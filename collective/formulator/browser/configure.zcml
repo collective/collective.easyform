@@ -1,0 +1,28 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="collective.formulator">
+    <!-- -*- extra stuff goes here -*- -->
+  <include package="Products.CMFCore" file="permissions.zcml" />
+
+  <browser:page
+      for="collective.formulator.interfaces.IFormulator"
+      name="view"
+      class=".formulatorview.FormulatorView"
+      permission="zope.Public"
+      />
+<!--
+  <browser:page
+      for="collective.formulator.interfaces.IFormulator"
+      name="fields"
+      class=".formulatorview.FormulatorSchemaView"
+      allowed_interface=".formulatorview.IFormulatorSchemaView"
+      permission="cmf.ModifyPortalContent"
+      />
+-->
+    <browser:page
+        name="fields"
+        for="collective.formulator.interfaces.IFormulator"
+        class="plone.app.dexterity.browser.fields.TypeFieldsPage"
+        permission="cmf.ModifyPortalContent" />
+
+</configure>

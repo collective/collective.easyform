@@ -1,0 +1,13 @@
+<model xmlns="http://namespaces.plone.org/supermodel/schema"
+       xmlns:security="http://namespaces.plone.org/supermodel/security"
+       xmlns:marshal="http://namespaces.plone.org/supermodel/marshal"
+       xmlns:form="http://namespaces.plone.org/supermodel/form"
+       xmlns:indexer="http://namespaces.plone.org/supermodel/indexer"
+       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+       i18n:domain="vidensportalen.stc">
+  <schema>
+    <field type="zope.schema.Object" name="schema" form:omitted="z3c.form.interfaces.IForm:true">
+        <title>Schema</title>
+    </field>
+  </schema>
+</model>

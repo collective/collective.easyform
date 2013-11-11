@@ -1,0 +1,15 @@
+*.py?
+*.pyc
+.DS_Store
+*~
+*.egg-info
+*.graffle
+.installed.cfg
+.mr.developer.cfg
+bin/
+develop-eggs/
+extras/
+parts/
+var/
+buildout-cache/
+src/
