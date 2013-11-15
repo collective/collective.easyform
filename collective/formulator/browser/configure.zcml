@@ -10,19 +10,31 @@
       class=".formulatorview.FormulatorView"
       permission="zope.Public"
       />
-<!--
   <browser:page
       for="collective.formulator.interfaces.IFormulator"
       name="fields"
       class=".formulatorview.FormulatorSchemaView"
-      allowed_interface=".formulatorview.IFormulatorSchemaView"
       permission="cmf.ModifyPortalContent"
+      allowed_interface="OFS.interfaces.IItem"
       />
--->
+    <subscriber
+        for=".formulatorview.IFormulatorSchemaContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".formulatorview.updateSchema"
+        />
+
+<!--
+    <browser:page
+        name="member-fields"
+        for="*"
+        class=".schemaeditor.MemberSchemaContext"
+        permission="plone.app.controlpanel.UsersAndGroups"
+        allowed_interface="OFS.interfaces.IItem" />
     <browser:page
         name="fields"
         for="collective.formulator.interfaces.IFormulator"
         class="plone.app.dexterity.browser.fields.TypeFieldsPage"
         permission="cmf.ModifyPortalContent" />
+-->
 
 </configure>
