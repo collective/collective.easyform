@@ -1,40 +1,100 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
            i18n_domain="collective.formulator">
-    <!-- -*- extra stuff goes here -*- -->
   <include package="Products.CMFCore" file="permissions.zcml" />
 
   <browser:page
-      for="collective.formulator.interfaces.IFormulator"
-      name="view"
-      class=".formulatorview.FormulatorView"
-      permission="zope.Public"
-      />
+    for="collective.formulator.interfaces.IFormulator"
+    name="view"
+    class=".formulatorview.FormulatorView"
+    permission="zope.Public"
+    />
   <browser:page
-      for="collective.formulator.interfaces.IFormulator"
-      name="fields"
-      class=".formulatorview.FormulatorSchemaView"
-      permission="cmf.ModifyPortalContent"
-      allowed_interface="OFS.interfaces.IItem"
-      />
-    <subscriber
-        for=".formulatorview.IFormulatorSchemaContext
-             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
-        handler=".formulatorview.updateSchema"
-        />
+    for="collective.formulator.interfaces.IFormulator"
+    name="fields"
+    class=".formulatorview.FormulatorSchemaView"
+    permission="cmf.ModifyPortalContent"
+    allowed_interface=".formulatorview.IFormulatorSchemaContext"
+    />
+  <subscriber
+    for=".formulatorview.IFormulatorSchemaContext
+         plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+    handler=".formulatorview.updateSchema"
+    />
 
-<!--
-    <browser:page
-        name="member-fields"
-        for="*"
-        class=".schemaeditor.MemberSchemaContext"
-        permission="plone.app.controlpanel.UsersAndGroups"
-        allowed_interface="OFS.interfaces.IItem" />
-    <browser:page
-        name="fields"
-        for="collective.formulator.interfaces.IFormulator"
-        class="plone.app.dexterity.browser.fields.TypeFieldsPage"
-        permission="cmf.ModifyPortalContent" />
--->
+  <browser:page
+    for="collective.formulator.interfaces.IFormulator"
+    name="actions"
+    class=".formulatorview.FormulatorActionsView"
+    permission="cmf.ModifyPortalContent"
+    allowed_interface=".formulatorview.IFormulatorActionsContext"
+    />
+  <subscriber
+    for=".formulatorview.IFormulatorActionsContext
+         plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+    handler=".formulatorview.updateActions"
+    />
+
+  <browser:page
+    name="add-field"
+    for=".formulatorview.IFormulatorActionsContext"
+    class=".formulatorview.ActionAddFormPage"
+    permission="cmf.ModifyPortalContent"
+    />
+
+  <utility
+      component=".formulatorview.FormulatorActionsVocabularyFactory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="FormulatorActions"
+      />
+  <utility
+      name="zope.schema._bootstrapfields.Int"
+      component=".formulatorview.IntAction"
+      />
+
+  <utility
+      name="collective.formulator.browser.formulatorview.Mailer"
+      component=".formulatorview.MailerAction"
+      />
+
+    <utility
+        component=".formulatorview.MailerHandler"
+        name="collective.formulator.browser.formulatorview.Mailer"
+        />
+  <class class=".formulatorview.MailerWidget">
+    <require
+        permission="zope.Public"
+        interface=".formulatorview.IMailerWidget"
+        />
+  </class>
+
+  <adapter
+      factory=".formulatorview.MailerActionWidget"
+      for=".formulatorview.IMailer
+           z3c.form.interfaces.IFormLayer"
+      />
+
+  <include package="z3c.form" file="meta.zcml" />
+  <z3c:widgetTemplate
+      mode="display"
+      widget=".formulatorview.IMailerWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="text_display.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget=".formulatorview.IMailerWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="text_input.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="hidden"
+      widget=".formulatorview.IMailerWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="text_hidden.pt"
+      />
 
 </configure>

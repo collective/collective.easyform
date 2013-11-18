@@ -31,6 +31,7 @@
   <alias from="edit" to="@@edit"/>
   <alias from="sharing" to="@@sharing"/>
   <alias from="fields" to="@@fields"/>
+  <alias from="actions" to="@@actions"/>
   <alias from="view" to="@@view" />
 
   <!-- Actions -->
@@ -46,6 +47,11 @@
 
   <action title="Fields" action_id="fields" category="object" condition_expr=""
     url_expr="string:${object_url}/fields" visible="True" i18n:domain="plone" i18n:attributes="title">
+    <permission value="Modify portal content"/>
+  </action>
+
+  <action title="Actions" action_id="actions" category="object" condition_expr=""
+    url_expr="string:${object_url}/actions" visible="True" i18n:domain="plone" i18n:attributes="title">
     <permission value="Modify portal content"/>
   </action>
 
