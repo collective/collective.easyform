@@ -37,6 +37,12 @@
     />
 
   <browser:page
+      name="edit"
+      for=".formulatorview.IFormulatorActionsContext"
+      class=".formulatorview.FormulatorActionsListingPage"
+      permission="cmf.ModifyPortalContent" />
+
+  <browser:page
     name="add-field"
     for=".formulatorview.IFormulatorActionsContext"
     class=".formulatorview.ActionAddFormPage"

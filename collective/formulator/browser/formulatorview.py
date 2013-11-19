@@ -1,17 +1,27 @@
 import copy
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from plone.supermodel.exportimport import BaseHandler
+
+from z3c.form import interfaces
+from z3c.form.widget import Widget, FieldWidget
+from z3c.form.browser import widget
+
+from zope.component import queryUtility
+from plone.memoize.instance import memoize
 from collective.formulator import formulatorMessageFactory as _
 from plone.dexterity.browser.edit import DefaultEditForm
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
+from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
 from plone.schemaeditor.interfaces import ISchemaContext
 from plone.supermodel import loadString
 from plone.supermodel.model import Model
 from plone.supermodel.serializer import serialize
 from plone.z3cform import layout
 from z3c.form import button, form, field
-from zope.component import getUtilitiesFor
+from zope.component import getUtilitiesFor, adapter
 from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import implements, Interface, implementer
+from zope.interface import implements, Interface, implementer, implementer_only
 from zope.i18n import translate
 from zope import schema as zs
 from collective.formulator.interfaces import INewAction, IActionFactory
@@ -107,7 +117,6 @@ class FormulatorSchemaView(SchemaContext):
     #schemaEditorView = 'fields'
 
     def __init__(self, context, request):
-        self.basecontext = context
         schema = get_schema(context)
         super(FormulatorSchemaView, self).__init__(
             schema,
@@ -130,7 +139,6 @@ class FormulatorActionsView(SchemaContext):
     #schemaEditorView = 'actions'
 
     def __init__(self, context, request):
-        self.basecontext = context
         schema = get_actions(context)
         super(FormulatorActionsView, self).__init__(
             schema,
@@ -143,11 +151,11 @@ def set_schema(string, context):
     context.model = string
 
 
-def updateSchema(object, event):
+def updateSchema(obj, event):
     # serialize the current schema
-    snew_schema = serialize_schema(object.schema)
+    snew_schema = serialize_schema(obj.schema)
     # store the current schema
-    set_schema(snew_schema, object.basecontext)
+    set_schema(snew_schema, obj.aq_parent)
 
 
 def serialize_schema(schema):
@@ -159,19 +167,38 @@ def set_actions(string, context):
     context.actions_model = string
 
 
-def updateActions(object, event):
+def updateActions(obj, event):
     # serialize the current schema
-    snew_schema = serialize_schema(object.schema)
+    snew_schema = serialize_schema(obj.schema)
     # store the current schema
-    set_actions(snew_schema, object.basecontext)
+    set_actions(snew_schema, obj.aq_parent)
+
+class FormulatorActionsListing(SchemaListing):
+    template = ViewPageTemplateFile('actions_listing.pt')
+
+    @memoize
+    def _field_factory(self, field):
+        field_identifier = u'%s.%s' % (field.__module__, field.__class__.__name__)
+        if self.context.allowedFields is not None:
+            if field_identifier not in self.context.allowedFields:
+                return None
+        return queryUtility(IActionFactory, name=field_identifier)
 
 
+class FormulatorActionsListingPage(SchemaListingPage):
+    """ Form wrapper so we can get a form with layout.
+
+        We define an explicit subclass rather than using the wrap_form method
+        from plone.z3cform.layout so that we can inject the schema name into
+        the form label.
+    """
+    form = FormulatorActionsListing
 
 class ActionAddForm(FieldAddForm):
 
     fields = field.Fields(INewAction)
     label = _("Add new action")
-    id = 'add-action-form'
+    #id = 'add-action-form'
 
 ActionAddFormPage = layout.wrap_form(ActionAddForm)
 
@@ -211,23 +238,14 @@ class Mailer(zs.Field):
 
 MailerAction = ActionFactory(Mailer, _(u'label_mailer_action', default=u'Mailer'))
 
-import plone.supermodel.exportimport
-MailerHandler = plone.supermodel.exportimport.BaseHandler(Mailer)
+MailerHandler = BaseHandler(Mailer)
 
-
-import zope.component
-import zope.interface
-import zope.schema.interfaces
-
-from z3c.form import interfaces
-from z3c.form.widget import Widget, FieldWidget
-from z3c.form.browser import widget
 
 class IMailerWidget(interfaces.IWidget):
     """Mailer widget."""
 
 
-@zope.interface.implementer_only(IMailerWidget)
+@implementer_only(IMailerWidget)
 class MailerWidget(widget.HTMLTextInputWidget, Widget):
     """Input type text widget implementation."""
 
@@ -240,8 +258,8 @@ class MailerWidget(widget.HTMLTextInputWidget, Widget):
         widget.addFieldClass(self)
 
 
-@zope.component.adapter(IMailer, interfaces.IFormLayer)
-@zope.interface.implementer(interfaces.IFieldWidget)
+@adapter(IMailer, interfaces.IFormLayer)
+@implementer(interfaces.IFieldWidget)
 def MailerActionWidget(field, request):
     """IFieldWidget factory for TextWidget."""
     return FieldWidget(field, MailerWidget(request))

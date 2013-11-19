@@ -1,0 +1,131 @@
+<div tal:omit-tag="" i18n:domain="plone.schemaeditor">
+  <form id="add-field" method="GET"
+        tal:attributes="action string:${context/absolute_url}/@@add-field">
+    <input type="submit" style="float: right; display: block; margin-top: -4.5em;"
+           i18n:attributes="value"
+           value="Add new field&hellip;"/>
+  </form>
+
+  <metal:form metal:use-macro="context/@@ploneform-macros/form">
+    <metal:top-slot metal:fill-slot="formtop">
+      <script type="text/javascript"
+              tal:attributes="src context/++resource++schemaeditor.js"></script>
+      <style type="text/css">
+  .fieldPreview {
+    background: #eee;
+    padding: 1em 1em 1px 1em;
+    margin: 0.5em 0;
+    -moz-border-radius: 0.5em;
+    position: relative;
+    border: solid 2px #ccc;
+  }
+
+  .fieldFromBehavior {
+    border: dashed 2px #ccc;
+  }
+
+  .fieldFromBehavior .disabled-field-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    background: #fff;
+    opacity: 0.6;
+  }
+
+  .fieldLabel {
+    float: left;
+    background: #ddd;
+    border-right: solid 1px #fff;
+    border-bottom: solid 1px #fff;
+    -moz-border-radius-bottomright: 0.5em;
+    margin: -1em -1em 0;
+    padding: 0 0.5em;
+    position: relative;
+    z-index: 3;
+  }
+
+  .fieldFromBehavior .fieldLabel {
+    outline-width-top: 0;
+    outline-left: none;
+  }
+
+  .fieldControls {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+  }
+      </style>
+    </metal:top-slot>
+
+    <metal:fields-slot metal:fill-slot="fields">
+
+      <tal:block tal:repeat="group python:[view] + list(view.groups)">
+        <fieldset tal:define="fieldset_name repeat/group/index"
+                  tal:attributes="id string:fieldset-${fieldset_name};
+                                  class string:kssattr-fieldset-${fieldset_name}">
+
+          <legend tal:define="group_name python:group.label or view.default_fieldset_label"
+                  tal:content="group_name">Fieldset name</legend>
+
+          <tal:block tal:define="errors group/widgets/errors"
+                     tal:condition="errors"
+                     tal:repeat="error errors">
+              <div class="field error"
+                  tal:condition="not:nocall:error/widget"
+                  tal:content="structure error/render"
+                  />
+          </tal:block>
+
+          <tal:widgets repeat="widget group/widgets/values">
+
+            <div tal:condition="widget/disabled|nothing" class="fieldPreview fieldFromBehavior">
+              <div class="fieldLabel">
+                  <tal:block i18n:translate="">From the
+                    <tal:block i18n:name="behavior_name" tal:replace="python:widget.__name__.split('.')[0]"/> behavior:</tal:block>
+                  <strong tal:content="widget/field/__name__" /> &ndash;
+                  <tal:block tal:content="python:view.field_type(widget.field)"/>
+              </div>
+              <tal:field tal:replace="structure widget/@@ploneform-render-widget" />
+              <div class="disabled-field-overlay"></div>
+            </div>
+
+            <div tal:condition="not:widget/disabled|nothing"
+                 class="fieldPreview orderable" tal:attributes="data-field_id widget/field/__name__">
+
+              <div class="fieldLabel">
+                  <strong tal:content="widget/field/__name__" /> &ndash;
+                  <tal:block tal:content="python:view.field_type(widget.field)"/>
+              </div>
+
+              <div class="fieldControls"
+                   i18n:domain="plone.schemaeditor">
+                  <a class="fieldSettings"
+                     tal:define="edit_url python:view.edit_url(widget.field)"
+                     tal:condition="edit_url"
+                     i18n:translate=""
+                     tal:attributes="href edit_url">Settings&hellip;</a>
+                  <a class="schemaeditor-delete-field"
+                     i18n:attributes="title"
+                     title="Delete field"
+                     style="margin-left: 1em; font-size: 150%; border: none"
+                     tal:define="delete_url python:view.delete_url(widget.field)"
+                     tal:condition="delete_url"
+                     tal:attributes="href delete_url">&times;</a>
+              </div>
+
+              <div style="width: 80%">
+                <tal:field tal:replace="structure widget/@@ploneform-render-widget" />
+              </div>
+
+            </div>
+
+          </tal:widgets>
+
+        </fieldset>
+      </tal:block>
+    </metal:fields-slot>
+  </metal:form>
+</div>
