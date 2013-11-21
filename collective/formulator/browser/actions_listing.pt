@@ -1,9 +1,9 @@
 <div tal:omit-tag="" i18n:domain="plone.schemaeditor">
   <form id="add-field" method="GET"
-        tal:attributes="action string:${context/absolute_url}/@@add-field">
+        tal:attributes="action string:${context/absolute_url}/@@add-action">
     <input type="submit" style="float: right; display: block; margin-top: -4.5em;"
            i18n:attributes="value"
-           value="Add new field&hellip;"/>
+           value="Add new action&hellip;"/>
   </form>
 
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
@@ -56,6 +56,13 @@
     position: absolute;
     top: 1em;
     right: 1em;
+  }
+
+  #content #form fieldset {
+    border-top: none;
+  }
+  #content #form legend {
+    display: none;
   }
       </style>
     </metal:top-slot>

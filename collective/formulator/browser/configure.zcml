@@ -43,11 +43,17 @@
       permission="cmf.ModifyPortalContent" />
 
   <browser:page
-    name="add-field"
+    name="add-action"
     for=".formulatorview.IFormulatorActionsContext"
     class=".formulatorview.ActionAddFormPage"
     permission="cmf.ModifyPortalContent"
     />
+
+    <browser:page
+        name="edit"
+        for=".formulatorview.IActionContext"
+        class=".formulatorview.EditView"
+        permission="cmf.ModifyPortalContent" />
 
   <utility
       component=".formulatorview.FormulatorActionsVocabularyFactory"

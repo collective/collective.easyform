@@ -1,30 +1,36 @@
-import copy
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.supermodel.exportimport import BaseHandler
-
-from z3c.form import interfaces
-from z3c.form.widget import Widget, FieldWidget
-from z3c.form.browser import widget
-
-from zope.component import queryUtility
-from plone.memoize.instance import memoize
+from ZPublisher.BaseRequest import DefaultPublishTraverse
 from collective.formulator import formulatorMessageFactory as _
+from collective.formulator.interfaces import INewAction, IActionFactory
+from copy import deepcopy
+from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.browser.edit import DefaultEditForm
-from plone.schemaeditor.browser.schema.traversal import SchemaContext
+from plone.directives import form as pdf
+from plone.memoize.instance import memoize
+from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
 from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
-from plone.schemaeditor.interfaces import ISchemaContext
+from plone.schemaeditor.browser.schema.traversal import SchemaContext
+from plone.schemaeditor.interfaces import ISchemaContext, IFieldContext, IFieldEditFormSchema, IFieldEditorExtender
 from plone.supermodel import loadString
+from plone.supermodel.exportimport import BaseHandler
 from plone.supermodel.model import Model
 from plone.supermodel.serializer import serialize
 from plone.z3cform import layout
 from z3c.form import button, form, field
-from zope.component import getUtilitiesFor, adapter
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import implements, Interface, implementer, implementer_only
-from zope.i18n import translate
+from z3c.form import interfaces
+from z3c.form.browser import widget
+from z3c.form.widget import Widget, FieldWidget
 from zope import schema as zs
-from collective.formulator.interfaces import INewAction, IActionFactory
+from zope.cachedescriptors.property import Lazy as lazy_property
+from zope.component import getUtilitiesFor, adapter
+from zope.component import queryUtility, getAdapters
+from zope.i18n import translate
+from zope.interface import implements, Interface, implementer, implementer_only
+from zope.schema.vocabulary import SimpleVocabulary
+from zope.event import notify
+from plone.schemaeditor.utils import SchemaModifiedEvent
+from Acquisition import aq_parent, aq_inner
 
 
 #SCHEMATA_KEY = "FormulatorSchema"
@@ -53,7 +59,7 @@ class FormulatorForm(DefaultEditForm):
 
     @property
     def additionalSchemata(self):
-        return []
+        return ()
 
     @button.buttonAndHandler(_(u'Save'), name='save')
     def handleApply(self, action):
@@ -102,6 +108,11 @@ class IFormulatorActionsContext(ISchemaContext):
     Formulator actions view interface
     """
 
+class IActionContext(IFieldContext):
+
+    """
+    Formulator action view interface
+    """
 
 def get_schema(context):
     try:
@@ -133,6 +144,20 @@ def get_actions(context):
         schema = None
     return schema
 
+class ActionContext(FieldContext):
+    """ wrapper for published zope 3 schema fields
+    """
+    implements(IActionContext)
+
+    def publishTraverse(self, request, name):
+        """ It's not valid to traverse to anything below a field context.
+        """
+        # hack to make inline validation work
+        # (plone.app.z3cform doesn't know the form is the default view)
+        if name == self.__name__:
+            return EditView(self, request).__of__(self)
+
+        return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
 class FormulatorActionsView(SchemaContext):
     implements(IFormulatorActionsContext)
@@ -145,6 +170,14 @@ class FormulatorActionsView(SchemaContext):
             request,
             name='actions'
         )
+
+    def publishTraverse(self, request, name):
+        """ Look up the field whose name matches the next URL path element, and wrap it.
+        """
+        try:
+            return ActionContext(self.schema[name], self.request).__of__(self)
+        except KeyError:
+            return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
 
 def set_schema(string, context):
@@ -202,6 +235,75 @@ class ActionAddForm(FieldAddForm):
 
 ActionAddFormPage = layout.wrap_form(ActionAddForm)
 
+class IActionEditForm(interfaces.IEditForm):
+    """ Marker interface for action edit forms
+    """
+
+class ActionEditForm(AutoExtensibleForm, form.EditForm):
+    implements(IActionEditForm)
+
+    def __init__(self, context, request):
+        super(form.EditForm, self).__init__(context, request)
+        self.field = context.field
+
+    def getContent(self):
+        return self.field
+
+    @lazy_property
+    def schema(self):
+        return IFieldEditFormSchema(self.field)
+
+    @lazy_property
+    def additionalSchemata(self):
+        schema_context = self.context.aq_parent
+        return [v for k, v in getAdapters((schema_context, self.field), IFieldEditorExtender)]
+
+    @button.buttonAndHandler(_(u'Save'), name='save')
+    def handleSave(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        # clear current min/max to avoid range errors
+        if 'min' in data:
+            self.field.min = None
+        if 'max' in data:
+            self.field.max = None
+
+        changes = self.applyChanges(data)
+
+        if changes:
+            self.status = self.successMessage
+        else:
+            self.status = self.noChangesMessage
+
+        notify(SchemaModifiedEvent(self.context.aq_parent))
+        self.redirectToParent()
+
+    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
+    def handleCancel(self, action):
+        self.redirectToParent()
+
+    def redirectToParent(self):
+        parent = aq_parent(aq_inner(self.context))
+        url = parent.absolute_url()
+        if hasattr(parent, 'schemaEditorView') and parent.schemaEditorView:
+            url += '/@@' + parent.schemaEditorView
+
+        self.request.response.redirect(url)
+
+class EditView(layout.FormWrapper):
+    form = ActionEditForm
+
+    def __init__(self, context, request):
+        super(EditView, self).__init__(context, request)
+        self.field = context.field
+
+    @lazy_property
+    def label(self):
+        return _(u"Edit Field '${fieldname}'", mapping={'fieldname': self.field.__name__})
+
 def FormulatorActionsVocabularyFactory(context):
     field_factories = getUtilitiesFor(IActionFactory)
     terms = []
@@ -221,7 +323,7 @@ class ActionFactory(object):
         self.kw = kw
 
     def __call__(self, *args, **kw):
-        kwargs = copy.deepcopy(self.kw)
+        kwargs = deepcopy(self.kw)
         kwargs.update(**kw)
         return self.fieldcls(*(self.args+args), **kwargs)
 
@@ -229,12 +331,63 @@ class ActionFactory(object):
 IntAction = ActionFactory(zs.Int, _(u'label_integer_action', default=u'Integer'))
 
 
-class IMailer(zs.interfaces.IField):
+class IAction(zs.interfaces.IField):
+    #title = zs.TextLine(
+        #title=zs.interfaces.ITextLine['title'].title,
+        #description=zs.interfaces.ITextLine['title'].description,
+        #default=u"",
+        #required=True,
+        #)
+    required = zs.Bool(
+        title=_("Enabled"),
+        description=(
+        _("Tells whether a action is enabled.")),
+        default=True)
+    #TALESString('execCondition',
+        #schemata='overrides',
+        #searchable=0,
+        #required=0,
+        #validators=('talesvalidator',),
+        #default='',
+        #write_permission=EDIT_TALES_PERMISSION,
+        #read_permission=ModifyPortalContent,
+        #isMetadata=True,  # just to hide from base view
+        #widget=StringWidget(label=_(u'label_execcondition_text', default=u"Execution Condition"),
+            #description=_(u'help_execcondition_text', default=u"""
+                #A TALES expression that will be evaluated to determine whether or not
+                #to execute this action.
+                #Leave empty if unneeded, and the action will be executed.
+                #Your expression should evaluate as a boolean; return True if you wish
+                #the action to execute.
+                #PLEASE NOTE: errors in the evaluation of this expression will cause
+                #an error on form display.
+            #"""),
+            #size=70,
+        #),
+    #),
+    execCondition = zs.TextLine(
+        title=u"Execution Condition",
+        default=u"",
+        required=False,
+    )
+
+class IMailer(pdf.Schema, IAction):
     """Field represents Form Mailer."""
+    pdf.fieldset(u"overrides", label="Overrides", fields=['execCondition'])
+    pdf.omitted('order', 'default', 'missing_value', 'readonly')
+
+class Action(zs.Field):
+    """ Base action class """
+    execCondition = u""
+
+    def __init__(self, execCondition = u"", **kw):
+        self.execCondition = execCondition
+        super(Action, self).__init__(**kw)
 
 @implementer(IMailer)
-class Mailer(zs.Field):
+class Mailer(Action):
     __doc__ = IMailer.__doc__
+
 
 MailerAction = ActionFactory(Mailer, _(u'label_mailer_action', default=u'Mailer'))
 
