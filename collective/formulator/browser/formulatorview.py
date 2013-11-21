@@ -10,6 +10,8 @@ from collective.formulator.interfaces import (
     IActionEditForm,
     IMailer,
     IMailerWidget,
+    ICustomScript,
+    ISaveData,
 )
 from copy import deepcopy
 from plone.autoform.form import AutoExtensibleForm
@@ -339,10 +341,26 @@ class Mailer(Action):
     __doc__ = IMailer.__doc__
 
 
+@implementer(ICustomScript)
+class CustomScript(Action):
+    __doc__ = ICustomScript.__doc__
+
+
+@implementer(ISaveData)
+class SaveData(Action):
+    __doc__ = ISaveData.__doc__
+
+
 MailerAction = ActionFactory(
     Mailer, _(u'label_mailer_action', default=u'Mailer'))
+CustomScriptAction = ActionFactory(
+    CustomScript, _(u'label_customscript_action', default=u'CustomScript'))
+SaveDataAction = ActionFactory(
+    SaveData, _(u'label_savedata_action', default=u'SaveData'))
 
 MailerHandler = BaseHandler(Mailer)
+CustomScriptHandler = BaseHandler(CustomScript)
+SaveDataHandler = BaseHandler(SaveData)
 
 
 @implementer_only(IMailerWidget)
