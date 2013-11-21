@@ -8,7 +8,6 @@ from plone.schemaeditor.interfaces import INewField, IFieldFactory, ID_RE
 from collective.formulator import formulatorMessageFactory as _
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 
-# -*- Additional Imports Here -*-
 def isValidFieldName(value):
     if not ID_RE.match(value):
         raise Invalid(__(u'Please use only letters, numbers and the following characters: _.'))
@@ -53,3 +52,36 @@ class IActionFactory(IField):
     """ A component that instantiates a action when called.
     """
     title = zs.TextLine(title=u'Title')
+
+
+
+class ICollectiveFormulatorLayer(Interface):
+    """ A layer specific to this product.
+        Is registered using browserlayer.xml
+    """
+
+class collectiveformulatorlayer:
+    ICollectiveFormulatorLayer = ICollectiveFormulatorLayer
+
+MODEL_DEFAULT = u"""
+<model xmlns="http://namespaces.plone.org/supermodel/schema">
+    <schema>
+    </schema>
+</model>
+"""
+
+class IFormulator(form.Schema):
+    """Forms for Plone"""
+
+    # -*- schema definition goes here -*-
+    model = zs.Text(
+        title=u"Model",
+        default=MODEL_DEFAULT,
+    )
+
+    actions_model = zs.Text(
+        title=u"Actions Model",
+        default=MODEL_DEFAULT,
+    )
+
+    

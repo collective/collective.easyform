@@ -3,7 +3,7 @@
     <!-- -*- extra stuff goes here -*- -->
 
     <layer name="CollectiveFormulator"
-        interface="collective.formulator.interfaces.collectiveformulatorlayer.ICollectiveFormulatorLayer"
+        interface="collective.formulator.interfaces.ICollectiveFormulatorLayer"
     />
 </layers>
 
