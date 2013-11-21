@@ -15,10 +15,10 @@
     name="fields"
     class=".formulatorview.FormulatorSchemaView"
     permission="cmf.ModifyPortalContent"
-    allowed_interface=".formulatorview.IFormulatorSchemaContext"
+    allowed_interface="collective.formulator.interfaces.IFormulatorSchemaContext"
     />
   <subscriber
-    for=".formulatorview.IFormulatorSchemaContext
+    for="collective.formulator.interfaces.IFormulatorSchemaContext
          plone.schemaeditor.interfaces.ISchemaModifiedEvent"
     handler=".formulatorview.updateSchema"
     />
@@ -28,30 +28,30 @@
     name="actions"
     class=".formulatorview.FormulatorActionsView"
     permission="cmf.ModifyPortalContent"
-    allowed_interface=".formulatorview.IFormulatorActionsContext"
+    allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
     />
   <subscriber
-    for=".formulatorview.IFormulatorActionsContext
+    for="collective.formulator.interfaces.IFormulatorActionsContext
          plone.schemaeditor.interfaces.ISchemaModifiedEvent"
     handler=".formulatorview.updateActions"
     />
 
   <browser:page
       name="edit"
-      for=".formulatorview.IFormulatorActionsContext"
+      for="collective.formulator.interfaces.IFormulatorActionsContext"
       class=".formulatorview.FormulatorActionsListingPage"
       permission="cmf.ModifyPortalContent" />
 
   <browser:page
     name="add-action"
-    for=".formulatorview.IFormulatorActionsContext"
+    for="collective.formulator.interfaces.IFormulatorActionsContext"
     class=".formulatorview.ActionAddFormPage"
     permission="cmf.ModifyPortalContent"
     />
 
     <browser:page
         name="edit"
-        for=".formulatorview.IActionContext"
+        for="collective.formulator.interfaces.IActionContext"
         class=".formulatorview.EditView"
         permission="cmf.ModifyPortalContent" />
 
@@ -77,34 +77,34 @@
   <class class=".formulatorview.MailerWidget">
     <require
         permission="zope.Public"
-        interface=".formulatorview.IMailerWidget"
+        interface="collective.formulator.interfaces.IMailerWidget"
         />
   </class>
 
   <adapter
       factory=".formulatorview.MailerActionWidget"
-      for=".formulatorview.IMailer
+      for="collective.formulator.interfaces.IMailer
            z3c.form.interfaces.IFormLayer"
       />
 
   <include package="z3c.form" file="meta.zcml" />
   <z3c:widgetTemplate
       mode="display"
-      widget=".formulatorview.IMailerWidget"
+      widget="collective.formulator.interfaces.IMailerWidget"
       layer="z3c.form.interfaces.IFormLayer"
       template="text_display.pt"
       />
 
   <z3c:widgetTemplate
       mode="input"
-      widget=".formulatorview.IMailerWidget"
+      widget="collective.formulator.interfaces.IMailerWidget"
       layer="z3c.form.interfaces.IFormLayer"
       template="text_input.pt"
       />
 
   <z3c:widgetTemplate
       mode="hidden"
-      widget=".formulatorview.IMailerWidget"
+      widget="collective.formulator.interfaces.IMailerWidget"
       layer="z3c.form.interfaces.IFormLayer"
       template="text_hidden.pt"
       />

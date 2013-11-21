@@ -1,17 +1,25 @@
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from collective.formulator import formulatorMessageFactory as _
-from collective.formulator.interfaces import INewAction, IActionFactory
+from collective.formulator.interfaces import (
+    INewAction,
+    IActionFactory,
+    IFormulatorSchemaContext,
+    IFormulatorActionsContext,
+    IActionContext,
+    IActionEditForm,
+    IMailer,
+    IMailerWidget,
+)
 from copy import deepcopy
 from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.browser.edit import DefaultEditForm
-from plone.directives import form as pdf
 from plone.memoize.instance import memoize
 from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
 from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
-from plone.schemaeditor.interfaces import ISchemaContext, IFieldContext, IFieldEditFormSchema, IFieldEditorExtender
+from plone.schemaeditor.interfaces import IFieldEditFormSchema, IFieldEditorExtender
 from plone.supermodel import loadString
 from plone.supermodel.exportimport import BaseHandler
 from plone.supermodel.model import Model
@@ -26,7 +34,7 @@ from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtilitiesFor, adapter
 from zope.component import queryUtility, getAdapters
 from zope.i18n import translate
-from zope.interface import implements, Interface, implementer, implementer_only
+from zope.interface import implements, implementer, implementer_only
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.event import notify
 from plone.schemaeditor.utils import SchemaModifiedEvent
@@ -35,13 +43,6 @@ from Acquisition import aq_parent, aq_inner
 
 #SCHEMATA_KEY = "FormulatorSchema"
 SCHEMATA_KEY = u""
-
-
-class IFormulatorView(Interface):
-
-    """
-    Formulator view interface
-    """
 
 
 class FormulatorForm(DefaultEditForm):
@@ -96,24 +97,6 @@ class FormulatorForm(DefaultEditForm):
 FormulatorView = layout.wrap_form(FormulatorForm)
 
 
-class IFormulatorSchemaContext(ISchemaContext):
-
-    """
-    Formulator schema view interface
-    """
-
-class IFormulatorActionsContext(ISchemaContext):
-
-    """
-    Formulator actions view interface
-    """
-
-class IActionContext(IFieldContext):
-
-    """
-    Formulator action view interface
-    """
-
 def get_schema(context):
     try:
         data = context.model
@@ -144,7 +127,9 @@ def get_actions(context):
         schema = None
     return schema
 
+
 class ActionContext(FieldContext):
+
     """ wrapper for published zope 3 schema fields
     """
     implements(IActionContext)
@@ -158,6 +143,7 @@ class ActionContext(FieldContext):
             return EditView(self, request).__of__(self)
 
         return DefaultPublishTraverse(self, request).publishTraverse(request, name)
+
 
 class FormulatorActionsView(SchemaContext):
     implements(IFormulatorActionsContext)
@@ -196,6 +182,7 @@ def serialize_schema(schema):
     sschema = serialize(model)
     return sschema
 
+
 def set_actions(string, context):
     context.actions_model = string
 
@@ -206,12 +193,14 @@ def updateActions(obj, event):
     # store the current schema
     set_actions(snew_schema, obj.aq_parent)
 
+
 class FormulatorActionsListing(SchemaListing):
     template = ViewPageTemplateFile('actions_listing.pt')
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = u'%s.%s' % (field.__module__, field.__class__.__name__)
+        field_identifier = u'%s.%s' % (
+            field.__module__, field.__class__.__name__)
         if self.context.allowedFields is not None:
             if field_identifier not in self.context.allowedFields:
                 return None
@@ -219,6 +208,7 @@ class FormulatorActionsListing(SchemaListing):
 
 
 class FormulatorActionsListingPage(SchemaListingPage):
+
     """ Form wrapper so we can get a form with layout.
 
         We define an explicit subclass rather than using the wrap_form method
@@ -226,6 +216,7 @@ class FormulatorActionsListingPage(SchemaListingPage):
         the form label.
     """
     form = FormulatorActionsListing
+
 
 class ActionAddForm(FieldAddForm):
 
@@ -235,9 +226,6 @@ class ActionAddForm(FieldAddForm):
 
 ActionAddFormPage = layout.wrap_form(ActionAddForm)
 
-class IActionEditForm(interfaces.IEditForm):
-    """ Marker interface for action edit forms
-    """
 
 class ActionEditForm(AutoExtensibleForm, form.EditForm):
     implements(IActionEditForm)
@@ -293,6 +281,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
 
         self.request.response.redirect(url)
 
+
 class EditView(layout.FormWrapper):
     form = ActionEditForm
 
@@ -304,12 +293,15 @@ class EditView(layout.FormWrapper):
     def label(self):
         return _(u"Edit Field '${fieldname}'", mapping={'fieldname': self.field.__name__})
 
+
 def FormulatorActionsVocabularyFactory(context):
     field_factories = getUtilitiesFor(IActionFactory)
     terms = []
     for (id, factory) in field_factories:
-        terms.append(SimpleVocabulary.createTerm(factory, translate(factory.title), factory.title))
+        terms.append(SimpleVocabulary.createTerm(
+            factory, translate(factory.title), factory.title))
     return SimpleVocabulary(terms)
+
 
 class ActionFactory(object):
     implements(IActionFactory)
@@ -325,81 +317,37 @@ class ActionFactory(object):
     def __call__(self, *args, **kw):
         kwargs = deepcopy(self.kw)
         kwargs.update(**kw)
-        return self.fieldcls(*(self.args+args), **kwargs)
+        return self.fieldcls(*(self.args + args), **kwargs)
 
 
-IntAction = ActionFactory(zs.Int, _(u'label_integer_action', default=u'Integer'))
+IntAction = ActionFactory(
+    zs.Int, _(u'label_integer_action', default=u'Integer'))
 
-
-class IAction(zs.interfaces.IField):
-    #title = zs.TextLine(
-        #title=zs.interfaces.ITextLine['title'].title,
-        #description=zs.interfaces.ITextLine['title'].description,
-        #default=u"",
-        #required=True,
-        #)
-    required = zs.Bool(
-        title=_("Enabled"),
-        description=(
-        _("Tells whether a action is enabled.")),
-        default=True)
-    #TALESString('execCondition',
-        #schemata='overrides',
-        #searchable=0,
-        #required=0,
-        #validators=('talesvalidator',),
-        #default='',
-        #write_permission=EDIT_TALES_PERMISSION,
-        #read_permission=ModifyPortalContent,
-        #isMetadata=True,  # just to hide from base view
-        #widget=StringWidget(label=_(u'label_execcondition_text', default=u"Execution Condition"),
-            #description=_(u'help_execcondition_text', default=u"""
-                #A TALES expression that will be evaluated to determine whether or not
-                #to execute this action.
-                #Leave empty if unneeded, and the action will be executed.
-                #Your expression should evaluate as a boolean; return True if you wish
-                #the action to execute.
-                #PLEASE NOTE: errors in the evaluation of this expression will cause
-                #an error on form display.
-            #"""),
-            #size=70,
-        #),
-    #),
-    execCondition = zs.TextLine(
-        title=u"Execution Condition",
-        default=u"",
-        required=False,
-    )
-
-class IMailer(pdf.Schema, IAction):
-    """Field represents Form Mailer."""
-    pdf.fieldset(u"overrides", label="Overrides", fields=['execCondition'])
-    pdf.omitted('order', 'default', 'missing_value', 'readonly')
 
 class Action(zs.Field):
+
     """ Base action class """
     execCondition = u""
 
-    def __init__(self, execCondition = u"", **kw):
+    def __init__(self, execCondition=u"", **kw):
         self.execCondition = execCondition
         super(Action, self).__init__(**kw)
+
 
 @implementer(IMailer)
 class Mailer(Action):
     __doc__ = IMailer.__doc__
 
 
-MailerAction = ActionFactory(Mailer, _(u'label_mailer_action', default=u'Mailer'))
+MailerAction = ActionFactory(
+    Mailer, _(u'label_mailer_action', default=u'Mailer'))
 
 MailerHandler = BaseHandler(Mailer)
 
 
-class IMailerWidget(interfaces.IWidget):
-    """Mailer widget."""
-
-
 @implementer_only(IMailerWidget)
 class MailerWidget(widget.HTMLTextInputWidget, Widget):
+
     """Input type text widget implementation."""
 
     klass = u'mailer-widget'
