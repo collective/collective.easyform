@@ -53,7 +53,20 @@ class FormulatorForm(DefaultEditForm):
     Formulator form
     """
     ignoreContext = True
-    #ignoreRequest = True
+    #method = "get"
+    # def action(self):
+        #""" Redefine <form action=''> attribute.
+        #"""
+        # return self.context.absolute_url()
+
+    def enable_form_tabbing(self):
+        return self.context.form_tabbing
+
+    def enable_unload_protection(self):
+        return self.context.unload_protection
+
+    def enableCSRFProtection(self):
+        return self.context.CSRFProtection
 
     @property
     def schema(self):
@@ -96,6 +109,23 @@ class FormulatorForm(DefaultEditForm):
     def description(self):
         return self.context.Description()
 
+#report_form_frame = layout.wrap_form(ReportForm, index=FiveViewPageTemplateFile("templates/reporter.pt"))
+#<html metal:use-macro="context/main_template/macros/master"
+      # i18n:domain="sits.reporttool">
+#<body>
+    #<metal:block fill-slot="main">
+        #<h1 class="documentFirstHeading" tal:content="view/label | nothing" />
+        #<div id="content-core">
+            #<div id="form-input">
+                #<span tal:replace="structure view/contents" />
+            #</div>
+            #<div id="form-output" tal:condition="view/form_instance/output">
+                # Chosen country: <b tal:content="view/form_instance/output/country" />
+            #</div>
+        #</div>
+    #</metal:block>
+#</body>
+#</html>
 FormulatorView = layout.wrap_form(FormulatorForm)
 
 

@@ -86,30 +86,48 @@ class IFormulator(form.Schema):
         title=u"Model",
         default=MODEL_DEFAULT,
     )
-
     actions_model = zs.Text(
         title=u"Actions Model",
         default=MODEL_DEFAULT,
     )
-
     submitLabel = zs.TextLine(
         title=_(u'label_submitlabel_text', default=u"Submit Button Label"),
         description=_(u'help_submitlabel_text', default=u""),
         default=u"Submit",
         required=False,
     )
-
     useCancelButton = zs.Bool(
         title=_(u'label_showcancel_text', default=u'Show Reset Button'),
         description=_(u'help_showcancel_text', default=u""),
         default=False,
         required=False,
     )
-
     resetLabel = zs.TextLine(
         title=_(u'label_reset_button', default=u"Reset Button Label"),
         description=_(u'help_reset_button', default=u""),
         default=u"Reset",
+        required=False,
+    )
+    form_tabbing = zs.Bool(
+        title=_(u'label_form_tabbing',
+                default=u'Enable turn fieldsets to tabs behavior'),
+        description=_(u'help_form_tabbing', default=u""),
+        default=True,
+        required=False,
+    )
+    unload_protection = zs.Bool(
+        title=_(u'label_unload_protection',
+                default=u'Enable unload protection behavior'),
+        description=_(u'help_unload_protection', default=u""),
+        default=True,
+        required=False,
+    )
+    CSRFProtection = zs.Bool(
+        title=_(u'label_csrf', default=u'Enable CSRF Protection'),
+        description=_(u'help_csrf', default=u"Check this to employ Cross-Site "
+                      u"Request Forgery protection. Note that only HTTP Post actions "
+                      u"will be allowed."),
+        default=True,
         required=False,
     )
     # StringField('thanksPage',
@@ -238,20 +256,6 @@ class IFormulator(form.Schema):
             # size=70,
             #),
         #),
-    # BooleanField('checkAuthenticator',
-        # required=False,
-        # default=True,
-        # schemata='overrides',
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # widget=BooleanWidget(
-            #label=_(u'label_csrf', default=u'CSRF Protection'),
-            # description=_(u'help_csrf', default=u"""
-                # Check this to employ Cross-Site Request Forgery protection.
-                # Note that only HTTP Post actions will be allowed.
-            #"""),
-            #),
-        #),
-    #))
 
 
 class IFormulatorView(Interface):
