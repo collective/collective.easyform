@@ -3,6 +3,7 @@ from zope import schema as zs
 from zope.schema.interfaces import IField
 from z3c.form import interfaces
 from zope.schema.vocabulary import SimpleVocabulary
+from plone.app.textfield import RichText
 from plone.directives import form
 from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
 from collective.formulator import formulatorMessageFactory as _
@@ -79,6 +80,8 @@ class IFormulator(form.Schema):
     """Forms for Plone"""
 
     # -*- schema definition goes here -*-
+    form.fieldset(u"models", label=_("Models"),
+                  fields=['model', 'actions_model'])
     model = zs.Text(
         title=u"Model",
         default=MODEL_DEFAULT,
@@ -88,6 +91,167 @@ class IFormulator(form.Schema):
         title=u"Actions Model",
         default=MODEL_DEFAULT,
     )
+
+    submitLabel = zs.TextLine(
+        title=_(u'label_submitlabel_text', default=u"Submit Button Label"),
+        description=_(u'help_submitlabel_text', default=u""),
+        default=u"Submit",
+        required=False,
+    )
+
+    useCancelButton = zs.Bool(
+        title=_(u'label_showcancel_text', default=u'Show Reset Button'),
+        description=_(u'help_showcancel_text', default=u""),
+        default=False,
+        required=False,
+    )
+
+    resetLabel = zs.TextLine(
+        title=_(u'label_reset_button', default=u"Reset Button Label"),
+        description=_(u'help_reset_button', default=u""),
+        default=u"Reset",
+        required=False,
+    )
+    # StringField('thanksPage',
+        # searchable=False,
+        # required=False,
+        # vocabulary='thanksPageVocabulary',
+        # widget=SelectionWidget(
+            #label=_(u'label_thankspage_text', default=u'Thanks Page'),
+            # description=_(u'help_thankspage_text', default=u"""
+                # Pick a contained page you wish to show on a successful
+                # form submit. (If none are available, add one.)
+                # Choose none to simply display the form
+                # field values.
+            #"""),
+            #),
+        #),
+    formPrologue = RichText(
+        title=_(u'label_prologue_text', default=u"Form Prologue"),
+        description=_(u'help_prologue_text',
+                      default=u"This text will be displayed above the form fields."),
+        required=False,
+    )
+    formEpilogue = RichText(
+        title=_(u'label_epilogue_text', default=u"Form Epilogue"),
+        description=_(u'help_epilogue_text',
+                      default=u"The text will be displayed after the form fields."),
+        required=False,
+    )
+    form.fieldset(u"overrides", label=_("Overrides"),
+                  fields=['thanksPageOverride', 'formActionOverride'])
+    thanksPageOverride = zs.TextLine(
+        title=_(u'label_thankspageoverride_text',
+                default=u"Custom Success Action"),
+        description=_(u'help_thankspageoverride_text', default=u"""
+            Use this field in place of a thanks-page designation
+            to determine final action after calling
+            your action adapter (if you have one). You would usually use
+            this for a custom success template or script.
+            Leave empty if unneeded. Otherwise, specify as you would a
+            CMFFormController action type and argument,
+            complete with type of action to execute
+            (e.g., "redirect_to" or "traverse_to")
+            and a TALES expression. For example,
+            "redirect_to:string:thanks-page" would redirect to
+            'thanks-page'.
+        """),
+        required=False,
+    )
+    formActionOverride = zs.TextLine(
+        title=_(u'label_formactionoverride_text',
+                default=u"Custom Form Action"),
+        description=_(u'help_formactionoverride_text', default=u"""
+            Use this field to override the form action attribute.
+            Specify a URL to which the form will post.
+            This will bypass form validation, success action
+            adapter and thanks page.
+        """),
+        required=False,
+    )
+    # TALESString('onDisplayOverride',
+        # schemata='overrides',
+        # searchable=0,
+        # required=0,
+        #validators=('talesvalidator', ),
+        # write_permission=EDIT_TALES_PERMISSION,
+        # default='',
+        # languageIndependent=1,
+        # widget=StringWidget(label=_(u'label_OnDisplayOverride_text',
+                                    # default=u"Form Setup Script"),
+            # description=_(u'help_OnDisplayOverride_text', default=u"""
+                # A TALES expression that will be called when the form is
+                # displayed.
+                # Leave empty if unneeded.
+                # The most common use of this field is to call a python script
+                # that sets defaults for multiple fields by pre-populating
+                # request.form.
+                # Any value returned by the expression is ignored.
+                # PLEASE NOTE: errors in the evaluation of this expression
+                # will cause an error on form display.
+            #"""),
+            # size=70,
+            #),
+        #),
+    # TALESString('afterValidationOverride',
+        # schemata='overrides',
+        # searchable=0,
+        # required=0,
+        #validators=('talesvalidator', ),
+        # write_permission=EDIT_TALES_PERMISSION,
+        # default='',
+        # languageIndependent=1,
+        # widget=StringWidget(label=_(u'label_AfterValidationOverride_text',
+                                    # default=u"After Validation Script"),
+            # description=_(u'help_AfterValidationOverride_text', default=\
+                #u"A TALES expression that will be called after the form is"
+                #"successfully validated, but before calling an action adapter"
+                #"(if any) or displaying a thanks page."
+                #"Form input will be in the request.form dictionary."
+                #"Leave empty if unneeded."
+                #"The most common use of this field is to call a python script"
+                #"to clean up form input or to script an alternative action."
+                #"Any value returned by the expression is ignored."
+                #"PLEASE NOTE: errors in the evaluation of this expression will"
+                #"cause an error on form display."),
+            # size=70,
+            #),
+        #),
+    # TALESString('headerInjection',
+        # schemata='overrides',
+        # searchable=0,
+        # required=0,
+        #validators=('talesvalidator', ),
+        # write_permission=EDIT_TALES_PERMISSION,
+        # default='',
+        # languageIndependent=1,
+        # widget=StringWidget(label=_(u'label_headerInjection_text',
+                                    # default=u"Header Injection"),
+            # description=_(u'help_headerInjection_text', default=u"""
+                # This override field allows you to insert content into the xhtml
+                # head. The typical use is to add custom CSS or JavaScript.
+                # Specify a TALES expression returning a string. The string will
+                # be inserted with no interpretation.
+                # PLEASE NOTE: errors in the evaluation of this expression will
+                # cause an error on form display.
+            #"""),
+            # size=70,
+            #),
+        #),
+    # BooleanField('checkAuthenticator',
+        # required=False,
+        # default=True,
+        # schemata='overrides',
+        # write_permission=EDIT_ADVANCED_PERMISSION,
+        # widget=BooleanWidget(
+            #label=_(u'label_csrf', default=u'CSRF Protection'),
+            # description=_(u'help_csrf', default=u"""
+                # Check this to employ Cross-Site Request Forgery protection.
+                # Note that only HTTP Post actions will be allowed.
+            #"""),
+            #),
+        #),
+    #))
 
 
 class IFormulatorView(Interface):
@@ -153,7 +317,7 @@ class IAction(zs.interfaces.IField):
 class IMailer(form.Schema, IAction):
 
     """A form action adapter that will e-mail form input."""
-    form.fieldset(u"overrides", label="Overrides", fields=['execCondition'])
+    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
     form.omitted('order', 'default', 'missing_value', 'readonly')
     # StringField('recipient_name',
         # searchable=0,
@@ -646,7 +810,7 @@ getProxyRoleChoices = SimpleVocabulary.fromItems((
 class ICustomScript(form.Schema, IAction):
 
     """Executes a Python script for form data"""
-    form.fieldset(u"overrides", label="Overrides", fields=['execCondition'])
+    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
     form.omitted('order', 'default', 'missing_value', 'readonly')
     # Field represents Form Mailer."""
     form.read_permission(ProxyRole='cmf.ModifyPortalContent')
@@ -674,7 +838,7 @@ class ISaveData(form.Schema, IAction):
 
     """A form action adapter that will save form input data and
        return it in csv- or tab-delimited format."""
-    form.fieldset(u"overrides", label="Overrides", fields=['execCondition'])
+    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
     form.omitted('order', 'default', 'missing_value', 'readonly')
         # LinesField('showFields',
             # required=0,

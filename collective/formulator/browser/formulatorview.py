@@ -53,7 +53,7 @@ class FormulatorForm(DefaultEditForm):
     Formulator form
     """
     ignoreContext = True
-    ignoreRequest = True
+    #ignoreRequest = True
 
     @property
     def schema(self):
@@ -70,10 +70,10 @@ class FormulatorForm(DefaultEditForm):
         if errors:
             self.status = self.formErrorsMessage
             return
-        self.applyChanges(data)
+        # self.applyChanges(data)
         self.request.response.redirect(self.nextURL())
 
-    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
+    @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton)
     def handleCancel(self, action):
         self.request.response.redirect(self.nextURL())
 
@@ -84,9 +84,9 @@ class FormulatorForm(DefaultEditForm):
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
         if 'save' in self.actions:
-            self.actions["save"].addClass("context")
+            self.actions['save'].title = self.context.submitLabel
         if 'cancel' in self.actions:
-            self.actions["cancel"].addClass("standalone")
+            self.actions['cancel'].title = self.context.resetLabel
 
     @property
     def label(self):
