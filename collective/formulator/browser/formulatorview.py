@@ -8,8 +8,8 @@ from collective.formulator.interfaces import (
     IFormulatorActionsContext,
     IActionContext,
     IActionEditForm,
+    IAction,
     IMailer,
-    IMailerWidget,
     ICustomScript,
     ISaveData,
 )
@@ -238,6 +238,32 @@ class FormulatorActionsListing(SchemaListing):
                 return None
         return queryUtility(IActionFactory, name=field_identifier)
 
+    @button.buttonAndHandler(_(u'Save'))
+    def handleSaveDefaults(self, action):
+        # ignore fields from behaviors by setting their widgets' modes
+        # to the display mode while we extract the form values (hack!)
+        widget_modes = {}
+        for widget in self._iterateOverWidgets():
+            if widget.field.interface is not self.context.schema:
+                widget_modes[widget] = widget.mode
+                widget.mode = DISPLAY_MODE
+
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        for fname, value in data.items():
+            self.context.schema[fname].required = value
+        notify(SchemaModifiedEvent(self.context))
+
+        # restore the actual widget modes so they render a preview
+        for widget, mode in widget_modes.items():
+            widget.mode = mode
+
+        # update widgets to take the new defaults into account
+        self.updateWidgets()
+
 
 class FormulatorActionsListingPage(SchemaListingPage):
 
@@ -356,7 +382,9 @@ IntAction = ActionFactory(
     zs.Int, _(u'label_integer_action', default=u'Integer'))
 
 
-class Action(zs.Field):
+#@implementer(zs.interfaces.IFromUnicode)
+# class Action(zs.Field):
+class Action(zs.Bool):
 
     """ Base action class """
     execCondition = u""
@@ -391,24 +419,3 @@ SaveDataAction = ActionFactory(
 MailerHandler = BaseHandler(Mailer)
 CustomScriptHandler = BaseHandler(CustomScript)
 SaveDataHandler = BaseHandler(SaveData)
-
-
-@implementer_only(IMailerWidget)
-class MailerWidget(widget.HTMLTextInputWidget, Widget):
-
-    """Input type text widget implementation."""
-
-    klass = u'mailer-widget'
-    css = u'mailer'
-    value = u''
-
-    def update(self):
-        super(MailerWidget, self).update()
-        widget.addFieldClass(self)
-
-
-@adapter(IMailer, interfaces.IFormLayer)
-@implementer(interfaces.IFieldWidget)
-def MailerActionWidget(field, request):
-    """IFieldWidget factory for TextWidget."""
-    return FieldWidget(field, MailerWidget(request))

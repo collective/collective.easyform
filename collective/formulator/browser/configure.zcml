@@ -92,39 +92,18 @@
       component=".formulatorview.SaveDataHandler"
       />
 
-  <class class=".formulatorview.MailerWidget">
-    <require
-        permission="zope.Public"
-        interface="collective.formulator.interfaces.IMailerWidget"
-        />
-  </class>
-
   <adapter
-      factory=".formulatorview.MailerActionWidget"
-      for="collective.formulator.interfaces.IMailer
-           z3c.form.interfaces.IFormLayer"
+      factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
+      for="collective.formulator.interfaces.IAction
+           collective.formulator.interfaces.IActionEditForm"
       />
-
   <include package="z3c.form" file="meta.zcml" />
-  <z3c:widgetTemplate
-      mode="display"
-      widget="collective.formulator.interfaces.IMailerWidget"
-      layer="z3c.form.interfaces.IFormLayer"
-      template="text_display.pt"
-      />
 
   <z3c:widgetTemplate
+      for="collective.formulator.interfaces.IFormulatorActionsContext"
       mode="input"
-      widget="collective.formulator.interfaces.IMailerWidget"
+      widget="z3c.form.interfaces.ICheckBoxWidget"
       layer="z3c.form.interfaces.IFormLayer"
-      template="text_input.pt"
+      template="action_input.pt"
       />
-
-  <z3c:widgetTemplate
-      mode="hidden"
-      widget="collective.formulator.interfaces.IMailerWidget"
-      layer="z3c.form.interfaces.IFormLayer"
-      template="text_hidden.pt"
-      />
-
 </configure>

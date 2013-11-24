@@ -896,8 +896,3 @@ class ISaveData(form.Schema, IAction):
                 # description=_(u'help_savedatainput_text'),
                 #),
             #),
-
-
-class IMailerWidget(interfaces.IWidget):
-
-    """Mailer widget."""
