@@ -265,6 +265,17 @@ class FormulatorActionsListing(SchemaListing):
         self.updateWidgets()
 
 
+class FormulatorSchemaListingPage(SchemaListingPage):
+
+    """ Form wrapper so we can get a form with layout.
+
+        We define an explicit subclass rather than using the wrap_form method
+        from plone.z3cform.layout so that we can inject the schema name into
+        the form label.
+    """
+    index = ViewPageTemplateFile("model_listing.pt")
+
+
 class FormulatorActionsListingPage(SchemaListingPage):
 
     """ Form wrapper so we can get a form with layout.
@@ -274,6 +285,8 @@ class FormulatorActionsListingPage(SchemaListingPage):
         the form label.
     """
     form = FormulatorActionsListing
+    index = ViewPageTemplateFile("model_listing.pt")
+
 
 
 class ActionAddForm(FieldAddForm):

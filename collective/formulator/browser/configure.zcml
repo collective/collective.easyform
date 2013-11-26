@@ -38,6 +38,12 @@
 
   <browser:page
       name="edit"
+      for="collective.formulator.interfaces.IFormulatorSchemaContext"
+      class=".formulatorview.FormulatorSchemaListingPage"
+      permission="cmf.ModifyPortalContent" />
+
+  <browser:page
+      name="edit"
       for="collective.formulator.interfaces.IFormulatorActionsContext"
       class=".formulatorview.FormulatorActionsListingPage"
       permission="cmf.ModifyPortalContent" />
