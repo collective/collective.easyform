@@ -13,6 +13,7 @@ from collective.formulator.interfaces import (
     ICustomScript,
     ISaveData,
 )
+from zope.schema import getFieldsInOrder
 from copy import deepcopy
 from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.browser.edit import DefaultEditForm
@@ -41,7 +42,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 from zope.event import notify
 from plone.schemaeditor.utils import SchemaModifiedEvent
 from Acquisition import aq_parent, aq_inner
-
+from Products.CMFCore.Expression import getExprContext, Expression
 
 #SCHEMATA_KEY = "FormulatorSchema"
 SCHEMATA_KEY = u""
@@ -77,14 +78,58 @@ class FormulatorForm(DefaultEditForm):
     def additionalSchemata(self):
         return ()
 
-    @button.buttonAndHandler(_(u'Save'), name='save')
+    def processActions(self, errors, data):
+        if not errors:
+            #if self.getRawAfterValidationOverride():
+                ## evaluate the override.
+                ## In case we end up traversing to a template,
+                ## we need to make sure we don't clobber
+                ## the expression context.
+                #self.getAfterValidationOverride()
+                #self.cleanExpressionContext(request=self.REQUEST)
+
+            # get a list of adapters with no duplicates, retaining order
+            actions = getFieldsInOrder(get_actions(self.context))
+            for name, action in actions:
+                # Now, see if we should execute it.
+                # Check to see if execCondition exists and has contents
+                execCondition = getattr(action, 'execCondition', '')
+                if execCondition:
+                    expression = Expression(execCondition)
+                    expression_context = getExprContext(self.context)
+                    doit = expression(expression_context)
+                else:
+                    doit = True
+                if doit:
+                    print action, execCondition, type(doit), doit, hasattr(action, "onSuccess")
+                    if hasattr(action, "onSuccess"):
+                        result = action.onSuccess(data, self.request)
+                        if type(result) is type({}) and len(result):
+                            ## return the dict, which hopefully uses
+                            ## field ids or FORM_ERROR_MARKER for keys
+                            return result
+        return errors
+
+    @button.buttonAndHandler(_(u'Save'), name='save', condition=lambda form: not hasattr(form, 'output'))
     def handleApply(self, action):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
             return
+        errors = self.processActions(errors, data)
+        if errors:
+            self.status = self.formErrorsMessage
+            return
         # self.applyChanges(data)
-        self.request.response.redirect(self.nextURL())
+        self.output = data
+        self.mode = 'display'
+        for widget in self.widgets.values():
+            widget.mode = 'display'
+        for group in self.groups:
+            for widget in group.widgets.values():
+                widget.mode = 'display'
+        self.updateWidgets()
+        #self.request.response.redirect(self.nextURL())
 
     @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton)
     def handleCancel(self, action):
@@ -109,23 +154,7 @@ class FormulatorForm(DefaultEditForm):
     def description(self):
         return self.context.Description()
 
-#report_form_frame = layout.wrap_form(ReportForm, index=FiveViewPageTemplateFile("templates/reporter.pt"))
-#<html metal:use-macro="context/main_template/macros/master"
-      # i18n:domain="sits.reporttool">
-#<body>
-    #<metal:block fill-slot="main">
-        #<h1 class="documentFirstHeading" tal:content="view/label | nothing" />
-        #<div id="content-core">
-            #<div id="form-input">
-                #<span tal:replace="structure view/contents" />
-            #</div>
-            #<div id="form-output" tal:condition="view/form_instance/output">
-                # Chosen country: <b tal:content="view/form_instance/output/country" />
-            #</div>
-        #</div>
-    #</metal:block>
-#</body>
-#</html>
+#FormulatorView = layout.wrap_form(FormulatorForm, index=ViewPageTemplateFile("formulator_view.pt"))
 FormulatorView = layout.wrap_form(FormulatorForm)
 
 
@@ -405,6 +434,9 @@ class Action(zs.Bool):
     def __init__(self, execCondition=u"", **kw):
         self.execCondition = execCondition
         super(Action, self).__init__(**kw)
+
+    def onSuccess(self, fields, request):
+        print "call onSuccess of %s with parameters (%r, %r)" % (self, fields, request)
 
 
 @implementer(IMailer)
