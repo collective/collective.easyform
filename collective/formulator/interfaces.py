@@ -279,6 +279,69 @@ class IFormulatorActionsContext(ISchemaContext):
     """
 
 
+class IFieldExtender(form.Schema):
+    form.fieldset(u"overrides", label=_("Overrides"),
+                  fields=['TDefault', 'TEnabled', 'TValidator'])
+    # validators=('talesvalidator',),
+    # write_permission=EDIT_TALES_PERMISSION,
+    TDefault = zs.TextLine(
+        title=_(u'label_tdefault_text', default=u"Default Expression"),
+        description=(_(u'help_tdefault_text', default=u"""
+                    A TALES expression that will be evaluated when the form is displayed
+                    to get the field default value.
+                    Leave empty if unneeded. Your expression should evaluate as a string.
+                    PLEASE NOTE: errors in the evaluation of this expression will cause
+                    an error on form display.
+                """)),
+        default=u"",
+        required=False,
+    )
+    # validators=('talesvalidator',),
+    # write_permission=EDIT_TALES_PERMISSION,
+    TEnabled = zs.TextLine(
+        title=_(u'label_tenabled_text', default=u"Enabling Expression"),
+        description=(_(u'help_tenabled_text', default=
+                       u"A TALES expression that will be evaluated when the form is displayed"
+                       "to determine whether or not the field is enabled."
+                       "Your expression should evaluate as True if"
+                       "the field should be included in the form, False if it should be omitted."
+                       "Leave this expression field empty if unneeded: the field will be included."
+                       "PLEASE NOTE: errors in the evaluation of this expression will cause"
+                       "an error on form display.")),
+        default=u"",
+        required=False,
+    )
+    # validators=('talesvalidator',),
+    # write_permission=EDIT_TALES_PERMISSION,
+    TValidator = zs.TextLine(
+        title=_(u'label_tvalidator_text', default=u"Custom Validator"),
+        description=(_(u'help_tvalidator_text', default=
+                       u"A TALES expression that will be evaluated when the form is validated."
+                       "Validate against 'value', which will contain the field input."
+                       "Return False if valid; if not valid return a string error message."
+                       "E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" will"
+                       "require \"eggs\" for input."
+                       "PLEASE NOTE: errors in the evaluation of this expression will cause"
+                       "an error on form display.")),
+        default=u"python:False",
+        required=False,
+    )
+    # BooleanField('serverSide',
+        # schemata='overrides',
+        # searchable=0,
+        # required=0,
+        # write_permission=EDIT_ADVANCED_PERMISSION,
+        # default='',
+        # widget=BooleanWidget(
+            #label=_(u'label_server_side_text', default=u"Server-Side Variable"),
+            # description=_(u'description_server_side_text', default=\
+                #u"Mark this field as a value to be injected into the"
+                #"request form for use by action adapters and is not"
+                #"modifiable by or exposed to the client."),
+            #),
+        #),
+
+
 class IActionContext(IFieldContext):
 
     """

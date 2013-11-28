@@ -37,13 +37,13 @@
     />
 
   <browser:page
-      name="edit"
+      name="fields"
       for="collective.formulator.interfaces.IFormulatorSchemaContext"
       class=".formulatorview.FormulatorSchemaListingPage"
       permission="cmf.ModifyPortalContent" />
 
   <browser:page
-      name="edit"
+      name="actions"
       for="collective.formulator.interfaces.IFormulatorActionsContext"
       class=".formulatorview.FormulatorActionsListingPage"
       permission="cmf.ModifyPortalContent" />
@@ -103,8 +103,23 @@
       for="collective.formulator.interfaces.IAction
            collective.formulator.interfaces.IActionEditForm"
       />
-  <include package="z3c.form" file="meta.zcml" />
 
+  <adapter
+      factory=".formulatorview.get_field_extender"
+      provides="plone.schemaeditor.interfaces.IFieldEditorExtender"
+      name="collective.formulator.fieldextender"
+      />
+
+  <adapter
+      factory=".formulatorview.FieldExtender"
+      provides="collective.formulator.interfaces.IFieldExtender"
+      />
+    <utility
+        factory=".formulatorview.FormulatorSchema"
+        name="collective.formulator.schema"
+        />
+
+  <include package="z3c.form" file="meta.zcml" />
   <z3c:widgetTemplate
       for="collective.formulator.interfaces.IFormulatorActionsContext"
       mode="input"

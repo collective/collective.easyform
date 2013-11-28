@@ -12,7 +12,10 @@ from collective.formulator.interfaces import (
     IMailer,
     ICustomScript,
     ISaveData,
+    IFieldExtender,
 )
+from plone.supermodel.utils import ns
+from plone.supermodel.parser import IFieldMetadataHandler
 from zope.schema import getFieldsInOrder
 from copy import deepcopy
 from plone.autoform.form import AutoExtensibleForm
@@ -34,7 +37,7 @@ from z3c.form.browser import widget
 from z3c.form.widget import Widget, FieldWidget
 from zope import schema as zs
 from zope.cachedescriptors.property import Lazy as lazy_property
-from zope.component import getUtilitiesFor, adapter
+from zope.component import getUtilitiesFor, adapter, adapts
 from zope.component import queryUtility, getAdapters
 from zope.i18n import translate
 from zope.interface import implements, implementer, implementer_only
@@ -80,14 +83,6 @@ class FormulatorForm(DefaultEditForm):
 
     def processActions(self, errors, data):
         if not errors:
-            #if self.getRawAfterValidationOverride():
-                ## evaluate the override.
-                ## In case we end up traversing to a template,
-                ## we need to make sure we don't clobber
-                ## the expression context.
-                #self.getAfterValidationOverride()
-                #self.cleanExpressionContext(request=self.REQUEST)
-
             # get a list of adapters with no duplicates, retaining order
             actions = getFieldsInOrder(get_actions(self.context))
             for name, action in actions:
@@ -101,12 +96,11 @@ class FormulatorForm(DefaultEditForm):
                 else:
                     doit = True
                 if doit:
-                    print action, execCondition, type(doit), doit, hasattr(action, "onSuccess")
                     if hasattr(action, "onSuccess"):
                         result = action.onSuccess(data, self.request)
                         if type(result) is type({}) and len(result):
-                            ## return the dict, which hopefully uses
-                            ## field ids or FORM_ERROR_MARKER for keys
+                            # return the dict, which hopefully uses
+                            # field ids or FORM_ERROR_MARKER for keys
                             return result
         return errors
 
@@ -129,7 +123,7 @@ class FormulatorForm(DefaultEditForm):
             for widget in group.widgets.values():
                 widget.mode = 'display'
         self.updateWidgets()
-        #self.request.response.redirect(self.nextURL())
+        # self.request.response.redirect(self.nextURL())
 
     @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton)
     def handleCancel(self, action):
@@ -179,6 +173,11 @@ class FormulatorSchemaView(SchemaContext):
             name='fields'
         )
 
+    def browserDefault(self, request):
+        """ If not traversing through the schema to a field, show the SchemaListingPage.
+        """
+        return self, ('@@fields',)
+
 
 def get_actions(context):
     try:
@@ -225,6 +224,11 @@ class FormulatorActionsView(SchemaContext):
             return ActionContext(self.schema[name], self.request).__of__(self)
         except KeyError:
             return DefaultPublishTraverse(self, request).publishTraverse(request, name)
+
+    def browserDefault(self, request):
+        """ If not traversing through the schema to a field, show the SchemaListingPage.
+        """
+        return self, ('@@actions',)
 
 
 def set_schema(string, context):
@@ -315,7 +319,6 @@ class FormulatorActionsListingPage(SchemaListingPage):
     """
     form = FormulatorActionsListing
     index = ViewPageTemplateFile("model_listing.pt")
-
 
 
 class ActionAddForm(FieldAddForm):
@@ -464,3 +467,59 @@ SaveDataAction = ActionFactory(
 MailerHandler = BaseHandler(Mailer)
 CustomScriptHandler = BaseHandler(CustomScript)
 SaveDataHandler = BaseHandler(SaveData)
+
+
+@adapter(IFormulatorSchemaContext, zs.interfaces.IField)
+def get_field_extender(context, field):
+    return IFieldExtender
+
+
+def _get_(self, key):
+    return self.field.interface.queryTaggedValue(key, {}).get(self.field.__name__)
+
+
+def _set_(self, value, key):
+    data = self.field.interface.queryTaggedValue(key, {})
+    data[self.field.__name__] = value
+    self.field.interface.setTaggedValue(key, data)
+
+
+class FieldExtender(object):
+    implements(IFieldExtender)
+    adapts(zs.interfaces.IField)
+
+    def __init__(self, field):
+        self.field = field
+
+    TDefault = property(lambda x: _get_(x, 'TDefault'),
+                        lambda x, value: _set_(x, value, 'TDefault'))
+    TEnabled = property(lambda x: _get_(x, 'TEnabled'),
+                        lambda x, value: _set_(x, value, 'TEnabled'))
+    TValidator = property(lambda x: _get_(x, 'TValidator'),
+                          lambda x, value: _set_(x, value, 'TValidator'))
+
+
+class FormulatorSchema(object):
+
+    """Support the formulator: namespace in model definitions.
+    """
+    implements(IFieldMetadataHandler)
+
+    namespace = 'http://namespaces.plone.org/supermodel/formulator'
+    prefix = 'formulator'
+
+    def read(self, fieldNode, schema, field):
+        name = field.__name__
+        for i in ['TDefault', 'TEnabled', 'TValidator']:
+            value = fieldNode.get(ns(i, self.namespace))
+            data = schema.queryTaggedValue(i, {})
+            if value:
+                data[name] = value
+                schema.setTaggedValue(i, data)
+
+    def write(self, fieldNode, schema, field):
+        name = field.__name__
+        for i in ['TDefault', 'TEnabled', 'TValidator']:
+            value = schema.queryTaggedValue(i, {}).get(name, None)
+            if value:
+                fieldNode.set(ns(i, self.namespace), value)
