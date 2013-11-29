@@ -2,129 +2,128 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
            i18n_domain="collective.formulator">
-  <include package="Products.CMFCore" file="permissions.zcml" />
-
-  <browser:page
-    for="collective.formulator.interfaces.IFormulator"
-    name="view"
-    class=".formulatorview.FormulatorView"
-    permission="zope.Public"
-    />
-  <browser:page
-    for="collective.formulator.interfaces.IFormulator"
-    name="fields"
-    class=".formulatorview.FormulatorSchemaView"
-    permission="cmf.ModifyPortalContent"
-    allowed_interface="collective.formulator.interfaces.IFormulatorSchemaContext"
-    />
-  <subscriber
-    for="collective.formulator.interfaces.IFormulatorSchemaContext
-         plone.schemaeditor.interfaces.ISchemaModifiedEvent"
-    handler=".formulatorview.updateSchema"
-    />
-
-  <browser:page
-    for="collective.formulator.interfaces.IFormulator"
-    name="actions"
-    class=".formulatorview.FormulatorActionsView"
-    permission="cmf.ModifyPortalContent"
-    allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
-    />
-  <subscriber
-    for="collective.formulator.interfaces.IFormulatorActionsContext
-         plone.schemaeditor.interfaces.ISchemaModifiedEvent"
-    handler=".formulatorview.updateActions"
-    />
-
-  <browser:page
-      name="fields"
-      for="collective.formulator.interfaces.IFormulatorSchemaContext"
-      class=".formulatorview.FormulatorSchemaListingPage"
-      permission="cmf.ModifyPortalContent" />
-
-  <browser:page
-      name="actions"
-      for="collective.formulator.interfaces.IFormulatorActionsContext"
-      class=".formulatorview.FormulatorActionsListingPage"
-      permission="cmf.ModifyPortalContent" />
-
-  <browser:page
-    name="add-action"
-    for="collective.formulator.interfaces.IFormulatorActionsContext"
-    class=".formulatorview.ActionAddFormPage"
-    permission="cmf.ModifyPortalContent"
-    />
-
+    <include package="Products.CMFCore" file="permissions.zcml" />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="view"
+        class=".formulatorview.FormulatorView"
+        permission="zope.Public"
+        />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="fields"
+        class=".formulatorview.FormulatorSchemaView"
+        permission="cmf.ModifyPortalContent"
+        allowed_interface="collective.formulator.interfaces.IFormulatorSchemaContext"
+        />
+    <subscriber
+        for="collective.formulator.interfaces.IFormulatorSchemaContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".formulatorview.updateSchema"
+        />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="actions"
+        class=".formulatorview.FormulatorActionsView"
+        permission="cmf.ModifyPortalContent"
+        allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
+        />
+    <subscriber
+        for="collective.formulator.interfaces.IFormulatorActionsContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".formulatorview.updateActions"
+        />
+    <browser:page
+        name="fields"
+        for="collective.formulator.interfaces.IFormulatorSchemaContext"
+        class=".formulatorview.FormulatorSchemaListingPage"
+        permission="cmf.ModifyPortalContent" />
+    <browser:page
+        name="actions"
+        for="collective.formulator.interfaces.IFormulatorActionsContext"
+        class=".formulatorview.FormulatorActionsListingPage"
+        permission="cmf.ModifyPortalContent" />
+    <browser:page
+        name="add-action"
+        for="collective.formulator.interfaces.IFormulatorActionsContext"
+        class=".formulatorview.ActionAddFormPage"
+        permission="cmf.ModifyPortalContent"
+        />
     <browser:page
         name="edit"
         for="collective.formulator.interfaces.IActionContext"
         class=".formulatorview.EditView"
         permission="cmf.ModifyPortalContent" />
-
-  <utility
-      component=".formulatorview.FormulatorActionsVocabularyFactory"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      name="FormulatorActions"
-      />
-  <utility
-      name="zope.schema._bootstrapfields.Int"
-      component=".formulatorview.IntAction"
-      />
-
-  <utility
-      name="collective.formulator.browser.formulatorview.Mailer"
-      component=".formulatorview.MailerAction"
-      />
-  <utility
-      name="collective.formulator.browser.formulatorview.Mailer"
-      component=".formulatorview.MailerHandler"
-      />
-
-  <utility
-      name="collective.formulator.browser.formulatorview.CustomScript"
-      component=".formulatorview.CustomScriptAction"
-      />
-  <utility
-      name="collective.formulator.browser.formulatorview.CustomScript"
-      component=".formulatorview.CustomScriptHandler"
-      />
-
-  <utility
-      name="collective.formulator.browser.formulatorview.SaveData"
-      component=".formulatorview.SaveDataAction"
-      />
-  <utility
-      name="collective.formulator.browser.formulatorview.SaveData"
-      component=".formulatorview.SaveDataHandler"
-      />
-
-  <adapter
-      factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
-      for="collective.formulator.interfaces.IAction
-           collective.formulator.interfaces.IActionEditForm"
-      />
-
-  <adapter
-      factory=".formulatorview.get_field_extender"
-      provides="plone.schemaeditor.interfaces.IFieldEditorExtender"
-      name="collective.formulator.fieldextender"
-      />
-
-  <adapter
-      factory=".formulatorview.FieldExtender"
-      provides="collective.formulator.interfaces.IFieldExtender"
-      />
     <utility
-        factory=".formulatorview.FormulatorSchema"
-        name="collective.formulator.schema"
+        component=".formulatorview.FormulatorActionsVocabularyFactory"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        name="FormulatorActions"
         />
-
-  <include package="z3c.form" file="meta.zcml" />
-  <z3c:widgetTemplate
-      for="collective.formulator.interfaces.IFormulatorActionsContext"
-      mode="input"
-      widget="z3c.form.interfaces.ICheckBoxWidget"
-      layer="z3c.form.interfaces.IFormLayer"
-      template="action_input.pt"
-      />
+    <utility
+        name="zope.schema._bootstrapfields.Int"
+        component=".formulatorview.IntAction"
+        />
+    <utility
+        name="collective.formulator.browser.formulatorview.Mailer"
+        component=".formulatorview.MailerAction"
+        />
+    <utility
+        name="collective.formulator.browser.formulatorview.Mailer"
+        component=".formulatorview.MailerHandler"
+        />
+    <utility
+        name="collective.formulator.browser.formulatorview.CustomScript"
+        component=".formulatorview.CustomScriptAction"
+        />
+    <utility
+        name="collective.formulator.browser.formulatorview.CustomScript"
+        component=".formulatorview.CustomScriptHandler"
+        />
+    <utility
+        name="collective.formulator.browser.formulatorview.SaveData"
+        component=".formulatorview.SaveDataAction"
+        />
+    <utility
+        name="collective.formulator.browser.formulatorview.SaveData"
+        component=".formulatorview.SaveDataHandler"
+        />
+    <adapter
+        factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
+        for="collective.formulator.interfaces.IAction
+             collective.formulator.interfaces.IActionEditForm"
+        />
+    <adapter
+        factory=".formulatorview.get_field_extender"
+        provides="plone.schemaeditor.interfaces.IFieldEditorExtender"
+        name="collective.formulator.fieldextender"
+        />
+    <adapter
+        factory=".formulatorview.FieldExtender"
+        provides="collective.formulator.interfaces.IFieldExtender"
+        />
+    <utility
+        factory=".formulatorview.FormulatorFieldMetadataHandler"
+        name="collective.formulator.fieldmetadatahandler"
+        />
+    <adapter
+        factory=".formulatorview.get_action_extender"
+        provides="plone.schemaeditor.interfaces.IFieldEditorExtender"
+        name="collective.formulator.actionextender"
+        />
+    <adapter
+        factory=".formulatorview.ActionExtender"
+        provides="collective.formulator.interfaces.IActionExtender"
+        />
+    <utility
+        factory=".formulatorview.FormulatorActionMetadataHandler"
+        name="collective.formulator.actionmetadatahandler"
+        />
+    <include package="z3c.form" file="meta.zcml" />
+    <z3c:widgetTemplate
+        for="collective.formulator.interfaces.IFormulatorActionsContext"
+        mode="input"
+        widget="z3c.form.interfaces.ICheckBoxWidget"
+        layer="z3c.form.interfaces.IFormLayer"
+        template="action_input.pt"
+        />
 </configure>

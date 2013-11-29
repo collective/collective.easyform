@@ -13,6 +13,7 @@ from collective.formulator.interfaces import (
     ICustomScript,
     ISaveData,
     IFieldExtender,
+    IActionExtender,
 )
 from plone.supermodel.utils import ns
 from plone.supermodel.parser import IFieldMetadataHandler
@@ -32,15 +33,13 @@ from plone.supermodel.model import Model
 from plone.supermodel.serializer import serialize
 from plone.z3cform import layout
 from z3c.form import button, form, field
-from z3c.form import interfaces
-from z3c.form.browser import widget
-from z3c.form.widget import Widget, FieldWidget
+from z3c.form.interfaces import DISPLAY_MODE
 from zope import schema as zs
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtilitiesFor, adapter, adapts
 from zope.component import queryUtility, getAdapters
 from zope.i18n import translate
-from zope.interface import implements, implementer, implementer_only
+from zope.interface import implements, implementer
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.event import notify
 from plone.schemaeditor.utils import SchemaModifiedEvent
@@ -98,7 +97,7 @@ class FormulatorForm(DefaultEditForm):
                 if doit:
                     if hasattr(action, "onSuccess"):
                         result = action.onSuccess(data, self.request)
-                        if type(result) is type({}) and len(result):
+                        if isinstance(result, dict) and len(result):
                             # return the dict, which hopefully uses
                             # field ids or FORM_ERROR_MARKER for keys
                             return result
@@ -116,12 +115,12 @@ class FormulatorForm(DefaultEditForm):
             return
         # self.applyChanges(data)
         self.output = data
-        self.mode = 'display'
+        self.mode = DISPLAY_MODE
         for widget in self.widgets.values():
-            widget.mode = 'display'
+            widget.mode = DISPLAY_MODE
         for group in self.groups:
             for widget in group.widgets.values():
-                widget.mode = 'display'
+                widget.mode = DISPLAY_MODE
         self.updateWidgets()
         # self.request.response.redirect(self.nextURL())
 
@@ -499,7 +498,7 @@ class FieldExtender(object):
                           lambda x, value: _set_(x, value, 'TValidator'))
 
 
-class FormulatorSchema(object):
+class FormulatorFieldMetadataHandler(object):
 
     """Support the formulator: namespace in model definitions.
     """
@@ -523,3 +522,43 @@ class FormulatorSchema(object):
             value = schema.queryTaggedValue(i, {}).get(name, None)
             if value:
                 fieldNode.set(ns(i, self.namespace), value)
+
+
+@adapter(IFormulatorActionsContext, IAction)
+def get_action_extender(context, action):
+    return IActionExtender
+
+
+class ActionExtender(object):
+    implements(IActionExtender)
+    adapts(IAction)
+
+    def __init__(self, field):
+        self.field = field
+
+    execCondition = property(lambda x: _get_(x, 'execCondition'),
+                             lambda x, value: _set_(x, value, 'execCondition'))
+
+
+class FormulatorActionMetadataHandler(object):
+
+    """Support the formulator: namespace in model definitions.
+    """
+    implements(IFieldMetadataHandler)
+
+    namespace = 'http://namespaces.plone.org/supermodel/formulator'
+    prefix = 'formulator'
+
+    def read(self, fieldNode, schema, field):
+        name = field.__name__
+        value = fieldNode.get(ns('execCondition', self.namespace))
+        data = schema.queryTaggedValue('execCondition', {})
+        if value:
+            data[name] = value
+            schema.setTaggedValue('execCondition', data)
+
+    def write(self, fieldNode, schema, field):
+        name = field.__name__
+        value = schema.queryTaggedValue('execCondition', {}).get(name, None)
+        if value:
+            fieldNode.set(ns('execCondition', self.namespace), value)

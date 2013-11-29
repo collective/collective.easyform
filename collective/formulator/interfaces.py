@@ -8,6 +8,8 @@ from plone.directives import form
 from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
 from collective.formulator import formulatorMessageFactory as _
 from plone.schemaeditor import SchemaEditorMessageFactory as __
+from Products.PageTemplates.Expressions import getEngine
+from zope.tales.tales import CompilerError
 
 
 def isValidFieldName(value):
@@ -279,10 +281,22 @@ class IFormulatorActionsContext(ISchemaContext):
     """
 
 
+class InvalidTALESError(zs.ValidationError):
+    __doc__ = u'Please enter a valid TALES expression.'
+
+
+def isTALES(value):
+    if value.strip():
+        try:
+            getEngine().compile(value)
+        except CompilerError:
+            raise InvalidTALESError
+    return True
+
+
 class IFieldExtender(form.Schema):
     form.fieldset(u"overrides", label=_("Overrides"),
                   fields=['TDefault', 'TEnabled', 'TValidator'])
-    # validators=('talesvalidator',),
     # write_permission=EDIT_TALES_PERMISSION,
     TDefault = zs.TextLine(
         title=_(u'label_tdefault_text', default=u"Default Expression"),
@@ -294,9 +308,9 @@ class IFieldExtender(form.Schema):
                     an error on form display.
                 """)),
         default=u"",
+        constraint=isTALES,
         required=False,
     )
-    # validators=('talesvalidator',),
     # write_permission=EDIT_TALES_PERMISSION,
     TEnabled = zs.TextLine(
         title=_(u'label_tenabled_text', default=u"Enabling Expression"),
@@ -309,9 +323,9 @@ class IFieldExtender(form.Schema):
                        "PLEASE NOTE: errors in the evaluation of this expression will cause"
                        "an error on form display.")),
         default=u"",
+        constraint=isTALES,
         required=False,
     )
-    # validators=('talesvalidator',),
     # write_permission=EDIT_TALES_PERMISSION,
     TValidator = zs.TextLine(
         title=_(u'label_tvalidator_text', default=u"Custom Validator"),
@@ -324,6 +338,7 @@ class IFieldExtender(form.Schema):
                        "PLEASE NOTE: errors in the evaluation of this expression will cause"
                        "an error on form display.")),
         default=u"python:False",
+        constraint=isTALES,
         required=False,
     )
     # BooleanField('serverSide',
@@ -342,28 +357,9 @@ class IFieldExtender(form.Schema):
         #),
 
 
-class IActionContext(IFieldContext):
-
-    """
-    Formulator action view interface
-    """
-
-
-class IActionEditForm(interfaces.IEditForm):
-
-    """ Marker interface for action edit forms
-    """
-
-
-class IAction(zs.interfaces.IField):
-    required = zs.Bool(
-        title=_("Enabled"),
-        description=_("Tells whether a action is enabled."),
-        default=True)
+class IActionExtender(form.Schema):
+    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
     # TODO:
-    # TALESString('execCondition',
-    # schemata='overrides',
-    # validators=('talesvalidator',),
     # write_permission=EDIT_TALES_PERMISSION,
     # read_permission=ModifyPortalContent,
     execCondition = zs.TextLine(
@@ -377,15 +373,36 @@ class IAction(zs.interfaces.IField):
                        u"cause an error on form display.")
                      ),
         default=u"",
+        constraint=isTALES,
         required=False,
     )
 
 
-class IMailer(form.Schema, IAction):
+class IActionContext(IFieldContext):
+
+    """
+    Formulator action view interface
+    """
+
+
+class IActionEditForm(interfaces.IEditForm):
+
+    """ Marker interface for action edit forms
+    """
+
+
+class IAction(form.Schema, zs.interfaces.IField):
+    form.omitted('order', 'default', 'missing_value', 'readonly')
+    required = zs.Bool(
+        title=_("Enabled"),
+        description=_("Tells whether a action is enabled."),
+        default=True)
+
+
+class IMailer(IAction):
 
     """A form action adapter that will e-mail form input."""
-    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
-    form.omitted('order', 'default', 'missing_value', 'readonly')
+    #form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
     # StringField('recipient_name',
         # searchable=0,
         # required=0,
@@ -874,11 +891,11 @@ getProxyRoleChoices = SimpleVocabulary.fromItems((
 ))
 
 
-class ICustomScript(form.Schema, IAction):
+class ICustomScript(IAction):
 
     """Executes a Python script for form data"""
-    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
-    form.omitted('order', 'default', 'missing_value', 'readonly')
+    #form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
+    #form.omitted('order', 'default', 'missing_value', 'readonly')
     # Field represents Form Mailer."""
     form.read_permission(ProxyRole='cmf.ModifyPortalContent')
     form.write_permission(ProxyRole='cmf.ModifyPortalContent')
@@ -901,12 +918,12 @@ class ICustomScript(form.Schema, IAction):
     )
 
 
-class ISaveData(form.Schema, IAction):
+class ISaveData(IAction):
 
     """A form action adapter that will save form input data and
        return it in csv- or tab-delimited format."""
-    form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
-    form.omitted('order', 'default', 'missing_value', 'readonly')
+    #form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
+    #form.omitted('order', 'default', 'missing_value', 'readonly')
         # LinesField('showFields',
             # required=0,
             # searchable=0,
