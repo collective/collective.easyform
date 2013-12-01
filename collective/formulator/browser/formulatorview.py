@@ -1,5 +1,6 @@
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from ZPublisher.mapply import mapply
 from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.interfaces import (
     INewAction,
@@ -14,6 +15,7 @@ from collective.formulator.interfaces import (
     ISaveData,
     IFieldExtender,
     IActionExtender,
+    SCHEMATA_KEY,
 )
 from plone.supermodel.utils import ns
 from plone.supermodel.parser import IFieldMetadataHandler
@@ -45,9 +47,6 @@ from zope.event import notify
 from plone.schemaeditor.utils import SchemaModifiedEvent
 from Acquisition import aq_parent, aq_inner
 from Products.CMFCore.Expression import getExprContext, Expression
-
-#SCHEMATA_KEY = "FormulatorSchema"
-SCHEMATA_KEY = u""
 
 
 class FormulatorForm(DefaultEditForm):
@@ -87,7 +86,7 @@ class FormulatorForm(DefaultEditForm):
             for name, action in actions:
                 # Now, see if we should execute it.
                 # Check to see if execCondition exists and has contents
-                execCondition = getattr(action, 'execCondition', '')
+                execCondition = action.interface.queryTaggedValue("execCondition", {}).get(name)
                 if execCondition:
                     expression = Expression(execCondition)
                     expression_context = getExprContext(self.context)
@@ -114,6 +113,22 @@ class FormulatorForm(DefaultEditForm):
             self.status = self.formErrorsMessage
             return
         # self.applyChanges(data)
+        thanksPageOverride = self.context.thanksPageOverride
+        if thanksPageOverride:
+            thanksPageOverrideAction = self.context.thanksPageOverrideAction
+            expression = Expression(thanksPageOverride)
+            expression_context = getExprContext(self.context)
+            thanksPage = expression(expression_context)
+            #import pdb; pdb.set_trace()
+            if thanksPageOverrideAction == "redirect_to":
+                self.request.response.redirect(thanksPage)
+                return
+            elif thanksPageOverrideAction == "traverse_to":
+                thanksPage = self.context.restrictedTraverse(
+                    thanksPage.encode("utf-8"))
+                thanksPage = mapply(
+                    thanksPage, self.request.args, self.request).encode("utf-8")
+                self.request.response.write(thanksPage)
         self.output = data
         self.mode = DISPLAY_MODE
         for widget in self.widgets.values():

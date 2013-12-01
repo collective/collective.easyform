@@ -12,10 +12,27 @@ from Products.PageTemplates.Expressions import getEngine
 from zope.tales.tales import CompilerError
 
 
+#SCHEMATA_KEY = "FormulatorSchema"
+SCHEMATA_KEY = u""
+
+
 def isValidFieldName(value):
     if not ID_RE.match(value):
         raise Invalid(__(u'Please use only letters, numbers and '
                          u'the following characters: _.'))
+    return True
+
+
+class InvalidTALESError(zs.ValidationError):
+    __doc__ = u'Please enter a valid TALES expression.'
+
+
+def isTALES(value):
+    if value.strip():
+        try:
+            getEngine().compile(value)
+        except CompilerError:
+            raise InvalidTALESError
     return True
 
 
@@ -75,6 +92,12 @@ MODEL_DEFAULT = u"""
     </schema>
 </model>
 """
+
+
+customActions = SimpleVocabulary.fromItems((
+    (_(u"Traverse to"), u"traverse_to"),
+    (_(u"Redirect to"), u"redirect_to"),
+))
 
 
 class IFormulator(form.Schema):
@@ -159,7 +182,27 @@ class IFormulator(form.Schema):
         required=False,
     )
     form.fieldset(u"overrides", label=_("Overrides"),
-                  fields=['thanksPageOverride', 'formActionOverride'])
+                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride'])
+    thanksPageOverrideAction = zs.Choice(
+        title=_(u'label_thankspageoverrideaction_text',
+                default=u'Custom Success Action Type'),
+        description=_(u'help_thankspageoverrideaction_text', default=u"""
+            Use this field in place of a thanks-page designation
+            to determine final action after calling
+            your action adapter (if you have one). You would usually use
+            this for a custom success template or script.
+            Leave empty if unneeded. Otherwise, specify as you would a
+            CMFFormController action type and argument,
+            complete with type of action to execute
+            (e.g., "redirect_to" or "traverse_to")
+            and a TALES expression. For example,
+            "Redirect to" and "string:thanks-page" would redirect to
+            'thanks-page'.
+        """),
+        default=u"redirect_to",
+        required=False,
+        vocabulary=customActions,
+    )
     thanksPageOverride = zs.TextLine(
         title=_(u'label_thankspageoverride_text',
                 default=u"Custom Success Action"),
@@ -173,9 +216,11 @@ class IFormulator(form.Schema):
             complete with type of action to execute
             (e.g., "redirect_to" or "traverse_to")
             and a TALES expression. For example,
-            "redirect_to:string:thanks-page" would redirect to
+            "Redirect to" and "string:thanks-page" would redirect to
             'thanks-page'.
         """),
+        default=u"",
+        constraint=isTALES,
         required=False,
     )
     formActionOverride = zs.TextLine(
@@ -279,19 +324,6 @@ class IFormulatorActionsContext(ISchemaContext):
     """
     Formulator actions view interface
     """
-
-
-class InvalidTALESError(zs.ValidationError):
-    __doc__ = u'Please enter a valid TALES expression.'
-
-
-def isTALES(value):
-    if value.strip():
-        try:
-            getEngine().compile(value)
-        except CompilerError:
-            raise InvalidTALESError
-    return True
 
 
 class IFieldExtender(form.Schema):
