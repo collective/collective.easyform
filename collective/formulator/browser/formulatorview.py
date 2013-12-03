@@ -86,7 +86,7 @@ class FormulatorForm(DefaultEditForm):
             for name, action in actions:
                 # Now, see if we should execute it.
                 # Check to see if execCondition exists and has contents
-                execCondition = action.interface.queryTaggedValue("execCondition", {}).get(name)
+                execCondition = IActionExtender(action).execCondition
                 if execCondition:
                     expression = Expression(execCondition)
                     expression_context = getExprContext(self.context)
@@ -511,6 +511,8 @@ class FieldExtender(object):
                         lambda x, value: _set_(x, value, 'TEnabled'))
     TValidator = property(lambda x: _get_(x, 'TValidator'),
                           lambda x, value: _set_(x, value, 'TValidator'))
+    serverSide = property(lambda x: _get_(x, 'serverSide'),
+                          lambda x, value: _set_(x, value, 'serverSide'))
 
 
 class FormulatorFieldMetadataHandler(object):
@@ -530,6 +532,13 @@ class FormulatorFieldMetadataHandler(object):
             if value:
                 data[name] = value
                 schema.setTaggedValue(i, data)
+        # serverSide
+        value = fieldNode.get(ns('serverSide', self.namespace))
+        data = schema.queryTaggedValue('serverSide', {})
+        if value:
+            # TODO eval
+            data[name] = eval(value)
+            schema.setTaggedValue('serverSide', data)
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
@@ -537,6 +546,10 @@ class FormulatorFieldMetadataHandler(object):
             value = schema.queryTaggedValue(i, {}).get(name, None)
             if value:
                 fieldNode.set(ns(i, self.namespace), value)
+        # serverSide
+        value = schema.queryTaggedValue('serverSide', {}).get(name, None)
+        if isinstance(value, bool):
+            fieldNode.set(ns('serverSide', self.namespace), str(value))
 
 
 @adapter(IFormulatorActionsContext, IAction)

@@ -12,7 +12,6 @@ from Products.PageTemplates.Expressions import getEngine
 from zope.tales.tales import CompilerError
 
 
-#SCHEMATA_KEY = "FormulatorSchema"
 SCHEMATA_KEY = u""
 
 
@@ -234,75 +233,58 @@ class IFormulator(form.Schema):
         """),
         required=False,
     )
-    # TALESString('onDisplayOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        #validators=('talesvalidator', ),
-        # write_permission=EDIT_TALES_PERMISSION,
-        # default='',
-        # languageIndependent=1,
-        # widget=StringWidget(label=_(u'label_OnDisplayOverride_text',
-                                    # default=u"Form Setup Script"),
-            # description=_(u'help_OnDisplayOverride_text', default=u"""
-                # A TALES expression that will be called when the form is
-                # displayed.
-                # Leave empty if unneeded.
-                # The most common use of this field is to call a python script
-                # that sets defaults for multiple fields by pre-populating
-                # request.form.
-                # Any value returned by the expression is ignored.
-                # PLEASE NOTE: errors in the evaluation of this expression
-                # will cause an error on form display.
-            #"""),
-            # size=70,
-            #),
-        #),
-    # TALESString('afterValidationOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        #validators=('talesvalidator', ),
-        # write_permission=EDIT_TALES_PERMISSION,
-        # default='',
-        # languageIndependent=1,
-        # widget=StringWidget(label=_(u'label_AfterValidationOverride_text',
-                                    # default=u"After Validation Script"),
-            # description=_(u'help_AfterValidationOverride_text', default=\
-                #u"A TALES expression that will be called after the form is"
-                #"successfully validated, but before calling an action adapter"
-                #"(if any) or displaying a thanks page."
-                #"Form input will be in the request.form dictionary."
-                #"Leave empty if unneeded."
-                #"The most common use of this field is to call a python script"
-                #"to clean up form input or to script an alternative action."
-                #"Any value returned by the expression is ignored."
-                #"PLEASE NOTE: errors in the evaluation of this expression will"
-                #"cause an error on form display."),
-            # size=70,
-            #),
-        #),
-    # TALESString('headerInjection',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        #validators=('talesvalidator', ),
-        # write_permission=EDIT_TALES_PERMISSION,
-        # default='',
-        # languageIndependent=1,
-        # widget=StringWidget(label=_(u'label_headerInjection_text',
-                                    # default=u"Header Injection"),
-            # description=_(u'help_headerInjection_text', default=u"""
-                # This override field allows you to insert content into the xhtml
-                # head. The typical use is to add custom CSS or JavaScript.
-                # Specify a TALES expression returning a string. The string will
-                # be inserted with no interpretation.
-                # PLEASE NOTE: errors in the evaluation of this expression will
-                # cause an error on form display.
-            #"""),
-            # size=70,
-            #),
-        #),
+    # write_permission=EDIT_TALES_PERMISSION,
+    onDisplayOverride = zs.TextLine(
+        title=_(u'label_OnDisplayOverride_text', default=u"Form Setup Script"),
+        description=_(u'help_OnDisplayOverride_text', default=u"""
+            A TALES expression that will be called when the form is
+            displayed.
+            Leave empty if unneeded.
+            The most common use of this field is to call a python script
+            that sets defaults for multiple fields by pre-populating
+            request.form.
+            Any value returned by the expression is ignored.
+            PLEASE NOTE: errors in the evaluation of this expression
+            will cause an error on form display.
+        """),
+        constraint=isTALES,
+        required=False,
+        default=u'',
+    )
+    # write_permission=EDIT_TALES_PERMISSION,
+    afterValidationOverride = zs.TextLine(
+        title=_(u'label_AfterValidationOverride_text',
+                default=u"After Validation Script"),
+        description=_(u'help_AfterValidationOverride_text', default=\
+            u"A TALES expression that will be called after the form is"
+            "successfully validated, but before calling an action adapter"
+            "(if any) or displaying a thanks page."
+            "Form input will be in the request.form dictionary."
+            "Leave empty if unneeded."
+            "The most common use of this field is to call a python script"
+            "to clean up form input or to script an alternative action."
+            "Any value returned by the expression is ignored."
+            "PLEASE NOTE: errors in the evaluation of this expression will"
+            "cause an error on form display."),
+        constraint=isTALES,
+        required=False,
+        default=u'',
+    )
+    # write_permission=EDIT_TALES_PERMISSION,
+    headerInjection = zs.TextLine(
+        title=_(u'label_headerInjection_text', default=u"Header Injection"),
+        description=_(u'help_headerInjection_text', default=u"""
+            This override field allows you to insert content into the xhtml
+            head. The typical use is to add custom CSS or JavaScript.
+            Specify a TALES expression returning a string. The string will
+            be inserted with no interpretation.
+            PLEASE NOTE: errors in the evaluation of this expression will
+            cause an error on form display.
+        """),
+        constraint=isTALES,
+        required=False,
+        default=u'',
+    )
 
 
 class IFormulatorView(Interface):
@@ -328,7 +310,8 @@ class IFormulatorActionsContext(ISchemaContext):
 
 class IFieldExtender(form.Schema):
     form.fieldset(u"overrides", label=_("Overrides"),
-                  fields=['TDefault', 'TEnabled', 'TValidator'])
+                  fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
+                  #fields=['TDefault', 'TEnabled', 'TValidator'])
     # write_permission=EDIT_TALES_PERMISSION,
     TDefault = zs.TextLine(
         title=_(u'label_tdefault_text', default=u"Default Expression"),
@@ -373,20 +356,16 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    # BooleanField('serverSide',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # default='',
-        # widget=BooleanWidget(
-            #label=_(u'label_server_side_text', default=u"Server-Side Variable"),
-            # description=_(u'description_server_side_text', default=\
-                #u"Mark this field as a value to be injected into the"
-                #"request form for use by action adapters and is not"
-                #"modifiable by or exposed to the client."),
-            #),
-        #),
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    serverSide = zs.Bool(
+        title=_(u'label_server_side_text', default=u"Server-Side Variable"),
+        description=_(u'description_server_side_text', default=\
+            u"Mark this field as a value to be injected into the"
+            "request form for use by action adapters and is not"
+            "modifiable by or exposed to the client."),
+        default=False,
+        required=False,
+    )
 
 
 class IActionExtender(form.Schema):
