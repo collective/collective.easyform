@@ -181,7 +181,7 @@ class IFormulator(form.Schema):
         required=False,
     )
     form.fieldset(u"overrides", label=_("Overrides"),
-                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride'])
+                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection'])
     thanksPageOverrideAction = zs.Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
@@ -255,17 +255,17 @@ class IFormulator(form.Schema):
     afterValidationOverride = zs.TextLine(
         title=_(u'label_AfterValidationOverride_text',
                 default=u"After Validation Script"),
-        description=_(u'help_AfterValidationOverride_text', default=\
-            u"A TALES expression that will be called after the form is"
-            "successfully validated, but before calling an action adapter"
-            "(if any) or displaying a thanks page."
-            "Form input will be in the request.form dictionary."
-            "Leave empty if unneeded."
-            "The most common use of this field is to call a python script"
-            "to clean up form input or to script an alternative action."
-            "Any value returned by the expression is ignored."
-            "PLEASE NOTE: errors in the evaluation of this expression will"
-            "cause an error on form display."),
+        description=_(u'help_AfterValidationOverride_text', default=
+                      u"A TALES expression that will be called after the form is"
+                      "successfully validated, but before calling an action adapter"
+                      "(if any) or displaying a thanks page."
+                      "Form input will be in the request.form dictionary."
+                      "Leave empty if unneeded."
+                      "The most common use of this field is to call a python script"
+                      "to clean up form input or to script an alternative action."
+                      "Any value returned by the expression is ignored."
+                      "PLEASE NOTE: errors in the evaluation of this expression will"
+                      "cause an error on form display."),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -311,7 +311,6 @@ class IFormulatorActionsContext(ISchemaContext):
 class IFieldExtender(form.Schema):
     form.fieldset(u"overrides", label=_("Overrides"),
                   fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
-                  #fields=['TDefault', 'TEnabled', 'TValidator'])
     # write_permission=EDIT_TALES_PERMISSION,
     TDefault = zs.TextLine(
         title=_(u'label_tdefault_text', default=u"Default Expression"),
@@ -359,10 +358,10 @@ class IFieldExtender(form.Schema):
     # write_permission=EDIT_ADVANCED_PERMISSION,
     serverSide = zs.Bool(
         title=_(u'label_server_side_text', default=u"Server-Side Variable"),
-        description=_(u'description_server_side_text', default=\
-            u"Mark this field as a value to be injected into the"
-            "request form for use by action adapters and is not"
-            "modifiable by or exposed to the client."),
+        description=_(u'description_server_side_text', default=
+                      u"Mark this field as a value to be injected into the"
+                      "request form for use by action adapters and is not"
+                      "modifiable by or exposed to the client."),
         default=False,
         required=False,
     )
@@ -413,35 +412,31 @@ class IAction(form.Schema, zs.interfaces.IField):
 class IMailer(IAction):
 
     """A form action adapter that will e-mail form input."""
-    #form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
-    # StringField('recipient_name',
-        # searchable=0,
-        # required=0,
-        # default_method='getDefaultRecipientName',
-        # write_permission=EDIT_ADDRESSING_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # widget=StringWidget(
-            # label=_(u'label_formmailer_recipient_fullname',
-                      # default=u"Recipient's full name"),
-            # description=_(u'help_formmailer_recipient_fullname', default=u"""
-                # The full name of the recipient of the mailed form.
-                #"""),
-            #),
-        #),
-    # StringField('recipient_email',
-        # searchable=0,
-        # required=0,
-        # default_method='getDefaultRecipient',
-        # write_permission=EDIT_ADDRESSING_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # validators=('isEmail',),
-        # widget=StringWidget(
-            # label=_(u'label_formmailer_recipient_email',
-                      # default=u"Recipient's e-mail address"),
-            # description=_(u'help_formmailer_recipient_email',
-                            # default=u'The recipients e-mail address.'),
-            #),
-        #),
+    # default_method='getDefaultRecipientName',
+    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    recipient_name = zs.TextLine(
+        title=_(u'label_formmailer_recipient_fullname',
+                default=u"Recipient's full name"),
+        description=_(u'help_formmailer_recipient_fullname',
+                      default=u"The full name of the recipient of the mailed form."),
+        default=u"",
+        required=False,
+    )
+    # default_method='getDefaultRecipient',
+    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    # validators=('isEmail',),
+    # TODO defaultFactory
+    # TODO IContextAwareDefaultFactory
+    recipient_email = zs.TextLine(
+        title=_(u'label_formmailer_recipient_email',
+                default=u"Recipient's e-mail address"),
+        description=_(u'help_formmailer_recipient_email',
+                      default=u'The recipients e-mail address.'),
+        default=u"",
+        required=False,
+    )
     # StringField('to_field',
         # schemata='addressing',
         # searchable=0,
@@ -462,34 +457,30 @@ class IMailer(IAction):
                 #"""),
             #),
         #),
-    # LinesField('cc_recipients',
-        # searchable=0,
-        # required=0,
-        # default_method='getDefaultCC',
-        # schemata='addressing',
-        # write_permission=EDIT_ADDRESSING_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # widget=LinesWidget(
-            # label=_(u'label_formmailer_cc_recipients',
-                      # default=u'CC Recipients'),
-            # description=_(u'help_formmailer_cc_recipients',
-                    # default=u'E-mail addresses which receive a carbon copy.'),
-            #),
-        #),
-    # LinesField('bcc_recipients',
-        # schemata='addressing',
-        # searchable=0,
-        # required=0,
-        # default_method='getDefaultBCC',
-        # write_permission=EDIT_ADDRESSING_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # widget=LinesWidget(
-            # label=_(u'label_formmailer_bcc_recipients',
-                      # default=u'BCC Recipients'),
-            # description=_(u'help_formmailer_bcc_recipients',
-                # default=u'E-mail addresses which receive a blind carbon copy.'),
-            #),
-        #),
+    # default_method='getDefaultCC',
+    # schemata='addressing',
+    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    cc_recipients = zs.Text(
+        title=_(u'label_formmailer_cc_recipients',
+                default=u'CC Recipients'),
+        description=_(u'help_formmailer_cc_recipients',
+                      default=u'E-mail addresses which receive a carbon copy.'),
+        default=u"",
+        required=False,
+    )
+    # schemata='addressing',
+    # default_method='getDefaultBCC',
+    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    bcc_recipients = zs.Text(
+        title=_(u'label_formmailer_bcc_recipients',
+                default=u'BCC Recipients'),
+        description=_(u'help_formmailer_bcc_recipients',
+                      default=u'E-mail addresses which receive a blind carbon copy.'),
+        default=u"",
+        required=False,
+    )
     # StringField('replyto_field',
         # schemata='addressing',
         # searchable=0,
@@ -509,36 +500,19 @@ class IMailer(IAction):
                 #"""),
             #),
         #),
-    # StringField('smtp_envelope_mail_from',
-        # schemata='addressing',
-        # searchable=0,
-        # required=0,
-        # read_permission=ModifyPortalContent,
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # widget=StringWidget(
-            # label = _(u'label_smtp_envelope_mail_from_address',
-                      # default=u'SMTP Envelope MAIL FROM address'),
-            # description = _(u'help_smtp_envelope_mail_from_address', default=\
-                # u"""
-                #"""),
-            #),
-        #),
-    # StringField('msg_subject',
-        # schemata='message',
-        # searchable=0,
-        # required=0,
-        #default='Form Submission',
-        # read_permission=ModifyPortalContent,
-        # widget=StringWidget(
-            # description=_(u'help_formmailer_subject',
-                # default=u"""
-                # Subject line of message. This is used if you
-                # do not specify a subject field or if the field
-                # is empty.
-                #"""),
-            #label=_(u'label_formmailer_subject', default=u'Subject'),
-            #),
-        #),
+    # schemata='message',
+    # read_permission=ModifyPortalContent,
+    msg_subject = zs.TextLine(
+        title=_(u'label_formmailer_subject', default=u'Subject'),
+        description=_(u'help_formmailer_subject',
+            default=u"""
+            Subject line of message. This is used if you
+            do not specify a subject field or if the field
+            is empty.
+            """),
+        default=u"Form Submission",
+        required=False,
+    )
     # StringField('subject_field',
         # schemata='message',
         # searchable=0,
@@ -556,62 +530,49 @@ class IMailer(IAction):
                 #"""),
             #),
         #),
-    # TextField('body_pre',
-        # searchable=0,
-        # required=0,
-        # schemata='message',
-        # accessor='getBody_pre',
-        # read_permission=ModifyPortalContent,
-        # default_content_type='text/plain',
-        # allowable_content_types=('text/plain',),
-        # widget=TextAreaWidget(description=_(u'help_formmailer_body_pre',
-                      # default=u'Text prepended to fields listed in mail-body'),
-          #label=_(u'label_formmailer_body_pre', default=u'Body (prepended)'),
-            #),
-        #),
-    # TextField('body_post',
-        # searchable=0,
-        # required=0,
-        # schemata='message',
-        # read_permission=ModifyPortalContent,
-        # default_content_type='text/plain',
-        # allowable_content_types=('text/plain',),
-        # widget=TextAreaWidget(description=_(u'help_formmailer_body_post',
-                      # default=u'Text appended to fields listed in mail-body'),
-          #label=_(u'label_formmailer_body_post', default=u'Body (appended)'),
-            #),
-        #),
-
-    # TextField('body_footer',
-        # searchable=0,
-        # required=0,
-        # schemata='message',
-        # read_permission=ModifyPortalContent,
-        # default_content_type='text/plain',
-        # allowable_content_types=('text/plain',),
-        # widget=TextAreaWidget(description=_(u'help_formmailer_body_footer',
-                          #default=u'Text used as the footer at '
-                          # u'bottom, delimited from the body by a dashed line.'),
-            # label=_(u'label_formmailer_body_footer',
-                      # default=u'Body (signature)'),
-            #),
-        #),
-    # BooleanField('showAll',
-        # required=0,
-        # searchable=0,
-        # schemata='message',
-        # default='1',
-        # read_permission=ModifyPortalContent,
-        # widget=BooleanWidget(
-            #label=_(u'label_mailallfields_text', default=u"Include All Fields"),
-            # description=_(u'help_mailallfields_text', default=u"""
-                # Check this to include input for all fields
-                #(except label and file fields). If you check
-                # this, the choices in the pick box below
-                # will be ignored.
-                #"""),
-            #),
-        #),
+    # schemata='message',
+    # accessor='getBody_pre',
+    # read_permission=ModifyPortalContent,
+    body_pre = zs.Text(
+        title=_(u'label_formmailer_body_pre', default=u'Body (prepended)'),
+        description=_(u'help_formmailer_body_pre',
+                      default=u'Text prepended to fields listed in mail-body'),
+        default=u"",
+        required=False,
+    )
+    # schemata='message',
+    # read_permission=ModifyPortalContent,
+    body_post = zs.Text(
+        title=_(u'label_formmailer_body_post', default=u'Body (appended)'),
+        description=_(u'help_formmailer_body_post',
+                      default=u'Text appended to fields listed in mail-body'),
+        default=u"",
+        required=False,
+    )
+    # schemata='message',
+    # read_permission=ModifyPortalContent,
+    body_footer = zs.Text(
+        title=_(u'label_formmailer_body_footer',
+                default=u'Body (signature)'),
+        description=_(u'help_formmailer_body_footer',
+                      default=u'Text used as the footer at '
+                      u'bottom, delimited from the body by a dashed line.'),
+        default=u"",
+        required=False,
+    )
+    # schemata='message',
+    # read_permission=ModifyPortalContent,
+    showAll = zs.Bool(
+        title=_(u'label_mailallfields_text', default=u"Include All Fields"),
+        description=_(u'help_mailallfields_text', default=u"""
+            Check this to include input for all fields
+            (except label and file fields). If you check
+            this, the choices in the pick box below
+            will be ignored.
+            """),
+        default=True,
+        required=False,
+    )
     # LinesField('showFields',
         # required=0,
         # searchable=0,
@@ -626,21 +587,18 @@ class IMailer(IAction):
                 #"""),
             #),
         #),
-    # BooleanField('includeEmpties',
-        # required=0,
-        # searchable=0,
-        # schemata='message',
-        # default='1',
-        # read_permission=ModifyPortalContent,
-        # widget=BooleanWidget(
-            #label=_(u'label_mailEmpties_text', default=u"Include Empties"),
-            # description=_(u'help_mailEmpties_text', default=u"""
-                # Check this to include titles
-                # for fields that received no input. Uncheck
-                # to leave fields with no input out of the e-mail.
-                #"""),
-            #),
-        #),
+    # schemata='message',
+    # read_permission=ModifyPortalContent,
+    includeEmpties = zs.Bool(
+        title=_(u'label_mailEmpties_text', default=u"Include Empties"),
+        description=_(u'help_mailEmpties_text', default=u"""
+            Check this to include titles
+            for fields that received no input. Uncheck
+            to leave fields with no input out of the e-mail.
+            """),
+        default=True,
+        required=False,
+    )
     # ZPTField('body_pt',
         # schemata='template',
         # write_permission=EDIT_TALES_PERMISSION,
@@ -905,9 +863,6 @@ getProxyRoleChoices = SimpleVocabulary.fromItems((
 class ICustomScript(IAction):
 
     """Executes a Python script for form data"""
-    #form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
-    #form.omitted('order', 'default', 'missing_value', 'readonly')
-    # Field represents Form Mailer."""
     form.read_permission(ProxyRole='cmf.ModifyPortalContent')
     form.write_permission(ProxyRole='cmf.ModifyPortalContent')
     ProxyRole = zs.Choice(
@@ -933,8 +888,6 @@ class ISaveData(IAction):
 
     """A form action adapter that will save form input data and
        return it in csv- or tab-delimited format."""
-    #form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
-    #form.omitted('order', 'default', 'missing_value', 'readonly')
         # LinesField('showFields',
             # required=0,
             # searchable=0,

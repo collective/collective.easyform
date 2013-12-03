@@ -446,11 +446,6 @@ IntAction = ActionFactory(
 class Action(zs.Bool):
 
     """ Base action class """
-    execCondition = u""
-
-    def __init__(self, execCondition=u"", **kw):
-        self.execCondition = execCondition
-        super(Action, self).__init__(**kw)
 
     def onSuccess(self, fields, request):
         print "call onSuccess of %s with parameters (%r, %r)" % (self, fields, request)
@@ -460,15 +455,30 @@ class Action(zs.Bool):
 class Mailer(Action):
     __doc__ = IMailer.__doc__
 
+    def __init__(self, **kw):
+        for i, f in IMailer.namesAndDescriptions():
+            setattr(self, i, kw.pop(i, f.default))
+        super(Mailer, self).__init__(**kw)
+
 
 @implementer(ICustomScript)
 class CustomScript(Action):
     __doc__ = ICustomScript.__doc__
 
+    def __init__(self, **kw):
+        for i, f in ICustomScript.namesAndDescriptions():
+            setattr(self, i, kw.pop(i, f.default))
+        super(CustomScript, self).__init__(**kw)
+
 
 @implementer(ISaveData)
 class SaveData(Action):
     __doc__ = ISaveData.__doc__
+
+    def __init__(self, **kw):
+        for i, f in ISaveData.namesAndDescriptions():
+            setattr(self, i, kw.pop(i, f.default))
+        super(SaveData, self).__init__(**kw)
 
 
 MailerAction = ActionFactory(
