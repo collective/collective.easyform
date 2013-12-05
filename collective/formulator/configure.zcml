@@ -18,7 +18,7 @@
 
   <include package=".browser" />
   <include package=".content" />
-  
+
   <i18n:registerTranslations directory="locales" />
-  
+
 </configure>

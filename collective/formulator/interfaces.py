@@ -10,9 +10,7 @@ from collective.formulator import formulatorMessageFactory as _
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 from Products.PageTemplates.Expressions import getEngine
 from zope.tales.tales import CompilerError
-
-
-SCHEMATA_KEY = u""
+from collective.formulator.vocabulary import fieldsDisplayList, fieldsDisplayListFactory
 
 
 def isValidFieldName(value):
@@ -437,28 +435,24 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # StringField('to_field',
-        # schemata='addressing',
-        # searchable=0,
-        # required=0,
-        # default='#NONE#',
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # vocabulary='fieldsDisplayList',
-        # widget=SelectionWidget(
-            #label=_(u'label_formmailer_to_extract', default=u'Extract Recipient From'),
-            # description=_(u'help_formmailer_to_extract',
-                # default=u"""
-                # Choose a form field from which you wish to extract
-                # input for the To header. If you choose anything other
-                # than "None", this will override the "Recipient's e-mail address"
-                # setting above. Be very cautious about allowing unguarded user
-                # input for this purpose.
-                #"""),
-            #),
-        #),
+    form.fieldset(u"addressing", label=_("Addressing"), fields=[
+                  'to_field', 'cc_recipients', 'bcc_recipients', 'replyto_field'])
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    to_field = zs.Choice(
+        title=_(u'label_formmailer_to_extract',
+                default=u'Extract Recipient From'),
+        description=_(u'help_formmailer_to_extract', default=u"""
+            Choose a form field from which you wish to extract
+            input for the To header. If you choose anything other
+            than "None", this will override the "Recipient's e-mail address"
+            setting above. Be very cautious about allowing unguarded user
+            input for this purpose.
+            """),
+        required=False,
+        vocabulary=fieldsDisplayListFactory,
+    )
     # default_method='getDefaultCC',
-    # schemata='addressing',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
     # read_permission=ModifyPortalContent,
     cc_recipients = zs.Text(
@@ -469,7 +463,6 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # schemata='addressing',
     # default_method='getDefaultBCC',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
     # read_permission=ModifyPortalContent,
@@ -481,26 +474,23 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # StringField('replyto_field',
-        # schemata='addressing',
-        # searchable=0,
-        # required=0,
-        # vocabulary='fieldsDisplayList',
-        # read_permission=ModifyPortalContent,
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # widget=SelectionWidget(
-            # label=_(u'label_formmailer_replyto_extract',
-                      # default=u'Extract Reply-To From'),
-            # description=_(u'help_formmailer_replyto_extract',
-                # default=u"""
-                # Choose a form field from which you wish to extract
-                # input for the Reply-To header. NOTE: You should
-                # activate e-mail address verification for the designated
-                # field.
-                #"""),
-            #),
-        #),
-    # schemata='message',
+    # read_permission=ModifyPortalContent,
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    replyto_field = zs.Choice(
+        title=_(u'label_formmailer_replyto_extract',
+                default=u'Extract Reply-To From'),
+        description=_(u'help_formmailer_replyto_extract',
+            default=u"""
+            Choose a form field from which you wish to extract
+            input for the Reply-To header. NOTE: You should
+            activate e-mail address verification for the designated
+            field.
+            """),
+        required=False,
+        vocabulary=fieldsDisplayListFactory,
+    )
+    form.fieldset(u"message", label=_("Message"), fields=[
+                  'msg_subject', 'subject_field', 'body_pre', 'body_post', 'body_footer', 'showAll', 'includeEmpties'])
     # read_permission=ModifyPortalContent,
     msg_subject = zs.TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
@@ -513,24 +503,20 @@ class IMailer(IAction):
         default=u"Form Submission",
         required=False,
     )
-    # StringField('subject_field',
-        # schemata='message',
-        # searchable=0,
-        # required=0,
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    subject_field = zs.Choice(
+        title=_(u'label_formmailer_subject_extract',
+                default=u'Extract Subject From'),
+        description=_(u'help_formmailer_subject_extract',
+        default=u"""
+            Choose a form field from which you wish to extract
+            input for the mail subject line.
+            """),
+        required=False,
         # vocabulary='fieldsDisplayList',
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # widget=SelectionWidget(
-            # label=_(u'label_formmailer_subject_extract',
-                      # default=u'Extract Subject From'),
-            # description=_(u'help_formmailer_subject_extract',
-            # default=u"""
-                # Choose a form field from which you wish to extract
-                # input for the mail subject line.
-                #"""),
-            #),
-        #),
-    # schemata='message',
+        vocabulary=fieldsDisplayListFactory,
+    )
     # accessor='getBody_pre',
     # read_permission=ModifyPortalContent,
     body_pre = zs.Text(
@@ -540,7 +526,6 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # schemata='message',
     # read_permission=ModifyPortalContent,
     body_post = zs.Text(
         title=_(u'label_formmailer_body_post', default=u'Body (appended)'),
@@ -549,7 +534,6 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # schemata='message',
     # read_permission=ModifyPortalContent,
     body_footer = zs.Text(
         title=_(u'label_formmailer_body_footer',
@@ -560,7 +544,6 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # schemata='message',
     # read_permission=ModifyPortalContent,
     showAll = zs.Bool(
         title=_(u'label_mailallfields_text', default=u"Include All Fields"),
@@ -587,7 +570,6 @@ class IMailer(IAction):
                 #"""),
             #),
         #),
-    # schemata='message',
     # read_permission=ModifyPortalContent,
     includeEmpties = zs.Bool(
         title=_(u'label_mailEmpties_text', default=u"Include Empties"),

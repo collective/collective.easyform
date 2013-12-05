@@ -15,7 +15,12 @@ from collective.formulator.interfaces import (
     ISaveData,
     IFieldExtender,
     IActionExtender,
-    SCHEMATA_KEY,
+)
+from collective.formulator.api import (
+    get_schema,
+    get_actions,
+    set_schema,
+    set_actions,
 )
 from plone.supermodel.utils import ns
 from plone.supermodel.parser import IFieldMetadataHandler
@@ -166,15 +171,6 @@ class FormulatorForm(DefaultEditForm):
 FormulatorView = layout.wrap_form(FormulatorForm)
 
 
-def get_schema(context):
-    try:
-        data = context.model
-        schema = loadString(data).schemata.get(SCHEMATA_KEY, None)
-    except Exception:
-        schema = None
-    return schema
-
-
 class FormulatorSchemaView(SchemaContext):
     implements(IFormulatorSchemaContext)
     #schemaEditorView = 'fields'
@@ -191,15 +187,6 @@ class FormulatorSchemaView(SchemaContext):
         """ If not traversing through the schema to a field, show the SchemaListingPage.
         """
         return self, ('@@fields',)
-
-
-def get_actions(context):
-    try:
-        data = context.actions_model
-        schema = loadString(data).schemata.get(SCHEMATA_KEY, None)
-    except Exception:
-        schema = None
-    return schema
 
 
 class ActionContext(FieldContext):
@@ -245,32 +232,12 @@ class FormulatorActionsView(SchemaContext):
         return self, ('@@actions',)
 
 
-def set_schema(string, context):
-    context.model = string
-
-
 def updateSchema(obj, event):
-    # serialize the current schema
-    snew_schema = serialize_schema(obj.schema)
-    # store the current schema
-    set_schema(snew_schema, obj.aq_parent)
-
-
-def serialize_schema(schema):
-    model = Model({SCHEMATA_KEY: schema})
-    sschema = serialize(model)
-    return sschema
-
-
-def set_actions(string, context):
-    context.actions_model = string
+    set_schema(obj.aq_parent, obj.schema)
 
 
 def updateActions(obj, event):
-    # serialize the current schema
-    snew_schema = serialize_schema(obj.schema)
-    # store the current schema
-    set_actions(snew_schema, obj.aq_parent)
+    set_actions(obj.aq_parent, obj.schema)
 
 
 class FormulatorActionsListing(SchemaListing):
@@ -459,6 +426,76 @@ class Mailer(Action):
         for i, f in IMailer.namesAndDescriptions():
             setattr(self, i, kw.pop(i, f.default))
         super(Mailer, self).__init__(**kw)
+
+    def get_mail_text(self, fields, request):
+        """Get header and body of e-mail as text (string)
+        """
+
+        (headerinfo, additional_headers,
+         body) = self.get_header_body_tuple(fields, request)
+
+        if not isinstance(body, unicode):
+            body = unicode(body, 'UTF-8')
+        email_charset = 'utf-8'
+        # always use text/plain for encrypted bodies
+        subtype = getattr(
+            self, 'gpg_keyid', False) and 'plain' or self.body_type or 'html'
+        mime_text = MIMEText(body.encode(email_charset, 'replace'),
+                             _subtype=subtype, _charset=email_charset)
+
+        attachments = self.get_attachments(fields, request)
+
+        if attachments:
+            outer = MIMEMultipart()
+            outer.attach(mime_text)
+        else:
+            outer = mime_text
+
+        # write header
+        for key, value in headerinfo.items():
+            outer[key] = value
+
+        # write additional header
+        for a in additional_headers:
+            key, value = a.split(':', 1)
+            outer.add_header(key, value.strip())
+
+        for attachment in attachments:
+            filename = attachment[0]
+            ctype = attachment[1]
+            # encoding = attachment[2]
+            content = attachment[3]
+
+            if ctype is None:
+                ctype = 'application/octet-stream'
+
+            maintype, subtype = ctype.split('/', 1)
+
+            if maintype == 'text':
+                msg = MIMEText(content, _subtype=subtype)
+            elif maintype == 'image':
+                msg = MIMEImage(content, _subtype=subtype)
+            elif maintype == 'audio':
+                msg = MIMEAudio(content, _subtype=subtype)
+            else:
+                msg = MIMEBase(maintype, subtype)
+                msg.set_payload(content)
+                # Encode the payload using Base64
+                Encoders.encode_base64(msg)
+
+            # Set the filename parameter
+            msg.add_header(
+                'Content-Disposition', 'attachment', filename=filename)
+            outer.attach(msg)
+
+        return outer.as_string()
+
+    def onSuccess(self, fields, request):
+        """Send the form.
+        """
+        mailtext = self.get_mail_text(fields, request)
+        host = self.MailHost
+        host.send(mailtext)
 
 
 @implementer(ICustomScript)
