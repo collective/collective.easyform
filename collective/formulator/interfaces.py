@@ -1,3 +1,4 @@
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope.interface import Invalid, Interface, invariant
 from zope import schema as zs
 from zope.schema.interfaces import IField
@@ -10,7 +11,7 @@ from collective.formulator import formulatorMessageFactory as _
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 from Products.PageTemplates.Expressions import getEngine
 from zope.tales.tales import CompilerError
-from collective.formulator.vocabulary import fieldsDisplayList, fieldsDisplayListFactory
+from collective.formulator.vocabulary import fieldsFactory
 
 
 def isValidFieldName(value):
@@ -94,6 +95,20 @@ MODEL_DEFAULT = u"""
 customActions = SimpleVocabulary.fromItems((
     (_(u"Traverse to"), u"traverse_to"),
     (_(u"Redirect to"), u"redirect_to"),
+))
+
+
+MIME_LIST = SimpleVocabulary.fromItems((
+    (_('HTML'), 'html'),
+    (_('Text'), 'plain'),
+))
+
+XINFO_HEADERS = SimpleVocabulary.fromItems((
+    (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
+    (u'REMOTE_ADDR', u'REMOTE_ADDR'),
+    (u'PATH_INFO', u'PATH_INFO'),
+    (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
+    (u'HTTP_REFERER', u'HTTP_REFERER'),
 ))
 
 
@@ -450,7 +465,7 @@ class IMailer(IAction):
             input for this purpose.
             """),
         required=False,
-        vocabulary=fieldsDisplayListFactory,
+        vocabulary=fieldsFactory,
     )
     # default_method='getDefaultCC',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
@@ -487,15 +502,15 @@ class IMailer(IAction):
             field.
             """),
         required=False,
-        vocabulary=fieldsDisplayListFactory,
+        vocabulary=fieldsFactory,
     )
     form.fieldset(u"message", label=_("Message"), fields=[
-                  'msg_subject', 'subject_field', 'body_pre', 'body_post', 'body_footer', 'showAll', 'includeEmpties'])
+                  'msg_subject', 'subject_field', 'body_pre', 'body_post',
+                  'body_footer', 'showAll', 'showFields', 'includeEmpties'])
     # read_permission=ModifyPortalContent,
     msg_subject = zs.TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
-        description=_(u'help_formmailer_subject',
-            default=u"""
+        description=_(u'help_formmailer_subject', default=u"""
             Subject line of message. This is used if you
             do not specify a subject field or if the field
             is empty.
@@ -508,14 +523,12 @@ class IMailer(IAction):
     subject_field = zs.Choice(
         title=_(u'label_formmailer_subject_extract',
                 default=u'Extract Subject From'),
-        description=_(u'help_formmailer_subject_extract',
-        default=u"""
+        description=_(u'help_formmailer_subject_extract', default=u"""
             Choose a form field from which you wish to extract
             input for the mail subject line.
             """),
         required=False,
-        # vocabulary='fieldsDisplayList',
-        vocabulary=fieldsDisplayListFactory,
+        vocabulary=fieldsFactory,
     )
     # accessor='getBody_pre',
     # read_permission=ModifyPortalContent,
@@ -556,20 +569,20 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
-    # LinesField('showFields',
-        # required=0,
-        # searchable=0,
-        # schemata='message',
-        # vocabulary='allFieldDisplayList',
-        # read_permission=ModifyPortalContent,
-        # widget=PicklistWidget(
-            #label=_(u'label_mailfields_text', default=u"Show Responses"),
-            # description=_(u'help_mailfields_text', default=u"""
-                # Pick the fields whose inputs you'd like to include in
-                # the e-mail.
-                #"""),
-            #),
-        #),
+    # read_permission=ModifyPortalContent,
+    showFields = zs.List(
+        title=_(u'label_mailfields_text', default=u"Show Responses"),
+        description=_(u'help_mailfields_text', default=u"""
+            Pick the fields whose inputs you'd like to include in
+            the e-mail.
+            """),
+        unique=True,
+        required=False,
+        value_type=zs.Choice(
+            title=_("Field"),
+            vocabulary=fieldsFactory,
+        ),
+    )
     # read_permission=ModifyPortalContent,
     includeEmpties = zs.Bool(
         title=_(u'label_mailEmpties_text', default=u"Include Empties"),
@@ -581,75 +594,69 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
+    form.fieldset(u"template", label=_(
+        "Template"), fields=['body_pt', 'body_type'])
     # ZPTField('body_pt',
-        # schemata='template',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # default_method='getMailBodyDefault',
-        # read_permission=ModifyPortalContent,
-        # widget=TextAreaWidget(description=_(u'help_formmailer_body_pt',
-            # default=u"""This is a Zope Page Template
-            # used for rendering of the mail-body. You don\'t need to modify
-            # it, but if you know TAL (Zope\'s Template Attribute Language)
-            # you have the full power to customize your outgoing mails."""),
-            #label=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
-            # rows=20,
-            #visible={'edit': 'visible', 'view': 'invisible'},
-            #),
-        # validators=('zptvalidator',),
-        #),
-    # StringField('body_type',
-        # schemata='template',
-        # default_method='getMailBodyTypeDefault',
-        # vocabulary=MIME_LIST,
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # widget=SelectionWidget(description=_(u'help_formmailer_body_type',
-            # default=u"""Set the mime-type of the mail-body.
-            # Change this setting only if you know exactly what you are doing.
-            # Leave it blank for default behaviour."""),
-            #label = _(u'label_formmailer_body_type', default=u'Mail Format'),
-            #),
-        #),
-    # LinesField('xinfo_headers',
-        # searchable=0,
-        # required=0,
-        # schemata='headers',
-        # default_method='getDefaultXInfo',
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # vocabulary=DisplayList((
-            #('HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED_FOR',),
-            #('REMOTE_ADDR', 'REMOTE_ADDR',),
-            #('PATH_INFO', 'PATH_INFO'),
-            #('HTTP_USER_AGENT', 'HTTP_USER_AGENT',),
-            #('HTTP_REFERER', 'HTTP_REFERER'),
-            #), ),
-        # widget=MultiSelectionWidget(
-            #label=_(u'label_xinfo_headers_text', default=u'HTTP Headers'),
-            # description=_(u'help_xinfo_headers_text', default=u"""
-                # Pick any items from the HTTP headers that
-                # you'd like to insert as X- headers in the
-                # message.
-                #"""),
-            # format='checkbox',
-            #),
-        #),
-    # LinesField('additional_headers',
-        # schemata='headers',
-        # searchable=0,
-        # required=0,
-        # default_method='getDefaultAddHdrs',
-        # write_permission=EDIT_ADVANCED_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # widget=LinesWidget(
-            #label=_(u'label_formmailer_additional_headers', default=u'Additional Headers'),
-            # description=_(u'help_formmailer_additional_headers', default=u"""
-                # Additional e-mail-header lines.
-                # Only use RFC822-compliant headers.
-                #"""),
-            #),
-        #),
-    #))
+    # write_permission=EDIT_TALES_PERMISSION,
+    # default_method='getMailBodyDefault',
+    # read_permission=ModifyPortalContent,
+    # validators=('zptvalidator',),
+    body_pt = zs.Text(
+        title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
+        description=_(u'help_formmailer_body_pt',
+            default=u"""This is a Zope Page Template
+            used for rendering of the mail-body. You don\'t need to modify
+            it, but if you know TAL (Zope\'s Template Attribute Language)
+            you have the full power to customize your outgoing mails."""),
+    )
+    # default_method='getMailBodyTypeDefault',
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    body_type = zs.Choice(
+        title=_(u'label_formmailer_body_type', default=u'Mail Format'),
+        description=_(u'help_formmailer_body_type',
+            default=u"""Set the mime-type of the mail-body.
+            Change this setting only if you know exactly what you are doing.
+            Leave it blank for default behaviour."""),
+        default=u"html",
+        vocabulary=MIME_LIST,
+    )
+    form.fieldset(u"headers", label=_("Headers"),
+                  fields=['xinfo_headers', 'additional_headers'])
+    form.widget(xinfo_headers=CheckBoxFieldWidget)
+    # default_method='getDefaultXInfo',
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    xinfo_headers = zs.List(
+        title=_(u'label_xinfo_headers_text', default=u'HTTP Headers'),
+        description=_(u'help_xinfo_headers_text', default=u"""
+            Pick any items from the HTTP headers that
+            you'd like to insert as X- headers in the
+            message.
+            """),
+        unique=True,
+        required=False,
+        value_type=zs.Choice(
+            title=_("HTTP Header"),
+            vocabulary=XINFO_HEADERS,
+        ),
+    )
+    # default_method='getDefaultAddHdrs',
+    # write_permission=EDIT_ADVANCED_PERMISSION,
+    # read_permission=ModifyPortalContent,
+    additional_headers = zs.List(
+        title=_(u'label_formmailer_additional_headers',
+                default=u'Additional Headers'),
+        description=_(u'help_formmailer_additional_headers', default=u"""
+            Additional e-mail-header lines.
+            Only use RFC822-compliant headers.
+            """),
+        unique=True,
+        required=False,
+        value_type=zs.TextLine(
+            title=_("HTTP Header"),
+        ),
+    )
 
 # if gpg is not None:
     # formMailerAdapterSchema = formMailerAdapterSchema + Schema((

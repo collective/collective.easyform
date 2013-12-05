@@ -24,7 +24,7 @@ from collective.formulator.api import (
 )
 
 
-class fieldsDisplayList(object):
+class fields(object):
 
     """Context source binder to provide a vocabulary of users in a given
     group.
@@ -47,4 +47,4 @@ class fieldsDisplayList(object):
                 SimpleVocabulary.createTerm(name, str(name), field.title))
         return SimpleVocabulary(terms)
 
-fieldsDisplayListFactory = fieldsDisplayList()
+fieldsFactory = fields()
