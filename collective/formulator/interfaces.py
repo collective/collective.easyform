@@ -814,6 +814,17 @@ class ICustomScript(IAction):
         required=False,
     )
 
+vocabExtraDataDL = SimpleVocabulary.fromItems((
+    (_('vocabulary_postingdt_text', default=u'Posting Date/Time'), u'dt'),
+    (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
+    (u'REMOTE_ADDR', u'REMOTE_ADDR'),
+    (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
+))
+vocabFormatDL = SimpleVocabulary.fromItems((
+    (_('vocabulary_tsv_text', default=u'Tab-Separated Values'), 'tsv'),
+    (_('vocabulary_csv_text', default=u'Comma-Separated Values'), 'csv'),
+))
+
 
 class ISaveData(IAction):
 
@@ -829,43 +840,36 @@ class ISaveData(IAction):
         required=False,
         value_type=zs.Choice(vocabulary=fieldsFactory),
     )
-        # LinesField('ExtraData',
-            # widget=MultiSelectionWidget(
-                #label=_(u'label_savedataextra_text', default='Extra Data'),
-                # description=_(u'help_savedataextra_text', default=u"""
-                    # Pick any extra data you'd like saved with the form input.
-                    #"""),
-                # format='checkbox',
-                #),
-            # vocabulary='vocabExtraDataDL',
-            #),
-        # StringField('DownloadFormat',
-            # searchable=0,
-            # required=1,
-            # default='csv',
-            # vocabulary='vocabFormatDL',
-            # widget=SelectionWidget(
-                #label=_(u'label_downloadformat_text', default=u'Download Format'),
-                #),
-            #),
-        # BooleanField("UseColumnNames",
-            # required=False,
-            # searchable=False,
-            # widget=BooleanWidget(
-                #label=_(u'label_usecolumnnames_text', default=u"Include Column Names"),
-                #description=_(u'help_usecolumnnames_text', default=u"Do you wish to have column names on the first line of downloaded input?"),
-                #),
-            #),
-        # ExLinesField('SavedFormInput',
-            # edit_accessor='getSavedFormInputForEdit',
-            # mutator='setSavedFormInput',
-            # searchable=0,
-            # required=0,
-            # primary=1,
-            #schemata="saved data",
-            # read_permission=DOWNLOAD_SAVED_PERMISSION,
-            # widget=TextAreaWidget(
-                #label=_(u'label_savedatainput_text', default=u"Saved Form Input"),
-                # description=_(u'help_savedatainput_text'),
-                #),
-            #),
+    form.widget(ExtraData=CheckBoxFieldWidget)
+    ExtraData = zs.List(
+        title=_(u'label_savedataextra_text', default='Extra Data'),
+        description=_(u'help_savedataextra_text', default=u"""
+            Pick any extra data you'd like saved with the form input.
+            """),
+        unique=True,
+        value_type=zs.Choice(vocabulary=vocabExtraDataDL),
+    )
+    DownloadFormat = zs.Choice(
+        title=_(u'label_downloadformat_text', default=u'Download Format'),
+        default=u"csv",
+        vocabulary=vocabFormatDL,
+    )
+    UseColumnNames = zs.Bool(
+        title=_(u'label_usecolumnnames_text', default=u"Include Column Names"),
+        description=_(u'help_usecolumnnames_text',
+                      default=u"Do you wish to have column names on the first line of downloaded input?"),
+        required=False,
+    )
+    # ExLinesField('SavedFormInput',
+    # edit_accessor='getSavedFormInputForEdit',
+    # mutator='setSavedFormInput',
+    # searchable=0,
+    # required=0,
+    # primary=1,
+    #schemata="saved data",
+    # read_permission=DOWNLOAD_SAVED_PERMISSION,
+    # widget=TextAreaWidget(
+        #label=_(u'label_savedatainput_text', default=u"Saved Form Input"),
+        # description=_(u'help_savedatainput_text'),
+        #),
+    #),

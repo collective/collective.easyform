@@ -491,7 +491,8 @@ class Mailer(Action):
         return outer.as_string()
 
     def onSuccess(self, fields, request):
-        """Send the form.
+        """
+        e-mails data.
         """
         mailtext = self.get_mail_text(fields, request)
         host = self.MailHost
@@ -507,6 +508,84 @@ class CustomScript(Action):
             setattr(self, i, kw.pop(i, f.default))
         super(CustomScript, self).__init__(**kw)
 
+    def updateScript(self, body, role):
+        # Regenerate Python script object
+
+        # Sync set of script source code, proxy role and
+        # creation of Python Script object.
+
+        bodyField = self.schema["ScriptBody"]
+        proxyField = self.schema["ProxyRole"]
+        script = PythonScript(self.title_or_id())
+        script = script.__of__(self)
+
+        # Force proxy role
+        if role != "none":
+            script.manage_proxy((role,))
+
+        script.ZPythonScript_edit("fields, ploneformgen, request", body)
+
+        PythonField.set(bodyField, self, script)
+        StringField.set(proxyField, self, role)
+
+    def sanifyFields(self, form):
+        # Makes request.form fields accessible in a script
+        #
+        # Avoid Unauthorized exceptions since REQUEST.form is inaccesible
+
+        result = {}
+        for field in form:
+            result[field] = form[field]
+        return result
+
+    def checkWarningsAndErrors(self, script):
+        # Raise exception if there has been bad things with the script
+        # compiling
+
+        field = self.schema["ScriptBody"]
+
+        script = ObjectField.get(field, self)
+
+        if len(script.warnings) > 0:
+            logger.warn("Python script " + self.title_or_id()
+                        + " has warning:" + str(script.warnings))
+
+        if len(script.errors) > 0:
+            logger.error("Python script " + self.title_or_id()
+                         + " has errors: " + str(script.errors))
+            raise ValueError(
+                "Python script " + self.title_or_id() + " has errors: " + str(script.errors))
+
+    def executeCustomScript(self, result, form, req):
+        # Execute in-place script
+
+        # @param result Extracted fields from REQUEST.form
+        # @param form PloneFormGen object
+
+        field = self.schema["ScriptBody"]
+        # Now pass through PythonField/PythonScript abstraction
+        # to access bad things (tm)
+        # otherwise there are silent failures
+        script = ObjectField.get(field, self)
+
+        self.checkWarningsAndErrors(script)
+
+        response = script(result, form, req)
+        return response
+
+    def onSuccess(self, fields, REQUEST=None):
+        # Executes the custom script
+
+        # use PloneFormGen object as a context
+        form = aq_parent(self)
+
+        if REQUEST != None:
+            resultData = self.sanifyFields(REQUEST.form)
+        else:
+            resultData = {}
+
+        return self.executeCustomScript(resultData, form, REQUEST)
+
 
 @implementer(ISaveData)
 class SaveData(Action):
@@ -515,7 +594,86 @@ class SaveData(Action):
     def __init__(self, **kw):
         for i, f in ISaveData.namesAndDescriptions():
             setattr(self, i, kw.pop(i, f.default))
+
+    def _addDataRow(self, value):
+
+        self._migrateStorage()
+
+        if isinstance(self._inputStorage, IOBTree):
+            # 32-bit IOBTree; use a key which is more likely to conflict
+            # but which won't overflow the key's bits
+            id = self._inputItems
+            self._inputItems += 1
+        else:
+            # 64-bit LOBTree
+            id = int(time.time() * 1000)
+            while id in self._inputStorage:  # avoid collisions during testing
+                id += 1
+        self._inputStorage[id] = value
+        self._length.change(1)
+
+    def onSuccess(self, fields, request):
+        """
+        saves data.
+        """
         super(SaveData, self).__init__(**kw)
+        if LP_SAVE_TO_CANONICAL and not loopstop:
+            # LinguaPlone functionality:
+            # check to see if we're in a translated
+            # form folder, but not the canonical version.
+            parent = self.aq_parent
+            if safe_hasattr(parent, 'isTranslation') and \
+               parent.isTranslation() and not parent.isCanonical():
+                # look in the canonical version to see if there is
+                # a matching (by id) save-data adapter.
+                # If so, call its onSuccess method
+                cf = parent.getCanonical()
+                target = cf.get(self.getId())
+                if target is not None and target.meta_type == 'FormSaveDataAdapter':
+                    target.onSuccess(fields, REQUEST, loopstop=True)
+                    return
+
+        from ZPublisher.HTTPRequest import FileUpload
+
+        data = []
+        for f in fields:
+            showFields = getattr(self, 'showFields', [])
+            if showFields and f.id not in showFields:
+                continue
+            if f.isFileField():
+                file = REQUEST.form.get('%s_file' % f.fgField.getName())
+                if isinstance(file, FileUpload) and file.filename != '':
+                    file.seek(0)
+                    fdata = file.read()
+                    filename = file.filename
+                    mimetype, enc = guess_content_type(filename, fdata, None)
+                    if mimetype.find('text/') >= 0:
+                        # convert to native eols
+                        fdata = fdata.replace('\x0d\x0a', '\n').replace(
+                            '\x0a', '\n').replace('\x0d', '\n')
+                        data.append('%s:%s:%s:%s' %
+                                    (filename, mimetype, enc, fdata))
+                    else:
+                        data.append('%s:%s:%s:Binary upload discarded' %
+                                    (filename, mimetype, enc))
+                else:
+                    data.append('NO UPLOAD')
+            elif not f.isLabel():
+                val = REQUEST.form.get(f.fgField.getName(), '')
+                if not type(val) in StringTypes:
+                    # Zope has marshalled the field into
+                    # something other than a string
+                    val = str(val)
+                data.append(val)
+
+        if self.ExtraData:
+            for f in self.ExtraData:
+                if f == 'dt':
+                    data.append(str(DateTime()))
+                else:
+                    data.append(getattr(REQUEST, f, ''))
+
+        self._addDataRow(data)
 
 
 MailerAction = ActionFactory(
