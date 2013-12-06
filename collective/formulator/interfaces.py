@@ -384,7 +384,8 @@ class IActionExtender(form.Schema):
     form.fieldset(u"overrides", label=_("Overrides"), fields=['execCondition'])
     # TODO:
     # write_permission=EDIT_TALES_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(execCondition='cmf.ModifyPortalContent')
+    # form.order_before(execCondition='*')
     execCondition = zs.TextLine(
         title=_(u'label_execcondition_text', default=u"Execution Condition"),
         description=(_(u'help_execcondition_text', default=u""
@@ -427,7 +428,7 @@ class IMailer(IAction):
     """A form action adapter that will e-mail form input."""
     # default_method='getDefaultRecipientName',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(recipient_name='cmf.ModifyPortalContent')
     recipient_name = zs.TextLine(
         title=_(u'label_formmailer_recipient_fullname',
                 default=u"Recipient's full name"),
@@ -438,10 +439,10 @@ class IMailer(IAction):
     )
     # default_method='getDefaultRecipient',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
-    # read_permission=ModifyPortalContent,
     # validators=('isEmail',),
     # TODO defaultFactory
     # TODO IContextAwareDefaultFactory
+    form.read_permission(recipient_email='cmf.ModifyPortalContent')
     recipient_email = zs.TextLine(
         title=_(u'label_formmailer_recipient_email',
                 default=u"Recipient's e-mail address"),
@@ -453,7 +454,7 @@ class IMailer(IAction):
     form.fieldset(u"addressing", label=_("Addressing"), fields=[
                   'to_field', 'cc_recipients', 'bcc_recipients', 'replyto_field'])
     # write_permission=EDIT_ADVANCED_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(to_field='cmf.ModifyPortalContent')
     to_field = zs.Choice(
         title=_(u'label_formmailer_to_extract',
                 default=u'Extract Recipient From'),
@@ -469,7 +470,7 @@ class IMailer(IAction):
     )
     # default_method='getDefaultCC',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(cc_recipients='cmf.ModifyPortalContent')
     cc_recipients = zs.Text(
         title=_(u'label_formmailer_cc_recipients',
                 default=u'CC Recipients'),
@@ -480,7 +481,7 @@ class IMailer(IAction):
     )
     # default_method='getDefaultBCC',
     # write_permission=EDIT_ADDRESSING_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(bcc_recipients='cmf.ModifyPortalContent')
     bcc_recipients = zs.Text(
         title=_(u'label_formmailer_bcc_recipients',
                 default=u'BCC Recipients'),
@@ -489,8 +490,8 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # read_permission=ModifyPortalContent,
     # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.read_permission(replyto_field='cmf.ModifyPortalContent')
     replyto_field = zs.Choice(
         title=_(u'label_formmailer_replyto_extract',
                 default=u'Extract Reply-To From'),
@@ -507,7 +508,7 @@ class IMailer(IAction):
     form.fieldset(u"message", label=_("Message"), fields=[
                   'msg_subject', 'subject_field', 'body_pre', 'body_post',
                   'body_footer', 'showAll', 'showFields', 'includeEmpties'])
-    # read_permission=ModifyPortalContent,
+    form.read_permission(msg_subject='cmf.ModifyPortalContent')
     msg_subject = zs.TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
         description=_(u'help_formmailer_subject', default=u"""
@@ -519,7 +520,7 @@ class IMailer(IAction):
         required=False,
     )
     # write_permission=EDIT_ADVANCED_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(subject_field='cmf.ModifyPortalContent')
     subject_field = zs.Choice(
         title=_(u'label_formmailer_subject_extract',
                 default=u'Extract Subject From'),
@@ -531,7 +532,7 @@ class IMailer(IAction):
         vocabulary=fieldsFactory,
     )
     # accessor='getBody_pre',
-    # read_permission=ModifyPortalContent,
+    form.read_permission(body_pre='cmf.ModifyPortalContent')
     body_pre = zs.Text(
         title=_(u'label_formmailer_body_pre', default=u'Body (prepended)'),
         description=_(u'help_formmailer_body_pre',
@@ -539,7 +540,7 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # read_permission=ModifyPortalContent,
+    form.read_permission(body_post='cmf.ModifyPortalContent')
     body_post = zs.Text(
         title=_(u'label_formmailer_body_post', default=u'Body (appended)'),
         description=_(u'help_formmailer_body_post',
@@ -547,7 +548,7 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # read_permission=ModifyPortalContent,
+    form.read_permission(body_footer='cmf.ModifyPortalContent')
     body_footer = zs.Text(
         title=_(u'label_formmailer_body_footer',
                 default=u'Body (signature)'),
@@ -557,7 +558,7 @@ class IMailer(IAction):
         default=u"",
         required=False,
     )
-    # read_permission=ModifyPortalContent,
+    form.read_permission(showAll='cmf.ModifyPortalContent')
     showAll = zs.Bool(
         title=_(u'label_mailallfields_text', default=u"Include All Fields"),
         description=_(u'help_mailallfields_text', default=u"""
@@ -569,7 +570,7 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
-    # read_permission=ModifyPortalContent,
+    form.read_permission(showFields='cmf.ModifyPortalContent')
     showFields = zs.List(
         title=_(u'label_mailfields_text', default=u"Show Responses"),
         description=_(u'help_mailfields_text', default=u"""
@@ -578,12 +579,9 @@ class IMailer(IAction):
             """),
         unique=True,
         required=False,
-        value_type=zs.Choice(
-            title=_("Field"),
-            vocabulary=fieldsFactory,
-        ),
+        value_type=zs.Choice(vocabulary=fieldsFactory),
     )
-    # read_permission=ModifyPortalContent,
+    form.read_permission(includeEmpties='cmf.ModifyPortalContent')
     includeEmpties = zs.Bool(
         title=_(u'label_mailEmpties_text', default=u"Include Empties"),
         description=_(u'help_mailEmpties_text', default=u"""
@@ -599,8 +597,8 @@ class IMailer(IAction):
     # ZPTField('body_pt',
     # write_permission=EDIT_TALES_PERMISSION,
     # default_method='getMailBodyDefault',
-    # read_permission=ModifyPortalContent,
     # validators=('zptvalidator',),
+    form.read_permission(body_pt='cmf.ModifyPortalContent')
     body_pt = zs.Text(
         title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
         description=_(u'help_formmailer_body_pt',
@@ -611,7 +609,7 @@ class IMailer(IAction):
     )
     # default_method='getMailBodyTypeDefault',
     # write_permission=EDIT_ADVANCED_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(body_type='cmf.ModifyPortalContent')
     body_type = zs.Choice(
         title=_(u'label_formmailer_body_type', default=u'Mail Format'),
         description=_(u'help_formmailer_body_type',
@@ -626,7 +624,7 @@ class IMailer(IAction):
     form.widget(xinfo_headers=CheckBoxFieldWidget)
     # default_method='getDefaultXInfo',
     # write_permission=EDIT_ADVANCED_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(xinfo_headers='cmf.ModifyPortalContent')
     xinfo_headers = zs.List(
         title=_(u'label_xinfo_headers_text', default=u'HTTP Headers'),
         description=_(u'help_xinfo_headers_text', default=u"""
@@ -636,14 +634,11 @@ class IMailer(IAction):
             """),
         unique=True,
         required=False,
-        value_type=zs.Choice(
-            title=_("HTTP Header"),
-            vocabulary=XINFO_HEADERS,
-        ),
+        value_type=zs.Choice(vocabulary=XINFO_HEADERS),
     )
     # default_method='getDefaultAddHdrs',
     # write_permission=EDIT_ADVANCED_PERMISSION,
-    # read_permission=ModifyPortalContent,
+    form.read_permission(additional_headers='cmf.ModifyPortalContent')
     additional_headers = zs.List(
         title=_(u'label_formmailer_additional_headers',
                 default=u'Additional Headers'),
@@ -657,164 +652,109 @@ class IMailer(IAction):
             title=_("HTTP Header"),
         ),
     )
-
-# if gpg is not None:
-    # formMailerAdapterSchema = formMailerAdapterSchema + Schema((
-        # StringField('gpg_keyid',
-            # schemata='encryption',
-            # accessor='getGPGKeyId',
-            # mutator='setGPGKeyId',
-            # write_permission=USE_ENCRYPTION_PERMISSION,
-            # read_permission=ModifyPortalContent,
-            # widget=StringWidget(
-                # description=_(u'help_gpg_key_id', default=u"""
-                    # Give your key-id, e-mail address or
-                    # whatever works to match a public key from current keyring.
-                    # It will be used to encrypt the message body (not attachments).
-                    # Contact the site administrator if you need to
-                    # install a new public key.
-                    # Note that you will probably wish to change your message
-                    # template to plain text if you're using encryption.
-                    # TEST THIS FEATURE BEFORE GOING PUBLIC!
-                    #"""),
-                #label=_(u'label_gpg_key_id', default=u'Key-Id'),
+    # if gpg is not None:
+        # formMailerAdapterSchema = formMailerAdapterSchema + Schema((
+            # StringField('gpg_keyid',
+                # schemata='encryption',
+                # accessor='getGPGKeyId',
+                # mutator='setGPGKeyId',
+                # write_permission=USE_ENCRYPTION_PERMISSION,
+                # read_permission=ModifyPortalContent,
+                # widget=StringWidget(
+                    # description=_(u'help_gpg_key_id', default=u"""
+                        # Give your key-id, e-mail address or
+                        # whatever works to match a public key from current keyring.
+                        # It will be used to encrypt the message body (not attachments).
+                        # Contact the site administrator if you need to
+                        # install a new public key.
+                        # Note that you will probably wish to change your message
+                        # template to plain text if you're using encryption.
+                        # TEST THIS FEATURE BEFORE GOING PUBLIC!
+                        #"""),
+                    #label=_(u'label_gpg_key_id', default=u'Key-Id'),
+                    #),
                 #),
-            #),
-        #))
-
-
-# formMailerAdapterSchema = formMailerAdapterSchema + Schema((
-    # TALESString('subjectOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # validators=('talesvalidator',),
-        # default='',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # isMetadata=True,  # just to hide from base view
-        # widget=StringWidget(label=_(u'label_subject_override_text', default=u"Subject Expression"),
-            # description=_(u'help_subject_override_text', default=u"""
-                # A TALES expression that will be evaluated to override any value
-                # otherwise entered for the e-mail subject header.
-                # Leave empty if unneeded. Your expression should evaluate as a string.
-                # PLEASE NOTE: errors in the evaluation of this expression will cause
-                # an error on form display.
-            #"""),
-            # size=70,
-        #),
-    #),
-    # TALESString('senderOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # validators=('talesvalidator',),
-        # default='',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # isMetadata=True,  # just to hide from base view
-        # widget=StringWidget(label=_(u'label_sender_override_text',
-                                    # default=u"Sender Expression"),
-            # description=_(u'help_sender_override_text', default=u"""
-                # A TALES expression that will be evaluated to override the "From" header.
-                # Leave empty if unneeded. Your expression should evaluate as a string.
-                # PLEASE NOTE: errors in the evaluation of this expression will cause
-                # an error on form display.
-            #"""),
-            # size=70,
-        #),
-    #),
-    # TALESString('recipientOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # validators=('talesvalidator',),
-        # default='',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # isMetadata=True,  # just to hide from base view
-        # widget=StringWidget(label=_(u'label_recipient_override_text', default=u"Recipient Expression"),
-            # description=_(u'help_recipient_override_text', default=u"""
-                # A TALES expression that will be evaluated to override any value
-                # otherwise entered for the recipient e-mail address. You are strongly
-                # cautioned against using unvalidated data from the request for this purpose.
-                # Leave empty if unneeded. Your expression should evaluate as a string.
-                # PLEASE NOTE: errors in the evaluation of this expression will cause
-                # an error on form display.
-            #"""),
-            # size=70,
-        #),
-    #),
-    # TALESString('ccOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # validators=('talesvalidator',),
-        # default='',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # isMetadata=True, # just to hide from base view
-        # widget=StringWidget(label=_(u'label_cc_override_text', default=u"CC Expression"),
-            # description=_(u'help_cc_override_text', default=u"""
-                # A TALES expression that will be evaluated to override any value
-                # otherwise entered for the CC list. You are strongly
-                # cautioned against using unvalidated data from the request for this purpose.
-                # Leave empty if unneeded. Your expression should evaluate as a sequence of strings.
-                # PLEASE NOTE: errors in the evaluation of this expression will cause
-                # an error on form display.
-            #"""),
-            # size=70,
-        #),
-    #),
-    # TALESString('bccOverride',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # validators=('talesvalidator',),
-        # default='',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # isMetadata=True,  # just to hide from base view
-        # widget=StringWidget(label=_(u'label_bcc_override_text', default=u"BCC Expression"),
-            # description=_(u'help_bcc_override_text', default=u"""
-                # A TALES expression that will be evaluated to override any value
-                # otherwise entered for the BCC list. You are strongly
-                # cautioned against using unvalidated data from the request for this purpose.
-                # Leave empty if unneeded. Your expression should evaluate as a sequence of strings.
-                # PLEASE NOTE: errors in the evaluation of this expression will cause
-                # an error on form display.
-            #"""),
-            # size=70,
-        #),
-    #),
-
-    # TALESString('smtp_envelope_mail_from_override',
-        # schemata='overrides',
-        # searchable=0,
-        # required=0,
-        # validators=('talesvalidator',),
-        # default='',
-        # write_permission=EDIT_TALES_PERMISSION,
-        # read_permission=ModifyPortalContent,
-        # isMetadata=True, # just to hide from base view
-        # widget=StringWidget(label=\
-                            #_(u'label_envelope_from_address_averride_text',
-                              # default=(u"SMTP Envelope MAIL FROM address "
-                                       #"Expression")),
-                           # description=_(
-                # u'help_envelope_from_address_averride_text', default=u"""
-                # A TALES expression that will be evaluated to override any value
-                # otherwise entered for the 'SMTP Envelope MAIL FROM address'
-                # field. You are strongly cautioned against using unvalidated data
-                # from the request for this purpose. Leave empty if unneeded.
-                # Your expression should evaluate as a sequence of strings.
-                # PLEASE NOTE: errors in the evaluation of this expression
-                # will cause an error on form display.
-            #"""),
-            # size=70,
-        #),
-    #),
-    #))
+            #))
+    form.fieldset(u"overrides", label=_("Overrides"), fields=[
+                  'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
+    # write_permission=EDIT_TALES_PERMISSION,
+    form.read_permission(subjectOverride='cmf.ModifyPortalContent')
+    subjectOverride = zs.TextLine(
+        title=_(u'label_subject_override_text', default=u"Subject Expression"),
+        description=_(u'help_subject_override_text', default=u"""
+            A TALES expression that will be evaluated to override any value
+            otherwise entered for the e-mail subject header.
+            Leave empty if unneeded. Your expression should evaluate as a string.
+            PLEASE NOTE: errors in the evaluation of this expression will cause
+            an error on form display.
+        """),
+        required=False,
+        default=u"",
+        constraint=isTALES,
+    )
+    # write_permission=EDIT_TALES_PERMISSION,
+    form.read_permission(senderOverride='cmf.ModifyPortalContent')
+    senderOverride = zs.TextLine(
+        title=_(u'label_sender_override_text', default=u"Sender Expression"),
+        description=_(u'help_sender_override_text', default=u"""
+            A TALES expression that will be evaluated to override the "From" header.
+            Leave empty if unneeded. Your expression should evaluate as a string.
+            PLEASE NOTE: errors in the evaluation of this expression will cause
+            an error on form display.
+        """),
+        required=False,
+        default=u"",
+        constraint=isTALES,
+    )
+    # write_permission=EDIT_TALES_PERMISSION,
+    form.read_permission(recipientOverride='cmf.ModifyPortalContent')
+    recipientOverride = zs.TextLine(
+        title=_(u'label_recipient_override_text',
+                default=u"Recipient Expression"),
+        description=_(u'help_recipient_override_text', default=u"""
+            A TALES expression that will be evaluated to override any value
+            otherwise entered for the recipient e-mail address. You are strongly
+            cautioned against using unvalidated data from the request for this purpose.
+            Leave empty if unneeded. Your expression should evaluate as a string.
+            PLEASE NOTE: errors in the evaluation of this expression will cause
+            an error on form display.
+        """),
+        required=False,
+        default=u"",
+        constraint=isTALES,
+    )
+    # write_permission=EDIT_TALES_PERMISSION,
+    form.read_permission(ccOverride='cmf.ModifyPortalContent')
+    ccOverride = zs.TextLine(
+        title=_(u'label_cc_override_text', default=u"CC Expression"),
+        description=_(u'help_cc_override_text', default=u"""
+            A TALES expression that will be evaluated to override any value
+            otherwise entered for the CC list. You are strongly
+            cautioned against using unvalidated data from the request for this purpose.
+            Leave empty if unneeded. Your expression should evaluate as a sequence of strings.
+            PLEASE NOTE: errors in the evaluation of this expression will cause
+            an error on form display.
+        """),
+        required=False,
+        default=u"",
+        constraint=isTALES,
+    )
+    # write_permission=EDIT_TALES_PERMISSION,
+    form.read_permission(bccOverride='cmf.ModifyPortalContent')
+    bccOverride = zs.TextLine(
+        title=_(u'label_bcc_override_text', default=u"BCC Expression"),
+        description=_(u'help_bcc_override_text', default=u"""
+            A TALES expression that will be evaluated to override any value
+            otherwise entered for the BCC list. You are strongly
+            cautioned against using unvalidated data from the request for this purpose.
+            Leave empty if unneeded. Your expression should evaluate as a sequence of strings.
+            PLEASE NOTE: errors in the evaluation of this expression will cause
+            an error on form display.
+        """),
+        required=False,
+        default=u"",
+        constraint=isTALES,
+    )
 
 
 default_script = u"""
@@ -852,8 +792,9 @@ getProxyRoleChoices = SimpleVocabulary.fromItems((
 class ICustomScript(IAction):
 
     """Executes a Python script for form data"""
+    # write_permission=EDIT_PYTHON_PERMISSION,
     form.read_permission(ProxyRole='cmf.ModifyPortalContent')
-    form.write_permission(ProxyRole='cmf.ModifyPortalContent')
+    # form.write_permission(ProxyRole='cmf.ModifyPortalContent')
     ProxyRole = zs.Choice(
         title=_(u'label_script_proxy', default=u'Proxy role'),
         description=_(u'help_script_proxy',
@@ -863,8 +804,9 @@ class ICustomScript(IAction):
         vocabulary=getProxyRoleChoices,
     )
     # TODO PythonField('ScriptBody',
+    # write_permission=EDIT_PYTHON_PERMISSION,
     form.read_permission(ScriptBody='cmf.ModifyPortalContent')
-    form.write_permission(ScriptBody='cmf.ModifyPortalContent')
+    # form.write_permission(ScriptBody='cmf.ModifyPortalContent')
     ScriptBody = zs.Text(
         title=_(u'label_script_body', default=u'Script body'),
         description=_(u'help_script_body', default=u"Write your script here."),
@@ -877,18 +819,16 @@ class ISaveData(IAction):
 
     """A form action adapter that will save form input data and
        return it in csv- or tab-delimited format."""
-        # LinesField('showFields',
-            # required=0,
-            # searchable=0,
-            # vocabulary='allFieldDisplayList',
-            # widget=PicklistWidget(
-                #label=_(u'label_savefields_text', default=u"Saved Fields"),
-                # description=_(u'help_savefields_text', default=u"""
-                    # Pick the fields whose inputs you'd like to include in
-                    # the saved data. If empty, all fields will be saved.
-                    #"""),
-                #),
-            #),
+    showFields = zs.List(
+        title=_(u'label_savefields_text', default=u"Saved Fields"),
+        description=_(u'help_savefields_text', default=u"""
+            Pick the fields whose inputs you'd like to include in
+            the saved data. If empty, all fields will be saved.
+            """),
+        unique=True,
+        required=False,
+        value_type=zs.Choice(vocabulary=fieldsFactory),
+    )
         # LinesField('ExtraData',
             # widget=MultiSelectionWidget(
                 #label=_(u'label_savedataextra_text', default='Extra Data'),
