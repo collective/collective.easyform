@@ -99,8 +99,8 @@ customActions = SimpleVocabulary.fromItems((
 
 
 MIME_LIST = SimpleVocabulary.fromItems((
-    (_('HTML'), 'html'),
-    (_('Text'), 'plain'),
+    (_(u'HTML'), u'html'),
+    (_(u'Text'), u'plain'),
 ))
 
 XINFO_HEADERS = SimpleVocabulary.fromItems((
@@ -606,6 +606,23 @@ class IMailer(IAction):
             used for rendering of the mail-body. You don\'t need to modify
             it, but if you know TAL (Zope\'s Template Attribute Language)
             you have the full power to customize your outgoing mails."""),
+        default=u"""<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head><title></title></head>
+
+  <body>
+    <p tal:content="here/getBody_pre | nothing" />
+    <dl>
+        <tal:block repeat="field options/wrappedFields | nothing">
+            <dt tal:content="field/fgField/widget/label" />
+            <dd tal:content="structure python:field.htmlValue(request)" />
+        </tal:block>
+    </dl>
+    <p tal:content="here/getBody_post | nothing" />
+    <pre tal:content="here/getBody_footer | nothing" />
+  </body>
+</html>
+""",
     )
     # default_method='getMailBodyTypeDefault',
     # write_permission=EDIT_ADVANCED_PERMISSION,
@@ -815,14 +832,14 @@ class ICustomScript(IAction):
     )
 
 vocabExtraDataDL = SimpleVocabulary.fromItems((
-    (_('vocabulary_postingdt_text', default=u'Posting Date/Time'), u'dt'),
+    (_(u'vocabulary_postingdt_text', default=u'Posting Date/Time'), u'dt'),
     (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
     (u'REMOTE_ADDR', u'REMOTE_ADDR'),
     (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
 ))
 vocabFormatDL = SimpleVocabulary.fromItems((
-    (_('vocabulary_tsv_text', default=u'Tab-Separated Values'), 'tsv'),
-    (_('vocabulary_csv_text', default=u'Comma-Separated Values'), 'csv'),
+    (_(u'vocabulary_tsv_text', default=u'Tab-Separated Values'), u'tsv'),
+    (_(u'vocabulary_csv_text', default=u'Comma-Separated Values'), u'csv'),
 ))
 
 

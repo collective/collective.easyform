@@ -16,11 +16,11 @@ from plone.app.vocabularies import SlicableVocabulary
 from zope.schema.vocabulary import SimpleVocabulary
 from zope.schema import getFieldsInOrder
 from collective.formulator.api import (
-    CONTEXT_KEY,
     get_schema,
     get_actions,
     set_schema,
     set_actions,
+    get_context,
 )
 
 
@@ -39,7 +39,7 @@ class fields(object):
     def __call__(self, context):
         # print context
         terms = []
-        form = context.interface.getTaggedValue(CONTEXT_KEY)
+        form = get_context(context)
         fields = getFieldsInOrder(get_schema(form))
         for name, field in fields:
             # print repr(name), repr(field.title)

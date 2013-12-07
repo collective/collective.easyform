@@ -17,10 +17,12 @@ from collective.formulator.interfaces import (
     IActionExtender,
 )
 from collective.formulator.api import (
+    get_expression,
     get_schema,
     get_actions,
     set_schema,
     set_actions,
+    get_context,
 )
 from plone.supermodel.utils import ns
 from plone.supermodel.parser import IFieldMetadataHandler
@@ -93,9 +95,7 @@ class FormulatorForm(DefaultEditForm):
                 # Check to see if execCondition exists and has contents
                 execCondition = IActionExtender(action).execCondition
                 if execCondition:
-                    expression = Expression(execCondition)
-                    expression_context = getExprContext(self.context)
-                    doit = expression(expression_context)
+                    doit = get_expression(self.context, execCondition)
                 else:
                     doit = True
                 if doit:
@@ -417,6 +417,18 @@ class Action(zs.Bool):
     def onSuccess(self, fields, request):
         print "call onSuccess of %s with parameters (%r, %r)" % (self, fields, request)
 
+from email import Encoders
+from email.Header import Header
+from email.MIMEAudio import MIMEAudio
+from email.MIMEBase import MIMEBase
+from email.MIMEImage import MIMEImage
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.utils import formataddr
+from Products.CMFCore.utils import getToolByName
+from types import StringTypes
+from Products.Archetypes.utils import OrderedDict
+
 
 @implementer(IMailer)
 class Mailer(Action):
@@ -424,8 +436,210 @@ class Mailer(Action):
 
     def __init__(self, **kw):
         for i, f in IMailer.namesAndDescriptions():
-            setattr(self, i, kw.pop(i, f.default))
+            setattr(self, i, kw.pop(i, None) or f.default)
         super(Mailer, self).__init__(**kw)
+
+    def secure_header_line(self, line):
+        nlpos = line.find('\x0a')
+        if nlpos >= 0:
+            line = line[:nlpos]
+        nlpos = line.find('\x0d')
+        if nlpos >= 0:
+            line = line[:nlpos]
+        return line
+
+    def _destFormat(self, input):
+        """ Format destination (To) input.
+            Input may be a string or sequence of strings;
+            returns a well-formatted address field
+        """
+
+        if type(input) in StringTypes:
+            input = [s for s in input.split(',')]
+        input = [s for s in input if s]
+        filtered_input = [s.strip().encode('utf-8') for s in input]
+
+        if filtered_input:
+            return "<%s>" % '>, <'.join(filtered_input)
+        else:
+            return ''
+
+    def get_mail_body(self, fields, request, **kwargs):
+        """Returns the mail-body with footer.
+        """
+
+        all_fields = [f for f in fields
+                      # TODO
+                      # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
+                      # 'showAll', True) and f.getServerSide())]
+                      ]
+
+        # which fields should we show?
+        if getattr(self, 'showAll', True):
+            live_fields = all_fields
+        else:
+            live_fields = \
+                [f for f in all_fields
+                 if f in getattr(self, 'showFields', ())]
+
+        if not getattr(self, 'includeEmpties', True):
+            all_fields = live_fields
+            live_fields = []
+            for f in all_fields:
+                value = fields[f]
+                if value and value != 'No Input':
+                    live_fields.append(f)
+
+        context = get_context(self)
+        schema = get_schema(context)
+        bare_fields = [schema[f] for f in live_fields]
+        bodyfield = self.body_pt
+
+        # pass both the bare_fields (fgFields only) and full fields.
+        # bare_fields for compatability with older templates,
+        # full fields to enable access to htmlValue
+        #body = bodyfield.get(self, fields=bare_fields, wrappedFields=live_fields, **kwargs)
+        body = bodyfield
+
+        # if isinstance(body, unicode):
+            #body = body.encode("utf-8")
+
+        #keyid = getattr(self, 'gpg_keyid', None)
+        #encryption = gpg and keyid
+
+        # if encryption:
+            #bodygpg = gpg.encrypt(body, keyid)
+            # if bodygpg.strip():
+                #body = bodygpg
+
+        return body
+
+    def get_header_body_tuple(self, fields, request,
+                              from_addr=None, to_addr=None,
+                              subject=None, **kwargs):
+        """Return header and body of e-mail as an 3-tuple:
+        (header, additional_header, body)
+
+        header is a dictionary, additional header is a list, body is a StringIO
+
+        Keyword arguments:
+        request -- (optional) alternate request object to use
+        """
+        context = get_context(self)
+        pprops = getToolByName(context, 'portal_properties')
+        site_props = getToolByName(pprops, 'site_properties')
+        portal = getToolByName(context, 'portal_url').getPortalObject()
+        pms = getToolByName(context, 'portal_membership')
+        utils = getToolByName(context, 'plone_utils')
+
+        body = self.get_mail_body(fields, request, **kwargs)
+
+        # fields = self.fgFields()
+
+        # get Reply-To
+        reply_addr = None
+        if hasattr(self, 'replyto_field'):
+            reply_addr = request.form.get(self.replyto_field, None)
+
+        # get subject header
+        nosubject = '(no subject)'
+        if hasattr(self, 'subjectOverride') and self.subjectOverride and get_expression(context, self.subjectOverride):
+            # subject has a TALES override
+            subject = get_expression(context, self.subjectOverride).strip()
+        else:
+            subject = getattr(self, 'msg_subject', nosubject)
+            subjectField = request.form.get(self.subject_field, None)
+            if subjectField is not None:
+                subject = subjectField
+            else:
+                # we only do subject expansion if there's no field chosen
+                #subject = self._dreplace(subject)
+                subject = subject
+
+        # Get From address
+        if hasattr(self, 'senderOverride') and self.senderOverride and get_expression(context, self.senderOverride):
+            from_addr = get_expression(context, self.senderOverride).strip()
+        else:
+            from_addr = from_addr or site_props.getProperty('email_from_address') or \
+                portal.getProperty('email_from_address')
+
+        # Get To address and full name
+        if hasattr(self, 'recipientOverride') and self.recipientOverride and get_expression(context, self.recipientOverride):
+            recip_email = get_expression(context, self.recipientOverride)
+        else:
+            recip_email = None
+            if hasattr(self, 'to_field') and self.to_field:
+                recip_email = request.form.get(self.to_field, None)
+            if not recip_email:
+                recip_email = self.recipient_email
+        print repr(self.recipient_email), repr(self.to_field), repr(self.recipientOverride), repr(recip_email)
+        recip_email = self._destFormat(recip_email)
+
+        recip_name = self.recipient_name.encode('utf-8')
+
+        # if no to_addr and no recip_email specified, use owner adress if possible.
+        # if not, fall back to portal email_from_address.
+        # if still no destination, raise an assertion exception.
+        if not recip_email and not to_addr:
+            ownerinfo = context.getOwner()
+            ownerid = ownerinfo.getId()
+            fullname = ownerid
+            userdest = pms.getMemberById(ownerid)
+            if userdest is not None:
+                fullname = userdest.getProperty('fullname', ownerid)
+            toemail = ''
+            if userdest is not None:
+                toemail = userdest.getProperty('email', '')
+            if not toemail:
+                toemail = portal.getProperty('email_from_address')
+            assert toemail, """
+                    Unable to mail form input because no recipient address has been specified.
+                    Please check the recipient settings of the PloneFormGen "Mailer" within the
+                    current form folder.
+                """
+            to = formataddr((fullname, toemail))
+        else:
+            to = to_addr or '%s %s' % (recip_name, recip_email)
+
+        headerinfo = OrderedDict()
+
+        headerinfo['To'] = self.secure_header_line(to)
+        headerinfo['From'] = self.secure_header_line(from_addr)
+        if reply_addr:
+            headerinfo['Reply-To'] = self.secure_header_line(reply_addr)
+
+        # transform subject into mail header encoded string
+        email_charset = portal.getProperty('email_charset', 'utf-8')
+
+        if not isinstance(subject, unicode):
+            site_charset = utils.getSiteEncoding()
+            subject = unicode(subject, site_charset, 'replace')
+
+        msgSubject = self.secure_header_line(
+            subject).encode(email_charset, 'replace')
+        msgSubject = str(Header(msgSubject, email_charset))
+        headerinfo['Subject'] = msgSubject
+
+        # CC
+        cc_recips = filter(None, self.cc_recipients)
+        if hasattr(self, 'ccOverride') and self.ccOverride and get_expression(context, self.ccOverride):
+            cc_recips = get_expression(context, self.ccOverride)
+        if cc_recips:
+            headerinfo['Cc'] = self._destFormat(cc_recips)
+
+        # BCC
+        bcc_recips = filter(None, self.bcc_recipients)
+        if hasattr(self, 'bccOverride') and self.bccOverride and get_expression(context, self.bccOverride):
+            bcc_recips = get_expression(context, self.bccOverride)
+        if bcc_recips:
+            headerinfo['Bcc'] = self._destFormat(bcc_recips)
+
+        for key in getattr(self, 'xinfo_headers', []):
+            headerinfo['X-%s' % key] = self.secure_header_line(
+                request.get(key, 'MISSING'))
+
+        # return 3-Tuple
+        return (headerinfo, self.additional_headers or [], body)
 
     def get_mail_text(self, fields, request):
         """Get header and body of e-mail as text (string)
@@ -443,7 +657,8 @@ class Mailer(Action):
         mime_text = MIMEText(body.encode(email_charset, 'replace'),
                              _subtype=subtype, _charset=email_charset)
 
-        attachments = self.get_attachments(fields, request)
+        #attachments = self.get_attachments(fields, request)
+        attachments = []
 
         if attachments:
             outer = MIMEMultipart()
@@ -494,8 +709,9 @@ class Mailer(Action):
         """
         e-mails data.
         """
+        context = get_context(self)
         mailtext = self.get_mail_text(fields, request)
-        host = self.MailHost
+        host = context.MailHost
         host.send(mailtext)
 
 
@@ -594,6 +810,7 @@ class SaveData(Action):
     def __init__(self, **kw):
         for i, f in ISaveData.namesAndDescriptions():
             setattr(self, i, kw.pop(i, f.default))
+        super(SaveData, self).__init__(**kw)
 
     def _addDataRow(self, value):
 
@@ -616,7 +833,6 @@ class SaveData(Action):
         """
         saves data.
         """
-        super(SaveData, self).__init__(**kw)
         if LP_SAVE_TO_CANONICAL and not loopstop:
             # LinguaPlone functionality:
             # check to see if we're in a translated

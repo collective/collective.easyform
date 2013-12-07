@@ -7,11 +7,22 @@ SCHEMATA_KEY = u""
 CONTEXT_KEY = u"context"
 
 
+def get_expression(context, expression_string):
+    expression = Expression(expression_string)
+    expression_context = getExprContext(context)
+    return expression(expression_context)
+
+
+def get_context(field):
+    return field.interface.getTaggedValue(CONTEXT_KEY)
+
+
 def load_schema(sschema):
     try:
         schema = loadString(sschema).schemata.get(SCHEMATA_KEY, Schema)
     except Exception:
         schema = Schema
+    schema = loadString(sschema).schemata.get(SCHEMATA_KEY, Schema)
     return schema
 
 
