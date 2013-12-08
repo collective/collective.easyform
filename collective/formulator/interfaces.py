@@ -3,7 +3,6 @@ from zope.interface import Invalid, Interface, invariant
 from zope import schema as zs
 from zope.schema.interfaces import IField
 from z3c.form import interfaces
-from zope.schema.vocabulary import SimpleVocabulary
 from plone.app.textfield import RichText
 from plone.directives import form
 from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
@@ -11,7 +10,20 @@ from collective.formulator import formulatorMessageFactory as _
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 from Products.PageTemplates.Expressions import getEngine
 from zope.tales.tales import CompilerError
-from collective.formulator.vocabulary import fieldsFactory
+from collective.formulator.vocabulary import (
+    fieldsFactory,
+    customActions,
+    MIME_LIST,
+    XINFO_HEADERS,
+    getProxyRoleChoices,
+    vocabExtraDataDL,
+    vocabFormatDL,
+)
+from collective.formulator.config import (
+    MODEL_DEFAULT,
+    MAIL_BODY_DEFAULT,
+    DEFAULT_SCRIPT,
+)
 
 
 def isValidFieldName(value):
@@ -83,33 +95,6 @@ class ICollectiveFormulatorLayer(Interface):
     """ A layer specific to this product.
         Is registered using browserlayer.xml
     """
-
-MODEL_DEFAULT = u"""
-<model xmlns="http://namespaces.plone.org/supermodel/schema">
-    <schema>
-    </schema>
-</model>
-"""
-
-
-customActions = SimpleVocabulary.fromItems((
-    (_(u"Traverse to"), u"traverse_to"),
-    (_(u"Redirect to"), u"redirect_to"),
-))
-
-
-MIME_LIST = SimpleVocabulary.fromItems((
-    (_(u'HTML'), u'html'),
-    (_(u'Text'), u'plain'),
-))
-
-XINFO_HEADERS = SimpleVocabulary.fromItems((
-    (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
-    (u'REMOTE_ADDR', u'REMOTE_ADDR'),
-    (u'PATH_INFO', u'PATH_INFO'),
-    (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
-    (u'HTTP_REFERER', u'HTTP_REFERER'),
-))
 
 
 class IFormulator(form.Schema):
@@ -495,8 +480,7 @@ class IMailer(IAction):
     replyto_field = zs.Choice(
         title=_(u'label_formmailer_replyto_extract',
                 default=u'Extract Reply-To From'),
-        description=_(u'help_formmailer_replyto_extract',
-            default=u"""
+        description=_(u'help_formmailer_replyto_extract', default=u"""
             Choose a form field from which you wish to extract
             input for the Reply-To header. NOTE: You should
             activate e-mail address verification for the designated
@@ -601,36 +585,18 @@ class IMailer(IAction):
     form.read_permission(body_pt='cmf.ModifyPortalContent')
     body_pt = zs.Text(
         title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
-        description=_(u'help_formmailer_body_pt',
-            default=u"""This is a Zope Page Template
+        description=_(u'help_formmailer_body_pt', default=u"""This is a Zope Page Template
             used for rendering of the mail-body. You don\'t need to modify
             it, but if you know TAL (Zope\'s Template Attribute Language)
             you have the full power to customize your outgoing mails."""),
-        default=u"""<html xmlns="http://www.w3.org/1999/xhtml">
-
-  <head><title></title></head>
-
-  <body>
-    <p tal:content="here/getBody_pre | nothing" />
-    <dl>
-        <tal:block repeat="field options/wrappedFields | nothing">
-            <dt tal:content="field/fgField/widget/label" />
-            <dd tal:content="structure python:field.htmlValue(request)" />
-        </tal:block>
-    </dl>
-    <p tal:content="here/getBody_post | nothing" />
-    <pre tal:content="here/getBody_footer | nothing" />
-  </body>
-</html>
-""",
+        default=MAIL_BODY_DEFAULT,
     )
     # default_method='getMailBodyTypeDefault',
     # write_permission=EDIT_ADVANCED_PERMISSION,
     form.read_permission(body_type='cmf.ModifyPortalContent')
     body_type = zs.Choice(
         title=_(u'label_formmailer_body_type', default=u'Mail Format'),
-        description=_(u'help_formmailer_body_type',
-            default=u"""Set the mime-type of the mail-body.
+        description=_(u'help_formmailer_body_type', default=u"""Set the mime-type of the mail-body.
             Change this setting only if you know exactly what you are doing.
             Leave it blank for default behaviour."""),
         default=u"html",
@@ -774,38 +740,6 @@ class IMailer(IAction):
     )
 
 
-default_script = u"""
-## Python Script
-##bind container=container
-##bind context=context
-##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
-##title=
-##
-
-# Available parameters:
-#  fields  = HTTP request form fields as key value pairs
-#  request = The current HTTP request.
-#            Access fields by request.form["myfieldname"]
-#  ploneformgen = PloneFormGen object
-#
-# Return value is not processed -- unless you
-# return a dictionary with contents. That's regarded
-# as an error and will stop processing of actions
-# and return the user to the form. Error dictionaries
-# should be of the form {'field_id':'Error message'}
-
-
-assert False, "Please complete your script"
-
-"""
-
-getProxyRoleChoices = SimpleVocabulary.fromItems((
-    (u"No proxy role", u"none"),
-    (u"Manager", u"Manager"),
-))
-
-
 class ICustomScript(IAction):
 
     """Executes a Python script for form data"""
@@ -827,20 +761,9 @@ class ICustomScript(IAction):
     ScriptBody = zs.Text(
         title=_(u'label_script_body', default=u'Script body'),
         description=_(u'help_script_body', default=u"Write your script here."),
-        default=default_script,
+        default=DEFAULT_SCRIPT,
         required=False,
     )
-
-vocabExtraDataDL = SimpleVocabulary.fromItems((
-    (_(u'vocabulary_postingdt_text', default=u'Posting Date/Time'), u'dt'),
-    (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
-    (u'REMOTE_ADDR', u'REMOTE_ADDR'),
-    (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
-))
-vocabFormatDL = SimpleVocabulary.fromItems((
-    (_(u'vocabulary_tsv_text', default=u'Tab-Separated Values'), u'tsv'),
-    (_(u'vocabulary_csv_text', default=u'Comma-Separated Values'), u'csv'),
-))
 
 
 class ISaveData(IAction):

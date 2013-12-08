@@ -1,7 +1,45 @@
+from Acquisition import aq_parent, aq_inner
+from BTrees.IOBTree import IOBTree
+try:
+    from BTrees.LOBTree import LOBTree
+    SavedDataBTree = LOBTree
+except ImportError:
+    SavedDataBTree = IOBTree
+from BTrees.Length import Length
+from DateTime import DateTime
+from Products.CMFCore.Expression import getExprContext, Expression
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.PythonScripts.PythonScript import PythonScript
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from ZPublisher.mapply import mapply
-from collective.formulator import formulatorMessageFactory as _
+from copy import deepcopy
+from logging import getLogger
+from plone.autoform.form import AutoExtensibleForm
+from plone.dexterity.browser.edit import DefaultEditForm
+from plone.memoize.instance import memoize
+from plone.schemaeditor.browser.field.traversal import FieldContext
+from plone.schemaeditor.browser.schema.add_field import FieldAddForm
+from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
+from plone.schemaeditor.browser.schema.traversal import SchemaContext
+from plone.schemaeditor.interfaces import IFieldEditFormSchema, IFieldEditorExtender
+from plone.schemaeditor.utils import SchemaModifiedEvent
+from plone.supermodel.exportimport import BaseHandler
+from plone.supermodel.parser import IFieldMetadataHandler
+from plone.supermodel.utils import ns
+from plone.z3cform import layout
+from time import time
+from z3c.form import button, form, field
+from z3c.form.interfaces import DISPLAY_MODE
+from zope import schema as zs
+from zope.cachedescriptors.property import Lazy as lazy_property
+from zope.component import getUtilitiesFor, adapter, adapts
+from zope.component import queryUtility, getAdapters
+from zope.event import notify
+from zope.i18n import translate
+from zope.interface import implements, implementer
+from zope.schema import getFieldsInOrder
+from zope.schema.vocabulary import SimpleVocabulary
+
 from collective.formulator.interfaces import (
     INewAction,
     IActionFactory,
@@ -24,36 +62,9 @@ from collective.formulator.api import (
     set_actions,
     get_context,
 )
-from plone.supermodel.utils import ns
-from plone.supermodel.parser import IFieldMetadataHandler
-from zope.schema import getFieldsInOrder
-from copy import deepcopy
-from plone.autoform.form import AutoExtensibleForm
-from plone.dexterity.browser.edit import DefaultEditForm
-from plone.memoize.instance import memoize
-from plone.schemaeditor.browser.field.traversal import FieldContext
-from plone.schemaeditor.browser.schema.add_field import FieldAddForm
-from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
-from plone.schemaeditor.browser.schema.traversal import SchemaContext
-from plone.schemaeditor.interfaces import IFieldEditFormSchema, IFieldEditorExtender
-from plone.supermodel import loadString
-from plone.supermodel.exportimport import BaseHandler
-from plone.supermodel.model import Model
-from plone.supermodel.serializer import serialize
-from plone.z3cform import layout
-from z3c.form import button, form, field
-from z3c.form.interfaces import DISPLAY_MODE
-from zope import schema as zs
-from zope.cachedescriptors.property import Lazy as lazy_property
-from zope.component import getUtilitiesFor, adapter, adapts
-from zope.component import queryUtility, getAdapters
-from zope.i18n import translate
-from zope.interface import implements, implementer
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.event import notify
-from plone.schemaeditor.utils import SchemaModifiedEvent
-from Acquisition import aq_parent, aq_inner
-from Products.CMFCore.Expression import getExprContext, Expression
+from collective.formulator import formulatorMessageFactory as _
+
+logger = getLogger("collective.formulator")
 
 
 class FormulatorForm(DefaultEditForm):
@@ -490,9 +501,9 @@ class Mailer(Action):
                 if value and value != 'No Input':
                     live_fields.append(f)
 
-        context = get_context(self)
-        schema = get_schema(context)
-        bare_fields = [schema[f] for f in live_fields]
+        #context = get_context(self)
+        #schema = get_schema(context)
+        #bare_fields = [schema[f] for f in live_fields]
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
@@ -747,7 +758,7 @@ class CustomScript(Action):
     def sanifyFields(self, form):
         # Makes request.form fields accessible in a script
         #
-        # Avoid Unauthorized exceptions since REQUEST.form is inaccesible
+        # Avoid Unauthorized exceptions since request.form is inaccesible
 
         result = {}
         for field in form:
@@ -775,7 +786,7 @@ class CustomScript(Action):
     def executeCustomScript(self, result, form, req):
         # Execute in-place script
 
-        # @param result Extracted fields from REQUEST.form
+        # @param result Extracted fields from request.form
         # @param form PloneFormGen object
 
         field = self.schema["ScriptBody"]
@@ -789,18 +800,11 @@ class CustomScript(Action):
         response = script(result, form, req)
         return response
 
-    def onSuccess(self, fields, REQUEST=None):
+    def onSuccess(self, fields, request):
         # Executes the custom script
-
-        # use PloneFormGen object as a context
-        form = aq_parent(self)
-
-        if REQUEST != None:
-            resultData = self.sanifyFields(REQUEST.form)
-        else:
-            resultData = {}
-
-        return self.executeCustomScript(resultData, form, REQUEST)
+        form = get_context(self)
+        resultData = self.sanifyFields(request.form)
+        return self.executeCustomScript(resultData, form, request)
 
 
 @implementer(ISaveData)
@@ -812,82 +816,95 @@ class SaveData(Action):
             setattr(self, i, kw.pop(i, f.default))
         super(SaveData, self).__init__(**kw)
 
+    def _migrateStorage(self, context):
+        updated = \
+            hasattr(context, '_inputStorage') and \
+            hasattr(context, '_inputItems') and \
+            hasattr(context, '_length')
+
+        if not updated:
+            context._inputStorage = SavedDataBTree()
+            context._inputItems = 0
+            context._length = Length()
+
     def _addDataRow(self, value):
 
-        self._migrateStorage()
+        context = get_context(self)
+        self._migrateStorage(context)
 
-        if isinstance(self._inputStorage, IOBTree):
+        if isinstance(context._inputStorage, IOBTree):
             # 32-bit IOBTree; use a key which is more likely to conflict
             # but which won't overflow the key's bits
-            id = self._inputItems
-            self._inputItems += 1
+            id = context._inputItems
+            context._inputItems += 1
         else:
             # 64-bit LOBTree
-            id = int(time.time() * 1000)
-            while id in self._inputStorage:  # avoid collisions during testing
+            id = int(time() * 1000)
+            while id in context._inputStorage:  # avoid collisions during testing
                 id += 1
-        self._inputStorage[id] = value
-        self._length.change(1)
+        context._inputStorage[id] = value
+        context._length.change(1)
 
     def onSuccess(self, fields, request):
         """
         saves data.
         """
-        if LP_SAVE_TO_CANONICAL and not loopstop:
+        # if LP_SAVE_TO_CANONICAL and not loopstop:
             # LinguaPlone functionality:
             # check to see if we're in a translated
             # form folder, but not the canonical version.
-            parent = self.aq_parent
-            if safe_hasattr(parent, 'isTranslation') and \
-               parent.isTranslation() and not parent.isCanonical():
+            #parent = self.aq_parent
+            # if safe_hasattr(parent, 'isTranslation') and \
+               # parent.isTranslation() and not parent.isCanonical():
                 # look in the canonical version to see if there is
                 # a matching (by id) save-data adapter.
                 # If so, call its onSuccess method
-                cf = parent.getCanonical()
-                target = cf.get(self.getId())
-                if target is not None and target.meta_type == 'FormSaveDataAdapter':
-                    target.onSuccess(fields, REQUEST, loopstop=True)
-                    return
+                #cf = parent.getCanonical()
+                #target = cf.get(self.getId())
+                # if target is not None and target.meta_type == 'FormSaveDataAdapter':
+                    #target.onSuccess(fields, request, loopstop=True)
+                    # return
 
-        from ZPublisher.HTTPRequest import FileUpload
+        #from ZPublisher.HTTPRequest import FileUpload
 
         data = []
         for f in fields:
             showFields = getattr(self, 'showFields', [])
-            if showFields and f.id not in showFields:
+            if showFields and f not in showFields:
                 continue
-            if f.isFileField():
-                file = REQUEST.form.get('%s_file' % f.fgField.getName())
-                if isinstance(file, FileUpload) and file.filename != '':
-                    file.seek(0)
-                    fdata = file.read()
-                    filename = file.filename
-                    mimetype, enc = guess_content_type(filename, fdata, None)
-                    if mimetype.find('text/') >= 0:
+            # if f.isFileField():
+                #file = request.form.get('%s_file' % f.fgField.getName())
+                # if isinstance(file, FileUpload) and file.filename != '':
+                    # file.seek(0)
+                    #fdata = file.read()
+                    #filename = file.filename
+                    #mimetype, enc = guess_content_type(filename, fdata, None)
+                    # if mimetype.find('text/') >= 0:
                         # convert to native eols
-                        fdata = fdata.replace('\x0d\x0a', '\n').replace(
-                            '\x0a', '\n').replace('\x0d', '\n')
-                        data.append('%s:%s:%s:%s' %
-                                    (filename, mimetype, enc, fdata))
-                    else:
-                        data.append('%s:%s:%s:Binary upload discarded' %
-                                    (filename, mimetype, enc))
-                else:
-                    data.append('NO UPLOAD')
-            elif not f.isLabel():
-                val = REQUEST.form.get(f.fgField.getName(), '')
-                if not type(val) in StringTypes:
+                        # fdata = fdata.replace('\x0d\x0a', '\n').replace(
+                            #'\x0a', '\n').replace('\x0d', '\n')
+                        # data.append('%s:%s:%s:%s' %
+                                    #(filename, mimetype, enc, fdata))
+                    # else:
+                        # data.append('%s:%s:%s:Binary upload discarded' %
+                                    #(filename, mimetype, enc))
+                # else:
+                    #data.append('NO UPLOAD')
+            # elif not f.isLabel():
+                #val = request.form.get(f.fgField.getName(), '')
+                # if not type(val) in StringTypes:
                     # Zope has marshalled the field into
                     # something other than a string
-                    val = str(val)
-                data.append(val)
+                    #val = str(val)
+                # data.append(val)
+            data.append(fields[f])
 
         if self.ExtraData:
             for f in self.ExtraData:
                 if f == 'dt':
                     data.append(str(DateTime()))
                 else:
-                    data.append(getattr(REQUEST, f, ''))
+                    data.append(getattr(request, f, ''))
 
         self._addDataRow(data)
 

@@ -2,6 +2,7 @@ from plone.supermodel import loadString
 from plone.supermodel.model import Model
 from plone.supermodel.serializer import serialize
 from plone.directives.form import Schema
+from Products.CMFCore.Expression import getExprContext, Expression
 
 SCHEMATA_KEY = u""
 CONTEXT_KEY = u"context"
