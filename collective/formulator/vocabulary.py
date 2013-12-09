@@ -41,6 +41,7 @@ vocabExtraDataDL = SimpleVocabulary.fromItems((
     (u'REMOTE_ADDR', u'REMOTE_ADDR'),
     (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
 ))
+
 vocabFormatDL = SimpleVocabulary.fromItems((
     (_(u'vocabulary_tsv_text', default=u'Tab-Separated Values'), u'tsv'),
     (_(u'vocabulary_csv_text', default=u'Comma-Separated Values'), u'csv'),

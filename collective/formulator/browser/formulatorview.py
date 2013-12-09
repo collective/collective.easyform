@@ -1,3 +1,16 @@
+from email import Encoders
+from email.Header import Header
+from email.MIMEAudio import MIMEAudio
+from email.MIMEBase import MIMEBase
+from email.MIMEImage import MIMEImage
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.utils import formataddr
+from Products.CMFCore.utils import getToolByName
+from types import StringTypes
+from Products.Archetypes.utils import OrderedDict
+
+
 from Acquisition import aq_parent, aq_inner
 from BTrees.IOBTree import IOBTree
 try:
@@ -29,15 +42,15 @@ from plone.supermodel.utils import ns
 from plone.z3cform import layout
 from time import time
 from z3c.form import button, form, field
-from z3c.form.interfaces import DISPLAY_MODE
+from z3c.form.interfaces import DISPLAY_MODE, IErrorViewSnippet
 from zope import schema as zs
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtilitiesFor, adapter, adapts
-from zope.component import queryUtility, getAdapters
+from zope.component import queryUtility, getAdapters, getMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import implements, implementer
-from zope.schema import getFieldsInOrder
+from zope.schema import getFieldsInOrder, ValidationError
 from zope.schema.vocabulary import SimpleVocabulary
 
 from collective.formulator.interfaces import (
@@ -126,6 +139,17 @@ class FormulatorForm(DefaultEditForm):
             return
         errors = self.processActions(errors, data)
         if errors:
+            for field in errors:
+                class Error(ValidationError):
+                    __doc__ = errors[field]
+                error = Error()
+                view = getMultiAdapter(
+                    (error, self.request, self.widgets[
+                     field], self.widgets[field].field, self, self.context),
+                    IErrorViewSnippet)
+                view.update()
+                self.widgets.errors += (view,)
+                self.widgets[field].error = view
             self.status = self.formErrorsMessage
             return
         # self.applyChanges(data)
@@ -288,6 +312,7 @@ class FormulatorActionsListing(SchemaListing):
 
         # update widgets to take the new defaults into account
         self.updateWidgets()
+        self.request.response.redirect(self.context.absolute_url())
 
 
 class FormulatorSchemaListingPage(SchemaListingPage):
@@ -415,30 +440,13 @@ class ActionFactory(object):
         return self.fieldcls(*(self.args + args), **kwargs)
 
 
-IntAction = ActionFactory(
-    zs.Int, _(u'label_integer_action', default=u'Integer'))
-
-
-#@implementer(zs.interfaces.IFromUnicode)
-# class Action(zs.Field):
 class Action(zs.Bool):
 
     """ Base action class """
 
     def onSuccess(self, fields, request):
-        print "call onSuccess of %s with parameters (%r, %r)" % (self, fields, request)
-
-from email import Encoders
-from email.Header import Header
-from email.MIMEAudio import MIMEAudio
-from email.MIMEBase import MIMEBase
-from email.MIMEImage import MIMEImage
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.utils import formataddr
-from Products.CMFCore.utils import getToolByName
-from types import StringTypes
-from Products.Archetypes.utils import OrderedDict
+        raise NotImplementedError(
+            "There is not implemented 'onSuccess' of %r" % (self,))
 
 
 @implementer(IMailer)
@@ -583,7 +591,7 @@ class Mailer(Action):
                 recip_email = request.form.get(self.to_field, None)
             if not recip_email:
                 recip_email = self.recipient_email
-        print repr(self.recipient_email), repr(self.to_field), repr(self.recipientOverride), repr(recip_email)
+
         recip_email = self._destFormat(recip_email)
 
         recip_name = self.recipient_name.encode('utf-8')
@@ -735,25 +743,21 @@ class CustomScript(Action):
             setattr(self, i, kw.pop(i, f.default))
         super(CustomScript, self).__init__(**kw)
 
-    def updateScript(self, body, role):
-        # Regenerate Python script object
+    def getScript(self, context):
+        # Generate Python script object
 
-        # Sync set of script source code, proxy role and
-        # creation of Python Script object.
-
-        bodyField = self.schema["ScriptBody"]
-        proxyField = self.schema["ProxyRole"]
-        script = PythonScript(self.title_or_id())
-        script = script.__of__(self)
+        body = self.ScriptBody
+        role = self.ProxyRole
+        script = PythonScript(self.__name__)
+        script = script.__of__(context)
 
         # Force proxy role
-        if role != "none":
+        if role != u"none":
             script.manage_proxy((role,))
 
-        script.ZPythonScript_edit("fields, ploneformgen, request", body)
-
-        PythonField.set(bodyField, self, script)
-        StringField.set(proxyField, self, role)
+        script.ZPythonScript_edit(
+            "fields, ploneformgen, request", body.encode("utf-8"))
+        return script
 
     def sanifyFields(self, form):
         # Makes request.form fields accessible in a script
@@ -768,10 +772,6 @@ class CustomScript(Action):
     def checkWarningsAndErrors(self, script):
         # Raise exception if there has been bad things with the script
         # compiling
-
-        field = self.schema["ScriptBody"]
-
-        script = ObjectField.get(field, self)
 
         if len(script.warnings) > 0:
             logger.warn("Python script " + self.title_or_id()
@@ -789,14 +789,8 @@ class CustomScript(Action):
         # @param result Extracted fields from request.form
         # @param form PloneFormGen object
 
-        field = self.schema["ScriptBody"]
-        # Now pass through PythonField/PythonScript abstraction
-        # to access bad things (tm)
-        # otherwise there are silent failures
-        script = ObjectField.get(field, self)
-
+        script = self.getScript(form)
         self.checkWarningsAndErrors(script)
-
         response = script(result, form, req)
         return response
 

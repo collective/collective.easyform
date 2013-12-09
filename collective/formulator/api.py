@@ -55,6 +55,8 @@ def set_schema(context, schema):
 
 
 def set_actions(context, schema):
+    # fix setting widgets
+    schema.setTaggedValue('plone.autoform.widgets', {})
     # serialize the current schema
     snew_schema = serialize_schema(schema)
     # store the current schema

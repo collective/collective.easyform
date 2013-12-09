@@ -60,10 +60,6 @@
         name="FormulatorActions"
         />
     <utility
-        name="zope.schema._bootstrapfields.Int"
-        component=".formulatorview.IntAction"
-        />
-    <utility
         name="collective.formulator.browser.formulatorview.Mailer"
         component=".formulatorview.MailerAction"
         />

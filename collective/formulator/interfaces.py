@@ -1,15 +1,15 @@
-from z3c.form.browser.checkbox import CheckBoxFieldWidget
-from zope.interface import Invalid, Interface, invariant
-from zope import schema as zs
-from zope.schema.interfaces import IField
-from z3c.form import interfaces
+from Products.PageTemplates.Expressions import getEngine
 from plone.app.textfield import RichText
 from plone.directives import form
-from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
-from collective.formulator import formulatorMessageFactory as _
 from plone.schemaeditor import SchemaEditorMessageFactory as __
-from Products.PageTemplates.Expressions import getEngine
+from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
+from z3c.form import interfaces
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
+from zope import schema as zs
+from zope.interface import Invalid, Interface, invariant
+from zope.schema.interfaces import IField
 from zope.tales.tales import CompilerError
+from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.vocabulary import (
     fieldsFactory,
     customActions,
