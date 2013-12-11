@@ -6,19 +6,17 @@ MODEL_DEFAULT = u"""
 """
 
 MAIL_BODY_DEFAULT = u"""<html xmlns="http://www.w3.org/1999/xhtml">
-
   <head><title></title></head>
-
   <body>
-    <p tal:content="here/getBody_pre | nothing" />
+    <p tal:content="mailer/body_pre | nothing" />
     <dl>
-        <tal:block repeat="field options/wrappedFields | nothing">
-            <dt tal:content="field/fgField/widget/label" />
-            <dd tal:content="structure python:field.htmlValue(request)" />
+        <tal:block repeat="field data | nothing">
+            <dt tal:content="python:fields[field]" />
+            <dd tal:content="structure python:data[field]" />
         </tal:block>
     </dl>
-    <p tal:content="here/getBody_post | nothing" />
-    <pre tal:content="here/getBody_footer | nothing" />
+    <p tal:content="mailer/body_post | nothing" />
+    <pre tal:content="mailer/body_footer | nothing" />
   </body>
 </html>
 """

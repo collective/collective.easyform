@@ -1,16 +1,3 @@
-from email import Encoders
-from email.Header import Header
-from email.MIMEAudio import MIMEAudio
-from email.MIMEBase import MIMEBase
-from email.MIMEImage import MIMEImage
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.utils import formataddr
-from Products.CMFCore.utils import getToolByName
-from types import StringTypes
-from Products.Archetypes.utils import OrderedDict
-
-
 from Acquisition import aq_parent, aq_inner
 from BTrees.IOBTree import IOBTree
 try:
@@ -20,12 +7,23 @@ except ImportError:
     SavedDataBTree = IOBTree
 from BTrees.Length import Length
 from DateTime import DateTime
+from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.Expression import getExprContext, Expression
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from ZPublisher.mapply import mapply
 from copy import deepcopy
+from email import Encoders
+from email.Header import Header
+from email.MIMEAudio import MIMEAudio
+from email.MIMEBase import MIMEBase
+from email.MIMEImage import MIMEImage
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.utils import formataddr
 from logging import getLogger
 from plone.autoform.form import AutoExtensibleForm
 from plone.dexterity.browser.edit import DefaultEditForm
@@ -41,6 +39,7 @@ from plone.supermodel.parser import IFieldMetadataHandler
 from plone.supermodel.utils import ns
 from plone.z3cform import layout
 from time import time
+from types import StringTypes
 from z3c.form import button, form, field
 from z3c.form.interfaces import DISPLAY_MODE, IErrorViewSnippet
 from zope import schema as zs
@@ -54,26 +53,26 @@ from zope.schema import getFieldsInOrder, ValidationError
 from zope.schema.vocabulary import SimpleVocabulary
 
 from collective.formulator.interfaces import (
-    INewAction,
-    IActionFactory,
-    IFormulatorSchemaContext,
-    IFormulatorActionsContext,
+    IAction,
     IActionContext,
     IActionEditForm,
-    IAction,
-    IMailer,
-    ICustomScript,
-    ISaveData,
-    IFieldExtender,
     IActionExtender,
+    IActionFactory,
+    ICustomScript,
+    IFieldExtender,
+    IFormulatorActionsContext,
+    IFormulatorSchemaContext,
+    IMailer,
+    INewAction,
+    ISaveData,
 )
 from collective.formulator.api import (
+    get_actions,
+    get_context,
     get_expression,
     get_schema,
-    get_actions,
-    set_schema,
     set_actions,
-    get_context,
+    set_schema,
 )
 from collective.formulator import formulatorMessageFactory as _
 
@@ -115,6 +114,8 @@ class FormulatorForm(DefaultEditForm):
             # get a list of adapters with no duplicates, retaining order
             actions = getFieldsInOrder(get_actions(self.context))
             for name, action in actions:
+                if not action.required:
+                    continue
                 # Now, see if we should execute it.
                 # Check to see if execCondition exists and has contents
                 execCondition = IActionExtender(action).execCondition
@@ -509,16 +510,31 @@ class Mailer(Action):
                 if value and value != 'No Input':
                     live_fields.append(f)
 
-        #context = get_context(self)
-        #schema = get_schema(context)
+        context = get_context(self)
+        schema = get_schema(context)
         #bare_fields = [schema[f] for f in live_fields]
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
-        #body = bodyfield.get(self, fields=bare_fields, wrappedFields=live_fields, **kwargs)
-        body = bodyfield
+        #template = PageTemplate()
+        #template.write(bodyfield)
+        #pt_args = template.pt_getContext()
+        #pt_args['request'] = request
+        #pt_args['here'] = self
+        #pt_args['context'] = self
+        #pt_args['container'] = context
+        #pt_args['fields'] = schema
+        #pt_args['data'] = fields
+        #body = template.pt_render(pt_args)
+        template = ZopePageTemplate(self.__name__)
+        template.write(bodyfield)
+        body = template.__of__(context).pt_render(extra_context={
+            'data': fields,
+            'fields': dict([(i, j.title) for i, j in getFieldsInOrder(schema)]),
+            'mailer': self,
+        })
 
         # if isinstance(body, unicode):
             #body = body.encode("utf-8")

@@ -1,12 +1,8 @@
 - TALES override submit button
-- +Mailer
-    - +Mailer interface
-    - +Mailer onSuccess
-- +SaveData
-    - +SaveData interface
-    - +SaveData onSuccess
-- CustomScript
-    - ???
+- Actions
+    - Mailer
+    - SaveData
+    - CustomScript
 - API
 - Split code by files
 - Custom Permissions
