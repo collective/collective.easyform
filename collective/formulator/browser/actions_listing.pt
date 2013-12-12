@@ -1,4 +1,7 @@
-<div tal:omit-tag="" i18n:domain="plone.schemaeditor">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="plone.schemaeditor"
+      tal:omit-tag="">
   <form id="add-field" method="GET"
         tal:attributes="action string:${context/absolute_url}/@@add-action">
     <input type="submit" style="float: right; display: block; margin-top: -4.5em;"
@@ -135,4 +138,4 @@
       </tal:block>
     </metal:fields-slot>
   </metal:form>
-</div>
+</html>

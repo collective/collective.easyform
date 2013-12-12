@@ -84,6 +84,7 @@ class FormulatorForm(DefaultEditForm):
     """
     Formulator form
     """
+    template = ViewPageTemplateFile('formulator_form.pt')
     ignoreContext = True
     #method = "get"
     # def action(self):
