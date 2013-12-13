@@ -186,6 +186,23 @@ class FormulatorForm(DefaultEditForm):
         view_url = self.context.absolute_url()
         return view_url
 
+    def updateFields(self):
+        super(FormulatorForm, self).updateFields()
+        omit = []
+        for fname in self.fields:
+            field = self.fields[fname].field
+            efield = IFieldExtender(field)
+            if getattr(efield, 'TDefault', None):
+                field.default = get_expression(self.context, efield.TDefault)
+            if getattr(efield, 'TValidator', None):
+                fconstraint = field.constraint
+                tvalidator = efield.TValidator
+                field.constraint = lambda v: fconstraint(v) and get_expression(self.context, tvalidator)
+            if getattr(efield, 'TEnabled', None) and not get_expression(self.context, efield.TEnabled):
+                omit.append(fname)
+        if omit:
+            self.fields = self.fields.omit(*omit)
+
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
         if 'save' in self.actions:
