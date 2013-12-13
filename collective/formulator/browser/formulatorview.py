@@ -8,7 +8,6 @@ except ImportError:
 from BTrees.Length import Length
 from DateTime import DateTime
 from Products.Archetypes.utils import OrderedDict
-from Products.CMFCore.Expression import getExprContext, Expression
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
@@ -158,9 +157,7 @@ class FormulatorForm(DefaultEditForm):
         thanksPageOverride = self.context.thanksPageOverride
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
-            expression = Expression(thanksPageOverride)
-            expression_context = getExprContext(self.context)
-            thanksPage = expression(expression_context)
+            thanksPage = get_expression(self.context, thanksPageOverride)
             #import pdb; pdb.set_trace()
             if thanksPageOverrideAction == "redirect_to":
                 self.request.response.redirect(thanksPage)
@@ -882,7 +879,7 @@ class SaveData(Action):
 
         #from ZPublisher.HTTPRequest import FileUpload
 
-        data = []
+        data = {}
         for f in fields:
             showFields = getattr(self, 'showFields', [])
             if showFields and f not in showFields:
@@ -912,14 +909,17 @@ class SaveData(Action):
                     # something other than a string
                     #val = str(val)
                 # data.append(val)
-            data.append(fields[f])
+            #data.append(fields[f])
+            data[f] = fields[f]
 
         if self.ExtraData:
             for f in self.ExtraData:
                 if f == 'dt':
-                    data.append(str(DateTime()))
+                    #data.append(str(DateTime()))
+                    data[f] = str(DateTime())
                 else:
-                    data.append(getattr(request, f, ''))
+                    #data.append(getattr(request, f, ''))
+                    data[f] = getattr(request, f, '')
 
         self._addDataRow(data)
 
