@@ -1,4 +1,3 @@
-- TALES override submit button
 - Actions
     - Mailer
     - SaveData
@@ -6,4 +5,3 @@
 - API
 - Split code by files
 - Custom Permissions
-- formPrologue, formEpilogue on view

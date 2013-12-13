@@ -103,9 +103,9 @@ class IFormulator(form.Schema):
 
     # -*- schema definition goes here -*-
     form.fieldset(u"models", label=_("Models"),
-                  fields=['model', 'actions_model'])
-    model = zs.Text(
-        title=u"Model",
+                  fields=['fields_model', 'actions_model'])
+    fields_model = zs.Text(
+        title=u"Fields Model",
         default=MODEL_DEFAULT,
     )
     actions_model = zs.Text(
@@ -132,23 +132,23 @@ class IFormulator(form.Schema):
     )
     form_tabbing = zs.Bool(
         title=_(u'label_form_tabbing',
-                default=u'Enable turn fieldsets to tabs behavior'),
+                default=u'Turn fieldsets to tabs'),
         description=_(u'help_form_tabbing', default=u""),
         default=True,
         required=False,
     )
     unload_protection = zs.Bool(
         title=_(u'label_unload_protection',
-                default=u'Enable unload protection behavior'),
+                default=u'Unload protection'),
         description=_(u'help_unload_protection', default=u""),
         default=True,
         required=False,
     )
     CSRFProtection = zs.Bool(
-        title=_(u'label_csrf', default=u'Enable CSRF Protection'),
+        title=_(u'label_csrf', default=u'CSRF Protection'),
         description=_(u'help_csrf', default=u"Check this to employ Cross-Site "
-                      u"Request Forgery protection. Note that only HTTP Post actions "
-                      u"will be allowed."),
+                      u"Request Forgery protection. Note that only HTTP Post "
+                      u"actions will be allowed."),
         default=True,
         required=False,
     )
@@ -179,7 +179,7 @@ class IFormulator(form.Schema):
         required=False,
     )
     form.fieldset(u"overrides", label=_("Overrides"),
-                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection'])
+                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection', 'submitLabelOverride'])
     thanksPageOverrideAction = zs.Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
@@ -276,6 +276,20 @@ class IFormulator(form.Schema):
             head. The typical use is to add custom CSS or JavaScript.
             Specify a TALES expression returning a string. The string will
             be inserted with no interpretation.
+            PLEASE NOTE: errors in the evaluation of this expression will
+            cause an error on form display.
+        """),
+        constraint=isTALES,
+        required=False,
+        default=u'',
+    )
+    submitLabelOverride = zs.TextLine(
+        title=_(u'label_submitlabeloverride_text',
+                default=u"Custom Submit Button Label"),
+        description=_(u'help_submitlabeloverride_text', default=u"""
+            This override field allows you to change submit button label.
+            The typical use is to set label with request parameters.
+            Specify a TALES expression returning a string.
             PLEASE NOTE: errors in the evaluation of this expression will
             cause an error on form display.
         """),

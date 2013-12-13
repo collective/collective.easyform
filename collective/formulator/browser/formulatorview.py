@@ -70,9 +70,9 @@ from collective.formulator.api import (
     get_actions,
     get_context,
     get_expression,
-    get_schema,
+    get_fields,
     set_actions,
-    set_schema,
+    set_fields,
 )
 from collective.formulator import formulatorMessageFactory as _
 
@@ -103,7 +103,7 @@ class FormulatorForm(DefaultEditForm):
 
     @property
     def schema(self):
-        schema = get_schema(self.context)
+        schema = get_fields(self.context)
         return schema
 
     @property
@@ -192,7 +192,11 @@ class FormulatorForm(DefaultEditForm):
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
         if 'save' in self.actions:
-            self.actions['save'].title = self.context.submitLabel
+            if self.context.submitLabelOverride:
+                self.actions['save'].title = get_expression(
+                    self.context, self.context.submitLabelOverride)
+            else:
+                self.actions['save'].title = self.context.submitLabel
         if 'cancel' in self.actions:
             self.actions['cancel'].title = self.context.resetLabel
 
@@ -213,7 +217,7 @@ class FormulatorSchemaView(SchemaContext):
     #schemaEditorView = 'fields'
 
     def __init__(self, context, request):
-        schema = get_schema(context)
+        schema = get_fields(context)
         super(FormulatorSchemaView, self).__init__(
             schema,
             request,
@@ -270,7 +274,7 @@ class FormulatorActionsView(SchemaContext):
 
 
 def updateSchema(obj, event):
-    set_schema(obj.aq_parent, obj.schema)
+    set_fields(obj.aq_parent, obj.schema)
 
 
 def updateActions(obj, event):
@@ -512,7 +516,7 @@ class Mailer(Action):
                     live_fields.append(f)
 
         context = get_context(self)
-        schema = get_schema(context)
+        schema = get_fields(context)
         #bare_fields = [schema[f] for f in live_fields]
         bodyfield = self.body_pt
 
@@ -520,7 +524,7 @@ class Mailer(Action):
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
         #template = PageTemplate()
-        #template.write(bodyfield)
+        # template.write(bodyfield)
         #pt_args = template.pt_getContext()
         #pt_args['request'] = request
         #pt_args['here'] = self

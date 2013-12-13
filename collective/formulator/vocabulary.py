@@ -4,7 +4,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabulary
 from zope.schema.vocabulary import SimpleVocabulary
 from collective.formulator.api import (
-    get_schema,
+    get_fields,
     # get_actions,
     # set_schema,
     # set_actions,
@@ -64,7 +64,7 @@ class fields(object):
         # print context
         terms = []
         form = get_context(context)
-        fields = getFieldsInOrder(get_schema(form))
+        fields = getFieldsInOrder(get_fields(form))
         for name, field in fields:
             # print repr(name), repr(field.title)
             terms.append(

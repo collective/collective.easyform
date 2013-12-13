@@ -23,12 +23,11 @@ def load_schema(sschema):
         schema = loadString(sschema).schemata.get(SCHEMATA_KEY, Schema)
     except Exception:
         schema = Schema
-    schema = loadString(sschema).schemata.get(SCHEMATA_KEY, Schema)
     return schema
 
 
-def get_schema(context):
-    data = context.model
+def get_fields(context):
+    data = context.fields_model
     schema = load_schema(data)
     schema.setTaggedValue(CONTEXT_KEY, context)
     return schema
@@ -47,11 +46,11 @@ def serialize_schema(schema):
     return sschema
 
 
-def set_schema(context, schema):
+def set_fields(context, schema):
     # serialize the current schema
     snew_schema = serialize_schema(schema)
     # store the current schema
-    context.model = snew_schema
+    context.fields_model = snew_schema
 
 
 def set_actions(context, schema):
