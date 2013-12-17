@@ -25,7 +25,6 @@ from email.MIMEText import MIMEText
 from email.utils import formataddr
 from logging import getLogger
 from plone.autoform.form import AutoExtensibleForm
-from plone.dexterity.browser.edit import DefaultEditForm
 from plone.memoize.instance import memoize
 from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
@@ -39,15 +38,15 @@ from plone.supermodel.utils import ns
 from plone.z3cform import layout
 from time import time
 from types import StringTypes
-from z3c.form import button, form, field
-from z3c.form.interfaces import DISPLAY_MODE, IErrorViewSnippet
+from z3c.form import button, form, field, validator
+from z3c.form.interfaces import DISPLAY_MODE, IErrorViewSnippet, IValidator
 from zope import schema as zs
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtilitiesFor, adapter, adapts
 from zope.component import queryUtility, getAdapters, getMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
-from zope.interface import implements, implementer
+from zope.interface import implements, implementer, Interface
 from zope.schema import getFieldsInOrder, ValidationError
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -59,6 +58,7 @@ from collective.formulator.interfaces import (
     IActionFactory,
     ICustomScript,
     IFieldExtender,
+    IFormulator,
     IFormulatorActionsContext,
     IFormulatorSchemaContext,
     IMailer,
@@ -78,7 +78,7 @@ from collective.formulator import formulatorMessageFactory as _
 logger = getLogger("collective.formulator")
 
 
-class FormulatorForm(DefaultEditForm):
+class FormulatorForm(AutoExtensibleForm, form.EditForm):
 
     """
     Formulator form
@@ -104,10 +104,6 @@ class FormulatorForm(DefaultEditForm):
     def schema(self):
         schema = get_fields(self.context)
         return schema
-
-    @property
-    def additionalSchemata(self):
-        return ()
 
     def processActions(self, errors, data):
         if not errors:
@@ -153,12 +149,10 @@ class FormulatorForm(DefaultEditForm):
                 self.widgets[field].error = view
             self.status = self.formErrorsMessage
             return
-        # self.applyChanges(data)
         thanksPageOverride = self.context.thanksPageOverride
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
             thanksPage = get_expression(self.context, thanksPageOverride)
-            #import pdb; pdb.set_trace()
             if thanksPageOverrideAction == "redirect_to":
                 self.request.response.redirect(thanksPage)
                 return
@@ -186,22 +180,24 @@ class FormulatorForm(DefaultEditForm):
         view_url = self.context.absolute_url()
         return view_url
 
-    def updateFields(self):
-        super(FormulatorForm, self).updateFields()
+    def setOmitFields(self, fields):
         omit = []
-        for fname in self.fields:
-            field = self.fields[fname].field
+        for fname in fields:
+            field = fields[fname].field
             efield = IFieldExtender(field)
-            if getattr(efield, 'TDefault', None):
-                field.default = get_expression(self.context, efield.TDefault)
-            if getattr(efield, 'TValidator', None):
-                fconstraint = field.constraint
-                tvalidator = efield.TValidator
-                field.constraint = lambda v: fconstraint(v) and get_expression(self.context, tvalidator)
-            if getattr(efield, 'TEnabled', None) and not get_expression(self.context, efield.TEnabled):
+            TEnabled = getattr(efield, 'TEnabled', None)
+            serverSide = getattr(efield, 'serverSide', False)
+            if TEnabled and not get_expression(self.context, TEnabled) or serverSide:
                 omit.append(fname)
         if omit:
-            self.fields = self.fields.omit(*omit)
+            fields = fields.omit(*omit)
+        return fields
+
+    def updateFields(self):
+        super(FormulatorForm, self).updateFields()
+        self.fields = self.setOmitFields(self.fields)
+        for group in self.groups:
+            group.fields = self.setOmitFields(group.fields)
 
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
@@ -213,6 +209,25 @@ class FormulatorForm(DefaultEditForm):
                 self.actions['save'].title = self.context.submitLabel
         if 'cancel' in self.actions:
             self.actions['cancel'].title = self.context.resetLabel
+
+    def setDefauts(self, widgets):
+        for fname in widgets:
+            widget = widgets[fname]
+            field = widget.field
+            efield = IFieldExtender(field)
+            fdefault = field.default
+            TDefault = getattr(efield, 'TDefault', None)
+            TDefault = get_expression(
+                self.context, TDefault) if TDefault else fdefault
+            if widget.value != fdefault:
+                widget.value == TDefault
+        return widgets
+
+    def update(self):
+        super(FormulatorForm, self).update()
+        self.widgets = self.setDefauts(self.widgets)
+        for group in self.groups:
+            group.widgets = self.setDefauts(group.widgets)
 
     @property
     def label(self):
@@ -226,9 +241,26 @@ class FormulatorForm(DefaultEditForm):
 FormulatorView = layout.wrap_form(FormulatorForm)
 
 
+class FieldExtenderValidator(validator.SimpleFieldValidator):
+
+    """ z3c.form validator class for formulator fields """
+    implements(IValidator)
+    adapts(IFormulator, Interface, FormulatorForm,
+           zs.interfaces.IField, Interface)
+
+    def validate(self, value):
+        """ Validate field by TValidator """
+        #print "TValidator", self.context, repr(self.request), self.view, self.field, self.widget, value
+        super(FieldExtenderValidator, self).validate(value)
+        efield = IFieldExtender(self.field)
+        TValidator = getattr(efield, 'TValidator', None)
+        if TValidator:
+            get_expression(self.context, TValidator)
+            #raise zope.interface.Invalid(_(u"Phone number contains bad characters"))
+
+
 class FormulatorSchemaView(SchemaContext):
     implements(IFormulatorSchemaContext)
-    #schemaEditorView = 'fields'
 
     def __init__(self, context, request):
         schema = get_fields(context)
@@ -263,7 +295,6 @@ class ActionContext(FieldContext):
 
 class FormulatorActionsView(SchemaContext):
     implements(IFormulatorActionsContext)
-    #schemaEditorView = 'actions'
 
     def __init__(self, context, request):
         schema = get_actions(context)
@@ -362,7 +393,7 @@ class ActionAddForm(FieldAddForm):
 
     fields = field.Fields(INewAction)
     label = _("Add new action")
-    #id = 'add-action-form'
+
 
 ActionAddFormPage = layout.wrap_form(ActionAddForm)
 
@@ -926,13 +957,13 @@ class SaveData(Action):
                     # something other than a string
                     #val = str(val)
                 # data.append(val)
-            #data.append(fields[f])
+            # data.append(fields[f])
             data[f] = fields[f]
 
         if self.ExtraData:
             for f in self.ExtraData:
                 if f == 'dt':
-                    #data.append(str(DateTime()))
+                    # data.append(str(DateTime()))
                     data[f] = str(DateTime())
                 else:
                     #data.append(getattr(request, f, ''))

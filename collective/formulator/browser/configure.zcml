@@ -3,6 +3,9 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            i18n_domain="collective.formulator">
     <include package="Products.CMFCore" file="permissions.zcml" />
+    <adapter
+        factory=".formulatorview.FieldExtenderValidator"
+        />
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
         name="view"

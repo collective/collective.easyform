@@ -2,7 +2,7 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       i18n:domain="collective.formulator"
       tal:omit-tag="">
-  <metal:form metal:use-macro="context/@@ploneform-macros/form">
+  <metal:form metal:use-macro="context/@@ploneform-macros/titlelessform">
     <metal:top-slot metal:fill-slot="formtop">
       <div id="formPrologue"
            tal:condition="context/formPrologue"
