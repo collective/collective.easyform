@@ -1,8 +1,6 @@
 - Default fieldset name
 - Fields
-    - TDefault adapter
     - TValidator testing
-    - serverSide post adding
 - Actions
     - Mailer
     - SaveData

@@ -6,6 +6,10 @@
     <adapter
         factory=".formulatorview.FieldExtenderValidator"
         />
+    <adapter
+        factory=".formulatorview.FieldExtenderDefault"
+        name="default"
+        />
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
         name="view"

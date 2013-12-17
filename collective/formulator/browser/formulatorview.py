@@ -39,7 +39,7 @@ from plone.z3cform import layout
 from time import time
 from types import StringTypes
 from z3c.form import button, form, field, validator
-from z3c.form.interfaces import DISPLAY_MODE, IErrorViewSnippet, IValidator
+from z3c.form.interfaces import DISPLAY_MODE, IErrorViewSnippet, IValidator, IValue
 from zope import schema as zs
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtilitiesFor, adapter, adapts
@@ -102,8 +102,21 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
 
     @property
     def schema(self):
-        schema = get_fields(self.context)
-        return schema
+        return get_fields(self.context)
+
+    def updateServerSideData(self, data):
+        for fname in self.schema:
+            field = self.schema[fname]
+            efield = IFieldExtender(field)
+            serverSide = getattr(efield, 'serverSide', False)
+            if not serverSide:
+                continue
+            fdefault = field.default
+            TDefault = getattr(efield, 'TDefault', None)
+            value = get_expression(
+                self.context, TDefault) if TDefault else fdefault
+            data[fname] = value
+        return data
 
     def processActions(self, errors, data):
         if not errors:
@@ -128,12 +141,21 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                             return result
         return errors
 
+    def setDisplayMode(self, mode):
+        self.mode = mode
+        for widget in self.widgets.values():
+            widget.mode = mode
+        for group in self.groups:
+            for widget in group.widgets.values():
+                widget.mode = mode
+
     @button.buttonAndHandler(_(u'Save'), name='save', condition=lambda form: not hasattr(form, 'output'))
     def handleApply(self, action):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
             return
+        data = self.updateServerSideData(data)
         errors = self.processActions(errors, data)
         if errors:
             for field in errors:
@@ -156,22 +178,15 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             thanksPage = get_expression(self.context, thanksPageOverride)
             if thanksPageOverrideAction == "redirect_to":
                 self.request.response.redirect(thanksPage)
-                return
             elif thanksPageOverrideAction == "traverse_to":
                 thanksPage = self.context.restrictedTraverse(
                     thanksPage.encode("utf-8"))
                 thanksPage = mapply(
                     thanksPage, self.request.args, self.request).encode("utf-8")
                 self.request.response.write(thanksPage)
-        self.output = data
-        self.mode = DISPLAY_MODE
-        for widget in self.widgets.values():
-            widget.mode = DISPLAY_MODE
-        for group in self.groups:
-            for widget in group.widgets.values():
-                widget.mode = DISPLAY_MODE
-        self.updateWidgets()
-        # self.request.response.redirect(self.nextURL())
+        else:
+            self.setDisplayMode(DISPLAY_MODE)
+            self.updateWidgets()
 
     @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton)
     def handleCancel(self, action):
@@ -211,25 +226,6 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
         if 'cancel' in self.actions:
             self.actions['cancel'].title = self.context.resetLabel
 
-    def setDefauts(self, widgets):
-        for fname in widgets:
-            widget = widgets[fname]
-            field = widget.field
-            efield = IFieldExtender(field)
-            fdefault = field.default
-            TDefault = getattr(efield, 'TDefault', None)
-            TDefault = get_expression(
-                self.context, TDefault) if TDefault else fdefault
-            if widget.value != fdefault:
-                widget.value == TDefault
-        return widgets
-
-    def update(self):
-        super(FormulatorForm, self).update()
-        self.widgets = self.setDefauts(self.widgets)
-        for group in self.groups:
-            group.widgets = self.setDefauts(group.widgets)
-
     @property
     def label(self):
         return self.context.Title()
@@ -251,14 +247,34 @@ class FieldExtenderValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         """ Validate field by TValidator """
-        # print "TValidator", self.context, repr(self.request), self.view,
-        # self.field, self.widget, value
         super(FieldExtenderValidator, self).validate(value)
         efield = IFieldExtender(self.field)
         TValidator = getattr(efield, 'TValidator', None)
         if TValidator:
             get_expression(self.context, TValidator)
             #raise zope.interface.Invalid(_(u"Phone number contains bad characters"))
+
+
+class FieldExtenderDefault(object):
+
+    """ z3c.form default class for formulator fields """
+    implements(IValue)
+    adapts(IFormulator, Interface, FormulatorForm,
+           zs.interfaces.IField, Interface)
+
+    def __init__(self, context, request, view, field, widget):
+        self.context = context
+        self.request = request
+        self.view = view
+        self.field = field
+        self.widget = widget
+
+    def get(self):
+        """ get default value of field from TDefault """
+        fdefault = self.field.default
+        efield = IFieldExtender(self.field)
+        TDefault = getattr(efield, 'TDefault', None)
+        return get_expression(self.context, TDefault) if TDefault else fdefault
 
 
 class FormulatorSchemaView(SchemaContext):
