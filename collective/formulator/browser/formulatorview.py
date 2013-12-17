@@ -46,7 +46,7 @@ from zope.component import getUtilitiesFor, adapter, adapts
 from zope.component import queryUtility, getAdapters, getMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
-from zope.interface import implements, implementer, Interface
+from zope.interface import implements, Interface
 from zope.schema import getFieldsInOrder, ValidationError
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -137,9 +137,10 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
         errors = self.processActions(errors, data)
         if errors:
             for field in errors:
-                class Error(ValidationError):
-                    __doc__ = errors[field]
-                error = Error()
+                if field not in self.widgets:
+                    continue
+                error = ValidationError()
+                error.doc = lambda: errors[field]
                 view = getMultiAdapter(
                     (error, self.request, self.widgets[
                      field], self.widgets[field].field, self, self.context),
@@ -250,7 +251,8 @@ class FieldExtenderValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         """ Validate field by TValidator """
-        #print "TValidator", self.context, repr(self.request), self.view, self.field, self.widget, value
+        # print "TValidator", self.context, repr(self.request), self.view,
+        # self.field, self.widget, value
         super(FieldExtenderValidator, self).validate(value)
         efield = IFieldExtender(self.field)
         TValidator = getattr(efield, 'TValidator', None)
@@ -500,8 +502,8 @@ class Action(zs.Bool):
             "There is not implemented 'onSuccess' of %r" % (self,))
 
 
-@implementer(IMailer)
 class Mailer(Action):
+    implements(IMailer)
     __doc__ = IMailer.__doc__
 
     def __init__(self, **kw):
@@ -800,8 +802,8 @@ class Mailer(Action):
         host.send(mailtext)
 
 
-@implementer(ICustomScript)
 class CustomScript(Action):
+    implements(ICustomScript)
     __doc__ = ICustomScript.__doc__
 
     def __init__(self, **kw):
@@ -867,8 +869,8 @@ class CustomScript(Action):
         return self.executeCustomScript(resultData, form, request)
 
 
-@implementer(ISaveData)
 class SaveData(Action):
+    implements(ISaveData)
     __doc__ = ISaveData.__doc__
 
     def __init__(self, **kw):
