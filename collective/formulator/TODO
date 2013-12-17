@@ -1,10 +1,8 @@
 - Default fieldset name
-- Schemas cache
 - Fields
-    - TDefault
-    - TEnabled
-    - TValidator
-    - serverSide
+    - TDefault adapter
+    - TValidator testing
+    - serverSide post adding
 - Actions
     - Mailer
     - SaveData
