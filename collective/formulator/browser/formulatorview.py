@@ -46,7 +46,7 @@ from zope.component import getUtilitiesFor, adapter, adapts
 from zope.component import queryUtility, getAdapters, getMultiAdapter
 from zope.event import notify
 from zope.i18n import translate
-from zope.interface import implements, Interface
+from zope.interface import implements, Invalid, Interface
 from zope.schema import getFieldsInOrder, ValidationError
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -251,8 +251,12 @@ class FieldExtenderValidator(validator.SimpleFieldValidator):
         efield = IFieldExtender(self.field)
         TValidator = getattr(efield, 'TValidator', None)
         if TValidator:
-            get_expression(self.context, TValidator)
-            #raise zope.interface.Invalid(_(u"Phone number contains bad characters"))
+            try:
+                cerr = get_expression(self.context, TValidator, value=value)
+            except Exception as e:
+                raise Invalid(e)
+            if cerr:
+                raise Invalid(cerr)
 
 
 class FieldExtenderDefault(object):
@@ -598,7 +602,8 @@ class Mailer(Action):
         #body = template.pt_render(pt_args)
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
-        body = template.__of__(context).pt_render(extra_context={
+        template = template.__of__(context)
+        body = template.pt_render(extra_context={
             'data': fields,
             'fields': dict([(i, j.title) for i, j in getFieldsInOrder(schema)]),
             'mailer': self,

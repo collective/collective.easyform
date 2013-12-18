@@ -10,9 +10,11 @@ CACHE_FIELDS_KEY = '_v_fields_model'
 CACHE_ACTIONS_KEY = '_v_actions_model'
 
 
-def get_expression(context, expression_string):
+def get_expression(context, expression_string, **kwargs):
+    expression_context = getExprContext(context, context)
+    for key in kwargs:
+        expression_context.setGlobal(key, kwargs[key])
     expression = Expression(expression_string)
-    expression_context = getExprContext(context)
     return expression(expression_context)
 
 
