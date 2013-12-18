@@ -66,6 +66,7 @@ from collective.formulator.interfaces import (
     ISaveData,
 )
 from collective.formulator.api import (
+    DollarVarReplacer,
     get_actions,
     get_context,
     get_expression,
@@ -661,8 +662,7 @@ class Mailer(Action):
                 subject = subjectField
             else:
                 # we only do subject expansion if there's no field chosen
-                #subject = self._dreplace(subject)
-                subject = subject
+                subject = DollarVarReplacer(fields).sub(subject)
 
         # Get From address
         if hasattr(self, 'senderOverride') and self.senderOverride and get_expression(context, self.senderOverride):
@@ -863,14 +863,14 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn("Python script " + self.title_or_id()
+            logger.warn("Python script " + self.__name__
                         + " has warning:" + str(script.warnings))
 
         if len(script.errors) > 0:
-            logger.error("Python script " + self.title_or_id()
+            logger.error("Python script " + self.__name__
                          + " has errors: " + str(script.errors))
             raise ValueError(
-                "Python script " + self.title_or_id() + " has errors: " + str(script.errors))
+                "Python script " + self.__name__ + " has errors: " + str(script.errors))
 
     def executeCustomScript(self, result, form, req):
         # Execute in-place script
@@ -947,39 +947,11 @@ class SaveData(Action):
                 # if target is not None and target.meta_type == 'FormSaveDataAdapter':
                     #target.onSuccess(fields, request, loopstop=True)
                     # return
-
-        #from ZPublisher.HTTPRequest import FileUpload
-
         data = {}
         for f in fields:
             showFields = getattr(self, 'showFields', [])
             if showFields and f not in showFields:
                 continue
-            # if f.isFileField():
-                #file = request.form.get('%s_file' % f.fgField.getName())
-                # if isinstance(file, FileUpload) and file.filename != '':
-                    # file.seek(0)
-                    #fdata = file.read()
-                    #filename = file.filename
-                    #mimetype, enc = guess_content_type(filename, fdata, None)
-                    # if mimetype.find('text/') >= 0:
-                        # convert to native eols
-                        # fdata = fdata.replace('\x0d\x0a', '\n').replace(
-                            #'\x0a', '\n').replace('\x0d', '\n')
-                        # data.append('%s:%s:%s:%s' %
-                                    #(filename, mimetype, enc, fdata))
-                    # else:
-                        # data.append('%s:%s:%s:Binary upload discarded' %
-                                    #(filename, mimetype, enc))
-                # else:
-                    #data.append('NO UPLOAD')
-            # elif not f.isLabel():
-                #val = request.form.get(f.fgField.getName(), '')
-                # if not type(val) in StringTypes:
-                    # Zope has marshalled the field into
-                    # something other than a string
-                    #val = str(val)
-                # data.append(val)
             # data.append(fields[f])
             data[f] = fields[f]
 
@@ -1060,8 +1032,7 @@ class FormulatorFieldMetadataHandler(object):
         value = fieldNode.get(ns('serverSide', self.namespace))
         data = schema.queryTaggedValue('serverSide', {})
         if value:
-            # TODO eval
-            data[name] = eval(value)
+            data[name] = value == 'True' or value == 'true'
             schema.setTaggedValue('serverSide', data)
 
     def write(self, fieldNode, schema, field):
