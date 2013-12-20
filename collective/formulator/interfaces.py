@@ -21,6 +21,8 @@ from collective.formulator.vocabulary import (
 )
 from collective.formulator.config import (
     MODEL_DEFAULT,
+    FIELDS_DEFAULT,
+    ACTIONS_DEFAULT,
     MAIL_BODY_DEFAULT,
     DEFAULT_SCRIPT,
 )
@@ -106,11 +108,13 @@ class IFormulator(form.Schema):
                   fields=['fields_model', 'actions_model'])
     fields_model = zs.Text(
         title=u"Fields Model",
-        default=MODEL_DEFAULT,
+        # default=MODEL_DEFAULT,
+        default=FIELDS_DEFAULT,
     )
     actions_model = zs.Text(
         title=u"Actions Model",
-        default=MODEL_DEFAULT,
+        # default=MODEL_DEFAULT,
+        default=ACTIONS_DEFAULT,
     )
     submitLabel = zs.TextLine(
         title=_(u'label_submitlabel_text', default=u"Submit Button Label"),
@@ -363,7 +367,7 @@ class IFieldExtender(form.Schema):
                        "require \"eggs\" for input."
                        "PLEASE NOTE: errors in the evaluation of this expression will cause"
                        "an error on form display.")),
-        default=u"python:False",
+        default=u"",
         constraint=isTALES,
         required=False,
     )
@@ -434,6 +438,7 @@ class IMailer(IAction):
         description=_(u'help_formmailer_recipient_fullname',
                       default=u"The full name of the recipient of the mailed form."),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     # default_method='getDefaultRecipient',
@@ -448,6 +453,7 @@ class IMailer(IAction):
         description=_(u'help_formmailer_recipient_email',
                       default=u'The recipients e-mail address.'),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     form.fieldset(u"addressing", label=_("Addressing"), fields=[
@@ -476,6 +482,7 @@ class IMailer(IAction):
         description=_(u'help_formmailer_cc_recipients',
                       default=u'E-mail addresses which receive a carbon copy.'),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     # default_method='getDefaultBCC',
@@ -487,6 +494,7 @@ class IMailer(IAction):
         description=_(u'help_formmailer_bcc_recipients',
                       default=u'E-mail addresses which receive a blind carbon copy.'),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     # write_permission=EDIT_ADVANCED_PERMISSION,
@@ -515,6 +523,7 @@ class IMailer(IAction):
             is empty.
             """),
         default=u"Form Submission",
+        missing_value=u"",
         required=False,
     )
     # write_permission=EDIT_ADVANCED_PERMISSION,
@@ -536,6 +545,7 @@ class IMailer(IAction):
         description=_(u'help_formmailer_body_pre',
                       default=u'Text prepended to fields listed in mail-body'),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     form.read_permission(body_post='cmf.ModifyPortalContent')
@@ -544,6 +554,7 @@ class IMailer(IAction):
         description=_(u'help_formmailer_body_post',
                       default=u'Text appended to fields listed in mail-body'),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     form.read_permission(body_footer='cmf.ModifyPortalContent')
@@ -554,6 +565,7 @@ class IMailer(IAction):
                       default=u'Text used as the footer at '
                       u'bottom, delimited from the body by a dashed line.'),
         default=u"",
+        missing_value=u"",
         required=False,
     )
     form.read_permission(showAll='cmf.ModifyPortalContent')
@@ -604,6 +616,7 @@ class IMailer(IAction):
             it, but if you know TAL (Zope\'s Template Attribute Language)
             you have the full power to customize your outgoing mails."""),
         default=MAIL_BODY_DEFAULT,
+        missing_value=u"",
     )
     # default_method='getMailBodyTypeDefault',
     # write_permission=EDIT_ADVANCED_PERMISSION,
@@ -631,6 +644,7 @@ class IMailer(IAction):
             """),
         unique=True,
         required=False,
+        default=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
         value_type=zs.Choice(vocabulary=XINFO_HEADERS),
     )
     # default_method='getDefaultAddHdrs',
@@ -687,6 +701,7 @@ class IMailer(IAction):
         """),
         required=False,
         default=u"",
+        missing_value=u"",
         constraint=isTALES,
     )
     # write_permission=EDIT_TALES_PERMISSION,
@@ -701,6 +716,7 @@ class IMailer(IAction):
         """),
         required=False,
         default=u"",
+        missing_value=u"",
         constraint=isTALES,
     )
     # write_permission=EDIT_TALES_PERMISSION,
@@ -718,6 +734,7 @@ class IMailer(IAction):
         """),
         required=False,
         default=u"",
+        missing_value=u"",
         constraint=isTALES,
     )
     # write_permission=EDIT_TALES_PERMISSION,
@@ -734,6 +751,7 @@ class IMailer(IAction):
         """),
         required=False,
         default=u"",
+        missing_value=u"",
         constraint=isTALES,
     )
     # write_permission=EDIT_TALES_PERMISSION,
@@ -750,6 +768,7 @@ class IMailer(IAction):
         """),
         required=False,
         default=u"",
+        missing_value=u"",
         constraint=isTALES,
     )
 

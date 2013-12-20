@@ -5,6 +5,11 @@ In this section we are tesing the Formulator content type by performing
 basic operations like adding, updadating and deleting Formulator content
 items.
 
+    >>> from Products.PloneTestCase.setup import portal_owner, default_password
+    >>> browser = self.browser
+    >>> portal_url = self.portal_url
+    >>> browser.open(portal_url)
+
 Adding a new Formulator content item
 --------------------------------
 
@@ -22,9 +27,9 @@ Then we select the type of item we want to add. In this case we select
 
 Now we fill the form and submit it.
 
-    >>> browser.getControl(name='title').value = 'Formulator Sample'
+    >>> browser.getControl('Title').value = 'Formulator Sample'
     >>> browser.getControl('Save').click()
-    >>> 'Changes saved' in browser.contents
+    >>> 'Item created' in browser.contents
     True
 
 And we are done! We added a new 'Formulator' content item to the portal.
@@ -35,7 +40,7 @@ Updating an existing Formulator content item
 Let's click on the 'edit' tab and update the object attribute values.
 
     >>> browser.getLink('Edit').click()
-    >>> browser.getControl(name='title').value = 'New Formulator Sample'
+    >>> browser.getControl('Title').value = 'New Formulator Sample'
     >>> browser.getControl('Save').click()
 
 We check that the changes were applied.
@@ -104,9 +109,9 @@ We select 'Formulator' and click the 'Add' button to get to the add form.
 
 Now we fill the form and submit it.
 
-    >>> browser.getControl(name='title').value = 'Formulator Sample'
+    >>> browser.getControl('Title').value = 'Formulator Sample'
     >>> browser.getControl('Save').click()
-    >>> 'Changes saved' in browser.contents
+    >>> 'Item created' in browser.contents
     True
 
 Done! We added a new Formulator content item logged in as contributor.

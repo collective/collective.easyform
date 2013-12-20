@@ -55,18 +55,15 @@ class fields(object):
     """
 
     implements(IContextSourceBinder, IVocabulary)
-    #implements(IVocabularyFactory), IBaseVocabulary
 
     def __contains__(self, value):
         return True
 
     def __call__(self, context):
-        # print context
         terms = []
         form = get_context(context)
         fields = getFieldsInOrder(get_fields(form))
         for name, field in fields:
-            # print repr(name), repr(field.title)
             terms.append(
                 SimpleVocabulary.createTerm(name, str(name), field.title))
         return SimpleVocabulary(terms)

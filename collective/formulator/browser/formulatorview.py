@@ -26,6 +26,7 @@ from email.utils import formataddr
 from logging import getLogger
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.instance import memoize
+from plone.namedfile.interfaces import INamedFile
 from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
 from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
@@ -44,6 +45,7 @@ from zope import schema as zs
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getUtilitiesFor, adapter, adapts
 from zope.component import queryUtility, getAdapters, getMultiAdapter
+from zope.contenttype import guess_content_type
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import implements, Invalid, Interface
@@ -186,6 +188,7 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                     thanksPage, self.request.args, self.request).encode("utf-8")
                 self.request.response.write(thanksPage)
         else:
+            self.status = u"Thanks for your input."
             self.setDisplayMode(DISPLAY_MODE)
             self.updateWidgets()
 
@@ -529,7 +532,7 @@ class Mailer(Action):
 
     def __init__(self, **kw):
         for i, f in IMailer.namesAndDescriptions():
-            setattr(self, i, kw.pop(i, None) or f.default)
+            setattr(self, i, kw.pop(i, f.default))
         super(Mailer, self).__init__(**kw)
 
     def secure_header_line(self, line):
@@ -561,31 +564,32 @@ class Mailer(Action):
         """Returns the mail-body with footer.
         """
 
+        context = get_context(self)
+        schema = get_fields(context)
         all_fields = [f for f in fields
                       # TODO
                       # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
                       # 'showAll', True) and f.getServerSide())]
+                      if not (INamedFile.providedBy(fields[f])) and not (getattr(self, 'showAll', True) and IFieldExtender(schema[f]).serverSide)
                       ]
 
         # which fields should we show?
         if getattr(self, 'showAll', True):
             live_fields = all_fields
         else:
-            live_fields = \
-                [f for f in all_fields
-                 if f in getattr(self, 'showFields', ())]
+            live_fields = [
+                f for f in all_fields if f in getattr(self, 'showFields', ())]
 
         if not getattr(self, 'includeEmpties', True):
             all_fields = live_fields
-            live_fields = []
+            live_fields = [f for f in all_fields if fields[f]]
             for f in all_fields:
                 value = fields[f]
-                if value and value != 'No Input':
+                if value:
                     live_fields.append(f)
 
-        context = get_context(self)
-        schema = get_fields(context)
         #bare_fields = [schema[f] for f in live_fields]
+        bare_fields = dict([(f, fields[f]) for f in live_fields])
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
@@ -605,7 +609,7 @@ class Mailer(Action):
         template.write(bodyfield)
         template = template.__of__(context)
         body = template.pt_render(extra_context={
-            'data': fields,
+            'data': bare_fields,
             'fields': dict([(i, j.title) for i, j in getFieldsInOrder(schema)]),
             'mailer': self,
         })
@@ -749,6 +753,21 @@ class Mailer(Action):
         # return 3-Tuple
         return (headerinfo, self.additional_headers or [], body)
 
+    def get_attachments(self, fields, request):
+        """Return all attachments uploaded in form.
+        """
+
+        attachments = []
+
+        for fname in fields:
+            field = fields[fname]
+            if INamedFile.providedBy(field) and (getattr(self, 'showAll', True) or fname in getattr(self, 'showFields', ())):
+                data = field.data
+                filename = field.filename
+                mimetype, enc = guess_content_type(filename, data, None)
+                attachments.append((filename, mimetype, enc, data))
+        return attachments
+
     def get_mail_text(self, fields, request):
         """Get header and body of e-mail as text (string)
         """
@@ -765,8 +784,7 @@ class Mailer(Action):
         mime_text = MIMEText(body.encode(email_charset, 'replace'),
                              _subtype=subtype, _charset=email_charset)
 
-        #attachments = self.get_attachments(fields, request)
-        attachments = []
+        attachments = self.get_attachments(fields, request)
 
         if attachments:
             outer = MIMEMultipart()
