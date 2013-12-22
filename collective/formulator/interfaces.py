@@ -170,6 +170,19 @@ class IFormulator(form.Schema):
             #"""),
             #),
         #),
+    forceSSL = zs.Bool(
+        # write_permission=EDIT_ADVANCED_PERMISSION,
+        title=_(u'label_force_ssl', default=u'Force SSL connection'),
+        description=_(u'help_force_ssl', default=u"""
+            Check this to make the form redirect to an SSL-enabled
+            version of itself (https://) if accessed via a non-SSL
+            URL (http://).  In order to function properly,
+            this requires a web server that has been configured to
+            handle the HTTPS protocol on port 443 and forward it to Zope.
+        """),
+        default=False,
+        required=False,
+    )
     formPrologue = RichText(
         title=_(u'label_prologue_text', default=u"Form Prologue"),
         description=_(u'help_prologue_text',
@@ -300,6 +313,73 @@ class IFormulator(form.Schema):
         constraint=isTALES,
         required=False,
         default=u'',
+    )
+    form.fieldset(u"thankyou", label=_("Thanks Page"),
+                  fields=['thankstitle', 'thanksdescription', 'showAll', 'showFields', 'includeEmpties', 'thanksPrologue', 'thanksEpilogue'])
+    # ThanksPageSchema
+    thankstitle = zs.TextLine(
+        title=_(u'label_thankstitle', default=u'Thanks title'),
+        default=u'Thank You',
+        required=True
+    )
+    thanksdescription = zs.Text(
+        title=_(u'label_thanksdescription', default=u'Thanks summary'),
+        description=_(
+            u'help_description',
+            default=u'Used in item listings and search results.'
+        ),
+        default=u'Thanks for your input.',
+        required=False,
+        missing_value=u'',
+    )
+    # obj.setTitle(_(u'pfg_thankyou_title', u'Thank You'))
+    # obj.setDescription(_(u'pfg_thankyou_description', u'Thanks for your input.'))
+    showAll = zs.Bool(
+        title=_(u'label_showallfields_text', default=u"Show All Fields"),
+        description=_(u'help_showallfields_text', default=u"""
+            Check this to display input for all fields
+            (except label and file fields). If you check
+            this, the choices in the pick box below
+            will be ignored.
+            """),
+        default=True,
+        required=False,
+    )
+    showFields = zs.List(
+        title=_(u'label_showfields_text', default=u"Show Responses"),
+        description=_(u'help_showfields_text', default=u"""
+            Pick the fields whose inputs you'd like to display on
+            the success page.
+            """),
+        unique=True,
+        required=False,
+        value_type=zs.Choice(vocabulary=fieldsFactory),
+    )
+    includeEmpties = zs.Bool(
+        title=_(u'label_includeEmpties_text', default=u"Include Empties"),
+        description=_(u'help_includeEmpties_text', default=u"""
+            Check this to display field titles
+            for fields that received no input. Uncheck
+            to leave fields with no input off the list.
+            """),
+        default=True,
+        required=False,
+    )
+    # schemata='decoration',
+    # accessor='getThanksPrologue',
+    thanksPrologue = RichText(
+        title=_(u"label_thanksprologue_text", default=u"Thanks Prologue"),
+        description=_(u"help_thanksprologue_text",
+                      default=u"This text will be displayed above the selected field inputs."),
+        required=False,
+    )
+    # schemata='decoration',
+    # accessor='getThanksEpilogue',
+    thanksEpilogue = RichText(
+        title=_(u"label_thanksepilogue_text", default=u"Thanks Epilogue"),
+        description=_(u"help_thanksepilogue_text",
+                      default=u"The text will be displayed after the field inputs."),
+        required=False,
     )
 
 
@@ -796,6 +876,7 @@ class ICustomScript(IAction):
         description=_(u'help_script_body', default=u"Write your script here."),
         default=DEFAULT_SCRIPT,
         required=False,
+        missing_value=u'',
     )
 
 

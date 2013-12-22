@@ -61,7 +61,12 @@ class fields(object):
 
     def __call__(self, context):
         terms = []
-        form = get_context(context)
+        if hasattr(context, 'interface'):
+            form = get_context(context)
+        elif hasattr(context, 'fields_model'):
+            form = context
+        else:
+            return SimpleVocabulary(terms)
         fields = getFieldsInOrder(get_fields(form))
         for name, field in fields:
             terms.append(

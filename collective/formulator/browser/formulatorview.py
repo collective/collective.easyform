@@ -88,11 +88,28 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
     """
     template = ViewPageTemplateFile('formulator_form.pt')
     ignoreContext = True
+    css_class = 'formulatorForm'
     #method = "get"
-    # def action(self):
-        #""" Redefine <form action=''> attribute.
-        #"""
-        # return self.context.absolute_url()
+
+    def action(self):
+        """ Redefine <form action=''> attribute.
+        """
+        action = getattr(self.context, 'formActionOverride')
+        if action:
+            action = get_expression(self.context, action)
+        if not action:
+            action = self.context.absolute_url()
+        if self.context.forceSSL:
+            action = action.replace('http://', 'https://')
+        return action
+    # default_fieldset_label view/default_fieldset_label | form_name;
+    # action view/action|request/getURL;
+    # print self.successMessage
+    # print self.noChangesMessage
+    # print self.formErrorsMessage
+    # Data successfully updated.
+    # No changes were applied.
+    # There were some errors.
 
     def enable_form_tabbing(self):
         return self.context.form_tabbing
@@ -102,6 +119,22 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
 
     def enableCSRFProtection(self):
         return self.context.CSRFProtection
+
+    @property
+    def label(self):
+        return self.mode == DISPLAY_MODE and self.context.thankstitle or self.context.Title()
+
+    @property
+    def description(self):
+        return self.mode == DISPLAY_MODE and self.context.thanksdescription or self.context.Description()
+
+    @property
+    def prologue(self):
+        return self.mode == DISPLAY_MODE and self.context.thanksPrologue or self.context.formPrologue
+
+    @property
+    def epilogue(self):
+        return self.mode == DISPLAY_MODE and self.context.thanksEpilogue or self.context.formEpilogue
 
     @property
     def schema(self):
@@ -188,7 +221,7 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                     thanksPage, self.request.args, self.request).encode("utf-8")
                 self.request.response.write(thanksPage)
         else:
-            self.status = u"Thanks for your input."
+            #self.status = u"Thanks for your input."
             self.setDisplayMode(DISPLAY_MODE)
             self.updateWidgets()
 
@@ -197,8 +230,7 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
         self.request.response.redirect(self.nextURL())
 
     def nextURL(self):
-        view_url = self.context.absolute_url()
-        return view_url
+        return self.context.absolute_url()
 
     def setOmitFields(self, fields):
         omit = []
@@ -229,14 +261,6 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                 self.actions['save'].title = self.context.submitLabel
         if 'cancel' in self.actions:
             self.actions['cancel'].title = self.context.resetLabel
-
-    @property
-    def label(self):
-        return self.context.Title()
-
-    @property
-    def description(self):
-        return self.context.Description()
 
 #FormulatorView = layout.wrap_form(FormulatorForm, index=ViewPageTemplateFile("formulator_view.pt"))
 FormulatorView = layout.wrap_form(FormulatorForm)
