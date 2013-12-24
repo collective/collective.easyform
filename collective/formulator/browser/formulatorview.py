@@ -1,3 +1,4 @@
+from AccessControl import getSecurityManager
 from Acquisition import aq_parent, aq_inner
 from BTrees.IOBTree import IOBTree
 try:
@@ -89,6 +90,7 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
     template = ViewPageTemplateFile('formulator_form.pt')
     ignoreContext = True
     css_class = 'formulatorForm'
+    thanksPage = False
     #method = "get"
 
     def action(self):
@@ -103,13 +105,9 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             action = action.replace('http://', 'https://')
         return action
     # default_fieldset_label view/default_fieldset_label | form_name;
-    # action view/action|request/getURL;
-    # print self.successMessage
-    # print self.noChangesMessage
-    # print self.formErrorsMessage
-    # Data successfully updated.
-    # No changes were applied.
-    # There were some errors.
+    # self.successMessage - Data successfully updated.
+    # self.noChangesMessage - No changes were applied.
+    # self.formErrorsMessage - There were some errors.
 
     def enable_form_tabbing(self):
         return self.context.form_tabbing
@@ -122,19 +120,19 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
 
     @property
     def label(self):
-        return self.mode == DISPLAY_MODE and self.context.thankstitle or self.context.Title()
+        return self.thanksPage and self.context.thankstitle or self.context.Title()
 
     @property
     def description(self):
-        return self.mode == DISPLAY_MODE and self.context.thanksdescription or self.context.Description()
+        return self.thanksPage and self.context.thanksdescription or self.context.Description()
 
     @property
     def prologue(self):
-        return self.mode == DISPLAY_MODE and self.context.thanksPrologue or self.context.formPrologue
+        return self.thanksPage and self.context.thanksPrologue or self.context.formPrologue
 
     @property
     def epilogue(self):
-        return self.mode == DISPLAY_MODE and self.context.thanksEpilogue or self.context.formEpilogue
+        return self.thanksPage and self.context.thanksEpilogue or self.context.formEpilogue
 
     @property
     def schema(self):
@@ -185,7 +183,7 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             for widget in group.widgets.values():
                 widget.mode = mode
 
-    @button.buttonAndHandler(_(u'Save'), name='save', condition=lambda form: not hasattr(form, 'output'))
+    @button.buttonAndHandler(_(u'Save'), name='save', condition=lambda form: not form.thanksPage)
     def handleApply(self, action):
         data, errors = self.extractData()
         if errors:
@@ -222,10 +220,15 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                 self.request.response.write(thanksPage)
         else:
             #self.status = u"Thanks for your input."
+            self.thanksPage = True
+            if not self.context.showAll:
+                self.fields = self.setThanksFields(self.base_fields)
+                for group in self.groups:
+                    group.fields = self.setThanksFields(self.base_groups.get(group.label))
             self.setDisplayMode(DISPLAY_MODE)
             self.updateWidgets()
 
-    @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton)
+    @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton or form.thanksPage)
     def handleCancel(self, action):
         self.request.response.redirect(self.nextURL())
 
@@ -245,11 +248,22 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             fields = fields.omit(*omit)
         return fields
 
+    def setThanksFields(self, fields):
+        showFields = self.context.showFields
+        omit = [fname for fname in fields if fname not in showFields]
+        if omit:
+            fields = fields.omit(*omit)
+        return fields
+
     def updateFields(self):
         super(FormulatorForm, self).updateFields()
-        self.fields = self.setOmitFields(self.fields)
+        if not hasattr(self, 'base_fields'):
+            self.base_fields = self.fields
+        if not hasattr(self, 'base_groups'):
+            self.base_groups = dict([(i.label, i.fields) for i in self.groups])
+        self.fields = self.setOmitFields(self.base_fields)
         for group in self.groups:
-            group.fields = self.setOmitFields(group.fields)
+            group.fields = self.setOmitFields(self.base_groups.get(group.label))
 
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
@@ -261,6 +275,25 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                 self.actions['save'].title = self.context.submitLabel
         if 'cancel' in self.actions:
             self.actions['cancel'].title = self.context.resetLabel
+
+    def formMaybeForceSSL(self):
+        """ Redirect to an https:// URL if the 'force SSL' option is on.
+
+            However, don't do so for those with rights to edit the form,
+            to avoid making the form uneditable if SSL isn't configured
+            properly.  These users will still get an SSL-ified form
+            action for when the form is submitted.
+        """
+        if self.context.forceSSL and not getSecurityManager().checkPermission("cmf.ModifyPortalContent", self):
+            # Make sure we're being accessed via a secure connection
+            if self.request['SERVER_URL'].startswith('http://'):
+                secure_url = self.request['URL'].replace('http://', 'https://')
+                self.request.response.redirect(secure_url, status="movedtemporarily")
+
+    def update(self):
+        '''See interfaces.IForm'''
+        self.formMaybeForceSSL()
+        super(FormulatorForm, self).update()
 
 #FormulatorView = layout.wrap_form(FormulatorForm, index=ViewPageTemplateFile("formulator_view.pt"))
 FormulatorView = layout.wrap_form(FormulatorForm)

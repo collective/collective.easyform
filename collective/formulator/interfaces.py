@@ -20,7 +20,7 @@ from collective.formulator.vocabulary import (
     vocabFormatDL,
 )
 from collective.formulator.config import (
-    MODEL_DEFAULT,
+    #MODEL_DEFAULT,
     FIELDS_DEFAULT,
     ACTIONS_DEFAULT,
     MAIL_BODY_DEFAULT,
