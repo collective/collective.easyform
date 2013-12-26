@@ -20,15 +20,11 @@ try:
 except ImportError:
     from Globals import InitializeClass
 
-from AccessControl import Unauthorized
 from AccessControl import ClassSecurityInfo
-from Products.PythonScripts.PythonScript import PythonScript, manage_addPythonScript
-
-from zExceptions import Forbidden
 
 from collective.formulator.tests import pfgtc
+from collective.formulator.api import get_actions
 
-from Products.CMFCore.utils import getToolByName
 from Products.CMFCore import permissions
 
 test_script = """
@@ -112,8 +108,7 @@ proxied_script = """
 return request.fooProtected()
 """
 
-default_params_script = \
-"""
+default_params_script = """
 fields
 ploneformgen
 request
@@ -154,20 +149,37 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
-        self.ff1.invokeFactory('FormStringField', 'test_field')
+        # print self.ff1.fields_model
+        #self.ff1.invokeFactory('FormStringField', 'test_field')
+        self.portal.REQUEST["form.widgets.title"] = u"Test field"
+        self.portal.REQUEST["form.widgets.__name__"] = u"test_field"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.factory"] = ["Text line (String)"]
+        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        view = self.ff1.restrictedTraverse("fields/@@add-field")
+        view.update()
+        form = view.form_instance
+        # form.update()
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
 
     def createScript(self):
         """ Creates FormCustomScript object """
         # 1. Create custom script adapter in the form folder
-        self.ff1.invokeFactory('FormCustomScriptAdapter', 'adapter')
+        self.portal.REQUEST["form.widgets.title"] = u"Adapter"
+        self.portal.REQUEST["form.widgets.__name__"] = u"adapter"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.factory"] = ["CustomScript"]
+        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        view = self.ff1.restrictedTraverse("actions/@@add-action")
+        view.update()
+        form = view.form_instance
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
 
         # 2. Check that creation succeeded
-        self.failUnless('adapter' in self.ff1.objectIds())
-        adapter = self.ff1.adapter
-
-        # 3. Set action adapter
-        self.ff1.setActionAdapter(('adapter',))
-        self.assertEqual(self.ff1.actionAdapter, ('adapter',))
+        actions = get_actions(self.ff1)
+        self.failUnless('adapter' in actions)
 
 #    def testScriptTypes(self):
 #        """ Check DisplayList doesn't fire exceptions """
@@ -184,36 +196,32 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         self.createScript()
 
-        adapter = self.ff1.adapter
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
+
         # 4. Set script data
-        adapter.setScriptBody(test_script)
+        adapter.ScriptBody = test_script
 
         req = FakeRequest(test_field="123")
 
-        errors = adapter.validate()
-        assert len(errors) == 0, "Had errors:" + str(errors)
-
-        # Execute script
-        # XXX TODO: we don't want to rely on return value from onSuccess
-        reply = adapter.onSuccess(self.ff1, req)
+        reply = adapter.onSuccess({}, req)
         assert reply == "foo", "Script returned:" + str(reply)
 
     def testRunTimeError(self):
         """ Script has run-time error """
         self.createScript()
 
-        adapter = self.ff1.adapter
-        # 4. Set script data
-        adapter.setScriptBody(runtime_error_script)
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
 
-        errors = adapter.validate()
-        assert len(errors) == 0, "Had errors:" + str(errors)
+        # 4. Set script data
+        adapter.ScriptBody = runtime_error_script
 
         # Execute script
         throwed = False
         try:
-            reply = adapter.onSuccess([])
-        except TypeError, e:
+            reply = adapter.onSuccess({})
+        except TypeError:
             reply = None
             throwed = True
 
@@ -232,15 +240,17 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         self.createScript()
 
-        adapter = self.ff1.adapter
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
+
         # 4. Set script data
-        adapter.setScriptBody(syntax_error_script)
+        adapter.ScriptBody = syntax_error_script
 
         # Execute script
         throwed = False
         try:
-            adapter.onSuccess([])
-        except ValueError, e:
+            adapter.onSuccess({}, FakeRequest())
+        except ValueError:
             throwed = True
 
         assert throwed, "Bad script didn't throw run-time exception"
@@ -250,12 +260,11 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         self.createScript()
 
-        adapter = self.ff1.adapter
-        # 4. Set script data
-        adapter.setScriptBody(bad_parameters_script)
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
 
-        errors = adapter.validate()
-        assert len(errors) == 0, "Had errors:" + str(errors)
+        # 4. Set script data
+        adapter.ScriptBody = bad_parameters_script
 
         # Execute script
         throwed = False
@@ -270,14 +279,17 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         self.createScript()
 
-        adapter = self.ff1.adapter
-        adapter.setScriptBody(default_params_script)
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
+
+        # 4. Set script data
+        adapter.ScriptBody = default_params_script
 
         request = FakeRequest(
             topic='test subject', replyto='test@test.org', comments='test comments')
 
-        errors = self.ff1.fgvalidate(REQUEST=request)
-        self.assertEqual(errors, {})
+        errors = adapter.onSuccess({}, request)
+        self.assertEqual(errors, None)
 
 #    def testSecurity(self):
 #        """ Script needing proxy role
@@ -308,12 +320,48 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
         """ Exercise setProxyRole """
 
         self.createScript()
-        adapter = self.ff1.adapter
-
-        adapter.setProxyRole('Manager')
-        adapter.setProxyRole('none')
-
-        self.assertRaises(Forbidden, adapter.setProxyRole, 'bogus')
+        self.portal.REQUEST["form.widgets.title"] = u"Adapter"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.ProxyRole"] = [u"Manager"]
+        self.portal.REQUEST[
+            "form.widgets.ScriptBody"] = unicode(proxied_script)
+        self.portal.REQUEST["form.widgets.IActionExtender.execCondition"] = u""
+        self.portal.REQUEST["form.buttons.save"] = u"Save"
+        view = self.ff1.restrictedTraverse("actions")
+        view = view.publishTraverse(view.request, 'adapter')
+        view = view.publishTraverse(view.request, 'adapter')
+        view.update()
+        form = view.form_instance
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
+        self.portal.REQUEST["form.widgets.title"] = u"Adapter"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.ProxyRole"] = [u"No proxy role"]
+        self.portal.REQUEST[
+            "form.widgets.ScriptBody"] = unicode(proxied_script)
+        self.portal.REQUEST["form.widgets.IActionExtender.execCondition"] = u""
+        self.portal.REQUEST["form.buttons.save"] = u"Save"
+        view = self.ff1.restrictedTraverse("actions")
+        view = view.publishTraverse(view.request, 'adapter')
+        view = view.publishTraverse(view.request, 'adapter')
+        view.update()
+        form = view.form_instance
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
+        self.portal.REQUEST["form.widgets.title"] = u"Adapter"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.ProxyRole"] = [u"bogus"]
+        self.portal.REQUEST[
+            "form.widgets.ScriptBody"] = unicode(proxied_script)
+        self.portal.REQUEST["form.widgets.IActionExtender.execCondition"] = u""
+        self.portal.REQUEST["form.buttons.save"] = u"Save"
+        view = self.ff1.restrictedTraverse("actions")
+        view = view.publishTraverse(view.request, 'adapter')
+        view = view.publishTraverse(view.request, 'adapter')
+        view.update()
+        form = view.form_instance
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 1)
 
 
 # XXX TODO: We need to find another way to test this.

@@ -20,7 +20,7 @@ from collective.formulator.vocabulary import (
     vocabFormatDL,
 )
 from collective.formulator.config import (
-    #MODEL_DEFAULT,
+    # MODEL_DEFAULT,
     FIELDS_DEFAULT,
     ACTIONS_DEFAULT,
     MAIL_BODY_DEFAULT,
@@ -499,11 +499,11 @@ class IActionEditForm(interfaces.IEditForm):
 
 
 class IAction(form.Schema, zs.interfaces.IField):
-    form.omitted('order', 'default', 'missing_value', 'readonly')
-    required = zs.Bool(
-        title=_("Enabled"),
-        description=_("Tells whether a action is enabled."),
-        default=True)
+    form.omitted('required', 'order', 'default', 'missing_value', 'readonly')
+    # required = zs.Bool(
+        # title=_("Enabled"),
+        #description=_("Tells whether a action is enabled."),
+        # default=True)
 
 
 class IMailer(IAction):

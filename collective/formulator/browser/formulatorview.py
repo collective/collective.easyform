@@ -166,13 +166,12 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
                     doit = get_expression(self.context, execCondition)
                 else:
                     doit = True
-                if doit:
-                    if hasattr(action, "onSuccess"):
-                        result = action.onSuccess(data, self.request)
-                        if isinstance(result, dict) and len(result):
-                            # return the dict, which hopefully uses
-                            # field ids or FORM_ERROR_MARKER for keys
-                            return result
+                if doit and hasattr(action, "onSuccess"):
+                    result = action.onSuccess(data, self.request)
+                    if isinstance(result, dict) and len(result):
+                        # return the dict, which hopefully uses
+                        # field ids or FORM_ERROR_MARKER for keys
+                        return result
         return errors
 
     def setDisplayMode(self, mode):
@@ -224,9 +223,11 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             if not self.context.showAll:
                 self.fields = self.setThanksFields(self.base_fields)
                 for group in self.groups:
-                    group.fields = self.setThanksFields(self.base_groups.get(group.label))
+                    group.fields = self.setThanksFields(
+                        self.base_groups.get(group.label))
             self.setDisplayMode(DISPLAY_MODE)
             self.updateWidgets()
+            self.updateActions()
 
     @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton or form.thanksPage)
     def handleCancel(self, action):
@@ -263,7 +264,8 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             self.base_groups = dict([(i.label, i.fields) for i in self.groups])
         self.fields = self.setOmitFields(self.base_fields)
         for group in self.groups:
-            group.fields = self.setOmitFields(self.base_groups.get(group.label))
+            group.fields = self.setOmitFields(
+                self.base_groups.get(group.label))
 
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
@@ -288,7 +290,8 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             # Make sure we're being accessed via a secure connection
             if self.request['SERVER_URL'].startswith('http://'):
                 secure_url = self.request['URL'].replace('http://', 'https://')
-                self.request.response.redirect(secure_url, status="movedtemporarily")
+                self.request.response.redirect(
+                    secure_url, status="movedtemporarily")
 
     def update(self):
         '''See interfaces.IForm'''
@@ -530,9 +533,6 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
     def redirectToParent(self):
         parent = aq_parent(aq_inner(self.context))
         url = parent.absolute_url()
-        if hasattr(parent, 'schemaEditorView') and parent.schemaEditorView:
-            url += '/@@' + parent.schemaEditorView
-
         self.request.response.redirect(url)
 
 
