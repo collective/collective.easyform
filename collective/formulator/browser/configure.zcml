@@ -18,6 +18,12 @@
         />
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
+        name="embedded"
+        class=".formulatorview.FormulatorForm"
+        permission="zope.Public"
+        />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
         name="fields"
         class=".formulatorview.FormulatorSchemaView"
         permission="cmf.ModifyPortalContent"

@@ -82,7 +82,7 @@ from collective.formulator import formulatorMessageFactory as _
 logger = getLogger("collective.formulator")
 
 
-class FormulatorForm(AutoExtensibleForm, form.EditForm):
+class FormulatorForm(AutoExtensibleForm, form.Form):
 
     """
     Formulator form
@@ -105,9 +105,6 @@ class FormulatorForm(AutoExtensibleForm, form.EditForm):
             action = action.replace('http://', 'https://')
         return action
     # default_fieldset_label view/default_fieldset_label | form_name;
-    # self.successMessage - Data successfully updated.
-    # self.noChangesMessage - No changes were applied.
-    # self.formErrorsMessage - There were some errors.
 
     def enable_form_tabbing(self):
         return self.context.form_tabbing

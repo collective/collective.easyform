@@ -50,10 +50,11 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         pfgtc.PloneFormGenTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
+        self.ff1.title = u"ff1"
         self.ff1.checkAuthenticator = False  # no csrf protection
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
-        self.ff1.mailer.setRecipient_email('mdummy@address.com')
+        #self.ff1.mailer.setRecipient_email('mdummy@address.com')
 
     def test_embedded_form_renders(self):
         view = self.ff1.restrictedTraverse('@@embedded')
@@ -81,7 +82,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
 
         # render the form
         view = self.ff1.restrictedTraverse('@@embedded')
-        view.setPrefix('mypfg')
+        view.prefix = 'mypfg'
         res = view()
 
         # should stay on same page on errors, and show messages
@@ -100,7 +101,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
 
         # render the form
         view = self.ff1.restrictedTraverse('@@embedded')
-        view.setPrefix('mypfg')
+        view.prefix = 'mypfg'
         res = view()
 
         # should be no validation errors
@@ -113,7 +114,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         self.assertEqual(self.app.REQUEST.get('controller_state'), 'foobar')
 
         # but if we remove the form prefix then it should process the form
-        view.setPrefix('')
+        view.prefix = ''
         res = view()
         self.failUnless('This field is required.' in res)
 
