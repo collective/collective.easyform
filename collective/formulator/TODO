@@ -9,4 +9,13 @@
 - Custom Permissions
 - Adapter errors
 - Tests
-- thanks page - Thanks for your input.
+    - testEvents
+    - testFunctions
+    - testInterfaces
+    - testLikertField
+    - testMailer
+    - testSaver
+    - testSetup
+    - testTools
+    - testValidators
+    - testExportImport
