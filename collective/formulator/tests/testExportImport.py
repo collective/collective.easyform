@@ -250,7 +250,7 @@ class TestFormExport(ExportImportTester):
 
         # make sure our field and adapters are objects
         for id, object in self.ff1.objectItems():
-            self.failUnless(form_export_data.has_key(self.file_tmpl % id),
+            self.failUnless((self.file_tmpl % id) in form_export_data,
                             "No export representation of %s" % id)
             self.failUnless(self.title_output_tmpl % object.Title() in
                             form_export_data[self.file_tmpl % id])

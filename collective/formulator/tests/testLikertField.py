@@ -2,18 +2,15 @@
 # Likert Field related tests
 #
 
-import os
-import sys
-import email
+#import os
+#import sys
 
 from ZPublisher.HTTPRequest import record
 
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+# if __name__ == '__main__':
+    #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from collective.formulator.tests import pfgtc
-
-from Products.CMFCore.utils import getToolByName
 
 
 class FakeRequest(dict):

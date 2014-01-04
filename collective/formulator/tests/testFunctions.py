@@ -127,7 +127,7 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
             'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es')
         request = self.fakeRequest()
         errors = self.ff1.topic.fgvalidate(request)
-        self.failUnless(errors.has_key('topic'))
+        self.failUnless('topic' in errors)
 
     def test_CustomValidation(self):
         """ test to make sure the custom TALES validation works
@@ -245,11 +245,11 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
 
         # good date
         request = self.fakeRequest(fdf='2007/01/01 00:00')
-        val = self.ff1['fdf'].htmlValue(request)
+        self.ff1['fdf'].htmlValue(request)
 
         # bad date
         request = self.fakeRequest(fdf='2007/01/00 00:00')
-        val = self.ff1['fdf'].htmlValue(request)
+        self.ff1['fdf'].htmlValue(request)
 
     def testMissingAdapter(self):
         """ test response to missing adapter -- should not fail """
@@ -598,15 +598,16 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         environ = {}
         environ.setdefault('SERVER_NAME', 'foo')
         environ.setdefault('SERVER_PORT', '80')
-        environ.setdefault('REQUEST_METHOD',  'POST')
+        environ.setdefault('REQUEST_METHOD', 'POST')
         request = HTTPRequest(sys.stdin,
                               environ,
                               HTTPResponse(stdout=sys.stdout))
 
-        request.form = \
-            {'topic': 'test subject',
-             'replyto': 'test@test.org',
-             'comments': 'test comments'}
+        request.form = {
+            'topic': 'test subject',
+            'replyto': 'test@test.org',
+            'comments': 'test comments',
+        }
 
         self.ff1.checkAuthenticator = True
 

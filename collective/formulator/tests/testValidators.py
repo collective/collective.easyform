@@ -2,14 +2,14 @@
 # Test PloneFormGen initialisation and set-up
 #
 
-import os
-import sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+#import os
+#import sys
+# if __name__ == '__main__':
+    #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from collective.formulator.tests import pfgtc
 
-#from collective.formulator.content import validationMessages
+from collective.formulator.content import validationMessages
 from Products.validation import validation
 
 
@@ -133,8 +133,8 @@ class TestCustomValidatorMessages(pfgtc.PloneFormGenTestCase):
         self.failUnlessEqual(v.validate('pfgv_isZipCode', 't2x 1v4'), 1)
 
 
-if __name__ == '__main__':
-    framework()
+# if __name__ == '__main__':
+    # framework()
 
 
 def test_suite():

@@ -2,12 +2,12 @@
 # Test PloneFormGen top-level functionality
 #
 
-import os
-import sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+#import os
+#import sys
+# if __name__ == '__main__':
+    #execfile(os.path.join(sys.path[0], 'framework.py'))
 
-import zope
+#import zope
 
 from collective.formulator.tests import pfgtc
 
@@ -27,8 +27,8 @@ class TestTools(pfgtc.PloneFormGenTestCase):
     def test_FormGenTool(self):
         fgt = getToolByName(self.portal, 'formgen_tool')
 
-        pt = getToolByName(
-            self.portal, 'portal_properties').ploneformgen_properties
+        # pt = getToolByName(
+            # self.portal, 'portal_properties').ploneformgen_properties
 
         fgt.setDefault('permissions_used', ['test text'])
         fgt.setDefault('mail_template', 'something')
@@ -124,8 +124,8 @@ class TestTools(pfgtc.PloneFormGenTestCase):
         self.failUnless(oid)
 
 
-if __name__ == '__main__':
-    framework()
+# if __name__ == '__main__':
+    # framework()
 
 
 def test_suite():

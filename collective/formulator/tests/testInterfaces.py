@@ -2,10 +2,10 @@
 # Integration tests for interaction with GenericSetup infrastructure
 #
 
-import os
-import sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+#import os
+#import sys
+# if __name__ == '__main__':
+    #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from zope.interface.verify import verifyObject, verifyClass
 from zope.component import getMultiAdapter
@@ -54,8 +54,8 @@ class TestFormGenInterfaces(pfgtc.PloneFormGenTestCase):
             verifyClass(interfaces.IPloneFormGenFieldset, content.fieldset.FieldsetFolder))
 
 
-if __name__ == '__main__':
-    framework()
+# if __name__ == '__main__':
+    # framework()
 
 
 def test_suite():

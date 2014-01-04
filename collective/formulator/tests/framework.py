@@ -73,7 +73,7 @@ if 'Testing' not in sys.modules:
         sys.exit(1)
 
 import Testing
-import unittest
+#import unittest
 execfile(os.path.join(os.path.dirname(Testing.__file__), 'common.py'))
 
 # Include ZopeTestCase support
