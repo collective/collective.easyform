@@ -3,7 +3,9 @@
       i18n:domain="collective.formulator"
       tal:omit-tag="">
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
-    <metal:title-slot fill-slot="title"></metal:title-slot>
+    <metal:title-slot define-slot="title">
+      <h3 tal:condition="view/label | nothing"><span tal:replace="view/label">Form title</span></h3>
+    </metal:title-slot>
     <metal:top-slot fill-slot="formtop">
       <div id="formPrologue"
            tal:condition="view/prologue"

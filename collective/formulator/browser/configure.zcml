@@ -19,7 +19,7 @@
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
         name="embedded"
-        class=".formulatorview.FormulatorForm"
+        class=".formulatorview.FormulatorFormEmbedded"
         permission="zope.Public"
         />
     <browser:page
