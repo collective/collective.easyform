@@ -389,8 +389,8 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
             'test1@testme.com' in self.mto
         )
 
-if __name__ == '__main__':
-    framework()
+# if __name__ == '__main__':
+    # framework()
 
 
 def test_suite():

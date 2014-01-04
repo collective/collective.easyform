@@ -86,8 +86,8 @@ class TestLikertField(pfgtc.PloneFormGenTestCase):
         self.failUnless("1: 2, 2: 3" in self.ff1.lf.htmlValue(request))
 
 
-if __name__ == '__main__':
-    framework()
+# if __name__ == '__main__':
+    # framework()
 
 
 def test_suite():

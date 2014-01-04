@@ -298,6 +298,7 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
 #FormulatorView = layout.wrap_form(FormulatorForm, index=ViewPageTemplateFile("formulator_view.pt"))
 FormulatorView = layout.wrap_form(FormulatorForm)
 
+
 class FormulatorFormEmbedded(FormulatorForm):
 
     """

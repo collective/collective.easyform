@@ -227,7 +227,7 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         assert throwed, "Bad script didn't throw run-time exception, got " + \
             str(reply)
-        assert reply == None
+        assert reply is None
 
     def testSyntaxError(self):
         """ Script has syntax errors
@@ -426,8 +426,8 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 #        assert reply == "foo", "Script returned:" + str(reply)
 
 
-if __name__ == '__main__':
-    framework()
+# if __name__ == '__main__':
+    # framework()
 
 
 def test_suite():
