@@ -20,5 +20,12 @@
   <include package=".content" />
 
   <i18n:registerTranslations directory="locales" />
+  <!--
+  <include package="collective.autopermission" />
 
+  <permission
+    id="myproduct.mypermission"
+    title="MyProduct: MyPermission"
+    />
+  -->
 </configure>

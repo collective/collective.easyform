@@ -179,7 +179,7 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
-        self.failUnless('adapter' in actions)
+        self.assertTrue('adapter' in actions)
 
 #    def testScriptTypes(self):
 #        """ Check DisplayList doesn't fire exceptions """
@@ -313,7 +313,7 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 # if hasattr(self.portal, "foo"):
 # assert "Script executed under full priviledges"
 #
-# self.failUnless(throwed==True, "Bypassed security, baaad!")
+# self.assertTrue(throwed==True, "Bypassed security, baaad!")
 #
 #        pass
     def testSetProxyRole(self):

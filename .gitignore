@@ -16,3 +16,4 @@ var/
 buildout-cache/
 src/
 htmlcov/
+collective/formulator/tests/*.tar.gz

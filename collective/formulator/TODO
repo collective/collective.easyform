@@ -1,5 +1,7 @@
 - Default fieldset name
 - Fields
+    - FormLabelField
+    - FormRichLabelField
 - Actions
     - Mailer
     - SaveData

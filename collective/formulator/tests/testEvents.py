@@ -37,7 +37,7 @@ class TestAdapterPaste(pfgtc.PloneFormGenTestCase):
             copy = self.ff1.manage_copyObjects(fname)
             new_id = self.ff1.manage_pasteObjects(copy)[0]['new_id']
 
-            self.failUnless(new_id in self.ff1.getActionAdapter())
+            self.assertTrue(new_id in self.ff1.getActionAdapter())
 
     def testActiveAdaptersNotDuplicatedOnFormCopy(self):
         self.loginAsPortalOwner()
@@ -62,5 +62,5 @@ class TestAdapterPaste(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestAdapterPaste))
+    #suite.addTest(makeSuite(TestAdapterPaste))
     return suite

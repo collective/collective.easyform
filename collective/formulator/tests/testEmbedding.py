@@ -63,7 +63,6 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         self.mailhost._send = self.dummy_send
         self.portal.manage_changeProperties(
             **{'email_from_address': 'mdummy@address.com'})
-        # self.ff1.mailer.setRecipient_email('mdummy@address.com')
         classImplements(BaseRequest, IFormLayer)
 
     def test_embedded_form_renders(self):
@@ -71,18 +70,18 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         res = view()
 
         # form renders
-        self.failUnless('Your E-Mail Address' in res)
+        self.assertTrue('Your E-Mail Address' in res)
 
         # form action equals request URL
-        self.failUnless('action="%s"' % self.ff1.absolute_url() in res)
+        self.assertTrue('action="%s"' % self.ff1.absolute_url() in res)
 
         # no form prefix
-        #self.failUnless('name="form.submitted"' in res)
+        #self.assertTrue('name="form.submitted"' in res)
 
         # we can specify a form prefix
         view.prefix = 'mypfg'
         res = view()
-        self.failUnless('name="mypfg.buttons.save"' in res)
+        self.assertTrue('name="mypfg.buttons.save"' in res)
 
     def test_embedded_form_validates(self):
         # fake an incomplete form submission
@@ -96,7 +95,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         res = view()
 
         # should stay on same page on errors, and show messages
-        self.failUnless('Required input is missing.' in res)
+        self.assertTrue('Required input is missing.' in res)
 
     def test_doesnt_process_submission_of_other_form(self):
         # fake submission of a *different* form (note mismatch of form
@@ -115,10 +114,10 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         res = view()
 
         # should be no validation errors
-        self.failIf('Required input is missing.' in res)
+        self.assertFalse('Required input is missing.' in res)
 
         # (and request should still have the 'form.submitted' key)
-        #self.failUnless('form.submitted' in self.app.REQUEST.form)
+        #self.assertTrue('form.submitted' in self.app.REQUEST.form)
 
         # (and the controller state should be untouched)
         #self.assertEqual(self.app.REQUEST.get('controller_state'), 'foobar')
@@ -126,7 +125,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         # but if we remove the form prefix then it should process the form
         view.prefix = 'form'
         res = view()
-        self.failUnless('Required input is missing.' in res)
+        self.assertTrue('Required input is missing.' in res)
 
     def test_render_thank_you_on_success(self):
         # We need to be able to make sure the transaction commit was called
@@ -149,14 +148,14 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         #self.assertRaises(Retry, view)
         res = view()
 
-        self.failUnless('Thank You' in res)
-        self.failUnless('Thanks for your input.' in res)
+        self.assertTrue('Thank You' in res)
+        self.assertTrue('Thanks for your input.' in res)
 
         # self.assertEqual(self.app.REQUEST._orig_env['PATH_INFO'],
                          #'/plone/Members/test_user_1_/ff1/thank-you')
 
         # make sure the transaction was committed
-        self.failUnless(committed)
+        self.assertTrue(committed)
 
         # make sure it can deal with VHM URLs
         self.app.REQUEST._orig_env[
@@ -164,8 +163,8 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         view = self.ff1.restrictedTraverse('@@embedded')
         res = view()
 
-        self.failUnless('Thank You' in res)
-        self.failUnless('Thanks for your input.' in res)
+        self.assertTrue('Thank You' in res)
+        self.assertTrue('Thanks for your input.' in res)
         #self.assertRaises(Retry, view)
         # self.assertEqual(self.app.REQUEST._orig_env['PATH_INFO'],
                          #'/VirtualHostBase/http/nohost:80/VirtualHostRoot/plone/Members/test_user_1_/ff1/thank-you')
