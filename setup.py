@@ -5,7 +5,7 @@ version = '1.0'
 
 setup(name='collective.formulator',
       version=version,
-      description="Formulator for Plone",
+      description="Forms for Plone",
       long_description=open("README.txt").read() + "\n" +
       open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from
@@ -14,9 +14,9 @@ setup(name='collective.formulator',
           "Framework :: Plone",
           "Programming Language :: Python",
       ],
-      keywords='',
-      author='',
-      author_email='',
+      keywords='form plone ttw',
+      author='Roman Kozlovskyi',
+      author_email='krzroman@gmail.com',
       url='http://svn.plone.org/svn/collective/',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
