@@ -573,6 +573,10 @@ class ActionFactory(object):
         self.args = args
         self.kw = kw
 
+    def editable(self, field):
+        """ test whether a given instance of a field is editable """
+        return True
+
     def __call__(self, *args, **kw):
         kwargs = deepcopy(self.kw)
         kwargs.update(**kw)
