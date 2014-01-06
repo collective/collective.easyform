@@ -12,7 +12,6 @@
 - Custom Permissions
 - Adapter errors
 - Tests
-    - testEvents
     - testFunctions
     - testInterfaces
     - testLikertField
