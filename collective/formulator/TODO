@@ -1,4 +1,5 @@
 - Default fieldset name
+- Merge models
 - Fields
     - FormLabelField
     - FormRichLabelField

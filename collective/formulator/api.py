@@ -1,7 +1,5 @@
 from re import compile
-from plone.supermodel import loadString
-from plone.supermodel.model import Model
-from plone.supermodel.serializer import serialize
+from plone.supermodel import loadString, serializeSchema
 from plone.directives.form import Schema
 from Products.CMFCore.Expression import getExprContext, Expression
 
@@ -100,16 +98,10 @@ def get_actions(context):
     return schema
 
 
-def serialize_schema(schema):
-    model = Model({SCHEMATA_KEY: schema})
-    sschema = serialize(model)
-    return sschema
-
-
 def set_fields(context, schema):
     delattr(context, CACHE_FIELDS_KEY)
     # serialize the current schema
-    snew_schema = serialize_schema(schema)
+    snew_schema = serializeSchema(schema, name=SCHEMATA_KEY)
     # store the current schema
     context.fields_model = snew_schema
 
@@ -119,6 +111,6 @@ def set_actions(context, schema):
     # fix setting widgets
     schema.setTaggedValue('plone.autoform.widgets', {})
     # serialize the current schema
-    snew_schema = serialize_schema(schema)
+    snew_schema = serializeSchema(schema, name=SCHEMATA_KEY)
     # store the current schema
     context.actions_model = snew_schema
