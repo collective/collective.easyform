@@ -89,10 +89,64 @@ Submit the form::
 
     >>> browser.open(self.portal_url + '/testform')
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
-    >>> browser.getControl('Subject').value = 'test'
+    >>> browser.getControl('Subject').value = 'Test Subject'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
+    >>> 'test@example.com' in browser.contents
+    True
+    >>> 'Test Subject' in browser.contents
+    True
+    >>> 'PFG rocks!' in browser.contents
+    True
+    >>> 'Thanks for your input.' in browser.contents
+    True
+
+Disable Mailer::
+
+    >>> browser.getLink('Actions').click()
+    >>> browser.getControl('Mailer').click()
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/testform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'test'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl('Submit').click()
+    >>> 'Thanks for your input.' in browser.contents
+    True
+
+Set Execution Condition for Mailer::
+
+    >>> browser.getLink('Actions').click()
+    >>> browser.getControl('Mailer').click()
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/testform/actions/mailer')
+    >>> browser.getControl(name='form.widgets.IActionExtender.execCondition').value = 'python:False'
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/testform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'test'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl('Submit').click()
+    >>> 'Thanks for your input.' in browser.contents
+    True
+
+Don't show all fields on thanks page::
+
+    >>> browser.open(self.portal_url + '/testform/edit')
+    >>> browser.getControl('Show All Fields').click()
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/testform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'Test Subject'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl('Submit').click()
+    >>> 'test@example.com' in browser.contents
+    False
+    >>> 'Test Subject' in browser.contents
+    False
+    >>> 'PFG rocks!' in browser.contents
+    False
     >>> 'Thanks for your input.' in browser.contents
     True
 

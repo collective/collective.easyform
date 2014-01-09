@@ -175,9 +175,12 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
         self.mode = mode
         for widget in self.widgets.values():
             widget.mode = mode
+        self.updateWidgets()
         for group in self.groups:
-            for widget in group.widgets.values():
-                widget.mode = mode
+            group.widgets.mode = mode
+            for field in group.widgets:
+                del group.widgets[field]
+            group.widgets.update()
 
     @button.buttonAndHandler(_(u'Save'), name='save', condition=lambda form: not form.thanksPage)
     def handleApply(self, action):
@@ -223,7 +226,6 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
                     group.fields = self.setThanksFields(
                         self.base_groups.get(group.label))
             self.setDisplayMode(DISPLAY_MODE)
-            self.updateWidgets()
             self.updateActions()
 
     @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton or form.thanksPage)
@@ -433,11 +435,11 @@ class FormulatorActionsListing(SchemaListing):
     def handleSaveDefaults(self, action):
         # ignore fields from behaviors by setting their widgets' modes
         # to the display mode while we extract the form values (hack!)
-        widget_modes = {}
-        for widget in self._iterateOverWidgets():
-            if widget.field.interface is not self.context.schema:
-                widget_modes[widget] = widget.mode
-                widget.mode = DISPLAY_MODE
+        #widget_modes = {}
+        #for widget in self._iterateOverWidgets():
+            #if widget.field.interface is not self.context.schema:
+                #widget_modes[widget] = widget.mode
+                #widget.mode = DISPLAY_MODE
 
         data, errors = self.extractData()
         if errors:
@@ -449,8 +451,8 @@ class FormulatorActionsListing(SchemaListing):
         notify(SchemaModifiedEvent(self.context))
 
         # restore the actual widget modes so they render a preview
-        for widget, mode in widget_modes.items():
-            widget.mode = mode
+        #for widget, mode in widget_modes.items():
+            #widget.mode = mode
 
         # update widgets to take the new defaults into account
         self.updateWidgets()
