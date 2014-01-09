@@ -169,7 +169,7 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
         self.portal.REQUEST["form.widgets.title"] = u"Adapter"
         self.portal.REQUEST["form.widgets.__name__"] = u"adapter"
         self.portal.REQUEST["form.widgets.description"] = u""
-        self.portal.REQUEST["form.widgets.factory"] = ["CustomScript"]
+        self.portal.REQUEST["form.widgets.factory"] = ["Custom Script"]
         self.portal.REQUEST["form.buttons.add"] = u"Add"
         view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()

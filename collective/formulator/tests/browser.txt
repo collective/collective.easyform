@@ -20,7 +20,7 @@ Let's add one now::
     >>> browser.getControl('Add new action…').click()
     >>> browser.getControl('Title').value = 'saver'
     >>> browser.getControl('Short Name').value = 'saver'
-    >>> browser.getControl('SaveData').selected = True
+    >>> browser.getControl('Save Data').selected = True
     >>> browser.getControl('Add').click()
     >>> 'http://nohost/plone/testform/actions/saver' in browser.contents
     True
@@ -203,7 +203,7 @@ We want to test security on the custom script adapter. Let's add one::
     >>> browser.getControl('Add new action…').click()
     >>> browser.getControl('Title').value = 'Test Script Adapter'
     >>> browser.getControl('Short Name').value = 'test_script_adapter'
-    >>> browser.getControl('CustomScript').selected = True
+    >>> browser.getControl('Custom Script').selected = True
     >>> browser.getControl('Add').click()
     >>> browser.open(self.portal_url + '/testform/actions/test_script_adapter')
     >>> browser.url

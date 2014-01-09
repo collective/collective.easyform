@@ -5,6 +5,23 @@ MODEL_DEFAULT = u"""
 </model>
 """
 
+#<model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:formulator="http://namespaces.plone.org/supermodel/formulator" xmlns="http://namespaces.plone.org/supermodel/schema">
+  #<schema name="Formulator" based-on="zope.interface.Interface">
+    #<field name="some_text" type="zope.schema.TextLine">
+      #<description/>
+      #<title>Some Text</title>
+    #</field>
+    #<fieldset name="set2" label="Set2">
+      #<field name="next_text" type="zope.schema.TextLine">
+        #<description/>
+        #<title>Next Text</title>
+      #</field>
+    #</fieldset>
+  #</schema>
+#</model>
+
+# replyto fgStringValidator 'isEmail'
+
 FIELDS_DEFAULT = u"""
 <model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:formulator="http://namespaces.plone.org/supermodel/formulator" xmlns="http://namespaces.plone.org/supermodel/schema">
   <schema>
@@ -65,22 +82,6 @@ ACTIONS_DEFAULT = u"""
   </schema>
 </model>
 """
-
-# obj.setFgStringValidator('isEmail')
-# obj.setFgTDefault('here/memberEmail')
-#obj.setFgDefault('dynamically overridden')
-
-# create a thanks page
-#self.invokeFactory('FormThanksPage', 'thank-you')
-#obj = self['thank-you']
-
-# obj.setTitle(zope.i18n.translate(
-    #_(u'pfg_thankyou_title', u'Thank You'), context=self.REQUEST))
-# obj.setDescription(zope.i18n.translate(
-    #_(u'pfg_thankyou_description', u'Thanks for your input.'),
-    # context=self.REQUEST))
-
-# self._pfFixup(obj)
 
 MAIL_BODY_DEFAULT = u"""<html xmlns="http://www.w3.org/1999/xhtml">
   <head><title></title></head>

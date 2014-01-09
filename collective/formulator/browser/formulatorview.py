@@ -1054,9 +1054,9 @@ class SaveData(Action):
 MailerAction = ActionFactory(
     Mailer, _(u'label_mailer_action', default=u'Mailer'))
 CustomScriptAction = ActionFactory(
-    CustomScript, _(u'label_customscript_action', default=u'CustomScript'))
+    CustomScript, _(u'label_customscript_action', default=u'Custom Script'))
 SaveDataAction = ActionFactory(
-    SaveData, _(u'label_savedata_action', default=u'SaveData'))
+    SaveData, _(u'label_savedata_action', default=u'Save Data'))
 
 MailerHandler = BaseHandler(Mailer)
 CustomScriptHandler = BaseHandler(CustomScript)
