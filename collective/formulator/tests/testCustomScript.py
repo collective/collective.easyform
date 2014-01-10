@@ -20,6 +20,7 @@ try:
 except ImportError:
     from Globals import InitializeClass
 
+from AccessControl import Unauthorized
 from AccessControl import ClassSecurityInfo
 
 from collective.formulator.tests import pfgtc
@@ -90,6 +91,8 @@ from Products.CMFCore.utils import getToolByName
 
 portal_url = getToolByName(context, "portal_url")
 portal = portal_url.getPortalObject()
+
+print portal
 
 # Try set left_slots
 portal.manage_addProperty('foo', ['foo'], 'lines')
@@ -291,31 +294,46 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
         errors = adapter.onSuccess({}, request)
         self.assertEqual(errors, None)
 
-#    def testSecurity(self):
-#        """ Script needing proxy role
-#
-#        TODO: Why no security exceptions are raised?
-#        """
-# self.createScript()
-#
-# adapter = self.ff1.adapter
-# 4. Set script data
-# adapter.setScriptBody(security_script)
-#
-# errors = adapter.validate()
-# assert len(errors) == 0, "Had errors:" + str(errors)
-#
-# Execute script
-# throwed = False
-#
-# adapter.onSuccess([])
-#
-# if hasattr(self.portal, "foo"):
-# assert "Script executed under full priviledges"
-#
-# self.assertTrue(throwed==True, "Bypassed security, baaad!")
-#
-#        pass
+    def testSecurity(self):
+        """ Script needing proxy role
+
+        TODO: Why no security exceptions are raised?
+        """
+        self.createScript()
+        self.logout()
+
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
+
+        # 4. Set script data
+        adapter.ScriptBody = security_script
+
+        #errors = adapter.validate()
+        #assert len(errors) == 0, "Had errors:" + str(errors)
+
+        # Execute script
+        throwed = False
+        try:
+            adapter.onSuccess({}, FakeRequest())
+        except Unauthorized:
+            throwed = True
+
+        if self.portal.hasProperty("foo"):
+            assert "Script executed under full priviledges"
+
+        self.assertTrue(throwed, "Bypassed security, baaad!")
+
+        adapter.ProxyRole = u"Manager"
+        throwed = False
+        try:
+            adapter.onSuccess({}, FakeRequest())
+        except Unauthorized:
+            throwed = True
+
+        if not self.portal.hasProperty("foo"):
+            assert "Script not executed thru proxy role"
+        self.assertFalse(throwed, "Unauthorized was raised!")
+
     def testSetProxyRole(self):
         """ Exercise setProxyRole """
 
@@ -363,40 +381,32 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
 
+    # XXX TODO: We need to find another way to test this.
+    def testProxyRole(self):
+        """ Test seeing how setting proxy role affects unauthorized exception """
 
-# XXX TODO: We need to find another way to test this.
-#    def testProxyRole(self):
-#        """ Test seeing how setting proxy role affects unauthorized exception """
-#
-# TODO: Zope security system kills me
-#
-# self.createScript()
-#
-# adapter = self.ff1.adapter
-# 4. Set script data
-# adapter.setScriptBody(proxied_script)
-#
-# req = SecureFakeRequest(test_field="123")
-# req = req.__of__(self.portal)
-#
-# errors = adapter.validate()
-# assert len(errors) == 0, "Had errors:" + str(errors)
-#
-# Execute script
-# throwed = False
-# try:
-# adapter.onSuccess([], req)
-# except Unauthorized:
-# throwed=True
-#
-# assert throwed, "No Unauthorized was raised"
-#
-# self.loginAsPortalOwner()
-# self.setRoles(["Manager", "Owner"])
-# adapter.setProxyRole("Manager")
-# self.logout()
-#
-#        assert adapter.onSuccess([], req) == "123"
+        # TODO: Zope security system kills me
+        self.createScript()
+
+        actions = get_actions(self.ff1)
+        adapter = actions['adapter']
+
+        # 4. Set script data
+        adapter.ScriptBody = proxied_script
+
+        req = SecureFakeRequest(test_field="123")
+
+        # errors = adapter.validate()
+        # assert len(errors) == 0, "Had errors:" + str(errors)
+
+        # Execute script
+        throwed = False
+        try:
+            adapter.onSuccess({}, req)
+        except Unauthorized:
+            throwed = True
+
+        assert throwed, "No Unauthorized was raised"
 
 #    def testSkinsScript(self):
 #        """ Test executing script from portal_skins """

@@ -436,8 +436,8 @@ class FormulatorActionsListing(SchemaListing):
         # ignore fields from behaviors by setting their widgets' modes
         # to the display mode while we extract the form values (hack!)
         #widget_modes = {}
-        #for widget in self._iterateOverWidgets():
-            #if widget.field.interface is not self.context.schema:
+        # for widget in self._iterateOverWidgets():
+            # if widget.field.interface is not self.context.schema:
                 #widget_modes[widget] = widget.mode
                 #widget.mode = DISPLAY_MODE
 
@@ -451,7 +451,7 @@ class FormulatorActionsListing(SchemaListing):
         notify(SchemaModifiedEvent(self.context))
 
         # restore the actual widget modes so they render a preview
-        #for widget, mode in widget_modes.items():
+        # for widget, mode in widget_modes.items():
             #widget.mode = mode
 
         # update widgets to take the new defaults into account
@@ -926,12 +926,16 @@ class CustomScript(Action):
         script = PythonScript(self.__name__)
         script = script.__of__(context)
 
+        # Skip check roles
+        script._validateProxy = lambda i=None: None
+
         # Force proxy role
         if role != u"none":
             script.manage_proxy((role,))
 
-        script.ZPythonScript_edit(
-            "fields, ploneformgen, request", body.encode("utf-8"))
+        boby = body.encode("utf-8")
+        params = "fields, ploneformgen, request"
+        script.ZPythonScript_edit(params, body)
         return script
 
     def sanifyFields(self, form):

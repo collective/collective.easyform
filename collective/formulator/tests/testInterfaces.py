@@ -61,5 +61,5 @@ class TestFormGenInterfaces(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    #suite.addTest(makeSuite(TestFormGenInterfaces))
+    # suite.addTest(makeSuite(TestFormGenInterfaces))
     return suite

@@ -61,7 +61,7 @@ class TestCustomValidators(pfgtc.PloneFormGenTestCase):
         self.assertEqual(v(good, **kw), 1)
         for b in bad:
             self.assertNotEqual(v(b, **kw), 1,
-                             '"%s" should be considered a link.' % b)
+                                '"%s" should be considered a link.' % b)
 
     def test_isNotTooLong2(self):
         v = validation.validatorFor('isNotTooLong')
@@ -104,8 +104,9 @@ class TestCustomValidatorMessages(pfgtc.PloneFormGenTestCase):
         # self.assertEqual(validationMessages.cleanupMessage(s, self, self), u'pfg_isUnixLikeName')
 
         #s = "Something is required, please correct."
-        #self.assertEqual(
-            #validationMessages.cleanupMessage(s, self, self), u'pfg_isRequired')
+        # self.assertEqual(
+            # validationMessages.cleanupMessage(s, self, self),
+            # u'pfg_isRequired')
 
         #s = "Validation failed(isNotTooLong): 'something' is too long. Must be no longer than some characters."
         #response = validationMessages.cleanupMessage(s, self, self)
@@ -141,6 +142,6 @@ class TestCustomValidatorMessages(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    #suite.addTest(makeSuite(TestCustomValidators))
-    #suite.addTest(makeSuite(TestCustomValidatorMessages))
+    # suite.addTest(makeSuite(TestCustomValidators))
+    # suite.addTest(makeSuite(TestCustomValidatorMessages))
     return suite

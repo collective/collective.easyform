@@ -8,7 +8,7 @@
 from collective.formulator.tests import pfgtc
 from collective.formulator.api import get_actions, get_fields
 
-#if __name__ == '__main__':
+# if __name__ == '__main__':
     #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 

@@ -679,5 +679,5 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    #suite.addTest(makeSuite(TestFunctions))
+    # suite.addTest(makeSuite(TestFunctions))
     return suite

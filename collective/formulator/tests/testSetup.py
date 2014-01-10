@@ -591,7 +591,7 @@ class TestGPG(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    #suite.addTest(makeSuite(TestInstallation))
-    #suite.addTest(makeSuite(TestContentCreation))
-    #suite.addTest(makeSuite(TestGPG))
+    # suite.addTest(makeSuite(TestInstallation))
+    # suite.addTest(makeSuite(TestContentCreation))
+    # suite.addTest(makeSuite(TestGPG))
     return suite

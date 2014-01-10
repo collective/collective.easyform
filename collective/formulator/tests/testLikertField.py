@@ -90,5 +90,5 @@ class TestLikertField(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    #suite.addTest(makeSuite(TestLikertField))
+    # suite.addTest(makeSuite(TestLikertField))
     return suite

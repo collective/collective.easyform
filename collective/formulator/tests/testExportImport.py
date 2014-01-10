@@ -161,7 +161,7 @@ class ExportImportTester(pfgtc.PloneFormGenTestCase, TarballTester):
         for form_field in ('comments', 'replyto', 'topic', 'mailer', 'thank-you'):
             if purge:
                 self.assertFalse(form_field in form_field_ids,
-                            "%s unexpectedly found in %s" % (form_field, form_ctx.getId()))
+                                 "%s unexpectedly found in %s" % (form_field, form_ctx.getId()))
                 continue
 
             self.assertTrue(form_field in form_field_ids,
@@ -403,6 +403,6 @@ class TestFormImport(ExportImportTester):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    #suite.addTest(makeSuite(TestFormExport))
-    #suite.addTest(makeSuite(TestFormImport))
+    # suite.addTest(makeSuite(TestFormExport))
+    # suite.addTest(makeSuite(TestFormImport))
     return suite
