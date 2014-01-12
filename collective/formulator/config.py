@@ -45,39 +45,10 @@ ACTIONS_DEFAULT = u"""
 <model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:formulator="http://namespaces.plone.org/supermodel/formulator" xmlns="http://namespaces.plone.org/supermodel/schema">
   <schema>
     <field name="mailer" type="collective.formulator.browser.formulatorview.Mailer">
-      <bccOverride/>
-      <bcc_recipients/>
-      <body_footer/>
-      <body_post/>
-      <body_pre/>
-      <body_pt>&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;&#13;
-  &lt;head&gt;&lt;title&gt;&lt;/title&gt;&lt;/head&gt;&#13;
-  &lt;body&gt;&#13;
-    &lt;p tal:content="mailer/body_pre | nothing" /&gt;&#13;
-    &lt;dl&gt;&#13;
-        &lt;tal:block repeat="field data | nothing"&gt;&#13;
-            &lt;dt tal:content="python:fields[field]" /&gt;&#13;
-            &lt;dd tal:content="structure python:data[field]" /&gt;&#13;
-        &lt;/tal:block&gt;&#13;
-    &lt;/dl&gt;&#13;
-    &lt;p tal:content="mailer/body_post | nothing" /&gt;&#13;
-    &lt;pre tal:content="mailer/body_footer | nothing" /&gt;&#13;
-  &lt;/body&gt;&#13;
-&lt;/html&gt;&#13;
-</body_pt>
-      <ccOverride/>
-      <cc_recipients/>
       <description>E-Mails Form Input</description>
-      <recipientOverride/>
-      <recipient_email/>
-      <recipient_name/>
       <replyto_field>replyto</replyto_field>
-      <senderOverride/>
-      <showFields/>
-      <subjectOverride/>
       <subject_field>topic</subject_field>
       <title>Mailer</title>
-      <xinfo_headers/>
     </field>
   </schema>
 </model>
@@ -86,18 +57,19 @@ ACTIONS_DEFAULT = u"""
 MAIL_BODY_DEFAULT = u"""<html xmlns="http://www.w3.org/1999/xhtml">
   <head><title></title></head>
   <body>
-    <p tal:content="mailer/body_pre | nothing" />
+    <p tal:content="body_pre | nothing" />
     <dl>
         <tal:block repeat="field data | nothing">
             <dt tal:content="python:fields[field]" />
             <dd tal:content="structure python:data[field]" />
         </tal:block>
     </dl>
-    <p tal:content="mailer/body_post | nothing" />
-    <pre tal:content="mailer/body_footer | nothing" />
+    <p tal:content="body_post | nothing" />
+    <pre tal:content="body_footer | nothing" />
   </body>
 </html>
 """
+
 
 DEFAULT_SCRIPT = u"""
 ## Python Script

@@ -12,6 +12,7 @@ from ZPublisher.HTTPResponse import HTTPResponse
 import zExceptions
 
 from collective.formulator.tests import pfgtc
+from collective.formulator.api import get_actions, get_fields
 
 from Products.CMFCore.utils import getToolByName
 import plone.protect
@@ -46,13 +47,31 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
 
+    def createSaver(self):
+        """ Creates FormCustomScript object """
+        # 1. Create custom script adapter in the form folder
+        self.portal.REQUEST["form.widgets.title"] = u"Saver"
+        self.portal.REQUEST["form.widgets.__name__"] = u"saver"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.factory"] = ["Save Data"]
+        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        view = self.ff1.restrictedTraverse("actions/@@add-action")
+        view.update()
+        form = view.form_instance
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
+
+        # 2. Check that creation succeeded
+        actions = get_actions(self.ff1)
+        self.assertTrue('saver' in actions)
+
     def testSaver(self):
         """ test save data adapter action """
 
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
+        self.createSaver()
 
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         self.ff1.setActionAdapter(('saver',))
         self.assertEqual(self.ff1.actionAdapter, ('saver',))
@@ -77,10 +96,10 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
     def testSaverSavedFormInput(self):
         """ test save data adapter action and direct access to SavedFormInput """
 
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
+        self.createSaver()
 
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         self.ff1.setActionAdapter(('saver',))
 
@@ -106,35 +125,35 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         """ test setSavedFormInput functionality """
 
         # set up saver
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.createSaver()
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         # save a row
-        saver.setSavedFormInput('one,two,three')
+        saver.savedFormInput = 'one,two,three'
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(saver._inputStorage[0], ['one', 'two', 'three'])
 
         # save a couple of \n-delimited rows - \n eol
-        saver.setSavedFormInput('one,two,three\nfour,five,six')
+        saver.savedFormInput = 'one,two,three\nfour,five,six'
         self.assertEqual(saver.itemsSaved(), 2)
         self.assertEqual(saver._inputStorage[0], ['one', 'two', 'three'])
         self.assertEqual(saver._inputStorage[1], ['four', 'five', 'six'])
 
         # save a couple of \n-delimited rows -- \r\n eol
-        saver.setSavedFormInput('one,two,three\r\nfour,five,six')
+        saver.savedFormInput = 'one,two,three\r\nfour,five,six'
         self.assertEqual(saver.itemsSaved(), 2)
 
         # save a couple of \n-delimited rows -- \n\n double eol
-        saver.setSavedFormInput('one,two,three\n\nfour,five,six')
+        saver.savedFormInput = 'one,two,three\n\nfour,five,six'
         self.assertEqual(saver.itemsSaved(), 2)
 
         # save empty string
-        saver.setSavedFormInput('')
+        saver.savedFormInput = ''
         self.assertEqual(saver.itemsSaved(), 0)
 
         # save empty list
-        saver.setSavedFormInput(tuple())
+        saver.savedFormInput = tuple()
         self.assertEqual(saver.itemsSaved(), 0)
 
     def testSetSavedFormInputAlternateDelimiter(self):
@@ -146,48 +165,48 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         alt_delimiter = '|'
         pft.setDefault('csv_delimiter', alt_delimiter)
         # set up saver
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
-        saver = self.ff1.saver
+        self.createSaver()
+        saver = get_actions(self.ff1)['saver']
 
         # build and save a row
         row1 = alt_delimiter.join(('one', 'two', 'three'))
-        saver.setSavedFormInput(row1)
+        saver.savedFormInput = row1
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(saver._inputStorage[0], ['one', 'two', 'three'])
 
         # save a couple of \n-delimited rows - \n eol
         row2 = alt_delimiter.join(('four', 'five', 'six'))
-        saver.setSavedFormInput('%s\n%s' % (row1, row2))
+        saver.savedFormInput = '%s\n%s' % (row1, row2)
         self.assertEqual(saver.itemsSaved(), 2)
         self.assertEqual(saver._inputStorage[0], ['one', 'two', 'three'])
         self.assertEqual(saver._inputStorage[1], ['four', 'five', 'six'])
 
         # save a couple of \n-delimited rows -- \r\n eol
-        saver.setSavedFormInput('%s\r\n%s' % (row1, row2))
+        saver.savedFormInput = '%s\r\n%s' % (row1, row2)
         self.assertEqual(saver.itemsSaved(), 2)
 
         # save a couple of \n-delimited rows -- \n\n double eol
-        saver.setSavedFormInput('%s\n\n%s' % (row1, row2))
+        saver.savedFormInput = '%s\n\n%s' % (row1, row2)
         self.assertEqual(saver.itemsSaved(), 2)
 
         # save empty string
-        saver.setSavedFormInput('')
+        saver.savedFormInput = ''
         self.assertEqual(saver.itemsSaved(), 0)
 
         # save empty list
-        saver.setSavedFormInput(tuple())
+        saver.savedFormInput = tuple()
         self.assertEqual(saver.itemsSaved(), 0)
 
     def testEditSavedFormInput(self):
         """ test manage_saveData functionality """
 
         # set up saver
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.createSaver()
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         # save a row
-        saver.setSavedFormInput('one,two,three')
+        saver.savedFormInput = 'one,two,three'
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
             saver._inputStorage.values()[0], ['one', 'two', 'three'])
@@ -217,12 +236,12 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         pft.setDefault('csv_delimiter', alt_delimiter)
 
         # set up saver
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.createSaver()
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         # save a row
-        saver.setSavedFormInput('one|two|three')
+        saver.savedFormInput = 'one|two|three'
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
             saver._inputStorage.values()[0], ['one', 'two', 'three'])
@@ -242,12 +261,12 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         """ test manage_saveData functionality when an alternate csv delimiter is used """
 
         # set up saver
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.createSaver()
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         # save a row
-        saver.setSavedFormInput('one,two,three')
+        saver.savedFormInput = 'one,two,three'
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
             saver._inputStorage.values()[0], ['one', 'two', 'three'])
@@ -266,9 +285,9 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         """ test manage_deleteData functionality """
 
         # set up saver
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.createSaver()
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         # save a few rows
         saver._addDataRow(['one', 'two', 'three'])
@@ -286,10 +305,10 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
     def testSaverInputAsDictionaries(self):
         """ test save data adapter's InputAsDictionaries """
 
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
+        self.createSaver()
 
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         self.ff1.setActionAdapter(('saver',))
 
@@ -312,10 +331,10 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
     def testSaverColumnNames(self):
         """ test save data adapter's getColumnNames function """
 
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
+        self.createSaver()
 
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         self.ff1.setActionAdapter(('saver',))
 
@@ -326,12 +345,12 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         self.assertTrue(cn[2] == 'comments')
 
         # Use selective field saving
-        saver.setShowFields(('topic', 'comments'))
+        saver.showFields = ('topic', 'comments')
         cn = saver.getColumnNames()
         self.assertTrue(len(cn) == 2)
         self.assertTrue(cn[0] == 'topic')
         self.assertTrue(cn[1] == 'comments')
-        saver.setShowFields(())
+        saver.showFields = tuple()
 
         # Add an extra column
         saver.ExtraData = ('dt',)
@@ -354,10 +373,10 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
     def testSaverColumnTitles(self):
         """ test save data adapter's getColumnTitles function """
 
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
+        self.createSaver()
 
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
 
         self.ff1.setActionAdapter(('saver',))
 
@@ -376,11 +395,11 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
     def testSaverSelectiveFieldSaving(self):
         """ Test selective inclusion of fields in the data"""
 
-        self.ff1.invokeFactory('FormSaveDataAdapter', 'saver')
+        self.createSaver()
 
-        self.assertTrue('saver' in self.ff1.objectIds())
-        saver = self.ff1.saver
-        saver.setShowFields(('topic', 'comments'))
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        saver.showFields = ('topic', 'comments')
 
         self.ff1.setActionAdapter(('saver',))
 

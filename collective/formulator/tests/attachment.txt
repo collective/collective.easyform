@@ -17,7 +17,7 @@ Add a File field::
 
     >>> browser.getLink('Fields').click()
     >>> browser.getControl('Add new field…').click()
-    >>> browser.getControl('Title').value = 'attachment'
+    >>> browser.getControl('Title').value = 'Attachment'
     >>> browser.getControl('Short Name').value = 'attachment'
     >>> browser.getControl('File Upload').selected = True
     >>> browser.getControl('Add').click()
@@ -33,7 +33,7 @@ And confirm that it renders properly::
     <input type="file" ... />
     ...
 
-Submit the form with an attachment::
+Submit the form with an text attachment::
 
     >>> browser.open(self.portal_url + '/attachmentform/actions/mailer')
     >>> browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
@@ -53,6 +53,69 @@ Make sure the attachment was included in the email message::
 
     >>> self.portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
     'file contents'
+
+Submit the form with an image attachment::
+
+    >>> browser.open(self.portal_url + '/attachmentform/actions/mailer')
+    >>> browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/attachmentform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'test'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('image content'), 'image/gif', 'test.gif')
+    >>> browser.getControl('Submit').click()
+    <sent mail from ...to ['mdummy@address.com']>
+    >>> 'Thanks for your input.' in browser.contents
+    True
+
+Make sure the attachment was included in the email message::
+
+
+    >>> self.portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
+    'image content'
+
+Submit the form with an audio attachment::
+
+    >>> browser.open(self.portal_url + '/attachmentform/actions/mailer')
+    >>> browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/attachmentform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'test'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('audio content'), 'audio/mpeg', 'test.mp3')
+    >>> browser.getControl('Submit').click()
+    <sent mail from ...to ['mdummy@address.com']>
+    >>> 'Thanks for your input.' in browser.contents
+    True
+
+Make sure the attachment was included in the email message::
+
+
+    >>> self.portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
+    'audio content'
+
+Submit the form with an zip attachment::
+
+    >>> browser.open(self.portal_url + '/attachmentform/actions/mailer')
+    >>> browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
+    >>> browser.getControl('Save').click()
+    >>> browser.open(self.portal_url + '/attachmentform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'test'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('zip content'), 'application/zip', 'test.zip')
+    >>> browser.getControl('Submit').click()
+    <sent mail from ...to ['mdummy@address.com']>
+    >>> 'Thanks for your input.' in browser.contents
+    True
+
+Make sure the attachment was included in the email message::
+
+
+    >>> self.portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
+    'zip content'
 
 Excluded fields
 ---------------

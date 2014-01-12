@@ -725,6 +725,7 @@ class IMailer(IAction):
         unique=True,
         required=False,
         default=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
+        missing_value=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
         value_type=zs.Choice(vocabulary=XINFO_HEADERS),
     )
     # default_method='getDefaultAddHdrs',

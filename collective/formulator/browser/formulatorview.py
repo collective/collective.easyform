@@ -673,14 +673,19 @@ class Mailer(Action):
         #pt_args['fields'] = schema
         #pt_args['data'] = fields
         #body = template.pt_render(pt_args)
-        template = ZopePageTemplate(self.__name__)
-        template.write(bodyfield)
-        template = template.__of__(context)
-        body = template.pt_render(extra_context={
+        replacer = DollarVarReplacer(fields).sub
+        extra = {
             'data': bare_fields,
             'fields': dict([(i, j.title) for i, j in getFieldsInOrder(schema)]),
             'mailer': self,
-        })
+            'body_pre': self.body_pre and replacer(self.body_pre),
+            'body_post': self.body_post and replacer(self.body_post),
+            'body_footer': self.body_footer and replacer(self.body_footer),
+        }
+        template = ZopePageTemplate(self.__name__)
+        template.write(bodyfield)
+        template = template.__of__(context)
+        body = template.pt_render(extra_context=extra)
 
         # if isinstance(body, unicode):
             #body = body.encode("utf-8")
@@ -933,7 +938,7 @@ class CustomScript(Action):
         if role != u"none":
             script.manage_proxy((role,))
 
-        boby = body.encode("utf-8")
+        body = body.encode("utf-8")
         params = "fields, ploneformgen, request"
         script.ZPythonScript_edit(params, body)
         return script

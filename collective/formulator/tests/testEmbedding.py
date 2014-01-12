@@ -8,6 +8,7 @@ from zope.interface import classImplements
 from z3c.form.interfaces import IFormLayer
 from ZPublisher.BaseRequest import BaseRequest
 from collective.formulator.tests import pfgtc
+from collective.formulator.api import get_actions, set_actions, get_fields, set_fields
 
 import transaction
 #from ZPublisher.Publish import Retry
@@ -55,10 +56,9 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.title = u"ff1"
         self.ff1.checkAuthenticator = False  # no csrf protection
-        self.ff1.actions_model = (
-            self.ff1.actions_model.replace(
-                u"<description>E-Mails Form Input</description>",
-                u"<recipient_email>mdummy@address.com</recipient_email><description>E-Mails Form Input</description>"))
+        actions = get_actions(self.ff1)
+        actions['mailer'].recipient_email = u'mdummy@address.com'
+        set_actions(self.ff1, actions)
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         self.portal.manage_changeProperties(
