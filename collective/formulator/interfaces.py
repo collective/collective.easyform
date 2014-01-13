@@ -10,7 +10,7 @@ from zope.interface import Invalid, Interface, invariant
 from zope.schema.interfaces import IField
 from zope.tales.tales import CompilerError
 from collective.formulator import formulatorMessageFactory as _
-from collective.formulator.vocabulary import (
+from collective.formulator.vocabularies import (
     fieldsFactory,
     customActions,
     MIME_LIST,
@@ -460,6 +460,16 @@ class IFieldExtender(form.Schema):
                       "modifiable by or exposed to the client."),
         default=False,
         required=False,
+    )
+    validators = zs.List(
+        title=_("Validators"),
+        description=_(
+            u"help_userfield_validators",
+            default=u'Select the validators to use on this field'),
+        unique=True,
+        required=False,
+        value_type=zs.Choice(
+            vocabulary="collective.formulator.validators"),
     )
 
 

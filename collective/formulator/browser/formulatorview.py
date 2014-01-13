@@ -77,6 +77,7 @@ from collective.formulator.api import (
     set_actions,
     set_fields,
 )
+from collective.formulator.validators import get_validators
 from collective.formulator import formulatorMessageFactory as _
 
 logger = getLogger("collective.formulator")
@@ -125,11 +126,11 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
 
     @property
     def prologue(self):
-        return self.thanksPage and self.context.thanksPrologue or self.context.formPrologue
+        return self.thanksPage and self.thanksPrologue or self.context.formPrologue
 
     @property
     def epilogue(self):
-        return self.thanksPage and self.context.thanksEpilogue or self.context.formEpilogue
+        return self.thanksPage and self.thanksEpilogue or self.context.formEpilogue
 
     @property
     def schema(self):
@@ -220,6 +221,11 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
         else:
             #self.status = u"Thanks for your input."
             self.thanksPage = True
+            replacer = DollarVarReplacer(data).sub
+            self.thanksPrologue = self.context.thanksPrologue and replacer(
+                self.context.thanksPrologue)
+            self.thanksEpilogue = self.context.thanksEpilogue and replacer(
+                self.context.thanksEpilogue)
             if not self.context.showAll:
                 self.fields = self.setThanksFields(self.base_fields)
                 for group in self.groups:
@@ -320,6 +326,16 @@ class FieldExtenderValidator(validator.SimpleFieldValidator):
         """ Validate field by TValidator """
         super(FieldExtenderValidator, self).validate(value)
         efield = IFieldExtender(self.field)
+        validators = getattr(efield, 'validators', [])
+        if validators:
+            vdict = get_validators()
+            for validator in validators:
+                if validator not in vdict:
+                    continue
+                vmethod = vdict[validator]
+                res = vmethod(value)
+                if res:
+                    raise Invalid(res)
         TValidator = getattr(efield, 'TValidator', None)
         if TValidator:
             try:
@@ -663,16 +679,6 @@ class Mailer(Action):
         # pass both the bare_fields (fgFields only) and full fields.
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
-        #template = PageTemplate()
-        # template.write(bodyfield)
-        #pt_args = template.pt_getContext()
-        #pt_args['request'] = request
-        #pt_args['here'] = self
-        #pt_args['context'] = self
-        #pt_args['container'] = context
-        #pt_args['fields'] = schema
-        #pt_args['data'] = fields
-        #body = template.pt_render(pt_args)
         replacer = DollarVarReplacer(fields).sub
         extra = {
             'data': bare_fields,
@@ -1104,6 +1110,8 @@ class FieldExtender(object):
                           lambda x, value: _set_(x, value, 'TValidator'))
     serverSide = property(lambda x: _get_(x, 'serverSide'),
                           lambda x, value: _set_(x, value, 'serverSide'))
+    validators = property(lambda x: _get_(x, 'validators'),
+                          lambda x, value: _set_(x, value, 'validators'))
 
 
 class FormulatorFieldMetadataHandler(object):
@@ -1119,16 +1127,22 @@ class FormulatorFieldMetadataHandler(object):
         name = field.__name__
         for i in ['TDefault', 'TEnabled', 'TValidator']:
             value = fieldNode.get(ns(i, self.namespace))
-            data = schema.queryTaggedValue(i, {})
             if value:
+                data = schema.queryTaggedValue(i, {})
                 data[name] = value
                 schema.setTaggedValue(i, data)
         # serverSide
         value = fieldNode.get(ns('serverSide', self.namespace))
-        data = schema.queryTaggedValue('serverSide', {})
         if value:
+            data = schema.queryTaggedValue('serverSide', {})
             data[name] = value == 'True' or value == 'true'
             schema.setTaggedValue('serverSide', data)
+        # validators
+        value = fieldNode.get(ns('validators', self.namespace))
+        if value:
+            data = schema.queryTaggedValue('validators', {})
+            data[name] = value.split("|")
+            schema.setTaggedValue('validators', data)
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
@@ -1140,6 +1154,10 @@ class FormulatorFieldMetadataHandler(object):
         value = schema.queryTaggedValue('serverSide', {}).get(name, None)
         if isinstance(value, bool):
             fieldNode.set(ns('serverSide', self.namespace), str(value))
+        # validators
+        value = schema.queryTaggedValue('validators', {}).get(name, None)
+        if value:
+            fieldNode.set(ns('validators', self.namespace), "|".join(value))
 
 
 @adapter(IFormulatorActionsContext, IAction)

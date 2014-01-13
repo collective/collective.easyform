@@ -20,12 +20,10 @@ MODEL_DEFAULT = u"""
   #</schema>
 #</model>
 
-# replyto fgStringValidator 'isEmail'
-
 FIELDS_DEFAULT = u"""
 <model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:formulator="http://namespaces.plone.org/supermodel/formulator" xmlns="http://namespaces.plone.org/supermodel/schema">
   <schema>
-    <field name="replyto" type="zope.schema.TextLine" formulator:TDefault="python:member and member.getProperty('email', '') or ''" formulator:serverSide="False">
+    <field name="replyto" type="zope.schema.TextLine" formulator:TDefault="python:member and member.getProperty('email', '') or ''" formulator:serverSide="False" formulator:validators="isValidEmail">
       <description/>
       <title>Your E-Mail Address</title>
     </field>

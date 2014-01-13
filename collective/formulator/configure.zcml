@@ -16,6 +16,10 @@
       />
   <!-- -*- extra stuff goes here -*- -->
 
+  <utility
+    component=".validators.ValidatorsVocabularyFactory"
+    name="collective.formulator.validators"
+    />
   <include package=".browser" />
   <include package=".content" />
 
