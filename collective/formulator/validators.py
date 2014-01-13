@@ -45,17 +45,17 @@ def isValidEmail(value):
 provideUtility(isValidEmail, provides=IFieldValidator, name='isValidEmail')
 
 if validation and baseValidators:
-    def validate(validator, value):
-        if isinstance(value, unicode):
-            value = value.encode("utf-8")
-        res = validation(validator, value)
-        if res != 1:
-            return res
+    def method(name):
+        def validate(value):
+            if isinstance(value, unicode):
+                value = value.encode("utf-8")
+            res = validation(name, value)
+            if res != 1:
+                return res
+        return validate
     for validator in baseValidators:
-        name = validator.name
-        method = lambda v: validate(name, v)
-        provideUtility(
-            lambda v: validate(name, v), provides=IFieldValidator, name=name)
+        provideUtility(method(validator.name),
+                       provides=IFieldValidator, name=validator.name)
 
 
 class ValidatorsVocabulary(object):

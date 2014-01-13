@@ -45,7 +45,7 @@ class TestBaseValidators(pfgtc.PloneFormGenTestCase):
 
     def test_basevalidator(self):
         fields = get_fields(self.ff1)
-        IFieldExtender(fields['replyto']).validators = "isEmail"
+        IFieldExtender(fields['replyto']).validators = ["isEmail"]
         set_fields(self.ff1, fields)
         view = self.ff1.restrictedTraverse('view')
         form = view.form_instance
@@ -54,10 +54,22 @@ class TestBaseValidators(pfgtc.PloneFormGenTestCase):
         data, errors = form.extractData()
         self.assertEqual(errors, ())
         self.assertEqual(data, FORM_DATA)
+
+    def test_basevalidator2(self):
+        fields = get_fields(self.ff1)
+        IFieldExtender(fields['comments']).validators = ["isInt", "isURL"]
+        set_fields(self.ff1, fields)
+        view = self.ff1.restrictedTraverse('view')
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 1)
 
     def test_talvalidator(self):
         fields = get_fields(self.ff1)
-        IFieldExtender(fields['comments']).TValidator = "python: value == 'comments'"
+        IFieldExtender(
+            fields['comments']).TValidator = "python: value == 'comments'"
         set_fields(self.ff1, fields)
         view = self.ff1.restrictedTraverse('view')
         form = view.form_instance
@@ -66,6 +78,17 @@ class TestBaseValidators(pfgtc.PloneFormGenTestCase):
         data, errors = form.extractData()
         self.assertEqual(errors, ())
         self.assertEqual(data, FORM_DATA)
+
+    def test_talvalidator2(self):
+        fields = get_fields(self.ff1)
+        IFieldExtender(fields['comments']).TValidator = "python: !value"
+        set_fields(self.ff1, fields)
+        view = self.ff1.restrictedTraverse('view')
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 1)
 
 
 class TestCustomValidators(pfgtc.PloneFormGenTestCase):

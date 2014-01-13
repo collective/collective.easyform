@@ -150,27 +150,25 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             data[fname] = value
         return data
 
-    def processActions(self, errors, data):
-        if not errors:
-            # get a list of adapters with no duplicates, retaining order
-            actions = getFieldsInOrder(get_actions(self.context))
-            for name, action in actions:
-                if not action.required:
-                    continue
-                # Now, see if we should execute it.
-                # Check to see if execCondition exists and has contents
-                execCondition = IActionExtender(action).execCondition
-                if execCondition:
-                    doit = get_expression(self.context, execCondition)
-                else:
-                    doit = True
-                if doit and hasattr(action, "onSuccess"):
-                    result = action.onSuccess(data, self.request)
-                    if isinstance(result, dict) and len(result):
-                        # return the dict, which hopefully uses
-                        # field ids or FORM_ERROR_MARKER for keys
-                        return result
-        return errors
+    def processActions(self, data):
+        # get a list of adapters with no duplicates, retaining order
+        actions = getFieldsInOrder(get_actions(self.context))
+        for name, action in actions:
+            if not action.required:
+                continue
+            # Now, see if we should execute it.
+            # Check to see if execCondition exists and has contents
+            execCondition = IActionExtender(action).execCondition
+            if execCondition:
+                doit = get_expression(self.context, execCondition)
+            else:
+                doit = True
+            if doit and hasattr(action, "onSuccess"):
+                result = action.onSuccess(data, self.request)
+                if isinstance(result, dict) and len(result):
+                    # return the dict, which hopefully uses
+                    # field ids or FORM_ERROR_MARKER for keys
+                    return result
 
     def setDisplayMode(self, mode):
         self.mode = mode
@@ -190,7 +188,7 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             self.status = self.formErrorsMessage
             return
         data = self.updateServerSideData(data)
-        errors = self.processActions(errors, data)
+        errors = self.processActions(data)
         if errors:
             for field in errors:
                 if field not in self.widgets:
@@ -219,7 +217,6 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
                     thanksPage, self.request.args, self.request).encode("utf-8")
                 self.request.response.write(thanksPage)
         else:
-            #self.status = u"Thanks for your input."
             self.thanksPage = True
             replacer = DollarVarReplacer(data).sub
             self.thanksPrologue = self.context.thanksPrologue and replacer(

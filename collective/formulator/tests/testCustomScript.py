@@ -24,7 +24,7 @@ from AccessControl import Unauthorized
 from AccessControl import ClassSecurityInfo
 
 from collective.formulator.tests import pfgtc
-from collective.formulator.api import get_actions
+from collective.formulator.api import get_actions, set_actions
 
 from Products.CMFCore import permissions
 
@@ -111,6 +111,17 @@ proxied_script = """
 return request.fooProtected()
 """
 
+return_error_script = """
+## Python Script
+##bind container=container
+##bind context=context
+##bind subpath=traverse_subpath
+##parameters=fields, ploneformgen, request
+##title=
+##
+return {"comments": "Please enter more text"}
+"""
+
 default_params_script = """
 fields
 ploneformgen
@@ -152,8 +163,6 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
-        # print self.ff1.fields_model
-        #self.ff1.invokeFactory('FormStringField', 'test_field')
         self.portal.REQUEST["form.widgets.title"] = u"Test field"
         self.portal.REQUEST["form.widgets.__name__"] = u"test_field"
         self.portal.REQUEST["form.widgets.description"] = u""
@@ -189,6 +198,38 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
 #        self.createScript()
 #        adapter = self.ff1.adapter
 #        adapter.getScriptTypeChoices()
+
+    def testReturnError(self):
+        """ Succesful script execution with return error
+        """
+        self.portal.manage_changeProperties(
+            **{'email_from_address': 'mdummy@address.com'})
+
+        self.createScript()
+
+        actions = get_actions(self.ff1)
+        actions['adapter'].ScriptBody = return_error_script
+        set_actions(self.ff1, actions)
+
+        self.portal.REQUEST["form.widgets.test_field"] = u"Test field"
+        self.portal.REQUEST["form.widgets.topic"] = u"subject"
+        self.portal.REQUEST["form.widgets.comments"] = u"some comments"
+        self.portal.REQUEST["form.widgets.replyto"] = u"foobar@example.com"
+        self.portal.REQUEST["form.buttons.save"] = u"Submit"
+
+        view = self.ff1.restrictedTraverse('view')
+        form = view.form_instance
+        form.update()
+
+        errors = form.widgets.errors
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0].message, "Please enter more text")
+
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
+
+        errors = form.processActions(data)
+        self.assertEqual(errors, {'comments': 'Please enter more text'})
 
     def testSuccess(self):
         """ Succesful script execution

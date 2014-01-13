@@ -296,23 +296,23 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
 
         self.messageText = ''
         self.setExecCondition('python: False')
-        form.processActions({}, request.form)
+        form.processActions(request.form)
         self.assertTrue(len(self.messageText) == 0)
 
         self.messageText = ''
         self.setExecCondition('python: True')
-        form.processActions({}, request.form)
+        form.processActions(request.form)
         self.assertTrue(len(self.messageText) > 0)
 
         self.messageText = ''
         self.setExecCondition('python: 1==0')
-        form.processActions({}, request.form)
+        form.processActions(request.form)
         self.assertTrue(len(self.messageText) == 0)
 
         # make sure an empty execCondition causes the action to fire
         self.messageText = ''
         self.setExecCondition('')
-        form.processActions({}, request.form)
+        form.processActions(request.form)
         self.assertTrue(len(self.messageText) > 0)
 
     def test_selectiveFieldMailing(self):
