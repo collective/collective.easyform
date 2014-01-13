@@ -1,14 +1,8 @@
-#import os
-#import sys
-
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from zope.interface import classImplements
 from z3c.form.interfaces import IFormLayer
 from ZPublisher.BaseRequest import BaseRequest
 from collective.formulator.tests import pfgtc
-from collective.formulator.api import get_actions, set_actions, get_fields, set_fields
+from collective.formulator.api import get_actions, set_actions
 
 import transaction
 #from ZPublisher.Publish import Retry

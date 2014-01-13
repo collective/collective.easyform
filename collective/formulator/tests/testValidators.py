@@ -2,15 +2,58 @@
 # Test PloneFormGen initialisation and set-up
 #
 
-#import os
-#import sys
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
-
+from zope.interface import classImplements
+from z3c.form.interfaces import IFormLayer
+from ZPublisher.BaseRequest import BaseRequest
 from collective.formulator.tests import pfgtc
+from collective.formulator.api import get_fields, set_fields
+from collective.formulator.interfaces import IFieldExtender
 
 #from collective.formulator.content import validationMessages
 from Products.validation import validation
+
+FORM_DATA = {
+    'topic': u'test subject',
+    'replyto': u'test@test.org',
+    'comments': u'test comments',
+}
+
+
+class TestBaseValidators(pfgtc.PloneFormGenTestCase):
+
+    """ test base validators """
+
+    def afterSetUp(self):
+        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        self.folder.invokeFactory('Formulator', 'ff1')
+        self.ff1 = getattr(self.folder, 'ff1')
+        self.ff1.checkAuthenticator = False  # no csrf protection
+        classImplements(BaseRequest, IFormLayer)
+
+        request = self.app.REQUEST
+        for i in FORM_DATA:
+            request.form['form.widgets.%s' % i] = FORM_DATA[i]
+
+    def test_basevalidator(self):
+        view = self.ff1.restrictedTraverse('view')
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(errors, ())
+        self.assertEqual(data, FORM_DATA)
+
+    def test_talvalidator(self):
+        fields = get_fields(self.ff1)
+        IFieldExtender(fields['comments']).TValidator = "python: value == 'comments'"
+        set_fields(self.ff1, fields)
+        view = self.ff1.restrictedTraverse('view')
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(errors, ())
+        self.assertEqual(data, FORM_DATA)
 
 
 class TestCustomValidators(pfgtc.PloneFormGenTestCase):
@@ -142,6 +185,7 @@ class TestCustomValidatorMessages(pfgtc.PloneFormGenTestCase):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
+    suite.addTest(makeSuite(TestBaseValidators))
     # suite.addTest(makeSuite(TestCustomValidators))
     # suite.addTest(makeSuite(TestCustomValidatorMessages))
     return suite
