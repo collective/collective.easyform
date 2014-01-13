@@ -34,7 +34,19 @@ class TestBaseValidators(pfgtc.PloneFormGenTestCase):
         for i in FORM_DATA:
             request.form['form.widgets.%s' % i] = FORM_DATA[i]
 
+    def test_defaultvalidator(self):
+        view = self.ff1.restrictedTraverse('view')
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(errors, ())
+        self.assertEqual(data, FORM_DATA)
+
     def test_basevalidator(self):
+        fields = get_fields(self.ff1)
+        IFieldExtender(fields['replyto']).validators = "isEmail"
+        set_fields(self.ff1, fields)
         view = self.ff1.restrictedTraverse('view')
         form = view.form_instance
         form.update()
