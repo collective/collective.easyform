@@ -138,7 +138,6 @@ Don't show all fields on thanks page::
     >>> browser.open(self.portal_url + '/testform/edit')
     >>> browser.getControl('Show All Fields').click()
     >>> browser.getControl('Save').click()
-    >>> browser.open(self.portal_url + '/testform')
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'Test Subject'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
@@ -151,6 +150,33 @@ Don't show all fields on thanks page::
     False
     >>> 'Thanks for your input.' in browser.contents
     True
+
+Check redirect to portal::
+
+    >>> browser.open(self.portal_url + '/testform/edit')
+    >>> browser.getControl(name='form.widgets.thanksPageOverride').value = "portal_url"
+    >>> browser.getControl('Save').click()
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'Test Subject'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl('Submit').click()
+    >>> browser.url 
+    'http://nohost/plone'
+
+Check traverse to portal::
+
+    >>> browser.open(self.portal_url + '/testform/edit')
+    >>> browser.getControl('Traverse to').selected = True
+    >>> browser.getControl(name='form.widgets.thanksPageOverride').value = "string:news"
+    >>> browser.getControl('Save').click()
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = 'Test Subject'
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl('Submit').click()
+    >>> browser.url
+    'http://nohost/plone/testform'
+    >>> 'Thanks for your input.' in browser.contents
+    False
 
 We should be able to view an individual field::
 
