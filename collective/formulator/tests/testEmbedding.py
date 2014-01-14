@@ -75,12 +75,12 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         # we can specify a form prefix
         view.prefix = 'mypfg'
         res = view()
-        self.assertTrue('name="mypfg.buttons.save"' in res)
+        self.assertTrue('name="mypfg.buttons.submit"' in res)
 
     def test_embedded_form_validates(self):
         # fake an incomplete form submission
         self.LoadRequestForm(**{
-            'mypfg.buttons.save': u'Submit',
+            'mypfg.buttons.submit': u'Submit',
         })
 
         # render the form
@@ -95,7 +95,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         # fake submission of a *different* form (note mismatch of form
         # submission marker with prefix)
         self.LoadRequestForm(**{
-            'form.buttons.save': u'Submit',
+            'form.buttons.submit': u'Submit',
         })
 
         # let's preset a faux controller_state (as if from the other form)
@@ -132,7 +132,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
             'form.widgets.topic': u'monkeys',
             'form.widgets.comments': u'I am not a walnut.',
             'form.widgets.replyto': u'foobar@example.com',
-            'form.buttons.save': u'Submit',
+            'form.buttons.submit': u'Submit',
         })
         # should raise a retry exception triggering a new publish attempt
         # with the new URL

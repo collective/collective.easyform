@@ -181,8 +181,8 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
                 del group.widgets[field]
             group.widgets.update()
 
-    @button.buttonAndHandler(_(u'Save'), name='save', condition=lambda form: not form.thanksPage)
-    def handleApply(self, action):
+    @button.buttonAndHandler(_(u'Submit'), name='submit', condition=lambda form: not form.thanksPage)
+    def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
@@ -231,8 +231,8 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             self.setDisplayMode(DISPLAY_MODE)
             self.updateActions()
 
-    @button.buttonAndHandler(_(u'Cancel'), name='cancel', condition=lambda form: form.context.useCancelButton or form.thanksPage)
-    def handleCancel(self, action):
+    @button.buttonAndHandler(_(u'Reset'), name='reset', condition=lambda form: form.context.useCancelButton or form.thanksPage)
+    def handleReset(self, action):
         self.request.response.redirect(self.nextURL())
 
     def nextURL(self):
@@ -271,14 +271,14 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
 
     def updateActions(self):
         super(FormulatorForm, self).updateActions()
-        if 'save' in self.actions:
+        if 'submit' in self.actions:
             if self.context.submitLabelOverride:
-                self.actions['save'].title = get_expression(
+                self.actions['submit'].title = get_expression(
                     self.context, self.context.submitLabelOverride)
             else:
-                self.actions['save'].title = self.context.submitLabel
-        if 'cancel' in self.actions:
-            self.actions['cancel'].title = self.context.resetLabel
+                self.actions['submit'].title = self.context.submitLabel
+        if 'reset' in self.actions:
+            self.actions['reset'].title = self.context.resetLabel
 
     def formMaybeForceSSL(self):
         """ Redirect to an https:// URL if the 'force SSL' option is on.

@@ -40,7 +40,7 @@ Return to form and confirm that it renders properly::
     True
     >>> """<textarea id="form-widgets-comments" name="form.widgets.comments" class="textarea-widget required text-field"></textarea>""" in browser.contents
     True
-    >>> """<input id="form-buttons-save" name="form.buttons.save" class="submit-widget button-field" value="Submit" type="submit" />""" in browser.contents
+    >>> """<input id="form-buttons-submit" name="form.buttons.submit" class="submit-widget button-field" value="Submit" type="submit" />""" in browser.contents
     True
 
 Submit the form.  An incomplete submission should give validation errors::
@@ -72,6 +72,8 @@ base class)::
     >>> browser.getControl('Reset').click()
     >>> browser.url
     'http://nohost/plone/testform'
+    >>> 'Thanks for your input.' in browser.contents
+    False
 
 Add a new fieldset::
 

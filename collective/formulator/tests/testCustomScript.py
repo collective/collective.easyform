@@ -215,7 +215,7 @@ class TestCustomScript(pfgtc.PloneFormGenTestCase):
         self.portal.REQUEST["form.widgets.topic"] = u"subject"
         self.portal.REQUEST["form.widgets.comments"] = u"some comments"
         self.portal.REQUEST["form.widgets.replyto"] = u"foobar@example.com"
-        self.portal.REQUEST["form.buttons.save"] = u"Submit"
+        self.portal.REQUEST["form.buttons.submit"] = u"Submit"
 
         view = self.ff1.restrictedTraverse('view')
         form = view.form_instance
