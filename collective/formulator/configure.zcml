@@ -16,12 +16,9 @@
       />
   <!-- -*- extra stuff goes here -*- -->
 
-  <utility
-    component=".validators.ValidatorsVocabularyFactory"
-    name="collective.formulator.validators"
-    />
   <include package=".browser" />
   <include package=".content" />
+  <include file="validators.zcml" />
 
   <i18n:registerTranslations directory="locales" />
   <!--

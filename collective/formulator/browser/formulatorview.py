@@ -77,7 +77,7 @@ from collective.formulator.api import (
     set_actions,
     set_fields,
 )
-from collective.formulator.validators import get_validators
+from collective.formulator.validators import IFieldValidator
 from collective.formulator import formulatorMessageFactory as _
 
 logger = getLogger("collective.formulator")
@@ -325,11 +325,10 @@ class FieldExtenderValidator(validator.SimpleFieldValidator):
         efield = IFieldExtender(self.field)
         validators = getattr(efield, 'validators', [])
         if validators:
-            vdict = get_validators()
             for validator in validators:
-                if validator not in vdict:
+                vmethod = queryUtility(IFieldValidator, name=validator)
+                if not vmethod:
                     continue
-                vmethod = vdict[validator]
                 res = vmethod(value)
                 if res:
                     raise Invalid(res)
