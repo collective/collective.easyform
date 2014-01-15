@@ -1,6 +1,6 @@
 """
 
-    Unit test for PloneFormGen custom scripts
+    Unit test for Formulator custom scripts
 
     Copyright 2006 Red Innovation http://www.redinnovation.com
 
@@ -23,7 +23,7 @@ except ImportError:
 from AccessControl import Unauthorized
 from AccessControl import ClassSecurityInfo
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_actions, set_actions
 
 from Products.CMFCore import permissions
@@ -33,7 +33,7 @@ test_script = """
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
+##parameters=fields, formulator, request
 ##title=Succesfully working script
 ##
 
@@ -60,7 +60,7 @@ syntax_error_script = """
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
+##parameters=fields, formulator, request
 ##title=
 ##
 if:
@@ -72,7 +72,7 @@ runtime_error_script = """
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen
+##parameters=fields, formulator
 ##title=
 ##
 return "asdfaf" + 1
@@ -83,7 +83,7 @@ security_script = """
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
+##parameters=fields, formulator, request
 ##title=Script needing special privileges
 ##
 
@@ -103,7 +103,7 @@ proxied_script = """
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
+##parameters=fields, formulator, request
 ##title=Script needing special privileges
 ##
 
@@ -116,7 +116,7 @@ return_error_script = """
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
+##parameters=fields, formulator, request
 ##title=
 ##
 return {"comments": "Please enter more text"}
@@ -124,7 +124,7 @@ return {"comments": "Please enter more text"}
 
 default_params_script = """
 fields
-ploneformgen
+formulator
 request
 """
 
@@ -152,12 +152,12 @@ class SecureFakeRequest(dict):
 InitializeClass(SecureFakeRequest)
 
 
-class TestCustomScript(pfgtc.PloneFormGenTestCase):
+class TestCustomScript(base.FormulatorTestCase):
 
-    """ Test FormCustomScriptAdapter functionality in PloneFormGen """
+    """ Test FormCustomScriptAdapter functionality in Formulator """
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
 
         self.loginAsPortalOwner()
 

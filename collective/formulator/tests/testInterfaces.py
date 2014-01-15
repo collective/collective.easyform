@@ -10,20 +10,20 @@
 from zope.interface.verify import verifyObject, verifyClass
 from zope.component import getMultiAdapter
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator import interfaces
 #from collective.formulator.browser import exportimport
 from collective.formulator import content
 
 
-class TestFormGenInterfaces(pfgtc.PloneFormGenTestCase):
+class TestFormGenInterfaces(base.FormulatorTestCase):
 
     """ Some boilerplate-ish tests to confirm that that classes
         and instances confirm to the interface contracts intended.
     """
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
 
         # add form folder for use in tests
         self.folder.invokeFactory('Formulator', 'ff1')
@@ -49,9 +49,9 @@ class TestFormGenInterfaces(pfgtc.PloneFormGenTestCase):
 
     def testContentClassInterfaces(self):
         self.assertTrue(
-            interfaces.IPloneFormGenFieldset.implementedBy(content.fieldset.FieldsetFolder))
+            interfaces.IFormulatorFieldset.implementedBy(content.fieldset.FieldsetFolder))
         self.assertTrue(
-            verifyClass(interfaces.IPloneFormGenFieldset, content.fieldset.FieldsetFolder))
+            verifyClass(interfaces.IFormulatorFieldset, content.fieldset.FieldsetFolder))
 
 
 # if __name__ == '__main__':

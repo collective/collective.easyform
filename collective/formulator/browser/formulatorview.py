@@ -781,7 +781,7 @@ class Mailer(Action):
                 toemail = portal.getProperty('email_from_address')
             assert toemail, """
                     Unable to mail form input because no recipient address has been specified.
-                    Please check the recipient settings of the PloneFormGen "Mailer" within the
+                    Please check the recipient settings of the Formulator "Mailer" within the
                     current form folder.
                 """
             to = formataddr((fullname, toemail))
@@ -941,7 +941,7 @@ class CustomScript(Action):
             script.manage_proxy((role,))
 
         body = body.encode("utf-8")
-        params = "fields, ploneformgen, request"
+        params = "fields, formulator, request"
         script.ZPythonScript_edit(params, body)
         return script
 
@@ -973,7 +973,7 @@ class CustomScript(Action):
         # Execute in-place script
 
         # @param result Extracted fields from request.form
-        # @param form PloneFormGen object
+        # @param form Formulator object
 
         script = self.getScript(form)
         self.checkWarningsAndErrors(script)

@@ -11,7 +11,7 @@ from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 import zExceptions
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_actions, get_fields
 
 from Products.CMFCore.utils import getToolByName
@@ -38,12 +38,12 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
     return request
 
 
-class TestFunctions(pfgtc.PloneFormGenTestCase):
+class TestFunctions(base.FormulatorTestCase):
 
     """ test save data adapter """
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
 

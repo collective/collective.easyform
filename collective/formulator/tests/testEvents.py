@@ -1,18 +1,18 @@
 #
-# Test PloneFormGen event-handler functionality
+# Test Formulator event-handler functionality
 #
 
 #import os
 #import sys
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_actions, get_fields
 
 # if __name__ == '__main__':
     #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 
-class TestAdapterPaste(pfgtc.PloneFormGenTestCase):
+class TestAdapterPaste(base.FormulatorTestCase):
 
     """Ensure content types can be created and edited"""
 
@@ -23,7 +23,7 @@ class TestAdapterPaste(pfgtc.PloneFormGenTestCase):
     )
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
 

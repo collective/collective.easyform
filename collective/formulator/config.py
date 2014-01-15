@@ -74,7 +74,7 @@ DEFAULT_SCRIPT = u"""
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
-##parameters=fields, ploneformgen, request
+##parameters=fields, formulator, request
 ##title=
 ##
 
@@ -82,7 +82,7 @@ DEFAULT_SCRIPT = u"""
 #  fields  = HTTP request form fields as key value pairs
 #  request = The current HTTP request.
 #            Access fields by request.form["myfieldname"]
-#  ploneformgen = PloneFormGen object
+#  formulator = Formulator object
 #
 # Return value is not processed -- unless you
 # return a dictionary with contents. That's regarded

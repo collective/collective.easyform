@@ -1,7 +1,7 @@
 from zope.interface import classImplements
 from z3c.form.interfaces import IFormLayer
 from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_actions, set_actions
 
 import transaction
@@ -28,7 +28,7 @@ class TrueOnceCalled(object):
         return self.called
 
 
-class TestEmbedding(pfgtc.PloneFormGenTestCase):
+class TestEmbedding(base.FormulatorTestCase):
 
     """ test embedding of a PFG in another template """
 
@@ -45,7 +45,7 @@ class TestEmbedding(pfgtc.PloneFormGenTestCase):
         return self.app.REQUEST
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.title = u"ff1"

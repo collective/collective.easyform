@@ -10,12 +10,12 @@ import sys
 if __name__ == '__main__':
     execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_actions, set_actions, get_fields, set_fields
 from collective.formulator.interfaces import IActionExtender
 
 
-class TestFunctions(pfgtc.PloneFormGenTestCase):
+class TestFunctions(base.FormulatorTestCase):
 
     """ test ya_gpg.py """
 
@@ -26,7 +26,7 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         self.messageBody = '\n\n'.join(messageText.split('\n\n')[1:])
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.checkAuthenticator = False  # no csrf protection

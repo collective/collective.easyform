@@ -10,7 +10,7 @@ from ZPublisher.HTTPRequest import record
 # if __name__ == '__main__':
     #execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 
 
 class FakeRequest(dict):
@@ -19,7 +19,7 @@ class FakeRequest(dict):
         self.form = kwargs
 
 
-class TestLikertField(pfgtc.PloneFormGenTestCase):
+class TestLikertField(base.FormulatorTestCase):
 
     """ tests that mostly concern the Likert Field.
         field instantiation is tested in testSetup,
@@ -29,7 +29,7 @@ class TestLikertField(pfgtc.PloneFormGenTestCase):
     def afterSetUp(self):
         # build a form folder, add a Likert Field and
         # a saver.
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.invokeFactory('FormLikertField', 'lf')

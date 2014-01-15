@@ -13,7 +13,7 @@ import plone.protect
 from zope.interface import classImplements
 from z3c.form.interfaces import IFormLayer
 from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_actions, get_fields
 
 from Testing.makerequest import makerequest
@@ -28,7 +28,7 @@ def stripWhiteSpace(multiLineString):
     return '\n'.join([s.strip() for s in multiLineString.split('\n')])
 
 
-class TestFunctions(pfgtc.PloneFormGenTestCase):
+class TestFunctions(base.FormulatorTestCase):
 
     """ tests that mostly concern functionality beyond the unit """
 
@@ -45,7 +45,7 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         return self.request
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.title = u"ff1"
@@ -451,7 +451,7 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
             This test will fail if .mo files don't exist.
         """
 
-        from collective.formulator import PloneFormGenMessageFactory as _
+        from collective.formulator import FormulatorMessageFactory as _
         from zope.i18n import translate
 
         # test with:
@@ -542,7 +542,7 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         ##bind container=container
         ##bind context=context
         ##bind subpath=traverse_subpath
-        ##parameters=fields, ploneformgen, request
+        ##parameters=fields, formulator, request
         ##title=Succesfully working script returning error
         ##
 
@@ -556,7 +556,7 @@ class TestFunctions(pfgtc.PloneFormGenTestCase):
         ##bind container=container
         ##bind context=context
         ##bind subpath=traverse_subpath
-        ##parameters=fields, ploneformgen, request
+        ##parameters=fields, formulator, request
         ##title=Succesfully working script returning error
         ##
 

@@ -1,5 +1,5 @@
 #
-# Test PloneFormGen initialisation and set-up
+# Test Formulator initialisation and set-up
 #
 
 from zope.component import getUtility
@@ -7,7 +7,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.interface import classImplements
 from z3c.form.interfaces import IFormLayer
 from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 from collective.formulator.api import get_fields, set_fields
 from collective.formulator.interfaces import IFieldExtender
 from collective.formulator import validators
@@ -25,12 +25,12 @@ FORM_DATA = {
 }
 
 
-class TestBaseValidators(pfgtc.PloneFormGenTestCase):
+class TestBaseValidators(base.FormulatorTestCase):
 
     """ test base validators """
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.checkAuthenticator = False  # no csrf protection
@@ -99,7 +99,7 @@ class TestBaseValidators(pfgtc.PloneFormGenTestCase):
         self.assertEqual(len(errors), 1)
 
 
-class TestCustomValidators(pfgtc.PloneFormGenTestCase):
+class TestCustomValidators(base.FormulatorTestCase):
 
     """ test our validators """
 
@@ -176,7 +176,7 @@ class TestCustomValidators(pfgtc.PloneFormGenTestCase):
         self.assertNotEqual(v('abc@plone.org; xyz@plone.org'), None)
 
 
-class TestCustomValidatorMessages(pfgtc.PloneFormGenTestCase):
+class TestCustomValidatorMessages(base.FormulatorTestCase):
 
     """ Test friendlier validation framework """
 

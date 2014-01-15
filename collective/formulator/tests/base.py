@@ -52,7 +52,7 @@ class MailHostMock(MailHost):
         self.msg = email.message_from_string(messageText.lstrip())
 
 
-class PloneFormGenTestCase(PloneTestCase.PloneTestCase):
+class FormulatorTestCase(PloneTestCase.PloneTestCase):
 
     def _setup(self):
         # make sure we test in Plone 2.5 with the exception hook monkeypatch
@@ -63,7 +63,7 @@ class PloneFormGenTestCase(PloneTestCase.PloneTestCase):
         self.app.REQUEST['SESSION'] = Session()
 
 
-class PloneFormGenFunctionalTestCase(PloneTestCase.FunctionalTestCase):
+class FormulatorFunctionalTestCase(PloneTestCase.FunctionalTestCase):
 
     def _setup(self):
         PloneTestCase.FunctionalTestCase._setup(self)

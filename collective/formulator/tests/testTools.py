@@ -1,5 +1,5 @@
 #
-# Test PloneFormGen top-level functionality
+# Test Formulator top-level functionality
 #
 
 #import os
@@ -9,7 +9,7 @@
 
 #import zope
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 
 from Products.CMFCore.utils import getToolByName
 
@@ -20,7 +20,7 @@ class FakeRequest(dict):
         self.form = kwargs
 
 
-class TestTools(pfgtc.PloneFormGenTestCase):
+class TestTools(base.FormulatorTestCase):
 
     """ test our tool """
 
@@ -28,7 +28,7 @@ class TestTools(pfgtc.PloneFormGenTestCase):
         fgt = getToolByName(self.portal, 'formgen_tool')
 
         # pt = getToolByName(
-            # self.portal, 'portal_properties').ploneformgen_properties
+            # self.portal, 'portal_properties').formulator_properties
 
         fgt.setDefault('permissions_used', ['test text'])
         fgt.setDefault('mail_template', 'something')
@@ -71,7 +71,7 @@ class TestTools(pfgtc.PloneFormGenTestCase):
         fgt = getToolByName(self.portal, 'formgen_tool')
 
         # make sure rolesForPermission works
-        roleList = fgt.rolesForPermission('PloneFormGen: Add Content')
+        roleList = fgt.rolesForPermission('Formulator: Add Content')
         self.assertNotEqual(len(roleList), 0)
         mid = ''
         oid = ''
@@ -88,7 +88,7 @@ class TestTools(pfgtc.PloneFormGenTestCase):
         # let's try changing a permission
 
         # first, get the request ids
-        roleList = fgt.rolesForPermission('PloneFormGen: Edit Advanced Fields')
+        roleList = fgt.rolesForPermission('Formulator: Edit Advanced Fields')
         self.assertNotEqual(len(roleList), 0)
         mid = ''
         oid = ''
@@ -105,11 +105,11 @@ class TestTools(pfgtc.PloneFormGenTestCase):
         fr = FakeRequest()
         fr.form[mid] = '1'
         fr.form[oid] = '1'
-        fr.form['PloneFormGen: Edit Advanced Fields'] = '1'
+        fr.form['Formulator: Edit Advanced Fields'] = '1'
         fgt.setRolePermits(fr)
 
         # now, check to see if it took
-        roleList = fgt.rolesForPermission('PloneFormGen: Edit Advanced Fields')
+        roleList = fgt.rolesForPermission('Formulator: Edit Advanced Fields')
         self.assertNotEqual(len(roleList), 0)
         mid = ''
         oid = ''

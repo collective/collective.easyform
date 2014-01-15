@@ -23,7 +23,7 @@ from Products.Five import fiveconfigure
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import TarballTester
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 
 from Testing import ZopeTestCase
 from Products.PloneTestCase.layer import PloneSite
@@ -35,7 +35,7 @@ zcml_string = """\
 
     <gs:registerProfile
         name="testing"
-        title="PloneFormGen testing"
+        title="Formulator testing"
         description="Used for testing only"
         directory="tests/profiles/testing"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
@@ -74,7 +74,7 @@ class TestFormGenGSLayer(PloneSite):
         ZopeTestCase.close(app)
 
 
-class ExportImportTester(pfgtc.PloneFormGenTestCase, TarballTester):
+class ExportImportTester(base.FormulatorTestCase, TarballTester):
 
     """Base class for integration test suite for export/import """
 

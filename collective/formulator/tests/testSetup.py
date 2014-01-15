@@ -1,5 +1,5 @@
 #
-# Test PloneFormGen initialisation and set-up
+# Test Formulator initialisation and set-up
 #
 
 import os
@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
 from AccessControl import Unauthorized
 
-from collective.formulator.tests import pfgtc
+from collective.formulator.tests import base
 
 from Products.CMFCore.utils import getToolByName
 
@@ -26,12 +26,12 @@ def getAddPermission(product, name):
     return ""
 
 
-class TestInstallation(pfgtc.PloneFormGenTestCase):
+class TestInstallation(base.FormulatorTestCase):
 
     """Ensure product is properly installed"""
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
 
         self.kupu = getattr(self.portal, 'kupu_library_tool', None)
         self.skins = self.portal.portal_skins
@@ -59,7 +59,7 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
             'FormFileField',
             'FormLikertField',
         ]
-        if pfgtc.haveRecaptcha:
+        if base.haveRecaptcha:
             fieldTypes.append('FormCaptchaField')
         self.fieldTypes = tuple(fieldTypes)
         self.adapterTypes = (
@@ -78,17 +78,17 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
             self.thanksTypes + self.fieldsetTypes
 
     def testSkinLayersInstalled(self):
-        self.assertTrue('PloneFormGen' in self.skins.objectIds())
+        self.assertTrue('Formulator' in self.skins.objectIds())
 
     def testSkinLayersInSkinPath(self):
-        pfg_layers = self.skins['PloneFormGen']
+        pfg_layers = self.skins['Formulator']
         for skin_name, obj in pfg_layers.items():
-            self.assertTrue('PloneFormGen' in obj.getPhysicalPath())
+            self.assertTrue('Formulator' in obj.getPhysicalPath())
 
     def testKssRegsitry(self):
         if 'portal_kss' in self.portal.objectIds():
             # confirm kinetic stylesheet registration
-            for kss_id in ('ploneformgen.kss',):
+            for kss_id in ('formulator.kss',):
                 self.assertTrue(
                     kss_id in self.portal.portal_kss.getResourceIds(),
                     "The kss resource %s wasn't registered appropriately with the portal_kss registry")
@@ -112,24 +112,24 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
 
     def testControlPanelConfigletInstalled(self):
         self.assertTrue(
-            'PloneFormGen' in [action.id for action in self.controlpanel.listActions()])
+            'Formulator' in [action.id for action in self.controlpanel.listActions()])
 
     def testAddPermissions(self):
         """ Test to make sure add permissions are as intended """
 
-        ADD_CONTENT_PERMISSION = 'PloneFormGen: Add Content'
-        CSA_ADD_CONTENT_PERMISSION = 'PloneFormGen: Add Custom Scripts'
-        MA_ADD_CONTENT_PERMISSION = 'PloneFormGen: Add Mailers'
-        SDA_ADD_CONTENT_PERMISSION = 'PloneFormGen: Add Data Savers'
+        ADD_CONTENT_PERMISSION = 'Formulator: Add Content'
+        CSA_ADD_CONTENT_PERMISSION = 'Formulator: Add Custom Scripts'
+        MA_ADD_CONTENT_PERMISSION = 'Formulator: Add Mailers'
+        SDA_ADD_CONTENT_PERMISSION = 'Formulator: Add Data Savers'
 
         self.assertEqual(
-            getAddPermission('PloneFormGen', 'Form Folder'), ADD_CONTENT_PERMISSION)
+            getAddPermission('Formulator', 'Form Folder'), ADD_CONTENT_PERMISSION)
         self.assertEqual(
-            getAddPermission('PloneFormGen', 'Mailer Adapter'), MA_ADD_CONTENT_PERMISSION)
+            getAddPermission('Formulator', 'Mailer Adapter'), MA_ADD_CONTENT_PERMISSION)
         self.assertEqual(
-            getAddPermission('PloneFormGen', 'Save Data Adapter'), SDA_ADD_CONTENT_PERMISSION)
+            getAddPermission('Formulator', 'Save Data Adapter'), SDA_ADD_CONTENT_PERMISSION)
         self.assertEqual(
-            getAddPermission('PloneFormGen', 'Custom Script Adapter'), CSA_ADD_CONTENT_PERMISSION)
+            getAddPermission('Formulator', 'Custom Script Adapter'), CSA_ADD_CONTENT_PERMISSION)
 
     def testActionsInstalled(self):
         self.setRoles(['Manager', ])
@@ -180,7 +180,7 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
         self.assertTrue(getToolByName(self.portal, 'formgen_tool'))
 
     def test_PropSheetCreation(self):
-        props = getattr(self.properties, 'ploneformgen_properties', None)
+        props = getattr(self.properties, 'formulator_properties', None)
         self.assertTrue(props)
         self.assertTrue(props.hasProperty('permissions_used'))
         self.assertTrue(props.hasProperty('mail_template'))
@@ -194,22 +194,22 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
 
     def testModificationsToPropSheetNotOverwritten(self):
         newprop = 'foo'
-        self.properties.ploneformgen_properties.manage_changeProperties(
+        self.properties.formulator_properties.manage_changeProperties(
             mail_body_type=newprop)
 
         # reinstall
         qi = self.portal.portal_quickinstaller
-        qi.reinstallProducts(['PloneFormGen'])
+        qi.reinstallProducts(['Formulator'])
 
         # make sure we still have our new value for 'mail_body_type'
         self.assertEqual(
-            newprop, self.properties.ploneformgen_properties.getProperty('mail_body_type'))
+            newprop, self.properties.formulator_properties.getProperty('mail_body_type'))
 
     def testModificationsToPropSheetLinesNotPuged(self):
         pfg_property_mappings = [
             {"propsheet": "navtree_properties",
              "added_props": ["metaTypesNotToList", ]},
-            {"propsheet": "ploneformgen_properties",
+            {"propsheet": "formulator_properties",
              "added_props": ["permissions_used", "mail_cc_recipients",
                              "mail_bcc_recipients", "mail_xinfo_headers", "mail_add_headers", "csv_delimiter"]},
             {"propsheet": "site_properties",
@@ -227,7 +227,7 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
 
         # reinstall
         qi = self.portal.portal_quickinstaller
-        qi.reinstallProducts(['PloneFormGen'])
+        qi.reinstallProducts(['Formulator'])
 
         # now make sure our garbage values survived the reinstall
         for mapping in pfg_property_mappings:
@@ -253,7 +253,7 @@ class TestInstallation(pfgtc.PloneFormGenTestCase):
                 'fg_savedata_tabview_p3', 'fg_savedata_recview_p3', 'fg_savedata_view_p3'))
 
 
-class TestContentCreation(pfgtc.PloneFormGenTestCase):
+class TestContentCreation(base.FormulatorTestCase):
 
     """Ensure content types can be created and edited"""
 
@@ -272,7 +272,7 @@ class TestContentCreation(pfgtc.PloneFormGenTestCase):
         'FormRichTextField',
         'FormFileField',
     ]
-    if pfgtc.haveRecaptcha:
+    if base.haveRecaptcha:
         fieldTypes.append('FormCaptchaField')
     fieldTypes = tuple(fieldTypes)
 
@@ -292,7 +292,7 @@ class TestContentCreation(pfgtc.PloneFormGenTestCase):
     sampleContentIds = ('mailer', 'replyto', 'topic', 'comments', 'thank-you')
 
     def afterSetUp(self):
-        pfgtc.PloneFormGenTestCase.afterSetUp(self)
+        base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
 
@@ -575,7 +575,7 @@ class TestContentCreation(pfgtc.PloneFormGenTestCase):
         self.assertFalse(fsf2.checkIdAvailable('sf2'))
 
 
-class TestGPG(pfgtc.PloneFormGenTestCase):
+class TestGPG(base.FormulatorTestCase):
 
     """ test ya_gpg.py """
 
