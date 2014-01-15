@@ -1,6 +1,7 @@
 - Default fieldset name
 - Merge models
 - Fields
+    - FormLikertField
     - FormLabelField
     - FormRichLabelField
 - Actions
@@ -15,9 +16,7 @@
     - testFunctions
     - testInterfaces
     - testLikertField
-    - testMailer
     - testSaver
     - testSetup
     - testTools
-    - testValidators
     - testExportImport
