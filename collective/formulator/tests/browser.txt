@@ -6,7 +6,7 @@ Integration tests
 Standalone form
 ---------------
 
-Add a new Form Folder::
+Add a new Formulator::
 
     >>> browser.open(self.portal_url)
     >>> browser.getLink('Formulator').click()

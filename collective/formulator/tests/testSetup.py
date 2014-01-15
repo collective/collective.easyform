@@ -123,7 +123,7 @@ class TestInstallation(base.FormulatorTestCase):
         SDA_ADD_CONTENT_PERMISSION = 'Formulator: Add Data Savers'
 
         self.assertEqual(
-            getAddPermission('Formulator', 'Form Folder'), ADD_CONTENT_PERMISSION)
+            getAddPermission('Formulator', 'Formulator'), ADD_CONTENT_PERMISSION)
         self.assertEqual(
             getAddPermission('Formulator', 'Mailer Adapter'), MA_ADD_CONTENT_PERMISSION)
         self.assertEqual(

@@ -64,7 +64,7 @@ class TestFunctions(base.FormulatorTestCase):
         classImplements(BaseRequest, IFormLayer)
 
     def testFgFieldsDisplayList(self):
-        """ test Form Folder's fgFieldsDisplayList """
+        """ test Formulator's fgFieldsDisplayList """
 
         # in v 1.0.2, this caused "'unicode' object has no attribute 'decode'"
         # w/ Plone 2.5.1 and Zope 2.8.7
@@ -91,7 +91,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertEqual(len(res), 4)
 
     def testFgFieldsDisplayOnly(self):
-        """ test Form Folder's fgFields displayOnly option """
+        """ test Formulator's fgFields displayOnly option """
 
         ff = self.ff1
         fields = get_fields(ff)
