@@ -4,6 +4,11 @@
     <subscriber
         for="collective.formulator.interfaces.IFormulatorFieldsContext
              plone.schemaeditor.interfaces.ISchemaModifiedEvent"
-        handler=".fields.updateFields"
+        handler=".subscribers.updateFields"
+        />
+    <subscriber
+        for="collective.formulator.interfaces.IFormulatorActionsContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".subscribers.updateActions"
         />
 </configure>
