@@ -90,7 +90,8 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
     ignoreContext = True
     css_class = 'formulatorForm'
     thanksPage = False
-    #method = "get"
+    # method = "get"
+    # default_fieldset_label view/default_fieldset_label | form_name;
 
     def action(self):
         """ Redefine <form action=''> attribute.
@@ -103,7 +104,6 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
         if self.context.forceSSL:
             action = action.replace('http://', 'https://')
         return action
-    # default_fieldset_label view/default_fieldset_label | form_name;
 
     def enable_form_tabbing(self):
         return self.context.form_tabbing
@@ -124,11 +124,11 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
 
     @property
     def prologue(self):
-        return self.thanksPage and self.thanksPrologue or self.context.formPrologue
+        return self.thanksPage and self.thanksPrologue or self.context.formPrologue.output
 
     @property
     def epilogue(self):
-        return self.thanksPage and self.thanksEpilogue or self.context.formEpilogue
+        return self.thanksPage and self.thanksEpilogue or self.context.formEpilogue.output
 
     @property
     def schema(self):
@@ -218,9 +218,9 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             self.thanksPage = True
             replacer = DollarVarReplacer(data).sub
             self.thanksPrologue = self.context.thanksPrologue and replacer(
-                self.context.thanksPrologue)
+                self.context.thanksPrologue.output)
             self.thanksEpilogue = self.context.thanksEpilogue and replacer(
-                self.context.thanksEpilogue)
+                self.context.thanksEpilogue.output)
             if not self.context.showAll:
                 self.fields = self.setThanksFields(self.base_fields)
                 for group in self.groups:
