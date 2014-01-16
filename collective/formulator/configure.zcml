@@ -16,9 +16,11 @@
       />
   <!-- -*- extra stuff goes here -*- -->
 
+  <include file="fields.zcml" />
+  <include file="actions.zcml" />
+  <include file="validators.zcml" />
   <include package=".browser" />
   <include package=".content" />
-  <include file="validators.zcml" />
 
   <i18n:registerTranslations directory="locales" />
   <!--
