@@ -1,4 +1,9 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="collective.formulator">
+    <subscriber
+        for="collective.formulator.interfaces.IFormulatorFieldsContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".fields.updateFields"
+        />
 </configure>

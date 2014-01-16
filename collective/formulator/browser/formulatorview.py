@@ -63,7 +63,7 @@ from collective.formulator.interfaces import (
     IFieldExtender,
     IFormulator,
     IFormulatorActionsContext,
-    IFormulatorSchemaContext,
+    IFormulatorFieldsContext,
     IMailer,
     INewAction,
     ISaveData,
@@ -74,8 +74,6 @@ from collective.formulator.api import (
     get_context,
     get_expression,
     get_fields,
-    set_actions,
-    set_fields,
 )
 from collective.formulator.validators import IFieldValidator
 from collective.formulator import formulatorMessageFactory as _
@@ -364,23 +362,6 @@ class FieldExtenderDefault(object):
         return get_expression(self.context, TDefault) if TDefault else fdefault
 
 
-class FormulatorSchemaView(SchemaContext):
-    implements(IFormulatorSchemaContext)
-
-    def __init__(self, context, request):
-        schema = get_fields(context)
-        super(FormulatorSchemaView, self).__init__(
-            schema,
-            request,
-            name='fields'
-        )
-
-    def browserDefault(self, request):
-        """ If not traversing through the schema to a field, show the SchemaListingPage.
-        """
-        return self, ('@@fields',)
-
-
 class ActionContext(FieldContext):
 
     """ wrapper for published zope 3 schema fields
@@ -423,14 +404,6 @@ class FormulatorActionsView(SchemaContext):
         return self, ('@@actions',)
 
 
-def updateSchema(obj, event):
-    set_fields(obj.aq_parent, obj.schema)
-
-
-def updateActions(obj, event):
-    set_actions(obj.aq_parent, obj.schema)
-
-
 class FormulatorActionsListing(SchemaListing):
     template = ViewPageTemplateFile('actions_listing.pt')
 
@@ -469,17 +442,6 @@ class FormulatorActionsListing(SchemaListing):
         # update widgets to take the new defaults into account
         self.updateWidgets()
         self.request.response.redirect(self.context.absolute_url())
-
-
-class FormulatorSchemaListingPage(SchemaListingPage):
-
-    """ Form wrapper so we can get a form with layout.
-
-        We define an explicit subclass rather than using the wrap_form method
-        from plone.z3cform.layout so that we can inject the schema name into
-        the form label.
-    """
-    index = ViewPageTemplateFile("model_listing.pt")
 
 
 class FormulatorActionsListingPage(SchemaListingPage):
@@ -529,12 +491,6 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
             self.status = self.formErrorsMessage
             return
 
-        # clear current min/max to avoid range errors
-        if 'min' in data:
-            self.field.min = None
-        if 'max' in data:
-            self.field.max = None
-
         changes = self.applyChanges(data)
 
         if changes:
@@ -564,7 +520,7 @@ class EditView(layout.FormWrapper):
 
     @lazy_property
     def label(self):
-        return _(u"Edit Field '${fieldname}'", mapping={'fieldname': self.field.__name__})
+        return _(u"Edit Action '${fieldname}'", mapping={'fieldname': self.field.__name__})
 
 
 def FormulatorActionsVocabularyFactory(context):
@@ -1076,7 +1032,7 @@ CustomScriptHandler = BaseHandler(CustomScript)
 SaveDataHandler = BaseHandler(SaveData)
 
 
-@adapter(IFormulatorSchemaContext, zs.interfaces.IField)
+@adapter(IFormulatorFieldsContext, zs.interfaces.IField)
 def get_field_extender(context, field):
     return IFieldExtender
 

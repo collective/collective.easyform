@@ -25,14 +25,9 @@
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
         name="fields"
-        class=".formulatorview.FormulatorSchemaView"
+        class=".fields.FormulatorFieldsView"
         permission="cmf.ModifyPortalContent"
-        allowed_interface="collective.formulator.interfaces.IFormulatorSchemaContext"
-        />
-    <subscriber
-        for="collective.formulator.interfaces.IFormulatorSchemaContext
-             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
-        handler=".formulatorview.updateSchema"
+        allowed_interface="collective.formulator.interfaces.IFormulatorFieldsContext"
         />
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
@@ -41,15 +36,10 @@
         permission="cmf.ModifyPortalContent"
         allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
         />
-    <subscriber
-        for="collective.formulator.interfaces.IFormulatorActionsContext
-             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
-        handler=".formulatorview.updateActions"
-        />
     <browser:page
         name="fields"
-        for="collective.formulator.interfaces.IFormulatorSchemaContext"
-        class=".formulatorview.FormulatorSchemaListingPage"
+        for="collective.formulator.interfaces.IFormulatorFieldsContext"
+        class=".fields.FormulatorFieldsListingPage"
         permission="cmf.ModifyPortalContent" />
     <browser:page
         name="actions"

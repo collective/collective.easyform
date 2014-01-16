@@ -390,7 +390,7 @@ class IFormulatorView(Interface):
     """
 
 
-class IFormulatorSchemaContext(ISchemaContext):
+class IFormulatorFieldsContext(ISchemaContext):
 
     """
     Formulator schema view interface
