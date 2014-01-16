@@ -17,7 +17,7 @@
   <!-- -*- extra stuff goes here -*- -->
 
   <include file="actions.zcml" />
-  <include file="subscriber.zcml" />
+  <include file="subscribers.zcml" />
   <include file="validators.zcml" />
   <include package=".browser" />
   <include package=".content" />
