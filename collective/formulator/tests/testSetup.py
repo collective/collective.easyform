@@ -130,10 +130,6 @@ class TestInstallation(base.FormulatorTestCase):
     def testTypeViews(self):
             self.assertEqual(
                 self.types.Formulator.getAvailableViewMethods(self.types), ('view',))
-            #self.assertEqual(self.types.FormThanksPage.getAvailableViewMethods(
-                #self.types), ('fg_thankspage_view_p3',))
-            #self.assertEqual(self.types.FormSaveDataAdapter.getAvailableViewMethods(self.types), (
-                #'fg_savedata_tabview_p3', 'fg_savedata_recview_p3', 'fg_savedata_view_p3'))
 
 
 class TestContentCreation(base.FormulatorTestCase):
