@@ -10,6 +10,8 @@ from collective.formulator.api import get_fields
 class FormulatorFieldsView(SchemaContext):
     implements(IFormulatorFieldsContext)
 
+    schema = None
+
     def __init__(self, context, request):
         schema = get_fields(context)
         super(FormulatorFieldsView, self).__init__(

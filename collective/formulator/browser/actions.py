@@ -47,10 +47,12 @@ class ActionContext(FieldContext):
 class FormulatorActionsView(SchemaContext):
     implements(IFormulatorActionsContext)
 
+    schema = None
+
     def __init__(self, context, request):
-        schema = get_actions(context)
+        self.schema = get_actions(context)
         super(FormulatorActionsView, self).__init__(
-            schema,
+            self.schema,
             request,
             name='actions'
         )

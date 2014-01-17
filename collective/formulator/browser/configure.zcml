@@ -3,6 +3,8 @@
            xmlns:z3c="http://namespaces.zope.org/z3c"
            i18n_domain="collective.formulator">
     <include package="Products.CMFCore" file="permissions.zcml" />
+    <include file="fields.zcml" />
+    <include file="actions.zcml" />
     <adapter
         factory=".formulatorview.FieldExtenderValidator"
         />
@@ -22,41 +24,6 @@
         class=".formulatorview.FormulatorFormEmbedded"
         permission="zope.Public"
         />
-    <browser:page
-        for="collective.formulator.interfaces.IFormulator"
-        name="fields"
-        class=".fields.FormulatorFieldsView"
-        permission="cmf.ModifyPortalContent"
-        allowed_interface="collective.formulator.interfaces.IFormulatorFieldsContext"
-        />
-    <browser:page
-        for="collective.formulator.interfaces.IFormulator"
-        name="actions"
-        class=".actions.FormulatorActionsView"
-        permission="cmf.ModifyPortalContent"
-        allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
-        />
-    <browser:page
-        name="fields"
-        for="collective.formulator.interfaces.IFormulatorFieldsContext"
-        class=".fields.FormulatorFieldsListingPage"
-        permission="cmf.ModifyPortalContent" />
-    <browser:page
-        name="actions"
-        for="collective.formulator.interfaces.IFormulatorActionsContext"
-        class=".actions.FormulatorActionsListingPage"
-        permission="cmf.ModifyPortalContent" />
-    <browser:page
-        name="add-action"
-        for="collective.formulator.interfaces.IFormulatorActionsContext"
-        class=".actions.ActionAddFormPage"
-        permission="cmf.ModifyPortalContent"
-        />
-    <browser:page
-        name="edit"
-        for="collective.formulator.interfaces.IActionContext"
-        class=".actions.ActionEditView"
-        permission="cmf.ModifyPortalContent" />
     <utility
         component=".formulatorview.FormulatorActionsVocabularyFactory"
         provides="zope.schema.interfaces.IVocabularyFactory"

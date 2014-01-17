@@ -1,0 +1,16 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="collective.formulator">
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="fields"
+        class=".fields.FormulatorFieldsView"
+        permission="cmf.ModifyPortalContent"
+        allowed_interface="collective.formulator.interfaces.IFormulatorFieldsContext"
+        />
+    <browser:page
+        name="fields"
+        for="collective.formulator.interfaces.IFormulatorFieldsContext"
+        class=".fields.FormulatorFieldsListingPage"
+        permission="cmf.ModifyPortalContent" />
+</configure>

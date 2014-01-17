@@ -1,0 +1,27 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           i18n_domain="collective.formulator">
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="actions"
+        class=".actions.FormulatorActionsView"
+        permission="cmf.ModifyPortalContent"
+        allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
+        />
+    <browser:page
+        name="actions"
+        for="collective.formulator.interfaces.IFormulatorActionsContext"
+        class=".actions.FormulatorActionsListingPage"
+        permission="cmf.ModifyPortalContent" />
+    <browser:page
+        name="add-action"
+        for="collective.formulator.interfaces.IFormulatorActionsContext"
+        class=".actions.ActionAddFormPage"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="edit"
+        for="collective.formulator.interfaces.IActionContext"
+        class=".actions.ActionEditView"
+        permission="cmf.ModifyPortalContent" />
+</configure>

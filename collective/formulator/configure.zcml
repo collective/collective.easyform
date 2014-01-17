@@ -16,6 +16,7 @@
       />
   <!-- -*- extra stuff goes here -*- -->
 
+  <include file="fields.zcml" />
   <include file="actions.zcml" />
   <include file="subscribers.zcml" />
   <include file="validators.zcml" />
