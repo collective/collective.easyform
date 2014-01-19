@@ -24,6 +24,18 @@
         class=".formulatorview.FormulatorFormEmbedded"
         permission="zope.Public"
         />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="export-formulator"
+        class=".exportimport.FormulatorExportView"
+        permission="cmf.ManagePortal"
+        />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
+        name="import-formulator"
+        class=".exportimport.FormulatorImportView"
+        permission="cmf.ManagePortal"
+        />
     <utility
         component=".formulatorview.FormulatorActionsVocabularyFactory"
         provides="zope.schema.interfaces.IVocabularyFactory"

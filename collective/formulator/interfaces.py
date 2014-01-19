@@ -99,6 +99,15 @@ class ICollectiveFormulatorLayer(Interface):
     """
 
 
+class IFormulatorImportFormSchema(Interface):
+
+    """Schema for formulator import form.
+    """
+    upload = zs.Bytes(
+        title=_(u'Upload'),
+        required=True)
+
+
 class IFormulator(form.Schema):
 
     """Forms for Plone"""

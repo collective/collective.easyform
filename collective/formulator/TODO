@@ -1,3 +1,5 @@
+- Fix caching
+- Fix export file name
 - Default fieldset name
 - Merge models
 - Fields
@@ -5,9 +7,9 @@
     - FormLabelField
     - FormRichLabelField
 - Actions
-    - Mailer
-    - SaveData
-    - CustomScript
+    - Mailer 80%
+    - SaveData 30%
+    - CustomScript 80%
 - API
 - Split code by files
 - Custom Permissions

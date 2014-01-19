@@ -80,7 +80,7 @@ class TestInstallation(base.FormulatorTestCase):
         self.assertEqual(
             getAddPermission('Formulator', 'Custom Script Adapter'), CSA_ADD_CONTENT_PERMISSION)
 
-    def ttestActionsInstalled(self):
+    def testActionsInstalled(self):
         self.setRoles(['Manager', ])
         self.assertTrue(
             self.portal.portal_actions.getActionInfo('object_buttons/export'))
