@@ -165,6 +165,21 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
                 del group.widgets[field]
             group.widgets.update()
 
+    def setErrorsMessage(self, errors):
+        for field in errors:
+            if field not in self.widgets:
+                continue
+            error = ValidationError()
+            error.doc = lambda: errors[field]
+            view = getMultiAdapter(
+                (error, self.request, self.widgets[
+                    field], self.widgets[field].field, self, self.context),
+                IErrorViewSnippet)
+            view.update()
+            self.widgets.errors += (view,)
+            self.widgets[field].error = view
+        self.status = self.formErrorsMessage
+
     @button.buttonAndHandler(_(u'Submit'), name='submit', condition=lambda form: not form.thanksPage)
     def handleSubmit(self, action):
         data, errors = self.extractData()
@@ -174,20 +189,7 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
         data = self.updateServerSideData(data)
         errors = self.processActions(data)
         if errors:
-            for field in errors:
-                if field not in self.widgets:
-                    continue
-                error = ValidationError()
-                error.doc = lambda: errors[field]
-                view = getMultiAdapter(
-                    (error, self.request, self.widgets[
-                     field], self.widgets[field].field, self, self.context),
-                    IErrorViewSnippet)
-                view.update()
-                self.widgets.errors += (view,)
-                self.widgets[field].error = view
-            self.status = self.formErrorsMessage
-            return
+            return self.setErrorsMessage(errors)
         thanksPageOverride = self.context.thanksPageOverride
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction

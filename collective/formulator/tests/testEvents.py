@@ -34,7 +34,7 @@ class TestAdapterPaste(base.FormulatorTestCase):
         ff2 = getattr(self.folder, new_id)
         active_adapters = tuple(get_actions(ff2))
         self.assertEqual(active_adapters, ('mailer',))
-        active_fields = tuple([i for i in get_fields(ff2)])
+        active_fields = tuple(get_fields(ff2))
         self.assertEqual(active_fields, ('replyto', 'topic', 'comments'))
 
 

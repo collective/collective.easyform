@@ -1,4 +1,3 @@
-from zope.interface import implements
 from zope.formlib import form
 from zope.component import getMultiAdapter
 
@@ -17,7 +16,7 @@ from Products.GenericSetup.context import TarballExportContext, TarballImportCon
 from Products.GenericSetup.interfaces import IFilesystemExporter, IFilesystemImporter
 
 try:
-    from plone.dexterity.exportimport import DexterityContentExporterImporter
+    from plone.dexterity.exportimport import DexterityContentExporterImporter  # flake8: noqa
     has_export = True
 except ImportError:
     has_export = False

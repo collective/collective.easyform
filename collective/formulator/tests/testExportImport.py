@@ -34,12 +34,11 @@ except ImportError:
     from zope.component.hooks import setSite
 
 zcml_string = """\
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:gs="http://namespaces.zope.org/genericsetup"
-           i18n_domain="collective.formulator"
-           package="collective.formulator">
+<configure xmlns="http://namespaces.zope.org/genericsetup"
+           package="collective.formulator"
+           i18n_domain="collective.formulator">
 
-    <gs:registerProfile
+    <registerProfile
         name="testing"
         title="Formulator testing"
         description="Used for testing only"
