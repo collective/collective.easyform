@@ -1,12 +1,12 @@
 from re import compile
+from hashlib import md5
+from plone.memoize import ram
 from plone.supermodel import loadString, serializeSchema
 from plone.directives.form import Schema
 from Products.CMFCore.Expression import getExprContext, Expression
 
 SCHEMATA_KEY = u""
 CONTEXT_KEY = u"context"
-CACHE_FIELDS_KEY = '_v_fields_model'
-CACHE_ACTIONS_KEY = '_v_actions_model'
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
 dollarRE = compile(r"\$\{(.+?)\}")
@@ -78,39 +78,45 @@ def load_schema(sschema):
     return schema
 
 
+def get_fields_cache(method, context):
+    data = context.fields_model + str(context.modification_date)
+    return md5(data).hexdigest()
+
+
+@ram.cache(get_fields_cache)
 def get_fields(context):
-    if hasattr(context, CACHE_FIELDS_KEY):
-        return getattr(context, CACHE_FIELDS_KEY)
     data = context.fields_model
     schema = load_schema(data)
     schema.setTaggedValue(CONTEXT_KEY, context)
-    setattr(context, CACHE_FIELDS_KEY, schema)
     return schema
 
 
+def get_actions_cache(method, context):
+    data = context.actions_model + str(context.modification_date)
+    return md5(data).hexdigest()
+
+
+@ram.cache(get_actions_cache)
 def get_actions(context):
-    if hasattr(context, CACHE_ACTIONS_KEY):
-        return getattr(context, CACHE_ACTIONS_KEY)
     data = context.actions_model
     schema = load_schema(data)
     schema.setTaggedValue(CONTEXT_KEY, context)
-    setattr(context, CACHE_ACTIONS_KEY, schema)
     return schema
 
 
 def set_fields(context, schema):
-    delattr(context, CACHE_FIELDS_KEY)
     # serialize the current schema
     snew_schema = serializeSchema(schema, name=SCHEMATA_KEY)
     # store the current schema
     context.fields_model = snew_schema
+    context.notifyModified()
 
 
 def set_actions(context, schema):
-    delattr(context, CACHE_ACTIONS_KEY)
     # fix setting widgets
     schema.setTaggedValue('plone.autoform.widgets', {})
     # serialize the current schema
     snew_schema = serializeSchema(schema, name=SCHEMATA_KEY)
     # store the current schema
     context.actions_model = snew_schema
+    context.notifyModified()
