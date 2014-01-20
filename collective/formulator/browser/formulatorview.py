@@ -77,7 +77,10 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
     css_class = 'formulatorForm'
     thanksPage = False
     # method = "get"
-    # default_fieldset_label view/default_fieldset_label | form_name;
+
+    @property
+    def default_fieldset_label(self):
+        return self.context.default_fieldset_label or super(FormulatorForm, self).default_fieldset_label
 
     def action(self):
         """ Redefine <form action=''> attribute.
@@ -91,12 +94,15 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             action = action.replace('http://', 'https://')
         return action
 
+    @property
     def enable_form_tabbing(self):
         return self.context.form_tabbing
 
+    @property
     def enable_unload_protection(self):
         return self.context.unload_protection
 
+    @property
     def enableCSRFProtection(self):
         return self.context.CSRFProtection
 

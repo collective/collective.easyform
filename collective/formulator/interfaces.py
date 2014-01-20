@@ -205,7 +205,7 @@ class IFormulator(form.Schema):
         required=False,
     )
     form.fieldset(u"overrides", label=_("Overrides"),
-                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection', 'submitLabelOverride'])
+                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection', 'submitLabelOverride', 'default_fieldset_label'])
     thanksPageOverrideAction = zs.Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
@@ -320,6 +320,14 @@ class IFormulator(form.Schema):
             cause an error on form display.
         """),
         constraint=isTALES,
+        required=False,
+        default=u'',
+    )
+    default_fieldset_label = zs.TextLine(
+        title=_(u'label_default_fieldset_label_text',
+                default=u"Custom Default Fieldset Label"),
+        description=_(u'help_default_fieldset_label_text',
+                      default=u"This field allows you to change default fieldset label."),
         required=False,
         default=u'',
     )

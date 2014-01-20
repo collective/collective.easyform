@@ -1,6 +1,6 @@
 - Fix caching
 - Fix export file name
-- Default fieldset name
+- Form method (get|post)
 - Merge models
 - Fields
     - FormLikertField
