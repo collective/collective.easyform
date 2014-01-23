@@ -160,7 +160,7 @@ Check redirect to portal::
     >>> browser.getControl('Subject').value = 'Test Subject'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
     >>> browser.getControl('Submit').click()
-    >>> browser.url 
+    >>> browser.url
     'http://nohost/plone'
 
 Check traverse to portal::
