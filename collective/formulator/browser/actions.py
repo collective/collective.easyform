@@ -61,7 +61,7 @@ class SavedDataForm(crud.CrudForm):
 
     @property
     def storage(self):
-        return hasattr(self.formulator, '_inputStorage') and self.formulator._inputStorage.get(self.name, {}) or {}
+        return self.field._storage
 
     def description(self):
         return _(u"${items} input(s) saved", mapping={'items': len(self.storage)})
