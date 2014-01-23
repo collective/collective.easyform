@@ -1,6 +1,9 @@
 from Acquisition import aq_parent, aq_inner
+from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from StringIO import StringIO
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from csv import writer as csvwriter
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.instance import memoize
 from plone.schemaeditor.browser.field.traversal import FieldContext
@@ -10,21 +13,119 @@ from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.schemaeditor.interfaces import IFieldEditFormSchema, IFieldEditorExtender
 from plone.schemaeditor.utils import SchemaModifiedEvent
 from plone.z3cform import layout
+from plone.z3cform.crud import crud
 from z3c.form import button, form, field
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import queryUtility, getAdapters
 from zope.event import notify
 from zope.interface import implements
-
+from collective.formulator.api import get_actions, get_fields, get_context
+from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.interfaces import (
     IActionContext,
     IActionEditForm,
     IActionFactory,
     IFormulatorActionsContext,
     INewAction,
+    IExtraData,
+    ISaveData,
 )
-from collective.formulator.api import get_actions
-from collective.formulator import formulatorMessageFactory as _
+from zope.schema import getFieldsInOrder
+
+
+class SavedDataView(BrowserView):
+
+    def items(self):
+        return [
+            (name, action.__doc__)
+            for name, action in getFieldsInOrder(get_actions(self.context))
+            if ISaveData.providedBy(action)
+        ]
+
+
+class SavedDataForm(crud.CrudForm):
+    template = ViewPageTemplateFile('saveddata_form.pt')
+    addform_factory = crud.NullForm
+
+    @property
+    def field(self):
+        return self.context.field
+
+    @property
+    def name(self):
+        return self.field.__name__
+
+    @property
+    def formulator(self):
+        return get_context(self.field)
+
+    @property
+    def storage(self):
+        return hasattr(self.formulator, '_inputStorage') and self.formulator._inputStorage.get(self.name, {}) or {}
+
+    def description(self):
+        return _(u"${items} input(s) saved", mapping={'items': len(self.storage)})
+
+    @property
+    def update_schema(self):
+        fields = field.Fields(get_fields(self.formulator))
+        showFields = getattr(self.field, 'showFields', [])
+        if showFields:
+            fields = fields.select(*showFields)
+        return fields
+
+    @property
+    def view_schema(self):
+        fields = field.Fields(IExtraData)
+        ExtraData = self.field.ExtraData
+        if ExtraData:
+            fields = fields.select(*ExtraData)
+        return fields
+
+    def get_items(self):
+        return self.storage.items()
+
+    # def add(self, data):
+        #storage = self.context._inputStorage
+
+    def before_update(self, item, data):
+        id = item['id']
+        item.update(data)
+        self.storage[id] = item
+        #sdata = self.storage[id]
+        # sdata.update(data)
+        #self.storage[id] = sdata
+
+    def remove(self, (id, item)):
+        del self.storage[id]
+
+    @button.buttonAndHandler(_(u'Download'), name='download')
+    def handleDownload(self, action):
+        filename = '%s.csv' % self.name
+        self.request.response.setHeader(
+            "Content-Disposition", "attachment; filename=\"%s\"" % filename)
+        self.request.response.setHeader(
+            "Content-Type", 'text/comma-separated-values')
+        uschema = self.update_schema
+        vschema = self.view_schema
+        keys = uschema.keys() + vschema.keys()
+        names = [i.field.title for i in uschema.values() + vschema.values()]
+        sbuf = StringIO()
+        writer = csvwriter(sbuf)
+        if getattr(self.field, 'UseColumnNames', False):
+            writer.writerow(names)
+        items = self.get_items()
+        for id_, row in items:
+            writer.writerow([row.get(i, '') for i in keys])
+        res = sbuf.getvalue()
+        sbuf.close()
+        self.request.response.write(res)
+
+    @button.buttonAndHandler(_(u'Clear all'), name='clearall')
+    def handleClearAll(self, action):
+        self.storage.clear()
+
+ActionSavedDataView = layout.wrap_form(SavedDataForm)
 
 
 class ActionContext(FieldContext):

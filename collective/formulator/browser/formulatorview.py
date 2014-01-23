@@ -5,7 +5,6 @@ try:
     SavedDataBTree = LOBTree
 except ImportError:
     SavedDataBTree = IOBTree
-from BTrees.Length import Length
 from DateTime import DateTime
 from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
@@ -785,34 +784,28 @@ class SaveData(Action):
             setattr(self, i, kw.pop(i, f.default))
         super(SaveData, self).__init__(**kw)
 
-    def _migrateStorage(self, context):
-        updated = \
-            hasattr(context, '_inputStorage') and \
-            hasattr(context, '_inputItems') and \
-            hasattr(context, '_length')
-
-        if not updated:
-            context._inputStorage = SavedDataBTree()
-            context._inputItems = 0
-            context._length = Length()
+    @property
+    def _storage(self):
+        context = get_context(self)
+        if not hasattr(context, '_inputStorage'):
+            context._inputStorage = {}
+        if not self.__name__ in context._inputStorage:
+            context._inputStorage[self.__name__] = SavedDataBTree()
+        return context._inputStorage[self.__name__]
 
     def _addDataRow(self, value):
-
-        context = get_context(self)
-        self._migrateStorage(context)
-
-        if isinstance(context._inputStorage, IOBTree):
+        storage = self._storage
+        if isinstance(storage, IOBTree):
             # 32-bit IOBTree; use a key which is more likely to conflict
             # but which won't overflow the key's bits
-            id = context._inputItems
-            context._inputItems += 1
+            id = storage.maxKey() + 1
         else:
             # 64-bit LOBTree
             id = int(time() * 1000)
-            while id in context._inputStorage:  # avoid collisions during testing
+            while id in storage:  # avoid collisions during testing
                 id += 1
-        context._inputStorage[id] = value
-        context._length.change(1)
+        value['id'] = id
+        storage[id] = value
 
     def onSuccess(self, fields, request):
         """

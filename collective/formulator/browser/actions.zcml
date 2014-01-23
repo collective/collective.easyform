@@ -3,6 +3,13 @@
            i18n_domain="collective.formulator">
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
+        name="saveddata"
+        class=".actions.SavedDataView"
+        template="saveddata.pt"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        for="collective.formulator.interfaces.IFormulator"
         name="actions"
         class=".actions.FormulatorActionsView"
         permission="cmf.ModifyPortalContent"
@@ -24,4 +31,10 @@
         for="collective.formulator.interfaces.IActionContext"
         class=".actions.ActionEditView"
         permission="cmf.ModifyPortalContent" />
+    <browser:page
+        for="collective.formulator.interfaces.IActionContext"
+        name="data"
+        class=".actions.ActionSavedDataView"
+        permission="cmf.ModifyPortalContent"
+        />
 </configure>

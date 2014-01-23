@@ -908,6 +908,33 @@ class ICustomScript(IAction):
     )
 
 
+class IExtraData(Interface):
+    dt = zs.TextLine(
+        title=_(u"Posting Date/Time"),
+        required=False,
+        default=u"",
+        missing_value=u"",
+    )
+    HTTP_X_FORWARDED_FOR = zs.TextLine(
+        title=_(u"HTTP_X_FORWARDED_FOR Header"),
+        required=False,
+        default=u"",
+        missing_value=u"",
+    )
+    REMOTE_ADDR = zs.TextLine(
+        title=_(u"REMOTE_ADDR Header"),
+        required=False,
+        default=u"",
+        missing_value=u"",
+    )
+    HTTP_USER_AGENT = zs.TextLine(
+        title=_(u"HTTP_USER_AGENT Header"),
+        required=False,
+        default=u"",
+        missing_value=u"",
+    )
+
+
 class ISaveData(IAction):
 
     """A form action adapter that will save form input data and
