@@ -28,6 +28,9 @@ setup(name='collective.formulator',
           'plone.directives.form',
           # -*- Extra requirements: -*-
       ],
+      extras_require = {
+          'test': ['plone.app.testing']
+      },
       entry_points="""
       # -*- Entry points: -*-
 
