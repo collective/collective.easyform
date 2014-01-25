@@ -86,6 +86,8 @@ class TestInstallation(base.FormulatorTestCase):
             self.portal.portal_actions.getActionInfo('object_buttons/export'))
         self.assertTrue(
             self.portal.portal_actions.getActionInfo('object_buttons/import'))
+        self.assertTrue(
+            self.portal.portal_actions.getActionInfo('object_buttons/saveddata'))
 
     def ttest_FormGenTool(self):
         self.assertTrue(getToolByName(self.portal, 'formgen_tool'))

@@ -11,8 +11,10 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
+from StringIO import StringIO
 from ZPublisher.mapply import mapply
 from copy import deepcopy
+from csv import writer as csvwriter
 from email import Encoders
 from email.Header import Header
 from email.MIMEAudio import MIMEAudio
@@ -52,6 +54,7 @@ from collective.formulator.interfaces import (
     IFormulatorFieldsContext,
     IMailer,
     ISaveData,
+    IExtraData,
 )
 from collective.formulator.api import (
     DollarVarReplacer,
@@ -793,6 +796,71 @@ class SaveData(Action):
             context._inputStorage[self.__name__] = SavedDataBTree()
         return context._inputStorage[self.__name__]
 
+    def getSavedFormInput(self):
+        """ returns saved input as an iterable;
+            each row is a sequence of fields.
+        """
+
+        return self._storage.values()
+
+    def getSavedFormInputItems(self):
+        """ returns saved input as an iterable;
+            each row is an (id, sequence of fields) tuple
+        """
+        return self._storage.items()
+
+    def getSavedFormInputForEdit(self, header=False):
+        """ returns saved as CSV text """
+        sbuf = StringIO()
+        writer = csvwriter(sbuf)
+        names = self.getColumnNames()
+        if header:
+            writer.writerow(names)
+        for row in self.getSavedFormInput():
+            writer.writerow([
+                row[i].filename if INamedFile.providedBy(row.get(i, '')) else row.get(i, '')
+                for i in names])
+            writer.writerow(row.values())
+        res = sbuf.getvalue()
+        sbuf.close()
+        return res
+
+    def getColumnNames(self):
+        # """Returns a list of column names"""
+        context = get_context(self)
+        showFields = getattr(self, 'showFields', [])
+        names = [
+            name
+            for name, field in getFieldsInOrder(get_fields(context))
+            if not showFields or name in showFields
+        ]
+        if self.ExtraData:
+            for f in self.ExtraData:
+                names.append(f)
+        return names
+
+    def getColumnTitles(self):
+        # """Returns a list of column titles"""
+        context = get_context(self)
+        showFields = getattr(self, 'showFields', [])
+        names = [
+            field.title
+            for name, field in getFieldsInOrder(get_fields(context))
+            if not showFields or name in showFields
+        ]
+        if self.ExtraData:
+            for f in self.ExtraData:
+                names.append(IExtraData[f].title)
+        return names
+
+    def download_csv(self):
+        # """Download the saved data
+        # """
+        return self.getSavedFormInputForEdit(getattr(self, 'UseColumnNames', False))
+
+    def itemsSaved(self):
+        return len(self._storage)
+
     def _addDataRow(self, value):
         storage = self._storage
         if isinstance(storage, IOBTree):
@@ -827,20 +895,17 @@ class SaveData(Action):
                     #target.onSuccess(fields, request, loopstop=True)
                     # return
         data = {}
+        showFields = getattr(self, 'showFields', []) or self.getColumnNames()
         for f in fields:
-            showFields = getattr(self, 'showFields', [])
-            if showFields and f not in showFields:
+            if f not in showFields:
                 continue
-            # data.append(fields[f])
             data[f] = fields[f]
 
         if self.ExtraData:
             for f in self.ExtraData:
                 if f == 'dt':
-                    # data.append(str(DateTime()))
                     data[f] = str(DateTime())
                 else:
-                    #data.append(getattr(request, f, ''))
                     data[f] = getattr(request, f, '')
 
         self._addDataRow(data)

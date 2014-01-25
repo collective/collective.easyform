@@ -1,9 +1,7 @@
 from Acquisition import aq_parent, aq_inner
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from StringIO import StringIO
 from ZPublisher.BaseRequest import DefaultPublishTraverse
-from csv import writer as csvwriter
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.instance import memoize
 from plone.schemaeditor.browser.field.traversal import FieldContext
@@ -106,20 +104,7 @@ class SavedDataForm(crud.CrudForm):
             "Content-Disposition", "attachment; filename=\"%s\"" % filename)
         self.request.response.setHeader(
             "Content-Type", 'text/comma-separated-values')
-        uschema = self.update_schema
-        vschema = self.view_schema
-        keys = uschema.keys() + vschema.keys()
-        names = [i.field.title for i in uschema.values() + vschema.values()]
-        sbuf = StringIO()
-        writer = csvwriter(sbuf)
-        if getattr(self.field, 'UseColumnNames', False):
-            writer.writerow(names)
-        items = self.get_items()
-        for id_, row in items:
-            writer.writerow([row.get(i, '') for i in keys])
-        res = sbuf.getvalue()
-        sbuf.close()
-        self.request.response.write(res)
+        self.request.response.write(self.field.download_csv())
 
     @button.buttonAndHandler(_(u'Clear all'), name='clearall')
     def handleClearAll(self, action):

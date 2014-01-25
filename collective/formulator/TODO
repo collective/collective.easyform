@@ -7,7 +7,7 @@
     - FormRichLabelField
 - Actions
     - Mailer 80%
-    - SaveData 30%
+    - SaveData 80%
     - CustomScript 80%
 - API
 - Split code by files
@@ -17,7 +17,5 @@
     - testFunctions
     - testInterfaces
     - testLikertField
-    - testSaver
     - testSetup
     - testTools
-    - testExportImport
