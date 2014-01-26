@@ -821,7 +821,6 @@ class SaveData(Action):
                 row[i].filename if INamedFile.providedBy(
                     row.get(i, '')) else row.get(i, '')
                 for i in names])
-            writer.writerow(row.values())
         res = sbuf.getvalue()
         sbuf.close()
         return res
