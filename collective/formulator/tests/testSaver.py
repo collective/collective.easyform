@@ -1,15 +1,15 @@
 # Integration tests specific to save-data adapter.
 #
 
-import os
+#import os
 import sys
 
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+# if __name__ == '__main__':
+    #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
-import zExceptions
+#import zExceptions
 
 from collective.formulator.tests import base
 from collective.formulator.api import get_actions, get_fields
@@ -73,7 +73,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        #self.ff1.setActionAdapter(('saver',))
+        # self.ff1.setActionAdapter(('saver',))
         #self.assertEqual(self.ff1.actionAdapter, ('saver',))
 
         # print "|%s|" % saver.SavedFormInput
@@ -86,7 +86,7 @@ class TestFunctions(base.FormulatorTestCase):
             add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
         #view = self.ff1.restrictedTraverse('view')
         #form = view.form_instance
-        #form.processActions(request.form)
+        # form.processActions(request.form)
         saver.onSuccess(request.form, request)
         #errors = self.ff1.fgvalidate(REQUEST=request)
         #self.assertEqual(errors, {})
@@ -94,8 +94,8 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertEqual(saver.itemsSaved(), 1)
 
         #res = saver.getSavedFormInputForEdit()
-        #self.assertEqual(
-            #res.strip(), 'test@test.org,test subject,test comments')
+        # self.assertEqual(
+            # res.strip(), 'test@test.org,test subject,test comments')
 
     def testSaverSavedFormInput(self):
         """ test save data adapter action and direct access to SavedFormInput """
@@ -105,7 +105,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        #self.ff1.setActionAdapter(('saver',))
+        # self.ff1.setActionAdapter(('saver',))
 
         request = FakeRequest(
             add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
@@ -141,16 +141,16 @@ class TestFunctions(base.FormulatorTestCase):
         saver._addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id']+fields, [saver._storage.keys()[0],'one', 'two', 'three'])))
+            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
 
         # save a couple of \n-delimited rows - \n eol
         #saver.savedFormInput = 'one,two,three\nfour,five,six'
         saver._addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
         self.assertEqual(saver.itemsSaved(), 2)
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id']+fields, [saver._storage.keys()[0],'one', 'two', 'three'])))
+            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
         self.assertEqual(
-            saver._storage.values()[1], dict(zip(['id']+fields, [saver._storage.keys()[1],'four', 'five', 'six'])))
+            saver._storage.values()[1], dict(zip(['id'] + fields, [saver._storage.keys()[1], 'four', 'five', 'six'])))
 
         # save a couple of \n-delimited rows -- \r\n eol
         #saver.savedFormInput = 'one,two,three\r\nfour,five,six'
@@ -223,7 +223,7 @@ class TestFunctions(base.FormulatorTestCase):
         saver._addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id']+fields, [saver._storage.keys()[0],'one', 'two', 'three'])))
+            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
         """
         data = cd()
         setattr(data, 'item-0', 'four')
@@ -311,13 +311,13 @@ class TestFunctions(base.FormulatorTestCase):
         saver._addDataRow(dict(zip(fields, ['seven', 'eight', 'nine'])))
         self.assertEqual(saver.itemsSaved(), 3)
 
-        #saver.manage_deleteData(saver._storage.keys()[1])
+        # saver.manage_deleteData(saver._storage.keys()[1])
         del saver._storage[saver._storage.keys()[1]]
         self.assertEqual(saver.itemsSaved(), 2)
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id']+fields, [saver._storage.keys()[0],'one', 'two', 'three'])))
+            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
         self.assertEqual(
-            saver._storage.values()[1], dict(zip(['id']+fields, [saver._storage.keys()[1],'seven', 'eight', 'nine'])))
+            saver._storage.values()[1], dict(zip(['id'] + fields, [saver._storage.keys()[1], 'seven', 'eight', 'nine'])))
 
     def testSaverInputAsDictionaries(self):
         """ test save data adapter's InputAsDictionaries """
@@ -327,7 +327,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        #self.ff1.setActionAdapter(('saver',))
+        # self.ff1.setActionAdapter(('saver',))
 
         #self.assertEqual(saver.inputAsDictionaries, saver.InputAsDictionaries)
 
@@ -354,7 +354,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        #self.ff1.setActionAdapter(('saver',))
+        # self.ff1.setActionAdapter(('saver',))
 
         cn = saver.getColumnNames()
         self.assertTrue(len(cn) == 3)
@@ -396,7 +396,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        #self.ff1.setActionAdapter(('saver',))
+        # self.ff1.setActionAdapter(('saver',))
 
         cn = saver.getColumnTitles()
         self.assertTrue(len(cn) == 3)
@@ -419,7 +419,7 @@ class TestFunctions(base.FormulatorTestCase):
         saver = get_actions(self.ff1)['saver']
         saver.showFields = ('topic', 'comments')
 
-        #self.ff1.setActionAdapter(('saver',))
+        # self.ff1.setActionAdapter(('saver',))
 
         request = FakeRequest(add_auth=True, method='POST',
                               topic='test subject', replyto='test@test.org', comments='test comments')

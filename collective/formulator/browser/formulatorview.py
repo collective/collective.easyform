@@ -818,7 +818,8 @@ class SaveData(Action):
             writer.writerow(names)
         for row in self.getSavedFormInput():
             writer.writerow([
-                row[i].filename if INamedFile.providedBy(row.get(i, '')) else row.get(i, '')
+                row[i].filename if INamedFile.providedBy(
+                    row.get(i, '')) else row.get(i, '')
                 for i in names])
             writer.writerow(row.values())
         res = sbuf.getvalue()

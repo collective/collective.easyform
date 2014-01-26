@@ -3,6 +3,7 @@ from plone.app.textfield import RichText
 from plone.directives import form
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
+from plone.z3cform.interfaces import IFormWrapper
 from z3c.form import interfaces
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema as zs
@@ -46,6 +47,10 @@ def isTALES(value):
         except CompilerError:
             raise InvalidTALESError
     return True
+
+
+class ISavedDataFormWrapper(IFormWrapper):
+    pass
 
 
 class INewAction(Interface):

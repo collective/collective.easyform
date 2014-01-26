@@ -12,11 +12,15 @@ from plone.schemaeditor.interfaces import IFieldEditFormSchema, IFieldEditorExte
 from plone.schemaeditor.utils import SchemaModifiedEvent
 from plone.z3cform import layout
 from plone.z3cform.crud import crud
+from plone.z3cform.interfaces import IDeferSecurityCheck
+from plone.z3cform.traversal import WrapperWidgetTraversal
 from z3c.form import button, form, field
 from zope.cachedescriptors.property import Lazy as lazy_property
-from zope.component import queryUtility, getAdapters
+from zope.component import adapts, queryUtility, getAdapters
 from zope.event import notify
-from zope.interface import implements
+from zope.interface import alsoProvides, implements, noLongerProvides
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.schema import getFieldsInOrder
 from collective.formulator.api import get_actions, get_fields, get_context
 from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.interfaces import (
@@ -27,8 +31,30 @@ from collective.formulator.interfaces import (
     INewAction,
     IExtraData,
     ISaveData,
+    ISavedDataFormWrapper,
 )
-from zope.schema import getFieldsInOrder
+
+
+class SavedDataTraversal(WrapperWidgetTraversal):
+    adapts(ISavedDataFormWrapper, IBrowserRequest)
+
+    def traverse(self, name, ignored):
+        form = self._prepareForm()
+        alsoProvides(self.request, IDeferSecurityCheck)
+        form.update()
+        noLongerProvides(self.request, IDeferSecurityCheck)
+        for subform in form.subforms:
+            if not hasattr(subform, 'subforms'):
+                continue
+            for subsubform in subform.subforms:
+                if not name.startswith(subsubform.prefix):
+                    continue
+                for id_ in subsubform.widgets:
+                    if subsubform.prefix + subsubform.widgets.prefix + id_ == name:
+                        target = self._form_traverse(subsubform, id_)
+                        target.__parent__ = aq_inner(self.context)
+                        return target
+        return super(SavedDataTraversal, self).traverse(name, ignored)
 
 
 class SavedDataView(BrowserView):
@@ -110,7 +136,13 @@ class SavedDataForm(crud.CrudForm):
     def handleClearAll(self, action):
         self.storage.clear()
 
-ActionSavedDataView = layout.wrap_form(SavedDataForm)
+
+class SavedDataFormWrapper(layout.FormWrapper):
+    implements(ISavedDataFormWrapper)
+
+
+ActionSavedDataView = layout.wrap_form(
+    SavedDataForm, __wrapper_class=SavedDataFormWrapper)
 
 
 class ActionContext(FieldContext):
