@@ -177,6 +177,25 @@ Check saved data::
     True
     >>> '<input id="form-buttons-clearall" name="form.buttons.clearall" class="submit-widget button-field" value="Clear all" type="submit" />' in browser.contents
     True
+    >>> def first_item(browser, type_="checkbox"):
+    ...     for form in browser.mech_browser.forms():
+    ...         for control in form.controls:
+    ...             if control.type == type_ and control.name.startswith('crud-edit.'):
+    ...                 return control.name
+    ...
+    >>> fcb = browser.getControl(name=first_item(browser))
+    >>> fcb.value = fcb.options
+    >>> browser.getControl("Delete").click()
+    >>> "Successfully deleted items." in browser.contents
+    True
+    >>> "4 input(s) saved" in browser.contents
+    True
+    >>> browser.getControl(name=first_item(browser, 'text')).value = "testingchangingemail@mail.com"
+    >>> browser.getControl("Apply changes").click()
+    >>> "Successfully updated" in browser.contents
+    True
+    >>> "4 input(s) saved" in browser.contents
+    True
     >>> browser.getControl("Clear all").click()
     >>> "0 input(s) saved" in browser.contents
     True
