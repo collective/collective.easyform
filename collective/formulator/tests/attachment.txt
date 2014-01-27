@@ -13,6 +13,18 @@ Add a new Formulator::
     >>> browser.url
     'http://nohost/plone/attachmentform/...'
 
+We'll want to test the save data adapter later.
+Let's add one now::
+
+    >>> browser.getLink('Actions').click()
+    >>> browser.getControl('Add new action…').click()
+    >>> browser.getControl('Title').value = 'Saver'
+    >>> browser.getControl('Short Name').value = 'saver'
+    >>> browser.getControl('Save Data').selected = True
+    >>> browser.getControl('Add').click()
+    >>> 'http://nohost/plone/attachmentform/actions/saver' in browser.contents
+    True
+
 Add a File field::
 
     >>> browser.getLink('Fields').click()
@@ -137,3 +149,36 @@ the file field is not listed in the mailer's showFields::
     <sent mail from ...to ['mdummy@address.com']>
     >>> self.portal.MailHost.msg.get_payload(decode=True)
     '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n\n    </dl>\n    <p></p>\n    <pre></pre>\n  </body>\n</html>\n'
+
+Saved data
+----------
+
+Check saved data::
+
+    >>> browser.getLink('Saved data').click()
+    >>> 'http://nohost/plone/attachmentform/actions/saver/data' in browser.contents
+    True
+    >>> browser.getLink('Saver').click()
+    >>> "5 input(s) saved" in browser.contents
+    True
+    >>> ".widgets.attachment/@@download/test.gif" in browser.contents
+    True
+    >>> ".widgets.attachment/@@download/test.mp3" in browser.contents
+    True
+    >>> ".widgets.attachment/@@download/test.zip" in browser.contents
+    True
+    >>> ".widgets.attachment/@@download/test.txt" in browser.contents
+    True
+    >>> '<input id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit" class="submit-widget button-field" value="Apply changes" type="submit" />' in browser.contents
+    True
+    >>> '<input id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete" class="submit-widget button-field" value="Delete" type="submit" />' in browser.contents
+    True
+    >>> '<input id="form-buttons-download" name="form.buttons.download" class="submit-widget button-field" value="Download" type="submit" />' in browser.contents
+    True
+    >>> '<input id="form-buttons-clearall" name="form.buttons.clearall" class="submit-widget button-field" value="Clear all" type="submit" />' in browser.contents
+    True
+    >>> browser.getControl("Clear all").click()
+    >>> "0 input(s) saved" in browser.contents
+    True
+
+
