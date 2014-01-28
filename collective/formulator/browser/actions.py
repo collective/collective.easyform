@@ -80,19 +80,15 @@ class SavedDataForm(crud.CrudForm):
         return self.field.__name__
 
     @property
-    def formulator(self):
-        return get_context(self.field)
-
-    @property
-    def storage(self):
-        return self.field._storage
+    def get_fields(self):
+        return get_fields(get_context(self.field))
 
     def description(self):
-        return _(u"${items} input(s) saved", mapping={'items': len(self.storage)})
+        return _(u"${items} input(s) saved", mapping={'items': self.field.itemsSaved()})
 
     @property
     def update_schema(self):
-        fields = field.Fields(get_fields(self.formulator))
+        fields = field.Fields(self.get_fields)
         showFields = getattr(self.field, 'showFields', [])
         if showFields:
             fields = fields.select(*showFields)
@@ -107,34 +103,26 @@ class SavedDataForm(crud.CrudForm):
         return fields
 
     def get_items(self):
-        return self.storage.items()
+        return self.field.getSavedFormInputItems()
 
     # def add(self, data):
         #storage = self.context._inputStorage
 
     def before_update(self, item, data):
-        id = item['id']
+        id_ = item['id']
         item.update(data)
-        self.storage[id] = item
-        #sdata = self.storage[id]
-        # sdata.update(data)
-        #self.storage[id] = sdata
+        self.field.setDataRow(id_, item)
 
     def remove(self, (id, item)):
-        del self.storage[id]
+        self.field.delDataRow(id)
 
     @button.buttonAndHandler(_(u'Download'), name='download')
     def handleDownload(self, action):
-        filename = '%s.csv' % self.name
-        self.request.response.setHeader(
-            "Content-Disposition", "attachment; filename=\"%s\"" % filename)
-        self.request.response.setHeader(
-            "Content-Type", 'text/comma-separated-values')
-        self.request.response.write(self.field.download_csv())
+        self.field.download(self.request.response)
 
     @button.buttonAndHandler(_(u'Clear all'), name='clearall')
     def handleClearAll(self, action):
-        self.storage.clear()
+        self.field.clearSavedFormInput()
 
 
 class SavedDataFormWrapper(layout.FormWrapper):

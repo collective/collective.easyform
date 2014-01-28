@@ -65,6 +65,53 @@ class TestFunctions(base.FormulatorTestCase):
         actions = get_actions(self.ff1)
         self.assertTrue('saver' in actions)
 
+    def testSavedDataView(self):
+        """ test saved data view """
+
+        self.createSaver()
+
+        view = self.ff1.restrictedTraverse("saveddata")
+        self.assertEqual(view.items(), [('saver', u'Saver')])
+
+    def testSaverDataFormOneItem(self):
+        """ test saver data form one item """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+        request = FakeRequest(
+            topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.onSuccess(request.form, request)
+
+        view = self.ff1.restrictedTraverse("@@actions")
+        view = view.publishTraverse(view.request, 'saver')
+        view = view.publishTraverse(view.request, 'data')
+        view.update()
+        form = view.form_instance
+        message = form.description()
+        self.assertEqual(message.mapping, {'items': 1})
+        item = form.get_items()[0]
+        self.assertEqual(item[1]['id'], item[0])
+        self.assertEqual(item[1]['topic'], 'test subject')
+        self.assertEqual(item[1]['replyto'], 'test@test.org')
+        self.assertEqual(item[1]['comments'], 'test comments')
+
+    def testSaverDataForm(self):
+        """ test saver data form """
+
+        self.createSaver()
+
+        view = self.ff1.restrictedTraverse("@@actions")
+        view = view.publishTraverse(view.request, 'saver')
+        view = view.publishTraverse(view.request, 'data')
+        view.update()
+        form = view.form_instance
+        message = form.description()
+        self.assertEqual(message.mapping, {'items': 0})
+        self.assertEqual([i for i in form.get_items()], [])
+
     def testSaver(self):
         """ test save data adapter action """
 
@@ -138,14 +185,14 @@ class TestFunctions(base.FormulatorTestCase):
         # save a row
         fields = list(get_fields(self.ff1))
         #saver.savedFormInput = 'one,two,three'
-        saver._addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
+        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
             saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
 
         # save a couple of \n-delimited rows - \n eol
         #saver.savedFormInput = 'one,two,three\nfour,five,six'
-        saver._addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
+        saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
         self.assertEqual(saver.itemsSaved(), 2)
         self.assertEqual(
             saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
@@ -220,7 +267,7 @@ class TestFunctions(base.FormulatorTestCase):
         # save a row
         fields = list(get_fields(self.ff1))
         #saver.savedFormInput = 'one,two,three'
-        saver._addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
+        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
         self.assertEqual(
             saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
@@ -306,9 +353,9 @@ class TestFunctions(base.FormulatorTestCase):
 
         # save a few rows
         fields = list(get_fields(self.ff1))
-        saver._addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
-        saver._addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
-        saver._addDataRow(dict(zip(fields, ['seven', 'eight', 'nine'])))
+        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
+        saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
+        saver.addDataRow(dict(zip(fields, ['seven', 'eight', 'nine'])))
         self.assertEqual(saver.itemsSaved(), 3)
 
         # saver.manage_deleteData(saver._storage.keys()[1])

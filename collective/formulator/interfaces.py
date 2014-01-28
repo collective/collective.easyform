@@ -537,6 +537,9 @@ class IAction(form.Schema, zs.interfaces.IField):
         #description=_("Tells whether a action is enabled."),
         # default=True)
 
+    def onSuccess(fields, request):
+        pass
+
 
 class IMailer(IAction):
 

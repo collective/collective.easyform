@@ -421,6 +421,7 @@ class TestCustomScript(base.FormulatorTestCase):
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0].message, u"Required input is missing.")
 
     # XXX TODO: We need to find another way to test this.
     def testProxyRole(self):

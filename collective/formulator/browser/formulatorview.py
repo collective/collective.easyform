@@ -391,6 +391,7 @@ class ActionFactory(object):
 class Action(zs.Bool):
 
     """ Base action class """
+    implements(IAction)
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -796,6 +797,10 @@ class SaveData(Action):
             context._inputStorage[self.__name__] = SavedDataBTree()
         return context._inputStorage[self.__name__]
 
+    def clearSavedFormInput(self):
+        # convenience method to clear input buffer
+        self._storage.clear()
+
     def getSavedFormInput(self):
         """ returns saved input as an iterable;
             each row is a sequence of fields.
@@ -809,10 +814,10 @@ class SaveData(Action):
         """
         return self._storage.items()
 
-    def getSavedFormInputForEdit(self, header=False):
+    def getSavedFormInputForEdit(self, header=False, delimiter=","):
         """ returns saved as CSV text """
         sbuf = StringIO()
-        writer = csvwriter(sbuf)
+        writer = csvwriter(sbuf, delimiter=delimiter)
         names = self.getColumnNames()
         if header:
             writer.writerow(names)
@@ -853,15 +858,49 @@ class SaveData(Action):
                 names.append(IExtraData[f].title)
         return names
 
-    def download_csv(self):
+    def download_csv(self, response):
         # """Download the saved data
         # """
-        return self.getSavedFormInputForEdit(getattr(self, 'UseColumnNames', False))
+        filename = '%s.csv' % self.__name__
+        response.setHeader(
+            "Content-Disposition", "attachment; filename=\"%s\"" % filename)
+        response.setHeader("Content-Type", 'text/comma-separated-values')
+        response.write(self.getSavedFormInputForEdit(
+            getattr(self, 'UseColumnNames', False), delimiter=","))
+
+    def download_tsv(self, response):
+        # """Download the saved data
+        # """
+        filename = '%s.tsv' % self.__name__
+        response.setHeader(
+            "Content-Disposition", "attachment; filename=\"%s\"" % filename)
+        response.setHeader("Content-Type", 'text/tab-separated-values')
+        response.write(self.getSavedFormInputForEdit(
+            getattr(self, 'UseColumnNames', False), delimiter="\t"))
+
+    def download(self, response):
+        # """Download the saved data
+        # """
+        format = getattr(self, 'DownloadFormat', 'tsv')
+        if format == 'tsv':
+            return self.download_tsv(response)
+        else:
+            assert format == 'csv', 'Unknown download format'
+            return self.download_csv(response)
 
     def itemsSaved(self):
         return len(self._storage)
 
-    def _addDataRow(self, value):
+    def delDataRow(self, key):
+        del self._storage[key]
+
+    def setDataRow(self, key, value):
+        #sdata = self.storage[id]
+        # sdata.update(data)
+        #self.storage[id] = sdata
+        self._storage[key] = value
+
+    def addDataRow(self, value):
         storage = self._storage
         if isinstance(storage, IOBTree):
             # 32-bit IOBTree; use a key which is more likely to conflict
@@ -908,7 +947,7 @@ class SaveData(Action):
                 else:
                     data[f] = getattr(request, f, '')
 
-        self._addDataRow(data)
+        self.addDataRow(data)
 
 
 MailerAction = ActionFactory(
