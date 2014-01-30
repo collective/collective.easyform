@@ -1,21 +1,13 @@
 # Integration tests specific to save-data adapter.
 #
 
-#import os
 import sys
-
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
-
+import plone.protect
+from Products.CMFCore.utils import getToolByName
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
-#import zExceptions
-
-from collective.formulator.tests import base
 from collective.formulator.api import get_actions, get_fields
-
-from Products.CMFCore.utils import getToolByName
-import plone.protect
+from collective.formulator.tests import base
 
 # dummy class
 

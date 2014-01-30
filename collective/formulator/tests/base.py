@@ -1,39 +1,18 @@
-
-import email
-
-# Import the base test case classes
-from Testing import ZopeTestCase
-from Products.CMFPlone.tests import PloneTestCase
-
-from Products.Five import fiveconfigure
-from Products.Five import zcml
-from Products.PloneTestCase.layer import onsetup
-import collective.formulator
-try:
-    import collective.recaptcha
-    haveRecaptcha = True
-except ImportError:
-    haveRecaptcha = False
-    print "collective.recaptcha is unavailable: captcha tests will be skipped."
-
-from Products.Five.testbrowser import Browser
-
-ZopeTestCase.installProduct('collective.formulator')
-
-
-@onsetup
-def setup_product():
-    fiveconfigure.debug_mode = True
-    zcml.load_config('configure.zcml', collective.formulator)
-    if haveRecaptcha:
-        zcml.load_config('configure.zcml', collective.recaptcha)
-    fiveconfigure.debug_mode = False
-
-# Set up the Plone site used for the test fixture. The PRODUCTS are the products
-# to install in the Plone site (as opposed to the products defined above, which
-# are all products available to Zope in the test fixture)
-setup_product()
-PloneTestCase.setupPloneSite(products=['collective.formulator'])
+from Products.MailHost.MailHost import MailHost
+from Products.MailHost.interfaces import IMailHost
+from Testing.ZopeTestCase import FunctionalTestCase
+from email import message_from_string
+from plone.app.testing import FunctionalTesting
+from plone.app.testing import IntegrationTesting
+from plone.app.testing import PLONE_FIXTURE
+from plone.app.testing import PloneSandboxLayer
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import login
+from plone.app.testing import setRoles
+from plone.testing.z2 import Browser
+from transaction import commit
+from unittest2 import TestCase
+from zope.component import getSiteManager
 
 
 class Session(dict):
@@ -41,42 +20,91 @@ class Session(dict):
     def set(self, key, value):
         self[key] = value
 
-from Products.MailHost.MailHost import MailHost
-
 
 class MailHostMock(MailHost):
 
     def _send(self, mfrom, mto, messageText, immediate=False):
         print '<sent mail from %s to %s>' % (mfrom, mto)
         self.msgtext = messageText
-        self.msg = email.message_from_string(messageText.lstrip())
+        self.msg = message_from_string(messageText.lstrip())
 
 
-class FormulatorTestCase(PloneTestCase.PloneTestCase):
+class Fixture(PloneSandboxLayer):
 
-    def _setup(self):
-        # make sure we test in Plone 2.5 with the exception hook monkeypatch
-        # applied
-        collective.formulator.config.PLONE_25_PUBLISHER_MONKEYPATCH = True
+    defaultBases = (PLONE_FIXTURE,)
 
-        PloneTestCase.PloneTestCase._setup(self)
+    def setUpZope(self, app, configurationContext):
+        # Load ZCML
+        import collective.formulator
+        self.loadZCML(
+            package=collective.formulator, context=configurationContext)
+        try:
+            import collective.recaptcha
+            self.loadZCML(
+                package=collective.recaptcha, context=configurationContext)
+        except ImportError:
+            pass
+
+    def setUpPloneSite(self, portal):
+        # Install the collective.formulator product
+        self.applyProfile(portal, 'collective.formulator:default')
+        portal.acl_users.userFolderAddUser('admin',
+                                           'secret',
+                                           ['Manager'],
+                                           [])
+        login(portal, 'admin')
+        setRoles(portal, TEST_USER_ID, ['Manager'])
+
+
+FIXTURE = Fixture()
+INTEGRATION_TESTING = IntegrationTesting(
+    bases=(FIXTURE,),
+    name='collective.formulator:Integration',
+)
+FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(FIXTURE,),
+    name='collective.formulator:Functional',
+)
+
+
+class FormulatorTestCase(TestCase):
+
+    layer = INTEGRATION_TESTING
+
+    def setUp(self):
+        self.app = self.layer['app']
         self.app.REQUEST['SESSION'] = Session()
-
-
-class FormulatorFunctionalTestCase(PloneTestCase.FunctionalTestCase):
-
-    def _setup(self):
-        PloneTestCase.FunctionalTestCase._setup(self)
-        self.app.REQUEST['SESSION'] = Session()
-        self.browser = Browser()
-        self.anon_browser = Browser()
-        self.app.acl_users.userFolderAddUser('root', 'secret', ['Manager'], [])
-        self.browser.addHeader('Authorization', 'Basic root:secret')
-        self.portal_url = 'http://nohost/plone'
+        self.portal = self.layer['portal']
+        self.portal.invokeFactory('Folder', 'test-folder')
+        self.folder = self.portal['test-folder']
+        self.afterSetUp()
 
     def afterSetUp(self):
-        super(PloneTestCase.FunctionalTestCase, self).afterSetUp()
-        self.portal.MailHost = MailHostMock()
+        pass
+
+
+class FormulatorFunctionalTestCase(FunctionalTestCase):
+
+    layer = FUNCTIONAL_TESTING
+
+    def setUp(self):
+        self.app = self.layer['app']
+        self.app.REQUEST['SESSION'] = Session()
+        self.portal = self.layer['portal']
+        self.portal.invokeFactory('Folder', 'news')
+        self.browser = Browser(self.app)
+        self.browser.addHeader('Authorization', 'Basic admin:secret')
+        self.anon_browser = Browser(self.app)
+        self.portal_url = 'http://nohost/plone'
+        self.afterSetUp()
+        commit()
+
+    def afterSetUp(self):
+        self.portal.MailHost = mailhost = MailHostMock()
+        sm = getSiteManager(context=self.portal)
+        sm.unregisterUtility(provided=IMailHost)
+        sm.registerUtility(mailhost, provided=IMailHost)
+        self.portal.email_from_address = 'noreply@holokinesislibros.com'
 
     def setStatusCode(self, key, value):
         from ZPublisher import HTTPResponse

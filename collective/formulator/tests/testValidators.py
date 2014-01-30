@@ -2,19 +2,17 @@
 # Test Formulator initialisation and set-up
 #
 
+from Products.CMFDefault.exceptions import EmailAddressInvalid
+from Products.validation import validation
+from ZPublisher.BaseRequest import BaseRequest
+from collective.formulator import validators
+from collective.formulator.api import get_fields, set_fields
+from collective.formulator.interfaces import IFieldExtender
+from collective.formulator.tests import base
+from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import classImplements
-from z3c.form.interfaces import IFormLayer
-from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.tests import base
-from collective.formulator.api import get_fields, set_fields
-from collective.formulator.interfaces import IFieldExtender
-from collective.formulator import validators
-from Products.CMFDefault.exceptions import EmailAddressInvalid
-
-#from collective.formulator.content import validationMessages
-from Products.validation import validation
 
 IFieldValidator = validators.IFieldValidator
 
@@ -203,10 +201,6 @@ class TestCustomValidatorMessages(base.FormulatorTestCase):
         #self.assertEqual(validate('isZipCode', 'T2X 1V4'), None)
         #self.assertEqual(validate('isZipCode', 'T2X1V4'), None)
         #self.assertEqual(validate('isZipCode', 't2x 1v4'), None)
-
-
-# if __name__ == '__main__':
-    # framework()
 
 
 def test_suite():

@@ -5,7 +5,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="collective.formulator">
 
-  <five:registerPackage package="." initialize=".initialize" />
+  <includeDependencies package="." />
 
   <genericsetup:registerProfile
       name="default"

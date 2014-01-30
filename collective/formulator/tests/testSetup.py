@@ -2,17 +2,9 @@
 # Test Formulator initialisation and set-up
 #
 
-import os
-import sys
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from AccessControl import Unauthorized
-
 from collective.formulator.tests import base
-
 from Products.CMFCore.utils import getToolByName
-
 import Products
 
 
@@ -81,7 +73,7 @@ class TestInstallation(base.FormulatorTestCase):
             getAddPermission('Formulator', 'Custom Script Adapter'), CSA_ADD_CONTENT_PERMISSION)
 
     def testActionsInstalled(self):
-        self.setRoles(['Manager', ])
+        #self.setRoles(['Manager', ])
         self.assertTrue(
             self.portal.portal_actions.getActionInfo('object_buttons/export'))
         self.assertTrue(
@@ -92,7 +84,7 @@ class TestInstallation(base.FormulatorTestCase):
     def ttest_FormGenTool(self):
         self.assertTrue(getToolByName(self.portal, 'formgen_tool'))
 
-    def ttestModificationsToPropSheetLinesNotPuged(self):
+    def testModificationsToPropSheetLinesNotPuged(self):
         property_mappings = [{
             "propsheet": "site_properties",
             "added_props": [
@@ -112,7 +104,7 @@ class TestInstallation(base.FormulatorTestCase):
 
         # reinstall
         qi = self.portal.portal_quickinstaller
-        qi.reinstallProducts(['Formulator'])
+        qi.reinstallProducts(['collective.formulator'])
 
         # now make sure our garbage values survived the reinstall
         for mapping in property_mappings:
@@ -153,8 +145,8 @@ class TestContentCreation(base.FormulatorTestCase):
         'FormRichTextField',
         'FormFileField',
     ]
-    if base.haveRecaptcha:
-        fieldTypes.append('FormCaptchaField')
+    #if base.haveRecaptcha:
+        #fieldTypes.append('FormCaptchaField')
     fieldTypes = tuple(fieldTypes)
 
     adapterTypes = (

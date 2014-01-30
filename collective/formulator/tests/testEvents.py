@@ -2,14 +2,8 @@
 # Test Formulator event-handler functionality
 #
 
-#import os
-#import sys
-
 from collective.formulator.tests import base
 from collective.formulator.api import get_actions, get_fields
-
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
 
 
 class TestAdapterPaste(base.FormulatorTestCase):
@@ -23,12 +17,12 @@ class TestAdapterPaste(base.FormulatorTestCase):
     )
 
     def afterSetUp(self):
-        base.FormulatorTestCase.afterSetUp(self)
+        super(TestAdapterPaste, self).afterSetUp()
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
 
     def testActiveAdaptersNotDuplicatedOnFormCopy(self):
-        self.loginAsPortalOwner()
+        # self.loginAsPortalOwner()
         copy = self.folder.manage_copyObjects('ff1')
         new_id = self.folder.manage_pasteObjects(copy)[0]['new_id']
         ff2 = getattr(self.folder, new_id)

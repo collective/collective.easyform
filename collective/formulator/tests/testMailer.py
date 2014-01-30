@@ -4,12 +4,6 @@
 #
 
 import email
-import os
-import sys
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from collective.formulator.tests import base
 from collective.formulator.api import get_actions, set_actions, get_fields, set_fields
 from collective.formulator.interfaces import IActionExtender
@@ -457,9 +451,6 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue(
             'mdummy@address.com' in self.mto
         )
-
-# if __name__ == '__main__':
-    # framework()
 
 
 def test_suite():

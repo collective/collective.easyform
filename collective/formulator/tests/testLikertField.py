@@ -2,14 +2,7 @@
 # Likert Field related tests
 #
 
-#import os
-#import sys
-
 from ZPublisher.HTTPRequest import record
-
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
-
 from collective.formulator.tests import base
 
 
@@ -81,10 +74,6 @@ class TestLikertField(base.FormulatorTestCase):
         request = FakeRequest(topic='test subject', replyto='test@test.org',
                               comments='test comments', lf=rating_req_val)
         self.assertTrue("1: 2, 2: 3" in self.ff1.lf.htmlValue(request))
-
-
-# if __name__ == '__main__':
-    # framework()
 
 
 def test_suite():

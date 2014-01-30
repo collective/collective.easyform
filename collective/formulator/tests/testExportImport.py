@@ -3,40 +3,25 @@
 #
 
 import os
-import sys
 import re
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
 
-from tarfile import TarFile
-from ZPublisher.HTTPRequest import FileUpload
-from cgi import FieldStorage
-
-from transaction import commit
-from StringIO import StringIO
-
-from zope.component import getMultiAdapter
-
-from Products.Five import zcml
 from Products.Five import fiveconfigure
-
+from Products.Five import zcml
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import TarballTester
-
+from StringIO import StringIO
+from ZPublisher.HTTPRequest import FileUpload
+from cgi import FieldStorage
 from collective.formulator.tests import base
-
-from Testing import ZopeTestCase
-from Products.PloneTestCase.layer import PloneSite
-
-try:
-    from zope.app.component.hooks import setSite
-except ImportError:
-    from zope.component.hooks import setSite
+from tarfile import TarFile
+from zope.component import getMultiAdapter
 
 zcml_string = """\
 <configure xmlns="http://namespaces.zope.org/genericsetup"
            package="collective.formulator"
            i18n_domain="collective.formulator">
+
+    <include package="Products.GenericSetup" file="meta.zcml" />
 
     <registerProfile
         name="testing"
@@ -51,43 +36,24 @@ zcml_string = """\
 """
 
 
-class TestFormGenGSLayer(PloneSite):
-
-    @classmethod
-    def setUp(cls):
-        fiveconfigure.debug_mode = True
-        zcml.load_string(zcml_string)
-        fiveconfigure.debug_mode = False
-
-        app = ZopeTestCase.app()
-        portal = app.plone
-        # elevate permissions
-        from AccessControl.SecurityManagement import newSecurityManager, noSecurityManager
-        user = portal.getWrappedOwner()
-        newSecurityManager(app, user)
-
-        setSite(portal)
-
-        portal_setup = portal.portal_setup
-
-        try:
-            portal_setup.runAllImportStepsFromProfile(
-                'profile-collective.formulator:testing')
-        except:
-            pass
-
-        # drop elevated perms
-        noSecurityManager()
-
-        commit()
-        ZopeTestCase.close(app)
-
-
 class ExportImportTester(base.FormulatorTestCase, TarballTester):
 
     """Base class for integration test suite for export/import """
 
-    layer = TestFormGenGSLayer
+    def afterSetUp(self):
+        super(ExportImportTester, self).afterSetUp()
+        fiveconfigure.debug_mode = True
+        try:
+            zcml.load_string(zcml_string)
+        except:
+            pass
+        fiveconfigure.debug_mode = False
+
+        try:
+            self.portal.portal_setup.runAllImportStepsFromProfile(
+                'profile-collective.formulator:testing')
+        except:
+            pass
 
     def _makeForm(self):
         self.folder.invokeFactory('Formulator', 'ff1')

@@ -8,13 +8,6 @@
 __author__ = 'Mikko Ohtamaa <mikko@redinnovation.com>'
 __docformat__ = 'plaintext'
 
-import os
-import sys
-
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 try:
     from App.class_init import InitializeClass
 except ImportError:
@@ -22,6 +15,8 @@ except ImportError:
 
 from AccessControl import Unauthorized
 from AccessControl import ClassSecurityInfo
+
+from plone.app.testing import logout
 
 from collective.formulator.tests import base
 from collective.formulator.api import get_actions, set_actions
@@ -157,9 +152,9 @@ class TestCustomScript(base.FormulatorTestCase):
     """ Test FormCustomScriptAdapter functionality in Formulator """
 
     def afterSetUp(self):
-        base.FormulatorTestCase.afterSetUp(self)
+        super(TestCustomScript, self).afterSetUp()
 
-        self.loginAsPortalOwner()
+        # self.loginAsPortalOwner()
 
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
@@ -341,7 +336,7 @@ class TestCustomScript(base.FormulatorTestCase):
         TODO: Why no security exceptions are raised?
         """
         self.createScript()
-        self.logout()
+        logout()
 
         actions = get_actions(self.ff1)
         adapter = actions['adapter']
@@ -478,14 +473,8 @@ class TestCustomScript(base.FormulatorTestCase):
 #        assert reply == "foo", "Script returned:" + str(reply)
 
 
-# if __name__ == '__main__':
-    # framework()
-
-
 def test_suite():
     from unittest import TestSuite, makeSuite
-    from Products.PloneTestCase.layer import ZCMLLayer
     suite = TestSuite()
-    suite.layer = ZCMLLayer
     suite.addTest(makeSuite(TestCustomScript))
     return suite

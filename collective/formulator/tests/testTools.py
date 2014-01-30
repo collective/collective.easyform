@@ -2,16 +2,8 @@
 # Test Formulator top-level functionality
 #
 
-#import os
-#import sys
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
-
-#import zope
-
-from collective.formulator.tests import base
-
 from Products.CMFCore.utils import getToolByName
+from collective.formulator.tests import base
 
 
 class FakeRequest(dict):
@@ -122,10 +114,6 @@ class TestTools(base.FormulatorTestCase):
                 oid = role['id']
         self.assertTrue(mid)
         self.assertTrue(oid)
-
-
-# if __name__ == '__main__':
-    # framework()
 
 
 def test_suite():

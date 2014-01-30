@@ -2,25 +2,17 @@
 # Integration tests. See other test modules for specific components.
 #
 
-import os
 import sys
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
 import plone.protect
-
-from zope.interface import classImplements
-from z3c.form.interfaces import IFormLayer
-from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.tests import base
-from collective.formulator.api import get_actions, get_fields
-
-from Testing.makerequest import makerequest
 import zExceptions
-from zope.component import getMultiAdapter
-
+from Testing.makerequest import makerequest
+from ZPublisher.BaseRequest import BaseRequest
+from collective.formulator.api import get_actions, get_fields
+from collective.formulator.tests import base
 from plone.protect.authenticator import AuthenticatorView
+from z3c.form.interfaces import IFormLayer
+from zope.component import getMultiAdapter
+from zope.interface import classImplements
 
 
 # too lazy to see if this is already in the library somewhere

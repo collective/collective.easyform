@@ -5,7 +5,6 @@ from collective.formulator.tests import base
 from collective.formulator.api import get_actions, set_actions
 
 import transaction
-#from ZPublisher.Publish import Retry
 
 
 class FakeRequest(dict):

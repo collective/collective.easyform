@@ -3,17 +3,12 @@ Server-side only field
 
 Get our test browser::
 
-    >>> from Products.Five.testbrowser import Browser
-    >>> browser = Browser()
-    >>> portal_url = 'http://nohost/plone'
-    >>> self.app.acl_users.userFolderAddUser('root', 'secret', ['Manager'], [])
-    >>> browser.addHeader('Authorization', 'Basic root:secret')
+    >>> browser = self.browser
+    >>> browser.open(self.portal_url)
 
 Add a new form folder and mark the subject input variable as a server side variable.
 (It needs a non-empty default value because it's set as required.) ::
 
-    >>> self.setRoles(['Manager'])
-    >>> browser.open(portal_url)
     >>> browser.getLink('Formulator').click()
     >>> browser.getControl('Title').value = 'testform'
     >>> browser.getControl('Save').click()
@@ -26,7 +21,7 @@ Add a new form folder and mark the subject input variable as a server side varia
 
 And confirm that the server-side field is absent from the rendered form::
 
-    >>> browser.open(portal_url + '/testform')
+    >>> browser.open(self.portal_url + '/testform')
     >>> 'id="form-widgets-topic"' in browser.contents
     False
 
@@ -65,7 +60,7 @@ you page, and then it should show up in mail and thanks page::
     >>> browser.getControl('Include All Fields').selected = False
     >>> browser.getForm(id="form").mech_form.new_control(type='hidden', name='form.widgets.showFields:list', attrs=dict(value='topic'))
     >>> browser.getControl('Save').click()
-    >>> browser.open(portal_url + '/testform')
+    >>> browser.open(self.portal_url + '/testform')
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Comments').value = 'Now with double the rockage...'
     >>> browser.getControl('Submit').click()

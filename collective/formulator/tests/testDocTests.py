@@ -16,7 +16,6 @@ testfiles = (
 
 def test_suite():
     return unittest.TestSuite([
-
         ztc.FunctionalDocFileSuite(
             f, package='collective.formulator.tests',
             test_class=FormulatorFunctionalTestCase,

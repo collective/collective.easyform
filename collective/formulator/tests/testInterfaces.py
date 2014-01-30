@@ -2,18 +2,11 @@
 # Integration tests for interaction with GenericSetup infrastructure
 #
 
-#import os
-#import sys
-# if __name__ == '__main__':
-    #execfile(os.path.join(sys.path[0], 'framework.py'))
-
-from zope.interface.verify import verifyObject, verifyClass
-from zope.component import getMultiAdapter
-
-from collective.formulator.tests import base
-from collective.formulator import interfaces
-#from collective.formulator.browser import exportimport
 from collective.formulator import content
+from collective.formulator import interfaces
+from collective.formulator.tests import base
+from zope.component import getMultiAdapter
+from zope.interface.verify import verifyObject, verifyClass
 
 
 class TestFormGenInterfaces(base.FormulatorTestCase):
@@ -52,10 +45,6 @@ class TestFormGenInterfaces(base.FormulatorTestCase):
             interfaces.IFormulatorFieldset.implementedBy(content.fieldset.FieldsetFolder))
         self.assertTrue(
             verifyClass(interfaces.IFormulatorFieldset, content.fieldset.FieldsetFolder))
-
-
-# if __name__ == '__main__':
-    # framework()
 
 
 def test_suite():

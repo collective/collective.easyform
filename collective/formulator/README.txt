@@ -5,7 +5,6 @@ In this section we are tesing the Formulator content type by performing
 basic operations like adding, updadating and deleting Formulator content
 items.
 
-    >>> from Products.PloneTestCase.setup import portal_owner, default_password
     >>> browser = self.browser
     >>> portal_url = self.portal_url
     >>> browser.open(portal_url)
@@ -92,7 +91,7 @@ contributor role assigned.
     >>> browser.getLink('Log out').click()
     >>> browser.open(portal_url + '/login_form')
     >>> browser.getControl(name='__ac_name').value = 'contributor'
-    >>> browser.getControl(name='__ac_password').value = default_password
+    >>> browser.getControl(name='__ac_password').value = 'secret'
     >>> browser.getControl(name='submit').click()
     >>> browser.open(portal_url)
 
@@ -119,10 +118,5 @@ Done! We added a new Formulator content item logged in as contributor.
 Finally, let's login back as manager.
 
     >>> browser.getLink('Log out').click()
-    >>> browser.open(portal_url + '/login_form')
-    >>> browser.getControl(name='__ac_name').value = portal_owner
-    >>> browser.getControl(name='__ac_password').value = default_password
-    >>> browser.getControl(name='submit').click()
-    >>> browser.open(portal_url)
 
 

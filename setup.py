@@ -25,11 +25,19 @@ setup(name='collective.formulator',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'plone.app.dexterity',
+          'plone.app.textfield',
+          'plone.dexterity>=2.2.0dev',
           'plone.directives.form',
+          'plone.namedfile',
+          'plone.schemaeditor>=1.3.4',
           # -*- Extra requirements: -*-
       ],
-      extras_require = {
-          'test': ['plone.app.testing']
+      extras_require={
+          'test': [
+              'plone.app.testing',
+              'collective.recaptcha'
+          ]
       },
       entry_points="""
       # -*- Entry points: -*-
