@@ -149,6 +149,7 @@ the file field is not listed in the mailer's showFields::
     <sent mail from ...to ['mdummy@address.com']>
     >>> self.portal.MailHost.msg.get_payload(decode=True)
     '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n\n    </dl>\n    <p></p>\n    <pre></pre>\n  </body>\n</html>\n'
+    >>> browser.getControl('Reset').click()
 
 Saved data
 ----------
@@ -177,6 +178,12 @@ Check saved data::
     True
     >>> '<input id="form-buttons-clearall" name="form.buttons.clearall" class="submit-widget button-field" value="Clear all" type="submit" />' in browser.contents
     True
+    >>> browser.getLink('test.txt').click()
+    >>> browser.url
+    'http://nohost/plone/attachmentform/@@actions/saver/data/++widget++crud-edit...widgets.attachment/@@download/test.txt'
+    >>> browser.contents
+    'file contents'
+    >>> browser.goBack()
     >>> def first_item(browser, type_="checkbox"):
     ...     for form in browser.mech_browser.forms():
     ...         for control in form.controls:
