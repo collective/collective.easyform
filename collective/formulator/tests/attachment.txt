@@ -199,5 +199,6 @@ Check saved data::
     >>> browser.getControl("Clear all").click()
     >>> "0 input(s) saved" in browser.contents
     True
+    >>> browser.getControl("Download").click()
 
 

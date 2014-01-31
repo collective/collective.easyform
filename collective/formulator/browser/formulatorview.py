@@ -859,7 +859,7 @@ class SaveData(Action):
         return names
 
     def download_csv(self, response):
-        # """Download the saved data
+        # """Download the saved data as csv
         # """
         filename = '%s.csv' % self.__name__
         response.setHeader(
@@ -869,7 +869,7 @@ class SaveData(Action):
             getattr(self, 'UseColumnNames', False), delimiter=","))
 
     def download_tsv(self, response):
-        # """Download the saved data
+        # """Download the saved data as tsv
         # """
         filename = '%s.tsv' % self.__name__
         response.setHeader(

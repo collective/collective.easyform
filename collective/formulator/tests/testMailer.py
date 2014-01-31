@@ -20,7 +20,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.messageBody = '\n\n'.join(messageText.split('\n\n')[1:])
 
     def afterSetUp(self):
-        base.FormulatorTestCase.afterSetUp(self)
+        super(TestFunctions, self).afterSetUp()
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.checkAuthenticator = False  # no csrf protection
@@ -56,13 +56,35 @@ class TestFunctions(base.FormulatorTestCase):
 
         mailer = get_actions(self.ff1)['mailer']
 
-        #fields = self.ff1._getFieldObjects()
-
         request = self.LoadRequestForm(
             topic='test subject', comments='test comments')
 
         mailer.onSuccess(request.form, request)
 
+        self.assertTrue(self.messageText.find('To: <mdummy@address.com>') > 0)
+        self.assertTrue(self.messageText.find(
+            'Subject: =?utf-8?q?test_subject?=') > 0)
+        msg = email.message_from_string(self.messageText)
+        self.assertTrue(
+            msg.get_payload(decode=True).find('test comments') > 0)
+
+    def test_MailerAdditionalHeaders(self):
+        """ Test mailer with dummy_send """
+
+        mailer = get_actions(self.ff1)['mailer']
+
+        request = self.LoadRequestForm(
+            topic='test subject', comments='test comments')
+
+        mailer.additional_headers = [
+            'Generator: Plone',
+            'Token:   abc  ',
+        ]
+
+        mailer.onSuccess(request.form, request)
+
+        self.assertTrue(self.messageText.find('Generator: Plone') > 0)
+        self.assertTrue(self.messageText.find('Token: abc') > 0)
         self.assertTrue(self.messageText.find('To: <mdummy@address.com>') > 0)
         self.assertTrue(self.messageText.find(
             'Subject: =?utf-8?q?test_subject?=') > 0)

@@ -3,17 +3,11 @@
 
 import sys
 import plone.protect
-from Products.CMFCore.utils import getToolByName
+from StringIO import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 from collective.formulator.api import get_actions, get_fields
 from collective.formulator.tests import base
-
-# dummy class
-
-
-class cd:
-    pass
 
 
 def FakeRequest(method="GET", add_auth=False, **kwargs):
@@ -23,7 +17,7 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
     environ.setdefault('REQUEST_METHOD', method)
     request = HTTPRequest(sys.stdin,
                           environ,
-                          HTTPResponse(stdout=sys.stdout))
+                          HTTPResponse(stdout=StringIO()))
     request.form = kwargs
     if add_auth:
         request.form['_authenticator'] = plone.protect.createToken()
@@ -64,6 +58,59 @@ class TestFunctions(base.FormulatorTestCase):
 
         view = self.ff1.restrictedTraverse("saveddata")
         self.assertEqual(view.items(), [('saver', u'Saver')])
+
+    def testSaverDataFormExtraData(self):
+        """ test saver data form extra data"""
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+        request = FakeRequest(
+            topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.ExtraData = ('dt',)
+        saver.onSuccess(request.form, request)
+
+        view = self.ff1.restrictedTraverse("@@actions")
+        view = view.publishTraverse(view.request, 'saver')
+        view = view.publishTraverse(view.request, 'data')
+        view.update()
+        form = view.form_instance
+        message = form.description()
+        self.assertEqual(message.mapping, {'items': 1})
+        item = form.get_items()[0]
+        self.assertEqual(item[1]['id'], item[0])
+        self.assertEqual(item[1]['topic'], 'test subject')
+        self.assertEqual(item[1]['replyto'], 'test@test.org')
+        self.assertEqual(item[1]['comments'], 'test comments')
+        self.assertTrue(' ' in item[1]['dt'])
+
+    def testSaverDataFormShowFields(self):
+        """ test saver data form show fields """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+        request = FakeRequest(
+            topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.showFields = ('topic', 'comments')
+        saver.onSuccess(request.form, request)
+
+        view = self.ff1.restrictedTraverse("@@actions")
+        view = view.publishTraverse(view.request, 'saver')
+        view = view.publishTraverse(view.request, 'data')
+        view.update()
+        form = view.form_instance
+        message = form.description()
+        self.assertEqual(message.mapping, {'items': 1})
+        item = form.get_items()[0]
+        self.assertEqual(item[1]['id'], item[0])
+        self.assertEqual(item[1]['topic'], 'test subject')
+        self.assertEqual(item[1]['comments'], 'test comments')
+        self.assertTrue('replyto' not in item[1])
 
     def testSaverDataFormOneItem(self):
         """ test saver data form one item """
@@ -112,29 +159,124 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        # self.ff1.setActionAdapter(('saver',))
-        #self.assertEqual(self.ff1.actionAdapter, ('saver',))
-
-        # print "|%s|" % saver.SavedFormInput
         self.assertEqual(saver.itemsSaved(), 0)
 
-        #res = saver.getSavedFormInputForEdit()
-        #self.assertEqual(res, '')
+        res = saver.getSavedFormInputForEdit()
+        self.assertEqual(res, '')
 
         request = FakeRequest(
             add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
-        #view = self.ff1.restrictedTraverse('view')
-        #form = view.form_instance
-        # form.processActions(request.form)
         saver.onSuccess(request.form, request)
-        #errors = self.ff1.fgvalidate(REQUEST=request)
-        #self.assertEqual(errors, {})
 
         self.assertEqual(saver.itemsSaved(), 1)
 
-        #res = saver.getSavedFormInputForEdit()
-        # self.assertEqual(
-            # res.strip(), 'test@test.org,test subject,test comments')
+        res = saver.getSavedFormInputForEdit()
+        self.assertEqual(
+            res.strip(), 'test@test.org,test subject,test comments')
+
+    def testSaverExtraData(self):
+        """ test save data adapter action """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        request = FakeRequest(
+            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.ExtraData = ('dt',)
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+        self.assertTrue('dt' in saver.getSavedFormInput()[0])
+
+    def testSaverDownload(self):
+        """ test save data """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        request = FakeRequest(
+            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+        saver.download(request.response)
+        res = request.response.stdout.getvalue()
+        self.assertTrue('Content-Type: text/comma-separated-values' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue(saver.getSavedFormInputForEdit() in res)
+
+    def testSaverDownloadTSV(self):
+        """ test save data """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        request = FakeRequest(
+            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+        saver.DownloadFormat = "tsv"
+        saver.download(request.response)
+        res = request.response.stdout.getvalue()
+        self.assertTrue('Content-Type: text/tab-separated-values' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="saver.tsv"' in res)
+        self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
+
+    def testSaverDownloadWithTitles(self):
+        """ test save data """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        request = FakeRequest(
+            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+        saver.UseColumnNames = True
+        saver.download(request.response)
+        res = request.response.stdout.getvalue()
+        self.assertTrue('Content-Type: text/comma-separated-values' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue(saver.getSavedFormInputForEdit(header=True) in res)
+
+    def testSaverDownloadExtraData(self):
+        """ test save data """
+
+        self.createSaver()
+
+        self.assertTrue('saver' in get_actions(self.ff1))
+        saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        request = FakeRequest(
+            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+        saver.ExtraData = ('dt', 'HTTP_USER_AGENT')
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+        saver.download(request.response)
+        res = request.response.stdout.getvalue()
+        self.assertTrue('Content-Type: text/comma-separated-values' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):
         """ test save data adapter action and direct access to SavedFormInput """
@@ -144,13 +286,9 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        # self.ff1.setActionAdapter(('saver',))
-
         request = FakeRequest(
             add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
         saver.onSuccess(request.form, request)
-        #errors = self.ff1.fgvalidate(REQUEST=request)
-        #self.assertEqual(errors, {})
 
         self.assertEqual(saver.itemsSaved(), 1)
         row = iter(saver.getSavedFormInput()).next()
@@ -159,11 +297,9 @@ class TestFunctions(base.FormulatorTestCase):
         request = FakeRequest(
             add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
         saver.onSuccess(request.form, request)
-        #errors = self.ff1.fgvalidate(REQUEST=request)
-        #self.assertEqual(errors, {})
         self.assertEqual(saver.itemsSaved(), 2)
 
-        saver._storage.clear()
+        saver.clearSavedFormInput()
         self.assertEqual(saver.itemsSaved(), 0)
 
     def testSetSavedFormInput(self):
@@ -173,80 +309,32 @@ class TestFunctions(base.FormulatorTestCase):
         self.createSaver()
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
+        self.assertEqual(saver.getSavedFormInputForEdit(), '')
 
         # save a row
         fields = list(get_fields(self.ff1))
-        #saver.savedFormInput = 'one,two,three'
         saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
+        items = saver.getSavedFormInputItems()
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
+            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
+        self.assertEqual(saver.getSavedFormInputForEdit(), 'one,two,three\r\n')
 
         # save a couple of \n-delimited rows - \n eol
-        #saver.savedFormInput = 'one,two,three\nfour,five,six'
         saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
         self.assertEqual(saver.itemsSaved(), 2)
+        items = saver.getSavedFormInputItems()
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
+            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         self.assertEqual(
-            saver._storage.values()[1], dict(zip(['id'] + fields, [saver._storage.keys()[1], 'four', 'five', 'six'])))
-
-        # save a couple of \n-delimited rows -- \r\n eol
-        #saver.savedFormInput = 'one,two,three\r\nfour,five,six'
-        #self.assertEqual(saver.itemsSaved(), 2)
-
-        # save a couple of \n-delimited rows -- \n\n double eol
-        #saver.savedFormInput = 'one,two,three\n\nfour,five,six'
-        #self.assertEqual(saver.itemsSaved(), 2)
+            items[1][1], dict(zip(['id'] + fields, [items[1][0], 'four', 'five', 'six'])))
+        self.assertEqual(
+            saver.getSavedFormInputForEdit(), 'one,two,three\r\nfour,five,six\r\n')
 
         # save empty string
-        saver._storage.clear()
+        saver.clearSavedFormInput()
         self.assertEqual(saver.itemsSaved(), 0)
-
-        # save empty list
-        #saver.savedFormInput = tuple()
-        #self.assertEqual(saver.itemsSaved(), 0)
-
-    def ttestSetSavedFormInputAlternateDelimiter(self):
-        """ test setSavedFormInput functionality when an alternate csv delimiter
-            has been specified
-        """
-        # set prefered delimiter
-        pft = getToolByName(self.portal, 'formgen_tool')
-        alt_delimiter = '|'
-        pft.setDefault('csv_delimiter', alt_delimiter)
-        # set up saver
-        self.createSaver()
-        saver = get_actions(self.ff1)['saver']
-
-        # build and save a row
-        row1 = alt_delimiter.join(('one', 'two', 'three'))
-        saver.savedFormInput = row1
-        self.assertEqual(saver.itemsSaved(), 1)
-        self.assertEqual(saver._storage[0], ['one', 'two', 'three'])
-
-        # save a couple of \n-delimited rows - \n eol
-        row2 = alt_delimiter.join(('four', 'five', 'six'))
-        saver.savedFormInput = '%s\n%s' % (row1, row2)
-        self.assertEqual(saver.itemsSaved(), 2)
-        self.assertEqual(saver._storage[0], ['one', 'two', 'three'])
-        self.assertEqual(saver._storage[1], ['four', 'five', 'six'])
-
-        # save a couple of \n-delimited rows -- \r\n eol
-        saver.savedFormInput = '%s\r\n%s' % (row1, row2)
-        self.assertEqual(saver.itemsSaved(), 2)
-
-        # save a couple of \n-delimited rows -- \n\n double eol
-        saver.savedFormInput = '%s\n\n%s' % (row1, row2)
-        self.assertEqual(saver.itemsSaved(), 2)
-
-        # save empty string
-        saver.savedFormInput = ''
-        self.assertEqual(saver.itemsSaved(), 0)
-
-        # save empty list
-        saver.savedFormInput = tuple()
-        self.assertEqual(saver.itemsSaved(), 0)
+        self.assertEqual(saver.getSavedFormInputForEdit(), '')
 
     def testEditSavedFormInput(self):
         """ test manage_saveData functionality """
@@ -261,79 +349,9 @@ class TestFunctions(base.FormulatorTestCase):
         #saver.savedFormInput = 'one,two,three'
         saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
+        items = saver.getSavedFormInputItems()
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
-        """
-        data = cd()
-        setattr(data, 'item-0', 'four')
-        setattr(data, 'item-1', 'five')
-        setattr(data, 'item-2', 'six')
-
-        # We should need an authenticator
-        self.assertRaises(
-            zExceptions.Forbidden, saver.manage_saveData, *[saver._storage.keys()[0], data])
-
-        saver.REQUEST = FakeRequest(add_auth=True, method="POST")
-        saver.manage_saveData(saver._storage.keys()[0], data)
-
-        self.assertEqual(saver.itemsSaved(), 1)
-        self.assertEqual(
-            saver._storage.values()[0], ['four', 'five', 'six'])
-        """
-
-    def ttestEditSavedFormInputWithAlternateDelimiter(self):
-        """ test manage_saveData functionality when an alternate csv delimiter is used """
-
-        # set prefered delimiter
-        pft = getToolByName(self.portal, 'formgen_tool')
-        alt_delimiter = '|'
-        pft.setDefault('csv_delimiter', alt_delimiter)
-
-        # set up saver
-        self.createSaver()
-        self.assertTrue('saver' in get_actions(self.ff1))
-        saver = get_actions(self.ff1)['saver']
-
-        # save a row
-        saver.savedFormInput = 'one|two|three'
-        self.assertEqual(saver.itemsSaved(), 1)
-        self.assertEqual(
-            saver._storage.values()[0], ['one', 'two', 'three'])
-
-        data = cd()
-        setattr(data, 'item-0', 'four')
-        setattr(data, 'item-1', 'five')
-        setattr(data, 'item-2', 'six')
-
-        saver.REQUEST = FakeRequest(add_auth=True, method="POST")
-        saver.manage_saveData(saver._storage.keys()[0], data)
-        self.assertEqual(saver.itemsSaved(), 1)
-        self.assertEqual(
-            saver._storage.values()[0], ['four', 'five', 'six'])
-
-    def ttestRetrieveDataSavedBeforeSwitchingDelimiter(self):
-        """ test manage_saveData functionality when an alternate csv delimiter is used """
-
-        # set up saver
-        self.createSaver()
-        self.assertTrue('saver' in get_actions(self.ff1))
-        saver = get_actions(self.ff1)['saver']
-
-        # save a row
-        saver.savedFormInput = 'one,two,three'
-        self.assertEqual(saver.itemsSaved(), 1)
-        self.assertEqual(
-            saver._storage.values()[0], ['one', 'two', 'three'])
-
-        # switch prefered delimiter
-        #pft = getToolByName(self.portal, 'formgen_tool')
-        #alt_delimiter = '|'
-        #pft.setDefault('csv_delimiter', alt_delimiter)
-
-        # verify we can retrieve based on new delimiter
-        self.assertEqual(saver.itemsSaved(), 1)
-        self.assertEqual(
-            saver._storage.values()[0], ['one', 'two', 'three'])
+            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
 
     def testDeleteSavedFormInput(self):
         """ test manage_deleteData functionality """
@@ -351,12 +369,13 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertEqual(saver.itemsSaved(), 3)
 
         # saver.manage_deleteData(saver._storage.keys()[1])
-        del saver._storage[saver._storage.keys()[1]]
+        saver.delDataRow(saver.getSavedFormInputItems()[1][0])
         self.assertEqual(saver.itemsSaved(), 2)
+        items = saver.getSavedFormInputItems()
         self.assertEqual(
-            saver._storage.values()[0], dict(zip(['id'] + fields, [saver._storage.keys()[0], 'one', 'two', 'three'])))
+            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         self.assertEqual(
-            saver._storage.values()[1], dict(zip(['id'] + fields, [saver._storage.keys()[1], 'seven', 'eight', 'nine'])))
+            items[1][1], dict(zip(['id'] + fields, [items[1][0], 'seven', 'eight', 'nine'])))
 
     def testSaverInputAsDictionaries(self):
         """ test save data adapter's InputAsDictionaries """
@@ -392,8 +411,6 @@ class TestFunctions(base.FormulatorTestCase):
 
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
-
-        # self.ff1.setActionAdapter(('saver',))
 
         cn = saver.getColumnNames()
         self.assertTrue(len(cn) == 3)
@@ -435,8 +452,6 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
 
-        # self.ff1.setActionAdapter(('saver',))
-
         cn = saver.getColumnTitles()
         self.assertTrue(len(cn) == 3)
         self.assertTrue(cn[0] == 'Your E-Mail Address')
@@ -458,13 +473,9 @@ class TestFunctions(base.FormulatorTestCase):
         saver = get_actions(self.ff1)['saver']
         saver.showFields = ('topic', 'comments')
 
-        # self.ff1.setActionAdapter(('saver',))
-
         request = FakeRequest(add_auth=True, method='POST',
                               topic='test subject', replyto='test@test.org', comments='test comments')
         saver.onSuccess(request.form, request)
-        #errors = self.ff1.fgvalidate(REQUEST=request)
-        #self.assertEqual(errors, {})
 
         self.assertEqual(saver.itemsSaved(), 1)
         row = iter(saver.getSavedFormInput()).next()
