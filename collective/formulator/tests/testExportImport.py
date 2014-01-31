@@ -352,8 +352,8 @@ class TestFormImport(ExportImportTester):
         # setup a reasonable request
         request = self.app.REQUEST
         request.form = {
-            'form.upload': FileUpload(fs),
-            'form.actions.import': 'import'}
+            'form.widgets.upload': FileUpload(fs),
+            'form.buttons.import': 'import'}
         request.RESPONSE = request.response
 
         # get the form object
@@ -371,8 +371,8 @@ class TestFormImport(ExportImportTester):
         # submit the form requesting purge of contained fields
         request = self.app.REQUEST
         request.form = {
-            'form.upload': self._prepareFormTarball(),
-            'form.actions.import': 'import'}
+            'form.widgets.upload': self._prepareFormTarball(),
+            'form.buttons.import': 'import'}
         request.RESPONSE = self.app.REQUEST.response
 
         # get the form object
