@@ -145,8 +145,8 @@ class TestContentCreation(base.FormulatorTestCase):
         'FormRichTextField',
         'FormFileField',
     ]
-    #if base.haveRecaptcha:
-        #fieldTypes.append('FormCaptchaField')
+    # if base.haveRecaptcha:
+        # fieldTypes.append('FormCaptchaField')
     fieldTypes = tuple(fieldTypes)
 
     adapterTypes = (

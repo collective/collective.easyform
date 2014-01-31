@@ -15,12 +15,6 @@ from unittest2 import TestCase
 from zope.component import getSiteManager
 
 
-class Session(dict):
-
-    def set(self, key, value):
-        self[key] = value
-
-
 class MailHostMock(MailHost):
 
     def _send(self, mfrom, mto, messageText, immediate=False):
@@ -73,7 +67,6 @@ class FormulatorTestCase(TestCase):
 
     def setUp(self):
         self.app = self.layer['app']
-        self.app.REQUEST['SESSION'] = Session()
         self.portal = self.layer['portal']
         self.portal.invokeFactory('Folder', 'test-folder')
         self.folder = self.portal['test-folder']
@@ -89,7 +82,6 @@ class FormulatorFunctionalTestCase(FunctionalTestCase):
 
     def setUp(self):
         self.app = self.layer['app']
-        self.app.REQUEST['SESSION'] = Session()
         self.portal = self.layer['portal']
         self.portal.invokeFactory('Folder', 'news')
         self.browser = Browser(self.app)
