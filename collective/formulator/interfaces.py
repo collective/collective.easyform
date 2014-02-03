@@ -2,31 +2,31 @@ from Products.PageTemplates.Expressions import getEngine
 from plone.app.textfield import RichText
 from plone.directives import form
 from plone.schemaeditor import SchemaEditorMessageFactory as __
-from plone.schemaeditor.interfaces import ID_RE, ISchemaContext, IFieldContext
+from plone.schemaeditor.interfaces import ID_RE
+from plone.schemaeditor.interfaces import IFieldContext
+from plone.schemaeditor.interfaces import ISchemaContext
 from plone.z3cform.interfaces import IFormWrapper
 from z3c.form import interfaces
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema as zs
-from zope.interface import Invalid, Interface, invariant
+from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.schema.interfaces import IField
 from zope.tales.tales import CompilerError
+
 from collective.formulator import formulatorMessageFactory as _
-from collective.formulator.vocabularies import (
-    fieldsFactory,
-    customActions,
-    MIME_LIST,
-    XINFO_HEADERS,
-    getProxyRoleChoices,
-    vocabExtraDataDL,
-    vocabFormatDL,
-)
-from collective.formulator.config import (
-    # MODEL_DEFAULT,
-    FIELDS_DEFAULT,
-    ACTIONS_DEFAULT,
-    MAIL_BODY_DEFAULT,
-    DEFAULT_SCRIPT,
-)
+from collective.formulator.config import ACTIONS_DEFAULT
+from collective.formulator.config import DEFAULT_SCRIPT
+from collective.formulator.config import FIELDS_DEFAULT
+from collective.formulator.config import MAIL_BODY_DEFAULT
+from collective.formulator.vocabularies import MIME_LIST
+from collective.formulator.vocabularies import XINFO_HEADERS
+from collective.formulator.vocabularies import customActions
+from collective.formulator.vocabularies import fieldsFactory
+from collective.formulator.vocabularies import getProxyRoleChoices
+from collective.formulator.vocabularies import vocabExtraDataDL
+from collective.formulator.vocabularies import vocabFormatDL
 
 
 def isValidFieldName(value):
@@ -406,6 +406,13 @@ class IFormulator(form.Schema):
 
 
 class IFormulatorView(Interface):
+
+    """
+    Formulator view interface
+    """
+
+
+class IFormulatorForm(Interface):
 
     """
     Formulator view interface

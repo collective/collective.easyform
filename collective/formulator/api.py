@@ -1,9 +1,11 @@
-from re import compile
+from Products.CMFCore.Expression import Expression
+from Products.CMFCore.Expression import getExprContext
 from hashlib import md5
-from plone.memoize import ram
-from plone.supermodel import loadString, serializeSchema
 from plone.directives.form import Schema
-from Products.CMFCore.Expression import getExprContext, Expression
+from plone.memoize import ram
+from plone.supermodel import loadString
+from plone.supermodel import serializeSchema
+from re import compile
 
 SCHEMATA_KEY = u""
 CONTEXT_KEY = u"context"

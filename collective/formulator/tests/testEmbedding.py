@@ -1,10 +1,11 @@
-from zope.interface import classImplements
-from z3c.form.interfaces import IFormLayer
 from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.tests import base
-from collective.formulator.api import get_actions, set_actions
-
+from z3c.form.interfaces import IFormLayer
+from zope.interface import classImplements
 import transaction
+
+from collective.formulator.api import get_actions
+from collective.formulator.api import set_actions
+from collective.formulator.tests import base
 
 
 class FakeRequest(dict):

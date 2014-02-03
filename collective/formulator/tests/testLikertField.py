@@ -77,7 +77,7 @@ class TestLikertField(base.FormulatorTestCase):
 
 
 def test_suite():
-    from unittest import TestSuite, makeSuite
+    from unittest import TestSuite  # , makeSuite
     suite = TestSuite()
     # suite.addTest(makeSuite(TestLikertField))
     return suite

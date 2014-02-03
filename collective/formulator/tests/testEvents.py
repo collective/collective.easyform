@@ -2,8 +2,9 @@
 # Test Formulator event-handler functionality
 #
 
+from collective.formulator.api import get_actions
+from collective.formulator.api import get_fields
 from collective.formulator.tests import base
-from collective.formulator.api import get_actions, get_fields
 
 
 class TestAdapterPaste(base.FormulatorTestCase):

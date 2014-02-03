@@ -1,12 +1,13 @@
 # Integration tests specific to save-data adapter.
 #
 
-import sys
 import plone.protect
+import sys
 from StringIO import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
-from collective.formulator.api import get_actions, get_fields
+from collective.formulator.api import get_actions
+from collective.formulator.api import get_fields
 from collective.formulator.tests import base
 
 

@@ -2,17 +2,17 @@
 # Integration tests. See other test modules for specific components.
 #
 
-import sys
 import plone.protect
+import sys
 import zExceptions
 from Testing.makerequest import makerequest
 from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator.api import get_actions, get_fields
-from collective.formulator.tests import base
 from plone.protect.authenticator import AuthenticatorView
 from z3c.form.interfaces import IFormLayer
 from zope.component import getMultiAdapter
 from zope.interface import classImplements
+from collective.formulator.api import get_fields
+from collective.formulator.tests import base
 
 
 # too lazy to see if this is already in the library somewhere
@@ -669,7 +669,7 @@ class TestFunctions(base.FormulatorTestCase):
 
 
 def test_suite():
-    from unittest import TestSuite, makeSuite
+    from unittest import TestSuite  # , makeSuite
     suite = TestSuite()
     # suite.addTest(makeSuite(TestFunctions))
     return suite

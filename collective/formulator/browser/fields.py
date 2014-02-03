@@ -3,8 +3,8 @@ from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from zope.interface import implements
 
-from collective.formulator.interfaces import IFormulatorFieldsContext
 from collective.formulator.api import get_fields
+from collective.formulator.interfaces import IFormulatorFieldsContext
 
 
 class FormulatorFieldsView(SchemaContext):

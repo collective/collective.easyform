@@ -4,9 +4,12 @@
 #
 
 import email
-from collective.formulator.tests import base
-from collective.formulator.api import get_actions, set_actions, get_fields, set_fields
+from collective.formulator.api import get_actions
+from collective.formulator.api import get_fields
+from collective.formulator.api import set_actions
+from collective.formulator.api import set_fields
 from collective.formulator.interfaces import IActionExtender
+from collective.formulator.tests import base
 
 
 class TestFunctions(base.FormulatorTestCase):

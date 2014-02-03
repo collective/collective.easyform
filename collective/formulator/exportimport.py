@@ -1,16 +1,15 @@
 from plone.supermodel.parser import IFieldMetadataHandler
 from plone.supermodel.utils import ns
 from zope import schema as zs
-from zope.component import adapts, adapter
+from zope.component import adapter
+from zope.component import adapts
 from zope.interface import implements
 
-from collective.formulator.interfaces import (
-    IAction,
-    IActionExtender,
-    IFieldExtender,
-    IFormulatorActionsContext,
-    IFormulatorFieldsContext,
-)
+from collective.formulator.interfaces import IAction
+from collective.formulator.interfaces import IActionExtender
+from collective.formulator.interfaces import IFieldExtender
+from collective.formulator.interfaces import IFormulatorActionsContext
+from collective.formulator.interfaces import IFormulatorFieldsContext
 
 
 @adapter(IFormulatorFieldsContext, zs.interfaces.IField)

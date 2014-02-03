@@ -3,14 +3,10 @@ from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabulary
 from zope.schema.vocabulary import SimpleVocabulary
-from collective.formulator.api import (
-    get_fields,
-    # get_actions,
-    # set_schema,
-    # set_actions,
-    get_context,
-)
+
 from collective.formulator import formulatorMessageFactory as _
+from collective.formulator.api import get_context
+from collective.formulator.api import get_fields
 
 customActions = SimpleVocabulary.fromItems((
     (_(u"Traverse to"), u"traverse_to"),

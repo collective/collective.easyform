@@ -1,4 +1,5 @@
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.BaseRequest import DefaultPublishTraverse
@@ -6,33 +7,42 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.instance import memoize
 from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
-from plone.schemaeditor.browser.schema.listing import SchemaListing, SchemaListingPage
+from plone.schemaeditor.browser.schema.listing import SchemaListing
+from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
-from plone.schemaeditor.interfaces import IFieldEditFormSchema, IFieldEditorExtender
+from plone.schemaeditor.interfaces import IFieldEditFormSchema
+from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.utils import SchemaModifiedEvent
 from plone.z3cform import layout
 from plone.z3cform.crud import crud
 from plone.z3cform.interfaces import IDeferSecurityCheck
 from plone.z3cform.traversal import WrapperWidgetTraversal
-from z3c.form import button, form, field
+from z3c.form import button
+from z3c.form import field
+from z3c.form import form
 from zope.cachedescriptors.property import Lazy as lazy_property
-from zope.component import adapts, queryUtility, getAdapters
+from zope.component import adapts
+from zope.component import getAdapters
+from zope.component import queryUtility
 from zope.event import notify
-from zope.interface import alsoProvides, implements, noLongerProvides
+from zope.interface import alsoProvides
+from zope.interface import implements
+from zope.interface import noLongerProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFieldsInOrder
-from collective.formulator.api import get_actions, get_fields, get_context
+
 from collective.formulator import formulatorMessageFactory as _
-from collective.formulator.interfaces import (
-    IActionContext,
-    IActionEditForm,
-    IActionFactory,
-    IFormulatorActionsContext,
-    INewAction,
-    IExtraData,
-    ISaveData,
-    ISavedDataFormWrapper,
-)
+from collective.formulator.api import get_actions
+from collective.formulator.api import get_context
+from collective.formulator.api import get_fields
+from collective.formulator.interfaces import IActionContext
+from collective.formulator.interfaces import IActionEditForm
+from collective.formulator.interfaces import IActionFactory
+from collective.formulator.interfaces import IExtraData
+from collective.formulator.interfaces import IFormulatorActionsContext
+from collective.formulator.interfaces import INewAction
+from collective.formulator.interfaces import ISaveData
+from collective.formulator.interfaces import ISavedDataFormWrapper
 
 
 class SavedDataTraversal(WrapperWidgetTraversal):

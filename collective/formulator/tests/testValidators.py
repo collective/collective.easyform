@@ -5,14 +5,16 @@
 from Products.CMFDefault.exceptions import EmailAddressInvalid
 from Products.validation import validation
 from ZPublisher.BaseRequest import BaseRequest
-from collective.formulator import validators
-from collective.formulator.api import get_fields, set_fields
-from collective.formulator.interfaces import IFieldExtender
-from collective.formulator.tests import base
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import classImplements
+
+from collective.formulator import validators
+from collective.formulator.api import get_fields
+from collective.formulator.api import set_fields
+from collective.formulator.interfaces import IFieldExtender
+from collective.formulator.tests import base
 
 IFieldValidator = validators.IFieldValidator
 

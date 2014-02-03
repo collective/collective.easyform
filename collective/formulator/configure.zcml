@@ -16,6 +16,7 @@
       />
   <!-- -*- extra stuff goes here -*- -->
 
+  <include file="exportimport.zcml" />
   <include file="fields.zcml" />
   <include file="actions.zcml" />
   <include file="subscribers.zcml" />

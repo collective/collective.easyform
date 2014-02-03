@@ -5,18 +5,19 @@ except ImportError:
     validation = {}
     baseValidators = []
 
-from types import BooleanType, StringTypes
-from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.interface import Interface, implements
-from zope.component import (
-    getUtility,
-    provideUtility,
-    getUtilitiesFor,
-)
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.exceptions import EmailAddressInvalid
+from types import BooleanType
+from types import StringTypes
+from zope.component import getUtilitiesFor
+from zope.component import getUtility
+from zope.component import provideUtility
+from zope.interface import Interface
+from zope.interface import implements
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
+
 from collective.formulator import formulatorMessageFactory as _
 
 

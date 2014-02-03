@@ -2,11 +2,13 @@
 # Integration tests for interaction with GenericSetup infrastructure
 #
 
+from zope.component import getMultiAdapter
+from zope.interface.verify import verifyClass
+from zope.interface.verify import verifyObject
+
 from collective.formulator import content
 from collective.formulator import interfaces
 from collective.formulator.tests import base
-from zope.component import getMultiAdapter
-from zope.interface.verify import verifyObject, verifyClass
 
 
 class TestFormGenInterfaces(base.FormulatorTestCase):
@@ -48,7 +50,7 @@ class TestFormGenInterfaces(base.FormulatorTestCase):
 
 
 def test_suite():
-    from unittest import TestSuite, makeSuite
+    from unittest import TestSuite  # , makeSuite
     suite = TestSuite()
     # suite.addTest(makeSuite(TestFormGenInterfaces))
     return suite

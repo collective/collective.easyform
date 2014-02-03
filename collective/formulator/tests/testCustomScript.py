@@ -13,15 +13,15 @@ try:
 except ImportError:
     from Globals import InitializeClass
 
-from AccessControl import Unauthorized
 from AccessControl import ClassSecurityInfo
-
+from AccessControl import Unauthorized
+from Products.CMFCore import permissions
 from plone.app.testing import logout
 
+from collective.formulator.api import get_actions
+from collective.formulator.api import set_actions
 from collective.formulator.tests import base
-from collective.formulator.api import get_actions, set_actions
 
-from Products.CMFCore import permissions
 
 test_script = """
 ## Python Script
