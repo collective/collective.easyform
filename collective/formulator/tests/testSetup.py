@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Test Formulator initialisation and set-up
 #

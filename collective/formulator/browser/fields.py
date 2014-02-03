@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage

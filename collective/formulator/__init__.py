@@ -1,4 +1,5 @@
-# -*- extra stuff goes here -*-
+# -*- coding: utf-8 -*-
+
 from zope.i18nmessageid import MessageFactory
 
 formulatorMessageFactory = MessageFactory('collective.formulator')

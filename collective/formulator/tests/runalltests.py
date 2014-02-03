@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Runs all tests in the current directory
 #

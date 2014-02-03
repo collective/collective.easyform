@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Integration tests specific to save-data adapter.
 #
 

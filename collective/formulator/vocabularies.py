@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from zope.interface import implements
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextSourceBinder

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from BTrees.IOBTree import IOBTree
 try:
     from BTrees.LOBTree import LOBTree

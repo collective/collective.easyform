@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from collective.formulator.api import set_actions
 from collective.formulator.api import set_fields
 

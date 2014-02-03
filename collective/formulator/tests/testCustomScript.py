@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 
     Unit test for Formulator custom scripts

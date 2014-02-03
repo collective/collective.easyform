@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from hashlib import md5

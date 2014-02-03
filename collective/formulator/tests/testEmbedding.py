@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ZPublisher.BaseRequest import BaseRequest
 from z3c.form.interfaces import IFormLayer
 from zope.interface import classImplements

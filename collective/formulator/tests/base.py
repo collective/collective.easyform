@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from Products.MailHost.MailHost import MailHost
 from Products.MailHost.interfaces import IMailHost
 from Testing.ZopeTestCase import FunctionalTestCase

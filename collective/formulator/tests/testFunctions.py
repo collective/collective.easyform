@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Integration tests. See other test modules for specific components.
 #

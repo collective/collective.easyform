@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from AccessControl import getSecurityManager
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.mapply import mapply

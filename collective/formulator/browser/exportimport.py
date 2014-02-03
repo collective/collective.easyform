@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from Products.Five import BrowserView
 from Products.GenericSetup.context import TarballExportContext
 from Products.GenericSetup.context import TarballImportContext

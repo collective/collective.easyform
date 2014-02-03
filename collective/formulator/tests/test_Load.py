@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 try:
     from collective.funkload import testcase

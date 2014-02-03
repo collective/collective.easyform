@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 MODEL_DEFAULT = u"""
 <model xmlns="http://namespaces.plone.org/supermodel/schema">
     <schema>

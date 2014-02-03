@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 #
 # Integeration tests specific to the mailer
 #

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from Products.PageTemplates.Expressions import getEngine
 from plone.app.textfield import RichText
 from plone.directives import form

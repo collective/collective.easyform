@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Integration tests for interaction with GenericSetup infrastructure
 #

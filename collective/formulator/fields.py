@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from z3c.form import validator
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from plone.supermodel.parser import IFieldMetadataHandler
 from plone.supermodel.utils import ns
 from zope import schema as zs
