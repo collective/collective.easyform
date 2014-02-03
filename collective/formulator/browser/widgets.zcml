@@ -1,0 +1,17 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:z3c="http://namespaces.zope.org/z3c"
+           i18n_domain="collective.formulator">
+    <adapter
+        factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
+        for="collective.formulator.interfaces.IAction
+             collective.formulator.interfaces.IActionEditForm"
+        />
+    <include package="z3c.form" file="meta.zcml" />
+    <z3c:widgetTemplate
+        for="collective.formulator.interfaces.IFormulatorActionsContext"
+        mode="input"
+        widget="z3c.form.interfaces.ICheckBoxWidget"
+        layer="z3c.form.interfaces.IFormLayer"
+        template="action_input.pt"
+        />
+</configure>
