@@ -6,6 +6,7 @@ from Products.GenericSetup.context import TarballImportContext
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.statusmessages.interfaces import IStatusMessage
+from datetime import datetime
 from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.interfaces import IFormulatorImportFormSchema
 from plone.z3cform import layout
@@ -32,10 +33,12 @@ class FormulatorExportView(BrowserView):
         if not has_export:
             return
         ctx = TarballExportContext(self.context)
+        response = self.request.RESPONSE
+        disposition = 'attachment; filename="{0}-{1:{2}}.tar.gz"'.format(
+            self.context.getId(), datetime.now(), "%Y%m%d%H%M%S")
 
-        self.request.RESPONSE.setHeader('Content-type', 'application/x-gzip')
-        self.request.RESPONSE.setHeader('Content-disposition',
-                                        'attachment; filename="{0}"'.format(ctx.getArchiveFilename()))
+        response.setHeader('Content-type', 'application/x-gzip')
+        response.setHeader('Content-disposition', disposition)
 
         # export the structure treating the current form as our root context
         IFilesystemExporter(self.context).export(ctx, 'structure', True)
