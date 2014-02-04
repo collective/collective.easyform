@@ -41,30 +41,30 @@ def isCommaSeparatedEmails(value):
     """Check for one or more E-Mail Addresses separated by commas"""
     portal = getUtility(ISiteRoot)
     reg_tool = getToolByName(portal, 'portal_registration')
-    for v in value.split(","):
+    for v in value.split(','):
         if not reg_tool.isValidEmail(v.strip()):
-            return _(u"Must be a valid list of email addresses (separated by commas).")
+            return _(u'Must be a valid list of email addresses (separated by commas).')
 
 
 def isChecked(value):
     if (type(value) == BooleanType) and value or (type(value) in StringTypes) and (value == '1'):
         return
-    return _(u"Must be checked.")
+    return _(u'Must be checked.')
 
 
 def isUnchecked(value):
     if (type(value) == BooleanType) and not value or (type(value) in StringTypes) and (value == '0'):
         return
-    return _(u"Must be unchecked.")
+    return _(u'Must be unchecked.')
 
 
 def isNotLinkSpam(value):
     # validation is optional and configured on the field
-    bad_signs = ("<a ", "www.", "http:", ".com", )
+    bad_signs = ('<a ', 'www.', 'http:', '.com', )
     value = value.lower()
     for s in bad_signs:
         if s in value:
-            return _("Links are not allowed.")
+            return _('Links are not allowed.')
 
 # Base validators
 
@@ -74,7 +74,7 @@ def update_validators():
         def method(name):
             def validate(value):
                 if isinstance(value, unicode):
-                    value = value.encode("utf-8")
+                    value = value.encode('utf-8')
                 res = validation(name, value)
                 if res != 1:
                     return res

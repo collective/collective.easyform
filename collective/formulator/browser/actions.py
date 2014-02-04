@@ -223,13 +223,13 @@ class FormulatorActionsListingPage(SchemaListingPage):
         the form label.
     """
     form = FormulatorActionsListing
-    index = ViewPageTemplateFile("model_listing.pt")
+    index = ViewPageTemplateFile('model_listing.pt')
 
 
 class ActionAddForm(FieldAddForm):
 
     fields = field.Fields(INewAction)
-    label = _("Add new action")
+    label = _('Add new action')
 
 
 ActionAddFormPage = layout.wrap_form(ActionAddForm)

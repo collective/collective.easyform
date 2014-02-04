@@ -11,8 +11,8 @@ from collective.formulator.api import get_context
 from collective.formulator.api import get_fields
 
 customActions = SimpleVocabulary.fromItems((
-    (_(u"Traverse to"), u"traverse_to"),
-    (_(u"Redirect to"), u"redirect_to"),
+    (_(u'Traverse to'), u'traverse_to'),
+    (_(u'Redirect to'), u'redirect_to'),
 ))
 
 MIME_LIST = SimpleVocabulary.fromItems((
@@ -29,8 +29,8 @@ XINFO_HEADERS = SimpleVocabulary.fromItems((
 ))
 
 getProxyRoleChoices = SimpleVocabulary.fromItems((
-    (u"No proxy role", u"none"),
-    (u"Manager", u"Manager"),
+    (u'No proxy role', u'none'),
+    (u'Manager', u'Manager'),
 ))
 
 vocabExtraDataDL = SimpleVocabulary.fromItems((

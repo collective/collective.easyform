@@ -5,7 +5,7 @@ try:
     haveFunkload = True
 except ImportError:
     haveFunkload = False
-    print "collective.funkload is unavailable. Ignoring load tests."
+    print 'collective.funkload is unavailable. Ignoring load tests.'
 
 
 if haveFunkload:
@@ -14,7 +14,7 @@ if haveFunkload:
         """Let's see how the saved data adapter performs under load..."""
 
         def setUp(self):
-            self.logd("setUp")
+            self.logd('setUp')
             self.label = 'PFG load test'
             self.server_url = self.conf_get('main', 'url')
 

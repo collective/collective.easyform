@@ -36,4 +36,4 @@ class FormulatorFieldsListingPage(SchemaListingPage):
         from plone.z3cform.layout so that we can inject the schema name into
         the form label.
     """
-    index = ViewPageTemplateFile("model_listing.pt")
+    index = ViewPageTemplateFile('model_listing.pt')

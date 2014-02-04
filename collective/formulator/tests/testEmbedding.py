@@ -49,7 +49,7 @@ class TestEmbedding(base.FormulatorTestCase):
         base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
-        self.ff1.title = u"ff1"
+        self.ff1.title = u'ff1'
         self.ff1.checkAuthenticator = False  # no csrf protection
         actions = get_actions(self.ff1)
         actions['mailer'].recipient_email = u'mdummy@address.com'

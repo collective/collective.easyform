@@ -14,7 +14,8 @@ from z3c.form import field
 from z3c.form import form
 from zope.component import getMultiAdapter
 try:
-    from plone.dexterity.exportimport import DexterityContentExporterImporter  # flake8: noqa
+    # flake8: noqa
+    from plone.dexterity.exportimport import DexterityContentExporterImporter
     has_export = True
 except ImportError:
     has_export = False

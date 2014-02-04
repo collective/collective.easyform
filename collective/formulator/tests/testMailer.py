@@ -98,7 +98,7 @@ class TestFunctions(base.FormulatorTestCase):
     def test_MailerLongSubject(self):
         """ Test mailer with subject line > 76 chars (Tracker #84) """
 
-        long_subject = "Now is the time for all good persons to come to the aid of the quick brown fox."
+        long_subject = 'Now is the time for all good persons to come to the aid of the quick brown fox.'
 
         mailer = get_actions(self.ff1)['mailer']
         #fields = self.ff1._getFieldObjects()
@@ -223,8 +223,8 @@ class TestFunctions(base.FormulatorTestCase):
 
         mailer = get_actions(self.ff1)['mailer']
         mailer.subjectOverride = "python: '%s and %s' % ('eggs', 'spam')"
-        mailer.senderOverride = "string: spam@eggs.com"
-        mailer.recipientOverride = "string: eggs@spam.com"
+        mailer.senderOverride = 'string: spam@eggs.com'
+        mailer.recipientOverride = 'string: eggs@spam.com'
 
         #fields = self.ff1._getFieldObjects()
 
@@ -242,7 +242,7 @@ class TestFunctions(base.FormulatorTestCase):
         """ try multiple recipients in recipient override """
 
         mailer = get_actions(self.ff1)['mailer']
-        mailer.recipientOverride = "string: eggs@spam.com, spam@spam.com"
+        mailer.recipientOverride = 'string: eggs@spam.com, spam@spam.com'
 
         #fields = self.ff1._getFieldObjects()
 
@@ -273,7 +273,7 @@ class TestFunctions(base.FormulatorTestCase):
         """ try recipient from designated field  """
 
         mailer = get_actions(self.ff1)['mailer']
-        mailer.to_field = "replyto"
+        mailer.to_field = 'replyto'
         mailer.replyto_field = None
 
         #fields = self.ff1._getFieldObjects()
@@ -405,7 +405,7 @@ class TestFunctions(base.FormulatorTestCase):
         request = self.LoadRequestForm(
             topic='test subject', replyto='test@test.org', comments='test comments')
 
-        mailer.cc_recipients = "test@testme.com"
+        mailer.cc_recipients = 'test@testme.com'
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(
@@ -413,7 +413,7 @@ class TestFunctions(base.FormulatorTestCase):
         )
 
         # simple override
-        mailer.ccOverride = "string:test@testme.com"
+        mailer.ccOverride = 'string:test@testme.com'
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(
@@ -436,7 +436,7 @@ class TestFunctions(base.FormulatorTestCase):
         request = self.LoadRequestForm(
             topic='test subject', replyto='test@test.org', comments='test comments')
 
-        mailer.bcc_recipients = "test@testme.com"
+        mailer.bcc_recipients = 'test@testme.com'
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(
@@ -444,7 +444,7 @@ class TestFunctions(base.FormulatorTestCase):
         )
 
         # simple override
-        mailer.bccOverride = "string:test@testme.com"
+        mailer.bccOverride = 'string:test@testme.com'
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(

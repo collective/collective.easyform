@@ -9,11 +9,11 @@ from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from re import compile
 
-SCHEMATA_KEY = u""
-CONTEXT_KEY = u"context"
+SCHEMATA_KEY = u''
+CONTEXT_KEY = u'context'
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
-dollarRE = compile(r"\$\{(.+?)\}")
+dollarRE = compile(r'\$\{(.+?)\}')
 
 
 class DollarVarReplacer(object):

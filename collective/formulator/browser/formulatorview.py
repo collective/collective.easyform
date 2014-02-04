@@ -24,7 +24,7 @@ from collective.formulator.interfaces import IActionExtender
 from collective.formulator.interfaces import IFieldExtender
 from collective.formulator.interfaces import IFormulatorForm
 
-logger = getLogger("collective.formulator")
+logger = getLogger('collective.formulator')
 
 
 class FormulatorForm(AutoExtensibleForm, form.Form):
@@ -114,7 +114,7 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
                 doit = get_expression(self.context, execCondition)
             else:
                 doit = True
-            if doit and hasattr(action, "onSuccess"):
+            if doit and hasattr(action, 'onSuccess'):
                 result = action.onSuccess(data, self.request)
                 if isinstance(result, dict) and len(result):
                     # return the dict, which hopefully uses
@@ -161,13 +161,13 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
             thanksPage = get_expression(self.context, thanksPageOverride)
-            if thanksPageOverrideAction == "redirect_to":
+            if thanksPageOverrideAction == 'redirect_to':
                 self.request.response.redirect(thanksPage)
-            elif thanksPageOverrideAction == "traverse_to":
+            elif thanksPageOverrideAction == 'traverse_to':
                 thanksPage = self.context.restrictedTraverse(
-                    thanksPage.encode("utf-8"))
+                    thanksPage.encode('utf-8'))
                 thanksPage = mapply(
-                    thanksPage, self.request.args, self.request).encode("utf-8")
+                    thanksPage, self.request.args, self.request).encode('utf-8')
                 self.request.response.write(thanksPage)
         else:
             self.thanksPage = True
@@ -241,19 +241,19 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             properly.  These users will still get an SSL-ified form
             action for when the form is submitted.
         """
-        if self.context.forceSSL and not getSecurityManager().checkPermission("cmf.ModifyPortalContent", self):
+        if self.context.forceSSL and not getSecurityManager().checkPermission('cmf.ModifyPortalContent', self):
             # Make sure we're being accessed via a secure connection
             if self.request['SERVER_URL'].startswith('http://'):
                 secure_url = self.request['URL'].replace('http://', 'https://')
                 self.request.response.redirect(
-                    secure_url, status="movedtemporarily")
+                    secure_url, status='movedtemporarily')
 
     def update(self):
         '''See interfaces.IForm'''
         self.formMaybeForceSSL()
         super(FormulatorForm, self).update()
 
-#FormulatorView = layout.wrap_form(FormulatorForm, index=ViewPageTemplateFile("formulator_view.pt"))
+#FormulatorView = layout.wrap_form(FormulatorForm, index=ViewPageTemplateFile('formulator_view.pt'))
 FormulatorView = layout.wrap_form(FormulatorForm)
 
 

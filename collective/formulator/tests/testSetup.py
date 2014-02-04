@@ -10,18 +10,18 @@ import Products
 
 
 def getAddPermission(product, name):
-    """ find the add permission for a meta_type """
+    ''' find the add permission for a meta_type '''
 
-    name = "%s: %s" % (product, name)
+    name = '%s: %s' % (product, name)
     for mt in Products.meta_types:
         if mt['name'] == name:
             return mt['permission']
-    return ""
+    return ''
 
 
 class TestInstallation(base.FormulatorTestCase):
 
-    """Ensure product is properly installed"""
+    '''Ensure product is properly installed'''
 
     def afterSetUp(self):
         base.FormulatorTestCase.afterSetUp(self)
@@ -57,7 +57,7 @@ class TestInstallation(base.FormulatorTestCase):
             'Formulator' in [action.id for action in self.controlpanel.listActions()])
 
     def ttestAddPermissions(self):
-        """ Test to make sure add permissions are as intended """
+        ''' Test to make sure add permissions are as intended '''
 
         ADD_CONTENT_PERMISSION = 'Formulator: Add Content'
         CSA_ADD_CONTENT_PERMISSION = 'Formulator: Add Custom Scripts'
@@ -87,11 +87,11 @@ class TestInstallation(base.FormulatorTestCase):
 
     def testModificationsToPropSheetLinesNotPuged(self):
         property_mappings = [{
-            "propsheet": "site_properties",
-            "added_props": [
-                "use_folder_tabs",
-                "typesLinkToFolderContentsInFC",
-                "default_page_types",
+            'propsheet': 'site_properties',
+            'added_props': [
+                'use_folder_tabs',
+                'typesLinkToFolderContentsInFC',
+                'default_page_types',
             ]
         }]
 
@@ -113,7 +113,7 @@ class TestInstallation(base.FormulatorTestCase):
             for lines_prop in mapping['added_props']:
                 self.assertTrue('foo' in sheet.getProperty(lines_prop),
                                 "Our garbage item didn't survive reinstall for property %s"
-                                " within property sheet %s" % (lines_prop, mapping["propsheet"]))
+                                " within property sheet %s" % (lines_prop, mapping['propsheet']))
 
     def test_FormulatorInDefaultPageTypes(self):
         propsTool = getToolByName(self.portal, 'portal_properties')
@@ -129,7 +129,7 @@ class TestInstallation(base.FormulatorTestCase):
 
 class TestContentCreation(base.FormulatorTestCase):
 
-    """Ensure content types can be created and edited"""
+    '''Ensure content types can be created and edited'''
 
     fieldTypes = [
         'FormSelectionField',
@@ -197,27 +197,27 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testCreateFields(self):
         for f in self.fieldTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
 
     def testCreateAdapters(self):
         for f in self.adapterTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
             self.assertTrue(hasattr(self.ff1[fname], 'onSuccess'))
 
     def testCreateThanksPages(self):
         for f in self.thanksTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
             self.assertTrue(hasattr(self.ff1[fname], 'displayFields'))
 
     def testCreateFieldset(self):
         for f in self.fieldsetTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
 
@@ -227,7 +227,7 @@ class TestContentCreation(base.FormulatorTestCase):
         self.assertTrue(fname in self.ff1.objectIds())
         fs = self.ff1[fname]
         for f in self.fieldTypes:
-            fname = "%s1fs" % f
+            fname = '%s1fs' % f
             fs.invokeFactory(f, fname)
             self.assertTrue(fname in fs.objectIds())
 
@@ -242,13 +242,13 @@ class TestContentCreation(base.FormulatorTestCase):
 
         # try finding the fields
         for f in self.fieldTypes:
-            fname = "%s1fs" % f
+            fname = '%s1fs' % f
             self.assertTrue(self.ff1.findFieldObjectByName(fname))
 
     def testFgFieldsDisplayOnly(self):
-        """ Make sure fgFields displayOnly parameter correctly excludes
+        ''' Make sure fgFields displayOnly parameter correctly excludes
             labels and fieldset markers
-        """
+        '''
 
         noExtras = len(self.ff1.fgFields(displayOnly=True))
         wExtras = len(self.ff1.fgFields())
@@ -273,7 +273,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testEditField(self):
         for f in self.fieldTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             f1 = getattr(self.ff1, fname)
             f1.setTitle('Field title')
@@ -288,7 +288,7 @@ class TestContentCreation(base.FormulatorTestCase):
     def testTALESFieldValidation(self):
         for f in self.fieldTypes:
             if f != 'FormLabelField':
-                fname = "%s1" % f
+                fname = '%s1' % f
                 self.ff1.invokeFactory(f, fname)
                 f1 = getattr(self.ff1, fname)
                 self.assertEqual(f1.getFgTValidator(), False)
@@ -297,7 +297,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testEditAdapter(self):
         for f in self.adapterTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             f1 = getattr(self.ff1, fname)
             f1.setTitle('title')
@@ -314,7 +314,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testEditThanksPages(self):
         for f in self.thanksTypes:
-            fname = "%s1" % f
+            fname = '%s1' % f
             self.ff1.invokeFactory(f, fname)
             f1 = getattr(self.ff1, fname)
             f1.setTitle('title')
@@ -348,10 +348,10 @@ class TestContentCreation(base.FormulatorTestCase):
         self.assertRaises(BadRequest, f1.setId, 'form')
 
     def testFieldRename(self):
-        """
+        '''
         renaming a field should change the __name__ attribute
         of the embedded fgField; tracker issue #42
-        """
+        '''
 
         self.ff1.invokeFactory('FormStringField', 'spam_and_eggs')
         self.assertTrue('spam_and_eggs' in self.ff1.objectIds())
@@ -365,10 +365,10 @@ class TestContentCreation(base.FormulatorTestCase):
         #self.assertEqual(fgf.__name__, 'spam_spam_and_eggs')
 
     def testFieldsetRename(self):
-        """
+        '''
         renaming a fieldset should change the __name__ attribute
         of the embedded fsStartField
-        """
+        '''
 
         self.ff1.invokeFactory('FieldsetFolder', 'fsfolder1')
         self.assertTrue('fsfolder1' in self.ff1.objectIds())
@@ -378,16 +378,16 @@ class TestContentCreation(base.FormulatorTestCase):
         self.assertEqual(fgf.__name__, 'fsfolder1')
 
     def testFieldsetPlusDisplayList(self):
-        """ Test for issue  #44 -- Presence of fieldset causes an attribute error
-        """
+        ''' Test for issue  #44 -- Presence of fieldset causes an attribute error
+        '''
 
         # create fieldset
         self.ff1.invokeFactory('FieldsetFolder', 'fsf1')
         self.assertTrue(self.ff1.fgFieldsDisplayList())
 
     def testUtfInFieldTitle(self):
-        """ test for issue # 102, 104: utf8, non-ascii in field title or description
-        """
+        ''' test for issue # 102, 104: utf8, non-ascii in field title or description
+        '''
 
         self.ff1.invokeFactory('FormStringField', 'sf1',
                                title='Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8'))
@@ -398,8 +398,8 @@ class TestContentCreation(base.FormulatorTestCase):
         self.ff1.sf1.reindexObject()
 
     def testUtfInFormTitle(self):
-        """ test for utf8, non-ascii in form title or description
-        """
+        ''' test for utf8, non-ascii in form title or description
+        '''
 
         self.folder.invokeFactory('Formulator', 'ff2',
                                   title='Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8'))
@@ -410,11 +410,11 @@ class TestContentCreation(base.FormulatorTestCase):
         self.folder.ff2.reindexObject()
 
     def testBadIds(self):
-        """ test ids that cause problems.
+        ''' test ids that cause problems.
             We shouldn't be able to create objects with ids known
             to be troublesome.
             Also, all fields in all fieldsets must have unique ids.
-        """
+        '''
 
         # should be OK:
         self.assertTrue(self.ff1.checkIdAvailable('somethingunique8723'))
@@ -451,13 +451,13 @@ class TestContentCreation(base.FormulatorTestCase):
 
 class TestGPG(base.FormulatorTestCase):
 
-    """ test ya_gpg.py """
+    ''' test ya_gpg.py '''
 
     def test_gpg(self):
         from collective.formulator.content.ya_gpg import gpg, GPGError
 
         if gpg is None:
-            print "\nSkipping GPG tests; gpg binary not found"
+            print '\nSkipping GPG tests; gpg binary not found'
         else:
             self.assertRaises(GPGError, gpg.encrypt, 'spam', 'eggs')
 

@@ -75,7 +75,7 @@ class FormulatorFieldMetadataHandler(object):
         value = fieldNode.get(ns('validators', self.namespace))
         if value:
             data = schema.queryTaggedValue('validators', {})
-            data[name] = value.split("|")
+            data[name] = value.split('|')
             schema.setTaggedValue('validators', data)
 
     def write(self, fieldNode, schema, field):

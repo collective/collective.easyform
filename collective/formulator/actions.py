@@ -48,7 +48,7 @@ from collective.formulator.interfaces import IFieldExtender
 from collective.formulator.interfaces import IMailer
 from collective.formulator.interfaces import ISaveData
 
-logger = getLogger("collective.formulator")
+logger = getLogger('collective.formulator')
 
 
 def FormulatorActionsVocabularyFactory(context):
@@ -121,7 +121,7 @@ class Mailer(Action):
         filtered_input = [s.strip().encode('utf-8') for s in input]
 
         if filtered_input:
-            return "<%s>" % '>, <'.join(filtered_input)
+            return '<%s>' % '>, <'.join(filtered_input)
         else:
             return ''
 
@@ -422,11 +422,11 @@ class CustomScript(Action):
         script._validateProxy = lambda i=None: None
 
         # Force proxy role
-        if role != u"none":
+        if role != u'none':
             script.manage_proxy((role,))
 
-        body = body.encode("utf-8")
-        params = "fields, formulator, request"
+        body = body.encode('utf-8')
+        params = 'fields, formulator, request'
         script.ZPythonScript_edit(params, body)
         return script
 
@@ -445,14 +445,14 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn("Python script " + self.__name__
-                        + " has warning:" + str(script.warnings))
+            logger.warn('Python script ' + self.__name__
+                        + ' has warning:' + str(script.warnings))
 
         if len(script.errors) > 0:
-            logger.error("Python script " + self.__name__
-                         + " has errors: " + str(script.errors))
+            logger.error('Python script ' + self.__name__
+                         + ' has errors: ' + str(script.errors))
             raise ValueError(
-                "Python script " + self.__name__ + " has errors: " + str(script.errors))
+                'Python script ' + self.__name__ + ' has errors: ' + str(script.errors))
 
     def executeCustomScript(self, result, form, req):
         # Execute in-place script
@@ -507,7 +507,7 @@ class SaveData(Action):
         """
         return self._storage.items()
 
-    def getSavedFormInputForEdit(self, header=False, delimiter=","):
+    def getSavedFormInputForEdit(self, header=False, delimiter=','):
         """ returns saved as CSV text """
         sbuf = StringIO()
         writer = csvwriter(sbuf, delimiter=delimiter)
@@ -556,20 +556,20 @@ class SaveData(Action):
         # """
         filename = '%s.csv' % self.__name__
         response.setHeader(
-            "Content-Disposition", "attachment; filename=\"%s\"" % filename)
-        response.setHeader("Content-Type", 'text/comma-separated-values')
+            'Content-Disposition', 'attachment; filename="%s"' % filename)
+        response.setHeader('Content-Type', 'text/comma-separated-values')
         response.write(self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter=","))
+            getattr(self, 'UseColumnNames', False), delimiter=','))
 
     def download_tsv(self, response):
         # """Download the saved data as tsv
         # """
         filename = '%s.tsv' % self.__name__
         response.setHeader(
-            "Content-Disposition", "attachment; filename=\"%s\"" % filename)
-        response.setHeader("Content-Type", 'text/tab-separated-values')
+            'Content-Disposition', 'attachment; filename="%s"' % filename)
+        response.setHeader('Content-Type', 'text/tab-separated-values')
         response.write(self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter="\t"))
+            getattr(self, 'UseColumnNames', False), delimiter='\t'))
 
     def download(self, response):
         # """Download the saved data

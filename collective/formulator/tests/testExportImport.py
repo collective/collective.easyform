@@ -66,22 +66,22 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
            a tarfile for our test.  the approach to making
            a tarfile is a bit strange, but does the job
         """
-        in_fname = "test_form_1_formulator.tar.gz"
+        in_fname = 'test_form_1_formulator.tar.gz'
         test_dir = os.path.dirname(__file__)
 
         def _add_form_structure_to_archive(archive):
             form_relative_path = os.path.join(
-                "profiles", "testing", "structure",
-                "Members", "test_user_1_", "test_form_1_formulator")
+                'profiles', 'testing', 'structure',
+                'Members', 'test_user_1_', 'test_form_1_formulator')
             abs_path = os.path.join(test_dir, form_relative_path)
 
             # add structure folder
-            os.chdir(os.path.join(test_dir, "profiles", "testing"))
-            archive.add("structure", recursive=False)
+            os.chdir(os.path.join(test_dir, 'profiles', 'testing'))
+            archive.add('structure', recursive=False)
 
             for f in os.listdir(abs_path):
                 os.chdir(abs_path)  # add form data w/o full directory tree
-                archive.add(f, arcname=os.path.join("structure", f))
+                archive.add(f, arcname=os.path.join('structure', f))
 
         # Capture the current working directory for later when we need to
         # clean up the environment.
@@ -137,11 +137,11 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
         for form_field in ('comments', 'replyto', 'topic', 'mailer', 'thank-you'):
             if purge:
                 self.assertFalse(form_field in form_field_ids,
-                                 "%s unexpectedly found in %s" % (form_field, form_ctx.getId()))
+                                 '%s unexpectedly found in %s' % (form_field, form_ctx.getId()))
                 continue
 
             self.assertTrue(form_field in form_field_ids,
-                            "%s not found in %s" % (form_field, form_ctx.getId()))
+                            '%s not found in %s' % (form_field, form_ctx.getId()))
 
     def _verifyProfileForm(self, form_ctx, form_fields=None):
         """ helper method to verify adherence to profile-based
@@ -227,7 +227,7 @@ class TestFormExport(ExportImportTester):
         # make sure our field and adapters are objects
         for id, object in self.ff1.objectItems():
             self.assertTrue((self.file_tmpl % id) in form_export_data,
-                            "No export representation of %s" % id)
+                            'No export representation of %s' % id)
             self.assertTrue(self.title_output_tmpl % object.Title() in
                             form_export_data[self.file_tmpl % id])
 
@@ -242,7 +242,7 @@ class TestFormExport(ExportImportTester):
            export.  Confirm that is so here.
         """
         self._makeForm()
-        self.ff1.submitLabel = "Hit Me"
+        self.ff1.submitLabel = 'Hit Me'
         context = DummyExportContext(self.ff1)
         exporter = self._getExporter()
         exporter(context)

@@ -41,15 +41,15 @@ class TestFunctions(base.FormulatorTestCase):
         base.FormulatorTestCase.afterSetUp(self)
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
-        self.ff1.title = u"ff1"
+        self.ff1.title = u'ff1'
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         self.request = makerequest(self.app).REQUEST
         self.ff1.checkAuthenticator = False
         self.ff1.actions_model = (
             self.ff1.actions_model.replace(
-                u"<description>E-Mails Form Input</description>",
-                u"<recipient_email>mdummy@address.com</recipient_email><description>E-Mails Form Input</description>"))
+                u'<description>E-Mails Form Input</description>',
+                u'<recipient_email>mdummy@address.com</recipient_email><description>E-Mails Form Input</description>'))
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         self.portal.manage_changeProperties(
@@ -195,7 +195,7 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertEqual(self.ff1['topic'].htmlValue(request), "['one',]")
 
         # test eol encoding
-        request = self.fakeRequest(comments="one\ntwo")
+        request = self.fakeRequest(comments='one\ntwo')
         self.assertEqual(
             self.ff1['comments'].htmlValue(request), '<div>one<br />two</div>')
 
@@ -292,19 +292,19 @@ class TestFunctions(base.FormulatorTestCase):
         # call to the override doesn't clobber the expression context
         # and foul template evaluation.
 
-        self.ff1.setOnDisplayOverride("python: 1")
+        self.ff1.setOnDisplayOverride('python: 1')
         self.ff1()
 
     def testCallWithAfterValidationOverride(self):
         """ test calling form with good code in AfterValidationOverride """
 
-        self.ff1.setAfterValidationOverride("python: 1")
+        self.ff1.setAfterValidationOverride('python: 1')
         self.ff1()
 
     def testCallWithBadOverride(self):
         """ test calling form with bad code in override """
 
-        self.ff1.setOnDisplayOverride("python: 1/0")
+        self.ff1.setOnDisplayOverride('python: 1/0')
         self.assertRaises(ZeroDivisionError, self.ff1)
 
     def testCatalogCleanup(self):
@@ -450,10 +450,10 @@ class TestFunctions(base.FormulatorTestCase):
         # test with:
         # msgid "clear-save-input"
 
-        msg = _(u"clear-save-input", u"Clear Saved Input")
+        msg = _(u'clear-save-input', u'Clear Saved Input')
 
         xlation = translate(msg, target_language='en')
-        self.assertEqual(xlation, u"Clear Saved Input")
+        self.assertEqual(xlation, u'Clear Saved Input')
 
         # xlation = translate(msg, target_language='fr')
         # self.assertEqual( xlation, 'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8') )
@@ -665,8 +665,8 @@ class TestFunctions(base.FormulatorTestCase):
             name='pfg_javascript_variables.js'
         )
         res = jsvars()
-        self.assertEqual(res.find("pfgQEdit.messages = {"), 0)
-        self.assertTrue(res.find("ORDER_MSG: 'Order'") > 0)
+        self.assertEqual(res.find('pfgQEdit.messages = {'), 0)
+        self.assertTrue(res.find('ORDER_MSG: 'Order'') > 0)
 
 
 def test_suite():
