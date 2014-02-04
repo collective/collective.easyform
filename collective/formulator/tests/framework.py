@@ -99,11 +99,11 @@ if 1:   # Create a new scope
         f = 1
 
     if not f:
-        print 'Unable to locate %s.' % ztc_common
+        print 'Unable to locate {0}.'.format(ztc_common)
         sys.exit(1)
 
 # Debug
 #
-print 'SOFTWARE_HOME: %s' % os.environ.get('SOFTWARE_HOME', 'Not set')
-print 'INSTANCE_HOME: %s' % os.environ.get('INSTANCE_HOME', 'Not set')
+print 'SOFTWARE_HOME: {0}'.format(os.environ.get('SOFTWARE_HOME', 'Not set'))
+print 'INSTANCE_HOME: {0}'.format(os.environ.get('INSTANCE_HOME', 'Not set'))
 sys.stdout.flush()

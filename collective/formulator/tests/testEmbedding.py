@@ -68,7 +68,8 @@ class TestEmbedding(base.FormulatorTestCase):
         self.assertTrue('Your E-Mail Address' in res)
 
         # form action equals request URL
-        self.assertTrue('action="%s"' % self.ff1.absolute_url() in res)
+        self.assertTrue(
+            'action="{url}"'.format(url=self.ff1.absolute_url()) in res)
 
         # no form prefix
         #self.assertTrue('name="form.submitted"' in res)

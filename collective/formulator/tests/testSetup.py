@@ -12,7 +12,7 @@ import Products
 def getAddPermission(product, name):
     ''' find the add permission for a meta_type '''
 
-    name = '%s: %s' % (product, name)
+    name = '{0}: {1}'.format(product, name)
     for mt in Products.meta_types:
         if mt['name'] == name:
             return mt['permission']
@@ -112,8 +112,8 @@ class TestInstallation(base.FormulatorTestCase):
             sheet = self.properties[mapping['propsheet']]
             for lines_prop in mapping['added_props']:
                 self.assertTrue('foo' in sheet.getProperty(lines_prop),
-                                "Our garbage item didn't survive reinstall for property %s"
-                                " within property sheet %s" % (lines_prop, mapping['propsheet']))
+                                "Our garbage item didn't survive reinstall for property {0}"
+                                " within property sheet {1}".format(lines_prop, mapping['propsheet']))
 
     def test_FormulatorInDefaultPageTypes(self):
         propsTool = getToolByName(self.portal, 'portal_properties')
@@ -197,27 +197,27 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testCreateFields(self):
         for f in self.fieldTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
 
     def testCreateAdapters(self):
         for f in self.adapterTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
             self.assertTrue(hasattr(self.ff1[fname], 'onSuccess'))
 
     def testCreateThanksPages(self):
         for f in self.thanksTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
             self.assertTrue(hasattr(self.ff1[fname], 'displayFields'))
 
     def testCreateFieldset(self):
         for f in self.fieldsetTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             self.assertTrue(fname in self.ff1.objectIds())
 
@@ -227,7 +227,7 @@ class TestContentCreation(base.FormulatorTestCase):
         self.assertTrue(fname in self.ff1.objectIds())
         fs = self.ff1[fname]
         for f in self.fieldTypes:
-            fname = '%s1fs' % f
+            fname = '{0}1fs'.format(f)
             fs.invokeFactory(f, fname)
             self.assertTrue(fname in fs.objectIds())
 
@@ -242,7 +242,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
         # try finding the fields
         for f in self.fieldTypes:
-            fname = '%s1fs' % f
+            fname = '{0}1fs'.format(f)
             self.assertTrue(self.ff1.findFieldObjectByName(fname))
 
     def testFgFieldsDisplayOnly(self):
@@ -273,7 +273,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testEditField(self):
         for f in self.fieldTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             f1 = getattr(self.ff1, fname)
             f1.setTitle('Field title')
@@ -288,7 +288,7 @@ class TestContentCreation(base.FormulatorTestCase):
     def testTALESFieldValidation(self):
         for f in self.fieldTypes:
             if f != 'FormLabelField':
-                fname = '%s1' % f
+                fname = '{0}1'.format(f)
                 self.ff1.invokeFactory(f, fname)
                 f1 = getattr(self.ff1, fname)
                 self.assertEqual(f1.getFgTValidator(), False)
@@ -297,7 +297,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testEditAdapter(self):
         for f in self.adapterTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             f1 = getattr(self.ff1, fname)
             f1.setTitle('title')
@@ -314,7 +314,7 @@ class TestContentCreation(base.FormulatorTestCase):
 
     def testEditThanksPages(self):
         for f in self.thanksTypes:
-            fname = '%s1' % f
+            fname = '{0}1'.format(f)
             self.ff1.invokeFactory(f, fname)
             f1 = getattr(self.ff1, fname)
             f1.setTitle('title')

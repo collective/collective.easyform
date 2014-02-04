@@ -194,7 +194,7 @@ class FormulatorActionsListing(SchemaListing):
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = u'%s.%s' % (
+        field_identifier = u'{0}.{1}'.format(
             field.__module__, field.__class__.__name__)
         return queryUtility(IActionFactory, name=field_identifier)
 

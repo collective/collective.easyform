@@ -52,7 +52,6 @@ class TestFunctions(base.FormulatorTestCase):
         self.assertTrue(self.messageText.find('To: dummy@address.com') > 0)
         self.assertEqual(self.mfrom, 'dummy1@address.com')
         self.assertTrue(self.messageText.find('From: dummy1@address.com') > 0)
-        # print "|%s" % self.messageText
 
     def test_Mailer(self):
         """ Test mailer with dummy_send """
@@ -222,7 +221,7 @@ class TestFunctions(base.FormulatorTestCase):
         """ Test mailer override functions """
 
         mailer = get_actions(self.ff1)['mailer']
-        mailer.subjectOverride = "python: '%s and %s' % ('eggs', 'spam')"
+        mailer.subjectOverride = "python: '{0} and {1}'.format('eggs', 'spam')"
         mailer.senderOverride = 'string: spam@eggs.com'
         mailer.recipientOverride = 'string: eggs@spam.com'
 
@@ -232,7 +231,6 @@ class TestFunctions(base.FormulatorTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        # print "|%s" % self.messageText
         self.assertTrue(self.messageText.find(
             'Subject: =?utf-8?q?eggs_and_spam?=') > 0)
         self.assertTrue(self.messageText.find('From: spam@eggs.com') > 0)
@@ -265,7 +263,6 @@ class TestFunctions(base.FormulatorTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        # print "|%s" % self.messageText
         self.assertTrue(self.messageText.find(
             'To: <eggs@spam.com>, <spam.spam.com>') > 0)
 
@@ -283,7 +280,6 @@ class TestFunctions(base.FormulatorTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        # print "|%s" % self.messageText
         self.assertTrue(
             self.messageText.find('To: <eggs@spamandeggs.com>') > 0)
 
@@ -292,7 +288,6 @@ class TestFunctions(base.FormulatorTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        # print "|%s" % self.messageText
         self.assertTrue(self.messageText.find(
             'To: <eggs@spam.com>, <spam@spam.com>') > 0)
 

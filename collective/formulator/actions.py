@@ -88,7 +88,7 @@ class Action(zs.Bool):
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
-            "There is not implemented 'onSuccess' of %r" % (self,))
+            "There is not implemented 'onSuccess' of {0!r}".format(self))
 
 
 class Mailer(Action):
@@ -121,7 +121,7 @@ class Mailer(Action):
         filtered_input = [s.strip().encode('utf-8') for s in input]
 
         if filtered_input:
-            return '<%s>' % '>, <'.join(filtered_input)
+            return '<{0}>'.format('>, <'.join(filtered_input))
         else:
             return ''
 
@@ -271,7 +271,7 @@ class Mailer(Action):
                 """
             to = formataddr((fullname, toemail))
         else:
-            to = to_addr or '%s %s' % (recip_name, recip_email)
+            to = to_addr or formataddr((recip_name, recip_email))
 
         headerinfo = OrderedDict()
 
@@ -307,7 +307,7 @@ class Mailer(Action):
             headerinfo['Bcc'] = self._destFormat(bcc_recips)
 
         for key in getattr(self, 'xinfo_headers', []):
-            headerinfo['X-%s' % key] = self.secure_header_line(
+            headerinfo['X-{0}'.format(key)] = self.secure_header_line(
                 request.get(key, 'MISSING'))
 
         # return 3-Tuple
@@ -554,9 +554,8 @@ class SaveData(Action):
     def download_csv(self, response):
         # """Download the saved data as csv
         # """
-        filename = '%s.csv' % self.__name__
-        response.setHeader(
-            'Content-Disposition', 'attachment; filename="%s"' % filename)
+        response.setHeader('Content-Disposition',
+                           'attachment; filename="{0}.csv"'.format(self.__name__))
         response.setHeader('Content-Type', 'text/comma-separated-values')
         response.write(self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter=','))
@@ -564,9 +563,8 @@ class SaveData(Action):
     def download_tsv(self, response):
         # """Download the saved data as tsv
         # """
-        filename = '%s.tsv' % self.__name__
-        response.setHeader(
-            'Content-Disposition', 'attachment; filename="%s"' % filename)
+        response.setHeader('Content-Disposition',
+                           'attachment; filename="{0}.tsv"'.format(self.__name__))
         response.setHeader('Content-Type', 'text/tab-separated-values')
         response.write(self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter='\t'))

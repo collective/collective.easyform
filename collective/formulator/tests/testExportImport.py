@@ -102,7 +102,7 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
         env = {'REQUEST_METHOD': 'PUT'}
         headers = {'content-type': 'text/html',
                    'content-length': len(in_file.read()),
-                   'content-disposition': 'attachment; filename=%s' % in_file.name}
+                   'content-disposition': 'attachment; filename={0}'.format(in_file.name)}
         in_file.seek(0)
         fs = FieldStorage(fp=in_file, environ=env, headers=headers)
         return FileUpload(fs)
@@ -127,7 +127,7 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
 
         for k, v in form_values.items():
             self.assertEqual(v, self._extractFieldValue(form_ctx[k]),
-                             "Expected '%s' for field %s, Got '%s'" % (v, k, form_ctx[k]))
+                             "Expected '{0}' for field {1}, Got '{2}'".format(v, k, form_ctx[k]))
 
     def _verifyFormStockFields(self, form_ctx, purge):
         """ helper method to verify adherence to profile-based
@@ -137,11 +137,11 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
         for form_field in ('comments', 'replyto', 'topic', 'mailer', 'thank-you'):
             if purge:
                 self.assertFalse(form_field in form_field_ids,
-                                 '%s unexpectedly found in %s' % (form_field, form_ctx.getId()))
+                                 '{0} unexpectedly found in {1}'.format(form_field, form_ctx.getId()))
                 continue
 
             self.assertTrue(form_field in form_field_ids,
-                            '%s not found in %s' % (form_field, form_ctx.getId()))
+                            '{0} not found in {1}'.format(form_field, form_ctx.getId()))
 
     def _verifyProfileForm(self, form_ctx, form_fields=None):
         """ helper method to verify adherence to profile-based
@@ -152,40 +152,40 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
         if not form_fields:
             form_fields = [
                 {
-                    'id': '%sreplyto' % form_id_prefix,
+                    'id': '{0}replyto'.format(form_id_prefix),
                     'title': 'Test Form Your E-Mail Address',
                     'required': True,
                     #'isDiscussable':False,
                     'fgTDefault': 'here/memberEmail', },
                 {
-                    'id': '%shidden' % form_id_prefix,
+                    'id': '{0}hidden'.format(form_id_prefix),
                     'title': 'This is a sample hidden field',
                     'required': False,
                     #'isDiscussable':False,
                     'hidden': True, },
                 {
-                    'id': '%sfieldset-folder' % form_id_prefix,
+                    'id': '{0}fieldset-folder'.format(form_id_prefix),
                     'title': 'Fields grouped in a fieldset',
                     'useLegend': False,
                     'subfields': [{
-                        'id': '%shidden_fieldset' % form_id_prefix,
+                        'id': '{0}hidden_fieldset'.format(form_id_prefix),
                         'title': 'This is a sample hidden field fieldset',
                         'required': True,
                         #'isDiscussable':False,
                         'hidden': True,
                     }, ], },
                 {
-                    'id': '%stopic' % form_id_prefix,
+                    'id': '{0}topic'.format(form_id_prefix),
                     'title': 'Test Form Subject',
                     # 'isDiscussable':False,
                     'required': True, },
                 {
-                    'id': '%scomments' % form_id_prefix,
+                    'id': '{0}comments'.format(form_id_prefix),
                     'fgDefault': 'string:Test Comment', },
             ]
         # get our forms children to ensure proper config
         for form_field in form_fields:
-            self.assertTrue('%s' % form_field['id'] in form_ctx.objectIds())
+            self.assertTrue(form_field['id'] in form_ctx.objectIds())
             sub_form_item = form_ctx[form_field['id']]
             # make sure all the standard callables are set
             for k, v in form_field.items():
@@ -194,15 +194,15 @@ class ExportImportTester(base.FormulatorTestCase, TarballTester):
                 else:
                     self.assertEqual(
                         v, self._extractFieldValue(sub_form_item[k]),
-                        "Expected '%s' for field %s, Got '%s'" % (v, k, sub_form_item[k]))
+                        "Expected '{0}' for field {1}, Got '{2}'".format(v, k, sub_form_item[k]))
 
 
 class TestFormExport(ExportImportTester):
 
     """Export Form Test Suite"""
 
-    file_tmpl = 'structure/%s'
-    title_output_tmpl = 'title: %s'
+    file_tmpl = 'structure/{0}'
+    title_output_tmpl = 'title: {0}'
 
     def _getExporter(self):
         from Products.CMFCore.exportimport.content import exportSiteStructure
@@ -226,10 +226,10 @@ class TestFormExport(ExportImportTester):
 
         # make sure our field and adapters are objects
         for id, object in self.ff1.objectItems():
-            self.assertTrue((self.file_tmpl % id) in form_export_data,
-                            'No export representation of %s' % id)
-            self.assertTrue(self.title_output_tmpl % object.Title() in
-                            form_export_data[self.file_tmpl % id])
+            self.assertTrue((self.file_tmpl.format(id)) in form_export_data,
+                            'No export representation of {0}'.format(id))
+            self.assertTrue(self.title_output_tmpl.format(object.Title()) in
+                            form_export_data[self.file_tmpl.format(id)])
 
         # we should have .properties, .objects, and per subject
         self.assertEqual(len(context._wrote), 2 + len(self.ff1.objectIds()))

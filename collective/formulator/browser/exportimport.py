@@ -35,7 +35,7 @@ class FormulatorExportView(BrowserView):
 
         self.request.RESPONSE.setHeader('Content-type', 'application/x-gzip')
         self.request.RESPONSE.setHeader('Content-disposition',
-                                        'attachment; filename=%s' % ctx.getArchiveFilename())
+                                        'attachment; filename="{0}"'.format(ctx.getArchiveFilename()))
 
         # export the structure treating the current form as our root context
         IFilesystemExporter(self.context).export(ctx, 'structure', True)

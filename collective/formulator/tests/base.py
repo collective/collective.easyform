@@ -19,7 +19,7 @@ from zope.component import getSiteManager
 class MailHostMock(MailHost):
 
     def _send(self, mfrom, mto, messageText, immediate=False):
-        print '<sent mail from %s to %s>' % (mfrom, mto)
+        print '<sent mail from {0} to {1}>'.format(mfrom, mto)
         self.msgtext = messageText
         self.msg = message_from_string(messageText.lstrip())
 

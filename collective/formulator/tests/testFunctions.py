@@ -666,7 +666,7 @@ class TestFunctions(base.FormulatorTestCase):
         )
         res = jsvars()
         self.assertEqual(res.find('pfgQEdit.messages = {'), 0)
-        self.assertTrue(res.find('ORDER_MSG: 'Order'') > 0)
+        self.assertTrue(res.find("ORDER_MSG: 'Order'") > 0)
 
 
 def test_suite():

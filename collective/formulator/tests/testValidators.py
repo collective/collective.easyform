@@ -41,7 +41,7 @@ class TestBaseValidators(base.FormulatorTestCase):
 
         request = self.app.REQUEST
         for i in FORM_DATA:
-            request.form['form.widgets.%s' % i] = FORM_DATA[i]
+            request.form['form.widgets.{0}'.format(i)] = FORM_DATA[i]
 
     def test_defaultvalidator(self):
         view = self.ff1.restrictedTraverse('view')
@@ -144,7 +144,7 @@ class TestCustomValidators(base.FormulatorTestCase):
         self.assertEqual(v(good), None)
         for b in bad:
             self.assertNotEqual(
-                v(b), None, '"%s" should be considered a link.' % b)
+                v(b), None, '"{0}" should be considered a link.'.format(b))
 
     def ttest_isNotTooLong2(self):
         v = validation.validatorFor('isNotTooLong')

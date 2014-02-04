@@ -573,7 +573,7 @@ class IMailer(IAction):
     form.read_permission(recipient_email='cmf.ModifyPortalContent')
     recipient_email = zs.TextLine(
         title=_(u'label_formmailer_recipient_email',
-                default=u'Recipient's e - mail address'),
+                default=u"Recipient's e - mail address"),
         description=_(u'help_formmailer_recipient_email',
                       default=u'The recipients e-mail address.'),
         default=u'',
