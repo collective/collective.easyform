@@ -999,3 +999,28 @@ class ISaveData(IAction):
         # description=_(u'help_savedatainput_text'),
         #),
     #),
+
+
+class ILabel(IField):
+
+    """Label Field."""
+
+
+class IRichLabel(ILabel):
+
+    """Rich Label Field."""
+    rich_label = RichText(
+        title=_(u'Rich Label'),
+        default=u'',
+        missing_value=u'',
+    )
+
+
+class ILabelWidget(interfaces.IWidget):
+
+    """Label Widget."""
+
+
+class IRichLabelWidget(ILabelWidget):
+
+    """Rich Label Field Widget."""

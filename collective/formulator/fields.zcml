@@ -8,4 +8,20 @@
         factory=".fields.FieldExtenderDefault"
         name="default"
         />
+    <utility
+        name="collective.formulator.fields.Label"
+        component=".fields.LabelFactory"
+        />
+    <utility
+        name="collective.formulator.fields.Label"
+        component=".fields.LabelHandler"
+        />
+    <utility
+        name="collective.formulator.fields.RichLabel"
+        component=".fields.RichLabelFactory"
+        />
+    <utility
+        name="collective.formulator.fields.RichLabel"
+        component=".fields.RichLabelHandler"
+        />
 </configure>

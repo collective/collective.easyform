@@ -35,7 +35,7 @@ class FormulatorExportView(BrowserView):
         ctx = TarballExportContext(self.context)
         response = self.request.RESPONSE
         disposition = 'attachment; filename="{0}-{1:{2}}.tar.gz"'.format(
-            self.context.getId(), datetime.now(), "%Y%m%d%H%M%S")
+            self.context.getId(), datetime.now(), '%Y%m%d%H%M%S')
 
         response.setHeader('Content-type', 'application/x-gzip')
         response.setHeader('Content-disposition', disposition)

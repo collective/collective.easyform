@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from plone.schemaeditor.fields import FieldFactory
+from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
@@ -8,12 +10,17 @@ from zope.component import adapts
 from zope.component import queryUtility
 from zope.interface import Interface
 from zope.interface import Invalid
+from zope.interface import implementer
 from zope.interface import implements
+from zope.schema import Field
+from zope.schema._bootstrapinterfaces import IFromUnicode
 
 from collective.formulator.api import get_expression
 from collective.formulator.interfaces import IFieldExtender
 from collective.formulator.interfaces import IFormulator
 from collective.formulator.interfaces import IFormulatorForm
+from collective.formulator.interfaces import ILabel
+from collective.formulator.interfaces import IRichLabel
 from collective.formulator.validators import IFieldValidator
 
 
@@ -67,3 +74,37 @@ class FieldExtenderDefault(object):
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, 'TDefault', None)
         return get_expression(self.context, TDefault) if TDefault else fdefault
+
+
+@implementer(IFromUnicode)
+class Label(Field):
+
+    """A Label field
+    """
+    implements(ILabel)
+
+    def validate(self, value):
+        pass
+
+    def fromUnicode(self, str):
+        """
+        """
+        return
+
+
+class RichLabel(Label):
+
+    """A Rich Label field
+    """
+    implements(IRichLabel)
+    rich_label = u''
+
+    def __init__(self, rich_label=u'', **kw):
+        self.rich_label = rich_label
+        super(RichLabel, self).__init__(**kw)
+
+LabelFactory = FieldFactory(Label, u'Label')
+RichLabelFactory = FieldFactory(RichLabel, u'Rich Label')
+
+LabelHandler = BaseHandler(Label)
+RichLabelHandler = BaseHandler(RichLabel)

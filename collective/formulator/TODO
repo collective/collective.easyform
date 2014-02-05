@@ -2,8 +2,6 @@
 - Merge models
 - Fields
     - FormLikertField
-    - FormLabelField
-    - FormRichLabelField
 - Actions
     - Mailer 80%
     - SaveData 80%
