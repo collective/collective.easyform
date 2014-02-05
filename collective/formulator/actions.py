@@ -125,11 +125,10 @@ class Mailer(Action):
         else:
             return ''
 
-    def get_mail_body(self, fields, request, **kwargs):
+    def get_mail_body(self, fields, request, context):
         """Returns the mail-body with footer.
         """
 
-        context = get_context(self)
         schema = get_fields(context)
         all_fields = [f for f in fields
                       # TODO
@@ -187,46 +186,18 @@ class Mailer(Action):
 
         return body
 
-    def get_header_body_tuple(self, fields, request,
-                              from_addr=None, to_addr=None,
-                              subject=None, **kwargs):
-        """Return header and body of e-mail as an 3-tuple:
-        (header, additional_header, body)
-
-        header is a dictionary, additional header is a list, body is a StringIO
-
-        Keyword arguments:
-        request -- (optional) alternate request object to use
+    def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
+        """Return addresses
         """
-        context = get_context(self)
         pprops = getToolByName(context, 'portal_properties')
         site_props = getToolByName(pprops, 'site_properties')
         portal = getToolByName(context, 'portal_url').getPortalObject()
         pms = getToolByName(context, 'portal_membership')
-        utils = getToolByName(context, 'plone_utils')
-
-        body = self.get_mail_body(fields, request, **kwargs)
-
-        # fields = self.fgFields()
 
         # get Reply-To
         reply_addr = None
         if hasattr(self, 'replyto_field'):
-            reply_addr = request.form.get(self.replyto_field, None)
-
-        # get subject header
-        nosubject = '(no subject)'
-        if hasattr(self, 'subjectOverride') and self.subjectOverride and get_expression(context, self.subjectOverride):
-            # subject has a TALES override
-            subject = get_expression(context, self.subjectOverride).strip()
-        else:
-            subject = getattr(self, 'msg_subject', nosubject)
-            subjectField = request.form.get(self.subject_field, None)
-            if subjectField is not None:
-                subject = subjectField
-            else:
-                # we only do subject expansion if there's no field chosen
-                subject = DollarVarReplacer(fields).sub(subject)
+            reply_addr = fields.get(self.replyto_field, None)
 
         # Get From address
         if hasattr(self, 'senderOverride') and self.senderOverride and get_expression(context, self.senderOverride):
@@ -241,7 +212,7 @@ class Mailer(Action):
         else:
             recip_email = None
             if hasattr(self, 'to_field') and self.to_field:
-                recip_email = request.form.get(self.to_field, None)
+                recip_email = fields.get(self.to_field, None)
             if not recip_email:
                 recip_email = self.recipient_email
 
@@ -273,12 +244,48 @@ class Mailer(Action):
         else:
             to = to_addr or formataddr((recip_name, recip_email))
 
+        return (to, from_addr, reply_addr)
+
+    def get_subject(self, fields, request, context):
+        """Return subject
+        """
+        # get subject header
+        nosubject = '(no subject)'
+        if hasattr(self, 'subjectOverride') and self.subjectOverride and get_expression(context, self.subjectOverride):
+            # subject has a TALES override
+            subject = get_expression(context, self.subjectOverride).strip()
+        else:
+            subject = getattr(self, 'msg_subject', nosubject)
+            subjectField = fields.get(self.subject_field, None)
+            if subjectField is not None:
+                subject = subjectField
+            else:
+                # we only do subject expansion if there's no field chosen
+                subject = DollarVarReplacer(fields).sub(subject)
+
+        return subject
+
+    def get_header_info(self, fields, request, context,
+                        from_addr=None, to_addr=None,
+                        subject=None):
+        """Return header info
+
+        header info is a dictionary
+
+        Keyword arguments:
+        request -- (optional) alternate request object to use
+        """
+        portal = getToolByName(context, 'portal_url').getPortalObject()
+        utils = getToolByName(context, 'plone_utils')
+        (to, from_addr, reply) = self.get_addresses(fields, request, context)
+        subject = self.get_subject(fields, request, context)
+
         headerinfo = OrderedDict()
 
         headerinfo['To'] = self.secure_header_line(to)
         headerinfo['From'] = self.secure_header_line(from_addr)
-        if reply_addr:
-            headerinfo['Reply-To'] = self.secure_header_line(reply_addr)
+        if reply:
+            headerinfo['Reply-To'] = self.secure_header_line(reply)
 
         # transform subject into mail header encoded string
         email_charset = portal.getProperty('email_charset', 'utf-8')
@@ -310,8 +317,7 @@ class Mailer(Action):
             headerinfo['X-{0}'.format(key)] = self.secure_header_line(
                 request.get(key, 'MISSING'))
 
-        # return 3-Tuple
-        return (headerinfo, self.additional_headers or [], body)
+        return headerinfo
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form.
@@ -328,12 +334,12 @@ class Mailer(Action):
                 attachments.append((filename, mimetype, enc, data))
         return attachments
 
-    def get_mail_text(self, fields, request):
+    def get_mail_text(self, fields, request, context):
         """Get header and body of e-mail as text (string)
         """
 
-        (headerinfo, additional_headers,
-         body) = self.get_header_body_tuple(fields, request)
+        headerinfo = self.get_header_info(fields, request, context)
+        body = self.get_mail_body(fields, request, context)
 
         if not isinstance(body, unicode):
             body = unicode(body, 'UTF-8')
@@ -357,6 +363,7 @@ class Mailer(Action):
             outer[key] = value
 
         # write additional header
+        additional_headers = self.additional_headers or []
         for a in additional_headers:
             key, value = a.split(':', 1)
             outer.add_header(key, value.strip())
@@ -396,7 +403,7 @@ class Mailer(Action):
         e-mails data.
         """
         context = get_context(self)
-        mailtext = self.get_mail_text(fields, request)
+        mailtext = self.get_mail_text(fields, request, context)
         host = context.MailHost
         host.send(mailtext)
 
