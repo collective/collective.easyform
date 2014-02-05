@@ -15,6 +15,7 @@ from zope.interface import implements
 from zope.schema import Field
 from zope.schema._bootstrapinterfaces import IFromUnicode
 
+from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.api import get_expression
 from collective.formulator.interfaces import IFieldExtender
 from collective.formulator.interfaces import IFormulator
@@ -103,8 +104,8 @@ class RichLabel(Label):
         self.rich_label = rich_label
         super(RichLabel, self).__init__(**kw)
 
-LabelFactory = FieldFactory(Label, u'Label')
-RichLabelFactory = FieldFactory(RichLabel, u'Rich Label')
+LabelFactory = FieldFactory(Label, _(u'label_label_field', default=u'Label'))
+RichLabelFactory = FieldFactory(RichLabel, _(u'label_richlabel_field', default=u'Rich Label'))
 
 LabelHandler = BaseHandler(Label)
 RichLabelHandler = BaseHandler(RichLabel)
