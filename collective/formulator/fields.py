@@ -105,7 +105,8 @@ class RichLabel(Label):
         super(RichLabel, self).__init__(**kw)
 
 LabelFactory = FieldFactory(Label, _(u'label_label_field', default=u'Label'))
-RichLabelFactory = FieldFactory(RichLabel, _(u'label_richlabel_field', default=u'Rich Label'))
+RichLabelFactory = FieldFactory(
+    RichLabel, _(u'label_richlabel_field', default=u'Rich Label'))
 
 LabelHandler = BaseHandler(Label)
 RichLabelHandler = BaseHandler(RichLabel)

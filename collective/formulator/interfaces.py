@@ -11,6 +11,7 @@ from plone.z3cform.interfaces import IFormWrapper
 from z3c.form import interfaces
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema as zs
+from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
@@ -29,6 +30,8 @@ from collective.formulator.vocabularies import fieldsFactory
 from collective.formulator.vocabularies import getProxyRoleChoices
 from collective.formulator.vocabularies import vocabExtraDataDL
 from collective.formulator.vocabularies import vocabFormatDL
+
+PMF = MessageFactory('plone')
 
 
 def isValidFieldName(value):
@@ -96,7 +99,7 @@ class IActionFactory(IField):
 
     """ A component that instantiates a action when called.
     """
-    title = zs.TextLine(title=u'Title')
+    title = zs.TextLine(title=__(u'Title'))
 
 
 class ICollectiveFormulatorLayer(Interface):
@@ -111,7 +114,7 @@ class IFormulatorImportFormSchema(Interface):
     """Schema for formulator import form.
     """
     upload = zs.Bytes(
-        title=_(u'Upload'),
+        title=PMF(u'Upload'),
         required=True)
 
 
@@ -123,12 +126,12 @@ class IFormulator(form.Schema):
     form.fieldset(u'models', label=_('Models'),
                   fields=['fields_model', 'actions_model'])
     fields_model = zs.Text(
-        title=u'Fields Model',
+        title=_(u'Fields Model'),
         # default=MODEL_DEFAULT,
         default=FIELDS_DEFAULT,
     )
     actions_model = zs.Text(
-        title=u'Actions Model',
+        title=_(u'Actions Model'),
         # default=MODEL_DEFAULT,
         default=ACTIONS_DEFAULT,
     )
@@ -172,30 +175,15 @@ class IFormulator(form.Schema):
         default=True,
         required=False,
     )
-    # StringField('thanksPage',
-        # searchable=False,
-        # required=False,
-        # vocabulary='thanksPageVocabulary',
-        # widget=SelectionWidget(
-            #label=_(u'label_thankspage_text', default=u'Thanks Page'),
-            # description=_(u'help_thankspage_text', default=u"""
-                # Pick a contained page you wish to show on a successful
-                # form submit. (If none are available, add one.)
-                # Choose none to simply display the form
-                # field values.
-            #"""),
-            #),
-        #),
     forceSSL = zs.Bool(
         # write_permission=EDIT_ADVANCED_PERMISSION,
         title=_(u'label_force_ssl', default=u'Force SSL connection'),
-        description=_(u'help_force_ssl', default=u"""
-            Check this to make the form redirect to an SSL-enabled
-            version of itself (https://) if accessed via a non-SSL
-            URL (http://).  In order to function properly,
-            this requires a web server that has been configured to
-            handle the HTTPS protocol on port 443 and forward it to Zope.
-        """),
+        description=_(u'help_force_ssl', default=u''
+                      u'Check this to make the form redirect to an SSL-enabled '
+                      u'version of itself (https://) if accessed via a non-SSL '
+                      u'URL (http://).  In order to function properly, '
+                      u'this requires a web server that has been configured to '
+                      u'handle the HTTPS protocol on port 443 and forward it to Zope.'),
         default=False,
         required=False,
     )
@@ -216,19 +204,18 @@ class IFormulator(form.Schema):
     thanksPageOverrideAction = zs.Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
-        description=_(u'help_thankspageoverrideaction_text', default=u"""
-            Use this field in place of a thanks-page designation
-            to determine final action after calling
-            your action adapter (if you have one). You would usually use
-            this for a custom success template or script.
-            Leave empty if unneeded. Otherwise, specify as you would a
-            CMFFormController action type and argument,
-            complete with type of action to execute
-            (e.g., "redirect_to" or "traverse_to")
-            and a TALES expression. For example,
-            "Redirect to" and "string:thanks-page" would redirect to
-            'thanks-page'.
-        """),
+        description=_(u'help_thankspageoverrideaction_text', default=u''
+                      u'Use this field in place of a thanks-page designation '
+                      u'to determine final action after calling '
+                      u'your action adapter (if you have one). You would usually use '
+                      u'this for a custom success template or script. '
+                      u'Leave empty if unneeded. Otherwise, specify as you would a '
+                      u'CMFFormController action type and argument, '
+                      u'complete with type of action to execute '
+                      u'(e.g., "redirect_to" or "traverse_to") '
+                      u'and a TALES expression. For example, '
+                      u'"Redirect to" and "string:thanks-page" would redirect to '
+                      u'"thanks-page".'),
         default=u'redirect_to',
         required=False,
         vocabulary=customActions,
@@ -236,19 +223,18 @@ class IFormulator(form.Schema):
     thanksPageOverride = zs.TextLine(
         title=_(u'label_thankspageoverride_text',
                 default=u'Custom Success Action'),
-        description=_(u'help_thankspageoverride_text', default=u"""
-            Use this field in place of a thanks-page designation
-            to determine final action after calling
-            your action adapter (if you have one). You would usually use
-            this for a custom success template or script.
-            Leave empty if unneeded. Otherwise, specify as you would a
-            CMFFormController action type and argument,
-            complete with type of action to execute
-            (e.g., "redirect_to" or "traverse_to")
-            and a TALES expression. For example,
-            "Redirect to" and "string:thanks-page" would redirect to
-            'thanks-page'.
-        """),
+        description=_(u'help_thankspageoverride_text', default=u''
+                      u'Use this field in place of a thanks-page designation '
+                      u'to determine final action after calling '
+                      u'your action adapter (if you have one). You would usually use '
+                      u'this for a custom success template or script. '
+                      u'Leave empty if unneeded. Otherwise, specify as you would a '
+                      u'CMFFormController action type and argument, '
+                      u'complete with type of action to execute '
+                      u'(e.g., "redirect_to" or "traverse_to") '
+                      u'and a TALES expression. For example, '
+                      u'"Redirect to" and "string:thanks-page" would redirect to '
+                      u'"thanks-page".'),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -256,28 +242,26 @@ class IFormulator(form.Schema):
     formActionOverride = zs.TextLine(
         title=_(u'label_formactionoverride_text',
                 default=u'Custom Form Action'),
-        description=_(u'help_formactionoverride_text', default=u"""
-            Use this field to override the form action attribute.
-            Specify a URL to which the form will post.
-            This will bypass form validation, success action
-            adapter and thanks page.
-        """),
+        description=_(u'help_formactionoverride_text', default=u''
+                      u'Use this field to override the form action attribute. '
+                      u'Specify a URL to which the form will post. '
+                      u'This will bypass form validation, success action '
+                      u'adapter and thanks page.'),
         required=False,
     )
     # write_permission=EDIT_TALES_PERMISSION,
     onDisplayOverride = zs.TextLine(
         title=_(u'label_OnDisplayOverride_text', default=u'Form Setup Script'),
-        description=_(u'help_OnDisplayOverride_text', default=u"""
-            A TALES expression that will be called when the form is
-            displayed.
-            Leave empty if unneeded.
-            The most common use of this field is to call a python script
-            that sets defaults for multiple fields by pre-populating
-            request.form.
-            Any value returned by the expression is ignored.
-            PLEASE NOTE: errors in the evaluation of this expression
-            will cause an error on form display.
-        """),
+        description=_(u'help_OnDisplayOverride_text', default=u''
+                      u'A TALES expression that will be called when the form is '
+                      u'displayed. '
+                      u'Leave empty if unneeded. '
+                      u'The most common use of this field is to call a python script '
+                      u'that sets defaults for multiple fields by pre-populating '
+                      u'request.form. '
+                      u'Any value returned by the expression is ignored. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression '
+                      u'will cause an error on form display.'),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -286,17 +270,17 @@ class IFormulator(form.Schema):
     afterValidationOverride = zs.TextLine(
         title=_(u'label_AfterValidationOverride_text',
                 default=u'After Validation Script'),
-        description=_(u'help_AfterValidationOverride_text', default=
+        description=_(u'help_AfterValidationOverride_text', default=u''
                       u'A TALES expression that will be called after the form is'
-                      'successfully validated, but before calling an action adapter'
-                      '(if any) or displaying a thanks page.'
-                      'Form input will be in the request.form dictionary.'
-                      'Leave empty if unneeded.'
-                      'The most common use of this field is to call a python script'
-                      'to clean up form input or to script an alternative action.'
-                      'Any value returned by the expression is ignored.'
-                      'PLEASE NOTE: errors in the evaluation of this expression will'
-                      'cause an error on form display.'),
+                      u'successfully validated, but before calling an action adapter'
+                      u'(if any) or displaying a thanks page.'
+                      u'Form input will be in the request.form dictionary.'
+                      u'Leave empty if unneeded.'
+                      u'The most common use of this field is to call a python script'
+                      u'to clean up form input or to script an alternative action.'
+                      u'Any value returned by the expression is ignored.'
+                      u'PLEASE NOTE: errors in the evaluation of this expression will'
+                      u'cause an error on form display.'),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -304,14 +288,13 @@ class IFormulator(form.Schema):
     # write_permission=EDIT_TALES_PERMISSION,
     headerInjection = zs.TextLine(
         title=_(u'label_headerInjection_text', default=u'Header Injection'),
-        description=_(u'help_headerInjection_text', default=u"""
-            This override field allows you to insert content into the xhtml
-            head. The typical use is to add custom CSS or JavaScript.
-            Specify a TALES expression returning a string. The string will
-            be inserted with no interpretation.
-            PLEASE NOTE: errors in the evaluation of this expression will
-            cause an error on form display.
-        """),
+        description=_(u'help_headerInjection_text', default=u''
+                      u'This override field allows you to insert content into the xhtml '
+                      u'head. The typical use is to add custom CSS or JavaScript. '
+                      u'Specify a TALES expression returning a string. The string will '
+                      u'be inserted with no interpretation. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will '
+                      u'cause an error on form display.'),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -319,13 +302,12 @@ class IFormulator(form.Schema):
     submitLabelOverride = zs.TextLine(
         title=_(u'label_submitlabeloverride_text',
                 default=u'Custom Submit Button Label'),
-        description=_(u'help_submitlabeloverride_text', default=u"""
-            This override field allows you to change submit button label.
-            The typical use is to set label with request parameters.
-            Specify a TALES expression returning a string.
-            PLEASE NOTE: errors in the evaluation of this expression will
-            cause an error on form display.
-        """),
+        description=_(u'help_submitlabeloverride_text', default=u''
+                      u'This override field allows you to change submit button label. '
+                      u'The typical use is to set label with request parameters. '
+                      u'Specify a TALES expression returning a string. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will '
+                      u'cause an error on form display.'),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -349,8 +331,8 @@ class IFormulator(form.Schema):
     thanksdescription = zs.Text(
         title=_(u'label_thanksdescription', default=u'Thanks summary'),
         description=_(
-            u'help_description',
-            default=u'Used in item listings and search results.'
+            u'help_thanksdescription',
+            default=u'Used in thanks page.'
         ),
         default=u'Thanks for your input.',
         required=False,
@@ -360,32 +342,28 @@ class IFormulator(form.Schema):
     # obj.setDescription(_(u'pfg_thankyou_description', u'Thanks for your input.'))
     showAll = zs.Bool(
         title=_(u'label_showallfields_text', default=u'Show All Fields'),
-        description=_(u'help_showallfields_text', default=u"""
-            Check this to display input for all fields
-            (except label and file fields). If you check
-            this, the choices in the pick box below
-            will be ignored.
-            """),
+        description=_(u'help_showallfields_text', default=u''
+                      u'Check this to display input for all fields '
+                      u'(except label and file fields). If you check '
+                      u'this, the choices in the pick box below '
+                      u'will be ignored.'),
         default=True,
         required=False,
     )
     showFields = zs.List(
         title=_(u'label_showfields_text', default=u'Show Responses'),
-        description=_(u'help_showfields_text', default=u"""
-            Pick the fields whose inputs you'd like to display on
-            the success page.
-            """),
+        description=_(u'help_showfields_text',
+                      default=u'Pick the fields whose inputs you\'d like to display on the success page.'),
         unique=True,
         required=False,
         value_type=zs.Choice(vocabulary=fieldsFactory),
     )
     includeEmpties = zs.Bool(
         title=_(u'label_includeEmpties_text', default=u'Include Empties'),
-        description=_(u'help_includeEmpties_text', default=u"""
-            Check this to display field titles
-            for fields that received no input. Uncheck
-            to leave fields with no input off the list.
-            """),
+        description=_(u'help_includeEmpties_text', default=u''
+                      u'Check this to display field titles '
+                      u'for fields that received no input. Uncheck '
+                      u'to leave fields with no input off the list.'),
         default=True,
         required=False,
     )
@@ -441,13 +419,12 @@ class IFieldExtender(form.Schema):
     # write_permission=EDIT_TALES_PERMISSION,
     TDefault = zs.TextLine(
         title=_(u'label_tdefault_text', default=u'Default Expression'),
-        description=(_(u'help_tdefault_text', default=u"""
-                    A TALES expression that will be evaluated when the form is displayed
-                    to get the field default value.
-                    Leave empty if unneeded. Your expression should evaluate as a string.
-                    PLEASE NOTE: errors in the evaluation of this expression will cause
-                    an error on form display.
-                """)),
+        description=(_(u'help_tdefault_text', default=u''
+                       u'A TALES expression that will be evaluated when the form is displayed '
+                       u'to get the field default value. '
+                       u'Leave empty if unneeded. Your expression should evaluate as a string. '
+                       u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                       u'an error on form display.')),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -455,14 +432,14 @@ class IFieldExtender(form.Schema):
     # write_permission=EDIT_TALES_PERMISSION,
     TEnabled = zs.TextLine(
         title=_(u'label_tenabled_text', default=u'Enabling Expression'),
-        description=(_(u'help_tenabled_text', default=
-                       u'A TALES expression that will be evaluated when the form is displayed'
-                       'to determine whether or not the field is enabled.'
-                       'Your expression should evaluate as True if'
-                       'the field should be included in the form, False if it should be omitted.'
-                       'Leave this expression field empty if unneeded: the field will be included.'
-                       'PLEASE NOTE: errors in the evaluation of this expression will cause'
-                       'an error on form display.')),
+        description=(_(u'help_tenabled_text', default=u''
+                       u'A TALES expression that will be evaluated when the form is displayed '
+                       u'to determine whether or not the field is enabled. '
+                       u'Your expression should evaluate as True if '
+                       u'the field should be included in the form, False if it should be omitted. '
+                       u'Leave this expression field empty if unneeded: the field will be included. '
+                       u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                       u'an error on form display.')),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -470,14 +447,14 @@ class IFieldExtender(form.Schema):
     # write_permission=EDIT_TALES_PERMISSION,
     TValidator = zs.TextLine(
         title=_(u'label_tvalidator_text', default=u'Custom Validator'),
-        description=(_(u'help_tvalidator_text', default=
-                       u'A TALES expression that will be evaluated when the form is validated.'
-                       'Validate against \'value\', which will contain the field input.'
-                       'Return False if valid; if not valid return a string error message.'
-                       'E.G., "python: test(value==\'eggs\', False, \'input must be eggs\')" will'
-                       'require "eggs" for input.'
-                       'PLEASE NOTE: errors in the evaluation of this expression will cause'
-                       'an error on form display.')),
+        description=(_(u'help_tvalidator_text', default=u''
+                       u'A TALES expression that will be evaluated when the form is validated. '
+                       u'Validate against \'value\', which will contain the field input. '
+                       u'Return False if valid; if not valid return a string error message. '
+                       u'E.G., "python: test(value==\'eggs\', False, \'input must be eggs\')" will '
+                       u'require "eggs" for input. '
+                       u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                       u'an error on form display.')),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -485,10 +462,10 @@ class IFieldExtender(form.Schema):
     # write_permission=EDIT_ADVANCED_PERMISSION,
     serverSide = zs.Bool(
         title=_(u'label_server_side_text', default=u'Server-Side Variable'),
-        description=_(u'description_server_side_text', default=
-                      u'Mark this field as a value to be injected into the'
-                      'request form for use by action adapters and is not'
-                      'modifiable by or exposed to the client.'),
+        description=_(u'description_server_side_text', default=u''
+                      u'Mark this field as a value to be injected into the '
+                      u'request form for use by action adapters and is not '
+                      u'modifiable by or exposed to the client.'),
         default=False,
         required=False,
     )
@@ -513,7 +490,7 @@ class IActionExtender(form.Schema):
     execCondition = zs.TextLine(
         title=_(u'label_execcondition_text', default=u'Execution Condition'),
         description=(_(u'help_execcondition_text', default=u''
-                       u'A TALES expression that will be evaluated to determine whether'
+                       u'A TALES expression that will be evaluated to determine whether '
                        u'or not to execute this action. Leave empty if unneeded, and '
                        u'the action will be executed. Your expression should evaluate '
                        u'as a boolean; return True if you wish the action to execute. '
@@ -573,7 +550,7 @@ class IMailer(IAction):
     form.read_permission(recipient_email='cmf.ModifyPortalContent')
     recipient_email = zs.TextLine(
         title=_(u'label_formmailer_recipient_email',
-                default=u"Recipient's e - mail address"),
+                default=u"Recipient's e-mail address"),
         description=_(u'help_formmailer_recipient_email',
                       default=u'The recipients e-mail address.'),
         default=u'',
@@ -587,13 +564,12 @@ class IMailer(IAction):
     to_field = zs.Choice(
         title=_(u'label_formmailer_to_extract',
                 default=u'Extract Recipient From'),
-        description=_(u'help_formmailer_to_extract', default=u"""
-            Choose a form field from which you wish to extract
-            input for the To header. If you choose anything other
-            than "None", this will override the "Recipient's e-mail address"
-            setting above. Be very cautious about allowing unguarded user
-            input for this purpose.
-            """),
+        description=_(u'help_formmailer_to_extract', default=u''
+                      u'Choose a form field from which you wish to extract '
+                      u'input for the To header. If you choose anything other '
+                      u'than "None", this will override the "Recipient\'s e-mail address" '
+                      u'setting above. Be very cautious about allowing unguarded user '
+                      u'input for this purpose.'),
         required=False,
         vocabulary=fieldsFactory,
     )
@@ -626,26 +602,24 @@ class IMailer(IAction):
     replyto_field = zs.Choice(
         title=_(u'label_formmailer_replyto_extract',
                 default=u'Extract Reply-To From'),
-        description=_(u'help_formmailer_replyto_extract', default=u"""
-            Choose a form field from which you wish to extract
-            input for the Reply-To header. NOTE: You should
-            activate e-mail address verification for the designated
-            field.
-            """),
+        description=_(u'help_formmailer_replyto_extract', default=u''
+                      u'Choose a form field from which you wish to extract '
+                      u'input for the Reply-To header. NOTE: You should '
+                      u'activate e-mail address verification for the designated '
+                      u'field.'),
         required=False,
         vocabulary=fieldsFactory,
     )
-    form.fieldset(u'message', label=_('Message'), fields=[
+    form.fieldset(u'message', label=PMF('Message'), fields=[
                   'msg_subject', 'subject_field', 'body_pre', 'body_post',
                   'body_footer', 'showAll', 'showFields', 'includeEmpties'])
     form.read_permission(msg_subject='cmf.ModifyPortalContent')
     msg_subject = zs.TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
-        description=_(u'help_formmailer_subject', default=u"""
-            Subject line of message. This is used if you
-            do not specify a subject field or if the field
-            is empty.
-            """),
+        description=_(u'help_formmailer_subject', default=u''
+                      u'Subject line of message. This is used if you '
+                      u'do not specify a subject field or if the field '
+                      u'is empty.'),
         default=u'Form Submission',
         missing_value=u'',
         required=False,
@@ -655,10 +629,9 @@ class IMailer(IAction):
     subject_field = zs.Choice(
         title=_(u'label_formmailer_subject_extract',
                 default=u'Extract Subject From'),
-        description=_(u'help_formmailer_subject_extract', default=u"""
-            Choose a form field from which you wish to extract
-            input for the mail subject line.
-            """),
+        description=_(u'help_formmailer_subject_extract', default=u''
+                      u'Choose a form field from which you wish to extract '
+                      u'input for the mail subject line.'),
         required=False,
         vocabulary=fieldsFactory,
     )
@@ -695,22 +668,19 @@ class IMailer(IAction):
     form.read_permission(showAll='cmf.ModifyPortalContent')
     showAll = zs.Bool(
         title=_(u'label_mailallfields_text', default=u'Include All Fields'),
-        description=_(u'help_mailallfields_text', default=u"""
-            Check this to include input for all fields
-            (except label and file fields). If you check
-            this, the choices in the pick box below
-            will be ignored.
-            """),
+        description=_(u'help_mailallfields_text', default=u''
+                      u'Check this to include input for all fields '
+                      u'(except label and file fields). If you check '
+                      u'this, the choices in the pick box below '
+                      u'will be ignored.'),
         default=True,
         required=False,
     )
     form.read_permission(showFields='cmf.ModifyPortalContent')
     showFields = zs.List(
         title=_(u'label_mailfields_text', default=u'Show Responses'),
-        description=_(u'help_mailfields_text', default=u"""
-            Pick the fields whose inputs you'd like to include in
-            the e-mail.
-            """),
+        description=_(u'help_mailfields_text',
+                      default=u'Pick the fields whose inputs you\'d like to include in the e-mail.'),
         unique=True,
         required=False,
         value_type=zs.Choice(vocabulary=fieldsFactory),
@@ -718,15 +688,14 @@ class IMailer(IAction):
     form.read_permission(includeEmpties='cmf.ModifyPortalContent')
     includeEmpties = zs.Bool(
         title=_(u'label_mailEmpties_text', default=u'Include Empties'),
-        description=_(u'help_mailEmpties_text', default=u"""
-            Check this to include titles
-            for fields that received no input. Uncheck
-            to leave fields with no input out of the e-mail.
-            """),
+        description=_(u'help_mailEmpties_text', default=u''
+                      u'Check this to include titles '
+                      u'for fields that received no input. Uncheck '
+                      u'to leave fields with no input out of the e-mail.'),
         default=True,
         required=False,
     )
-    form.fieldset(u'template', label=_(
+    form.fieldset(u'template', label=PMF(
         'Template'), fields=['body_pt', 'body_type'])
     # ZPTField('body_pt',
     # write_permission=EDIT_TALES_PERMISSION,
@@ -735,10 +704,11 @@ class IMailer(IAction):
     form.read_permission(body_pt='cmf.ModifyPortalContent')
     body_pt = zs.Text(
         title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
-        description=_(u'help_formmailer_body_pt', default=u"""This is a Zope Page Template
-            used for rendering of the mail-body. You don\'t need to modify
-            it, but if you know TAL (Zope\'s Template Attribute Language)
-            you have the full power to customize your outgoing mails."""),
+        description=_(u'help_formmailer_body_pt', default=u''
+                      u'This is a Zope Page Template '
+                      u'used for rendering of the mail-body. You don\'t need to modify '
+                      u'it, but if you know TAL (Zope\'s Template Attribute Language) '
+                      u'you have the full power to customize your outgoing mails.'),
         default=MAIL_BODY_DEFAULT,
         missing_value=u'',
     )
@@ -747,9 +717,10 @@ class IMailer(IAction):
     form.read_permission(body_type='cmf.ModifyPortalContent')
     body_type = zs.Choice(
         title=_(u'label_formmailer_body_type', default=u'Mail Format'),
-        description=_(u'help_formmailer_body_type', default=u"""Set the mime-type of the mail-body.
-            Change this setting only if you know exactly what you are doing.
-            Leave it blank for default behaviour."""),
+        description=_(u'help_formmailer_body_type', default=u''
+                      u'Set the mime-type of the mail-body. '
+                      u'Change this setting only if you know exactly what you are doing. '
+                      u'Leave it blank for default behaviour.'),
         default=u'html',
         vocabulary=MIME_LIST,
     )
@@ -761,11 +732,9 @@ class IMailer(IAction):
     form.read_permission(xinfo_headers='cmf.ModifyPortalContent')
     xinfo_headers = zs.List(
         title=_(u'label_xinfo_headers_text', default=u'HTTP Headers'),
-        description=_(u'help_xinfo_headers_text', default=u"""
-            Pick any items from the HTTP headers that
-            you'd like to insert as X- headers in the
-            message.
-            """),
+        description=_(u'help_xinfo_headers_text', default=u''
+                      u'Pick any items from the HTTP headers that '
+                      u'you\'d like to insert as X- headers in the message.'),
         unique=True,
         required=False,
         default=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
@@ -778,14 +747,13 @@ class IMailer(IAction):
     additional_headers = zs.List(
         title=_(u'label_formmailer_additional_headers',
                 default=u'Additional Headers'),
-        description=_(u'help_formmailer_additional_headers', default=u"""
-            Additional e-mail-header lines.
-            Only use RFC822-compliant headers.
-            """),
+        description=_(u'help_formmailer_additional_headers',
+                      default=u'Additional e-mail-header lines. Only use RFC822-compliant headers.'),
         unique=True,
         required=False,
         value_type=zs.TextLine(
-            title=_('HTTP Header'),
+            title=_(u'extra_header',
+                    default=u'${name} Header', mapping={u'name': u'HTTP'}),
         ),
     )
     # if gpg is not None:
@@ -817,13 +785,12 @@ class IMailer(IAction):
     form.read_permission(subjectOverride='cmf.ModifyPortalContent')
     subjectOverride = zs.TextLine(
         title=_(u'label_subject_override_text', default=u'Subject Expression'),
-        description=_(u'help_subject_override_text', default=u"""
-            A TALES expression that will be evaluated to override any value
-            otherwise entered for the e-mail subject header.
-            Leave empty if unneeded. Your expression should evaluate as a string.
-            PLEASE NOTE: errors in the evaluation of this expression will cause
-            an error on form display.
-        """),
+        description=_(u'help_subject_override_text', default=u''
+                      u'A TALES expression that will be evaluated to override any value '
+                      u'otherwise entered for the e-mail subject header. '
+                      u'Leave empty if unneeded. Your expression should evaluate as a string. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                      u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -833,12 +800,11 @@ class IMailer(IAction):
     form.read_permission(senderOverride='cmf.ModifyPortalContent')
     senderOverride = zs.TextLine(
         title=_(u'label_sender_override_text', default=u'Sender Expression'),
-        description=_(u'help_sender_override_text', default=u"""
-            A TALES expression that will be evaluated to override the "From" header.
-            Leave empty if unneeded. Your expression should evaluate as a string.
-            PLEASE NOTE: errors in the evaluation of this expression will cause
-            an error on form display.
-        """),
+        description=_(u'help_sender_override_text', default=u''
+                      u'A TALES expression that will be evaluated to override the "From" header. '
+                      u'Leave empty if unneeded. Your expression should evaluate as a string. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                      u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -849,14 +815,13 @@ class IMailer(IAction):
     recipientOverride = zs.TextLine(
         title=_(u'label_recipient_override_text',
                 default=u'Recipient Expression'),
-        description=_(u'help_recipient_override_text', default=u"""
-            A TALES expression that will be evaluated to override any value
-            otherwise entered for the recipient e-mail address. You are strongly
-            cautioned against using unvalidated data from the request for this purpose.
-            Leave empty if unneeded. Your expression should evaluate as a string.
-            PLEASE NOTE: errors in the evaluation of this expression will cause
-            an error on form display.
-        """),
+        description=_(u'help_recipient_override_text', default=u''
+                      u'A TALES expression that will be evaluated to override any value '
+                      u'otherwise entered for the recipient e-mail address. You are strongly '
+                      u'cautioned against using unvalidated data from the request for this purpose. '
+                      u'Leave empty if unneeded. Your expression should evaluate as a string. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                      u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -866,14 +831,13 @@ class IMailer(IAction):
     form.read_permission(ccOverride='cmf.ModifyPortalContent')
     ccOverride = zs.TextLine(
         title=_(u'label_cc_override_text', default=u'CC Expression'),
-        description=_(u'help_cc_override_text', default=u"""
-            A TALES expression that will be evaluated to override any value
-            otherwise entered for the CC list. You are strongly
-            cautioned against using unvalidated data from the request for this purpose.
-            Leave empty if unneeded. Your expression should evaluate as a sequence of strings.
-            PLEASE NOTE: errors in the evaluation of this expression will cause
-            an error on form display.
-        """),
+        description=_(u'help_cc_override_text', default=u''
+                      u'A TALES expression that will be evaluated to override any value '
+                      u'otherwise entered for the CC list. You are strongly '
+                      u'cautioned against using unvalidated data from the request for this purpose. '
+                      u'Leave empty if unneeded. Your expression should evaluate as a sequence of strings. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                      u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -883,14 +847,13 @@ class IMailer(IAction):
     form.read_permission(bccOverride='cmf.ModifyPortalContent')
     bccOverride = zs.TextLine(
         title=_(u'label_bcc_override_text', default=u'BCC Expression'),
-        description=_(u'help_bcc_override_text', default=u"""
-            A TALES expression that will be evaluated to override any value
-            otherwise entered for the BCC list. You are strongly
-            cautioned against using unvalidated data from the request for this purpose.
-            Leave empty if unneeded. Your expression should evaluate as a sequence of strings.
-            PLEASE NOTE: errors in the evaluation of this expression will cause
-            an error on form display.
-        """),
+        description=_(u'help_bcc_override_text', default=u''
+                      u'A TALES expression that will be evaluated to override any value '
+                      u'otherwise entered for the BCC list. You are strongly '
+                      u'cautioned against using unvalidated data from the request for this purpose. '
+                      u'Leave empty if unneeded. Your expression should evaluate as a sequence of strings. '
+                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
+                      u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -933,19 +896,22 @@ class IExtraData(Interface):
         missing_value=u'',
     )
     HTTP_X_FORWARDED_FOR = zs.TextLine(
-        title=_(u'HTTP_X_FORWARDED_FOR Header'),
+        title=_(u'extra_header', default=u'${name} Header',
+                mapping={u'name': u'HTTP_X_FORWARDED_FOR'}),
         required=False,
         default=u'',
         missing_value=u'',
     )
     REMOTE_ADDR = zs.TextLine(
-        title=_(u'REMOTE_ADDR Header'),
+        title=_(u'extra_header',
+                default=u'${name} Header', mapping={u'name': u'REMOTE_ADDR'}),
         required=False,
         default=u'',
         missing_value=u'',
     )
     HTTP_USER_AGENT = zs.TextLine(
-        title=_(u'HTTP_USER_AGENT Header'),
+        title=_(u'extra_header',
+                default=u'${name} Header', mapping={u'name': u'HTTP_USER_AGENT'}),
         required=False,
         default=u'',
         missing_value=u'',
@@ -958,10 +924,9 @@ class ISaveData(IAction):
        return it in csv- or tab-delimited format."""
     showFields = zs.List(
         title=_(u'label_savefields_text', default=u'Saved Fields'),
-        description=_(u'help_savefields_text', default=u"""
-            Pick the fields whose inputs you'd like to include in
-            the saved data. If empty, all fields will be saved.
-            """),
+        description=_(u'help_savefields_text', default=u''
+                      u'Pick the fields whose inputs you\'d like to include in '
+                      u'the saved data. If empty, all fields will be saved.'),
         unique=True,
         required=False,
         value_type=zs.Choice(vocabulary=fieldsFactory),
@@ -969,9 +934,8 @@ class ISaveData(IAction):
     form.widget(ExtraData=CheckBoxFieldWidget)
     ExtraData = zs.List(
         title=_(u'label_savedataextra_text', default='Extra Data'),
-        description=_(u'help_savedataextra_text', default=u"""
-            Pick any extra data you'd like saved with the form input.
-            """),
+        description=_(u'help_savedataextra_text',
+                      default=u'Pick any extra data you\'d like saved with the form input.'),
         unique=True,
         value_type=zs.Choice(vocabulary=vocabExtraDataDL),
     )

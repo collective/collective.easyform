@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from zope.interface import implements
+from zope.i18nmessageid import MessageFactory
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabulary
@@ -10,14 +11,16 @@ from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.api import get_context
 from collective.formulator.api import get_fields
 
+PMF = MessageFactory('plone')
+
 customActions = SimpleVocabulary.fromItems((
     (_(u'Traverse to'), u'traverse_to'),
     (_(u'Redirect to'), u'redirect_to'),
 ))
 
 MIME_LIST = SimpleVocabulary.fromItems((
-    (_(u'HTML'), u'html'),
-    (_(u'Text'), u'plain'),
+    (u'HTML', u'html'),
+    (PMF(u'Text'), u'plain'),
 ))
 
 XINFO_HEADERS = SimpleVocabulary.fromItems((

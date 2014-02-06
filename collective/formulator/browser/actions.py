@@ -27,6 +27,7 @@ from zope.component import adapts
 from zope.component import getAdapters
 from zope.component import queryUtility
 from zope.event import notify
+from zope.i18nmessageid import MessageFactory
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import noLongerProvides
@@ -45,6 +46,8 @@ from collective.formulator.interfaces import IFormulatorActionsContext
 from collective.formulator.interfaces import INewAction
 from collective.formulator.interfaces import ISaveData
 from collective.formulator.interfaces import ISavedDataFormWrapper
+
+PMF = MessageFactory('plone')
 
 
 class SavedDataTraversal(WrapperWidgetTraversal):
@@ -128,7 +131,7 @@ class SavedDataForm(crud.CrudForm):
     def remove(self, (id, item)):
         self.field.delDataRow(id)
 
-    @button.buttonAndHandler(_(u'Download'), name='download')
+    @button.buttonAndHandler(PMF(u'Download'), name='download')
     def handleDownload(self, action):
         self.field.download(self.request.response)
 
@@ -198,7 +201,7 @@ class FormulatorActionsListing(SchemaListing):
             field.__module__, field.__class__.__name__)
         return queryUtility(IActionFactory, name=field_identifier)
 
-    @button.buttonAndHandler(_(u'Save'))
+    @button.buttonAndHandler(PMF(u'Save'))
     def handleSaveDefaults(self, action):
         data, errors = self.extractData()
         if errors:
@@ -254,7 +257,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         schema_context = self.context.aq_parent
         return [v for k, v in getAdapters((schema_context, self.field), IFieldEditorExtender)]
 
-    @button.buttonAndHandler(_(u'Save'), name='save')
+    @button.buttonAndHandler(PMF(u'Save'), name='save')
     def handleSave(self, action):
         data, errors = self.extractData()
         if errors:
@@ -271,7 +274,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         notify(SchemaModifiedEvent(self.context.aq_parent))
         self.redirectToParent()
 
-    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
+    @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):
         self.redirectToParent()
 

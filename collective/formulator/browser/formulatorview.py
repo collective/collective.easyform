@@ -11,6 +11,7 @@ from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
+from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 from zope.schema import ValidationError
 from zope.schema import getFieldsInOrder
@@ -25,6 +26,7 @@ from collective.formulator.interfaces import IFieldExtender
 from collective.formulator.interfaces import IFormulatorForm
 
 logger = getLogger('collective.formulator')
+PMF = MessageFactory('plone')
 
 
 class FormulatorForm(AutoExtensibleForm, form.Form):
@@ -147,7 +149,7 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             self.widgets[field].error = view
         self.status = self.formErrorsMessage
 
-    @button.buttonAndHandler(_(u'Submit'), name='submit', condition=lambda form: not form.thanksPage)
+    @button.buttonAndHandler(PMF(u'Submit'), name='submit', condition=lambda form: not form.thanksPage)
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:

@@ -1,98 +1,78 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-02-05 22:07+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Project-Id-Version: collective.formulator\n"
+"POT-Creation-Date: 2014-02-06 21:35+0000\n"
+"PO-Revision-Date: 2014-02-06 00:16+0300\n"
+"Last-Translator: Roman Kozlovskyi <krzroman@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
+"Language-Code: uk\n"
+"Language-Name: Ukraine\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: DOMAIN\n"
+"Domain: collective.formulator\n"
 
-#: collective.formulator/collective/formulator/browser/actions.py:99
+#: collective.formulator/collective/formulator/browser/actions.py:102
 msgid "${items} input(s) saved"
-msgstr ""
+msgstr "${items} елементів збережено."
 
-#: collective.formulator/collective/formulator/interfaces.py:79
+#: collective.formulator/collective/formulator/interfaces.py:82
 msgid "Action type"
+msgstr "Тип дії"
+
+#: collective.formulator/collective/formulator/interfaces.py:134
+msgid "Actions Model"
 msgstr ""
 
-#: collective.formulator/collective/formulator/browser/actions.py:232
+#: collective.formulator/collective/formulator/browser/actions.py:235
 msgid "Add new action"
-msgstr ""
+msgstr "Додати нову дію"
 
-#: collective.formulator/collective/formulator/interfaces.py:583
+#: collective.formulator/collective/formulator/interfaces.py:560
 msgid "Addressing"
-msgstr ""
+msgstr "Адреси"
 
-#: collective.formulator/collective/formulator/browser/actions.py:274
-msgid "Cancel"
-msgstr ""
-
-#: collective.formulator/collective/formulator/browser/actions.py:135
+#: collective.formulator/collective/formulator/browser/actions.py:138
 msgid "Clear all"
-msgstr ""
+msgstr "Очистити все"
 
-#: collective.formulator/collective/formulator/browser/actions.py:131
-msgid "Download"
-msgstr ""
-
-#: collective.formulator/collective/formulator/browser/actions.py:293
+#: collective.formulator/collective/formulator/browser/actions.py:296
 msgid "Edit Action '${fieldname}'"
-msgstr ""
+msgstr "Редагувати дію '${fieldname}'"
 
 #: collective.formulator/collective/formulator/profiles/default/actions.xml
 msgid "Export"
+msgstr "Експортувати"
+
+#: collective.formulator/collective/formulator/interfaces.py:129
+msgid "Fields Model"
 msgstr ""
 
 #: collective.formulator/collective/formulator/browser/exportimport.py:69
 msgid "Form imported."
-msgstr ""
+msgstr "Форму імпортовано."
 
 #: collective.formulator/collective/formulator/profiles/default/types/Formulator.xml
 msgid "Formulator"
-msgstr ""
+msgstr "Формулятор"
 
-#: collective.formulator/collective/formulator/vocabularies.py:19
-msgid "HTML"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:788
-msgid "HTTP Header"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:948
-msgid "HTTP_USER_AGENT Header"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:936
-msgid "HTTP_X_FORWARDED_FOR Header"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:756
+#: collective.formulator/collective/formulator/interfaces.py:727
 msgid "Headers"
-msgstr ""
+msgstr "Заголовки"
 
 #: collective.formulator/collective/formulator/profiles/default/actions.xml
 msgid "Import"
-msgstr ""
+msgstr "Імпорт"
 
 #: collective.formulator/collective/formulator/validators.py:67
 msgid "Links are not allowed."
-msgstr ""
+msgstr "Лінки заборонені."
 
-#: collective.formulator/collective/formulator/interfaces.py:638
-msgid "Message"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:123
+#: collective.formulator/collective/formulator/interfaces.py:126
 msgid "Models"
-msgstr ""
+msgstr "Моделі"
 
 #: collective.formulator/collective/formulator/validators.py:46
 msgid "Must be a valid list of email addresses (separated by commas)."
@@ -100,378 +80,359 @@ msgstr ""
 
 #: collective.formulator/collective/formulator/validators.py:52
 msgid "Must be checked."
-msgstr ""
+msgstr "Має бути вибрано."
 
 #: collective.formulator/collective/formulator/validators.py:58
 msgid "Must be unchecked."
-msgstr ""
+msgstr "Не має бути вибрано."
 
-#: collective.formulator/collective/formulator/interfaces.py:214
+#: collective.formulator/collective/formulator/interfaces.py:202
 msgid "Overrides"
 msgstr ""
 
-#: collective.formulator/collective/formulator/interfaces.py:930
+#: collective.formulator/collective/formulator/interfaces.py:893
 msgid "Posting Date/Time"
-msgstr ""
+msgstr "Дата/час заповнення"
 
-#: collective.formulator/collective/formulator/interfaces.py:942
-msgid "REMOTE_ADDR Header"
-msgstr ""
-
-#: collective.formulator/collective/formulator/vocabularies.py:15
+#: collective.formulator/collective/formulator/vocabularies.py:18
 msgid "Redirect to"
-msgstr ""
+msgstr "Перенаправити до"
 
-#: collective.formulator/collective/formulator/browser/formulatorview.py:187
+#: collective.formulator/collective/formulator/browser/formulatorview.py:189
 msgid "Reset"
-msgstr ""
+msgstr "Відновити"
 
-#: collective.formulator/collective/formulator/interfaces.py:1013
+#: collective.formulator/collective/formulator/interfaces.py:977
 msgid "Rich Label"
-msgstr ""
-
-#: collective.formulator/collective/formulator/browser/actions.py:201
-msgid "Save"
-msgstr ""
+msgstr "Розширений заголовок"
 
 #: collective.formulator/collective/formulator/profiles/default/actions.xml
 msgid "Saved data"
-msgstr ""
+msgstr "Збережені дані"
 
-#: collective.formulator/collective/formulator/browser/formulatorview.py:150
-msgid "Submit"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:729
-msgid "Template"
-msgstr ""
-
-#: collective.formulator/collective/formulator/vocabularies.py:20
-msgid "Text"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:341
+#: collective.formulator/collective/formulator/interfaces.py:323
 msgid "Thanks Page"
 msgstr ""
 
-#: collective.formulator/collective/formulator/vocabularies.py:14
+#: collective.formulator/collective/formulator/vocabularies.py:17
 msgid "Traverse to"
-msgstr ""
+msgstr "Траверсити до"
 
-#: collective.formulator/collective/formulator/interfaces.py:114
-msgid "Upload"
-msgstr ""
-
-#: collective.formulator/collective/formulator/interfaces.py:496
+#: collective.formulator/collective/formulator/interfaces.py:473
 msgid "Validators"
-msgstr ""
+msgstr "Валідатори"
 
-#. Default: "Mark this field as a value to be injected into therequest form for use by action adapters and is notmodifiable by or exposed to the client."
-#: collective.formulator/collective/formulator/interfaces.py:488
+#. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
+#: collective.formulator/collective/formulator/interfaces.py:465
 msgid "description_server_side_text"
 msgstr ""
 
+#. Default: "${name} Header"
+#: collective.formulator/collective/formulator/interfaces.py:755
+msgid "extra_header"
+msgstr "${name} Заголовок"
+
 #. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter(if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded.The most common use of this field is to call a python scriptto clean up form input or to script an alternative action.Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
-#: collective.formulator/collective/formulator/interfaces.py:289
+#: collective.formulator/collective/formulator/interfaces.py:273
 msgid "help_AfterValidationOverride_text"
 msgstr ""
 
-#. Default: "\n            A TALES expression that will be called when the form is\n            displayed.\n            Leave empty if unneeded.\n            The most common use of this field is to call a python script\n            that sets defaults for multiple fields by pre-populating\n            request.form.\n            Any value returned by the expression is ignored.\n            PLEASE NOTE: errors in the evaluation of this expression\n            will cause an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:270
+#. Default: "A TALES expression that will be called when the form is displayed. Leave empty if unneeded. The most common use of this field is to call a python script that sets defaults for multiple fields by pre-populating request.form. Any value returned by the expression is ignored. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:255
 msgid "help_OnDisplayOverride_text"
 msgstr ""
 
-#. Default: "\n            A TALES expression that will be evaluated to override any value\n            otherwise entered for the BCC list. You are strongly\n            cautioned against using unvalidated data from the request for this purpose.\n            Leave empty if unneeded. Your expression should evaluate as a sequence of strings.\n            PLEASE NOTE: errors in the evaluation of this expression will cause\n            an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:886
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the BCC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:850
 msgid "help_bcc_override_text"
 msgstr ""
 
-#. Default: "\n            A TALES expression that will be evaluated to override any value\n            otherwise entered for the CC list. You are strongly\n            cautioned against using unvalidated data from the request for this purpose.\n            Leave empty if unneeded. Your expression should evaluate as a sequence of strings.\n            PLEASE NOTE: errors in the evaluation of this expression will cause\n            an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:869
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the CC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:834
 msgid "help_cc_override_text"
 msgstr ""
 
 #. Default: "Check this to employ Cross-Site Request Forgery protection. Note that only HTTP Post actions will be allowed."
-#: collective.formulator/collective/formulator/interfaces.py:169
+#: collective.formulator/collective/formulator/interfaces.py:172
 msgid "help_csrf"
 msgstr ""
 
 #. Default: "This field allows you to change default fieldset label."
-#: collective.formulator/collective/formulator/interfaces.py:336
+#: collective.formulator/collective/formulator/interfaces.py:318
 msgid "help_default_fieldset_label_text"
 msgstr ""
 
-#. Default: "Used in item listings and search results."
-#: collective.formulator/collective/formulator/interfaces.py:351
-msgid "help_description"
-msgstr ""
-
 #. Default: "The text will be displayed after the form fields."
-#: collective.formulator/collective/formulator/interfaces.py:210
+#: collective.formulator/collective/formulator/interfaces.py:198
 msgid "help_epilogue_text"
 msgstr ""
 
-#. Default: "A TALES expression that will be evaluated to determine whetheror not to execute this action. Leave empty if unneeded, and the action will be executed. Your expression should evaluate as a boolean; return True if you wish the action to execute. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective.formulator/collective/formulator/interfaces.py:515
+#. Default: "A TALES expression that will be evaluated to determine whether or not to execute this action. Leave empty if unneeded, and the action will be executed. Your expression should evaluate as a boolean; return True if you wish the action to execute. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:492
 msgid "help_execcondition_text"
 msgstr ""
 
-#. Default: "\n            Check this to make the form redirect to an SSL-enabled\n            version of itself (https://) if accessed via a non-SSL\n            URL (http://).  In order to function properly,\n            this requires a web server that has been configured to\n            handle the HTTPS protocol on port 443 and forward it to Zope.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:192
+#. Default: "Check this to make the form redirect to an SSL-enabled version of itself (https://) if accessed via a non-SSL URL (http://).  In order to function properly, this requires a web server that has been configured to handle the HTTPS protocol on port 443 and forward it to Zope."
+#: collective.formulator/collective/formulator/interfaces.py:181
 msgid "help_force_ssl"
 msgstr ""
 
-#: collective.formulator/collective/formulator/interfaces.py:156
+#: collective.formulator/collective/formulator/interfaces.py:159
 msgid "help_form_tabbing"
 msgstr ""
 
-#. Default: "\n            Use this field to override the form action attribute.\n            Specify a URL to which the form will post.\n            This will bypass form validation, success action\n            adapter and thanks page.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:259
+#. Default: "Use this field to override the form action attribute. Specify a URL to which the form will post. This will bypass form validation, success action adapter and thanks page."
+#: collective.formulator/collective/formulator/interfaces.py:245
 msgid "help_formactionoverride_text"
 msgstr ""
 
-#. Default: "\n            Additional e-mail-header lines.\n            Only use RFC822-compliant headers.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:781
+#. Default: "Additional e-mail-header lines. Only use RFC822-compliant headers."
+#: collective.formulator/collective/formulator/interfaces.py:750
 msgid "help_formmailer_additional_headers"
 msgstr ""
 
 #. Default: "E-mail addresses which receive a blind carbon copy."
-#: collective.formulator/collective/formulator/interfaces.py:618
+#: collective.formulator/collective/formulator/interfaces.py:594
 msgid "help_formmailer_bcc_recipients"
 msgstr ""
 
 #. Default: "Text used as the footer at bottom, delimited from the body by a dashed line."
-#: collective.formulator/collective/formulator/interfaces.py:688
+#: collective.formulator/collective/formulator/interfaces.py:661
 msgid "help_formmailer_body_footer"
 msgstr ""
 
 #. Default: "Text appended to fields listed in mail-body"
-#: collective.formulator/collective/formulator/interfaces.py:678
+#: collective.formulator/collective/formulator/interfaces.py:651
 msgid "help_formmailer_body_post"
 msgstr ""
 
 #. Default: "Text prepended to fields listed in mail-body"
-#: collective.formulator/collective/formulator/interfaces.py:669
+#: collective.formulator/collective/formulator/interfaces.py:642
 msgid "help_formmailer_body_pre"
 msgstr ""
 
-#. Default: "This is a Zope Page Template\n            used for rendering of the mail-body. You don't need to modify\n            it, but if you know TAL (Zope's Template Attribute Language)\n            you have the full power to customize your outgoing mails."
-#: collective.formulator/collective/formulator/interfaces.py:738
+#. Default: "This is a Zope Page Template used for rendering of the mail-body. You don't need to modify it, but if you know TAL (Zope's Template Attribute Language) you have the full power to customize your outgoing mails."
+#: collective.formulator/collective/formulator/interfaces.py:707
 msgid "help_formmailer_body_pt"
 msgstr ""
 
-#. Default: "Set the mime-type of the mail-body.\n            Change this setting only if you know exactly what you are doing.\n            Leave it blank for default behaviour."
-#: collective.formulator/collective/formulator/interfaces.py:750
+#. Default: "Set the mime-type of the mail-body. Change this setting only if you know exactly what you are doing. Leave it blank for default behaviour."
+#: collective.formulator/collective/formulator/interfaces.py:720
 msgid "help_formmailer_body_type"
 msgstr ""
 
 #. Default: "E-mail addresses which receive a carbon copy."
-#: collective.formulator/collective/formulator/interfaces.py:606
+#: collective.formulator/collective/formulator/interfaces.py:582
 msgid "help_formmailer_cc_recipients"
 msgstr ""
 
 #. Default: "The recipients e-mail address."
-#: collective.formulator/collective/formulator/interfaces.py:577
+#: collective.formulator/collective/formulator/interfaces.py:554
 msgid "help_formmailer_recipient_email"
 msgstr ""
 
 #. Default: "The full name of the recipient of the mailed form."
-#: collective.formulator/collective/formulator/interfaces.py:562
+#: collective.formulator/collective/formulator/interfaces.py:539
 msgid "help_formmailer_recipient_fullname"
 msgstr ""
 
-#. Default: "\n            Choose a form field from which you wish to extract\n            input for the Reply-To header. NOTE: You should\n            activate e-mail address verification for the designated\n            field.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:629
+#. Default: "Choose a form field from which you wish to extract input for the Reply-To header. NOTE: You should activate e-mail address verification for the designated field."
+#: collective.formulator/collective/formulator/interfaces.py:605
 msgid "help_formmailer_replyto_extract"
 msgstr ""
 
-#. Default: "\n            Subject line of message. This is used if you\n            do not specify a subject field or if the field\n            is empty.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:644
+#. Default: "Subject line of message. This is used if you do not specify a subject field or if the field is empty."
+#: collective.formulator/collective/formulator/interfaces.py:619
 msgid "help_formmailer_subject"
 msgstr ""
 
-#. Default: "\n            Choose a form field from which you wish to extract\n            input for the mail subject line.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:658
+#. Default: "Choose a form field from which you wish to extract input for the mail subject line."
+#: collective.formulator/collective/formulator/interfaces.py:632
 msgid "help_formmailer_subject_extract"
 msgstr ""
 
-#. Default: "\n            Choose a form field from which you wish to extract\n            input for the To header. If you choose anything other\n            than \"None\", this will override the \"Recipient's e-mail address\"\n            setting above. Be very cautious about allowing unguarded user\n            input for this purpose.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:590
+#. Default: "Choose a form field from which you wish to extract input for the To header. If you choose anything other than \"None\", this will override the \"Recipient's e-mail address\" setting above. Be very cautious about allowing unguarded user input for this purpose."
+#: collective.formulator/collective/formulator/interfaces.py:567
 msgid "help_formmailer_to_extract"
 msgstr ""
 
-#. Default: "\n            This override field allows you to insert content into the xhtml\n            head. The typical use is to add custom CSS or JavaScript.\n            Specify a TALES expression returning a string. The string will\n            be inserted with no interpretation.\n            PLEASE NOTE: errors in the evaluation of this expression will\n            cause an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:307
+#. Default: "This override field allows you to insert content into the xhtml head. The typical use is to add custom CSS or JavaScript. Specify a TALES expression returning a string. The string will be inserted with no interpretation. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:291
 msgid "help_headerInjection_text"
 msgstr ""
 
-#. Default: "\n            Check this to display field titles\n            for fields that received no input. Uncheck\n            to leave fields with no input off the list.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:384
+#. Default: "Check this to display field titles for fields that received no input. Uncheck to leave fields with no input off the list."
+#: collective.formulator/collective/formulator/interfaces.py:363
 msgid "help_includeEmpties_text"
 msgstr ""
 
-#. Default: "\n            Check this to include titles\n            for fields that received no input. Uncheck\n            to leave fields with no input out of the e-mail.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:721
+#. Default: "Check this to include titles for fields that received no input. Uncheck to leave fields with no input out of the e-mail."
+#: collective.formulator/collective/formulator/interfaces.py:691
 msgid "help_mailEmpties_text"
 msgstr ""
 
-#. Default: "\n            Check this to include input for all fields\n            (except label and file fields). If you check\n            this, the choices in the pick box below\n            will be ignored.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:698
+#. Default: "Check this to include input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
+#: collective.formulator/collective/formulator/interfaces.py:671
 msgid "help_mailallfields_text"
 msgstr ""
 
-#. Default: "\n            Pick the fields whose inputs you'd like to include in\n            the e-mail.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:710
+#. Default: "Pick the fields whose inputs you'd like to include in the e-mail."
+#: collective.formulator/collective/formulator/interfaces.py:682
 msgid "help_mailfields_text"
 msgstr ""
 
 #. Default: "This text will be displayed above the form fields."
-#: collective.formulator/collective/formulator/interfaces.py:204
+#: collective.formulator/collective/formulator/interfaces.py:192
 msgid "help_prologue_text"
 msgstr ""
 
-#. Default: "\n            A TALES expression that will be evaluated to override any value\n            otherwise entered for the recipient e-mail address. You are strongly\n            cautioned against using unvalidated data from the request for this purpose.\n            Leave empty if unneeded. Your expression should evaluate as a string.\n            PLEASE NOTE: errors in the evaluation of this expression will cause\n            an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:852
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:818
 msgid "help_recipient_override_text"
 msgstr ""
 
-#: collective.formulator/collective/formulator/interfaces.py:149
+#: collective.formulator/collective/formulator/interfaces.py:152
 msgid "help_reset_button"
 msgstr ""
 
-#. Default: "\n            Pick any extra data you'd like saved with the form input.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:972
+#. Default: "Pick any extra data you'd like saved with the form input."
+#: collective.formulator/collective/formulator/interfaces.py:937
 msgid "help_savedataextra_text"
 msgstr ""
 
-#. Default: "\n            Pick the fields whose inputs you'd like to include in\n            the saved data. If empty, all fields will be saved.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:961
+#. Default: "Pick the fields whose inputs you'd like to include in the saved data. If empty, all fields will be saved."
+#: collective.formulator/collective/formulator/interfaces.py:927
 msgid "help_savefields_text"
 msgstr ""
 
 #. Default: "Write your script here."
-#: collective.formulator/collective/formulator/interfaces.py:921
+#: collective.formulator/collective/formulator/interfaces.py:884
 msgid "help_script_body"
 msgstr ""
 
 #. Default: "Role under which to run the script."
-#: collective.formulator/collective/formulator/interfaces.py:909
+#: collective.formulator/collective/formulator/interfaces.py:872
 msgid "help_script_proxy"
 msgstr ""
 
-#. Default: "\n            A TALES expression that will be evaluated to override the \"From\" header.\n            Leave empty if unneeded. Your expression should evaluate as a string.\n            PLEASE NOTE: errors in the evaluation of this expression will cause\n            an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:836
+#. Default: "A TALES expression that will be evaluated to override the \"From\" header. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:803
 msgid "help_sender_override_text"
 msgstr ""
 
-#. Default: "\n            Check this to display input for all fields\n            (except label and file fields). If you check\n            this, the choices in the pick box below\n            will be ignored.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:363
+#. Default: "Check this to display input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
+#: collective.formulator/collective/formulator/interfaces.py:345
 msgid "help_showallfields_text"
 msgstr ""
 
-#: collective.formulator/collective/formulator/interfaces.py:143
+#: collective.formulator/collective/formulator/interfaces.py:146
 msgid "help_showcancel_text"
 msgstr ""
 
-#. Default: "\n            Pick the fields whose inputs you'd like to display on\n            the success page.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:374
+#. Default: "Pick the fields whose inputs you'd like to display on the success page."
+#: collective.formulator/collective/formulator/interfaces.py:355
 msgid "help_showfields_text"
 msgstr ""
 
-#. Default: "\n            A TALES expression that will be evaluated to override any value\n            otherwise entered for the e-mail subject header.\n            Leave empty if unneeded. Your expression should evaluate as a string.\n            PLEASE NOTE: errors in the evaluation of this expression will cause\n            an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:820
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the e-mail subject header. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:788
 msgid "help_subject_override_text"
 msgstr ""
 
-#: collective.formulator/collective/formulator/interfaces.py:137
+#: collective.formulator/collective/formulator/interfaces.py:140
 msgid "help_submitlabel_text"
 msgstr ""
 
-#. Default: "\n            This override field allows you to change submit button label.\n            The typical use is to set label with request parameters.\n            Specify a TALES expression returning a string.\n            PLEASE NOTE: errors in the evaluation of this expression will\n            cause an error on form display.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:322
+#. Default: "This override field allows you to change submit button label. The typical use is to set label with request parameters. Specify a TALES expression returning a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:305
 msgid "help_submitlabeloverride_text"
 msgstr ""
 
-#. Default: "\n                    A TALES expression that will be evaluated when the form is displayed\n                    to get the field default value.\n                    Leave empty if unneeded. Your expression should evaluate as a string.\n                    PLEASE NOTE: errors in the evaluation of this expression will cause\n                    an error on form display.\n                "
-#: collective.formulator/collective/formulator/interfaces.py:444
+#. Default: "A TALES expression that will be evaluated when the form is displayed to get the field default value. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:422
 msgid "help_tdefault_text"
 msgstr ""
 
-#. Default: "A TALES expression that will be evaluated when the form is displayedto determine whether or not the field is enabled.Your expression should evaluate as True ifthe field should be included in the form, False if it should be omitted.Leave this expression field empty if unneeded: the field will be included.PLEASE NOTE: errors in the evaluation of this expression will causean error on form display."
-#: collective.formulator/collective/formulator/interfaces.py:458
+#. Default: "A TALES expression that will be evaluated when the form is displayed to determine whether or not the field is enabled. Your expression should evaluate as True if the field should be included in the form, False if it should be omitted. Leave this expression field empty if unneeded: the field will be included. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:435
 msgid "help_tenabled_text"
 msgstr ""
 
+#. Default: "Used in thanks page."
+#: collective.formulator/collective/formulator/interfaces.py:333
+msgid "help_thanksdescription"
+msgstr ""
+
 #. Default: "The text will be displayed after the field inputs."
-#: collective.formulator/collective/formulator/interfaces.py:404
+#: collective.formulator/collective/formulator/interfaces.py:382
 msgid "help_thanksepilogue_text"
 msgstr ""
 
-#. Default: "\n            Use this field in place of a thanks-page designation\n            to determine final action after calling\n            your action adapter (if you have one). You would usually use\n            this for a custom success template or script.\n            Leave empty if unneeded. Otherwise, specify as you would a\n            CMFFormController action type and argument,\n            complete with type of action to execute\n            (e.g., \"redirect_to\" or \"traverse_to\")\n            and a TALES expression. For example,\n            \"Redirect to\" and \"string:thanks-page\" would redirect to\n            'thanks-page'.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:239
+#. Default: "Use this field in place of a thanks-page designation to determine final action after calling your action adapter (if you have one). You would usually use this for a custom success template or script. Leave empty if unneeded. Otherwise, specify as you would a CMFFormController action type and argument, complete with type of action to execute (e.g., \"redirect_to\" or \"traverse_to\") and a TALES expression. For example, \"Redirect to\" and \"string:thanks-page\" would redirect to \"thanks-page\"."
+#: collective.formulator/collective/formulator/interfaces.py:226
 msgid "help_thankspageoverride_text"
 msgstr ""
 
-#. Default: "\n            Use this field in place of a thanks-page designation\n            to determine final action after calling\n            your action adapter (if you have one). You would usually use\n            this for a custom success template or script.\n            Leave empty if unneeded. Otherwise, specify as you would a\n            CMFFormController action type and argument,\n            complete with type of action to execute\n            (e.g., \"redirect_to\" or \"traverse_to\")\n            and a TALES expression. For example,\n            \"Redirect to\" and \"string:thanks-page\" would redirect to\n            'thanks-page'.\n        "
-#: collective.formulator/collective/formulator/interfaces.py:219
+#. Default: "Use this field in place of a thanks-page designation to determine final action after calling your action adapter (if you have one). You would usually use this for a custom success template or script. Leave empty if unneeded. Otherwise, specify as you would a CMFFormController action type and argument, complete with type of action to execute (e.g., \"redirect_to\" or \"traverse_to\") and a TALES expression. For example, \"Redirect to\" and \"string:thanks-page\" would redirect to \"thanks-page\"."
+#: collective.formulator/collective/formulator/interfaces.py:207
 msgid "help_thankspageoverrideaction_text"
 msgstr ""
 
 #. Default: "This text will be displayed above the selected field inputs."
-#: collective.formulator/collective/formulator/interfaces.py:396
+#: collective.formulator/collective/formulator/interfaces.py:374
 msgid "help_thanksprologue_text"
 msgstr ""
 
-#. Default: "A TALES expression that will be evaluated when the form is validated.Validate against 'value', which will contain the field input.Return False if valid; if not valid return a string error message.E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" willrequire \"eggs\" for input.PLEASE NOTE: errors in the evaluation of this expression will causean error on form display."
-#: collective.formulator/collective/formulator/interfaces.py:473
+#. Default: "A TALES expression that will be evaluated when the form is validated. Validate against 'value', which will contain the field input. Return False if valid; if not valid return a string error message. E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" will require \"eggs\" for input. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective.formulator/collective/formulator/interfaces.py:450
 msgid "help_tvalidator_text"
 msgstr ""
 
-#: collective.formulator/collective/formulator/interfaces.py:163
+#: collective.formulator/collective/formulator/interfaces.py:166
 msgid "help_unload_protection"
 msgstr ""
 
 #. Default: "Do you wish to have column names on the first line of downloaded input?"
-#: collective.formulator/collective/formulator/interfaces.py:985
+#: collective.formulator/collective/formulator/interfaces.py:949
 msgid "help_usecolumnnames_text"
 msgstr ""
 
 #. Default: "Select the validators to use on this field"
-#: collective.formulator/collective/formulator/interfaces.py:497
+#: collective.formulator/collective/formulator/interfaces.py:474
 msgid "help_userfield_validators"
 msgstr ""
 
-#. Default: "\n            Pick any items from the HTTP headers that\n            you'd like to insert as X- headers in the\n            message.\n            "
-#: collective.formulator/collective/formulator/interfaces.py:764
+#. Default: "Pick any items from the HTTP headers that you'd like to insert as X- headers in the message."
+#: collective.formulator/collective/formulator/interfaces.py:735
 msgid "help_xinfo_headers_text"
 msgstr ""
 
 #: collective.formulator/collective/formulator/browser/exportimport.py:57
 msgid "import"
-msgstr ""
+msgstr "Імпорт"
 
 #. Default: "After Validation Script"
-#: collective.formulator/collective/formulator/interfaces.py:287
+#: collective.formulator/collective/formulator/interfaces.py:271
 msgid "label_AfterValidationOverride_text"
 msgstr ""
 
 #. Default: "Form Setup Script"
-#: collective.formulator/collective/formulator/interfaces.py:269
+#: collective.formulator/collective/formulator/interfaces.py:254
 msgid "label_OnDisplayOverride_text"
 msgstr ""
 
 #. Default: "BCC Expression"
-#: collective.formulator/collective/formulator/interfaces.py:885
+#: collective.formulator/collective/formulator/interfaces.py:849
 msgid "label_bcc_override_text"
 msgstr ""
 
 #. Default: "CC Expression"
-#: collective.formulator/collective/formulator/interfaces.py:868
+#: collective.formulator/collective/formulator/interfaces.py:833
 msgid "label_cc_override_text"
 msgstr ""
 
 #. Default: "CSRF Protection"
-#: collective.formulator/collective/formulator/interfaces.py:168
+#: collective.formulator/collective/formulator/interfaces.py:171
 msgid "label_csrf"
 msgstr ""
 
@@ -481,132 +442,132 @@ msgid "label_customscript_action"
 msgstr ""
 
 #. Default: "Custom Default Fieldset Label"
-#: collective.formulator/collective/formulator/interfaces.py:334
+#: collective.formulator/collective/formulator/interfaces.py:316
 msgid "label_default_fieldset_label_text"
 msgstr ""
 
 #. Default: "Download Format"
-#: collective.formulator/collective/formulator/interfaces.py:979
+#: collective.formulator/collective/formulator/interfaces.py:943
 msgid "label_downloadformat_text"
 msgstr ""
 
 #. Default: "Form Epilogue"
-#: collective.formulator/collective/formulator/interfaces.py:209
+#: collective.formulator/collective/formulator/interfaces.py:197
 msgid "label_epilogue_text"
 msgstr ""
 
 #. Default: "Execution Condition"
-#: collective.formulator/collective/formulator/interfaces.py:514
+#: collective.formulator/collective/formulator/interfaces.py:491
 msgid "label_execcondition_text"
 msgstr ""
 
 #. Default: "Force SSL connection"
-#: collective.formulator/collective/formulator/interfaces.py:191
+#: collective.formulator/collective/formulator/interfaces.py:180
 msgid "label_force_ssl"
 msgstr ""
 
 #. Default: "Turn fieldsets to tabs"
-#: collective.formulator/collective/formulator/interfaces.py:154
+#: collective.formulator/collective/formulator/interfaces.py:157
 msgid "label_form_tabbing"
 msgstr ""
 
 #. Default: "Custom Form Action"
-#: collective.formulator/collective/formulator/interfaces.py:257
+#: collective.formulator/collective/formulator/interfaces.py:243
 msgid "label_formactionoverride_text"
 msgstr ""
 
 #. Default: "Additional Headers"
-#: collective.formulator/collective/formulator/interfaces.py:779
+#: collective.formulator/collective/formulator/interfaces.py:748
 msgid "label_formmailer_additional_headers"
 msgstr ""
 
 #. Default: "BCC Recipients"
-#: collective.formulator/collective/formulator/interfaces.py:616
+#: collective.formulator/collective/formulator/interfaces.py:592
 msgid "label_formmailer_bcc_recipients"
 msgstr ""
 
 #. Default: "Body (signature)"
-#: collective.formulator/collective/formulator/interfaces.py:686
+#: collective.formulator/collective/formulator/interfaces.py:659
 msgid "label_formmailer_body_footer"
 msgstr ""
 
 #. Default: "Body (appended)"
-#: collective.formulator/collective/formulator/interfaces.py:677
+#: collective.formulator/collective/formulator/interfaces.py:650
 msgid "label_formmailer_body_post"
 msgstr ""
 
 #. Default: "Body (prepended)"
-#: collective.formulator/collective/formulator/interfaces.py:668
+#: collective.formulator/collective/formulator/interfaces.py:641
 msgid "label_formmailer_body_pre"
 msgstr ""
 
 #. Default: "Mail-Body Template"
-#: collective.formulator/collective/formulator/interfaces.py:737
+#: collective.formulator/collective/formulator/interfaces.py:706
 msgid "label_formmailer_body_pt"
 msgstr ""
 
 #. Default: "Mail Format"
-#: collective.formulator/collective/formulator/interfaces.py:749
+#: collective.formulator/collective/formulator/interfaces.py:719
 msgid "label_formmailer_body_type"
 msgstr ""
 
 #. Default: "CC Recipients"
-#: collective.formulator/collective/formulator/interfaces.py:604
+#: collective.formulator/collective/formulator/interfaces.py:580
 msgid "label_formmailer_cc_recipients"
 msgstr ""
 
-#. Default: "Recipient's e - mail address"
-#: collective.formulator/collective/formulator/interfaces.py:575
+#. Default: "Recipient's e-mail address"
+#: collective.formulator/collective/formulator/interfaces.py:552
 msgid "label_formmailer_recipient_email"
 msgstr ""
 
 #. Default: "Recipient's full name"
-#: collective.formulator/collective/formulator/interfaces.py:560
+#: collective.formulator/collective/formulator/interfaces.py:537
 msgid "label_formmailer_recipient_fullname"
 msgstr ""
 
 #. Default: "Extract Reply-To From"
-#: collective.formulator/collective/formulator/interfaces.py:627
+#: collective.formulator/collective/formulator/interfaces.py:603
 msgid "label_formmailer_replyto_extract"
 msgstr ""
 
 #. Default: "Subject"
-#: collective.formulator/collective/formulator/interfaces.py:643
+#: collective.formulator/collective/formulator/interfaces.py:618
 msgid "label_formmailer_subject"
 msgstr ""
 
 #. Default: "Extract Subject From"
-#: collective.formulator/collective/formulator/interfaces.py:656
+#: collective.formulator/collective/formulator/interfaces.py:630
 msgid "label_formmailer_subject_extract"
 msgstr ""
 
 #. Default: "Extract Recipient From"
-#: collective.formulator/collective/formulator/interfaces.py:588
+#: collective.formulator/collective/formulator/interfaces.py:565
 msgid "label_formmailer_to_extract"
 msgstr ""
 
 #. Default: "Header Injection"
-#: collective.formulator/collective/formulator/interfaces.py:306
+#: collective.formulator/collective/formulator/interfaces.py:290
 msgid "label_headerInjection_text"
 msgstr ""
 
 #. Default: "Include Empties"
-#: collective.formulator/collective/formulator/interfaces.py:383
+#: collective.formulator/collective/formulator/interfaces.py:362
 msgid "label_includeEmpties_text"
 msgstr ""
 
 #. Default: "Label"
 #: collective.formulator/collective/formulator/fields.py:107
 msgid "label_label_field"
-msgstr ""
+msgstr "Звичайний заголовок"
 
 #. Default: "Include Empties"
-#: collective.formulator/collective/formulator/interfaces.py:720
+#: collective.formulator/collective/formulator/interfaces.py:690
 msgid "label_mailEmpties_text"
 msgstr ""
 
 #. Default: "Include All Fields"
-#: collective.formulator/collective/formulator/interfaces.py:697
+#: collective.formulator/collective/formulator/interfaces.py:670
 msgid "label_mailallfields_text"
 msgstr ""
 
@@ -616,29 +577,29 @@ msgid "label_mailer_action"
 msgstr ""
 
 #. Default: "Show Responses"
-#: collective.formulator/collective/formulator/interfaces.py:709
+#: collective.formulator/collective/formulator/interfaces.py:681
 msgid "label_mailfields_text"
 msgstr ""
 
 #. Default: "Form Prologue"
-#: collective.formulator/collective/formulator/interfaces.py:203
+#: collective.formulator/collective/formulator/interfaces.py:191
 msgid "label_prologue_text"
 msgstr ""
 
 #. Default: "Recipient Expression"
-#: collective.formulator/collective/formulator/interfaces.py:850
+#: collective.formulator/collective/formulator/interfaces.py:816
 msgid "label_recipient_override_text"
 msgstr ""
 
 #. Default: "Reset Button Label"
-#: collective.formulator/collective/formulator/interfaces.py:148
+#: collective.formulator/collective/formulator/interfaces.py:151
 msgid "label_reset_button"
 msgstr ""
 
 #. Default: "Rich Label"
-#: collective.formulator/collective/formulator/fields.py:108
+#: collective.formulator/collective/formulator/fields.py:109
 msgid "label_richlabel_field"
-msgstr ""
+msgstr "Розширений заголовок"
 
 #. Default: "Save Data"
 #: collective.formulator/collective/formulator/actions.py:656
@@ -646,137 +607,137 @@ msgid "label_savedata_action"
 msgstr ""
 
 #. Default: "Extra Data"
-#: collective.formulator/collective/formulator/interfaces.py:971
+#: collective.formulator/collective/formulator/interfaces.py:936
 msgid "label_savedataextra_text"
 msgstr ""
 
 #. Default: "Saved Fields"
-#: collective.formulator/collective/formulator/interfaces.py:960
+#: collective.formulator/collective/formulator/interfaces.py:926
 msgid "label_savefields_text"
 msgstr ""
 
 #. Default: "Script body"
-#: collective.formulator/collective/formulator/interfaces.py:920
+#: collective.formulator/collective/formulator/interfaces.py:883
 msgid "label_script_body"
 msgstr ""
 
 #. Default: "Proxy role"
-#: collective.formulator/collective/formulator/interfaces.py:908
+#: collective.formulator/collective/formulator/interfaces.py:871
 msgid "label_script_proxy"
 msgstr ""
 
 #. Default: "Sender Expression"
-#: collective.formulator/collective/formulator/interfaces.py:835
+#: collective.formulator/collective/formulator/interfaces.py:802
 msgid "label_sender_override_text"
 msgstr ""
 
 #. Default: "Server-Side Variable"
-#: collective.formulator/collective/formulator/interfaces.py:487
+#: collective.formulator/collective/formulator/interfaces.py:464
 msgid "label_server_side_text"
 msgstr ""
 
 #. Default: "Show All Fields"
-#: collective.formulator/collective/formulator/interfaces.py:362
+#: collective.formulator/collective/formulator/interfaces.py:344
 msgid "label_showallfields_text"
 msgstr ""
 
 #. Default: "Show Reset Button"
-#: collective.formulator/collective/formulator/interfaces.py:142
+#: collective.formulator/collective/formulator/interfaces.py:145
 msgid "label_showcancel_text"
 msgstr ""
 
 #. Default: "Show Responses"
-#: collective.formulator/collective/formulator/interfaces.py:373
+#: collective.formulator/collective/formulator/interfaces.py:354
 msgid "label_showfields_text"
 msgstr ""
 
 #. Default: "Subject Expression"
-#: collective.formulator/collective/formulator/interfaces.py:819
+#: collective.formulator/collective/formulator/interfaces.py:787
 msgid "label_subject_override_text"
 msgstr ""
 
 #. Default: "Submit Button Label"
-#: collective.formulator/collective/formulator/interfaces.py:136
+#: collective.formulator/collective/formulator/interfaces.py:139
 msgid "label_submitlabel_text"
 msgstr ""
 
 #. Default: "Custom Submit Button Label"
-#: collective.formulator/collective/formulator/interfaces.py:320
+#: collective.formulator/collective/formulator/interfaces.py:303
 msgid "label_submitlabeloverride_text"
 msgstr ""
 
 #. Default: "Default Expression"
-#: collective.formulator/collective/formulator/interfaces.py:443
+#: collective.formulator/collective/formulator/interfaces.py:421
 msgid "label_tdefault_text"
 msgstr ""
 
 #. Default: "Enabling Expression"
-#: collective.formulator/collective/formulator/interfaces.py:457
+#: collective.formulator/collective/formulator/interfaces.py:434
 msgid "label_tenabled_text"
 msgstr ""
 
 #. Default: "Thanks summary"
-#: collective.formulator/collective/formulator/interfaces.py:350
+#: collective.formulator/collective/formulator/interfaces.py:332
 msgid "label_thanksdescription"
 msgstr ""
 
 #. Default: "Thanks Epilogue"
-#: collective.formulator/collective/formulator/interfaces.py:403
+#: collective.formulator/collective/formulator/interfaces.py:381
 msgid "label_thanksepilogue_text"
 msgstr ""
 
 #. Default: "Custom Success Action"
-#: collective.formulator/collective/formulator/interfaces.py:237
+#: collective.formulator/collective/formulator/interfaces.py:224
 msgid "label_thankspageoverride_text"
 msgstr ""
 
 #. Default: "Custom Success Action Type"
-#: collective.formulator/collective/formulator/interfaces.py:217
+#: collective.formulator/collective/formulator/interfaces.py:205
 msgid "label_thankspageoverrideaction_text"
 msgstr ""
 
 #. Default: "Thanks Prologue"
-#: collective.formulator/collective/formulator/interfaces.py:395
+#: collective.formulator/collective/formulator/interfaces.py:373
 msgid "label_thanksprologue_text"
 msgstr ""
 
 #. Default: "Thanks title"
-#: collective.formulator/collective/formulator/interfaces.py:345
+#: collective.formulator/collective/formulator/interfaces.py:327
 msgid "label_thankstitle"
 msgstr ""
 
 #. Default: "Custom Validator"
-#: collective.formulator/collective/formulator/interfaces.py:472
+#: collective.formulator/collective/formulator/interfaces.py:449
 msgid "label_tvalidator_text"
 msgstr ""
 
 #. Default: "Unload protection"
-#: collective.formulator/collective/formulator/interfaces.py:161
+#: collective.formulator/collective/formulator/interfaces.py:164
 msgid "label_unload_protection"
 msgstr ""
 
 #. Default: "Include Column Names"
-#: collective.formulator/collective/formulator/interfaces.py:984
+#: collective.formulator/collective/formulator/interfaces.py:948
 msgid "label_usecolumnnames_text"
-msgstr ""
+msgstr "Включати назви колонок"
 
 #. Default: "HTTP Headers"
-#: collective.formulator/collective/formulator/interfaces.py:763
+#: collective.formulator/collective/formulator/interfaces.py:734
 msgid "label_xinfo_headers_text"
-msgstr ""
+msgstr "HTTP Заголовки"
 
 #. Default: "Comma-Separated Values"
-#: collective.formulator/collective/formulator/vocabularies.py:45
+#: collective.formulator/collective/formulator/vocabularies.py:48
 msgid "vocabulary_csv_text"
 msgstr ""
 
 #. Default: "Posting Date/Time"
-#: collective.formulator/collective/formulator/vocabularies.py:37
+#: collective.formulator/collective/formulator/vocabularies.py:40
 msgid "vocabulary_postingdt_text"
 msgstr ""
 
 #. Default: "Tab-Separated Values"
-#: collective.formulator/collective/formulator/vocabularies.py:44
+#: collective.formulator/collective/formulator/vocabularies.py:47
 msgid "vocabulary_tsv_text"
 msgstr ""
 
