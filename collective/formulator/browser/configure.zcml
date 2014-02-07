@@ -9,13 +9,13 @@
         for="collective.formulator.interfaces.IFormulator"
         name="view"
         class=".formulatorview.FormulatorView"
-        permission="zope.Public"
+        permission="zope2.View"
         />
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
         name="embedded"
         class=".formulatorview.FormulatorFormEmbedded"
-        permission="zope.Public"
+        permission="zope2.View"
         />
     <browser:page
         for="collective.formulator.interfaces.IFormulator"
