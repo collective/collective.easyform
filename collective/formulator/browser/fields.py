@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from plone.schemaeditor.browser.schema.traversal import SchemaContext
+from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
+from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from zope.interface import implements
 
 from collective.formulator.api import get_fields
@@ -28,6 +29,13 @@ class FormulatorFieldsView(SchemaContext):
         return self, ('@@fields',)
 
 
+class FieldsSchemaListing(SchemaListing):
+
+    @property
+    def default_fieldset_label(self):
+        return self.context.aq_parent.default_fieldset_label or super(FieldsSchemaListing, self).default_fieldset_label
+
+
 class FormulatorFieldsListingPage(SchemaListingPage):
 
     """ Form wrapper so we can get a form with layout.
@@ -36,4 +44,5 @@ class FormulatorFieldsListingPage(SchemaListingPage):
         from plone.z3cform.layout so that we can inject the schema name into
         the form label.
     """
+    form = FieldsSchemaListing
     index = ViewPageTemplateFile('model_listing.pt')
