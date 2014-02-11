@@ -3,13 +3,14 @@
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from hashlib import md5
-from plone.directives.form import Schema
 from plone.memoize import ram
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from re import compile
 
-SCHEMATA_KEY = u''
+from collective.formulator.config import MODEL_DEFAULT
+
+#SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
@@ -74,14 +75,6 @@ def get_context(field):
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 
-def load_schema(sschema):
-    try:
-        schema = loadString(sschema).schemata.get(SCHEMATA_KEY, Schema)
-    except Exception:
-        schema = Schema
-    return schema
-
-
 def get_fields_cache(method, context):
     data = context.fields_model + str(context.modification_date)
     return md5(data).hexdigest()
@@ -90,7 +83,10 @@ def get_fields_cache(method, context):
 @ram.cache(get_fields_cache)
 def get_fields(context):
     data = context.fields_model
-    schema = load_schema(data)
+    try:
+        schema = loadString(data).schema
+    except Exception:
+        schema = loadString(MODEL_DEFAULT).schema
     schema.setTaggedValue(CONTEXT_KEY, context)
     return schema
 
@@ -103,14 +99,17 @@ def get_actions_cache(method, context):
 @ram.cache(get_actions_cache)
 def get_actions(context):
     data = context.actions_model
-    schema = load_schema(data)
+    try:
+        schema = loadString(data).schema
+    except Exception:
+        schema = loadString(MODEL_DEFAULT).schema
     schema.setTaggedValue(CONTEXT_KEY, context)
     return schema
 
 
 def set_fields(context, schema):
     # serialize the current schema
-    snew_schema = serializeSchema(schema, name=SCHEMATA_KEY)
+    snew_schema = serializeSchema(schema)
     # store the current schema
     context.fields_model = snew_schema
     context.notifyModified()
@@ -120,7 +119,7 @@ def set_actions(context, schema):
     # fix setting widgets
     schema.setTaggedValue('plone.autoform.widgets', {})
     # serialize the current schema
-    snew_schema = serializeSchema(schema, name=SCHEMATA_KEY)
+    snew_schema = serializeSchema(schema)
     # store the current schema
     context.actions_model = snew_schema
     context.notifyModified()
