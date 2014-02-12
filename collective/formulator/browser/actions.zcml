@@ -17,7 +17,7 @@
         allowed_interface="collective.formulator.interfaces.IFormulatorActionsContext"
         />
     <browser:page
-        name="actions"
+        name="listing"
         for="collective.formulator.interfaces.IFormulatorActionsContext"
         class=".actions.FormulatorActionsListingPage"
         permission="cmf.ModifyPortalContent" />
@@ -29,13 +29,34 @@
         />
     <browser:page
         name="edit"
-        for="collective.formulator.interfaces.IActionContext"
+        for="collective.formulator.interfaces.IFormulatorActionContext"
         class=".actions.ActionEditView"
         permission="cmf.ModifyPortalContent" />
     <browser:page
-        for="collective.formulator.interfaces.IActionContext"
+        for="collective.formulator.interfaces.IFormulatorActionContext"
         name="data"
         class=".actions.ActionSavedDataView"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="order"
+        for="collective.formulator.interfaces.IFormulatorActionContext"
+        class="plone.schemaeditor.browser.field.order.FieldOrderView"
+        attribute="move"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="delete"
+        for="collective.formulator.interfaces.IFormulatorActionContext"
+        class="plone.schemaeditor.browser.field.order.FieldOrderView"
+        attribute="delete"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="changefieldset"
+        for="collective.formulator.interfaces.IFormulatorActionContext"
+        class="plone.schemaeditor.browser.field.fieldset.ChangeFieldsetView"
+        attribute="change"
         permission="cmf.ModifyPortalContent"
         />
 </configure>

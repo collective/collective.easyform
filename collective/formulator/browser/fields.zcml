@@ -9,8 +9,48 @@
         allowed_interface="collective.formulator.interfaces.IFormulatorFieldsContext"
         />
     <browser:page
-        name="fields"
+        name="listing"
         for="collective.formulator.interfaces.IFormulatorFieldsContext"
         class=".fields.FormulatorFieldsListingPage"
-        permission="cmf.ModifyPortalContent" />
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="add-field"
+        for="collective.formulator.interfaces.IFormulatorFieldsContext"
+        class="plone.schemaeditor.browser.schema.add_field.FieldAddFormPage"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="add-fieldset"
+        for="collective.formulator.interfaces.IFormulatorFieldsContext"
+        class="plone.schemaeditor.browser.schema.add_fieldset.FieldsetAddFormPage"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="edit"
+        for="collective.formulator.interfaces.IFormulatorFieldContext"
+        class="plone.schemaeditor.browser.field.edit.EditView"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="order"
+        for="collective.formulator.interfaces.IFormulatorFieldContext"
+        class="plone.schemaeditor.browser.field.order.FieldOrderView"
+        attribute="move"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="delete"
+        for="collective.formulator.interfaces.IFormulatorFieldContext"
+        class="plone.schemaeditor.browser.field.order.FieldOrderView"
+        attribute="delete"
+        permission="cmf.ModifyPortalContent"
+        />
+    <browser:page
+        name="changefieldset"
+        for="collective.formulator.interfaces.IFormulatorFieldContext"
+        class="plone.schemaeditor.browser.field.fieldset.ChangeFieldsetView"
+        attribute="change"
+        permission="cmf.ModifyPortalContent"
+        />
 </configure>

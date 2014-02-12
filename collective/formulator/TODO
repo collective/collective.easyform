@@ -1,5 +1,6 @@
 - Form method (get|post)
 - Merge models
+- Loading schema errors
 - Fields
     - FormLikertField
 - Actions
@@ -7,7 +8,6 @@
     - SaveData 80%
     - CustomScript 80%
 - API
-- Split code by files
 - Custom Permissions
 - Adapter errors
 - Tests

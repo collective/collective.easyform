@@ -1,26 +1,18 @@
 # -*- coding: utf-8 -*-
 
+EDIT_TALES_PERMISSION = 'collective.formulator: Edit TALES Fields'
+EDIT_PYTHON_PERMISSION = 'collective.formulator: Edit Python Fields'
+EDIT_ADVANCED_PERMISSION = 'collective.formulator: Edit Advanced Fields'
+EDIT_ADDRESSING_PERMISSION = 'collective.formulator: Edit Mail Addresses'
+USE_ENCRYPTION_PERMISSION = 'collective.formulator: Edit Encryption Specs'
+DOWNLOAD_SAVED_PERMISSION = 'collective.formulator: Download Saved Input'
+
 MODEL_DEFAULT = u"""
 <model xmlns="http://namespaces.plone.org/supermodel/schema">
     <schema>
     </schema>
 </model>
 """
-
-#<model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:formulator="http://namespaces.plone.org/supermodel/formulator" xmlns="http://namespaces.plone.org/supermodel/schema">
-  #<schema name="Formulator" based-on="zope.interface.Interface">
-    #<field name="some_text" type="zope.schema.TextLine">
-      #<description/>
-      #<title>Some Text</title>
-    #</field>
-    #<fieldset name="set2" label="Set2">
-      #<field name="next_text" type="zope.schema.TextLine">
-        #<description/>
-        #<title>Next Text</title>
-      #</field>
-    #</fieldset>
-  #</schema>
-#</model>
 
 FIELDS_DEFAULT = u"""
 <model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:formulator="http://namespaces.plone.org/supermodel/formulator" xmlns="http://namespaces.plone.org/supermodel/schema">
@@ -69,7 +61,6 @@ MAIL_BODY_DEFAULT = u"""<html xmlns="http://www.w3.org/1999/xhtml">
   </body>
 </html>
 """
-
 
 DEFAULT_SCRIPT = u"""
 ## Python Script

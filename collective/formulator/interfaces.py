@@ -23,6 +23,10 @@ from collective.formulator.config import ACTIONS_DEFAULT
 from collective.formulator.config import DEFAULT_SCRIPT
 from collective.formulator.config import FIELDS_DEFAULT
 from collective.formulator.config import MAIL_BODY_DEFAULT
+from collective.formulator.config import EDIT_TALES_PERMISSION
+from collective.formulator.config import EDIT_PYTHON_PERMISSION
+from collective.formulator.config import EDIT_ADDRESSING_PERMISSION
+from collective.formulator.config import EDIT_ADVANCED_PERMISSION
 from collective.formulator.vocabularies import MIME_LIST
 from collective.formulator.vocabularies import XINFO_HEADERS
 from collective.formulator.vocabularies import customActions
@@ -175,8 +179,8 @@ class IFormulator(form.Schema):
         default=True,
         required=False,
     )
+    form.write_permission(forceSSL=EDIT_ADVANCED_PERMISSION)
     forceSSL = zs.Bool(
-        # write_permission=EDIT_ADVANCED_PERMISSION,
         title=_(u'label_force_ssl', default=u'Force SSL connection'),
         description=_(u'help_force_ssl', default=u''
                       u'Check this to make the form redirect to an SSL-enabled '
@@ -249,7 +253,7 @@ class IFormulator(form.Schema):
                       u'adapter and thanks page.'),
         required=False,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(onDisplayOverride=EDIT_TALES_PERMISSION)
     onDisplayOverride = zs.TextLine(
         title=_(u'label_OnDisplayOverride_text', default=u'Form Setup Script'),
         description=_(u'help_OnDisplayOverride_text', default=u''
@@ -266,7 +270,7 @@ class IFormulator(form.Schema):
         required=False,
         default=u'',
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(afterValidationOverride=EDIT_TALES_PERMISSION)
     afterValidationOverride = zs.TextLine(
         title=_(u'label_AfterValidationOverride_text',
                 default=u'After Validation Script'),
@@ -285,7 +289,7 @@ class IFormulator(form.Schema):
         required=False,
         default=u'',
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(headerInjection=EDIT_TALES_PERMISSION)
     headerInjection = zs.TextLine(
         title=_(u'label_headerInjection_text', default=u'Header Injection'),
         description=_(u'help_headerInjection_text', default=u''
@@ -299,6 +303,7 @@ class IFormulator(form.Schema):
         required=False,
         default=u'',
     )
+    form.write_permission(submitLabelOverride=EDIT_TALES_PERMISSION)
     submitLabelOverride = zs.TextLine(
         title=_(u'label_submitlabeloverride_text',
                 default=u'Custom Submit Button Label'),
@@ -416,7 +421,7 @@ class IFormulatorActionsContext(ISchemaContext):
 class IFieldExtender(form.Schema):
     form.fieldset(u'overrides', label=_('Overrides'),
                   fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(TDefault=EDIT_TALES_PERMISSION)
     TDefault = zs.TextLine(
         title=_(u'label_tdefault_text', default=u'Default Expression'),
         description=(_(u'help_tdefault_text', default=u''
@@ -429,7 +434,7 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(TEnabled=EDIT_TALES_PERMISSION)
     TEnabled = zs.TextLine(
         title=_(u'label_tenabled_text', default=u'Enabling Expression'),
         description=(_(u'help_tenabled_text', default=u''
@@ -444,7 +449,7 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(TValidator=EDIT_TALES_PERMISSION)
     TValidator = zs.TextLine(
         title=_(u'label_tvalidator_text', default=u'Custom Validator'),
         description=(_(u'help_tvalidator_text', default=u''
@@ -459,7 +464,7 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(serverSide=EDIT_TALES_PERMISSION)
     serverSide = zs.Bool(
         title=_(u'label_server_side_text', default=u'Server-Side Variable'),
         description=_(u'description_server_side_text', default=u''
@@ -483,10 +488,8 @@ class IFieldExtender(form.Schema):
 
 class IActionExtender(form.Schema):
     form.fieldset(u'overrides', label=_('Overrides'), fields=['execCondition'])
-    # TODO:
-    # write_permission=EDIT_TALES_PERMISSION,
     form.read_permission(execCondition='cmf.ModifyPortalContent')
-    # form.order_before(execCondition='*')
+    form.write_permission(execCondition=EDIT_TALES_PERMISSION)
     execCondition = zs.TextLine(
         title=_(u'label_execcondition_text', default=u'Execution Condition'),
         description=(_(u'help_execcondition_text', default=u''
@@ -503,10 +506,17 @@ class IActionExtender(form.Schema):
     )
 
 
-class IActionContext(IFieldContext):
+class IFormulatorFieldContext(IFieldContext):
 
     """
-    Formulator action view interface
+    Formulator field content marker
+    """
+
+
+class IFormulatorActionContext(IFieldContext):
+
+    """
+    Formulator action content marker
     """
 
 
@@ -531,7 +541,7 @@ class IMailer(IAction):
 
     """A form action adapter that will e-mail form input."""
     # default_method='getDefaultRecipientName',
-    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    form.write_permission(recipient_name=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(recipient_name='cmf.ModifyPortalContent')
     recipient_name = zs.TextLine(
         title=_(u'label_formmailer_recipient_fullname',
@@ -543,10 +553,10 @@ class IMailer(IAction):
         required=False,
     )
     # default_method='getDefaultRecipient',
-    # write_permission=EDIT_ADDRESSING_PERMISSION,
     # validators=('isEmail',),
     # TODO defaultFactory
     # TODO IContextAwareDefaultFactory
+    form.write_permission(recipient_email=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(recipient_email='cmf.ModifyPortalContent')
     recipient_email = zs.TextLine(
         title=_(u'label_formmailer_recipient_email',
@@ -559,7 +569,7 @@ class IMailer(IAction):
     )
     form.fieldset(u'addressing', label=_('Addressing'), fields=[
                   'to_field', 'cc_recipients', 'bcc_recipients', 'replyto_field'])
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(to_field=EDIT_ADVANCED_PERMISSION)
     form.read_permission(to_field='cmf.ModifyPortalContent')
     to_field = zs.Choice(
         title=_(u'label_formmailer_to_extract',
@@ -574,7 +584,7 @@ class IMailer(IAction):
         vocabulary=fieldsFactory,
     )
     # default_method='getDefaultCC',
-    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    form.write_permission(cc_recipients=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(cc_recipients='cmf.ModifyPortalContent')
     cc_recipients = zs.Text(
         title=_(u'label_formmailer_cc_recipients',
@@ -586,7 +596,7 @@ class IMailer(IAction):
         required=False,
     )
     # default_method='getDefaultBCC',
-    # write_permission=EDIT_ADDRESSING_PERMISSION,
+    form.write_permission(bcc_recipients=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(bcc_recipients='cmf.ModifyPortalContent')
     bcc_recipients = zs.Text(
         title=_(u'label_formmailer_bcc_recipients',
@@ -597,7 +607,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(replyto_field=EDIT_ADVANCED_PERMISSION)
     form.read_permission(replyto_field='cmf.ModifyPortalContent')
     replyto_field = zs.Choice(
         title=_(u'label_formmailer_replyto_extract',
@@ -624,7 +634,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(subject_field=EDIT_ADVANCED_PERMISSION)
     form.read_permission(subject_field='cmf.ModifyPortalContent')
     subject_field = zs.Choice(
         title=_(u'label_formmailer_subject_extract',
@@ -698,9 +708,9 @@ class IMailer(IAction):
     form.fieldset(u'template', label=PMF(
         'Template'), fields=['body_pt', 'body_type'])
     # ZPTField('body_pt',
-    # write_permission=EDIT_TALES_PERMISSION,
     # default_method='getMailBodyDefault',
     # validators=('zptvalidator',),
+    form.write_permission(body_pt=EDIT_TALES_PERMISSION)
     form.read_permission(body_pt='cmf.ModifyPortalContent')
     body_pt = zs.Text(
         title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
@@ -713,7 +723,7 @@ class IMailer(IAction):
         missing_value=u'',
     )
     # default_method='getMailBodyTypeDefault',
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(body_type=EDIT_ADVANCED_PERMISSION)
     form.read_permission(body_type='cmf.ModifyPortalContent')
     body_type = zs.Choice(
         title=_(u'label_formmailer_body_type', default=u'Mail Format'),
@@ -728,7 +738,7 @@ class IMailer(IAction):
                   fields=['xinfo_headers', 'additional_headers'])
     form.widget(xinfo_headers=CheckBoxFieldWidget)
     # default_method='getDefaultXInfo',
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(xinfo_headers=EDIT_ADVANCED_PERMISSION)
     form.read_permission(xinfo_headers='cmf.ModifyPortalContent')
     xinfo_headers = zs.List(
         title=_(u'label_xinfo_headers_text', default=u'HTTP Headers'),
@@ -742,7 +752,7 @@ class IMailer(IAction):
         value_type=zs.Choice(vocabulary=XINFO_HEADERS),
     )
     # default_method='getDefaultAddHdrs',
-    # write_permission=EDIT_ADVANCED_PERMISSION,
+    form.write_permission(additional_headers=EDIT_ADVANCED_PERMISSION)
     form.read_permission(additional_headers='cmf.ModifyPortalContent')
     additional_headers = zs.List(
         title=_(u'label_formmailer_additional_headers',
@@ -781,7 +791,7 @@ class IMailer(IAction):
             #))
     form.fieldset(u'overrides', label=_('Overrides'), fields=[
                   'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(subjectOverride=EDIT_TALES_PERMISSION)
     form.read_permission(subjectOverride='cmf.ModifyPortalContent')
     subjectOverride = zs.TextLine(
         title=_(u'label_subject_override_text', default=u'Subject Expression'),
@@ -796,7 +806,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(senderOverride=EDIT_TALES_PERMISSION)
     form.read_permission(senderOverride='cmf.ModifyPortalContent')
     senderOverride = zs.TextLine(
         title=_(u'label_sender_override_text', default=u'Sender Expression'),
@@ -810,7 +820,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(recipientOverride=EDIT_TALES_PERMISSION)
     form.read_permission(recipientOverride='cmf.ModifyPortalContent')
     recipientOverride = zs.TextLine(
         title=_(u'label_recipient_override_text',
@@ -827,7 +837,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(ccOverride=EDIT_TALES_PERMISSION)
     form.read_permission(ccOverride='cmf.ModifyPortalContent')
     ccOverride = zs.TextLine(
         title=_(u'label_cc_override_text', default=u'CC Expression'),
@@ -843,7 +853,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    # write_permission=EDIT_TALES_PERMISSION,
+    form.write_permission(bccOverride=EDIT_TALES_PERMISSION)
     form.read_permission(bccOverride='cmf.ModifyPortalContent')
     bccOverride = zs.TextLine(
         title=_(u'label_bcc_override_text', default=u'BCC Expression'),
@@ -864,9 +874,8 @@ class IMailer(IAction):
 class ICustomScript(IAction):
 
     """Executes a Python script for form data"""
-    # write_permission=EDIT_PYTHON_PERMISSION,
     form.read_permission(ProxyRole='cmf.ModifyPortalContent')
-    # form.write_permission(ProxyRole='cmf.ModifyPortalContent')
+    form.write_permission(ProxyRole=EDIT_PYTHON_PERMISSION)
     ProxyRole = zs.Choice(
         title=_(u'label_script_proxy', default=u'Proxy role'),
         description=_(u'help_script_proxy',
@@ -875,10 +884,8 @@ class ICustomScript(IAction):
         required=True,
         vocabulary=getProxyRoleChoices,
     )
-    # TODO PythonField('ScriptBody',
-    # write_permission=EDIT_PYTHON_PERMISSION,
     form.read_permission(ScriptBody='cmf.ModifyPortalContent')
-    # form.write_permission(ScriptBody='cmf.ModifyPortalContent')
+    form.write_permission(ScriptBody=EDIT_PYTHON_PERMISSION)
     ScriptBody = zs.Text(
         title=_(u'label_script_body', default=u'Script body'),
         description=_(u'help_script_body', default=u'Write your script here.'),

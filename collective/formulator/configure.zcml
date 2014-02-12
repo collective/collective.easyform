@@ -7,6 +7,18 @@
 
   <includeDependencies package="." />
 
+  <i18n:registerTranslations directory="locales" />
+
+  <include file="permissions.zcml" />
+  <include file="exportimport.zcml" />
+  <include file="fields.zcml" />
+  <include file="actions.zcml" />
+  <include file="subscribers.zcml" />
+  <include file="validators.zcml" />
+
+  <include package=".browser" />
+  <include package=".content" />
+
   <genericsetup:registerProfile
       name="default"
       title="collective.formulator"
@@ -14,23 +26,5 @@
       description="Installs the collective.formulator package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
-  <!-- -*- extra stuff goes here -*- -->
 
-  <include file="exportimport.zcml" />
-  <include file="fields.zcml" />
-  <include file="actions.zcml" />
-  <include file="subscribers.zcml" />
-  <include file="validators.zcml" />
-  <include package=".browser" />
-  <include package=".content" />
-
-  <i18n:registerTranslations directory="locales" />
-  <!--
-  <include package="collective.autopermission" />
-
-  <permission
-    id="myproduct.mypermission"
-    title="MyProduct: MyPermission"
-    />
-  -->
 </configure>

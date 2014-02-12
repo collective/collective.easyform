@@ -38,10 +38,10 @@ from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.api import get_actions
 from collective.formulator.api import get_context
 from collective.formulator.api import get_fields
-from collective.formulator.interfaces import IActionContext
 from collective.formulator.interfaces import IActionEditForm
 from collective.formulator.interfaces import IActionFactory
 from collective.formulator.interfaces import IExtraData
+from collective.formulator.interfaces import IFormulatorActionContext
 from collective.formulator.interfaces import IFormulatorActionsContext
 from collective.formulator.interfaces import INewAction
 from collective.formulator.interfaces import ISaveData
@@ -148,11 +148,11 @@ ActionSavedDataView = layout.wrap_form(
     SavedDataForm, __wrapper_class=SavedDataFormWrapper)
 
 
-class ActionContext(FieldContext):
+class FormulatorActionContext(FieldContext):
 
     """ wrapper for published zope 3 schema fields
     """
-    implements(IActionContext)
+    implements(IFormulatorActionContext)
 
     def publishTraverse(self, request, name):
         """ It's not valid to traverse to anything below a field context.
@@ -182,14 +182,14 @@ class FormulatorActionsView(SchemaContext):
         """ Look up the field whose name matches the next URL path element, and wrap it.
         """
         try:
-            return ActionContext(self.schema[name], self.request).__of__(self)
+            return FormulatorActionContext(self.schema[name], self.request).__of__(self)
         except KeyError:
             return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
     def browserDefault(self, request):
         """ If not traversing through the schema to a field, show the SchemaListingPage.
         """
-        return self, ('@@actions',)
+        return self, ('@@listing',)
 
 
 class FormulatorActionsListing(SchemaListing):

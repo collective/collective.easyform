@@ -67,8 +67,7 @@ class FormulatorImportForm(form.Form):
         IFilesystemImporter(self.context).import_(ctx, 'structure', True)
 
         self.status = _(u'Form imported.')
-        message = _(u'Form imported.')
-        IStatusMessage(self.request).addStatusMessage(message, type='info')
+        IStatusMessage(self.request).addStatusMessage(self.status, type='info')
 
         url = getMultiAdapter(
             (self.context, self.request), name='absolute_url')()
