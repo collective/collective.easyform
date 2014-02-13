@@ -21,7 +21,7 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="collective.formulator"
+      title="Formulator"
       directory="profiles/default"
       description="Installs the collective.formulator package"
       provides="Products.GenericSetup.interfaces.EXTENSION"

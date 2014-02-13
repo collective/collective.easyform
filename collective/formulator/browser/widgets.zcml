@@ -1,6 +1,7 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:z3c="http://namespaces.zope.org/z3c"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
            i18n_domain="collective.formulator">
     <adapter
         factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
@@ -23,7 +24,7 @@
     </class>
     <adapter
         factory=".widgets.LabelFieldWidget"
-        for="collective.formulator.fields.ILabel
+        for="collective.formulator.interfaces.ILabel
              *"
         />
     <class class=".widgets.RichLabelWidget">
@@ -34,7 +35,7 @@
     </class>
     <adapter
         factory=".widgets.RichLabelFieldWidget"
-        for="collective.formulator.fields.IRichLabel
+        for="collective.formulator.interfaces.IRichLabel
              *"
         />
     <z3c:widgetTemplate
@@ -69,4 +70,13 @@
         class=".widgets.RichLabelRenderWidget"
         permission="zope.Public"
         />
+    <configure
+        zcml:condition="installed plone.formwidget.recaptcha">
+    <adapter
+        factory="plone.formwidget.recaptcha.widget.ReCaptchaFieldWidget"
+        provides="z3c.form.interfaces.IFieldWidget"
+        for="collective.formulator.interfaces.IReCaptcha
+             *"
+        />
+    </configure>
 </configure>

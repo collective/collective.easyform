@@ -86,11 +86,6 @@ class Action(zs.Bool):
     """ Base action class """
     implements(IAction)
 
-    #def bind(self, object):
-        #import pdb; pdb.set_trace()
-        #print "call bind action", object
-        #return super(Action, self).bind(object)
-
     def onSuccess(self, fields, request):
         raise NotImplementedError(
             "There is not implemented 'onSuccess' of {0!r}".format(self))

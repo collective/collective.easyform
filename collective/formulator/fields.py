@@ -5,7 +5,6 @@ from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
-from zope import schema as zs
 from zope.component import adapts
 from zope.component import queryUtility
 from zope.interface import Interface
@@ -13,6 +12,8 @@ from zope.interface import Invalid
 from zope.interface import implementer
 from zope.interface import implements
 from zope.schema import Field
+from zope.schema import TextLine
+from zope.schema.interfaces import IField
 from zope.schema._bootstrapinterfaces import IFromUnicode
 
 from collective.formulator import formulatorMessageFactory as _
@@ -21,6 +22,7 @@ from collective.formulator.interfaces import IFieldExtender
 from collective.formulator.interfaces import IFormulator
 from collective.formulator.interfaces import IFormulatorForm
 from collective.formulator.interfaces import ILabel
+from collective.formulator.interfaces import IReCaptcha
 from collective.formulator.interfaces import IRichLabel
 from collective.formulator.validators import IFieldValidator
 
@@ -29,8 +31,7 @@ class FieldExtenderValidator(validator.SimpleFieldValidator):
 
     """ z3c.form validator class for formulator fields """
     implements(IValidator)
-    adapts(IFormulator, Interface, IFormulatorForm,
-           zs.interfaces.IField, Interface)
+    adapts(IFormulator, Interface, IFormulatorForm, IField, Interface)
 
     def validate(self, value):
         """ Validate field by TValidator """
@@ -59,8 +60,7 @@ class FieldExtenderDefault(object):
 
     """ z3c.form default class for formulator fields """
     implements(IValue)
-    adapts(IFormulator, Interface, IFormulatorForm,
-           zs.interfaces.IField, Interface)
+    adapts(IFormulator, Interface, IFormulatorForm, IField, Interface)
 
     def __init__(self, context, request, view, field, widget):
         self.context = context
@@ -110,3 +110,14 @@ RichLabelFactory = FieldFactory(
 
 LabelHandler = BaseHandler(Label)
 RichLabelHandler = BaseHandler(RichLabel)
+
+
+class ReCaptcha(TextLine):
+
+    """A ReCaptcha field
+    """
+    implements(IReCaptcha)
+
+ReCaptchaFactory = FieldFactory(
+    ReCaptcha, _(u'label_recaptcha_field', default=u'ReCaptcha'))
+ReCaptchaHandler = BaseHandler(ReCaptcha)

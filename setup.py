@@ -34,9 +34,11 @@ setup(name='collective.formulator',
           # -*- Extra requirements: -*-
       ],
       extras_require={
+          'recaptcha': [
+              'plone.formwidget.recaptcha'
+          ],
           'test': [
               'plone.app.testing',
-              'collective.recaptcha',
               'robotsuite',
               'robotframework-selenium2library',
               'decorator',

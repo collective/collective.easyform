@@ -3,6 +3,7 @@
 - Loading schema errors
 - Fields
     - FormLikertField
+    - Captcha
 - Actions
     - Mailer 80%
     - SaveData 80%

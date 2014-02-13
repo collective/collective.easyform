@@ -1,5 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.formulator">
     <adapter
         factory=".fields.FieldExtenderValidator"
@@ -24,4 +25,15 @@
         name="collective.formulator.fields.RichLabel"
         component=".fields.RichLabelHandler"
         />
+    <configure
+        zcml:condition="installed plone.formwidget.recaptcha">
+    <utility
+        name="collective.formulator.fields.ReCaptcha"
+        component=".fields.ReCaptchaFactory"
+        />
+    <utility
+        name="collective.formulator.fields.ReCaptcha"
+        component=".fields.ReCaptchaHandler"
+        />
+    </configure>
 </configure>

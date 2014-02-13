@@ -16,6 +16,7 @@ from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
 from zope.schema.interfaces import IField
+from zope.schema.interfaces import ITextLine
 from zope.tales.tales import CompilerError
 
 from collective.formulator import formulatorMessageFactory as _
@@ -995,3 +996,8 @@ class ILabelWidget(interfaces.IWidget):
 class IRichLabelWidget(ILabelWidget):
 
     """Rich Label Field Widget."""
+
+
+class IReCaptcha(ITextLine):
+
+    """ReCaptcha Field."""
