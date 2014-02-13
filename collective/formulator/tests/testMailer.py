@@ -32,8 +32,6 @@ class TestFunctions(base.FormulatorTestCase):
         actions = get_actions(self.ff1)
         actions['mailer'].recipient_email = u'mdummy@address.com'
         set_actions(self.ff1, actions)
-        self.portal.manage_changeProperties(
-            **{'email_from_address': 'mdummy@address.com'})
 
     def LoadRequestForm(self, **kwargs):
         form = self.app.REQUEST.form

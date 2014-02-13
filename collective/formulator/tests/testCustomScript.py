@@ -198,9 +198,6 @@ class TestCustomScript(base.FormulatorTestCase):
     def testReturnError(self):
         ''' Succesful script execution with return error
         '''
-        self.portal.manage_changeProperties(
-            **{'email_from_address': 'mdummy@address.com'})
-
         self.createScript()
 
         actions = get_actions(self.ff1)

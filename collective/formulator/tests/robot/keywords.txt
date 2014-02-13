@@ -1,0 +1,45 @@
+*** Settings ***
+
+Variables  plone/app/testing/interfaces.py
+
+
+*** Variables ***
+
+${PORTAL_URL} =  http://localhost:55001/${PLONE_SITE_ID}
+
+
+*** Keywords ***
+
+# ----------------------------------------------------------------------------
+# Content
+# ----------------------------------------------------------------------------
+
+a formulator
+    [Arguments]  ${title}
+    Go to  ${PORTAL_URL}/++add++Formulator
+    Input text  name=form.widgets.IDublinCore.title  ${title}
+    Click Button  Save
+
+# ----------------------------------------------------------------------------
+# Login/Logout
+# ----------------------------------------------------------------------------
+
+Log in
+    [Arguments]  ${userid}  ${password}
+    Go to  ${PORTAL_URL}/login_form
+    Page should contain element  __ac_name
+    Page should contain element  __ac_password
+    Page should contain button  Log in
+    Input text  __ac_name  ${userid}
+    Input text  __ac_password  ${password}
+    Click Button  Log in
+
+Log out
+    Go to  ${PORTAL_URL}/logout
+    Page should contain  logged out
+
+a test user
+    Log in  ${TEST_USER_NAME}  ${TEST_USER_PASSWORD}
+
+a site owner
+    Log in  ${SITE_OWNER_NAME}  ${SITE_OWNER_PASSWORD}

@@ -56,8 +56,6 @@ class TestEmbedding(base.FormulatorTestCase):
         set_actions(self.ff1, actions)
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
-        self.portal.manage_changeProperties(
-            **{'email_from_address': 'mdummy@address.com'})
         classImplements(BaseRequest, IFormLayer)
 
     def test_embedded_form_renders(self):

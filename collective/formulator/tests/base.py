@@ -11,6 +11,8 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.testing.z2 import Browser
+from plone.testing.z2 import ZSERVER_FIXTURE
+
 from transaction import commit
 from unittest2 import TestCase
 from zope.component import getSiteManager
@@ -49,6 +51,8 @@ class Fixture(PloneSandboxLayer):
                                            [])
         login(portal, 'admin')
         setRoles(portal, TEST_USER_ID, ['Manager'])
+        portal.manage_changeProperties(
+            **{'email_from_address': 'mdummy@address.com'})
 
 
 FIXTURE = Fixture()
@@ -60,6 +64,9 @@ FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(FIXTURE,),
     name='collective.formulator:Functional',
 )
+ACCEPTANCE_TESTING = FunctionalTesting(
+    bases=(FIXTURE, ZSERVER_FIXTURE),
+    name='collective.formulator:Acceptance')
 
 
 class FormulatorTestCase(TestCase):
@@ -97,7 +104,6 @@ class FormulatorFunctionalTestCase(FunctionalTestCase):
         sm = getSiteManager(context=self.portal)
         sm.unregisterUtility(provided=IMailHost)
         sm.registerUtility(mailhost, provided=IMailHost)
-        self.portal.email_from_address = 'noreply@holokinesislibros.com'
 
     def setStatusCode(self, key, value):
         from ZPublisher import HTTPResponse

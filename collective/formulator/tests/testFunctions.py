@@ -38,7 +38,7 @@ class TestFunctions(base.FormulatorTestCase):
         return self.request
 
     def afterSetUp(self):
-        base.FormulatorTestCase.afterSetUp(self)
+        super(TestFunctions, self).afterSetUp()
         self.folder.invokeFactory('Formulator', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.title = u'ff1'
@@ -52,8 +52,6 @@ class TestFunctions(base.FormulatorTestCase):
                 u'<recipient_email>mdummy@address.com</recipient_email><description>E-Mails Form Input</description>'))
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
-        self.portal.manage_changeProperties(
-            **{'email_from_address': 'mdummy@address.com'})
         classImplements(BaseRequest, IFormLayer)
 
     def testFgFieldsDisplayList(self):

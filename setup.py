@@ -36,7 +36,11 @@ setup(name='collective.formulator',
       extras_require={
           'test': [
               'plone.app.testing',
-              'collective.recaptcha'
+              'collective.recaptcha',
+              'robotsuite',
+              'robotframework-selenium2library',
+              'decorator',
+              'selenium',
           ]
       },
       entry_points="""
