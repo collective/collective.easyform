@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<layers>
-    <!-- -*- extra stuff goes here -*- -->
-
-    <layer name="CollectiveFormulator"
-        interface="collective.formulator.interfaces.ICollectiveFormulatorLayer"
-    />
-</layers>
-

@@ -5,6 +5,7 @@
 *.egg-info
 *.egg
 *.graffle
+*.kate-swp
 .installed.cfg
 .mr.developer.cfg
 .coverage

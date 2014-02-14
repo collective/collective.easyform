@@ -116,13 +116,6 @@ class IActionFactory(IField):
     title = TextLine(title=__(u'Title'))
 
 
-class ICollectiveFormulatorLayer(Interface):
-
-    """ A layer specific to this product.
-        Is registered using browserlayer.xml
-    """
-
-
 class IFormulatorImportFormSchema(Interface):
 
     """Schema for formulator import form.

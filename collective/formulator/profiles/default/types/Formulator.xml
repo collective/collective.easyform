@@ -10,7 +10,7 @@
   <property name="schema">collective.formulator.interfaces.IFormulator</property>
   <property name="model_source"></property>
   <property name="model_file"></property>
-  <property name="klass">collective.formulator.content.formulator.Formulator</property>
+  <property name="klass">collective.formulator.content.Formulator</property>
   <property name="add_permission">cmf.AddPortalContent</property>
   <property name="behaviors">
     <element value="plone.app.content.interfaces.INameFromTitle"/>
