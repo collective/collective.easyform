@@ -19,3 +19,8 @@
     - testTools
     - formActionOverride
     - Reset button
+- Schema based on
+- autoform
+    - widget
+    - mode
+    - validator
