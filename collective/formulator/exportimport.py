@@ -2,10 +2,10 @@
 
 from plone.supermodel.parser import IFieldMetadataHandler
 from plone.supermodel.utils import ns
-from zope import schema as zs
 from zope.component import adapter
 from zope.component import adapts
 from zope.interface import implements
+from zope.schema.interfaces import IField
 
 from collective.formulator.interfaces import IAction
 from collective.formulator.interfaces import IActionExtender
@@ -14,7 +14,7 @@ from collective.formulator.interfaces import IFormulatorActionsContext
 from collective.formulator.interfaces import IFormulatorFieldsContext
 
 
-@adapter(IFormulatorFieldsContext, zs.interfaces.IField)
+@adapter(IFormulatorFieldsContext, IField)
 def get_field_extender(context, field):
     return IFieldExtender
 
@@ -31,7 +31,7 @@ def _set_(self, value, key):
 
 class FieldExtender(object):
     implements(IFieldExtender)
-    adapts(zs.interfaces.IField)
+    adapts(IField)
 
     def __init__(self, field):
         self.field = field

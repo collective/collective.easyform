@@ -27,11 +27,11 @@ from plone.namedfile.interfaces import INamedFile
 from plone.supermodel.exportimport import BaseHandler
 from time import time
 from types import StringTypes
-from zope import schema as zs
 from zope.component import getUtilitiesFor
 from zope.contenttype import guess_content_type
 from zope.i18n import translate
 from zope.interface import implements
+from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -81,7 +81,7 @@ class ActionFactory(object):
         return self.fieldcls(*(self.args + args), **kwargs)
 
 
-class Action(zs.Bool):
+class Action(Bool):
 
     """ Base action class """
     implements(IAction)
