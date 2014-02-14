@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-EDIT_TALES_PERMISSION = 'collective.formulator: Edit TALES Fields'
-EDIT_PYTHON_PERMISSION = 'collective.formulator: Edit Python Fields'
-EDIT_ADVANCED_PERMISSION = 'collective.formulator: Edit Advanced Fields'
-EDIT_ADDRESSING_PERMISSION = 'collective.formulator: Edit Mail Addresses'
-USE_ENCRYPTION_PERMISSION = 'collective.formulator: Edit Encryption Specs'
-DOWNLOAD_SAVED_PERMISSION = 'collective.formulator: Download Saved Input'
+EDIT_TALES_PERMISSION = 'collective.formulator.EditTALESFields'
+EDIT_PYTHON_PERMISSION = 'collective.formulator.EditPythonFields'
+EDIT_ADVANCED_PERMISSION = 'collective.formulator.EditAdvancedFields'
+EDIT_ADDRESSING_PERMISSION = 'collective.formulator.EditMailAddresses'
+USE_ENCRYPTION_PERMISSION = 'collective.formulator.EditEncryptionSpecs'
+DOWNLOAD_SAVED_PERMISSION = 'collective.formulator.DownloadSavedInput'
 
 MODEL_DEFAULT = u"""
 <model xmlns="http://namespaces.plone.org/supermodel/schema">
