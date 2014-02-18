@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from zope.interface import implements
+from z3c.form.interfaces import IFieldWidget
+from zope.component import getGlobalSiteManager
 from zope.i18nmessageid import MessageFactory
+from zope.interface import directlyProvides
+from zope.interface import implements
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabulary
@@ -75,3 +78,30 @@ class fields(object):
         return SimpleVocabulary(terms)
 
 fieldsFactory = fields()
+
+
+class WidgetVocabulary(SimpleVocabulary):
+
+    def getTerm(self, value):
+        """See zope.schema.interfaces.IBaseVocabulary"""
+        if not isinstance(value, basestring):
+            value = '{0}.{1}'.format(
+                value.widget_factory.__module__, value.widget_factory.__name__)
+        return self.getTermByToken(value)
+
+
+def widgetsFactory(context):
+    terms = []
+    adapters = [
+        a
+        for a in getGlobalSiteManager().registeredAdapters()
+        if a.provided == IFieldWidget and a.required[0].providedBy(context)
+    ]
+    for adapter in adapters:
+        name = u'{0}.{1}'.format(
+            adapter.factory.__module__, adapter.factory.__name__)
+        terms.append(WidgetVocabulary.createTerm(
+            name, str(name), adapter.factory.__name__))
+    return WidgetVocabulary(terms)
+
+directlyProvides(widgetsFactory, IContextSourceBinder)

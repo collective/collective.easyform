@@ -43,6 +43,7 @@ from collective.formulator.vocabularies import fieldsFactory
 from collective.formulator.vocabularies import getProxyRoleChoices
 from collective.formulator.vocabularies import vocabExtraDataDL
 from collective.formulator.vocabularies import vocabFormatDL
+from collective.formulator.vocabularies import widgetsFactory
 
 PMF = MessageFactory('plone')
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
@@ -420,6 +421,13 @@ class IFormulatorActionsContext(ISchemaContext):
 
 
 class IFieldExtender(form.Schema):
+    field_widget = Choice(
+        title=_(u'label_field_widget',
+                default=u'Field Widget'),
+        description=_(u'help_field_widget', default=u''),
+        required=False,
+        source=widgetsFactory,
+    )
     form.fieldset(u'overrides', label=_('Overrides'),
                   fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
     form.write_permission(TDefault=EDIT_TALES_PERMISSION)

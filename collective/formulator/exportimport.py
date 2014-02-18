@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from plone.autoform.interfaces import WIDGETS_KEY
 from plone.supermodel.parser import IFieldMetadataHandler
 from plone.supermodel.utils import ns
 from zope.component import adapter
@@ -36,6 +37,8 @@ class FieldExtender(object):
     def __init__(self, field):
         self.field = field
 
+    field_widget = property(lambda x: _get_(x, WIDGETS_KEY),
+                            lambda x, value: _set_(x, value, WIDGETS_KEY))
     TDefault = property(lambda x: _get_(x, 'TDefault'),
                         lambda x, value: _set_(x, value, 'TDefault'))
     TEnabled = property(lambda x: _get_(x, 'TEnabled'),
