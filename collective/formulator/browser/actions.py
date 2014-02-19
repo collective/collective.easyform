@@ -34,10 +34,18 @@ from zope.interface import noLongerProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFieldsInOrder
 
+try:
+    import plone.resourceeditor
+    plone.resourceeditor  # avoid PEP 8 warning
+    HAVE_RESOURCE_EDITOR = True
+except ImportError:
+    HAVE_RESOURCE_EDITOR = False
+
 from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.api import get_actions
 from collective.formulator.api import get_context
 from collective.formulator.api import get_fields
+from collective.formulator.browser.fields import AjaxSaveHandler
 from collective.formulator.interfaces import IActionEditForm
 from collective.formulator.interfaces import IActionFactory
 from collective.formulator.interfaces import IExtraData
@@ -216,6 +224,9 @@ class FormulatorActionsListing(SchemaListing):
         self.updateWidgets()
         self.request.response.redirect(self.context.absolute_url())
 
+    def handleModelEdit(self, action):
+        self.request.response.redirect('@@modeleditor')
+
 
 class FormulatorActionsListingPage(SchemaListingPage):
 
@@ -294,3 +305,27 @@ class ActionEditView(layout.FormWrapper):
     @lazy_property
     def label(self):
         return _(u"Edit Action '${fieldname}'", mapping={'fieldname': self.field.__name__})
+
+
+if HAVE_RESOURCE_EDITOR:
+    but = button.Button("modeleditor", title=_(u'Edit XML Actions Model'))
+    FormulatorActionsListing.buttons += button.Buttons(but)
+    handler = button.Handler(but, FormulatorActionsListing.handleModelEdit)
+    FormulatorActionsListing.handlers.addHandler(but, handler)
+
+
+class ModelEditorView(BrowserView):
+
+    """ editor view """
+    title = _(u'Edit XML Actions Model')
+
+    def modelSource(self):
+        return self.context.aq_parent.actions_model
+
+
+class AjaxSaveHandler(AjaxSaveHandler):
+
+    """ handle AJAX save posts """
+
+    def save(self, source):
+        self.context.aq_parent.actions_model = source
