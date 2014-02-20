@@ -15,6 +15,7 @@
   <include file="actions.zcml" />
   <include file="subscribers.zcml" />
   <include file="validators.zcml" />
+  <include file="vocabularies.zcml" />
 
   <include package=".browser" />
 

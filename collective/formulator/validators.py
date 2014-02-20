@@ -12,20 +12,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.exceptions import EmailAddressInvalid
 from types import BooleanType
 from types import StringTypes
-from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.component import provideUtility
-from zope.interface import Interface
-from zope.interface import implements
-from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary
 
 from collective.formulator import formulatorMessageFactory as _
-
-
-class IFieldValidator(Interface):
-
-    """Base marker for field validators"""
+from collective.formulator.interfaces import IFieldValidator
 
 
 def isValidEmail(value):
@@ -83,14 +74,3 @@ def update_validators():
             provideUtility(method(validator.name),
                            provides=IFieldValidator, name=validator.name)
 update_validators()
-
-
-class ValidatorsVocabulary(object):
-
-    """Field validators vocabulary"""
-    implements(IVocabularyFactory)
-
-    def __call__(self, context, key=None):
-        return SimpleVocabulary([SimpleVocabulary.createTerm(i, i, i) for i, u in getUtilitiesFor(IFieldValidator)])
-
-ValidatorsVocabularyFactory = ValidatorsVocabulary()

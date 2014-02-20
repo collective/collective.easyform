@@ -2,6 +2,8 @@
 
 from z3c.form.interfaces import IFieldWidget
 from zope.component import getGlobalSiteManager
+from zope.component import getUtilitiesFor
+from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.interface import directlyProvides
 from zope.interface import implements
@@ -13,6 +15,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.api import get_context
 from collective.formulator.api import get_fields
+
 
 PMF = MessageFactory('plone')
 
@@ -105,3 +108,22 @@ def widgetsFactory(context):
     return WidgetVocabulary(terms)
 
 directlyProvides(widgetsFactory, IContextSourceBinder)
+
+
+def FormulatorActionsVocabularyFactory(context):
+    """Formulator actions vocabulary"""
+    from collective.formulator.interfaces import IActionFactory
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(
+            factory, translate(factory.title), factory.title)
+        for (id, factory) in getUtilitiesFor(IActionFactory)
+    ])
+
+
+def ValidatorsVocabularyFactory(context):
+    """Field validators vocabulary"""
+    from collective.formulator.interfaces import IFieldValidator
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(i, i, i)
+        for i, u in getUtilitiesFor(IFieldValidator)
+    ])

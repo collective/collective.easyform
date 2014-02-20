@@ -130,8 +130,8 @@ class IFormulator(form.Schema):
 
     """Forms for Plone"""
 
-    #form.fieldset(u'models', label=_('Models'),
-                  #fields=['fields_model', 'actions_model'])
+    # form.fieldset(u'models', label=_('Models'),
+                  # fields=['fields_model', 'actions_model'])
     form.omitted('fields_model', 'actions_model')
     fields_model = Text(
         title=_(u'Fields Model'),
@@ -1010,3 +1010,8 @@ class IRichLabelWidget(ILabelWidget):
 class IReCaptcha(ITextLine):
 
     """ReCaptcha Field."""
+
+
+class IFieldValidator(Interface):
+
+    """Base marker for field validators"""

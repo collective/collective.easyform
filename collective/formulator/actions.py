@@ -27,13 +27,10 @@ from plone.namedfile.interfaces import INamedFile
 from plone.supermodel.exportimport import BaseHandler
 from time import time
 from types import StringTypes
-from zope.component import getUtilitiesFor
 from zope.contenttype import guess_content_type
-from zope.i18n import translate
 from zope.interface import implements
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
-from zope.schema.vocabulary import SimpleVocabulary
 
 from collective.formulator import formulatorMessageFactory as _
 from collective.formulator.api import DollarVarReplacer
@@ -49,15 +46,6 @@ from collective.formulator.interfaces import IMailer
 from collective.formulator.interfaces import ISaveData
 
 logger = getLogger('collective.formulator')
-
-
-def FormulatorActionsVocabularyFactory(context):
-    field_factories = getUtilitiesFor(IActionFactory)
-    terms = []
-    for (id, factory) in field_factories:
-        terms.append(SimpleVocabulary.createTerm(
-            factory, translate(factory.title), factory.title))
-    return SimpleVocabulary(terms)
 
 
 class ActionFactory(object):

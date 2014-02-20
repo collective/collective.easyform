@@ -2,11 +2,6 @@
     xmlns="http://namespaces.zope.org/zope"
     i18n_domain="collective.formulator">
     <utility
-        component=".actions.FormulatorActionsVocabularyFactory"
-        provides="zope.schema.interfaces.IVocabularyFactory"
-        name="FormulatorActions"
-        />
-    <utility
         name="collective.formulator.actions.Mailer"
         component=".actions.MailerAction"
         />
