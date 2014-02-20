@@ -19,37 +19,42 @@ from collective.formulator.api import get_fields
 
 PMF = MessageFactory('plone')
 
-customActions = SimpleVocabulary.fromItems((
+_make_vocabulary = lambda items: SimpleVocabulary([
+    SimpleVocabulary.createTerm(token, token, name)
+    for (name, token) in items
+])
+
+customActions = _make_vocabulary((
     (_(u'Traverse to'), u'traverse_to'),
     (_(u'Redirect to'), u'redirect_to'),
 ))
 
-MIME_LIST = SimpleVocabulary.fromItems((
+MIME_LIST = _make_vocabulary((
     (u'HTML', u'html'),
     (PMF(u'Text'), u'plain'),
 ))
 
-XINFO_HEADERS = SimpleVocabulary.fromItems((
-    (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
-    (u'REMOTE_ADDR', u'REMOTE_ADDR'),
-    (u'PATH_INFO', u'PATH_INFO'),
-    (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
-    (u'HTTP_REFERER', u'HTTP_REFERER'),
+XINFO_HEADERS = SimpleVocabulary.fromValues((
+    u'HTTP_X_FORWARDED_FOR',
+    u'REMOTE_ADDR',
+    u'PATH_INFO',
+    u'HTTP_USER_AGENT',
+    u'HTTP_REFERER',
 ))
 
-getProxyRoleChoices = SimpleVocabulary.fromItems((
+getProxyRoleChoices = _make_vocabulary((
     (u'No proxy role', u'none'),
     (u'Manager', u'Manager'),
 ))
 
-vocabExtraDataDL = SimpleVocabulary.fromItems((
+vocabExtraDataDL = _make_vocabulary((
     (_(u'vocabulary_postingdt_text', default=u'Posting Date/Time'), u'dt'),
     (u'HTTP_X_FORWARDED_FOR', u'HTTP_X_FORWARDED_FOR'),
     (u'REMOTE_ADDR', u'REMOTE_ADDR'),
     (u'HTTP_USER_AGENT', u'HTTP_USER_AGENT'),
 ))
 
-vocabFormatDL = SimpleVocabulary.fromItems((
+vocabFormatDL = _make_vocabulary((
     (_(u'vocabulary_tsv_text', default=u'Tab-Separated Values'), u'tsv'),
     (_(u'vocabulary_csv_text', default=u'Comma-Separated Values'), u'csv'),
 ))
