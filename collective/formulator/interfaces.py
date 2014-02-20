@@ -36,6 +36,7 @@ from collective.formulator.config import EDIT_TALES_PERMISSION
 from collective.formulator.config import EDIT_PYTHON_PERMISSION
 from collective.formulator.config import EDIT_ADDRESSING_PERMISSION
 from collective.formulator.config import EDIT_ADVANCED_PERMISSION
+from collective.formulator.vocabularies import FORM_METHODS
 from collective.formulator.vocabularies import MIME_LIST
 from collective.formulator.vocabularies import XINFO_HEADERS
 from collective.formulator.vocabularies import customActions
@@ -158,6 +159,13 @@ class IFormulator(form.Schema):
         description=_(u'help_reset_button', default=u''),
         default=u'Reset',
         required=False,
+    )
+    method = Choice(
+        title=_(u'label_method', default=u'Form method'),
+        description=_(u'help_method', default=u''),
+        default=u'post',
+        required=False,
+        vocabulary=FORM_METHODS,
     )
     form_tabbing = Bool(
         title=_(u'label_form_tabbing',

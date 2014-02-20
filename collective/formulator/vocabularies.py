@@ -34,6 +34,11 @@ MIME_LIST = _make_vocabulary((
     (PMF(u'Text'), u'plain'),
 ))
 
+FORM_METHODS = SimpleVocabulary.fromValues((
+    u'post',
+    u'get',
+))
+
 XINFO_HEADERS = SimpleVocabulary.fromValues((
     u'HTTP_X_FORWARDED_FOR',
     u'REMOTE_ADDR',

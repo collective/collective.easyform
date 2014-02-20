@@ -39,7 +39,10 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
     ignoreContext = True
     css_class = 'formulatorForm'
     thanksPage = False
-    # method = "get"
+
+    @property
+    def method(self):
+        return self.context.method
 
     @property
     def default_fieldset_label(self):
@@ -119,8 +122,6 @@ class FormulatorForm(AutoExtensibleForm, form.Form):
             if doit and hasattr(action, 'onSuccess'):
                 result = action.onSuccess(data, self.request)
                 if isinstance(result, dict) and len(result):
-                    # return the dict, which hopefully uses
-                    # field ids or FORM_ERROR_MARKER for keys
                     return result
 
     def setDisplayMode(self, mode):

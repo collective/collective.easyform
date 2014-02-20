@@ -388,7 +388,7 @@ class TestCustomScript(base.FormulatorTestCase):
         self.assertEqual(len(errors), 0)
         self.portal.REQUEST['form.widgets.title'] = u'Adapter'
         self.portal.REQUEST['form.widgets.description'] = u''
-        self.portal.REQUEST['form.widgets.ProxyRole'] = [u'No proxy role']
+        self.portal.REQUEST['form.widgets.ProxyRole'] = [u'none']
         self.portal.REQUEST[
             'form.widgets.ScriptBody'] = unicode(proxied_script)
         self.portal.REQUEST['form.widgets.IActionExtender.execCondition'] = u''
