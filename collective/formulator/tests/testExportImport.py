@@ -389,6 +389,11 @@ class TestFormImport(ExportImportTester):
 def test_suite():
     from unittest import TestSuite, makeSuite
     suite = TestSuite()
-    suite.addTest(makeSuite(TestFormExport))
-    suite.addTest(makeSuite(TestFormImport))
+    try:
+        # flake8: noqa
+        from plone.dexterity.exportimport import DexterityContentExporterImporter
+        suite.addTest(makeSuite(TestFormExport))
+        suite.addTest(makeSuite(TestFormImport))
+    except ImportError:
+        pass
     return suite

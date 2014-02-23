@@ -27,10 +27,10 @@ setup(name='collective.formulator',
           'setuptools',
           'plone.app.dexterity',
           'plone.app.textfield',
-          'plone.dexterity>=2.2.0dev',
+          'plone.dexterity',
           'plone.directives.form',
           'plone.namedfile',
-          'plone.schemaeditor>=1.3.4',
+          'plone.schemaeditor',
           # -*- Extra requirements: -*-
       ],
       extras_require={

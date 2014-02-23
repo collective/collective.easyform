@@ -14,12 +14,6 @@ from z3c.form import button
 from z3c.form import field
 from z3c.form import form
 from zope.component import getMultiAdapter
-try:
-    # flake8: noqa
-    from plone.dexterity.exportimport import DexterityContentExporterImporter
-    has_export = True
-except ImportError:
-    has_export = False
 
 
 class FormulatorExportView(BrowserView):
@@ -30,8 +24,6 @@ class FormulatorExportView(BrowserView):
     def __call__(self):
         """See ..interfaces.exportimport.IFormulatorExportView.__call__
         """
-        if not has_export:
-            return
         ctx = TarballExportContext(self.context)
         response = self.request.RESPONSE
         disposition = 'attachment; filename="{0}-{1:{2}}.tar.gz"'.format(
@@ -59,8 +51,6 @@ class FormulatorImportForm(form.Form):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
-            return
-        if not has_export:
             return
 
         ctx = TarballImportContext(self.context, data['upload'])
