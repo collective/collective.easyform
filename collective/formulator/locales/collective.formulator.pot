@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-02-20 21:24+0000\n"
+"POT-Creation-Date: 2014-02-23 22:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,7 @@ msgstr ""
 msgid "Fields Model"
 msgstr ""
 
-#: collective.formulator/collective/formulator/browser/exportimport.py:69
+#: collective.formulator/collective/formulator/browser/exportimport.py:59
 msgid "Form imported."
 msgstr ""
 
@@ -422,7 +422,7 @@ msgstr ""
 msgid "help_xinfo_headers_text"
 msgstr ""
 
-#: collective.formulator/collective/formulator/browser/exportimport.py:57
+#: collective.formulator/collective/formulator/browser/exportimport.py:49
 msgid "import"
 msgstr ""
 

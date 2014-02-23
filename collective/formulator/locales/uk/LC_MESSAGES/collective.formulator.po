@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.formulator\n"
-"POT-Creation-Date: 2014-02-20 21:24+0000\n"
+"POT-Creation-Date: 2014-02-23 22:17+0000\n"
 "PO-Revision-Date: 2014-02-06 00:16+0300\n"
 "Last-Translator: Roman Kozlovskyi <krzroman@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,7 +58,7 @@ msgstr "Експортувати"
 msgid "Fields Model"
 msgstr ""
 
-#: collective.formulator/collective/formulator/browser/exportimport.py:69
+#: collective.formulator/collective/formulator/browser/exportimport.py:59
 msgid "Form imported."
 msgstr "Форму імпортовано."
 
@@ -419,7 +419,7 @@ msgstr ""
 msgid "help_xinfo_headers_text"
 msgstr ""
 
-#: collective.formulator/collective/formulator/browser/exportimport.py:57
+#: collective.formulator/collective/formulator/browser/exportimport.py:49
 msgid "import"
 msgstr "Імпорт"
 
