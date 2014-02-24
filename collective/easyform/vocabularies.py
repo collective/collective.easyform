@@ -127,6 +127,7 @@ def EasyFormActionsVocabularyFactory(context):
         SimpleVocabulary.createTerm(
             factory, translate(factory.title), factory.title)
         for (id, factory) in getUtilitiesFor(IActionFactory)
+        if factory.available(context)
     ])
 
 

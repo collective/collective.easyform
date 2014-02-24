@@ -11,7 +11,7 @@
   <property name="model_source"></property>
   <property name="model_file"></property>
   <property name="klass">collective.easyform.content.EasyForm</property>
-  <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="add_permission">collective.easyform.AddContent</property>
   <property name="behaviors">
     <element value="plone.app.content.interfaces.INameFromTitle"/>
     <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>

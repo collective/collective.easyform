@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from AccessControl import getSecurityManager
 from BTrees.IOBTree import IOBTree
 try:
     from BTrees.LOBTree import LOBTree
@@ -28,9 +29,11 @@ from plone.supermodel.exportimport import BaseHandler
 from time import time
 from types import StringTypes
 from zope.contenttype import guess_content_type
+from zope.component import queryUtility
 from zope.interface import implements
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
+from zope.security.interfaces import IPermission
 
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
@@ -53,11 +56,20 @@ class ActionFactory(object):
 
     title = u''
 
-    def __init__(self, fieldcls, title, *args, **kw):
+    def __init__(self, fieldcls, title, permission, *args, **kw):
         self.fieldcls = fieldcls
         self.title = title
+        self.permission = permission
         self.args = args
         self.kw = kw
+
+    def available(self, context):
+        """ field is addable in the current context """
+        securityManager = getSecurityManager()
+        permission = queryUtility(IPermission, name=self.permission)
+        if permission is None:
+            return True
+        return bool(securityManager.checkPermission(permission.title, context))
 
     def editable(self, field):
         """ test whether a given instance of a field is editable """
@@ -637,11 +649,11 @@ class SaveData(Action):
 
 
 MailerAction = ActionFactory(
-    Mailer, _(u'label_mailer_action', default=u'Mailer'))
+    Mailer, _(u'label_mailer_action', default=u'Mailer'), 'collective.easyform.AddMailers')
 CustomScriptAction = ActionFactory(
-    CustomScript, _(u'label_customscript_action', default=u'Custom Script'))
+    CustomScript, _(u'label_customscript_action', default=u'Custom Script'), 'collective.easyform.AddCustomScripts')
 SaveDataAction = ActionFactory(
-    SaveData, _(u'label_savedata_action', default=u'Save Data'))
+    SaveData, _(u'label_savedata_action', default=u'Save Data'), 'collective.easyform.AddDataSavers')
 
 MailerHandler = BaseHandler(Mailer)
 CustomScriptHandler = BaseHandler(CustomScript)
