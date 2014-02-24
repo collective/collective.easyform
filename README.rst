@@ -1,11 +1,11 @@
 Introduction
 ============
 
-.. image:: https://travis-ci.org/kroman0/collective.easyform.png?branch=master
-    :target: https://travis-ci.org/kroman0/collective.easyform
+.. image:: https://travis-ci.org/quintagroup/collective.easyform.png?branch=master
+    :target: https://travis-ci.org/quintagroup/collective.easyform
 
-.. image:: https://coveralls.io/repos/kroman0/collective.easyform/badge.png?branch=master
-    :target: https://coveralls.io/r/kroman0/collective.easyform?branch=master
+.. image:: https://coveralls.io/repos/quintagroup/collective.easyform/badge.png?branch=master
+    :target: https://coveralls.io/r/quintagroup/collective.easyform?branch=master
 
 .. image:: https://badge.fury.io/py/collective.easyform.png
     :target: http://badge.fury.io/py/collective.easyform
