@@ -33,6 +33,17 @@ Simple Formulator
     Page should contain  test subject
     Page should contain  test comments
 
+Add a choice field with vocabulary values
+    a formulator  Formulator
+    Click Link  Fields
+    Add field  Hobbies  hobbies  Multiple Choice
+    Open field settings  hobbies
+    Input text  form-widgets-values  Chess\nSoccer\nBaseball\nVideo games
+    Click Button  Save
+    Wait until page contains element  form-widgets-hobbies-3
+    Click Link  View
+    Wait until page contains element  form-widgets-hobbies-3
+
 
 *** Keywords ***
 
