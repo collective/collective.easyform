@@ -1,0 +1,15 @@
+<html metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.easyform">
+<body>
+    <metal:block fill-slot="content-core">
+        <div tal:condition="view/items|nothing">
+            <tal:block repeat="item view/items">
+                <a href=""
+                   tal:define="name python:item[0]; title python:item[1];"
+                   tal:attributes="href string:${context/absolute_url}/actions/${name}/data; title title"
+                   tal:content="title" />
+            </tal:block>
+        </div>
+    </metal:block>
+</body>
+</html>

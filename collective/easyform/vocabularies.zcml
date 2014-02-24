@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="collective.easyform">
+    <utility
+        component=".vocabularies.EasyFormActionsVocabularyFactory"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        name="EasyFormActions"
+        />
+    <utility
+        component=".vocabularies.ValidatorsVocabularyFactory"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        name="collective.easyform.validators"
+        />
+</configure>

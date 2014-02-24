@@ -1,0 +1,35 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
+           i18n_domain="collective.easyform">
+    <include package="Products.CMFCore" file="permissions.zcml" />
+    <include file="fields.zcml" />
+    <include file="actions.zcml" />
+    <include file="widgets.zcml" />
+    <browser:page
+        for="collective.easyform.interfaces.IEasyForm"
+        name="view"
+        class=".view.EasyFormView"
+        permission="zope2.View"
+        />
+    <browser:page
+        for="collective.easyform.interfaces.IEasyForm"
+        name="embedded"
+        class=".view.EasyFormFormEmbedded"
+        permission="zope2.View"
+        />
+    <configure zcml:condition="installed plone.dexterity.exportimport">
+    <browser:page
+        for="collective.easyform.interfaces.IEasyForm"
+        name="export-easyform"
+        class=".exportimport.EasyFormExportView"
+        permission="cmf.ManagePortal"
+        />
+    <browser:page
+        for="collective.easyform.interfaces.IEasyForm"
+        name="import-easyform"
+        class=".exportimport.EasyFormImportView"
+        permission="cmf.ManagePortal"
+        />
+    </configure>
+</configure>

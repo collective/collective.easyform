@@ -7,4 +7,4 @@ omit =
     eggs/*
     parts/*
     src/*
-    collective/formulator/tests/*
+    collective/easyform/tests/*

@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0'
+version = '1.0a1'
 
-setup(name='collective.formulator',
+setup(name='collective.easyform',
       version=version,
       description="Forms for Plone",
-      long_description=open("README.txt").read() + "\n" +
-      open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description=open("README.rst").read() +
+      "\n" + open("CHANGES.rst").read(),
       # Get more strings from
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[

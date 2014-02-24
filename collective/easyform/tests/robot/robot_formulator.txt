@@ -1,0 +1,55 @@
+*** Settings ***
+
+Library  Selenium2Library  timeout=10  implicit_wait=0.5
+
+Variables  plone/app/testing/interfaces.py
+
+Resource  keywords.txt
+
+Suite Setup  Suite Setup
+Suite Teardown  Suite Teardown
+
+
+*** Variables ***
+
+${PORT} =  55001
+${ZOPE_URL} =  http://localhost:${PORT}
+${PLONE_URL} =  ${ZOPE_URL}/plone
+${BROWSER} =  Firefox
+
+
+*** Test Cases ***
+
+Simple EasyForm
+    a easyform  EasyForm
+    Click Link  Fields
+    Click Link  Actions
+    Click Link  View
+    Input text  name=form.widgets.replyto  test@example.com
+    Input text  name=form.widgets.topic  test subject
+    Input text  name=form.widgets.comments  test comments
+    Click Button  Submit
+    Page should contain  test@example.com
+    Page should contain  test subject
+    Page should contain  test comments
+
+Add a choice field with vocabulary values
+    a easyform  EasyForm
+    Click Link  Fields
+    Add field  Hobbies  hobbies  Multiple Choice
+    Open field settings  hobbies
+    Input text  form-widgets-values  Chess\nSoccer\nBaseball\nVideo games
+    Click Button  Save
+    Wait until page contains element  form-widgets-hobbies-3
+    Click Link  View
+    Wait until page contains element  form-widgets-hobbies-3
+
+
+*** Keywords ***
+
+Suite Setup
+    Open browser  ${PLONE_URL}  browser=${BROWSER}
+    a site owner
+
+Suite Teardown
+    Close All Browsers

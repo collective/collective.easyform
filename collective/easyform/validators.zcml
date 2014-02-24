@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="collective.easyform">
+    <utility
+        provides=".validators.IFieldValidator"
+        component=".validators.isValidEmail"
+        name="isValidEmail"
+        />
+    <utility
+        provides=".validators.IFieldValidator"
+        component=".validators.isCommaSeparatedEmails"
+        name="isCommaSeparatedEmails"
+        />
+    <utility
+        provides=".validators.IFieldValidator"
+        component=".validators.isChecked"
+        name="isChecked"
+        />
+    <utility
+        provides=".validators.IFieldValidator"
+        component=".validators.isUnchecked"
+        name="isUnchecked"
+        />
+    <utility
+        provides=".validators.IFieldValidator"
+        component=".validators.isNotLinkSpam"
+        name="isNotLinkSpam"
+        />
+</configure>

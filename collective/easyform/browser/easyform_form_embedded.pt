@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="collective.easyform"
+      tal:omit-tag="">
+  <metal:form metal:use-macro="context/@@ploneform-macros/form">
+    <metal:title-slot define-slot="title">
+      <h3 tal:condition="view/label | nothing"><span tal:replace="view/label">Form title</span></h3>
+    </metal:title-slot>
+    <metal:top-slot fill-slot="formtop">
+      <div id="formPrologue"
+           tal:condition="view/prologue|nothing"
+           tal:content="structure view/prologue" />
+    </metal:top-slot>
+    <metal:top-slot fill-slot="formbottom">
+      <div id="formEpilogue"
+           tal:condition="view/epilogue|nothing"
+           tal:content="structure view/epilogue" />
+    </metal:top-slot>
+  </metal:form>
+</html>

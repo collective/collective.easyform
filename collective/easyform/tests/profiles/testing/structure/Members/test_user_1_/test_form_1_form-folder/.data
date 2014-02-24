@@ -1,0 +1,125 @@
+fields_model: =?utf-8?q?=3Cmodel_xmlns=3Asecurity=3D=22http=3A//namespaces=2Eplone=2Eor?=
+ =?utf-8?q?g/supermodel/security=22_xmlns=3Amarshal=3D=22http=3A//namespac?=
+ =?utf-8?q?es=2Eplone=2Eorg/supermodel/marshal=22_xmlns=3Aform=3D=22http?=
+ =?utf-8?q?=3A//namespaces=2Eplone=2Eorg/supermodel/form=22_xmlns=3Aformul?=
+ =?utf-8?q?ator=3D=22http=3A//namespaces=2Eplone=2Eorg/supermodel/formulat?=
+ =?utf-8?q?or=22_xmlns=3D=22http=3A//namespaces=2Eplone=2Eorg/supermodel/s?=
+ =?utf-8?q?chema=22=3E=0D=0A__=3Cschema=3E=0D=0A____=3Cfield_name=3D=22rep?=
+ =?utf-8?q?lyto=22_type=3D=22zope=2Eschema=2ETextLine=22_easyform=3ATDef?=
+ =?utf-8?q?ault=3D=22python=3Amember_and_member=2EgetProperty=28=27email?=
+ =?utf-8?q?=27=2C_=27=27=29_or_=27=27=22_easyform=3AserverSide=3D=22Fals?=
+ =?utf-8?q?e=22_easyform=3Avalidators=3D=22isValidEmail=22=3E=0D=0A_____?=
+ =?utf-8?q?_=3Cdefault=3Easda=3C/default=3E=0D=0A______=3Cdescription/=3E?=
+ =?utf-8?q?=0D=0A______=3Ctitle=3EYour_E-Mail_Address=3C/title=3E=0D=0A___?=
+ =?utf-8?q?_=3C/field=3E=0D=0A____=3Cfield_name=3D=22topic=22_type=3D=22zo?=
+ =?utf-8?q?pe=2Eschema=2ETextLine=22_easyform=3AserverSide=3D=22True=22?=
+ =?utf-8?q?=3E=0D=0A______=3Cdefault=3Easdf=3C/default=3E=0D=0A______=3Cde?=
+ =?utf-8?q?scription/=3E=0D=0A______=3Ctitle=3ESubject=3C/title=3E=0D=0A__?=
+ =?utf-8?q?__=3C/field=3E=0D=0A____=3Cfield_name=3D=22assdsdsd=22_type=3D?=
+ =?utf-8?q?=22zope=2Eschema=2ETextLine=22=3E=0D=0A______=3Cdescription/=3E?=
+ =?utf-8?q?=0D=0A______=3Ctitle=3EAssdsdsd=3C/title=3E=0D=0A____=3C/field?=
+ =?utf-8?q?=3E=0D=0A____=3Cfieldset_name=3D=22new=5Ffieldset=22_label=3D?=
+ =?utf-8?q?=22New_fieldset=22=3E=0D=0A______=3Cfield_name=3D=22comments=22?=
+ =?utf-8?q?_type=3D=22zope=2Eschema=2EText=22=3E=0D=0A________=3Cdefault?=
+ =?utf-8?q?=3Easda=3C/default=3E=0D=0A________=3Cdescription/=3E=0D=0A____?=
+ =?utf-8?q?____=3Ctitle=3EComments=3C/title=3E=0D=0A______=3C/field=3E=0D=0A?=
+ =?utf-8?q?=0D=0A____=3C/fieldset=3E=0D=0A__=3C/schema=3E=0D=0A=3C/model=3E?=
+actions_model: =?utf-8?q?=3Cmodel_xmlns=3Asecurity=3D=22http=3A//namespaces=2Eplone=2Eor?=
+ =?utf-8?q?g/supermodel/security=22_xmlns=3Amarshal=3D=22http=3A//namespac?=
+ =?utf-8?q?es=2Eplone=2Eorg/supermodel/marshal=22_xmlns=3Aform=3D=22http?=
+ =?utf-8?q?=3A//namespaces=2Eplone=2Eorg/supermodel/form=22_xmlns=3Aformul?=
+ =?utf-8?q?ator=3D=22http=3A//namespaces=2Eplone=2Eorg/supermodel/formulat?=
+ =?utf-8?q?or=22_xmlns=3D=22http=3A//namespaces=2Eplone=2Eorg/supermodel/s?=
+ =?utf-8?q?chema=22=3E=0D=0A__=3Cschema=3E=0D=0A____=3Cfield_name=3D=22mai?=
+ =?utf-8?q?ler=22_type=3D=22collective=2Eeasyform=2Ebrowser=2Eeasyform?=
+ =?utf-8?q?view=2EMailer=22=3E=0D=0A______=3Cbody=5Fpt=3E=26lt=3Bhtml_xmln?=
+ =?utf-8?q?s=3D=22http=3A//www=2Ew3=2Eorg/1999/xhtml=22=26gt=3B=26=2313=3B?=
+ =?utf-8?q?=0D=0A__=26lt=3Bhead=26gt=3B=26lt=3Btitle=26gt=3B=26lt=3B/title?=
+ =?utf-8?q?=26gt=3B=26lt=3B/head=26gt=3B=26=2313=3B=0D=0A__=26lt=3Bbody=26?=
+ =?utf-8?q?gt=3B=26=2313=3B=0D=0A____=26lt=3Bp_tal=3Acontent=3D=22mailer/b?=
+ =?utf-8?q?ody=5Fpre_=7C_nothing=22_/=26gt=3B=26=2313=3B=0D=0A____=26lt=3B?=
+ =?utf-8?q?dl=26gt=3B=26=2313=3B=0D=0A________=26lt=3Btal=3Ablock_repeat?=
+ =?utf-8?q?=3D=22field_data_=7C_nothing=22=26gt=3B=26=2313=3B=0D=0A_______?=
+ =?utf-8?q?_____=26lt=3Bdt_tal=3Acontent=3D=22python=3Afields=5Bfield=5D?=
+ =?utf-8?q?=22_/=26gt=3B=26=2313=3B=0D=0A____________=26lt=3Bdd_tal=3Acont?=
+ =?utf-8?q?ent=3D=22structure_python=3Adata=5Bfield=5D=22_/=26gt=3B=26=231?=
+ =?utf-8?q?3=3B=0D=0A________=26lt=3B/tal=3Ablock=26gt=3B=26=2313=3B=0D=0A?=
+ =?utf-8?q?____=26lt=3B/dl=26gt=3B=26=2313=3B=0D=0A____=26lt=3Bp_tal=3Acon?=
+ =?utf-8?q?tent=3D=22mailer/body=5Fpost_=7C_nothing=22_/=26gt=3B=26=2313?=
+ =?utf-8?q?=3B=0D=0A____=26lt=3Bpre_tal=3Acontent=3D=22mailer/body=5Ffoote?=
+ =?utf-8?q?r_=7C_nothing=22_/=26gt=3B=26=2313=3B=0D=0A__=26lt=3B/body=26gt?=
+ =?utf-8?q?=3B=26=2313=3B=0D=0A=26lt=3B/html=26gt=3B=26=2313=3B=0D=0A=3C/b?=
+ =?utf-8?q?ody=5Fpt=3E=0D=0A______=3Cdescription=3EE-Mails_Form_Input=3C/d?=
+ =?utf-8?q?escription=3E=0D=0A______=3Crecipient=5Femail=3Emdummy=40addres?=
+ =?utf-8?q?s=2Ecom=3C/recipient=5Femail=3E=0D=0A______=3Creplyto=5Ffield?=
+ =?utf-8?q?=3Ereplyto=3C/replyto=5Ffield=3E=0D=0A______=3Crequired=3EFalse?=
+ =?utf-8?q?=3C/required=3E=0D=0A______=3CshowAll=3EFalse=3C/showAll=3E=0D=0A?=
+ =?utf-8?q?=0D=0A______=3CshowFields=3E=0D=0A________=3Celement=3Etopic=3C/el?=
+ =?utf-8?q?ement=3E=0D=0A______=3C/showFields=3E=0D=0A______=3Csubject=5Ff?=
+ =?utf-8?q?ield=3Etopic=3C/subject=5Ffield=3E=0D=0A______=3Ctitle=3EMailer?=
+ =?utf-8?q?=3C/title=3E=0D=0A______=3Cxinfo=5Fheaders/=3E=0D=0A____=3C/fie?=
+ =?utf-8?q?ld=3E=0D=0A____=3Cfield_name=3D=22adapter=22_type=3D=22collecti?=
+ =?utf-8?q?ve=2Eeasyform=2Ebrowser=2Eeasyformview=2ECustomScript=22=3E?=
+ =?utf-8?q?=0D=0A______=3CProxyRole=3EManager=3C/ProxyRole=3E=0D=0A______?=
+ =?utf-8?q?=3CScriptBody=3E=23=23_Python_Script=26=2313=3B=0D=0A=23=23bind?=
+ =?utf-8?q?_container=3Dcontainer=26=2313=3B=0D=0A=23=23bind_context=3Dcon?=
+ =?utf-8?q?text=26=2313=3B=0D=0A=23=23bind_subpath=3Dtraverse=5Fsubpath=26?=
+ =?utf-8?q?=2313=3B=0D=0A=23=23parameters=3Dfields=2C_ploneformgen=2C_requ?=
+ =?utf-8?q?est=26=2313=3B=0D=0A=23=23title=3D=26=2313=3B=0D=0A=23=23=26=23?=
+ =?utf-8?q?13=3B=0D=0A=26=2313=3B=0D=0A=23_Available_parameters=3A=26=2313?=
+ =?utf-8?q?=3B=0D=0A=23__fields__=3D_HTTP_request_form_fields_as_key_value?=
+ =?utf-8?q?_pairs=26=2313=3B=0D=0A=23__request_=3D_The_current_HTTP_reques?=
+ =?utf-8?q?t=2E=26=2313=3B=0D=0A=23____________Access_fields_by_request=2E?=
+ =?utf-8?q?form=5B=22myfieldname=22=5D=26=2313=3B=0D=0A=23__ploneformgen_?=
+ =?utf-8?q?=3D_PloneFormGen_object=26=2313=3B=0D=0A=23=26=2313=3B=0D=0A=23?=
+ =?utf-8?q?_Return_value_is_not_processed_--_unless_you=26=2313=3B=0D=0A?=
+ =?utf-8?q?=23_return_a_dictionary_with_contents=2E_That=27s_regarded=26?=
+ =?utf-8?q?=2313=3B=0D=0A=23_as_an_error_and_will_stop_processing_of_actio?=
+ =?utf-8?q?ns=26=2313=3B=0D=0A=23_and_return_the_user_to_the_form=2E_Error?=
+ =?utf-8?q?_dictionaries=26=2313=3B=0D=0A=23_should_be_of_the_form_=7B=27f?=
+ =?utf-8?q?ield=5Fid=27=3A=27Error_message=27=7D=26=2313=3B=0D=0A=26=2313?=
+ =?utf-8?q?=3B=0D=0A=26=2313=3B=0D=0Aassert_False=2C_=22Please_complete_yo?=
+ =?utf-8?q?ur_script=22=26=2313=3B=0D=0A=26=2313=3B=0D=0A=3C/ScriptBody=3E?=
+ =?utf-8?q?=0D=0A______=3Cdescription/=3E=0D=0A______=3Crequired=3EFalse?=
+ =?utf-8?q?=3C/required=3E=0D=0A______=3Ctitle=3EAdapter=3C/title=3E=0D=0A?=
+ =?utf-8?q?____=3C/field=3E=0D=0A____=3Cfield_name=3D=22next=22_type=3D=22?=
+ =?utf-8?q?collective=2Eeasyform=2Ebrowser=2Eeasyformview=2EMailer=22?=
+ =?utf-8?q?=3E=0D=0A______=3Cdescription/=3E=0D=0A______=3Ctitle=3ENext=3C?=
+ =?utf-8?q?/title=3E=0D=0A____=3C/field=3E=0D=0A__=3C/schema=3E=0D=0A=3C/m?=
+ =?utf-8?q?odel=3E?=
+submitLabel: Hit Me
+useCancelButton: False
+resetLabel: Reset
+form_tabbing: True
+unload_protection: True
+CSRFProtection: True
+forceSSL: False
+formPrologue:
+formEpilogue:
+thanksPageOverrideAction: traverse_to
+thanksPageOverride:
+formActionOverride:
+onDisplayOverride:
+afterValidationOverride:
+headerInjection:
+submitLabelOverride:
+thankstitle: Thank You
+thanksdescription: Thanks for your input.
+showAll: True
+showFields: topic
+includeEmpties: True
+thanksPrologue: =?utf-8?q?=3Cp=3E=D1=84=D1=96=D0=B2=D1=84=D0=B2=D1=84=D1=96=3C/p=3E?=
+thanksEpilogue:
+allow_discussion:
+exclude_from_nav: False
+title: My OOTB Form
+description: The description for our OOTB form
+subjects:
+language: uk
+effective:
+expires:
+creators: admin||ededed
+contributors:
+rights:
+Portal-Type: EasyForm
+

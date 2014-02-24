@@ -1,0 +1,44 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.easyform">
+    <adapter
+        factory=".fields.FieldExtenderValidator"
+        />
+    <adapter
+        factory=".fields.FieldExtenderDefault"
+        name="default"
+        />
+    <utility
+        name="collective.easyform.fields.Label"
+        component=".fields.LabelFactory"
+        />
+    <utility
+        name="collective.easyform.fields.Label"
+        component=".fields.LabelHandler"
+        />
+    <utility
+        name="collective.easyform.fields.RichLabel"
+        component=".fields.RichLabelFactory"
+        />
+    <utility
+        name="collective.easyform.fields.RichLabel"
+        component=".fields.RichLabelHandler"
+        />
+    <configure
+        zcml:condition="installed plone.formwidget.recaptcha">
+    <utility
+        name="collective.easyform.fields.ReCaptcha"
+        component=".fields.ReCaptchaFactory"
+        />
+    <utility
+        name="collective.easyform.fields.ReCaptcha"
+        component=".fields.ReCaptchaHandler"
+        />
+    <adapter
+        for="* * * collective.easyform.interfaces.IReCaptcha *"
+        provides="z3c.form.interfaces.IValidator"
+        factory="plone.formwidget.recaptcha.ReCaptchaValidator"
+        />
+    </configure>
+</configure>

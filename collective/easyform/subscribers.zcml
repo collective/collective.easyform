@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="collective.easyform">
+    <subscriber
+        for="collective.easyform.interfaces.IEasyFormFieldsContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".subscribers.updateFields"
+        />
+    <subscriber
+        for="collective.easyform.interfaces.IEasyFormActionsContext
+             plone.schemaeditor.interfaces.ISchemaModifiedEvent"
+        handler=".subscribers.updateActions"
+        />
+</configure>

@@ -1,0 +1,97 @@
+*** Settings ***
+
+Variables  plone/app/testing/interfaces.py
+
+
+*** Variables ***
+
+${PORTAL_URL} =  http://localhost:55001/${PLONE_SITE_ID}
+
+
+*** Keywords ***
+
+# ----------------------------------------------------------------------------
+# Content
+# ----------------------------------------------------------------------------
+
+a easyform
+    [Arguments]  ${title}
+    Go to  ${PORTAL_URL}/++add++EasyForm
+    Input text  name=form.widgets.IDublinCore.title  ${title}
+    Click Button  Save
+
+# ----------------------------------------------------------------------------
+# Login/Logout
+# ----------------------------------------------------------------------------
+
+Log in
+    [Arguments]  ${userid}  ${password}
+    Go to  ${PORTAL_URL}/login_form
+    Page should contain element  __ac_name
+    Page should contain element  __ac_password
+    Page should contain button  Log in
+    Input text  __ac_name  ${userid}
+    Input text  __ac_password  ${password}
+    Click Button  Log in
+
+Log out
+    Go to  ${PORTAL_URL}/logout
+    Page should contain  logged out
+
+a test user
+    Log in  ${TEST_USER_NAME}  ${TEST_USER_PASSWORD}
+
+a site owner
+    Log in  ${SITE_OWNER_NAME}  ${SITE_OWNER_PASSWORD}
+
+Wait overlay is closed
+    Wait until keyword succeeds  60  1  Page should not contain element  css=div.overlay
+
+Add field
+    [Arguments]    ${field_title}    ${field_id}    ${field_type}
+    [Documentation]    Add field in current easyform
+
+    Click Overlay Button  Add new field…
+    Input text for sure  form-widgets-title  ${field_title}
+    Focus  form-widgets-__name__
+    Wait until keyword succeeds  10  1  Textfield Value Should Be  form-widgets-__name__  ${field_id}
+    Select from list  form-widgets-factory  ${field_type}
+    Click button  Add
+    Wait overlay is closed
+
+Open field settings
+    [Arguments]    ${field_id}
+    Click Overlay Link  xpath=//div[@data-field_id='${field_id}']//a[@class='fieldSettings link-overlay']
+
+Click Overlay Link
+    [Arguments]  ${element}
+    Click Link  ${element}
+    Wait until keyword succeeds  10  1  Page Should Contain Element  css=.pb-ajax > div
+    Element Should Be Visible  css=.pb-ajax > div
+
+Click Overlay Button
+    [Arguments]  ${element}
+    Click Button  ${element}
+    Wait until keyword succeeds  10  1  Page Should Contain Element  css=.pb-ajax > div
+    Element Should Be Visible  css=.pb-ajax > div
+
+Input text for sure
+    [Documentation]  Locate input element by ${locator} and enter the given
+    ...              ${text}. Validate that the text has been entered.
+    ...              Retry until the set Selenium timeout. (The purpose of
+    ...              this keyword is to fix random input issues on slow test
+    ...              machines.)
+    [Arguments]  ${locator}  ${text}
+    ${TIMEOUT} =  Get Selenium timeout
+    ${IMPLICIT_WAIT} =  Get Selenium implicit wait
+    Wait until keyword succeeds  ${TIMEOUT}  ${IMPLICIT_WAIT}
+    ...                          Input text and validate  ${locator}  ${text}
+
+Input text and validate
+    [Documentation]  Locate input element by ${locator} and enter the given
+    ...              ${text}. Validate that the text has been entered.
+    [Arguments]  ${locator}  ${text}
+    Focus  ${locator}
+    Input text  ${locator}  ${text}
+    ${value} =  Get value  ${locator}
+    Should be equal  ${text}  ${value}

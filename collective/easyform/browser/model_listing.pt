@@ -1,0 +1,31 @@
+<html metal:use-macro="context/main_template/macros/master"
+      i18n:domain="collective.easyform">
+<body>
+    <metal:block fill-slot="content">
+        <script type="text/javascript">
+jQuery(function($) {
+    $(document).on('onLoad', function(e){
+        initTinyMCE(e.target);
+    });
+});
+        </script>
+        <style type="text/css">
+.overlay .richTextWidget iframe {
+    box-shadow: none;
+}
+        </style>
+        <div id="edit-bar"
+             tal:define="context nocall:context/aq_parent"
+             tal:content="structure provider:plone.contentviews" />
+        <div metal:use-macro="context/global_statusmessage/macros/portal_message">
+            Status message
+        </div>
+        <div id="content">
+            <h1 class="documentFirstHeading" tal:content="view/label | nothing" />
+            <div id="content-core">
+                <span tal:replace="structure view/contents" />
+            </div>
+        </div>
+    </metal:block>
+</body>
+</html>
