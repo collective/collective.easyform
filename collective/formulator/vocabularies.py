@@ -106,15 +106,15 @@ class WidgetVocabulary(SimpleVocabulary):
 def widgetsFactory(context):
     terms = []
     adapters = [
-        a
+        a.factory
         for a in getGlobalSiteManager().registeredAdapters()
-        if a.provided == IFieldWidget and a.required[0].providedBy(context)
+        if a.provided == IFieldWidget and len(a.required) == 2 and a.required[0].providedBy(context)
     ]
-    for adapter in adapters:
+    for adapter in set(adapters):
         name = u'{0}.{1}'.format(
-            adapter.factory.__module__, adapter.factory.__name__)
+            adapter.__module__, adapter.__name__)
         terms.append(WidgetVocabulary.createTerm(
-            name, str(name), adapter.factory.__name__))
+            name, str(name), adapter.__name__))
     return WidgetVocabulary(terms)
 
 directlyProvides(widgetsFactory, IContextSourceBinder)
