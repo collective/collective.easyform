@@ -287,7 +287,7 @@ class TestFormExport(ExportImportTester):
         """We provide a browser view that can be used to
            export a given form as the root context as well.
            XXX - Andrew B remember this is a rather tempoary representation
-                 of what's returned.
+           of what's returned.
         """
         toc_list = ['structure/.objects', 'structure/.data']
         self._makeForm()
@@ -321,7 +321,7 @@ class TestFormImport(ExportImportTester):
     def ttest_profile_from_gs_import(self):
         """We create a profile (see: profiles/testing/structure)
            which adds a EasyForm called 'test_form_1_' in via our
-           import handler. The form uses the standard ids proceeded by:
+           import handler. The form uses the standard ids proceeded by
            test_form_1_.  We test for the existence of and accurate
            configuration of these subfields below.
         """
