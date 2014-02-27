@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.easyform\n"
-"POT-Creation-Date: 2014-02-24 14:17+0000\n"
+"POT-Creation-Date: 2014-02-27 10:47+0000\n"
 "PO-Revision-Date: 2014-02-06 00:16+0300\n"
 "Last-Translator: Roman Kozlovskyi <krzroman@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -449,7 +449,7 @@ msgid "label_csrf"
 msgstr ""
 
 #. Default: "Custom Script"
-#: collective/easyform/actions.py:642
+#: collective/easyform/actions.py:654
 msgid "label_customscript_action"
 msgstr ""
 
@@ -589,7 +589,7 @@ msgid "label_mailallfields_text"
 msgstr ""
 
 #. Default: "Mailer"
-#: collective/easyform/actions.py:640
+#: collective/easyform/actions.py:652
 msgid "label_mailer_action"
 msgstr ""
 
@@ -629,7 +629,7 @@ msgid "label_richlabel_field"
 msgstr "Розширений заголовок"
 
 #. Default: "Save Data"
-#: collective/easyform/actions.py:644
+#: collective/easyform/actions.py:656
 msgid "label_savedata_action"
 msgstr ""
 

@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[quintagroup.collective-easyform]
+file_filter = collective/easyform/locales/<lang>/LC_MESSAGES/collective.easyform.po
+source_file = collective/easyform/locales/collective.easyform.pot
+source_lang = en
+type = PO
