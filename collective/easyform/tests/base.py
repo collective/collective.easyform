@@ -10,8 +10,10 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import login
 from plone.app.testing import setRoles
+from plone.testing import Layer
 from plone.testing.z2 import Browser
 from plone.testing.z2 import ZSERVER_FIXTURE
+from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 
 from transaction import commit
 from unittest2 import TestCase
@@ -36,9 +38,9 @@ class Fixture(PloneSandboxLayer):
         self.loadZCML(
             package=collective.easyform, context=configurationContext)
         try:
-            import collective.recaptcha
+            import plone.formwidget.recaptcha
             self.loadZCML(
-                package=collective.recaptcha, context=configurationContext)
+                package=plone.formwidget.recaptcha, context=configurationContext)
         except ImportError:
             pass
 
@@ -65,8 +67,9 @@ FUNCTIONAL_TESTING = FunctionalTesting(
     name='collective.easyform:Functional',
 )
 ACCEPTANCE_TESTING = FunctionalTesting(
-    bases=(FIXTURE, ZSERVER_FIXTURE),
+    bases=(FIXTURE, AUTOLOGIN_LIBRARY_FIXTURE, ZSERVER_FIXTURE),
     name='collective.easyform:Acceptance')
+ROBOT_TESTING = Layer(name='collective.easyform:Robot')
 
 
 class EasyFormTestCase(TestCase):

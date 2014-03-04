@@ -10,9 +10,7 @@ Suite Teardown  Teardown
 *** Keywords ***
 
 Setup
-    Setup Plone site
-    ...     plone.app.robotframework.testing.AUTOLOGIN_ROBOT_TESTING
-    ...     collective.easyform.tests.base.ACCEPTANCE_TESTING
+    Setup Plone site  collective.easyform.tests.base.ACCEPTANCE_TESTING
     Import library  Remote  ${PLONE_URL}/RobotRemote
 
 Teardown

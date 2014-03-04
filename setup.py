@@ -17,7 +17,7 @@ setup(name='collective.easyform',
       keywords='form plone ttw',
       author='Roman Kozlovskyi',
       author_email='krzroman@gmail.com',
-      url='http://svn.plone.org/svn/collective/',
+      url='https://github.com/quintagroup/collective.easyform',
       license='GPL',
       packages=find_packages(exclude=['ez_setup']),
       namespace_packages=['collective'],
@@ -38,11 +38,8 @@ setup(name='collective.easyform',
               'plone.formwidget.recaptcha'
           ],
           'test': [
-              'plone.app.testing',
-              'robotsuite',
-              'robotframework-selenium2library',
-              'decorator',
-              'selenium',
+              'plone.app.testing[robot]',
+              'plone.app.robotframework',
           ]
       },
       entry_points="""
