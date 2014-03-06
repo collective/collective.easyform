@@ -1,5 +1,5 @@
-browser Package
-===============
+collective.easyform.browser Package
+===================================
 
 :mod:`actions` Module
 ---------------------

@@ -18,10 +18,10 @@ Teardown
 
 *** Test Cases ***
 
-Add easyform
+Add easyform as Manager
 
     Enable autologin as  Manager
-    Set autologin username  Admin
+    Set autologin username  Manager
     Go to  ${PLONE_URL}
 
     Click link  css=#plone-contentmenu-factories dt a
@@ -55,13 +55,25 @@ Add easyform
     Capture and crop page screenshot  new-easyform-overrides.png  content
     Select from list  css=.formTabs  Thanks Page
     Capture and crop page screenshot  new-easyform-thankspage.png  content
-    Select from list  css=.formTabs  Settings
-    Capture and crop page screenshot  new-easyform-settings.png  content
-    Select from list  css=.formTabs  Categorization
-    Capture and crop page screenshot  new-easyform-categorization.png  content
-    Select from list  css=.formTabs  Dates
-    Capture and crop page screenshot  new-easyform-dates.png  content
-    Select from list  css=.formTabs  Ownership
-    Capture and crop page screenshot  new-easyform-ownership.png  content
     Click Button  Save
     Capture and crop page screenshot  created-easyform.png  css=.documentEditable
+
+Add easyform as Contributor
+
+    Enable autologin as  Contributor
+    Set autologin username  Contributor
+    Go to  ${PLONE_URL}
+
+    Click link  css=#plone-contentmenu-factories dt a
+    Click link  css=#plone-contentmenu-factories a.contenttype-easyform
+    ${dot1} =  Add dot  form-widgets-IDublinCore-title  3
+    ${note1} =  Add note  form-widgets-IDublinCore-title  Set form title  width=180  position=right
+    ${dot2} =  Add dot  form-widgets-IDublinCore-description  4
+    ${note2} =  Add note  form-widgets-IDublinCore-description  And description  width=180  position=right
+    Capture and crop page screenshot  new-easyform-default-contributor.png  content
+    Remove elements  ${dot1}  ${note1}  ${dot2}  ${note2}
+    Input text  form-widgets-IDublinCore-title  EasyForm
+    Click link  Thanks Page
+    Capture and crop page screenshot  new-easyform-thankspage-contributor.png  content
+    Click Button  Save
+    Capture and crop page screenshot  created-easyform-contributor.png  css=.documentEditable

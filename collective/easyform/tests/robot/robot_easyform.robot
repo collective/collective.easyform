@@ -9,27 +9,27 @@ Suite Teardown  Teardown
 *** Test Cases ***
 
 Simple EasyForm
-    a site owner
-    a easyform  EasyForm
-    Click Link  Fields
-    Click Link  Actions
-    Click Link  View
-    Input text  name=form.widgets.replyto  test@example.com
-    Input text  name=form.widgets.topic  test subject
-    Input text  name=form.widgets.comments  test comments
-    Click Button  Submit
-    Page should contain  test@example.com
-    Page should contain  test subject
-    Page should contain  test comments
+    Given a site owner
+    And a easyform  EasyForm
+    When Click Link  Fields
+    When Click Link  Actions
+    When Click Link  View
+    And Input text  name=form.widgets.replyto  test@example.com
+    And Input text  name=form.widgets.topic  test subject
+    And Input text  name=form.widgets.comments  test comments
+    And Click Button  Submit
+    Then Page should contain  test@example.com
+    And Page should contain  test subject
+    And Page should contain  test comments
 
 Add a choice field with vocabulary values
-    a site owner
-    a easyform  EasyForm
-    Click Link  Fields
-    Add field  Hobbies  hobbies  Multiple Choice
-    Open field settings  hobbies
-    Input text  form-widgets-values  Chess\nSoccer\nBaseball\nVideo games
-    Click Button  Save
+    Given a site owner
+    And a easyform  EasyForm
+    When Click Link  Fields
+    And add field  Hobbies  hobbies  Multiple Choice
+    Then Open field settings  hobbies
+    And Input text  form-widgets-values  Chess\nSoccer\nBaseball\nVideo games
+    When Click Button  Save
     Wait until page contains element  form-widgets-hobbies-3
     Click Link  View
     Wait until page contains element  form-widgets-hobbies-3

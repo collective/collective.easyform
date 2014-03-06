@@ -1,8 +1,8 @@
 collective.easyform Package
 ===========================
 
-:mod:`collective.easyform` Package
-----------------------------------
+:mod:`easyform` Package
+-----------------------
 
 .. automodule:: collective.easyform
     :members:
@@ -95,5 +95,4 @@ Subpackages
 .. toctree::
 
     collective.easyform.browser
-    collective.easyform.tests
 

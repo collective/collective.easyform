@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from hashlib import md5
@@ -27,7 +26,7 @@ class DollarVarReplacer(object):
     >>> from collective.easyform import api
 
     >>> adict = {'one':'two', '_two':'three', '.two':'four'}
-    >>> dvr = api.DollarVarReplacer( adict )
+    >>> dvr = api.DollarVarReplacer(adict)
 
     >>> dvr.sub('one one')
     'one one'
@@ -64,6 +63,13 @@ class DollarVarReplacer(object):
 
 
 def get_expression(context, expression_string, **kwargs):
+    """ Get TALES expression
+
+    :param context: [required] TALES expression context
+    :param string expression_string: [required] TALES expression string
+    :param dict kwargs: additional arguments for expression
+    :returns: result of TALES expression
+    """
     expression_context = getExprContext(context, context)
     for key in kwargs:
         expression_context.setGlobal(key, kwargs[key])
@@ -72,6 +78,11 @@ def get_expression(context, expression_string, **kwargs):
 
 
 def get_context(field):
+    """ Get context of field
+
+    :param field: [required] easyform field
+    :returns: easyform
+    """
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 

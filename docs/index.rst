@@ -50,28 +50,7 @@ Contents
    :maxdepth: 2
 
    adding
-
-
-Modules
--------
-
-.. toctree::
-   :maxdepth: 2
-
-   modules
-
-
-Acceptance tests
-----------------
-
-.. toctree::
-   :maxdepth: 2
-   :glob:
-
    tests
-   keywords
-   settings
-   variables
 
 
 Indices and tables
