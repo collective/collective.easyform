@@ -3,15 +3,19 @@ Introduction
 
 .. image:: https://travis-ci.org/quintagroup/collective.easyform.png?branch=master
     :target: https://travis-ci.org/quintagroup/collective.easyform
+    :alt: Travis CI status
 
 .. image:: https://coveralls.io/repos/quintagroup/collective.easyform/badge.png?branch=master
     :target: https://coveralls.io/r/quintagroup/collective.easyform?branch=master
+    :alt: Coveralls status
 
 .. image:: https://badge.fury.io/py/collective.easyform.png
     :target: http://badge.fury.io/py/collective.easyform
+    :alt: Fury Python
 
 .. image:: https://badge.fury.io/gh/quintagroup%2Fcollective.easyform.png
     :target: http://badge.fury.io/gh/quintagroup%2Fcollective.easyform
+    :alt: Fury Github
 
 .. image:: https://pypip.in/d/collective.easyform/badge.png
     :target: https://pypi.python.org/pypi/collective.easyform/

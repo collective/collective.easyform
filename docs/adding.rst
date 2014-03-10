@@ -14,6 +14,16 @@ Adding as Manager
 
 .. image:: images/created-easyform.png
 
+Default fields
+^^^^^^^^^^^^^^
+
+.. image:: images/created-easyform-fields.png
+
+Default actions
+^^^^^^^^^^^^^^^
+
+.. image:: images/created-easyform-actions.png
+
 Adding as Contributor
 ---------------------
 
@@ -23,4 +33,4 @@ Adding as Contributor
 
 .. image:: images/new-easyform-thankspage-contributor.png
 
-.. image:: images/created-easyform-contributor.png
+.. image:: images/created-easyform.png
