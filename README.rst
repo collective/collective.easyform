@@ -37,7 +37,7 @@ Introduction
     :target: https://pypi.python.org/pypi/collective.easyform/
     :alt: License
     
-.. figure:: http://quintagroup.com/services/plone-development/products/easyform/easyform
+.. figure:: http://quintagroup.com/services/plone-development/products/easyform/easyform.png
     :target: https://github.com/quintagroup/collective.easyform
     :alt: Logo
 
