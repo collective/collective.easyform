@@ -48,10 +48,16 @@ Similarly to PloneFormGen, Easyform is used to generate web forms that save or m
 Usage
 =====
 
-* Install product, rerun your Plone instance and activate Collective.easyform. 
+* Install product (in your buildout.cfg add ‘collective.easyform’ to the eggs section), rerun your Plone instance and activate Collective.easyform. 
 * Choose Easyform from the 'Add new' drop-down menu. Insert form title, description and other settings.  
 * Add fields or fieldsets to create a unique form that will meet your particular requirements.  There are enough basic field types to satisfy any demands: File Upload, Text line (String), Integer, Yes/No, Date, Date/Time, Floating-point number, Choice, Rich Text, Image, Multiple Choice, Text, Password, ReСaptcha field. 
 * Continue to customize form by setting the order of fields, defining required and hidden ones, choosing validator, if necessary, and other field type specific settings.
+
+See quick overview of this product: 
+
+.. image:: http://quintagroup.com/services/plone-development/products/easyform/easyform-youtube.png
+    :target: https://www.youtube.com/watch?v=DMCYnYE9RKU
+    :alt: Collective.easyform
 
 Compatibility
 -------------
