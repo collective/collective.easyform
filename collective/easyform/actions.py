@@ -200,21 +200,32 @@ class Mailer(Action):
             reply_addr = fields.get(self.replyto_field, None)
 
         # Get From address
-        if hasattr(self, 'senderOverride') and self.senderOverride and get_expression(context, self.senderOverride):
-            from_addr = get_expression(context, self.senderOverride).strip()
-        else:
-            from_addr = from_addr or site_props.getProperty('email_from_address') or \
-                portal.getProperty('email_from_address')
+        from_addr = (
+            from_addr or
+            site_props.getProperty('email_from_address') or
+            portal.getProperty('email_from_address')
+        )
+
+        if hasattr(self, 'senderOverride') and self.senderOverride:
+            _from = get_expression(context, self.senderOverride, fields=fields)
+            if _from:
+                from_addr = _from
 
         # Get To address and full name
-        if hasattr(self, 'recipientOverride') and self.recipientOverride and get_expression(context, self.recipientOverride):
-            recip_email = get_expression(context, self.recipientOverride)
-        else:
-            recip_email = None
-            if hasattr(self, 'to_field') and self.to_field:
-                recip_email = fields.get(self.to_field, None)
-            if not recip_email:
-                recip_email = self.recipient_email
+        recip_email = None
+        if hasattr(self, 'to_field') and self.to_field:
+            recip_email = fields.get(self.to_field, None)
+        if not recip_email:
+            recip_email = self.recipient_email
+
+        if hasattr(self, 'recipientOverride') and self.recipientOverride:
+            _recip = get_expression(
+                context,
+                self.recipientOverride,
+                fields=fields
+            )
+            if _recip:
+                recip_email = _recip
 
         recip_email = self._destFormat(recip_email)
 
@@ -251,10 +262,16 @@ class Mailer(Action):
         """
         # get subject header
         nosubject = '(no subject)'
-        if hasattr(self, 'subjectOverride') and self.subjectOverride and get_expression(context, self.subjectOverride):
+        subject = None
+        if hasattr(self, 'subjectOverride') and self.subjectOverride:
             # subject has a TALES override
-            subject = get_expression(context, self.subjectOverride).strip()
-        else:
+            subject = get_expression(
+                context,
+                self.subjectOverride,
+                fields=fields
+            ).strip()
+
+        if not subject:
             subject = getattr(self, 'msg_subject', nosubject)
             subjectField = fields.get(self.subject_field, None)
             if subjectField is not None:
@@ -301,15 +318,21 @@ class Mailer(Action):
 
         # CC
         cc_recips = filter(None, self.cc_recipients)
-        if hasattr(self, 'ccOverride') and self.ccOverride and get_expression(context, self.ccOverride):
-            cc_recips = get_expression(context, self.ccOverride)
+        if hasattr(self, 'ccOverride') and self.ccOverride:
+            _cc = get_expression(context, self.ccOverride, fields=fields)
+            if _cc:
+                cc_recips = _cc
+
         if cc_recips:
             headerinfo['Cc'] = self._destFormat(cc_recips)
 
         # BCC
         bcc_recips = filter(None, self.bcc_recipients)
-        if hasattr(self, 'bccOverride') and self.bccOverride and get_expression(context, self.bccOverride):
-            bcc_recips = get_expression(context, self.bccOverride)
+        if hasattr(self, 'bccOverride') and self.bccOverride:
+            _bcc = get_expression(context, self.bccOverride, fields=fields)
+            if _bcc:
+                bcc_recips = _bcc
+
         if bcc_recips:
             headerinfo['Bcc'] = self._destFormat(bcc_recips)
 
