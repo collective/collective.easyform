@@ -542,13 +542,18 @@ class SaveData(Action):
         sbuf = StringIO()
         writer = csvwriter(sbuf, delimiter=delimiter)
         names = self.getColumnNames()
+        titles = self.getColumnTitles()
         if header:
-            writer.writerow(names)
+            writer.writerow(titles)
         for row in self.getSavedFormInput():
-            writer.writerow([
-                row[i].filename if INamedFile.providedBy(
-                    row.get(i, '')) else row.get(i, '')
-                for i in names])
+            def get_data(row, i):
+                data = row.get(i, '')
+                if INamedFile.providedBy(data):
+                    return data.filename
+                if isinstance(data, unicode):
+                    return data.encode('utf-8')
+
+            writer.writerow([get_data(row, i) for i in names])
         res = sbuf.getvalue()
         sbuf.close()
         return res
