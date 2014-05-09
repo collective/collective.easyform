@@ -141,8 +141,12 @@ class Mailer(Action):
         if getattr(self, 'showAll', True):
             live_fields = all_fields
         else:
+            showFields = getattr(self, 'showFields', [])
+            if showFields is None:
+                showFields = []
+
             live_fields = [
-                f for f in all_fields if f in getattr(self, 'showFields', ())]
+                f for f in all_fields if f in showFields]
 
         if not getattr(self, 'includeEmpties', True):
             all_fields = live_fields
@@ -562,6 +566,8 @@ class SaveData(Action):
         # """Returns a list of column names"""
         context = get_context(self)
         showFields = getattr(self, 'showFields', [])
+        if showFields is None:
+            showFields = []
         names = [
             name
             for name, field in getFieldsInOrder(get_fields(context))
@@ -576,6 +582,9 @@ class SaveData(Action):
         # """Returns a list of column titles"""
         context = get_context(self)
         showFields = getattr(self, 'showFields', [])
+        if showFields is None:
+            showFields = []
+
         names = [
             field.title
             for name, field in getFieldsInOrder(get_fields(context))
