@@ -88,6 +88,8 @@ def get_context(field):
 
 def get_fields_cache(method, context):
     data = context.fields_model + str(context.modification_date)
+    if isinstance(data, unicode):
+        data = data.encode('utf-8')
     return md5(data).hexdigest()
 
 
