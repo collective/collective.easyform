@@ -25,6 +25,7 @@ from email.MIMEText import MIMEText
 from email.utils import formataddr
 from logging import getLogger
 from plone.namedfile.interfaces import INamedFile
+from plone.namedfile.interfaces import INamedBlobFile
 from plone.supermodel.exportimport import BaseHandler
 from time import time
 from types import StringTypes
@@ -125,6 +126,13 @@ class Mailer(Action):
         else:
             return ''
 
+    def _is_file_data(self, value):
+        ifaces = (INamedFile, INamedBlobFile)
+        for i in ifaces:
+            if i.providedBy(value):
+                return True
+        return False
+
     def get_mail_body(self, fields, request, context):
         """Returns the mail-body with footer.
         """
@@ -134,7 +142,7 @@ class Mailer(Action):
                       # TODO
                       # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
                       # 'showAll', True) and f.getServerSide())]
-                      if not (INamedFile.providedBy(fields[f])) and not (getattr(self, 'showAll', True) and IFieldExtender(schema[f]).serverSide)
+                      if not (self._is_file_data(fields[f])) and not (getattr(self, 'showAll', True) and IFieldExtender(schema[f]).serverSide)
                       ]
 
         # which fields should we show?
@@ -354,7 +362,9 @@ class Mailer(Action):
 
         for fname in fields:
             field = fields[fname]
-            if INamedFile.providedBy(field) and (getattr(self, 'showAll', True) or fname in getattr(self, 'showFields', ())):
+            showFields = getattr(self, 'showFields', []) or []
+
+            if self._is_file_data(field) and (getattr(self, 'showAll', True) or fname in showFields):
                 data = field.data
                 filename = field.filename
                 mimetype, enc = guess_content_type(filename, data, None)
@@ -548,11 +558,16 @@ class SaveData(Action):
         names = self.getColumnNames()
         titles = self.getColumnTitles()
         if header:
-            writer.writerow(titles)
+            encoded_titles = []
+            for t in titles:
+                if isinstance(t, unicode):
+                    return t.encode('utf-8')
+                encoded_titles.append(t)
+            writer.writerow(encoded_titles)
         for row in self.getSavedFormInput():
             def get_data(row, i):
                 data = row.get(i, '')
-                if INamedFile.providedBy(data):
+                if self._is_file_data(data):
                     return data.filename
                 if isinstance(data, unicode):
                     return data.encode('utf-8')
