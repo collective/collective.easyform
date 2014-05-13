@@ -70,6 +70,9 @@ def get_expression(context, expression_string, **kwargs):
     :param dict kwargs: additional arguments for expression
     :returns: result of TALES expression
     """
+    if isinstance(expression_string, unicode):
+        expression_string = expression_string.encode('utf-8')
+
     expression_context = getExprContext(context, context)
     for key in kwargs:
         expression_context.setGlobal(key, kwargs[key])
