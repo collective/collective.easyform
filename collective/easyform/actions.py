@@ -91,6 +91,13 @@ class Action(Bool):
         raise NotImplementedError(
             "There is not implemented 'onSuccess' of {0!r}".format(self))
 
+    def _is_file_data(self, value):
+        ifaces = (INamedFile, INamedBlobFile)
+        for i in ifaces:
+            if i.providedBy(value):
+                return True
+        return False
+
 
 class Mailer(Action):
     implements(IMailer)
@@ -126,12 +133,6 @@ class Mailer(Action):
         else:
             return ''
 
-    def _is_file_data(self, value):
-        ifaces = (INamedFile, INamedBlobFile)
-        for i in ifaces:
-            if i.providedBy(value):
-                return True
-        return False
 
     def get_mail_body(self, fields, request, context):
         """Returns the mail-body with footer.
@@ -557,11 +558,12 @@ class SaveData(Action):
         writer = csvwriter(sbuf, delimiter=delimiter)
         names = self.getColumnNames()
         titles = self.getColumnTitles()
+
         if header:
             encoded_titles = []
             for t in titles:
                 if isinstance(t, unicode):
-                    return t.encode('utf-8')
+                    t = t.encode('utf-8')
                 encoded_titles.append(t)
             writer.writerow(encoded_titles)
         for row in self.getSavedFormInput():
@@ -571,7 +573,7 @@ class SaveData(Action):
                     return data.filename
                 if isinstance(data, unicode):
                     return data.encode('utf-8')
-
+                return data
             writer.writerow([get_data(row, i) for i in names])
         res = sbuf.getvalue()
         sbuf.close()
