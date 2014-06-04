@@ -17,7 +17,7 @@ msgstr ""
 
 #: collective/easyform/browser/actions.py:110
 msgid "${items} input(s) saved"
-msgstr ""
+msgstr "${items} elemento/i salvato/i"
 
 #: collective/easyform/interfaces.py:98
 msgid "Action type"
@@ -33,11 +33,11 @@ msgstr "Aggiungi azione"
 
 #: collective/easyform/interfaces.py:588
 msgid "Addressing"
-msgstr ""
+msgstr "Indirizzi"
 
 #: collective/easyform/browser/actions.py:146
 msgid "Clear all"
-msgstr ""
+msgstr "Cancella i dati salvati"
 
 #: collective/easyform/profiles/default/types/EasyForm.xml
 msgid "EasyForm"
@@ -49,11 +49,11 @@ msgstr "Modifica azione '${fieldname}'"
 
 #: collective/easyform/browser/actions.py:311
 msgid "Edit XML Actions Model"
-msgstr ""
+msgstr "Modifica l'XML delle azioni"
 
 #: collective/easyform/browser/fields.py:78
 msgid "Edit XML Fields Model"
-msgstr ""
+msgstr "Modifica l'XML dei campi"
 
 #: collective/easyform/profiles/default/actions.xml
 msgid "Export"
@@ -61,11 +61,11 @@ msgstr "Esporta"
 
 #: collective/easyform/interfaces.py:138
 msgid "Fields Model"
-msgstr ""
+msgstr "Modello dei campi"
 
 #: collective/easyform/browser/exportimport.py:59
 msgid "Form imported."
-msgstr ""
+msgstr "Form importato."
 
 #: collective/easyform/interfaces.py:755
 msgid "Headers"
@@ -77,19 +77,19 @@ msgstr "Importa"
 
 #: collective/easyform/validators.py:58
 msgid "Links are not allowed."
-msgstr ""
+msgstr "Non sono consentiti link"
 
 #: collective/easyform/validators.py:37
 msgid "Must be a valid list of email addresses (separated by commas)."
-msgstr ""
+msgstr "Dev'essere una lista di indirizzi email validi, separati da virgola."
 
 #: collective/easyform/validators.py:43
 msgid "Must be checked."
-msgstr ""
+msgstr "Dev'essere selezionato."
 
 #: collective/easyform/validators.py:49
 msgid "Must be unchecked."
-msgstr ""
+msgstr "Dev'essere deselezionato"
 
 #: collective/easyform/interfaces.py:224
 msgid "Overrides"
@@ -105,7 +105,7 @@ msgstr ""
 
 #: collective/easyform/browser/view.py:190
 msgid "Reset"
-msgstr ""
+msgstr "Annulla"
 
 #: collective/easyform/interfaces.py:1002
 msgid "Rich Label"
@@ -113,7 +113,7 @@ msgstr ""
 
 #: collective/easyform/profiles/default/actions.xml
 msgid "Saved data"
-msgstr ""
+msgstr "Dati salvati"
 
 #: collective/easyform/interfaces.py:343
 msgid "Thanks Page"
@@ -135,7 +135,7 @@ msgstr ""
 #. Default: "${name} Header"
 #: collective/easyform/interfaces.py:783
 msgid "extra_header"
-msgstr ""
+msgstr "${name} intestazione"
 
 #. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter(if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded.The most common use of this field is to call a python scriptto clean up form input or to script an alternative action.Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
 #: collective/easyform/interfaces.py:300
