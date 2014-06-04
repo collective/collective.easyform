@@ -22,3 +22,5 @@
 /docs/html
 /docs/Makefile
 /docs/make.bat
+*.mo
+/dist

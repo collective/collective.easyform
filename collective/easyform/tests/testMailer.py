@@ -234,6 +234,21 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(self.messageText.find('From: spam@eggs.com') > 0)
         self.assertTrue(self.messageText.find('To: <eggs@spam.com>') > 0)
 
+    def test_MailerOverridesWithFieldValues(self):
+        mailer = get_actions(self.ff1)['mailer']
+        mailer.subjectOverride = "fields/topic"
+        mailer.recipientOverride = "fields/replyto"
+
+        request = self.LoadRequestForm(
+            topic='eggs and spam',
+            replyto=u'test@test.ts'
+        )
+        mailer.onSuccess(request.form, request)
+
+        self.assertTrue(self.messageText.find(
+            'Subject: =?utf-8?q?eggs_and_spam?=') > 0)
+        self.assertTrue(self.messageText.find('To: <test@test.ts>') > 0)
+
     def testMultiRecipientOverrideByString(self):
         """ try multiple recipients in recipient override """
 

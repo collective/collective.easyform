@@ -70,6 +70,9 @@ def get_expression(context, expression_string, **kwargs):
     :param dict kwargs: additional arguments for expression
     :returns: result of TALES expression
     """
+    if isinstance(expression_string, unicode):
+        expression_string = expression_string.encode('utf-8')
+
     expression_context = getExprContext(context, context)
     for key in kwargs:
         expression_context.setGlobal(key, kwargs[key])
@@ -88,6 +91,8 @@ def get_context(field):
 
 def get_fields_cache(method, context):
     data = context.fields_model + str(context.modification_date)
+    if isinstance(data, unicode):
+        data = data.encode('utf-8')
     return md5(data).hexdigest()
 
 

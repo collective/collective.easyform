@@ -25,6 +25,7 @@ from email.MIMEText import MIMEText
 from email.utils import formataddr
 from logging import getLogger
 from plone.namedfile.interfaces import INamedFile
+from plone.namedfile.interfaces import INamedBlobFile
 from plone.supermodel.exportimport import BaseHandler
 from time import time
 from types import StringTypes
@@ -90,6 +91,13 @@ class Action(Bool):
         raise NotImplementedError(
             "There is not implemented 'onSuccess' of {0!r}".format(self))
 
+    def _is_file_data(self, value):
+        ifaces = (INamedFile, INamedBlobFile)
+        for i in ifaces:
+            if i.providedBy(value):
+                return True
+        return False
+
 
 class Mailer(Action):
     implements(IMailer)
@@ -125,6 +133,7 @@ class Mailer(Action):
         else:
             return ''
 
+
     def get_mail_body(self, fields, request, context):
         """Returns the mail-body with footer.
         """
@@ -134,15 +143,19 @@ class Mailer(Action):
                       # TODO
                       # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
                       # 'showAll', True) and f.getServerSide())]
-                      if not (INamedFile.providedBy(fields[f])) and not (getattr(self, 'showAll', True) and IFieldExtender(schema[f]).serverSide)
+                      if not (self._is_file_data(fields[f])) and not (getattr(self, 'showAll', True) and IFieldExtender(schema[f]).serverSide)
                       ]
 
         # which fields should we show?
         if getattr(self, 'showAll', True):
             live_fields = all_fields
         else:
+            showFields = getattr(self, 'showFields', [])
+            if showFields is None:
+                showFields = []
+
             live_fields = [
-                f for f in all_fields if f in getattr(self, 'showFields', ())]
+                f for f in all_fields if f in showFields]
 
         if not getattr(self, 'includeEmpties', True):
             all_fields = live_fields
@@ -200,21 +213,32 @@ class Mailer(Action):
             reply_addr = fields.get(self.replyto_field, None)
 
         # Get From address
-        if hasattr(self, 'senderOverride') and self.senderOverride and get_expression(context, self.senderOverride):
-            from_addr = get_expression(context, self.senderOverride).strip()
-        else:
-            from_addr = from_addr or site_props.getProperty('email_from_address') or \
-                portal.getProperty('email_from_address')
+        from_addr = (
+            from_addr or
+            site_props.getProperty('email_from_address') or
+            portal.getProperty('email_from_address')
+        )
+
+        if hasattr(self, 'senderOverride') and self.senderOverride:
+            _from = get_expression(context, self.senderOverride, fields=fields)
+            if _from:
+                from_addr = _from
 
         # Get To address and full name
-        if hasattr(self, 'recipientOverride') and self.recipientOverride and get_expression(context, self.recipientOverride):
-            recip_email = get_expression(context, self.recipientOverride)
-        else:
-            recip_email = None
-            if hasattr(self, 'to_field') and self.to_field:
-                recip_email = fields.get(self.to_field, None)
-            if not recip_email:
-                recip_email = self.recipient_email
+        recip_email = None
+        if hasattr(self, 'to_field') and self.to_field:
+            recip_email = fields.get(self.to_field, None)
+        if not recip_email:
+            recip_email = self.recipient_email
+
+        if hasattr(self, 'recipientOverride') and self.recipientOverride:
+            _recip = get_expression(
+                context,
+                self.recipientOverride,
+                fields=fields
+            )
+            if _recip:
+                recip_email = _recip
 
         recip_email = self._destFormat(recip_email)
 
@@ -251,10 +275,16 @@ class Mailer(Action):
         """
         # get subject header
         nosubject = '(no subject)'
-        if hasattr(self, 'subjectOverride') and self.subjectOverride and get_expression(context, self.subjectOverride):
+        subject = None
+        if hasattr(self, 'subjectOverride') and self.subjectOverride:
             # subject has a TALES override
-            subject = get_expression(context, self.subjectOverride).strip()
-        else:
+            subject = get_expression(
+                context,
+                self.subjectOverride,
+                fields=fields
+            ).strip()
+
+        if not subject:
             subject = getattr(self, 'msg_subject', nosubject)
             subjectField = fields.get(self.subject_field, None)
             if subjectField is not None:
@@ -301,15 +331,21 @@ class Mailer(Action):
 
         # CC
         cc_recips = filter(None, self.cc_recipients)
-        if hasattr(self, 'ccOverride') and self.ccOverride and get_expression(context, self.ccOverride):
-            cc_recips = get_expression(context, self.ccOverride)
+        if hasattr(self, 'ccOverride') and self.ccOverride:
+            _cc = get_expression(context, self.ccOverride, fields=fields)
+            if _cc:
+                cc_recips = _cc
+
         if cc_recips:
             headerinfo['Cc'] = self._destFormat(cc_recips)
 
         # BCC
         bcc_recips = filter(None, self.bcc_recipients)
-        if hasattr(self, 'bccOverride') and self.bccOverride and get_expression(context, self.bccOverride):
-            bcc_recips = get_expression(context, self.bccOverride)
+        if hasattr(self, 'bccOverride') and self.bccOverride:
+            _bcc = get_expression(context, self.bccOverride, fields=fields)
+            if _bcc:
+                bcc_recips = _bcc
+
         if bcc_recips:
             headerinfo['Bcc'] = self._destFormat(bcc_recips)
 
@@ -327,7 +363,9 @@ class Mailer(Action):
 
         for fname in fields:
             field = fields[fname]
-            if INamedFile.providedBy(field) and (getattr(self, 'showAll', True) or fname in getattr(self, 'showFields', ())):
+            showFields = getattr(self, 'showFields', []) or []
+
+            if self._is_file_data(field) and (getattr(self, 'showAll', True) or fname in showFields):
                 data = field.data
                 filename = field.filename
                 mimetype, enc = guess_content_type(filename, data, None)
@@ -519,13 +557,24 @@ class SaveData(Action):
         sbuf = StringIO()
         writer = csvwriter(sbuf, delimiter=delimiter)
         names = self.getColumnNames()
+        titles = self.getColumnTitles()
+
         if header:
-            writer.writerow(names)
+            encoded_titles = []
+            for t in titles:
+                if isinstance(t, unicode):
+                    t = t.encode('utf-8')
+                encoded_titles.append(t)
+            writer.writerow(encoded_titles)
         for row in self.getSavedFormInput():
-            writer.writerow([
-                row[i].filename if INamedFile.providedBy(
-                    row.get(i, '')) else row.get(i, '')
-                for i in names])
+            def get_data(row, i):
+                data = row.get(i, '')
+                if self._is_file_data(data):
+                    return data.filename
+                if isinstance(data, unicode):
+                    return data.encode('utf-8')
+                return data
+            writer.writerow([get_data(row, i) for i in names])
         res = sbuf.getvalue()
         sbuf.close()
         return res
@@ -534,6 +583,8 @@ class SaveData(Action):
         # """Returns a list of column names"""
         context = get_context(self)
         showFields = getattr(self, 'showFields', [])
+        if showFields is None:
+            showFields = []
         names = [
             name
             for name, field in getFieldsInOrder(get_fields(context))
@@ -548,6 +599,9 @@ class SaveData(Action):
         # """Returns a list of column titles"""
         context = get_context(self)
         showFields = getattr(self, 'showFields', [])
+        if showFields is None:
+            showFields = []
+
         names = [
             field.title
             for name, field in getFieldsInOrder(get_fields(context))
