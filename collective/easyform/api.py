@@ -9,7 +9,7 @@ from re import compile
 
 from collective.easyform.config import MODEL_DEFAULT
 
-#SCHEMATA_KEY = u''
+# SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns

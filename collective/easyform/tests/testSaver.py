@@ -349,7 +349,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         # save a row
         fields = list(get_fields(self.ff1))
-        #saver.savedFormInput = 'one,two,three'
+        # saver.savedFormInput = 'one,two,three'
         saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
@@ -390,15 +390,15 @@ class TestFunctions(base.EasyFormTestCase):
 
         # self.ff1.setActionAdapter(('saver',))
 
-        #self.assertEqual(saver.inputAsDictionaries, saver.InputAsDictionaries)
+        # self.assertEqual(saver.inputAsDictionaries, saver.InputAsDictionaries)
 
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
             add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
         saver.onSuccess(request.form, request)
-        #errors = self.ff1.fgvalidate(REQUEST=request)
-        #self.assertEqual(errors, {})
+        # errors = self.ff1.fgvalidate(REQUEST=request)
+        # self.assertEqual(errors, {})
 
         self.assertEqual(saver.itemsSaved(), 1)
 
@@ -436,16 +436,16 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(cn[3] == 'dt')
 
         # add a label field -- should not show up in column names
-        #self.ff1.invokeFactory('FormLabelField', 'alabel')
-        #cn = saver.getColumnNames()
-        #self.assertTrue(len(cn) == 4)
+        # self.ff1.invokeFactory('FormLabelField', 'alabel')
+        # cn = saver.getColumnNames()
+        # self.assertTrue(len(cn) == 4)
 
         # add a form field -- should show up in column names before 'dt'
-        #self.ff1.invokeFactory('FormFileField', 'afile')
-        #cn = saver.getColumnNames()
-        #self.assertTrue(len(cn) == 5)
-        #self.assertTrue(cn[3] == 'afile')
-        #self.assertTrue(cn[4] == 'dt')
+        # self.ff1.invokeFactory('FormFileField', 'afile')
+        # cn = saver.getColumnNames()
+        # self.assertTrue(len(cn) == 5)
+        # self.assertTrue(cn[3] == 'afile')
+        # self.assertTrue(cn[4] == 'dt')
 
     def testSaverColumnTitles(self):
         ''' test save data adapter's getColumnTitles function '''

@@ -93,12 +93,12 @@ class TestFunctions(base.EasyFormTestCase):
             msg.get_payload(decode=True).find('test comments') > 0)
 
     def test_MailerLongSubject(self):
-        """ Test mailer with subject line > 76 chars (Tracker #84) """
+        """ Test mailer with subject line > 76 chars (Tracker # 84) """
 
         long_subject = 'Now is the time for all good persons to come to the aid of the quick brown fox.'
 
         mailer = get_actions(self.ff1)['mailer']
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
         request = self.LoadRequestForm(topic=long_subject)
         mailer.onSuccess(request.form, request)
 
@@ -186,7 +186,7 @@ class TestFunctions(base.EasyFormTestCase):
         utf8_subject = 'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'
 
         mailer = get_actions(self.ff1)['mailer']
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
         request = self.LoadRequestForm(topic=utf8_subject)
         mailer.onSuccess(request.form, request)
 
@@ -204,7 +204,7 @@ class TestFunctions(base.EasyFormTestCase):
         unicode_subject = utf8_subject.decode('UTF-8')
 
         mailer = get_actions(self.ff1)['mailer']
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
         request = self.LoadRequestForm(topic=unicode_subject)
         mailer.onSuccess(request.form, request)
 
@@ -223,7 +223,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.senderOverride = 'string: spam@eggs.com'
         mailer.recipientOverride = 'string: eggs@spam.com'
 
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
 
         request = self.LoadRequestForm(topic='test subject')
 
@@ -236,8 +236,8 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_MailerOverridesWithFieldValues(self):
         mailer = get_actions(self.ff1)['mailer']
-        mailer.subjectOverride = "fields/topic"
-        mailer.recipientOverride = "fields/replyto"
+        mailer.subjectOverride = 'fields/topic'
+        mailer.recipientOverride = 'fields/replyto'
 
         request = self.LoadRequestForm(
             topic='eggs and spam',
@@ -255,7 +255,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.recipientOverride = 'string: eggs@spam.com, spam@spam.com'
 
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
 
         request = self.LoadRequestForm(topic='test subject')
 
@@ -270,7 +270,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.recipientOverride = "python: ('eggs@spam.com', 'spam.spam.com')"
 
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
 
         request = self.LoadRequestForm(topic='test subject')
 
@@ -286,7 +286,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.to_field = 'replyto'
         mailer.replyto_field = None
 
-        #fields = self.ff1._getFieldObjects()
+        # fields = self.ff1._getFieldObjects()
 
         request = self.LoadRequestForm(
             topic='test subject', replyto='eggs@spamandeggs.com')

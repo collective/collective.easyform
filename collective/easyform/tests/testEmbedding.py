@@ -70,7 +70,7 @@ class TestEmbedding(base.EasyFormTestCase):
             'action="{url}"'.format(url=self.ff1.absolute_url()) in res)
 
         # no form prefix
-        #self.assertTrue('name="form.submitted"' in res)
+        # self.assertTrue('name="form.submitted"' in res)
 
         # we can specify a form prefix
         view.prefix = 'mypfg'
@@ -100,7 +100,7 @@ class TestEmbedding(base.EasyFormTestCase):
 
         # let's preset a faux controller_state (as if from the other form)
         # to make sure it doesn't throw things off
-        #self.app.REQUEST.set('controller_state', 'foobar')
+        # self.app.REQUEST.set('controller_state', 'foobar')
 
         # render the form
         view = self.ff1.restrictedTraverse('@@embedded')
@@ -111,10 +111,10 @@ class TestEmbedding(base.EasyFormTestCase):
         self.assertFalse('Required input is missing.' in res)
 
         # (and request should still have the 'form.submitted' key)
-        #self.assertTrue('form.submitted' in self.app.REQUEST.form)
+        # self.assertTrue('form.submitted' in self.app.REQUEST.form)
 
         # (and the controller state should be untouched)
-        #self.assertEqual(self.app.REQUEST.get('controller_state'), 'foobar')
+        # self.assertEqual(self.app.REQUEST.get('controller_state'), 'foobar')
 
         # but if we remove the form prefix then it should process the form
         view.prefix = 'form'
@@ -139,14 +139,14 @@ class TestEmbedding(base.EasyFormTestCase):
         # XXX do a full publish for this test
         self.app.REQUEST._orig_env['PATH_TRANSLATED'] = '/plone'
         view = self.ff1.restrictedTraverse('@@embedded')
-        #self.assertRaises(Retry, view)
+        # self.assertRaises(Retry, view)
         res = view()
 
         self.assertTrue('Thank You' in res)
         self.assertTrue('Thanks for your input.' in res)
 
         # self.assertEqual(self.app.REQUEST._orig_env['PATH_INFO'],
-                         #'/plone/Members/test_user_1_/ff1/thank-you')
+        #                  '/plone/Members/test_user_1_/ff1/thank-you')
 
         # make sure the transaction was committed
         self.assertTrue(committed)
@@ -159,9 +159,9 @@ class TestEmbedding(base.EasyFormTestCase):
 
         self.assertTrue('Thank You' in res)
         self.assertTrue('Thanks for your input.' in res)
-        #self.assertRaises(Retry, view)
+        # self.assertRaises(Retry, view)
         # self.assertEqual(self.app.REQUEST._orig_env['PATH_INFO'],
-                         #'/VirtualHostBase/http/nohost:80/VirtualHostRoot/plone/Members/test_user_1_/ff1/thank-you')
+        #                  '/VirtualHostBase/http/nohost:80/VirtualHostRoot/plone/Members/test_user_1_/ff1/thank-you')
 
         # clean up
         transaction.commit = real_transaction_commit

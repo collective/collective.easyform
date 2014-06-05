@@ -41,3 +41,5 @@ Open field settings
 
 Wait overlay is closed
     Wait until keyword succeeds  60  1  Page should not contain element  css=div.overlay
+
+*** Test Cases ***

@@ -342,8 +342,8 @@ class TestCustomScript(base.EasyFormTestCase):
         # 4. Set script data
         adapter.ScriptBody = security_script
 
-        #errors = adapter.validate()
-        #assert len(errors) == 0, 'Had errors:' + str(errors)
+        # errors = adapter.validate()
+        # assert len(errors) == 0, 'Had errors:' + str(errors)
 
         # Execute script
         throwed = False

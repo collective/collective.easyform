@@ -1,15 +1,21 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      i18n:domain="plone.schemaeditor"
-      tal:omit-tag="">
+<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     tal:omit-tag="" i18n:domain="plone.schemaeditor">
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:description-slot metal:fill-slot="description">
       <div class="extraActions">
         <form id="add-field" method="GET"
-              tal:attributes="action string:${context/absolute_url}/@@add-action">
+              tal:attributes="action string:${context/absolute_url}/@@add-field">
           <input type="submit"
                  i18n:attributes="value"
-                 value="Add new action&hellip;"/>
+                 value="Add new field&hellip;"/>
+        </form>
+        <form id="add-fieldset" method="GET"
+              tal:attributes="action string:${context/absolute_url}/@@add-fieldset">
+          <input type="submit"
+                 i18n:attributes="value"
+                 value="Add new fieldset&hellip;"/>
         </form>
       <div>
     </metal:description-slot>
@@ -26,7 +32,7 @@
       <tal:block tal:repeat="group python:[view] + list(view.groups)">
         <fieldset tal:define="fieldset_name repeat/group/index"
                   tal:attributes="id string:fieldset-${fieldset_name};
-                                  class string:kssattr-fieldset-${fieldset_name}">
+class string:kssattr-fieldset-${fieldset_name}">
 
           <legend tal:define="group_name python:group.label or view.default_fieldset_label"
                   tal:content="group_name">Fieldset name</legend>
@@ -69,8 +75,9 @@
                      i18n:translate=""
                      tal:attributes="href edit_url">Settings&hellip;</a>
                   <a class="schemaeditor-delete-field"
-                     i18n:attributes="title"
+                     i18n:attributes="title; data-confirm_msg"
                      title="Delete field"
+                     data-confirm_msg="Are you sure you want to delete this field?"
                      style="margin-left: 1em; font-size: 150%; border: none"
                      tal:define="delete_url python:view.delete_url(widget.field)"
                      tal:condition="delete_url"
@@ -89,4 +96,4 @@
       </tal:block>
     </metal:fields-slot>
   </metal:form>
-</html>
+</div>

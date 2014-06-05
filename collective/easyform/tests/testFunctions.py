@@ -68,7 +68,7 @@ class TestFunctions(base.EasyFormTestCase):
 
     def testFgFieldsDisplayListFieldset(self):
         """ Make sure fgFieldsDisplayList works for fields in fieldsets.
-            Tracker #123.
+            Tracker # 123.
         """
 
         self.ff1.invokeFactory('FieldsetFolder', 'fsf1', title='a fieldset')
@@ -90,8 +90,8 @@ class TestFunctions(base.EasyFormTestCase):
         len1 = len(res)
 
         # TODO add label fields
-        #ff.invokeFactory('FormLabelField', 'lf')
-        #ff.invokeFactory('FormRichLabelField', 'rlf')
+        # ff.invokeFactory('FormLabelField', 'lf')
+        # ff.invokeFactory('FormRichLabelField', 'rlf')
 
         # when displayOnly==True, fgFields should not return label fields
         self.assertEqual(len(get_fields(ff)), len1)
@@ -315,7 +315,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(len(sfb), 2)
 
     def testEmptySelectionField(self):
-        """ test for issue  #80: No radio button selected: AttributeError
+        """ test for issue  # 80: No radio button selected: AttributeError
             'NoneType' object has no attribute 'encode' """
 
         self.ff1.invokeFactory('FormSelectionField', 'fsf')
@@ -327,7 +327,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.fsf.htmlValue(request)
 
     def testEmptyMultiSelectionField(self):
-        """ check MSF for issue  #80: No radio button selected: AttributeError
+        """ check MSF for issue  # 80: No radio button selected: AttributeError
             'NoneType' object has no attribute 'encode' """
 
         self.ff1.invokeFactory('FormMultiSelectionField', 'fsf')
@@ -339,7 +339,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.fsf.htmlValue(request)
 
     def testTrailSpacesValidation(self):
-        """ check MSF for issue  #79:
+        """ check MSF for issue  # 79:
             Trailing space in recipient address of mailer causes validation failure"""
 
         request = self.fakeRequest(
@@ -529,13 +529,13 @@ class TestFunctions(base.EasyFormTestCase):
         # Script code to imitate a Custom Script adapter
         # script returning something other than a dict
         non_error_script = """
-        ## Python Script
-        ##bind container=container
-        ##bind context=context
-        ##bind subpath=traverse_subpath
-        ##parameters=fields, easyform, request
-        ##title=Succesfully working script returning error
-        ##
+        # # Python Script
+        # #bind container=container
+        # #bind context=context
+        # #bind subpath=traverse_subpath
+        # #parameters=fields, easyform, request
+        # #title=Succesfully working script returning error
+        # #
 
         return False
         """
@@ -543,13 +543,13 @@ class TestFunctions(base.EasyFormTestCase):
         # Script code to imitate a Custom Script adapter
         # script returning a dict and using context.FORM_ERROR_MARKER
         error_script = """
-        ## Python Script
-        ##bind container=container
-        ##bind context=context
-        ##bind subpath=traverse_subpath
-        ##parameters=fields, easyform, request
-        ##title=Succesfully working script returning error
-        ##
+        # # Python Script
+        # #bind container=container
+        # #bind context=context
+        # #bind subpath=traverse_subpath
+        # #parameters=fields, easyform, request
+        # #title=Succesfully working script returning error
+        # #
 
         return {context.FORM_ERROR_MARKER:'an error message'}
         """
@@ -643,7 +643,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertRaises(zExceptions.Forbidden, self.ff1.fgvalidate, request)
 
     def testBooleanRequired(self):
-        """ test for issue  #202: bad enforcement of required
+        """ test for issue  # 202: bad enforcement of required
             on boolean fields
         """
 

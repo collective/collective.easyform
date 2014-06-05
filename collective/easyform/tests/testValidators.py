@@ -199,11 +199,11 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
 
         self.assertEqual(validate('isZipCode', '12345'), None)
         self.assertNotEqual(validate('isZipCode', '12345-1234'), None)
-        #self.assertEqual(validate('isZipCode', '12345-1234'), None)
+        # self.assertEqual(validate('isZipCode', '12345-1234'), None)
         # Canadian zip codes
-        #self.assertEqual(validate('isZipCode', 'T2X 1V4'), None)
-        #self.assertEqual(validate('isZipCode', 'T2X1V4'), None)
-        #self.assertEqual(validate('isZipCode', 't2x 1v4'), None)
+        # self.assertEqual(validate('isZipCode', 'T2X 1V4'), None)
+        # self.assertEqual(validate('isZipCode', 'T2X1V4'), None)
+        # self.assertEqual(validate('isZipCode', 't2x 1v4'), None)
 
 
 def test_suite():

@@ -2,7 +2,7 @@
 
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
-from z3c.form import validator
+from z3c.form import validator as z3c_validator
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
 from zope.component import adapts
@@ -27,7 +27,7 @@ from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 
 
-class FieldExtenderValidator(validator.SimpleFieldValidator):
+class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
 
     """ z3c.form validator class for easyform fields """
     implements(IValidator)

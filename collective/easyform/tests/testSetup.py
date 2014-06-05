@@ -74,7 +74,7 @@ class TestInstallation(base.EasyFormTestCase):
             getAddPermission('EasyForm', 'Custom Script Adapter'), CSA_ADD_CONTENT_PERMISSION)
 
     def testActionsInstalled(self):
-        #self.setRoles(['Manager', ])
+        # self.setRoles(['Manager', ])
         self.assertTrue(
             self.portal.portal_actions.getActionInfo('object_buttons/export'))
         self.assertTrue(
@@ -147,7 +147,7 @@ class TestContentCreation(base.EasyFormTestCase):
         'FormFileField',
     ]
     # if base.haveRecaptcha:
-        # fieldTypes.append('FormCaptchaField')
+    #    fieldTypes.append('FormCaptchaField')
     fieldTypes = tuple(fieldTypes)
 
     adapterTypes = (
@@ -333,7 +333,7 @@ class TestContentCreation(base.EasyFormTestCase):
                 'Expected error when creating form field or adapter outside form folder.')
 
     def testBadIdField(self):
-        # test for tracker #32 - Field with id 'language' causes problems with
+        # test for tracker # 32 - Field with id 'language' causes problems with
         # PTS
 
         from Products.CMFCore.exceptions import BadRequest
@@ -350,7 +350,7 @@ class TestContentCreation(base.EasyFormTestCase):
     def testFieldRename(self):
         '''
         renaming a field should change the __name__ attribute
-        of the embedded fgField; tracker issue #42
+        of the embedded fgField; tracker issue # 42
         '''
 
         self.ff1.invokeFactory('FormStringField', 'spam_and_eggs')
@@ -361,8 +361,8 @@ class TestContentCreation(base.EasyFormTestCase):
         self.assertEqual(fgf.__name__, 'spam_and_eggs')
 
         # XXX TODO: figure out what's wrong with this:
-        #self.ff1.manage_renameObject('spam_and_eggs', 'spam_spam_and_eggs')
-        #self.assertEqual(fgf.__name__, 'spam_spam_and_eggs')
+        # self.ff1.manage_renameObject('spam_and_eggs', 'spam_spam_and_eggs')
+        # self.assertEqual(fgf.__name__, 'spam_spam_and_eggs')
 
     def testFieldsetRename(self):
         '''
@@ -378,7 +378,7 @@ class TestContentCreation(base.EasyFormTestCase):
         self.assertEqual(fgf.__name__, 'fsfolder1')
 
     def testFieldsetPlusDisplayList(self):
-        ''' Test for issue  #44 -- Presence of fieldset causes an attribute error
+        ''' Test for issue  # 44 -- Presence of fieldset causes an attribute error
         '''
 
         # create fieldset

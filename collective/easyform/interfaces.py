@@ -131,8 +131,8 @@ class IEasyForm(form.Schema):
 
     """Forms for Plone"""
 
-    # form.fieldset(u'models', label=_('Models'),
-                  # fields=['fields_model', 'actions_model'])
+#     form.fieldset(u'models', label=_('Models'),
+#                   fields=['fields_model', 'actions_model'])
     form.omitted('fields_model', 'actions_model')
     fields_model = Text(
         title=_(u'Fields Model'),
@@ -357,9 +357,9 @@ class IEasyForm(form.Schema):
         required=False,
         missing_value=u'',
     )
-    # TODO
-    # obj.setTitle(_(u'pfg_thankyou_title', u'Thank You'))
-    # obj.setDescription(_(u'pfg_thankyou_description', u'Thanks for your input.'))
+#     TODO
+#     obj.setTitle(_(u'pfg_thankyou_title', u'Thank You'))
+#     obj.setDescription(_(u'pfg_thankyou_description', u'Thanks for your input.'))
     showAll = Bool(
         title=_(u'label_showallfields_text', default=u'Show All Fields'),
         description=_(u'help_showallfields_text', default=u''
@@ -546,10 +546,10 @@ class IActionEditForm(IEditForm):
 
 class IAction(form.Schema, IField):
     form.omitted('required', 'order', 'default', 'missing_value', 'readonly')
-    # required = Bool(
-        # title=_('Enabled'),
-        #description=_('Tells whether a action is enabled.'),
-        # default=True)
+#     required = Bool(
+#         title=_('Enabled'),
+#        description=_('Tells whether a action is enabled.'),
+#         default=True)
 
     def onSuccess(fields, request):
         pass
@@ -558,7 +558,7 @@ class IAction(form.Schema, IField):
 class IMailer(IAction):
 
     """A form action adapter that will e-mail form input."""
-    # default_method='getDefaultRecipientName',
+#     default_method='getDefaultRecipientName',
     form.write_permission(recipient_name=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(recipient_name=MODIFY_PORTAL_CONTENT)
     recipient_name = TextLine(
@@ -570,10 +570,10 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    # default_method='getDefaultRecipient',
-    # validators=('isEmail',),
-    # TODO defaultFactory
-    # TODO IContextAwareDefaultFactory
+#     default_method='getDefaultRecipient',
+#     validators=('isEmail',),
+#     TODO defaultFactory
+#     TODO IContextAwareDefaultFactory
     form.write_permission(recipient_email=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(recipient_email=MODIFY_PORTAL_CONTENT)
     recipient_email = TextLine(
@@ -601,7 +601,7 @@ class IMailer(IAction):
         required=False,
         vocabulary=fieldsFactory,
     )
-    # default_method='getDefaultCC',
+#     default_method='getDefaultCC',
     form.write_permission(cc_recipients=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(cc_recipients=MODIFY_PORTAL_CONTENT)
     cc_recipients = Text(
@@ -613,7 +613,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    # default_method='getDefaultBCC',
+#     default_method='getDefaultBCC',
     form.write_permission(bcc_recipients=EDIT_ADDRESSING_PERMISSION)
     form.read_permission(bcc_recipients=MODIFY_PORTAL_CONTENT)
     bcc_recipients = Text(
@@ -663,7 +663,7 @@ class IMailer(IAction):
         required=False,
         vocabulary=fieldsFactory,
     )
-    # accessor='getBody_pre',
+#     accessor='getBody_pre',
     form.read_permission(body_pre=MODIFY_PORTAL_CONTENT)
     body_pre = Text(
         title=_(u'label_formmailer_body_pre', default=u'Body (prepended)'),
@@ -725,9 +725,9 @@ class IMailer(IAction):
     )
     form.fieldset(u'template', label=PMF(
         'Template'), fields=['body_pt', 'body_type'])
-    # ZPTField('body_pt',
-    # default_method='getMailBodyDefault',
-    # validators=('zptvalidator',),
+#     ZPTField('body_pt',
+#     default_method='getMailBodyDefault',
+#     validators=('zptvalidator',),
     form.write_permission(body_pt=EDIT_TALES_PERMISSION)
     form.read_permission(body_pt=MODIFY_PORTAL_CONTENT)
     body_pt = Text(
@@ -740,7 +740,7 @@ class IMailer(IAction):
         default=MAIL_BODY_DEFAULT,
         missing_value=u'',
     )
-    # default_method='getMailBodyTypeDefault',
+#     default_method='getMailBodyTypeDefault',
     form.write_permission(body_type=EDIT_ADVANCED_PERMISSION)
     form.read_permission(body_type=MODIFY_PORTAL_CONTENT)
     body_type = Choice(
@@ -755,7 +755,7 @@ class IMailer(IAction):
     form.fieldset(u'headers', label=_('Headers'),
                   fields=['xinfo_headers', 'additional_headers'])
     form.widget(xinfo_headers=CheckBoxFieldWidget)
-    # default_method='getDefaultXInfo',
+#     default_method='getDefaultXInfo',
     form.write_permission(xinfo_headers=EDIT_ADVANCED_PERMISSION)
     form.read_permission(xinfo_headers=MODIFY_PORTAL_CONTENT)
     xinfo_headers = List(
@@ -769,7 +769,7 @@ class IMailer(IAction):
         missing_value=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
         value_type=Choice(vocabulary=XINFO_HEADERS),
     )
-    # default_method='getDefaultAddHdrs',
+#     default_method='getDefaultAddHdrs',
     form.write_permission(additional_headers=EDIT_ADVANCED_PERMISSION)
     form.read_permission(additional_headers=MODIFY_PORTAL_CONTENT)
     additional_headers = List(
@@ -784,29 +784,29 @@ class IMailer(IAction):
                     default=u'${name} Header', mapping={u'name': u'HTTP'}),
         ),
     )
-    # if gpg is not None:
-        # formMailerAdapterSchema = formMailerAdapterSchema + Schema((
-            # StringField('gpg_keyid',
-                # schemata='encryption',
-                # accessor='getGPGKeyId',
-                # mutator='setGPGKeyId',
-                # write_permission=USE_ENCRYPTION_PERMISSION,
-                # read_permission=ModifyPortalContent,
-                # widget=StringWidget(
-                    # description=_(u'help_gpg_key_id', default=u"""
-                        # Give your key-id, e-mail address or
-                        # whatever works to match a public key from current keyring.
-                        # It will be used to encrypt the message body (not attachments).
-                        # Contact the site administrator if you need to
-                        # install a new public key.
-                        # Note that you will probably wish to change your message
-                        # template to plain text if you're using encryption.
-                        # TEST THIS FEATURE BEFORE GOING PUBLIC!
-                        #"""),
-                    #label=_(u'label_gpg_key_id', default=u'Key-Id'),
-                    #),
-                #),
-            #))
+#     if gpg is not None:
+#         formMailerAdapterSchema = formMailerAdapterSchema + Schema((
+#             StringField('gpg_keyid',
+#                 schemata='encryption',
+#                 accessor='getGPGKeyId',
+#                 mutator='setGPGKeyId',
+#                 write_permission=USE_ENCRYPTION_PERMISSION,
+#                 read_permission=ModifyPortalContent,
+#                 widget=StringWidget(
+#                     description=_(u'help_gpg_key_id', default=u"""
+#                         Give your key-id, e-mail address or
+#                         whatever works to match a public key from current keyring.
+#                         It will be used to encrypt the message body (not attachments).
+#                         Contact the site administrator if you need to
+#                         install a new public key.
+#                         Note that you will probably wish to change your message
+#                         template to plain text if you're using encryption.
+#                         TEST THIS FEATURE BEFORE GOING PUBLIC!
+#                        """),
+#                    label=_(u'label_gpg_key_id', default=u'Key-Id'),
+#                    ),
+#                ),
+#            ))
     form.fieldset(u'overrides', label=_('Overrides'), fields=[
                   'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
     form.write_permission(subjectOverride=EDIT_TALES_PERMISSION)
@@ -975,19 +975,19 @@ class ISaveData(IAction):
                       default=u'Do you wish to have column names on the first line of downloaded input?'),
         required=False,
     )
-    # ExLinesField('SavedFormInput',
-    # edit_accessor='getSavedFormInputForEdit',
-    # mutator='setSavedFormInput',
-    # searchable=0,
-    # required=0,
-    # primary=1,
-    #schemata='saved data',
-    # read_permission=DOWNLOAD_SAVED_PERMISSION,
-    # widget=TextAreaWidget(
-        #label=_(u'label_savedatainput_text', default=u'Saved Form Input'),
-        # description=_(u'help_savedatainput_text'),
-        #),
-    #),
+#     ExLinesField('SavedFormInput',
+#     edit_accessor='getSavedFormInputForEdit',
+#     mutator='setSavedFormInput',
+#     searchable=0,
+#     required=0,
+#     primary=1,
+#    schemata='saved data',
+#     read_permission=DOWNLOAD_SAVED_PERMISSION,
+#     widget=TextAreaWidget(
+#        label=_(u'label_savedatainput_text', default=u'Saved Form Input'),
+#         description=_(u'help_savedatainput_text'),
+#        ),
+#    ),
 
 
 class ILabel(IField):

@@ -28,10 +28,10 @@ class TestFormGenInterfaces(base.EasyFormTestCase):
         """Some basic boiler plate testing of interfaces and classes"""
         # verify IEasyFormExportView
         # self.assertTrue(
-            # interfaces.IEasyFormExportView.implementedBy(exportimport.EasyFormExportView))
+        #     interfaces.IEasyFormExportView.implementedBy(exportimport.EasyFormExportView))
         # self.assertTrue(
-            # verifyClass(interfaces.IEasyFormExportView,
-            # exportimport.EasyFormExportView))
+        #     verifyClass(interfaces.IEasyFormExportView,
+        #     exportimport.EasyFormExportView))
 
     def testBrowserViewObjectsVerify(self):
         # verify views are objects of the expected class, verified
@@ -39,7 +39,7 @@ class TestFormGenInterfaces(base.EasyFormTestCase):
         form_folder_export = getMultiAdapter(
             (self.folder.ff1, self.app.REQUEST), name='export-form-folder')
         # self.assertTrue(isinstance(
-            # form_folder_export, exportimport.EasyFormExportView))
+        #     form_folder_export, exportimport.EasyFormExportView))
         self.assertTrue(verifyObject(interfaces.IEasyFormExportView,
                         form_folder_export))
 

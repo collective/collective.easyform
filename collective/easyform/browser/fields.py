@@ -65,6 +65,7 @@ class EasyFormFieldsView(SchemaContext):
 
 
 class FieldsSchemaListing(SchemaListing):
+    template = ViewPageTemplateFile('fields_listing.pt')
 
     @property
     def default_fieldset_label(self):

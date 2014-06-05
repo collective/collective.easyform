@@ -32,4 +32,9 @@
         permission="cmf.ManagePortal"
         />
     </configure>
+    <browser:resource
+        name="easyform.css"
+        file="easyform.css"
+        />
+
 </configure>

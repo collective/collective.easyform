@@ -21,7 +21,7 @@ class TestTools(base.EasyFormTestCase):
         fgt = getToolByName(self.portal, 'formgen_tool')
 
         # pt = getToolByName(
-            # self.portal, 'portal_properties').easyform_properties
+        #    self.portal, 'portal_properties').easyform_properties
 
         fgt.setDefault('permissions_used', ['test text'])
         fgt.setDefault('mail_template', 'something')

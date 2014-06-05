@@ -133,7 +133,6 @@ class Mailer(Action):
         else:
             return ''
 
-
     def get_mail_body(self, fields, request, context):
         """Returns the mail-body with footer.
         """
@@ -165,7 +164,7 @@ class Mailer(Action):
                 if value:
                     live_fields.append(f)
 
-        #bare_fields = [schema[f] for f in live_fields]
+        # bare_fields = [schema[f] for f in live_fields]
         bare_fields = dict([(f, fields[f]) for f in live_fields])
         bodyfield = self.body_pt
 
@@ -187,17 +186,40 @@ class Mailer(Action):
         body = template.pt_render(extra_context=extra)
 
         # if isinstance(body, unicode):
-            #body = body.encode("utf-8")
+        # body = body.encode("utf-8")
 
-        #keyid = getattr(self, 'gpg_keyid', None)
-        #encryption = gpg and keyid
+        # keyid = getattr(self, 'gpg_keyid', None)
+        # encryption = gpg and keyid
 
         # if encryption:
-            #bodygpg = gpg.encrypt(body, keyid)
-            # if bodygpg.strip():
-                #body = bodygpg
+        # bodygpg = gpg.encrypt(body, keyid)
+        # if bodygpg.strip():
+        # body = bodygpg
 
         return body
+
+    def get_owner_info(self, context):
+        """Return owner info
+        """
+        pms = getToolByName(context, 'portal_membership')
+        ownerinfo = context.getOwner()
+        ownerid = ownerinfo.getId()
+        fullname = ownerid
+        userdest = pms.getMemberById(ownerid)
+        if userdest is not None:
+            fullname = userdest.getProperty('fullname', ownerid)
+        toemail = ''
+        if userdest is not None:
+            toemail = userdest.getProperty('email', '')
+        if not toemail:
+            portal = getToolByName(context, 'portal_url').getPortalObject()
+            toemail = portal.getProperty('email_from_address')
+        assert toemail, """
+                Unable to mail form input because no recipient address has been specified.
+                Please check the recipient settings of the EasyForm "Mailer" within the
+                current form folder.
+            """
+        return (fullname, toemail)
 
     def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
         """Return addresses
@@ -205,7 +227,6 @@ class Mailer(Action):
         pprops = getToolByName(context, 'portal_properties')
         site_props = getToolByName(pprops, 'site_properties')
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        pms = getToolByName(context, 'portal_membership')
 
         # get Reply-To
         reply_addr = None
@@ -248,23 +269,8 @@ class Mailer(Action):
         # if not, fall back to portal email_from_address.
         # if still no destination, raise an assertion exception.
         if not recip_email and not to_addr:
-            ownerinfo = context.getOwner()
-            ownerid = ownerinfo.getId()
-            fullname = ownerid
-            userdest = pms.getMemberById(ownerid)
-            if userdest is not None:
-                fullname = userdest.getProperty('fullname', ownerid)
-            toemail = ''
-            if userdest is not None:
-                toemail = userdest.getProperty('email', '')
-            if not toemail:
-                toemail = portal.getProperty('email_from_address')
-            assert toemail, """
-                    Unable to mail form input because no recipient address has been specified.
-                    Please check the recipient settings of the EasyForm "Mailer" within the
-                    current form folder.
-                """
-            to = formataddr((fullname, toemail))
+            self.get_owner_info(context)
+            to = formataddr(self.get_owner_info(context))
         else:
             to = to_addr or formataddr((recip_name, recip_email))
 
@@ -531,7 +537,7 @@ class SaveData(Action):
         context = get_context(self)
         if not hasattr(context, '_inputStorage'):
             context._inputStorage = {}
-        if not self.__name__ in context._inputStorage:
+        if self.__name__ not in context._inputStorage:
             context._inputStorage[self.__name__] = SavedDataBTree()
         return context._inputStorage[self.__name__]
 
@@ -647,9 +653,9 @@ class SaveData(Action):
         del self._storage[key]
 
     def setDataRow(self, key, value):
-        #sdata = self.storage[id]
+        # sdata = self.storage[id]
         # sdata.update(data)
-        #self.storage[id] = sdata
+        # self.storage[id] = sdata
         self._storage[key] = value
 
     def addDataRow(self, value):
@@ -671,20 +677,20 @@ class SaveData(Action):
         saves data.
         """
         # if LP_SAVE_TO_CANONICAL and not loopstop:
-            # LinguaPlone functionality:
-            # check to see if we're in a translated
-            # form folder, but not the canonical version.
-            #parent = self.aq_parent
-            # if safe_hasattr(parent, 'isTranslation') and \
-               # parent.isTranslation() and not parent.isCanonical():
-                # look in the canonical version to see if there is
-                # a matching (by id) save-data adapter.
-                # If so, call its onSuccess method
-                #cf = parent.getCanonical()
-                #target = cf.get(self.getId())
-                # if target is not None and target.meta_type == 'FormSaveDataAdapter':
-                    #target.onSuccess(fields, request, loopstop=True)
-                    # return
+        # LinguaPlone functionality:
+        # check to see if we're in a translated
+        # form folder, but not the canonical version.
+        # parent = self.aq_parent
+        # if safe_hasattr(parent, 'isTranslation') and \
+        # parent.isTranslation() and not parent.isCanonical():
+        # look in the canonical version to see if there is
+        # a matching (by id) save-data adapter.
+        # If so, call its onSuccess method
+        # cf = parent.getCanonical()
+        # target = cf.get(self.getId())
+        # if target is not None and target.meta_type == 'FormSaveDataAdapter':
+        # target.onSuccess(fields, request, loopstop=True)
+        # return
         data = {}
         showFields = getattr(self, 'showFields', []) or self.getColumnNames()
         for f in fields:
