@@ -17,7 +17,7 @@
                  i18n:attributes="value"
                  value="Add new fieldset&hellip;"/>
         </form>
-      <div>
+      </div>
     </metal:description-slot>
 
     <metal:top-slot metal:fill-slot="formtop">

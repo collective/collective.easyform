@@ -11,7 +11,7 @@
                  i18n:attributes="value"
                  value="Add new action&hellip;"/>
         </form>
-      <div>
+      </div>
     </metal:description-slot>
 
     <metal:top-slot metal:fill-slot="formtop">
