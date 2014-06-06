@@ -7,6 +7,8 @@ from ZPublisher.BaseRequest import DefaultPublishTraverse
 from json import dumps
 from lxml import etree
 from plone.schemaeditor import SchemaEditorMessageFactory as __
+from plone.schemaeditor.browser.field.edit import EditView
+from plone.schemaeditor.browser.field.edit import FieldEditForm
 from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
@@ -14,6 +16,8 @@ from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel import loadString
 from plone.supermodel.parser import SupermodelParseError
 from z3c.form import button
+from zope.cachedescriptors.property import Lazy as lazy_property
+from zope.component import getAdapters
 from zope.component import queryMultiAdapter
 from zope.interface import implements
 
@@ -28,6 +32,7 @@ from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_fields
 from collective.easyform.interfaces import IEasyFormFieldContext
 from collective.easyform.interfaces import IEasyFormFieldsContext
+from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
 
 
 class EasyFormFieldContext(FieldContext):
@@ -92,6 +97,18 @@ class EasyFormFieldsListingPage(SchemaListingPage):
     """
     form = FieldsSchemaListing
     index = ViewPageTemplateFile('model_listing.pt')
+
+
+class FieldEditForm(FieldEditForm):
+
+    @lazy_property
+    def additionalSchemata(self):
+        schema_context = self.context.aq_parent
+        return [v for k, v in getAdapters((schema_context, self.field), IEasyFormFieldsEditorExtender)]
+
+
+class EditView(EditView):
+    form = FieldEditForm
 
 
 class ModelEditorView(BrowserView):

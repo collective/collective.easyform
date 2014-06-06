@@ -2,7 +2,7 @@
            i18n_domain="collective.easyform">
     <adapter
         factory=".exportimport.get_field_extender"
-        provides="plone.schemaeditor.interfaces.IFieldEditorExtender"
+        provides="collective.easyform.interfaces.IEasyFormFieldsEditorExtender"
         name="collective.easyform.fieldextender"
         />
     <adapter
@@ -15,7 +15,7 @@
         />
     <adapter
         factory=".exportimport.get_action_extender"
-        provides="plone.schemaeditor.interfaces.IFieldEditorExtender"
+        provides="collective.easyform.interfaces.IEasyFormActionsEditorExtender"
         name="collective.easyform.actionextender"
         />
     <adapter

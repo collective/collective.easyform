@@ -13,7 +13,6 @@ from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.schemaeditor.interfaces import IFieldEditFormSchema
-from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.utils import SchemaModifiedEvent
 from plone.z3cform import layout
 from plone.z3cform.crud import crud
@@ -48,9 +47,10 @@ from collective.easyform.api import get_fields
 from collective.easyform.browser.fields import AjaxSaveHandler
 from collective.easyform.interfaces import IActionEditForm
 from collective.easyform.interfaces import IActionFactory
-from collective.easyform.interfaces import IExtraData
 from collective.easyform.interfaces import IEasyFormActionContext
 from collective.easyform.interfaces import IEasyFormActionsContext
+from collective.easyform.interfaces import IEasyFormActionsEditorExtender
+from collective.easyform.interfaces import IExtraData
 from collective.easyform.interfaces import INewAction
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.interfaces import ISavedDataFormWrapper
@@ -275,7 +275,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
     @lazy_property
     def additionalSchemata(self):
         schema_context = self.context.aq_parent
-        return [v for k, v in getAdapters((schema_context, self.field), IFieldEditorExtender)]
+        return [v for k, v in getAdapters((schema_context, self.field), IEasyFormActionsEditorExtender)]
 
     @button.buttonAndHandler(PMF(u'Save'), name='save')
     def handleSave(self, action):

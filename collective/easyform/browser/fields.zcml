@@ -30,7 +30,7 @@
     <browser:page
         name="edit"
         for="collective.easyform.interfaces.IEasyFormFieldContext"
-        class="plone.schemaeditor.browser.field.edit.EditView"
+        class=".fields.EditView"
         permission="cmf.ModifyPortalContent"
         />
     <browser:page

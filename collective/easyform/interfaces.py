@@ -6,6 +6,7 @@ from plone.directives import form
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 from plone.schemaeditor.interfaces import ID_RE
 from plone.schemaeditor.interfaces import IFieldContext
+from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
 from plone.z3cform.interfaces import IFormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -71,6 +72,14 @@ def isTALES(value):
 
 
 class ISavedDataFormWrapper(IFormWrapper):
+    pass
+
+
+class IEasyFormFieldsEditorExtender(IFieldEditorExtender):
+    pass
+
+
+class IEasyFormActionsEditorExtender(IFieldEditorExtender):
     pass
 
 
