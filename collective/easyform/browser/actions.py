@@ -90,6 +90,14 @@ class SavedDataView(BrowserView):
         ]
 
 
+class DataWrapper(dict):
+
+    def __init__(self, sid, data, parent):
+        self.__sid__ = sid
+        self.update(data)
+        self.__parent__ = parent
+
+
 class SavedDataForm(crud.CrudForm):
     template = ViewPageTemplateFile('saveddata_form.pt')
     addform_factory = crud.NullForm
@@ -119,22 +127,23 @@ class SavedDataForm(crud.CrudForm):
 
     @property
     def view_schema(self):
-        fields = field.Fields(IExtraData)
         ExtraData = self.field.ExtraData
         if ExtraData:
-            fields = fields.select(*ExtraData)
-        return fields
+            return field.Fields(IExtraData).select(*ExtraData)
 
     def get_items(self):
-        return self.field.getSavedFormInputItems()
+        return [
+            (key, DataWrapper(key, value, self.context))
+            for key, value in self.field.getSavedFormInputItems()
+        ]
 
     # def add(self, data):
         # storage = self.context._inputStorage
 
     def before_update(self, item, data):
-        id_ = item['id']
+        id_ = item.__sid__
         item.update(data)
-        self.field.setDataRow(id_, item)
+        self.field.setDataRow(id_, item.copy())
 
     def remove(self, (id, item)):
         self.field.delDataRow(id)
