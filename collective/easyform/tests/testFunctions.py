@@ -45,7 +45,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         self.request = makerequest(self.app).REQUEST
-        self.ff1.checkAuthenticator = False
+        self.ff1.CSRFProtection = False
         self.ff1.actions_model = (
             self.ff1.actions_model.replace(
                 u'<description>E-Mails Form Input</description>',
@@ -617,7 +617,7 @@ class TestFunctions(base.EasyFormTestCase):
             'comments': 'test comments',
         }
 
-        self.ff1.checkAuthenticator = True
+        self.ff1.CSRFProtection = True
 
         self.assertRaises(zExceptions.Forbidden, self.ff1.fgvalidate, request)
 

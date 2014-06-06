@@ -50,7 +50,7 @@ class TestEmbedding(base.EasyFormTestCase):
         self.folder.invokeFactory('EasyForm', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.title = u'ff1'
-        self.ff1.checkAuthenticator = False  # no csrf protection
+        self.ff1.CSRFProtection = False  # no csrf protection
         actions = get_actions(self.ff1)
         actions['mailer'].recipient_email = u'mdummy@address.com'
         set_actions(self.ff1, actions)

@@ -26,7 +26,7 @@ class TestFunctions(base.EasyFormTestCase):
         super(TestFunctions, self).afterSetUp()
         self.folder.invokeFactory('EasyForm', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
-        self.ff1.checkAuthenticator = False  # no csrf protection
+        self.ff1.CSRFProtection = False  # no csrf protection
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         actions = get_actions(self.ff1)

@@ -159,6 +159,7 @@ class TestCustomScript(base.EasyFormTestCase):
 
         self.folder.invokeFactory('EasyForm', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
+        self.ff1.CSRFProtection = False
         self.portal.REQUEST['form.widgets.title'] = u'Test field'
         self.portal.REQUEST['form.widgets.__name__'] = u'test_field'
         self.portal.REQUEST['form.widgets.description'] = u''

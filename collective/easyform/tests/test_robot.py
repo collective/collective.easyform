@@ -17,7 +17,7 @@ def test_suite():
     robot_tests = [
         os.path.join('robot', doc)
         for doc in os.listdir(robot_dir)
-        if doc.endswith('.robot')
+        if doc.startswith('test') and doc.endswith('.robot')
     ]
     for test in robot_tests:
         suite.addTests([
