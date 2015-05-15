@@ -15,6 +15,7 @@ jQuery(function($) {
 }
         </style>
         <div id="edit-bar"
+             tal:on-error="nothing"
              tal:define="context nocall:context/aq_parent"
              tal:content="structure provider:plone.contentviews" />
         <div metal:use-macro="context/global_statusmessage/macros/portal_message">
