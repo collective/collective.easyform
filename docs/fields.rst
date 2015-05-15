@@ -27,3 +27,10 @@ Edit field
 ----------
 
 .. image:: images/created-easyform-fields.png
+
+Edit XML Fields Model
+---------------------
+
+.. image:: images/edit-xml-fields-model-button.png
+
+.. image:: images/edit-xml-fields-model-page.png

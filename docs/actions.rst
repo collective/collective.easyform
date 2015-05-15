@@ -18,3 +18,10 @@ Edit action
 -----------
 
 .. image:: images/created-easyform-actions.png
+
+Edit XML Actions Model
+----------------------
+
+.. image:: images/edit-xml-actions-model-button.png
+
+.. image:: images/edit-xml-actions-model-page.png
