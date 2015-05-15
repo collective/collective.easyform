@@ -9,12 +9,12 @@ from z3c.form.browser import widget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-import zope.component
-import zope.interface
-import zope.schema.interfaces
+from zope.component import adapter
+from zope.interface import implementer
+from zope.interface import implementer_only
 
 
-@zope.interface.implementer_only(ILabelWidget)
+@implementer_only(ILabelWidget)
 class LabelWidget(widget.HTMLFormElement, Widget):
 
     """Textarea widget implementation."""
@@ -28,14 +28,14 @@ class LabelWidget(widget.HTMLFormElement, Widget):
         widget.addFieldClass(self)
 
 
-@zope.component.adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
-@zope.interface.implementer(interfaces.IFieldWidget)
+@adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
+@implementer(interfaces.IFieldWidget)
 def LabelFieldWidget(field, request):
     """IFieldWidget factory for TextWidget."""
     return FieldWidget(field, LabelWidget(request))
 
 
-@zope.interface.implementer_only(IRichLabelWidget)
+@implementer_only(IRichLabelWidget)
 class RichLabelWidget(widget.HTMLFormElement, Widget):
 
     """Textarea widget implementation."""
@@ -49,8 +49,8 @@ class RichLabelWidget(widget.HTMLFormElement, Widget):
         widget.addFieldClass(self)
 
 
-@zope.component.adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
-@zope.interface.implementer(interfaces.IFieldWidget)
+@adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
+@implementer(interfaces.IFieldWidget)
 def RichLabelFieldWidget(field, request):
     """IFieldWidget factory for TextWidget."""
     return FieldWidget(field, RichLabelWidget(request))
