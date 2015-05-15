@@ -12,6 +12,7 @@ from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implementer_only
+from zope.schema.interfaces import IField
 
 
 @implementer_only(ILabelWidget)
@@ -28,7 +29,7 @@ class LabelWidget(widget.HTMLFormElement, Widget):
         widget.addFieldClass(self)
 
 
-@adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
+@adapter(IField, interfaces.IFormLayer)
 @implementer(interfaces.IFieldWidget)
 def LabelFieldWidget(field, request):
     """IFieldWidget factory for TextWidget."""
@@ -49,7 +50,7 @@ class RichLabelWidget(widget.HTMLFormElement, Widget):
         widget.addFieldClass(self)
 
 
-@adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
+@adapter(IField, interfaces.IFormLayer)
 @implementer(interfaces.IFieldWidget)
 def RichLabelFieldWidget(field, request):
     """IFieldWidget factory for TextWidget."""

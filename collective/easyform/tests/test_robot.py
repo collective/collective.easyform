@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.tests import base
-from plone.testing import layered
 from os import listdir
 from os import path
+from plone.testing import layered
 from robotsuite import RobotTestSuite
 from unittest import TestSuite
 
