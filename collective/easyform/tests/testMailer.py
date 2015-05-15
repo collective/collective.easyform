@@ -3,13 +3,13 @@
 # Integeration tests specific to the mailer
 #
 
-import email
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_fields
 from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
+import email
 
 
 class TestFunctions(base.EasyFormTestCase):

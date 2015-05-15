@@ -2,40 +2,12 @@
 
 from AccessControl import getSecurityManager
 from BTrees.IOBTree import IOBTree
-try:
-    from BTrees.LOBTree import LOBTree
-    SavedDataBTree = LOBTree
-except ImportError:
-    SavedDataBTree = IOBTree
 from DateTime import DateTime
 from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
-from copy import deepcopy
-from csv import writer as csvwriter
-from email import Encoders
-from email.Header import Header
-from email.MIMEAudio import MIMEAudio
-from email.MIMEBase import MIMEBase
-from email.MIMEImage import MIMEImage
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-from email.utils import formataddr
-from logging import getLogger
-from plone.namedfile.interfaces import INamedFile
-from plone.namedfile.interfaces import INamedBlobFile
-from plone.supermodel.exportimport import BaseHandler
-from time import time
-from types import StringTypes
-from zope.contenttype import guess_content_type
-from zope.component import queryUtility
-from zope.interface import implements
-from zope.schema import Bool
-from zope.schema import getFieldsInOrder
-from zope.security.interfaces import IPermission
-
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
 from collective.easyform.api import get_context
@@ -48,7 +20,33 @@ from collective.easyform.interfaces import IExtraData
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
-
+from copy import deepcopy
+from csv import writer as csvwriter
+from email import Encoders
+from email.Header import Header
+from email.MIMEAudio import MIMEAudio
+from email.MIMEBase import MIMEBase
+from email.MIMEImage import MIMEImage
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.utils import formataddr
+from logging import getLogger
+from plone.namedfile.interfaces import INamedBlobFile
+from plone.namedfile.interfaces import INamedFile
+from plone.supermodel.exportimport import BaseHandler
+from time import time
+from types import StringTypes
+from zope.component import queryUtility
+from zope.contenttype import guess_content_type
+from zope.interface import implements
+from zope.schema import Bool
+from zope.schema import getFieldsInOrder
+from zope.security.interfaces import IPermission
+try:
+    from BTrees.LOBTree import LOBTree
+    SavedDataBTree = LOBTree
+except ImportError:
+    SavedDataBTree = IOBTree
 logger = getLogger('collective.easyform')
 
 

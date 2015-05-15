@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import get_expression
+from collective.easyform.interfaces import IEasyForm
+from collective.easyform.interfaces import IEasyFormForm
+from collective.easyform.interfaces import IFieldExtender
+from collective.easyform.interfaces import ILabel
+from collective.easyform.interfaces import IReCaptcha
+from collective.easyform.interfaces import IRichLabel
+from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator as z3c_validator
@@ -13,18 +22,8 @@ from zope.interface import implementer
 from zope.interface import implements
 from zope.schema import Field
 from zope.schema import TextLine
-from zope.schema.interfaces import IField
 from zope.schema._bootstrapinterfaces import IFromUnicode
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import get_expression
-from collective.easyform.interfaces import IFieldExtender
-from collective.easyform.interfaces import IEasyForm
-from collective.easyform.interfaces import IEasyFormForm
-from collective.easyform.interfaces import ILabel
-from collective.easyform.interfaces import IReCaptcha
-from collective.easyform.interfaces import IRichLabel
-from collective.easyform.validators import IFieldValidator
+from zope.schema.interfaces import IField
 
 
 class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):

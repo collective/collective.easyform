@@ -10,13 +10,12 @@ except ImportError:
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.CMFDefault.exceptions import EmailAddressInvalid
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.interfaces import IFieldValidator
 from types import BooleanType
 from types import StringTypes
 from zope.component import getUtility
 from zope.component import provideUtility
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.interfaces import IFieldValidator
 
 
 def isValidEmail(value):

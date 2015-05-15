@@ -3,13 +3,12 @@
 # Integration tests for interaction with GenericSetup infrastructure
 #
 
-from zope.component import getMultiAdapter
-from zope.interface.verify import verifyClass
-from zope.interface.verify import verifyObject
-
 from collective.easyform import content
 from collective.easyform import interfaces
 from collective.easyform.tests import base
+from zope.component import getMultiAdapter
+from zope.interface.verify import verifyClass
+from zope.interface.verify import verifyObject
 
 
 class TestFormGenInterfaces(base.EasyFormTestCase):

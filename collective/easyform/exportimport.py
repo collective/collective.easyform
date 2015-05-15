@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from collective.easyform.interfaces import IAction
+from collective.easyform.interfaces import IActionExtender
+from collective.easyform.interfaces import IEasyFormActionsContext
+from collective.easyform.interfaces import IEasyFormFieldsContext
+from collective.easyform.interfaces import IFieldExtender
 from plone.autoform.interfaces import WIDGETS_KEY
 from plone.supermodel.parser import IFieldMetadataHandler
 from plone.supermodel.utils import ns
@@ -7,12 +12,6 @@ from zope.component import adapter
 from zope.component import adapts
 from zope.interface import implements
 from zope.schema.interfaces import IField
-
-from collective.easyform.interfaces import IAction
-from collective.easyform.interfaces import IActionExtender
-from collective.easyform.interfaces import IFieldExtender
-from collective.easyform.interfaces import IEasyFormActionsContext
-from collective.easyform.interfaces import IEasyFormFieldsContext
 
 
 @adapter(IEasyFormFieldsContext, IField)

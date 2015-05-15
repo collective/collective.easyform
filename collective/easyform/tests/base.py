@@ -3,6 +3,7 @@ from Products.MailHost.MailHost import MailHost
 from Products.MailHost.interfaces import IMailHost
 from Testing.ZopeTestCase import FunctionalTestCase
 from email import message_from_string
+from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
@@ -13,8 +14,6 @@ from plone.app.testing import setRoles
 from plone.testing import Layer
 from plone.testing.z2 import Browser
 from plone.testing.z2 import ZSERVER_FIXTURE
-from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
-
 from transaction import commit
 from unittest2 import TestCase
 from zope.component import getSiteManager

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
+from collective.easyform.config import MODEL_DEFAULT
 from hashlib import md5
 from plone.memoize import ram
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from re import compile
-
-from collective.easyform.config import MODEL_DEFAULT
 
 # SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'

@@ -3,9 +3,6 @@
 # Integration tests for interaction with GenericSetup infrastructure
 #
 
-import os
-import re
-
 from Products.Five import fiveconfigure
 from Products.Five import zcml
 from Products.GenericSetup.tests.common import DummyExportContext
@@ -16,6 +13,8 @@ from cgi import FieldStorage
 from collective.easyform.tests import base
 from tarfile import TarFile
 from zope.component import getMultiAdapter
+import os
+import re
 
 zcml_string = """\
 <configure xmlns="http://namespaces.zope.org/genericsetup"

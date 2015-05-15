@@ -3,14 +3,14 @@
 # Integration tests specific to save-data adapter.
 #
 
-import plone.protect
-import sys
 from StringIO import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_fields
 from collective.easyform.tests import base
+import plone.protect
+import sys
 
 
 def FakeRequest(method='GET', add_auth=False, **kwargs):

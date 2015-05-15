@@ -3,6 +3,14 @@
 from AccessControl import getSecurityManager
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.mapply import mapply
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import get_actions
+from collective.easyform.api import get_expression
+from collective.easyform.api import get_fields
+from collective.easyform.interfaces import IActionExtender
+from collective.easyform.interfaces import IEasyFormForm
+from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import layout
@@ -15,15 +23,6 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 from zope.schema import ValidationError
 from zope.schema import getFieldsInOrder
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import DollarVarReplacer
-from collective.easyform.api import get_actions
-from collective.easyform.api import get_expression
-from collective.easyform.api import get_fields
-from collective.easyform.interfaces import IActionExtender
-from collective.easyform.interfaces import IFieldExtender
-from collective.easyform.interfaces import IEasyFormForm
 
 logger = getLogger('collective.easyform')
 PMF = MessageFactory('plone')

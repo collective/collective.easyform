@@ -5,6 +5,20 @@ from Acquisition import aq_parent
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import get_actions
+from collective.easyform.api import get_context
+from collective.easyform.api import get_fields
+from collective.easyform.browser.fields import AjaxSaveHandler
+from collective.easyform.interfaces import IActionEditForm
+from collective.easyform.interfaces import IActionFactory
+from collective.easyform.interfaces import IEasyFormActionContext
+from collective.easyform.interfaces import IEasyFormActionsContext
+from collective.easyform.interfaces import IEasyFormActionsEditorExtender
+from collective.easyform.interfaces import IExtraData
+from collective.easyform.interfaces import INewAction
+from collective.easyform.interfaces import ISaveData
+from collective.easyform.interfaces import ISavedDataFormWrapper
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.instance import memoize
 from plone.schemaeditor.browser.field.traversal import FieldContext
@@ -39,21 +53,6 @@ try:
     HAVE_RESOURCE_EDITOR = True
 except ImportError:
     HAVE_RESOURCE_EDITOR = False
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import get_actions
-from collective.easyform.api import get_context
-from collective.easyform.api import get_fields
-from collective.easyform.browser.fields import AjaxSaveHandler
-from collective.easyform.interfaces import IActionEditForm
-from collective.easyform.interfaces import IActionFactory
-from collective.easyform.interfaces import IEasyFormActionContext
-from collective.easyform.interfaces import IEasyFormActionsContext
-from collective.easyform.interfaces import IEasyFormActionsEditorExtender
-from collective.easyform.interfaces import IExtraData
-from collective.easyform.interfaces import INewAction
-from collective.easyform.interfaces import ISaveData
-from collective.easyform.interfaces import ISavedDataFormWrapper
 
 PMF = MessageFactory('plone')
 

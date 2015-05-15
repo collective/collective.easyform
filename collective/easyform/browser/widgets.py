@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import zope.component
-import zope.interface
-import zope.schema.interfaces
-
 from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
+from collective.easyform.interfaces import ILabelWidget
+from collective.easyform.interfaces import IRichLabelWidget
 from z3c.form import interfaces
 from z3c.form.browser import widget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-
-from collective.easyform.interfaces import ILabelWidget
-from collective.easyform.interfaces import IRichLabelWidget
+import zope.component
+import zope.interface
+import zope.schema.interfaces
 
 
 @zope.interface.implementer_only(ILabelWidget)

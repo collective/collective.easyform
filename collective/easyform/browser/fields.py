@@ -4,6 +4,11 @@ from AccessControl import Unauthorized
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import get_fields
+from collective.easyform.interfaces import IEasyFormFieldContext
+from collective.easyform.interfaces import IEasyFormFieldsContext
+from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
 from json import dumps
 from lxml import etree
 from plone.schemaeditor import SchemaEditorMessageFactory as __
@@ -27,12 +32,6 @@ try:
     HAVE_RESOURCE_EDITOR = True
 except ImportError:
     HAVE_RESOURCE_EDITOR = False
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import get_fields
-from collective.easyform.interfaces import IEasyFormFieldContext
-from collective.easyform.interfaces import IEasyFormFieldsContext
-from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
 
 
 class EasyFormFieldContext(FieldContext):

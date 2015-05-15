@@ -6,9 +6,9 @@ from Products.GenericSetup.context import TarballImportContext
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.statusmessages.interfaces import IStatusMessage
-from datetime import datetime
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.interfaces import IEasyFormImportFormSchema
+from datetime import datetime
 from plone.z3cform import layout
 from z3c.form import button
 from z3c.form import field

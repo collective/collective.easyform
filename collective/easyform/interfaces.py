@@ -1,6 +1,24 @@
 # -*- coding: utf-8 -*-
 
 from Products.PageTemplates.Expressions import getEngine
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.config import ACTIONS_DEFAULT
+from collective.easyform.config import DEFAULT_SCRIPT
+from collective.easyform.config import EDIT_ADDRESSING_PERMISSION
+from collective.easyform.config import EDIT_ADVANCED_PERMISSION
+from collective.easyform.config import EDIT_PYTHON_PERMISSION
+from collective.easyform.config import EDIT_TALES_PERMISSION
+from collective.easyform.config import FIELDS_DEFAULT
+from collective.easyform.config import MAIL_BODY_DEFAULT
+from collective.easyform.vocabularies import FORM_METHODS
+from collective.easyform.vocabularies import MIME_LIST
+from collective.easyform.vocabularies import XINFO_HEADERS
+from collective.easyform.vocabularies import customActions
+from collective.easyform.vocabularies import fieldsFactory
+from collective.easyform.vocabularies import getProxyRoleChoices
+from collective.easyform.vocabularies import vocabExtraDataDL
+from collective.easyform.vocabularies import vocabFormatDL
+from collective.easyform.vocabularies import widgetsFactory
 from plone.app.textfield import RichText
 from plone.autoform.directives import omitted
 from plone.autoform.directives import read_permission
@@ -32,25 +50,6 @@ from zope.schema import ValidationError
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ITextLine
 from zope.tales.tales import CompilerError
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.config import ACTIONS_DEFAULT
-from collective.easyform.config import DEFAULT_SCRIPT
-from collective.easyform.config import FIELDS_DEFAULT
-from collective.easyform.config import MAIL_BODY_DEFAULT
-from collective.easyform.config import EDIT_TALES_PERMISSION
-from collective.easyform.config import EDIT_PYTHON_PERMISSION
-from collective.easyform.config import EDIT_ADDRESSING_PERMISSION
-from collective.easyform.config import EDIT_ADVANCED_PERMISSION
-from collective.easyform.vocabularies import FORM_METHODS
-from collective.easyform.vocabularies import MIME_LIST
-from collective.easyform.vocabularies import XINFO_HEADERS
-from collective.easyform.vocabularies import customActions
-from collective.easyform.vocabularies import fieldsFactory
-from collective.easyform.vocabularies import getProxyRoleChoices
-from collective.easyform.vocabularies import vocabExtraDataDL
-from collective.easyform.vocabularies import vocabFormatDL
-from collective.easyform.vocabularies import widgetsFactory
 
 PMF = MessageFactory('plone')
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
@@ -236,7 +235,7 @@ class IEasyForm(Schema):
         required=False,
     )
     fieldset(u'overrides', label=_('Overrides'),
-                  fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection', 'submitLabelOverride'])
+             fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection', 'submitLabelOverride'])
     write_permission(thanksPageOverrideAction=EDIT_TALES_PERMISSION)
     thanksPageOverrideAction = Choice(
         title=_(u'label_thankspageoverrideaction_text',
@@ -355,7 +354,7 @@ class IEasyForm(Schema):
         default=u'',
     )
     fieldset(u'thankyou', label=_('Thanks Page'),
-                  fields=['thankstitle', 'thanksdescription', 'showAll', 'showFields', 'includeEmpties', 'thanksPrologue', 'thanksEpilogue'])
+             fields=['thankstitle', 'thanksdescription', 'showAll', 'showFields', 'includeEmpties', 'thanksPrologue', 'thanksEpilogue'])
     thankstitle = TextLine(
         title=_(u'label_thankstitle', default=u'Thanks title'),
         default=u'Thank You',
@@ -452,7 +451,7 @@ class IFieldExtender(Schema):
         source=widgetsFactory,
     )
     fieldset(u'overrides', label=_('Overrides'),
-                  fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
+             fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
     write_permission(TDefault=EDIT_TALES_PERMISSION)
     TDefault = TextLine(
         title=_(u'label_tdefault_text', default=u'Default Expression'),
@@ -600,7 +599,7 @@ class IMailer(IAction):
         required=False,
     )
     fieldset(u'addressing', label=_('Addressing'), fields=[
-                  'to_field', 'cc_recipients', 'bcc_recipients', 'replyto_field'])
+             'to_field', 'cc_recipients', 'bcc_recipients', 'replyto_field'])
     write_permission(to_field=EDIT_ADVANCED_PERMISSION)
     read_permission(to_field=MODIFY_PORTAL_CONTENT)
     to_field = Choice(
@@ -653,8 +652,8 @@ class IMailer(IAction):
         vocabulary=fieldsFactory,
     )
     fieldset(u'message', label=PMF('Message'), fields=[
-                  'msg_subject', 'subject_field', 'body_pre', 'body_post',
-                  'body_footer', 'showAll', 'showFields', 'includeEmpties'])
+             'msg_subject', 'subject_field', 'body_pre', 'body_post',
+             'body_footer', 'showAll', 'showFields', 'includeEmpties'])
     read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
     msg_subject = TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
@@ -767,7 +766,7 @@ class IMailer(IAction):
         vocabulary=MIME_LIST,
     )
     fieldset(u'headers', label=_('Headers'),
-                  fields=['xinfo_headers', 'additional_headers'])
+             fields=['xinfo_headers', 'additional_headers'])
     widget(xinfo_headers=CheckBoxFieldWidget)
 #     default_method='getDefaultXInfo',
     write_permission(xinfo_headers=EDIT_ADVANCED_PERMISSION)
@@ -822,7 +821,7 @@ class IMailer(IAction):
 #                ),
 #            ))
     fieldset(u'overrides', label=_('Overrides'), fields=[
-                  'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
+             'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
     write_permission(subjectOverride=EDIT_TALES_PERMISSION)
     read_permission(subjectOverride=MODIFY_PORTAL_CONTENT)
     subjectOverride = TextLine(

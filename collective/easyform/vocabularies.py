@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import get_context
+from collective.easyform.api import get_fields
 from z3c.form.interfaces import IFieldWidget
 from zope.component import getGlobalSiteManager
 from zope.component import getUtilitiesFor
@@ -11,10 +14,6 @@ from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabulary
 from zope.schema.vocabulary import SimpleVocabulary
-
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import get_context
-from collective.easyform.api import get_fields
 
 
 PMF = MessageFactory('plone')

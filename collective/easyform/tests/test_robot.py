@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-
-import os
-import unittest
-
-from plone.testing import layered
-
 from collective.easyform.tests import base
-
+from plone.testing import layered
+import os
 import robotsuite
+import unittest
 
 
 def test_suite():

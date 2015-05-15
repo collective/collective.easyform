@@ -4,8 +4,8 @@
 #
 
 from AccessControl import Unauthorized
-from collective.easyform.tests import base
 from Products.CMFCore.utils import getToolByName
+from collective.easyform.tests import base
 import Products
 
 
