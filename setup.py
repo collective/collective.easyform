@@ -27,10 +27,11 @@ setup(name='collective.easyform',
           'setuptools',
           'plone.app.dexterity',
           'plone.app.textfield',
+          'plone.autoform',
           'plone.dexterity',
-          'plone.directives.form',
           'plone.namedfile',
           'plone.schemaeditor',
+          'plone.supermodel',
           # -*- Extra requirements: -*-
       ],
       extras_require={

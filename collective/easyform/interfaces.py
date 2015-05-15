@@ -2,12 +2,17 @@
 
 from Products.PageTemplates.Expressions import getEngine
 from plone.app.textfield import RichText
-from plone.directives import form
+from plone.autoform.directives import omitted
+from plone.autoform.directives import read_permission
+from plone.autoform.directives import widget
+from plone.autoform.directives import write_permission
 from plone.schemaeditor import SchemaEditorMessageFactory as __
 from plone.schemaeditor.interfaces import ID_RE
 from plone.schemaeditor.interfaces import IFieldContext
 from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
+from plone.supermodel.model import Schema
+from plone.supermodel.model import fieldset
 from plone.z3cform.interfaces import IFormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import IEditForm
@@ -136,13 +141,13 @@ class IEasyFormImportFormSchema(Interface):
         required=True)
 
 
-class IEasyForm(form.Schema):
+class IEasyForm(Schema):
 
     """Forms for Plone"""
 
-#     form.fieldset(u'models', label=_('Models'),
+#     fieldset(u'models', label=_('Models'),
 #                   fields=['fields_model', 'actions_model'])
-    form.omitted('fields_model', 'actions_model')
+    omitted('fields_model', 'actions_model')
     fields_model = Text(
         title=_(u'Fields Model'),
         default=FIELDS_DEFAULT,
@@ -206,7 +211,7 @@ class IEasyForm(form.Schema):
         default=True,
         required=False,
     )
-    form.write_permission(forceSSL=EDIT_ADVANCED_PERMISSION)
+    write_permission(forceSSL=EDIT_ADVANCED_PERMISSION)
     forceSSL = Bool(
         title=_(u'label_force_ssl', default=u'Force SSL connection'),
         description=_(u'help_force_ssl', default=u''
@@ -230,9 +235,9 @@ class IEasyForm(form.Schema):
                       default=u'The text will be displayed after the form fields.'),
         required=False,
     )
-    form.fieldset(u'overrides', label=_('Overrides'),
+    fieldset(u'overrides', label=_('Overrides'),
                   fields=['thanksPageOverrideAction', 'thanksPageOverride', 'formActionOverride', 'onDisplayOverride', 'afterValidationOverride', 'headerInjection', 'submitLabelOverride'])
-    form.write_permission(thanksPageOverrideAction=EDIT_TALES_PERMISSION)
+    write_permission(thanksPageOverrideAction=EDIT_TALES_PERMISSION)
     thanksPageOverrideAction = Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
@@ -252,7 +257,7 @@ class IEasyForm(form.Schema):
         required=False,
         vocabulary=customActions,
     )
-    form.write_permission(thanksPageOverride=EDIT_TALES_PERMISSION)
+    write_permission(thanksPageOverride=EDIT_TALES_PERMISSION)
     thanksPageOverride = TextLine(
         title=_(u'label_thankspageoverride_text',
                 default=u'Custom Success Action'),
@@ -272,7 +277,7 @@ class IEasyForm(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    form.write_permission(formActionOverride=EDIT_TALES_PERMISSION)
+    write_permission(formActionOverride=EDIT_TALES_PERMISSION)
     formActionOverride = TextLine(
         title=_(u'label_formactionoverride_text',
                 default=u'Custom Form Action'),
@@ -285,7 +290,7 @@ class IEasyForm(form.Schema):
         required=False,
         constraint=isTALES,
     )
-    form.write_permission(onDisplayOverride=EDIT_TALES_PERMISSION)
+    write_permission(onDisplayOverride=EDIT_TALES_PERMISSION)
     onDisplayOverride = TextLine(
         title=_(u'label_OnDisplayOverride_text', default=u'Form Setup Script'),
         description=_(u'help_OnDisplayOverride_text', default=u''
@@ -302,7 +307,7 @@ class IEasyForm(form.Schema):
         required=False,
         default=u'',
     )
-    form.write_permission(afterValidationOverride=EDIT_TALES_PERMISSION)
+    write_permission(afterValidationOverride=EDIT_TALES_PERMISSION)
     afterValidationOverride = TextLine(
         title=_(u'label_AfterValidationOverride_text',
                 default=u'After Validation Script'),
@@ -321,7 +326,7 @@ class IEasyForm(form.Schema):
         required=False,
         default=u'',
     )
-    form.write_permission(headerInjection=EDIT_TALES_PERMISSION)
+    write_permission(headerInjection=EDIT_TALES_PERMISSION)
     headerInjection = TextLine(
         title=_(u'label_headerInjection_text', default=u'Header Injection'),
         description=_(u'help_headerInjection_text', default=u''
@@ -335,7 +340,7 @@ class IEasyForm(form.Schema):
         required=False,
         default=u'',
     )
-    form.write_permission(submitLabelOverride=EDIT_TALES_PERMISSION)
+    write_permission(submitLabelOverride=EDIT_TALES_PERMISSION)
     submitLabelOverride = TextLine(
         title=_(u'label_submitlabeloverride_text',
                 default=u'Custom Submit Button Label'),
@@ -349,7 +354,7 @@ class IEasyForm(form.Schema):
         required=False,
         default=u'',
     )
-    form.fieldset(u'thankyou', label=_('Thanks Page'),
+    fieldset(u'thankyou', label=_('Thanks Page'),
                   fields=['thankstitle', 'thanksdescription', 'showAll', 'showFields', 'includeEmpties', 'thanksPrologue', 'thanksEpilogue'])
     thankstitle = TextLine(
         title=_(u'label_thankstitle', default=u'Thanks title'),
@@ -438,7 +443,7 @@ class IEasyFormActionsContext(ISchemaContext):
     """
 
 
-class IFieldExtender(form.Schema):
+class IFieldExtender(Schema):
     field_widget = Choice(
         title=_(u'label_field_widget',
                 default=u'Field Widget'),
@@ -446,9 +451,9 @@ class IFieldExtender(form.Schema):
         required=False,
         source=widgetsFactory,
     )
-    form.fieldset(u'overrides', label=_('Overrides'),
+    fieldset(u'overrides', label=_('Overrides'),
                   fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
-    form.write_permission(TDefault=EDIT_TALES_PERMISSION)
+    write_permission(TDefault=EDIT_TALES_PERMISSION)
     TDefault = TextLine(
         title=_(u'label_tdefault_text', default=u'Default Expression'),
         description=(_(u'help_tdefault_text', default=u''
@@ -461,7 +466,7 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    form.write_permission(TEnabled=EDIT_TALES_PERMISSION)
+    write_permission(TEnabled=EDIT_TALES_PERMISSION)
     TEnabled = TextLine(
         title=_(u'label_tenabled_text', default=u'Enabling Expression'),
         description=(_(u'help_tenabled_text', default=u''
@@ -476,7 +481,7 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    form.write_permission(TValidator=EDIT_TALES_PERMISSION)
+    write_permission(TValidator=EDIT_TALES_PERMISSION)
     TValidator = TextLine(
         title=_(u'label_tvalidator_text', default=u'Custom Validator'),
         description=(_(u'help_tvalidator_text', default=u''
@@ -491,7 +496,7 @@ class IFieldExtender(form.Schema):
         constraint=isTALES,
         required=False,
     )
-    form.write_permission(serverSide=EDIT_TALES_PERMISSION)
+    write_permission(serverSide=EDIT_TALES_PERMISSION)
     serverSide = Bool(
         title=_(u'label_server_side_text', default=u'Server-Side Variable'),
         description=_(u'description_server_side_text', default=u''
@@ -513,10 +518,10 @@ class IFieldExtender(form.Schema):
     )
 
 
-class IActionExtender(form.Schema):
-    form.fieldset(u'overrides', label=_('Overrides'), fields=['execCondition'])
-    form.read_permission(execCondition=MODIFY_PORTAL_CONTENT)
-    form.write_permission(execCondition=EDIT_TALES_PERMISSION)
+class IActionExtender(Schema):
+    fieldset(u'overrides', label=_('Overrides'), fields=['execCondition'])
+    read_permission(execCondition=MODIFY_PORTAL_CONTENT)
+    write_permission(execCondition=EDIT_TALES_PERMISSION)
     execCondition = TextLine(
         title=_(u'label_execcondition_text', default=u'Execution Condition'),
         description=(_(u'help_execcondition_text', default=u''
@@ -553,8 +558,8 @@ class IActionEditForm(IEditForm):
     """
 
 
-class IAction(form.Schema, IField):
-    form.omitted('required', 'order', 'default', 'missing_value', 'readonly')
+class IAction(Schema, IField):
+    omitted('required', 'order', 'default', 'missing_value', 'readonly')
 #     required = Bool(
 #         title=_('Enabled'),
 #        description=_('Tells whether a action is enabled.'),
@@ -568,8 +573,8 @@ class IMailer(IAction):
 
     """A form action adapter that will e-mail form input."""
 #     default_method='getDefaultRecipientName',
-    form.write_permission(recipient_name=EDIT_ADDRESSING_PERMISSION)
-    form.read_permission(recipient_name=MODIFY_PORTAL_CONTENT)
+    write_permission(recipient_name=EDIT_ADDRESSING_PERMISSION)
+    read_permission(recipient_name=MODIFY_PORTAL_CONTENT)
     recipient_name = TextLine(
         title=_(u'label_formmailer_recipient_fullname',
                 default=u"Recipient's full name"),
@@ -583,8 +588,8 @@ class IMailer(IAction):
 #     validators=('isEmail',),
 #     TODO defaultFactory
 #     TODO IContextAwareDefaultFactory
-    form.write_permission(recipient_email=EDIT_ADDRESSING_PERMISSION)
-    form.read_permission(recipient_email=MODIFY_PORTAL_CONTENT)
+    write_permission(recipient_email=EDIT_ADDRESSING_PERMISSION)
+    read_permission(recipient_email=MODIFY_PORTAL_CONTENT)
     recipient_email = TextLine(
         title=_(u'label_formmailer_recipient_email',
                 default=u"Recipient's e-mail address"),
@@ -594,10 +599,10 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    form.fieldset(u'addressing', label=_('Addressing'), fields=[
+    fieldset(u'addressing', label=_('Addressing'), fields=[
                   'to_field', 'cc_recipients', 'bcc_recipients', 'replyto_field'])
-    form.write_permission(to_field=EDIT_ADVANCED_PERMISSION)
-    form.read_permission(to_field=MODIFY_PORTAL_CONTENT)
+    write_permission(to_field=EDIT_ADVANCED_PERMISSION)
+    read_permission(to_field=MODIFY_PORTAL_CONTENT)
     to_field = Choice(
         title=_(u'label_formmailer_to_extract',
                 default=u'Extract Recipient From'),
@@ -611,8 +616,8 @@ class IMailer(IAction):
         vocabulary=fieldsFactory,
     )
 #     default_method='getDefaultCC',
-    form.write_permission(cc_recipients=EDIT_ADDRESSING_PERMISSION)
-    form.read_permission(cc_recipients=MODIFY_PORTAL_CONTENT)
+    write_permission(cc_recipients=EDIT_ADDRESSING_PERMISSION)
+    read_permission(cc_recipients=MODIFY_PORTAL_CONTENT)
     cc_recipients = Text(
         title=_(u'label_formmailer_cc_recipients',
                 default=u'CC Recipients'),
@@ -623,8 +628,8 @@ class IMailer(IAction):
         required=False,
     )
 #     default_method='getDefaultBCC',
-    form.write_permission(bcc_recipients=EDIT_ADDRESSING_PERMISSION)
-    form.read_permission(bcc_recipients=MODIFY_PORTAL_CONTENT)
+    write_permission(bcc_recipients=EDIT_ADDRESSING_PERMISSION)
+    read_permission(bcc_recipients=MODIFY_PORTAL_CONTENT)
     bcc_recipients = Text(
         title=_(u'label_formmailer_bcc_recipients',
                 default=u'BCC Recipients'),
@@ -634,8 +639,8 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    form.write_permission(replyto_field=EDIT_ADVANCED_PERMISSION)
-    form.read_permission(replyto_field=MODIFY_PORTAL_CONTENT)
+    write_permission(replyto_field=EDIT_ADVANCED_PERMISSION)
+    read_permission(replyto_field=MODIFY_PORTAL_CONTENT)
     replyto_field = Choice(
         title=_(u'label_formmailer_replyto_extract',
                 default=u'Extract Reply-To From'),
@@ -647,10 +652,10 @@ class IMailer(IAction):
         required=False,
         vocabulary=fieldsFactory,
     )
-    form.fieldset(u'message', label=PMF('Message'), fields=[
+    fieldset(u'message', label=PMF('Message'), fields=[
                   'msg_subject', 'subject_field', 'body_pre', 'body_post',
                   'body_footer', 'showAll', 'showFields', 'includeEmpties'])
-    form.read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
+    read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
     msg_subject = TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
         description=_(u'help_formmailer_subject', default=u''
@@ -661,8 +666,8 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    form.write_permission(subject_field=EDIT_ADVANCED_PERMISSION)
-    form.read_permission(subject_field=MODIFY_PORTAL_CONTENT)
+    write_permission(subject_field=EDIT_ADVANCED_PERMISSION)
+    read_permission(subject_field=MODIFY_PORTAL_CONTENT)
     subject_field = Choice(
         title=_(u'label_formmailer_subject_extract',
                 default=u'Extract Subject From'),
@@ -673,7 +678,7 @@ class IMailer(IAction):
         vocabulary=fieldsFactory,
     )
 #     accessor='getBody_pre',
-    form.read_permission(body_pre=MODIFY_PORTAL_CONTENT)
+    read_permission(body_pre=MODIFY_PORTAL_CONTENT)
     body_pre = Text(
         title=_(u'label_formmailer_body_pre', default=u'Body (prepended)'),
         description=_(u'help_formmailer_body_pre',
@@ -682,7 +687,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    form.read_permission(body_post=MODIFY_PORTAL_CONTENT)
+    read_permission(body_post=MODIFY_PORTAL_CONTENT)
     body_post = Text(
         title=_(u'label_formmailer_body_post', default=u'Body (appended)'),
         description=_(u'help_formmailer_body_post',
@@ -691,7 +696,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    form.read_permission(body_footer=MODIFY_PORTAL_CONTENT)
+    read_permission(body_footer=MODIFY_PORTAL_CONTENT)
     body_footer = Text(
         title=_(u'label_formmailer_body_footer',
                 default=u'Body (signature)'),
@@ -702,7 +707,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-    form.read_permission(showAll=MODIFY_PORTAL_CONTENT)
+    read_permission(showAll=MODIFY_PORTAL_CONTENT)
     showAll = Bool(
         title=_(u'label_mailallfields_text', default=u'Include All Fields'),
         description=_(u'help_mailallfields_text', default=u''
@@ -713,7 +718,7 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
-    form.read_permission(showFields=MODIFY_PORTAL_CONTENT)
+    read_permission(showFields=MODIFY_PORTAL_CONTENT)
     showFields = List(
         title=_(u'label_mailfields_text', default=u'Show Responses'),
         description=_(u'help_mailfields_text',
@@ -722,7 +727,7 @@ class IMailer(IAction):
         required=False,
         value_type=Choice(vocabulary=fieldsFactory),
     )
-    form.read_permission(includeEmpties=MODIFY_PORTAL_CONTENT)
+    read_permission(includeEmpties=MODIFY_PORTAL_CONTENT)
     includeEmpties = Bool(
         title=_(u'label_mailEmpties_text', default=u'Include Empties'),
         description=_(u'help_mailEmpties_text', default=u''
@@ -732,13 +737,13 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
-    form.fieldset(u'template', label=PMF(
+    fieldset(u'template', label=PMF(
         'Template'), fields=['body_pt', 'body_type'])
 #     ZPTField('body_pt',
 #     default_method='getMailBodyDefault',
 #     validators=('zptvalidator',),
-    form.write_permission(body_pt=EDIT_TALES_PERMISSION)
-    form.read_permission(body_pt=MODIFY_PORTAL_CONTENT)
+    write_permission(body_pt=EDIT_TALES_PERMISSION)
+    read_permission(body_pt=MODIFY_PORTAL_CONTENT)
     body_pt = Text(
         title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
         description=_(u'help_formmailer_body_pt', default=u''
@@ -750,8 +755,8 @@ class IMailer(IAction):
         missing_value=u'',
     )
 #     default_method='getMailBodyTypeDefault',
-    form.write_permission(body_type=EDIT_ADVANCED_PERMISSION)
-    form.read_permission(body_type=MODIFY_PORTAL_CONTENT)
+    write_permission(body_type=EDIT_ADVANCED_PERMISSION)
+    read_permission(body_type=MODIFY_PORTAL_CONTENT)
     body_type = Choice(
         title=_(u'label_formmailer_body_type', default=u'Mail Format'),
         description=_(u'help_formmailer_body_type', default=u''
@@ -761,12 +766,12 @@ class IMailer(IAction):
         default=u'html',
         vocabulary=MIME_LIST,
     )
-    form.fieldset(u'headers', label=_('Headers'),
+    fieldset(u'headers', label=_('Headers'),
                   fields=['xinfo_headers', 'additional_headers'])
-    form.widget(xinfo_headers=CheckBoxFieldWidget)
+    widget(xinfo_headers=CheckBoxFieldWidget)
 #     default_method='getDefaultXInfo',
-    form.write_permission(xinfo_headers=EDIT_ADVANCED_PERMISSION)
-    form.read_permission(xinfo_headers=MODIFY_PORTAL_CONTENT)
+    write_permission(xinfo_headers=EDIT_ADVANCED_PERMISSION)
+    read_permission(xinfo_headers=MODIFY_PORTAL_CONTENT)
     xinfo_headers = List(
         title=_(u'label_xinfo_headers_text', default=u'HTTP Headers'),
         description=_(u'help_xinfo_headers_text', default=u''
@@ -779,8 +784,8 @@ class IMailer(IAction):
         value_type=Choice(vocabulary=XINFO_HEADERS),
     )
 #     default_method='getDefaultAddHdrs',
-    form.write_permission(additional_headers=EDIT_ADVANCED_PERMISSION)
-    form.read_permission(additional_headers=MODIFY_PORTAL_CONTENT)
+    write_permission(additional_headers=EDIT_ADVANCED_PERMISSION)
+    read_permission(additional_headers=MODIFY_PORTAL_CONTENT)
     additional_headers = List(
         title=_(u'label_formmailer_additional_headers',
                 default=u'Additional Headers'),
@@ -816,10 +821,10 @@ class IMailer(IAction):
 #                    ),
 #                ),
 #            ))
-    form.fieldset(u'overrides', label=_('Overrides'), fields=[
+    fieldset(u'overrides', label=_('Overrides'), fields=[
                   'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
-    form.write_permission(subjectOverride=EDIT_TALES_PERMISSION)
-    form.read_permission(subjectOverride=MODIFY_PORTAL_CONTENT)
+    write_permission(subjectOverride=EDIT_TALES_PERMISSION)
+    read_permission(subjectOverride=MODIFY_PORTAL_CONTENT)
     subjectOverride = TextLine(
         title=_(u'label_subject_override_text', default=u'Subject Expression'),
         description=_(u'help_subject_override_text', default=u''
@@ -833,8 +838,8 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    form.write_permission(senderOverride=EDIT_TALES_PERMISSION)
-    form.read_permission(senderOverride=MODIFY_PORTAL_CONTENT)
+    write_permission(senderOverride=EDIT_TALES_PERMISSION)
+    read_permission(senderOverride=MODIFY_PORTAL_CONTENT)
     senderOverride = TextLine(
         title=_(u'label_sender_override_text', default=u'Sender Expression'),
         description=_(u'help_sender_override_text', default=u''
@@ -847,8 +852,8 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    form.write_permission(recipientOverride=EDIT_TALES_PERMISSION)
-    form.read_permission(recipientOverride=MODIFY_PORTAL_CONTENT)
+    write_permission(recipientOverride=EDIT_TALES_PERMISSION)
+    read_permission(recipientOverride=MODIFY_PORTAL_CONTENT)
     recipientOverride = TextLine(
         title=_(u'label_recipient_override_text',
                 default=u'Recipient Expression'),
@@ -864,8 +869,8 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    form.write_permission(ccOverride=EDIT_TALES_PERMISSION)
-    form.read_permission(ccOverride=MODIFY_PORTAL_CONTENT)
+    write_permission(ccOverride=EDIT_TALES_PERMISSION)
+    read_permission(ccOverride=MODIFY_PORTAL_CONTENT)
     ccOverride = TextLine(
         title=_(u'label_cc_override_text', default=u'CC Expression'),
         description=_(u'help_cc_override_text', default=u''
@@ -880,8 +885,8 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
-    form.write_permission(bccOverride=EDIT_TALES_PERMISSION)
-    form.read_permission(bccOverride=MODIFY_PORTAL_CONTENT)
+    write_permission(bccOverride=EDIT_TALES_PERMISSION)
+    read_permission(bccOverride=MODIFY_PORTAL_CONTENT)
     bccOverride = TextLine(
         title=_(u'label_bcc_override_text', default=u'BCC Expression'),
         description=_(u'help_bcc_override_text', default=u''
@@ -901,8 +906,8 @@ class IMailer(IAction):
 class ICustomScript(IAction):
 
     """Executes a Python script for form data"""
-    form.read_permission(ProxyRole=MODIFY_PORTAL_CONTENT)
-    form.write_permission(ProxyRole=EDIT_PYTHON_PERMISSION)
+    read_permission(ProxyRole=MODIFY_PORTAL_CONTENT)
+    write_permission(ProxyRole=EDIT_PYTHON_PERMISSION)
     ProxyRole = Choice(
         title=_(u'label_script_proxy', default=u'Proxy role'),
         description=_(u'help_script_proxy',
@@ -911,8 +916,8 @@ class ICustomScript(IAction):
         required=True,
         vocabulary=getProxyRoleChoices,
     )
-    form.read_permission(ScriptBody=MODIFY_PORTAL_CONTENT)
-    form.write_permission(ScriptBody=EDIT_PYTHON_PERMISSION)
+    read_permission(ScriptBody=MODIFY_PORTAL_CONTENT)
+    write_permission(ScriptBody=EDIT_PYTHON_PERMISSION)
     ScriptBody = Text(
         title=_(u'label_script_body', default=u'Script body'),
         description=_(u'help_script_body', default=u'Write your script here.'),
@@ -965,7 +970,7 @@ class ISaveData(IAction):
         required=False,
         value_type=Choice(vocabulary=fieldsFactory),
     )
-    form.widget(ExtraData=CheckBoxFieldWidget)
+    widget(ExtraData=CheckBoxFieldWidget)
     ExtraData = List(
         title=_(u'label_savedataextra_text', default='Extra Data'),
         description=_(u'help_savedataextra_text',
