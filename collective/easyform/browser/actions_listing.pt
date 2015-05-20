@@ -5,16 +5,17 @@
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:description-slot metal:fill-slot="description">
       <div class="extraActions">
-        <form id="add-field" method="GET"
-              tal:attributes="action string:${context/absolute_url}/@@add-action">
-          <input type="submit"
-                 i18n:attributes="value"
-                 value="Add new action&hellip;"/>
-        </form>
+        <a id="add-field" class="pat-modal pat-plone-modal"
+           href="${context/absolute_url}/@@add-action">
+            <button style="float: right; display: block;"
+                    i18n:translate="add_new_action_hellip">Add new action&hellip;</button>
+        </a>
+
       </div>
     </metal:description-slot>
 
     <metal:top-slot metal:fill-slot="formtop">
+      <input tal:replace="structure context/@@authenticator/authenticator" />
       <script type="text/javascript"
               tal:attributes="src context/++resource++schemaeditor.js"></script>
       <link media="screen" type="text/css" rel="stylesheet"
@@ -63,7 +64,7 @@
 
               <div class="fieldControls"
                    i18n:domain="plone.schemaeditor">
-                  <a class="fieldSettings"
+                  <a class="fieldSettings pat-modal pat-plone-modal"
                      tal:define="edit_url python:view.edit_url(widget.field)"
                      tal:condition="edit_url"
                      i18n:translate=""
