@@ -5,15 +5,15 @@ Introduction
     :target: https://travis-ci.org/quintagroup/collective.easyform
     :alt: Travis CI status
 
-.. image:: https://coveralls.io/repos/quintagroup/collective.easyform/badge.png?branch=master
+.. image:: https://coveralls.io/repos/quintagroup/collective.easyform/badge.svg?branch=master
     :target: https://coveralls.io/r/quintagroup/collective.easyform?branch=master
     :alt: Coveralls status
 
-.. image:: https://badge.fury.io/py/collective.easyform.png
+.. image:: https://badge.fury.io/py/collective.easyform.svg
     :target: http://badge.fury.io/py/collective.easyform
     :alt: Fury Python
 
-.. image:: https://badge.fury.io/gh/quintagroup%2Fcollective.easyform.png
+.. image:: https://badge.fury.io/gh/quintagroup%2Fcollective.easyform.svg
     :target: http://badge.fury.io/gh/quintagroup%2Fcollective.easyform
     :alt: Fury Github
 
