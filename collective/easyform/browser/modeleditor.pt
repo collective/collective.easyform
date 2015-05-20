@@ -39,7 +39,7 @@
             </form>
             <div id="modelEditor" tal:content="view/modelSource" />
         </div>
-    <script>
+    <script type="text/javascript">
         // start with an editor that fits the viewport with room
         // to show the save button.
         jQuery(function ($) {
