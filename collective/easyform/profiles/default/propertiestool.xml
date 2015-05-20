@@ -4,10 +4,10 @@
   <property name="use_folder_tabs" type="lines" purge="False">
    <element value="EasyForm"/>
   </property>
-  <property name="typesLinkToFolderContentsInFC" purge="False">
+  <property name="typesLinkToFolderContentsInFC" type="lines" purge="False">
    <element value="EasyForm"/>
   </property>
-  <property name="default_page_types" purge="False">
+  <property name="default_page_types" type="lines" purge="False">
    <element value="EasyForm"/>
   </property>
  </object>
