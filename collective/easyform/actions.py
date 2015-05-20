@@ -163,7 +163,7 @@ class Mailer(Action):
                     live_fields.append(f)
 
         # bare_fields = [schema[f] for f in live_fields]
-        bare_fields = dict([(f, fields[f]) for f in live_fields])
+        bare_fields = OrderedDict([(f, fields[f]) for f in live_fields])
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
@@ -172,7 +172,10 @@ class Mailer(Action):
         replacer = DollarVarReplacer(fields).sub
         extra = {
             'data': bare_fields,
-            'fields': dict([(i, j.title) for i, j in getFieldsInOrder(schema)]),
+            'fields': OrderedDict([
+                (i, j.title)
+                for i, j in getFieldsInOrder(schema)
+            ]),
             'mailer': self,
             'body_pre': self.body_pre and replacer(self.body_pre),
             'body_post': self.body_post and replacer(self.body_post),
