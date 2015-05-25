@@ -111,13 +111,13 @@ Add field to form
     ...    content-views  ${dot1}  ${note1}
     Remove elements  ${dot1}  ${note1}
     Click link  Fields
-    ${dot1} =  Add dot  css=#add-field input  2
+    ${dot1} =  Add dot  css=#add-field  2
     ${note1} =  Add note
-    ...    css=#add-field input
+    ...    css=#add-field
     ...    Then click at 'Add new field…' button
     ...    width=320  position=left
     Capture and crop page screenshot  click-add-new-field.png
-    ...    css=#add-field input  ${dot1}  ${note1}
+    ...    css=#add-field  ${dot1}  ${note1}
     Remove elements  ${dot1}  ${note1}
     Click Overlay Button  Add new field…
     ${dot1} =  Add dot  form-widgets-title  3
@@ -148,13 +148,13 @@ Add fieldset to form
     And a easyform  EasyForm
     When Click Link  Fields
 
-    ${dot1} =  Add dot  css=#add-fieldset input  2
+    ${dot1} =  Add dot  css=#add-fieldset  2
     ${note1} =  Add note
-    ...    css=#add-fieldset input
+    ...    css=#add-fieldset
     ...    Then click at 'Add new fieldset…' button
     ...    width=330  position=left
     Capture and crop page screenshot  click-add-new-fieldset.png
-    ...    css=#add-fieldset input  ${dot1}  ${note1}
+    ...    css=#add-fieldset  ${dot1}  ${note1}
     Remove elements  ${dot1}  ${note1}
     Click Overlay Button  Add new fieldset…
     ${dot1} =  Add dot  form-widgets-label  3
@@ -187,13 +187,13 @@ Add action to form
     ...    content-views  ${dot1}  ${note1}
     Remove elements  ${dot1}  ${note1}
     Click link  Actions
-    ${dot1} =  Add dot  css=#add-field input  2
+    ${dot1} =  Add dot  css=#add-field  2
     ${note1} =  Add note
-    ...    css=#add-field input
+    ...    css=#add-field
     ...    Then click at 'Add new action…' button
     ...    width=330  position=left
     Capture and crop page screenshot  click-add-new-action.png
-    ...    css=#add-field input  ${dot1}  ${note1}
+    ...    css=#add-field  ${dot1}  ${note1}
     Remove elements  ${dot1}  ${note1}
     Click Overlay Button  Add new action…
     ${dot1} =  Add dot  form-widgets-title  3

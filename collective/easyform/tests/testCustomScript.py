@@ -165,7 +165,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.portal.REQUEST['form.widgets.__name__'] = u'test_field'
         self.portal.REQUEST['form.widgets.description'] = u''
         self.portal.REQUEST['form.widgets.factory'] = ['Text line (String)']
-        self.portal.REQUEST['form.widgets.required'] = ['false']
+        self.portal.REQUEST['form.widgets.required'] = []
         self.portal.REQUEST['form.buttons.add'] = u'Add'
         view = self.ff1.restrictedTraverse('fields/@@add-field')
         view.update()

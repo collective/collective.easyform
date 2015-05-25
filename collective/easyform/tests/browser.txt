@@ -17,7 +17,7 @@ We'll want to test the save data adapter later.
 Let's add one now::
 
     >>> browser.getLink('Actions').click()
-    >>> browser.getControl('Add new action…').click()
+    >>> browser.getLink('Add new action…').click()
     >>> browser.getControl('Title').value = 'saver'
     >>> browser.getControl('Short Name').value = 'saver'
     >>> browser.getControl('Save Data').selected = True
@@ -78,7 +78,7 @@ base class)::
 Add a new fieldset::
 
     >>> browser.getLink('Fields').click()
-    >>> browser.getControl('Add new fieldset…').click()
+    >>> browser.getLink('Add new fieldset…').click()
     >>> browser.getControl('Title').value = 'New fieldset'
     >>> browser.getControl('Short Name').value = 'new_fieldset'
     >>> browser.getControl('Add').click()
@@ -282,7 +282,7 @@ We want to test security on the custom script adapter. Let's add one::
 
     >>> browser.open(self.portal_url + '/testform')
     >>> browser.getLink('Actions').click()
-    >>> browser.getControl('Add new action…').click()
+    >>> browser.getLink('Add new action…').click()
     >>> browser.getControl('Title').value = 'Test Script Adapter'
     >>> browser.getControl('Short Name').value = 'test_script_adapter'
     >>> browser.getControl('Custom Script').selected = True

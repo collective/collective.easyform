@@ -37,7 +37,7 @@ Add field
 
 Open field settings
     [Arguments]    ${field_id}
-    Click Overlay Link  xpath=//div[@data-field_id='${field_id}']//a[@class='fieldSettings link-overlay']
+    Click Overlay Link  xpath=//div[@data-field_id='${field_id}']//a[contains(@class,'fieldSettings')]
 
 Wait overlay is closed
     Wait until keyword succeeds  60  1  Page should not contain element  css=div.overlay
