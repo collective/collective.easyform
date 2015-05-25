@@ -6,13 +6,15 @@
     <metal:description-slot metal:fill-slot="description">
       <div class="extraActions">
         <a id="add-field" class="pat-modal pat-plone-modal"
-           href="${context/absolute_url}/@@add-field">
+           tal:attributes="href string:${context/absolute_url}/@@add-field"
+           href="@@add-field">
             <button style="float: right; display: block;"
                 i18n:translate="add_new_field_hellip">Add new field&hellip;</button>
         </a>
 
-        <a id="add-fieldset" class="pat-modal pat-plone-modal" tal:condition="context/enableFieldsets"
-           href="${context/absolute_url}/@@add-fieldset">
+        <a id="add-fieldset" class="pat-modal pat-plone-modal" tal:condition="context/enableFieldsets|python:True"
+           tal:attributes="href string:${context/absolute_url}/@@add-fieldset"
+           href="@@add-fieldset">
             <button style="float: right; display: block;"
                 i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</button>
         </a>
