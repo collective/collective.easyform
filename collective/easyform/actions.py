@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
+from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
 from DateTime import DateTime
-from Products.Archetypes.utils import OrderedDict
 from Products.CMFCore.utils import getToolByName
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
+from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
 from collective.easyform.api import get_context
@@ -48,6 +50,24 @@ try:
 except ImportError:
     SavedDataBTree = IOBTree
 logger = getLogger('collective.easyform')
+
+
+class OrderedDict(BaseDict):
+    """
+    A wrapper around dictionary objects that provides an ordering for
+    keys() and items().
+    """
+
+    security = ClassSecurityInfo()
+    security.setDefaultAccess('allow')
+
+    def reverse(self):
+        items = list(self.items())
+        items.reverse()
+        return items
+
+
+InitializeClass(OrderedDict)
 
 
 class ActionFactory(object):
