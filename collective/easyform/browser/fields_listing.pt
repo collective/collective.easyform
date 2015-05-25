@@ -1,4 +1,4 @@
-<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
      xmlns:metal="http://xml.zope.org/namespaces/metal"
      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
      tal:omit-tag="" i18n:domain="plone.schemaeditor">
@@ -24,7 +24,7 @@
       <script type="text/javascript"
               tal:attributes="src context/++resource++schemaeditor.js"></script>
       <link media="screen" type="text/css" rel="stylesheet"
-            tal:attributes="href context/++resource++easyform.css">
+            tal:attributes="href context/++resource++easyform.css" />
     </metal:top-slot>
 
     <metal:fields-slot metal:fill-slot="fields">
@@ -96,4 +96,4 @@ class string:kssattr-fieldset-${fieldset_name}">
       </tal:block>
     </metal:fields-slot>
   </metal:form>
-</div>
+</html>
