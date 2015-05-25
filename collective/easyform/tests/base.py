@@ -33,6 +33,16 @@ class Fixture(PloneSandboxLayer):
 
     def setUpZope(self, app, configurationContext):
         # Load ZCML
+        try:
+            import plone.app.contenttypes
+            import plone.app.dexterity
+            self.loadZCML(
+                package=plone.app.dexterity, context=configurationContext)
+            self.loadZCML(
+                package=plone.app.contenttypes, context=configurationContext)
+        except ImportError:
+            pass
+
         import collective.easyform
         self.loadZCML(
             package=collective.easyform, context=configurationContext)
@@ -44,6 +54,12 @@ class Fixture(PloneSandboxLayer):
             pass
 
     def setUpPloneSite(self, portal):
+        try:
+            import plone.app.contenttypes
+            self.applyProfile(portal, 'plone.app.contenttypes:default')
+        except ImportError:
+            pass
+
         # Install the collective.easyform product
         self.applyProfile(portal, 'collective.easyform:default')
         portal.acl_users.userFolderAddUser('admin',

@@ -17,11 +17,12 @@ except ImportError:
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from Products.CMFCore import permissions
-from plone.app.testing import logout
-
 from collective.easyform.api import get_actions
 from collective.easyform.api import set_actions
 from collective.easyform.tests import base
+from plone.app.testing import logout
+from unittest import TestSuite
+from unittest import makeSuite
 
 
 test_script = '''
@@ -164,6 +165,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.portal.REQUEST['form.widgets.__name__'] = u'test_field'
         self.portal.REQUEST['form.widgets.description'] = u''
         self.portal.REQUEST['form.widgets.factory'] = ['Text line (String)']
+        self.portal.REQUEST['form.widgets.required'] = ['false']
         self.portal.REQUEST['form.buttons.add'] = u'Add'
         view = self.ff1.restrictedTraverse('fields/@@add-field')
         view.update()
@@ -473,7 +475,6 @@ class TestCustomScript(base.EasyFormTestCase):
 
 
 def test_suite():
-    from unittest import TestSuite, makeSuite
     suite = TestSuite()
     suite.addTest(makeSuite(TestCustomScript))
     return suite
