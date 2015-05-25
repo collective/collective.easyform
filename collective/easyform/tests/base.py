@@ -55,9 +55,8 @@ class Fixture(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         try:
-            import plone.app.contenttypes
             self.applyProfile(portal, 'plone.app.contenttypes:default')
-        except ImportError:
+        except:
             pass
 
         # Install the collective.easyform product
