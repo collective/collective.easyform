@@ -1,6 +1,24 @@
 Changelog
 =========
 
+1.0a3 (2015-06-02)
+------------------
+
+- Fixed templates
+  [kroman0]
+  
+- Fixed field order #17
+  [kroman0]
+
+- Fixed Plone 5 support
+  [kroman0]
+
+- Fixed dependencies
+  [kroman0]
+
+- Set script type correctly
+  [fredvd]
+  
 1.0a2 (2014-06-13)
 ------------------
 
