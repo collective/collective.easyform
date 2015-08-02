@@ -3,7 +3,10 @@
 # Test EasyForm initialisation and set-up
 #
 
-from Products.CMFDefault.exceptions import EmailAddressInvalid
+try:
+    from Products.CMFDefault.exceptions import EmailAddressInvalid
+except ImportError:
+    from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from ZPublisher.BaseRequest import BaseRequest
 from collective.easyform import validators

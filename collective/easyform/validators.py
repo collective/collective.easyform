@@ -7,9 +7,13 @@ except ImportError:
     validation = {}
     baseValidators = []
 
+try:
+    from Products.CMFDefault.exceptions import EmailAddressInvalid
+except ImportError:
+    from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
+
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
-from Products.CMFDefault.exceptions import EmailAddressInvalid
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.interfaces import IFieldValidator
 from types import BooleanType
