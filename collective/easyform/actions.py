@@ -272,13 +272,13 @@ class Mailer(Action):
             if _recip:
                 recip_email = _recip
 
+        to = None
         if to_addr:
             to = format_addresses(to_addr)
         elif recip_email:
-
-            recip_email = format_addresses(
+            to = format_addresses(
                 recip_email,
-                self.recipient_name.encode('utf-8')
+                self.recipient_name
             )
         else:
             # Use owner adress or fall back to portal email_from_address.
