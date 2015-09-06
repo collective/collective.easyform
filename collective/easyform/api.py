@@ -2,6 +2,7 @@
 
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
+from Products.CMFPlone.utils import safe_unicode
 from collective.easyform.config import MODEL_DEFAULT
 from hashlib import md5
 from plone.memoize import ram
@@ -163,6 +164,9 @@ def format_addresses(addresses, names=[]):
     >>> api.format_addresses('sim@sala.bim', 'sim')
     >>> 'sim <sim@sala.bim>'
 
+    >>> api.format_addresses('ähm@öhm.ühm', 'ähm')
+    >>> '\xc3\xa4hm <\xc3\xa4hm@\xc3\xb6hm.\xc3\xbchm>'
+
     >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus')
     >>> 'sim@sala.bim, hokus@pokus.fidibus'
 
@@ -191,12 +195,14 @@ def format_addresses(addresses, names=[]):
     if type(addresses) in StringTypes:
         addresses = [s for s in addresses.split(',')]
     assert(isinstance(addresses, list) or isinstance(addresses, tuple))  # ensure iterable  # noqa
-    addresses = [s.strip().encode('utf-8') for s in addresses if s]
+    addresses = [
+        safe_unicode(s).strip().encode('utf-8') for s in addresses if s
+    ]
 
     if names and type(names) in StringTypes:
         names = [s for s in names.split(',')]
     assert(isinstance(names, list) or isinstance(names, tuple))
-    names = [s.strip().encode('utf-8') for s in names if s]
+    names = [safe_unicode(s).strip().encode('utf-8') for s in names if s]
 
     address_pairs = []
     for cnt, address in enumerate(addresses):
