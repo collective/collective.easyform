@@ -6,6 +6,13 @@ Changelog
 
 Fixes:
 
+- Add German translations.
+  [thet]
+
+- Allow the definition of some EasyForm default values via the i18n translation
+  mechanism.
+  [thet]
+
 - Reworked mail address formating, avoiding recipient address in the form of
   ``name <<account@domain.com>>`` and having instead
   ``name <account@domain.com>``.

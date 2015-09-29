@@ -1,151 +1,150 @@
-# Giorgio Borelli 2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.0\n"
+"Project-Id-Version: collective.easyform\n"
 "POT-Creation-Date: 2015-09-29 22:51+0000\n"
-"PO-Revision-Date: 2014-05-06 16.00+0000\n"
-"Last-Translator: Giorgio Borelli\n"
+"PO-Revision-Date: 2014-06-06 23:17+0300\n"
+"Last-Translator: Johannes Raggam <raggam-nl@adm.at>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: it\n"
-"Language-Name: Italian\n"
+"Language-Code: de\n"
+"Language-Name: Deutsch\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.easyform\n"
 
 #: collective/easyform/browser/actions.py:117
 msgid "${items} input(s) saved"
-msgstr "${items} elemento/i salvato/i"
+msgstr "${items} Eingaben gespeichert."
 
 #: collective/easyform/interfaces.py:113
 msgid "Action type"
-msgstr "Tipo di azione"
+msgstr "Aktionstyp"
 
 #: collective/easyform/interfaces.py:201
 msgid "Actions Model"
-msgstr "Modello azioni"
+msgstr "Aktonsmodell"
 
 #: collective/easyform/browser/actions.py:254
 msgid "Add new action"
-msgstr "Aggiungi azione"
+msgstr "Eine neue Aktion hinzufügen"
 
 #: collective/easyform/interfaces.py:647
 msgid "Addressing"
-msgstr "Indirizzi"
+msgstr "Adressierung"
 
 #: collective/easyform/browser/actions.py:154
 msgid "Clear all"
-msgstr "Cancella i dati salvati"
+msgstr "Alles löschen"
 
 #: collective/easyform/profiles/default/types/EasyForm.xml
 msgid "EasyForm"
-msgstr ""
+msgstr "EasyForm"
 
 #: collective/easyform/browser/actions.py:315
 msgid "Edit Action '${fieldname}'"
-msgstr "Modifica azione '${fieldname}'"
+msgstr "Aktion editieren '${fieldname}'"
 
 #: collective/easyform/browser/actions.py:319
 msgid "Edit XML Actions Model"
-msgstr "Modifica l'XML delle azioni"
+msgstr "XML Aktionsmodell editieren"
 
 #: collective/easyform/browser/fields.py:83
 msgid "Edit XML Fields Model"
-msgstr "Modifica l'XML dei campi"
+msgstr "XML Feldmodell editieren"
 
 #: collective/easyform/profiles/default/actions.xml
 msgid "Export"
-msgstr "Esporta"
+msgstr "Export"
 
 #: collective/easyform/interfaces.py:197
 msgid "Fields Model"
-msgstr "Modello dei campi"
+msgstr "Feldmodell"
 
 #: collective/easyform/browser/exportimport.py:59
 msgid "Form imported."
-msgstr "Form importato."
+msgstr "Formular importiert."
 
 #: collective/easyform/interfaces.py:814
 msgid "Headers"
-msgstr "Intestazioni"
+msgstr "Kopfzeilen"
 
 #: collective/easyform/profiles/default/actions.xml
 msgid "Import"
-msgstr "Importa"
+msgstr "Import"
 
 #: collective/easyform/validators.py:61
 msgid "Links are not allowed."
-msgstr "Non sono consentiti link"
+msgstr "Links sind nicht erlaubt."
 
 #: collective/easyform/validators.py:40
 msgid "Must be a valid list of email addresses (separated by commas)."
-msgstr "Dev'essere una lista di indirizzi email validi, separati da virgola."
+msgstr "Muss eine valide liste von email Adressen sein, getrennt durch kommas."
 
 #: collective/easyform/validators.py:46
 msgid "Must be checked."
-msgstr "Dev'essere selezionato."
+msgstr "Muss angehackt sein."
 
 #: collective/easyform/validators.py:52
 msgid "Must be unchecked."
-msgstr "Dev'essere deselezionato"
+msgstr "Darf nicht angehackt sein."
 
 #: collective/easyform/interfaces.py:283
 msgid "Overrides"
-msgstr ""
+msgstr "Anpassungen"
 
 #: collective/easyform/interfaces.py:977
 msgid "Posting Date/Time"
-msgstr ""
+msgstr "Datum/Zeit des Eintrags"
 
 #: collective/easyform/vocabularies.py:28
 msgid "Redirect to"
-msgstr ""
+msgstr "Weiterleiten nach"
 
 #: collective/easyform/browser/view.py:189
 msgid "Reset"
-msgstr "Annulla"
+msgstr "Zurücksetzen"
 
 #: collective/easyform/interfaces.py:1061
 msgid "Rich Label"
-msgstr ""
+msgstr "HTML Label"
 
 #: collective/easyform/profiles/default/actions.xml
 msgid "Saved data"
-msgstr "Dati salvati"
+msgstr "Gespeicherte Daten"
 
 #: collective/easyform/interfaces.py:402
 msgid "Thanks Page"
-msgstr "Pagina di ringraziamento"
+msgstr "Danke-Seite"
 
 #: collective/easyform/vocabularies.py:27
 msgid "Traverse to"
-msgstr ""
+msgstr "Traversieren nach"
 
 #: collective/easyform/interfaces.py:555
 msgid "Validators"
-msgstr "Validatori"
+msgstr "Überprüfungen"
 
 #. Default: "Reset"
 #: collective/easyform/interfaces.py:164
 msgid "default_resetLabel"
-msgstr ""
+msgstr "Zurücksetzen"
 
 #. Default: "Submit"
 #: collective/easyform/interfaces.py:153
 msgid "default_submitLabel"
-msgstr ""
+msgstr "Einreichen"
 
 #. Default: "Thanks for your input."
 #: collective/easyform/interfaces.py:186
 msgid "default_thanksdescription"
-msgstr ""
+msgstr "Danke für Ihren Beitrag."
 
 #. Default: "Thank You"
 #: collective/easyform/interfaces.py:175
 msgid "default_thankstitle"
-msgstr ""
+msgstr "Vielen Dank"
 
 #. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
 #: collective/easyform/interfaces.py:547
@@ -155,7 +154,7 @@ msgstr ""
 #. Default: "${name} Header"
 #: collective/easyform/interfaces.py:842
 msgid "extra_header"
-msgstr "${name} intestazione"
+msgstr "${name} Kopfzeile"
 
 #. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter(if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded.The most common use of this field is to call a python scriptto clean up form input or to script an alternative action.Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
 #: collective/easyform/interfaces.py:359
@@ -442,7 +441,7 @@ msgstr ""
 
 #: collective/easyform/browser/exportimport.py:49
 msgid "import"
-msgstr ""
+msgstr "Import"
 
 #. Default: "After Validation Script"
 #: collective/easyform/interfaces.py:357
@@ -472,7 +471,7 @@ msgstr ""
 #. Default: "Custom Script"
 #: collective/easyform/actions.py:726
 msgid "label_customscript_action"
-msgstr "Script custom"
+msgstr ""
 
 #. Default: "Custom Default Fieldset Label"
 #: collective/easyform/interfaces.py:237
@@ -597,7 +596,7 @@ msgstr ""
 #. Default: "Label"
 #: collective/easyform/fields.py:106
 msgid "label_label_field"
-msgstr ""
+msgstr "Bezeichnung"
 
 #. Default: "Include Empties"
 #: collective/easyform/interfaces.py:777
@@ -647,7 +646,7 @@ msgstr ""
 #. Default: "Rich Label"
 #: collective/easyform/fields.py:108
 msgid "label_richlabel_field"
-msgstr ""
+msgstr "HTML Label"
 
 #. Default: "Save Data"
 #: collective/easyform/actions.py:728
@@ -687,7 +686,7 @@ msgstr ""
 #. Default: "Show All Fields"
 #: collective/easyform/interfaces.py:423
 msgid "label_showallfields_text"
-msgstr "Visualizza tutti i campi"
+msgstr ""
 
 #. Default: "Show Reset Button"
 #: collective/easyform/interfaces.py:211
@@ -757,7 +756,7 @@ msgstr ""
 #. Default: "Custom Validator"
 #: collective/easyform/interfaces.py:531
 msgid "label_tvalidator_text"
-msgstr "Validatore personalizzato"
+msgstr ""
 
 #. Default: "Unload protection"
 #: collective/easyform/interfaces.py:245
@@ -767,17 +766,17 @@ msgstr ""
 #. Default: "Include Column Names"
 #: collective/easyform/interfaces.py:1032
 msgid "label_usecolumnnames_text"
-msgstr "Includi i nomi delle colonne"
+msgstr "Spaltennamen inkludieren"
 
 #. Default: "HTTP Headers"
 #: collective/easyform/interfaces.py:821
 msgid "label_xinfo_headers_text"
-msgstr ""
+msgstr "HTTP Headers"
 
 #. Default: "Comma-Separated Values"
 #: collective/easyform/vocabularies.py:63
 msgid "vocabulary_csv_text"
-msgstr "Valori separati da virgola"
+msgstr ""
 
 #. Default: "Posting Date/Time"
 #: collective/easyform/vocabularies.py:55
@@ -787,5 +786,5 @@ msgstr ""
 #. Default: "Tab-Separated Values"
 #: collective/easyform/vocabularies.py:62
 msgid "vocabulary_tsv_text"
-msgstr "Valori separati da Tab"
+msgstr ""
 
