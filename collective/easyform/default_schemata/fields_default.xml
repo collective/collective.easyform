@@ -1,0 +1,25 @@
+<model
+    xmlns="http://namespaces.plone.org/supermodel/schema"
+    xmlns:easyform="http://namespaces.plone.org/supermodel/easyform"
+    xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+    i18n:domain="collective.easyform">
+  <schema>
+    <field
+        name="replyto"
+        type="zope.schema.TextLine"
+        easyform:TDefault="python:member and member.getProperty('email', '') or ''"
+        easyform:serverSide="False"
+        easyform:validators="isValidEmail">
+      <description/>
+      <title i18n:translate="">Your E-Mail Address</title>
+    </field>
+    <field name="topic" type="zope.schema.TextLine">
+      <description/>
+      <title i18n:translate="">Subject</title>
+    </field>
+    <field name="comments" type="zope.schema.Text">
+      <description/>
+      <title i18n:translate="">Comments</title>
+    </field>
+  </schema>
+</model>

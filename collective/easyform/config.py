@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+from Products.CMFPlone.utils import safe_unicode
+import os
+
+this_path = os.path.dirname(__file__)
+
 
 EDIT_TALES_PERMISSION = 'collective.easyform.EditTALESFields'
 EDIT_PYTHON_PERMISSION = 'collective.easyform.EditPythonFields'
@@ -14,24 +19,9 @@ MODEL_DEFAULT = u"""
 </model>
 """
 
-FIELDS_DEFAULT = u"""
-<model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns="http://namespaces.plone.org/supermodel/schema">
-  <schema>
-    <field name="replyto" type="zope.schema.TextLine" easyform:TDefault="python:member and member.getProperty('email', '') or ''" easyform:serverSide="False" easyform:validators="isValidEmail">
-      <description/>
-      <title>Your E-Mail Address</title>
-    </field>
-    <field name="topic" type="zope.schema.TextLine">
-      <description/>
-      <title>Subject</title>
-    </field>
-    <field name="comments" type="zope.schema.Text">
-      <description/>
-      <title>Comments</title>
-    </field>
-  </schema>
-</model>
-"""
+FIELDS_DEFAULT = safe_unicode(open(
+    os.path.join(this_path, "default_schemata", "fields_default.xml")).read())
+
 
 ACTIONS_DEFAULT = u"""
 <model xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns="http://namespaces.plone.org/supermodel/schema">
