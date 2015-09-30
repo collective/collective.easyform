@@ -33,6 +33,7 @@ from plone.z3cform.interfaces import IFormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import IEditForm
 from z3c.form.interfaces import IWidget
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
@@ -152,7 +153,7 @@ def default_submitLabel(context):
         'default_submitLabel',
         'collective.easyform',
         default=u'Submit',
-        context=context.REQUEST
+        context=getRequest()
     )
     foo = _(u'default_submitLabel', u'Submit')  # dummy msgid for i18ndude to translate  # noqa
 
@@ -163,7 +164,7 @@ def default_resetLabel(context):
         'default_resetLabel',
         'collective.easyform',
         default=u'Reset',
-        context=context.REQUEST
+        context=getRequest()
     )
     foo = _(u'default_resetLabel', u'Reset')  # dummy msgid for i18ndude to translate  # noqa
 
@@ -174,7 +175,7 @@ def default_thankstitle(context):
         'default_thankstitle',
         'collective.easyform',
         default=u'Thank You',
-        context=context.REQUEST
+        context=getRequest()
     )
     foo = _(u'default_thankstitle', u'Thank You')  # dummy msgid for i18ndude to translate  # noqa
 
@@ -185,7 +186,7 @@ def default_thanksdescription(context):
         'default_thanksdescription',
         'collective.easyform',
         default=u'Thanks for your input.',
-        context=context.REQUEST
+        context=getRequest()
     )
     foo = _(u'default_thanksdescription', u'Thanks for your input.')  # dummy msgid for i18ndude to translate  # noqa
 
