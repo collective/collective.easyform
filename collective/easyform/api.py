@@ -201,6 +201,8 @@ def format_addresses(addresses, names=[]):
 
     if names and type(names) in StringTypes:
         names = [s for s in names.split(',')]
+    if not names:
+        names = []
     assert(isinstance(names, list) or isinstance(names, tuple))
     names = [safe_unicode(s).strip().encode('utf-8') for s in names if s]
 
