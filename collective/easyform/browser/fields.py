@@ -11,7 +11,6 @@ from collective.easyform.interfaces import IEasyFormFieldsContext
 from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
 from json import dumps
 from lxml import etree
-from plone.schemaeditor import SchemaEditorMessageFactory as __
 from plone.schemaeditor.browser.field.edit import EditView
 from plone.schemaeditor.browser.field.edit import FieldEditForm
 from plone.schemaeditor.browser.field.traversal import FieldContext
@@ -25,6 +24,11 @@ from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getAdapters
 from zope.component import queryMultiAdapter
 from zope.interface import implements
+
+try:
+    from plone.schemaeditor import SchemaEditorMessageFactory as __
+except ImportError:
+    from plone.schemaeditor import _ as __
 
 try:
     import plone.resourceeditor

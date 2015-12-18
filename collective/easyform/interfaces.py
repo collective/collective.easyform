@@ -24,7 +24,6 @@ from plone.autoform.directives import omitted
 from plone.autoform.directives import read_permission
 from plone.autoform.directives import widget
 from plone.autoform.directives import write_permission
-from plone.schemaeditor import SchemaEditorMessageFactory as __
 from plone.schemaeditor.interfaces import ID_RE
 from plone.schemaeditor.interfaces import IFieldContext
 from plone.schemaeditor.interfaces import IFieldEditorExtender
@@ -50,6 +49,11 @@ from zope.schema import ValidationError
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ITextLine
 from zope.tales.tales import CompilerError
+
+try:
+    from plone.schemaeditor import SchemaEditorMessageFactory as __
+except ImportError:
+    from plone.schemaeditor import _ as __
 
 PMF = MessageFactory('plone')
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
