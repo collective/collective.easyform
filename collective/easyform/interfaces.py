@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from Products.PageTemplates.Expressions import getEngine
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.config import ACTIONS_DEFAULT
@@ -34,10 +33,13 @@ from plone.z3cform.interfaces import IFormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.interfaces import IEditForm
 from z3c.form.interfaces import IWidget
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
+from zope.interface import provider
 from zope.schema import ASCIILine
 from zope.schema import Bool
 from zope.schema import Bytes
@@ -46,6 +48,7 @@ from zope.schema import List
 from zope.schema import Text
 from zope.schema import TextLine
 from zope.schema import ValidationError
+from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ITextLine
 from zope.tales.tales import CompilerError
@@ -144,6 +147,50 @@ class IEasyFormImportFormSchema(Interface):
         required=True)
 
 
+@provider(IContextAwareDefaultFactory)
+def default_submitLabel(context):
+    return translate(
+        'default_submitLabel',
+        'collective.easyform',
+        default=u'Submit',
+        context=getRequest()
+    )
+    foo = _(u'default_submitLabel', u'Submit')  # dummy msgid for i18ndude to translate  # noqa
+
+
+@provider(IContextAwareDefaultFactory)
+def default_resetLabel(context):
+    return translate(
+        'default_resetLabel',
+        'collective.easyform',
+        default=u'Reset',
+        context=getRequest()
+    )
+    foo = _(u'default_resetLabel', u'Reset')  # dummy msgid for i18ndude to translate  # noqa
+
+
+@provider(IContextAwareDefaultFactory)
+def default_thankstitle(context):
+    return translate(
+        'default_thankstitle',
+        'collective.easyform',
+        default=u'Thank You',
+        context=getRequest()
+    )
+    foo = _(u'default_thankstitle', u'Thank You')  # dummy msgid for i18ndude to translate  # noqa
+
+
+@provider(IContextAwareDefaultFactory)
+def default_thanksdescription(context):
+    return translate(
+        'default_thanksdescription',
+        'collective.easyform',
+        default=u'Thanks for your input.',
+        context=getRequest()
+    )
+    foo = _(u'default_thanksdescription', u'Thanks for your input.')  # dummy msgid for i18ndude to translate  # noqa
+
+
 class IEasyForm(Schema):
 
     """Forms for Plone"""
@@ -162,7 +209,7 @@ class IEasyForm(Schema):
     submitLabel = TextLine(
         title=_(u'label_submitlabel_text', default=u'Submit Button Label'),
         description=_(u'help_submitlabel_text', default=u''),
-        default=u'Submit',
+        defaultFactory=default_submitLabel,
         required=False,
     )
     useCancelButton = Bool(
@@ -174,7 +221,7 @@ class IEasyForm(Schema):
     resetLabel = TextLine(
         title=_(u'label_reset_button', default=u'Reset Button Label'),
         description=_(u'help_reset_button', default=u''),
-        default=u'Reset',
+        defaultFactory=default_resetLabel,
         required=False,
     )
     method = Choice(
@@ -361,7 +408,7 @@ class IEasyForm(Schema):
              fields=['thankstitle', 'thanksdescription', 'showAll', 'showFields', 'includeEmpties', 'thanksPrologue', 'thanksEpilogue'])
     thankstitle = TextLine(
         title=_(u'label_thankstitle', default=u'Thanks title'),
-        default=u'Thank You',
+        defaultFactory=default_thankstitle,
         required=True
     )
     thanksdescription = Text(
@@ -370,7 +417,7 @@ class IEasyForm(Schema):
             u'help_thanksdescription',
             default=u'Used in thanks page.'
         ),
-        default=u'Thanks for your input.',
+        defaultFactory=default_thanksdescription,
         required=False,
         missing_value=u'',
     )

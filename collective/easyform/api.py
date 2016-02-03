@@ -2,12 +2,15 @@
 
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
+from Products.CMFPlone.utils import safe_unicode
 from collective.easyform.config import MODEL_DEFAULT
 from hashlib import md5
 from plone.memoize import ram
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
+from email.utils import formataddr
 from re import compile
+from types import StringTypes
 
 # SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'
@@ -139,3 +142,76 @@ def set_actions(context, schema):
     # store the current schema
     context.actions_model = snew_schema
     context.notifyModified()
+
+
+def format_addresses(addresses, names=[]):
+    """Format destination (To) input.
+    Input may be a string or sequence of strings;
+    returns a well-formatted address string.
+
+    :param addresses: [required] Mail addresses.
+    :type addresses: sequence or string
+    :param names: Names corresponding to mail addresses.
+    :type addresses: sequence or string
+    :returns: Well formatted address string.
+    :rtype: String
+
+    >>> from collective.easyform import api
+
+    >>> api.format_addresses('sim@sala.bim')
+    >>> 'sim@sala.bim'
+
+    >>> api.format_addresses('sim@sala.bim', 'sim')
+    >>> 'sim <sim@sala.bim>'
+
+    >>> api.format_addresses('ähm@öhm.ühm', 'ähm')
+    >>> '\xc3\xa4hm <\xc3\xa4hm@\xc3\xb6hm.\xc3\xbchm>'
+
+    >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus')
+    >>> 'sim@sala.bim, hokus@pokus.fidibus'
+
+    >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim')
+    >>> 'sim <sim@sala.bim>, hokus@pokus.fidibus'
+
+    >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim, hokus')
+    >>> 'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+
+    >>> api.format_addresses(['sim@sala.bim', 'hokus@pokus.fidibus'],
+    ...                      ['sim', 'hokus'])
+    >>> 'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+
+    >>> api.format_addresses(('sim@sala.bim', 'hokus@pokus.fidibus'),
+    ...                      ('sim', 'hokus'))
+    >>> 'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+
+    >>> api.format_addresses([])
+    >>> ''
+
+    >>> api.format_addresses('')
+    >>> ''
+
+    """
+
+    if type(addresses) in StringTypes:
+        addresses = [s for s in addresses.split(',')]
+    assert(isinstance(addresses, list) or isinstance(addresses, tuple))  # ensure iterable  # noqa
+    addresses = [
+        safe_unicode(s).strip().encode('utf-8') for s in addresses if s
+    ]
+
+    if names and type(names) in StringTypes:
+        names = [s for s in names.split(',')]
+    if not names:
+        names = []
+    assert(isinstance(names, list) or isinstance(names, tuple))
+    names = [safe_unicode(s).strip().encode('utf-8') for s in names if s]
+
+    address_pairs = []
+    for cnt, address in enumerate(addresses):
+        address_pairs.append((
+            names[cnt] if len(names) > cnt else False,
+            address
+        ))
+
+    ret = ', '.join([formataddr(pair) for pair in address_pairs])
+    return ret

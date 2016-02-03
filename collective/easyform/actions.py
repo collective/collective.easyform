@@ -12,6 +12,7 @@ from StringIO import StringIO
 from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_fields
@@ -135,33 +136,22 @@ class Mailer(Action):
             line = line[:nlpos]
         return line
 
-    def _destFormat(self, input):
-        """ Format destination (To) input.
-            Input may be a string or sequence of strings;
-            returns a well-formatted address field
-        """
-
-        if type(input) in StringTypes:
-            input = [s for s in input.split(',')]
-        input = [s for s in input if s]
-        filtered_input = [s.strip().encode('utf-8') for s in input]
-
-        if filtered_input:
-            return '<{0}>'.format('>, <'.join(filtered_input))
-        else:
-            return ''
-
     def get_mail_body(self, fields, request, context):
         """Returns the mail-body with footer.
         """
 
         schema = get_fields(context)
-        all_fields = [f for f in fields
-                      # TODO
-                      # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
-                      # 'showAll', True) and f.getServerSide())]
-                      if not (self._is_file_data(fields[f])) and not (getattr(self, 'showAll', True) and IFieldExtender(schema[f]).serverSide)
-                      ]
+        all_fields = [
+            f for f in fields
+            # TODO
+            # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
+            # 'showAll', True) and f.getServerSide())]
+            if not (self._is_file_data(fields[f]))
+            and not (
+                getattr(self, 'showAll', True)
+                and IFieldExtender(schema[f]).serverSide
+            )
+        ]
 
         # which fields should we show?
         if getattr(self, 'showAll', True):
@@ -282,19 +272,19 @@ class Mailer(Action):
             if _recip:
                 recip_email = _recip
 
-        recip_email = self._destFormat(recip_email)
-
-        recip_name = self.recipient_name.encode('utf-8')
-
-        # if no to_addr and no recip_email specified, use owner adress if possible.
-        # if not, fall back to portal email_from_address.
-        # if still no destination, raise an assertion exception.
-        if not recip_email and not to_addr:
-            self.get_owner_info(context)
-            to = formataddr(self.get_owner_info(context))
+        to = None
+        if to_addr:
+            to = format_addresses(to_addr)
+        elif recip_email:
+            to = format_addresses(
+                recip_email,
+                self.recipient_name
+            )
         else:
-            to = to_addr or formataddr((recip_name, recip_email))
+            # Use owner adress or fall back to portal email_from_address.
+            to = formataddr(self.get_owner_info(context))
 
+        assert(to)
         return (to, from_addr, reply_addr)
 
     def get_subject(self, fields, request, context):
@@ -364,7 +354,7 @@ class Mailer(Action):
                 cc_recips = _cc
 
         if cc_recips:
-            headerinfo['Cc'] = self._destFormat(cc_recips)
+            headerinfo['Cc'] = format_addresses(cc_recips)
 
         # BCC
         bcc_recips = filter(None, self.bcc_recipients)
@@ -374,7 +364,7 @@ class Mailer(Action):
                 bcc_recips = _bcc
 
         if bcc_recips:
-            headerinfo['Bcc'] = self._destFormat(bcc_recips)
+            headerinfo['Bcc'] = format_addresses(bcc_recips)
 
         for key in getattr(self, 'xinfo_headers', []):
             headerinfo['X-{0}'.format(key)] = self.secure_header_line(
@@ -392,7 +382,8 @@ class Mailer(Action):
             field = fields[fname]
             showFields = getattr(self, 'showFields', []) or []
 
-            if self._is_file_data(field) and (getattr(self, 'showAll', True) or fname in showFields):
+            if self._is_file_data(field) and (
+                    getattr(self, 'showAll', True) or fname in showFields):
                 data = field.data
                 filename = field.filename
                 mimetype, enc = guess_content_type(filename, data, None)
