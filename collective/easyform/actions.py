@@ -127,6 +127,8 @@ class Mailer(Action):
         super(Mailer, self).__init__(**kw)
 
     def secure_header_line(self, line):
+        if not line:
+            return ''
         nlpos = line.find('\x0a')
         if nlpos >= 0:
             line = line[:nlpos]
