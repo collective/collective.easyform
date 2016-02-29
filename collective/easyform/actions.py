@@ -38,7 +38,6 @@ from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
 from plone.supermodel.exportimport import BaseHandler
 from time import time
-from types import StringTypes
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implements

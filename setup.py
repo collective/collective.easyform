@@ -11,7 +11,10 @@ setup(name='collective.easyform',
       # http://pypi.python.org/pypi?:action=list_classifiers
       classifiers=[
           "Framework :: Plone",
+          "Framework :: Plone :: 4.3",
+          "Framework :: Plone :: 5.0",
           "Programming Language :: Python",
+          "Programming Language :: Python :: 2.7",
       ],
       keywords='form plone ttw',
       author='Roman Kozlovskyi',
