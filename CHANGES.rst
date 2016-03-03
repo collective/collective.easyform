@@ -25,13 +25,10 @@ Fixes:
 
 - Depend on plone.schemaeditor > 2.0 for JS compatibility.
   [thet]
- 
-- fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support.
-  [vangheem]
 
 Fixes:
 
- - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
+- fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
 
 
 1.0a3 (2015-06-02)
