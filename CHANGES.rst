@@ -4,7 +4,7 @@ Changelog
 1.0a4 (unreleased)
 ------------------
 
-Fixes:
+New:
 
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
