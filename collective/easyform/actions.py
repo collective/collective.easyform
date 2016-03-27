@@ -101,7 +101,6 @@ class ActionFactory(object):
 
 
 class Action(Bool):
-
     """ Base action class """
     implements(IAction)
 

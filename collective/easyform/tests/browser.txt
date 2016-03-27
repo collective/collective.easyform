@@ -9,6 +9,8 @@ Standalone form
 Add a new EasyForm::
 
     >>> browser.open(self.portal_url)
+    >>> browser.url
+    'http://nohost/plone'
     >>> browser.getLink('EasyForm').click()
     >>> browser.getControl('Title').value = 'testform'
     >>> browser.getControl('Save').click()
@@ -16,9 +18,12 @@ Add a new EasyForm::
 We'll want to test the save data adapter later.
 Let's add one now::
 
+    >>> browser.open(self.portal_url + '/testform')
+    >>> browser.url
+    'http://nohost/plone/testform'
     >>> browser.getLink('Actions').click()
-    >>> browser.getLink('Add new action…').click()
-    >>> browser.getControl('Title').value = 'saver'
+    >>> browser.getControl('Add new action…').click()
+    >>> browser.getControl('Title').value = 'Saver'
     >>> browser.getControl('Short Name').value = 'saver'
     >>> browser.getControl('Save Data').selected = True
     >>> browser.getControl('Add').click()

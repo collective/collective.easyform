@@ -162,6 +162,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.CSRFProtection = False
         self.portal.REQUEST['form.widgets.title'] = u'Test field'
+        self.portal.REQUEST['form.widgets.Short_name'] = u'test_field'
         self.portal.REQUEST['form.widgets.__name__'] = u'test_field'
         self.portal.REQUEST['form.widgets.description'] = u''
         self.portal.REQUEST['form.widgets.factory'] = ['Text line (String)']
@@ -187,7 +188,6 @@ class TestCustomScript(base.EasyFormTestCase):
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
-
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
         self.assertTrue('adapter' in actions)
