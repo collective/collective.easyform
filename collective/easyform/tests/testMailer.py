@@ -438,7 +438,6 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_bccOverride(self):
         """ Test override for BCC field """
-
         mailer = get_actions(self.ff1)['mailer']
         request = self.LoadRequestForm(
             topic='test subject', replyto='test@test.org', comments='test comments')
@@ -468,8 +467,10 @@ class TestFunctions(base.EasyFormTestCase):
         )
 
     def testNoRecipient(self):
-        """ try no recipient """
-
+        """
+        This is not the feature in easyform as we need recipient in the mailer
+        for easyforms. It will not take the default site's recipient.
+        """
         mailer = get_actions(self.ff1)['mailer']
         mailer.recipient_email = u''
         mailer.to_field = None
@@ -479,9 +480,13 @@ class TestFunctions(base.EasyFormTestCase):
             topic='test subject', replyto='test@test.org', comments='test comments')
 
         self.messageText = ''
-        mailer.onSuccess(request.form, request)
-        self.assertTrue(
-            'mdummy@address.com' in self.mto
+        try:
+            mailer.onSuccess(request.form, request)
+        except Exception as e:
+            pass
+        self.assertEqual(
+            str('\n                Unable to mail form input because no recipient address has been specified.\n                Please check the recipient settings of the EasyForm Mailer within the\n                current form folder.\n            ',),
+            str(e)
         )
 
 
