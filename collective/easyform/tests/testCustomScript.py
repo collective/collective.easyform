@@ -162,16 +162,15 @@ class TestCustomScript(base.EasyFormTestCase):
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.CSRFProtection = False
         self.portal.REQUEST['form.widgets.title'] = u'Test field'
-        self.portal.REQUEST['form.widgets.Short_name'] = u'test_field'
+        # self.portal.REQUEST['form.widgets.Short_name'] = u'test_field'
         self.portal.REQUEST['form.widgets.__name__'] = u'test_field'
-        self.portal.REQUEST['form.widgets.description'] = u''
-        self.portal.REQUEST['form.widgets.factory'] = ['Text line (String)']
-        self.portal.REQUEST['form.widgets.required'] = []
+        self.portal.REQUEST['form.widgets.description'] = u'foobar'
+        self.portal.REQUEST['form.widgets.factory'] = ['label_textline_field']
+        self.portal.REQUEST['form.widgets.required'] = ['selected']
         self.portal.REQUEST['form.buttons.add'] = u'Add'
         view = self.ff1.restrictedTraverse('fields/@@add-field')
         view.update()
         form = view.form_instance
-        # form.update()
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
 
@@ -214,13 +213,12 @@ class TestCustomScript(base.EasyFormTestCase):
         self.portal.REQUEST['form.buttons.submit'] = u'Submit'
 
         view = self.ff1.restrictedTraverse('view')
+        view.update()
         form = view.form_instance
-        form.update()
-
+        # form.update()
         errors = form.widgets.errors
         self.assertEqual(len(errors), 1)
         self.assertEqual(errors[0].message, 'Please enter more text')
-
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
 
