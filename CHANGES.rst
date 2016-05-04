@@ -33,6 +33,9 @@ New:
 - Depend on plone.schemaeditor > 2.0 for JS compatibility.
   [thet]
 
+- Fix modeleditor.pt markup so it works with barceloneta.
+  [ebrehault]
+
 Fixes:
 
 - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
