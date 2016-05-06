@@ -6,6 +6,7 @@
 *.py?
 *.pyc
 *~
+._*
 .DS_Store
 .coverage
 .installed.cfg
