@@ -146,10 +146,9 @@ class Mailer(Action):
             # TODO
             # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
             # 'showAll', True) and f.getServerSide())]
-            if not (self._is_file_data(fields[f]))
-            and not (
-                getattr(self, 'showAll', True)
-                and IFieldExtender(schema[f]).serverSide
+            if not (self._is_file_data(fields[f])) and not (
+                getattr(self, 'showAll', True) and
+                IFieldExtender(schema[f]).serverSide
             )
         ]
 
@@ -508,12 +507,12 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn('Python script ' + self.__name__
-                        + ' has warning:' + str(script.warnings))
+            logger.warn('Python script ' + self.__name__ +
+                        ' has warning:' + str(script.warnings))
 
         if len(script.errors) > 0:
-            logger.error('Python script ' + self.__name__
-                         + ' has errors: ' + str(script.errors))
+            logger.error('Python script ' + self.__name__ +
+                         ' has errors: ' + str(script.errors))
             raise ValueError(
                 'Python script ' + self.__name__ + ' has errors: ' + str(script.errors))
 
