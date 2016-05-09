@@ -24,7 +24,8 @@ extras/
 htmlcov/
 include/
 lib/
-lib64
+lib64/
+local/
 parts/
 pip-selfcheck.json
 src/
