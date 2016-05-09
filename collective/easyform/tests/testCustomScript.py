@@ -6,13 +6,6 @@
     Copyright 2006 Red Innovation http://www.redinnovation.com
 
 '''
-__author__ = 'Mikko Ohtamaa <mikko@redinnovation.com>'
-__docformat__ = 'plaintext'
-
-try:
-    from App.class_init import InitializeClass
-except ImportError:
-    from Globals import InitializeClass
 
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
@@ -23,6 +16,11 @@ from collective.easyform.tests import base
 from plone.app.testing import logout
 from unittest import TestSuite
 from unittest import makeSuite
+
+try:
+    from App.class_init import InitializeClass
+except ImportError:
+    from Globals import InitializeClass
 
 
 test_script = '''
