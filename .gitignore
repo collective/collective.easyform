@@ -6,6 +6,7 @@
 *.py?
 *.pyc
 *~
+._*
 .DS_Store
 .coverage
 .installed.cfg
@@ -23,7 +24,8 @@ extras/
 htmlcov/
 include/
 lib/
-lib64
+lib64/
+local/
 parts/
 pip-selfcheck.json
 src/
