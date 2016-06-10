@@ -41,11 +41,6 @@ And confirm that it renders properly::
     >>> browser.open(self.portal_url + '/attachmentform')
     >>> browser.url
     'http://nohost/plone/attachmentform...'
-    >>> print browser.contents
-    <!DOCTYPE...
-    ...
-    <input type="file" ... />
-    ...
 
 Submit the form with an text attachment::
 
