@@ -49,36 +49,6 @@ We check that the changes were applied.
     >>> 'New EasyForm Sample' in browser.contents
     True
 
-Removing a/an EasyForm content item
---------------------------------
-
-If we go to the home page, we can see a tab with the 'New EasyForm
-Sample' title in the global navigation tabs.
-
-    >>> browser.open(portal_url)
-    >>> 'New EasyForm Sample' in browser.contents
-    True
-
-Now we are going to delete the 'New EasyForm Sample' object. First we
-go to the contents tab and select the 'New EasyForm Sample' for
-deletion.
-
-    >>> browser.getLink('Contents').click()
-    >>> browser.getControl('New EasyForm Sample').click()
-
-We click on the 'Delete' button.
-
-    >>> browser.getControl('Delete').click()
-    >>> 'Item(s) deleted' in browser.contents
-    True
-
-So, if we go back to the home page, there is no longer a 'New EasyForm
-Sample' tab.
-
-    >>> browser.open(portal_url)
-    >>> 'New EasyForm Sample' in browser.contents
-    False
-
 Adding a new EasyForm content item as contributor
 ------------------------------------------------
 

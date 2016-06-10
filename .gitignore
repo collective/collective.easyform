@@ -13,6 +13,7 @@
 .mr.developer.cfg
 bin/
 buildout-cache/
+build/
 collective/easyform/tests/*.tar.gz
 develop-eggs/
 dist
