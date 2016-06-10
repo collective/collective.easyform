@@ -232,7 +232,8 @@ class Mailer(Action):
         return (fullname, toemail)
 
     def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
-        """Return addresses
+        """
+        Return addresses
         """
         pprops = getToolByName(context, 'portal_properties')
         site_props = getToolByName(pprops, 'site_properties')

@@ -9,7 +9,7 @@
            tal:attributes="href string:${context/absolute_url}/@@add-action"
            href="@@add-action">
             <button style="float: right; display: block;"
-                    i18n:translate="add_new_action_hellip">Add new action&hellip;</button>
+                    i18n:translate="add_new_action_hellip">Add new action…</button>
         </a>
 
       </div>
