@@ -2,11 +2,11 @@ Introduction
 ============
 
 .. image:: https://travis-ci.org/collective/collective.easyform.png?branch=master
-    :target: https://travis-ci.org/quintagroup/collective.easyform
+    :target: https://travis-ci.org/collective/collective.easyform
     :alt: Travis CI status
 
 .. image:: https://coveralls.io/repos/collective/collective.easyform/badge.svg?branch=master
-    :target: https://coveralls.io/r/quintagroup/collective.easyform?branch=master
+    :target: https://coveralls.io/r/collective/collective.easyform?branch=master
     :alt: Coveralls status
 
 .. image:: https://badge.fury.io/py/collective.easyform.svg
