@@ -29,7 +29,7 @@ Let's add one now::
 Add a File field::
 
     >>> browser.open(self.portal_url + '/attachmentform')
-    >>> browser.getLink('Fields').click()
+    >>> browser.getLink('Define form fields').click()
     >>> browser.getLink('Add new field…').click()
     >>> browser.getControl('Title').value = 'Attachment'
     >>> browser.getControl('Short Name').value = 'attachment'
