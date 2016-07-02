@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from actions import IAction
 from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import vocabularies
+from collective.easyform.interfaces import IAction
 from plone.autoform import directives
+from plone.schema import Email
 from plone.supermodel.model import fieldset
 from validators import isTALES
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -38,13 +39,11 @@ class IMailer(IAction):
 #     TODO IContextAwareDefaultFactory
     directives.write_permission(recipient_email=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(recipient_email=MODIFY_PORTAL_CONTENT)
-    recipient_email = zope.schema.TextLine(
+    recipient_email = Email(
         title=_(u'label_formmailer_recipient_email',
                 default=u"Recipient's e-mail address"),
         description=_(u'help_formmailer_recipient_email',
                       default=u'The recipients e-mail address.'),
-        default=u'',
-        missing_value=u'',
         required=False,
     )
     fieldset(u'addressing', label=_('Addressing'), fields=[
