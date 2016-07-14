@@ -1,8 +1,12 @@
 Changelog
 =========
 
+
 1.0a4 (unreleased)
 ------------------
+
+- Change recipient address field to Email type so it gets properly validated
+  [davilima6]
 
 - Make the default buildout use Plone 5. Update travis setup to the point where
   tests actually run, though many still fail.
@@ -59,6 +63,7 @@ Fixes:
 - Set script type correctly
   [fredvd]
 
+
 1.0a2 (2014-06-13)
 ------------------
 
@@ -79,6 +84,7 @@ Fixes:
 
 - Added fields parameter in Mailer override expressions
   [gborelli]
+
 
 1.0a1 (2014-03-18)
 ------------------
