@@ -36,10 +36,12 @@ from email.utils import formataddr
 from logging import getLogger
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
+from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from time import time
 from types import StringTypes
 from zope.component import queryUtility
+from zope.component import getUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implements
 from zope.schema import Bool
@@ -238,6 +240,7 @@ class Mailer(Action):
         pprops = getToolByName(context, 'portal_properties')
         site_props = getToolByName(pprops, 'site_properties')
         portal = getToolByName(context, 'portal_url').getPortalObject()
+        registry = getUtility(IRegistry)
 
         # get Reply-To
         reply_addr = None
@@ -248,7 +251,8 @@ class Mailer(Action):
         from_addr = (
             from_addr or
             site_props.getProperty('email_from_address') or
-            portal.getProperty('email_from_address')
+            portal.getProperty('email_from_address') or 
+            registry.get('plone.email_from_address')
         )
 
         if hasattr(self, 'senderOverride') and self.senderOverride:
