@@ -10,6 +10,9 @@ Changelog
 
 Fixes:
 
+- Get email_from_address from registry
+  [kcleong, tkimnguyen]
+
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
   translate the ``FIELDS_DEFAULT`` fields.
@@ -38,7 +41,7 @@ Fixes:
 
 Fixes:
 
- - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
+- fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
 
 
 1.0a3 (2015-06-02)
