@@ -4,10 +4,14 @@ Changelog
 1.0a4 (unreleased)
 ------------------
 
-New:
+- Make the default buildout use Plone 5. Update travis setup to the point where
+  tests actually run, though many still fail.
+  [smcmahon]
+
+Fixes:
 
 - Get email_from_address from registry
-  [kcleong]
+  [kcleong, tkimnguyen]
 
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
@@ -28,6 +32,12 @@ New:
 
 - Depend on plone.schemaeditor > 2.0 for JS compatibility.
   [thet]
+
+- fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support.
+  [vangheem]
+
+- Fix modeleditor.pt markup so it works with barceloneta.
+  [ebrehault]
 
 Fixes:
 

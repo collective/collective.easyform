@@ -28,7 +28,6 @@ class TestInstallation(base.EasyFormTestCase):
 
         self.types = self.portal.portal_types
         self.properties = self.portal.portal_properties
-        self.at_tool = self.portal.archetype_tool
         self.controlpanel = self.portal.portal_controlpanel
 
         self.metaTypes = ('EasyForm',)
@@ -47,10 +46,13 @@ class TestInstallation(base.EasyFormTestCase):
                     self.assertTrue(act.visible)
 
     def testArchetypesToolCatalogRegistration(self):
+        at_tool = getToolByName(self.portal, 'archetype_tool', None)
+        if not at_tool:
+            return
         for t in self.metaTypes:
-            self.assertEqual(1, len(self.at_tool.getCatalogsByType(t)))
+            self.assertEqual(1, len(at_tool.getCatalogsByType(t)))
             self.assertEqual(
-                'portal_catalog', self.at_tool.getCatalogsByType(t)[0].getId())
+                'portal_catalog', at_tool.getCatalogsByType(t)[0].getId())
 
     def ttestControlPanelConfigletInstalled(self):
         self.assertTrue(

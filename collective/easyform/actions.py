@@ -39,7 +39,6 @@ from plone.namedfile.interfaces import INamedFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from time import time
-from types import StringTypes
 from zope.component import queryUtility
 from zope.component import getUtility
 from zope.contenttype import guess_content_type
@@ -130,6 +129,8 @@ class Mailer(Action):
         super(Mailer, self).__init__(**kw)
 
     def secure_header_line(self, line):
+        if not line:
+            return ''
         nlpos = line.find('\x0a')
         if nlpos >= 0:
             line = line[:nlpos]
@@ -148,10 +149,9 @@ class Mailer(Action):
             # TODO
             # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
             # 'showAll', True) and f.getServerSide())]
-            if not (self._is_file_data(fields[f]))
-            and not (
-                getattr(self, 'showAll', True)
-                and IFieldExtender(schema[f]).serverSide
+            if not (self._is_file_data(fields[f])) and not (
+                getattr(self, 'showAll', True) and
+                IFieldExtender(schema[f]).serverSide
             )
         ]
 
@@ -512,12 +512,12 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn('Python script ' + self.__name__
-                        + ' has warning:' + str(script.warnings))
+            logger.warn('Python script ' + self.__name__ +
+                        ' has warning:' + str(script.warnings))
 
         if len(script.errors) > 0:
-            logger.error('Python script ' + self.__name__
-                         + ' has errors: ' + str(script.errors))
+            logger.error('Python script ' + self.__name__ +
+                         ' has errors: ' + str(script.errors))
             raise ValueError(
                 'Python script ' + self.__name__ + ' has errors: ' + str(script.errors))
 
