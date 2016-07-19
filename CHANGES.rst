@@ -10,6 +10,9 @@ Changelog
 
 Fixes:
 
+- look up email_from_address in registry
+  [kcleong]
+
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
   translate the ``FIELDS_DEFAULT`` fields.
