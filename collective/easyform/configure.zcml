@@ -33,7 +33,6 @@
       directory="profiles/uninstall"
       description="UnInstall the collective.easyform package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      post_handler=".setuphandlers.uninstall"
       />
 
 </configure>

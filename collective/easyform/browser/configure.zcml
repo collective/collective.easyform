@@ -18,6 +18,12 @@
         class=".view.EasyFormFormEmbedded"
         permission="zope2.View"
         />
+    <browser:page
+        name="easyform-controlpanel"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        permission="cmf.ManagePortal"
+        class=".controlpanel.EasyFormControlPanelView"
+        />
     <configure zcml:condition="installed plone.dexterity.exportimport">
     <browser:page
         for="collective.easyform.interfaces.IEasyForm"
