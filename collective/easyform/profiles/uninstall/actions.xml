@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<object name="portal_actions" meta_type="Plone Actions Tool"
+   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+ <object name="object_buttons" meta_type="CMF Action Category">
+  <object name="export" meta_type="CMF Action" i18n:domain="collective.easyform" remove="True">
+  </object>
+  <object name="import" meta_type="CMF Action" i18n:domain="collective.easyform" remove="True">
+  </object>
+  <object name="saveddata" meta_type="CMF Action" i18n:domain="collective.easyform" remove="True">
+  </object>
+  <object name="Fields" meta_type="CMF Action" i18n:domain="collective.easyform" remove="True">
+  </object>
+  <object name="Actions" meta_type="CMF Action" i18n:domain="collective.easyform" remove="True">
+  </object>
+ </object>
+</object>
