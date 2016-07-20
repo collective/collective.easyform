@@ -20,24 +20,6 @@ testfiles = (
     '../README.txt',
 )
 
-# easyformfunctionaltestcase = EasyFormFunctionalTestCase()
-# def setUp(test):
-#     easyformfunctionaltestcase.setUp()
-# def tearDown(test):
-#     easyformfunctionaltestcase.tearDown()
-
-# def test_suite():
-#     suite = unittest.TestSuite()
-#     suite.addTests([
-#         layered(doctest.DocFileSuite(test,
-#                                      optionflags=optionflags,
-#                                      setUp=setUp,
-#                                      tearDown=tearDown,
-#                                      ),
-#                 layer=EasyFormFunctionalTestCase.layer)
-#         for test in testfiles])
-#     return suite
-
 
 def test_suite():
     return unittest.TestSuite([
