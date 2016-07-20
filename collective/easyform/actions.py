@@ -101,7 +101,6 @@ class ActionFactory(object):
 
 
 class Action(Bool):
-
     """ Base action class """
     implements(IAction)
 
@@ -227,13 +226,14 @@ class Mailer(Action):
             toemail = portal.getProperty('email_from_address')
         assert toemail, """
                 Unable to mail form input because no recipient address has been specified.
-                Please check the recipient settings of the EasyForm "Mailer" within the
+                Please check the recipient settings of the EasyForm Mailer within the
                 current form folder.
             """
         return (fullname, toemail)
 
     def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
-        """Return addresses
+        """
+        Return addresses
         """
         pprops = getToolByName(context, 'portal_properties')
         site_props = getToolByName(pprops, 'site_properties')
@@ -261,7 +261,8 @@ class Mailer(Action):
         if hasattr(self, 'to_field') and self.to_field:
             recip_email = fields.get(self.to_field, None)
         if not recip_email:
-            recip_email = self.recipient_email
+            if self.recipient_email != '':
+                recip_email = self.recipient_email
 
         if hasattr(self, 'recipientOverride') and self.recipientOverride:
             _recip = get_expression(
@@ -393,7 +394,6 @@ class Mailer(Action):
     def get_mail_text(self, fields, request, context):
         """Get header and body of e-mail as text (string)
         """
-
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
 

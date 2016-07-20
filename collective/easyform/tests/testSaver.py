@@ -435,18 +435,6 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(len(cn) == 4)
         self.assertTrue(cn[3] == 'dt')
 
-        # add a label field -- should not show up in column names
-        # self.ff1.invokeFactory('FormLabelField', 'alabel')
-        # cn = saver.getColumnNames()
-        # self.assertTrue(len(cn) == 4)
-
-        # add a form field -- should show up in column names before 'dt'
-        # self.ff1.invokeFactory('FormFileField', 'afile')
-        # cn = saver.getColumnNames()
-        # self.assertTrue(len(cn) == 5)
-        # self.assertTrue(cn[3] == 'afile')
-        # self.assertTrue(cn[4] == 'dt')
-
     def testSaverColumnTitles(self):
         ''' test save data adapter's getColumnTitles function '''
 

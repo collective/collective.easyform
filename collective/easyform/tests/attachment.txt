@@ -11,22 +11,24 @@ Add a new EasyForm::
     >>> browser.getControl('Title').value = 'attachmentform'
     >>> browser.getControl('Save').click()
     >>> browser.url
-    'http://nohost/plone/attachmentform/...'
+    'http://nohost/plone/attachmentform/view'
 
 We'll want to test the save data adapter later.
 Let's add one now::
 
     >>> browser.getLink('Actions').click()
-    >>> browser.getLink('Add new action…').click()
+    >>> browser.open(self.portal_url + '/attachmentform/actions/@@add-action')
     >>> browser.getControl('Title').value = 'Saver'
     >>> browser.getControl('Short Name').value = 'saver'
     >>> browser.getControl('Save Data').selected = True
     >>> browser.getControl('Add').click()
-    >>> 'http://nohost/plone/attachmentform/actions/saver' in browser.contents
+    >>> browser.open(self.portal_url + '/attachmentform/actions/saver')
+    >>> 'Edit' in browser.contents
     True
 
 Add a File field::
 
+    >>> browser.open(self.portal_url + '/attachmentform')
     >>> browser.getLink('Fields').click()
     >>> browser.getLink('Add new field…').click()
     >>> browser.getControl('Title').value = 'Attachment'
@@ -39,11 +41,6 @@ And confirm that it renders properly::
     >>> browser.open(self.portal_url + '/attachmentform')
     >>> browser.url
     'http://nohost/plone/attachmentform...'
-    >>> print browser.contents
-    <!DOCTYPE...
-    ...
-    <input type="file" ... />
-    ...
 
 Submit the form with an text attachment::
 
@@ -148,7 +145,7 @@ the file field is not listed in the mailer's showFields::
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> self.portal.MailHost.msg.get_payload(decode=True)
-    '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n\n    </dl>\n    <p></p>\n    <pre></pre>\n  </body>\n</html>'
+    '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n        \n    </dl>\n    <p></p>\n    <pre></pre>\n  </body>\n</html>'
     >>> browser.getControl('Reset').click()
 
 Saved data
