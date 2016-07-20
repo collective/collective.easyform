@@ -188,40 +188,6 @@ class TestCustomScript(base.EasyFormTestCase):
         actions = get_actions(self.ff1)
         self.assertTrue('adapter' in actions)
 
-#    def testScriptTypes(self):
-#        ''' Check DisplayList doesn't fire exceptions '''
-#        self.createScript()
-#        adapter = self.ff1.adapter
-#        adapter.getScriptTypeChoices()
-
-    # def testReturnError(self):
-    #     ''' Succesful script execution with return error
-    #     '''
-    #     self.createScript()
-
-    #     actions = get_actions(self.ff1)
-    #     actions['adapter'].ScriptBody = return_error_script
-    #     set_actions(self.ff1, actions)
-
-    #     self.portal.REQUEST['form.widgets.test_field'] = u'Test field'
-    #     self.portal.REQUEST['form.widgets.topic'] = u'subject'
-    #     self.portal.REQUEST['form.widgets.comments'] = u'some comments'
-    #     self.portal.REQUEST['form.widgets.replyto'] = u'foobar@example.com'
-    #     self.portal.REQUEST['form.buttons.submit'] = u'Submit'
-    #     import pdb; pdb.set_trace()
-    #     view = self.ff1.restrictedTraverse('view')
-    #     # view.update()
-    #     form = view.form_instance
-    #     # form.update()
-    #     errors = form.widgets.errors
-    #     self.assertEqual(len(errors), 1)
-    #     self.assertEqual(errors[0].message, 'Please enter more text')
-    #     data, errors = form.extractData()
-    #     self.assertEqual(len(errors), 0)
-
-    #     errors = form.processActions(data)
-    #     self.assertEqual(errors, {'comments': 'Please enter more text'})
-
     def testSuccess(self):
         ''' Succesful script execution
 
@@ -440,33 +406,6 @@ class TestCustomScript(base.EasyFormTestCase):
             throwed = True
 
         assert throwed, 'No Unauthorized was raised'
-
-#    def testSkinsScript(self):
-#        ''' Test executing script from portal_skins '''
-#        portal_skins = self.portal.portal_skins
-#        manage_addPythonScript(portal_skins.custom, 'test_skins_script')
-#        test_skins_script = portal_skins.custom.test_skins_script
-#
-#        test_skins_script.ZPythonScript_edit('', test_script)
-#        self._refreshSkinData()
-#
-#
-#        portal_skins.custom.test_skins_script({'test_field' : '123'}, 'foo', None)
-# Do a dummy test call
-#        self.portal.test_skins_script({'test_field' : '123'}, 'foo', None)
-#
-#        self.createScript()
-#        adapter = self.ff1.adapter
-#        adapter.setScriptType('skins_script')
-#        adapter.setScriptName('test_skins_script')
-#
-#        errors = adapter.validate()
-#        assert len(errors) == 0, 'Had errors:' + str(errors)
-#
-# Execute script
-#        req = FakeRequest(test_field='123')
-#        reply = adapter.onSuccess([], req)
-#        assert reply == 'foo', 'Script returned:' + str(reply)
 
 
 def test_suite():

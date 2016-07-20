@@ -480,13 +480,12 @@ class TestFunctions(base.EasyFormTestCase):
             topic='test subject', replyto='test@test.org', comments='test comments')
 
         self.messageText = ''
-        try:
+        with self.assertRaises(Exception) as context:
             mailer.onSuccess(request.form, request)
-        except Exception as e:
-            pass
+
         self.assertEqual(
             str('\n                Unable to mail form input because no recipient address has been specified.\n                Please check the recipient settings of the EasyForm Mailer within the\n                current form folder.\n            ',),
-            str(e)
+            str(context.exception)
         )
 
 
