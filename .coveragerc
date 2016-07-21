@@ -8,5 +8,5 @@ omit =
     parts/*
     src/*
     collective/easyform/tests/*
-    lib/*
+    */lib/*
     collective/__init__.py
