@@ -34,7 +34,7 @@ try:
     import plone.resourceeditor
     plone.resourceeditor  # avoid PEP 8 warning
     HAVE_RESOURCE_EDITOR = True
-except ImportError:
+except ImportError:  # pragma: no cover
     HAVE_RESOURCE_EDITOR = False
 
 
