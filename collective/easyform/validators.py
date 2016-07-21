@@ -3,7 +3,7 @@
 try:
     from Products.validation import validation
     from Products.validation.validators.BaseValidators import baseValidators
-except ImportError:
+except ImportError:  # pragma: no cover
     validation = {}
     baseValidators = []
 
