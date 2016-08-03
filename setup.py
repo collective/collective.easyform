@@ -43,7 +43,8 @@ setup(name='collective.easyform',
           'test': [
               'plone.app.testing[robot]',
               'plone.app.robotframework',
-          ]
+              'Products.PloneFormGen',
+          ],
       },
       entry_points="""
       # -*- Entry points: -*-
