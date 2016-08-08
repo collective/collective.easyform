@@ -7,6 +7,7 @@
 
 from collective.easyform.tests import base
 from plone.testing import z2
+from collective.easyform.migrations import migrate_pfg_content
 
 try:
     import Products.PloneFormGen
@@ -62,6 +63,11 @@ class TestPFGmigration(MigrationFormTestCase):
         self.assertEqual(object_ids, ['ef1', 'pfgff1'])
         self.assertEqual(self.ef1.portal_type, 'EasyForm')
         self.assertEqual(self.pfgff1.portal_type, 'FormFolder')
+
+    def testStringField(self):
+        transformed_string = migrate_pfg_content(self.pfgff1)
+        expected = '<field name="reply_to" type="zope.schema.Field"/><field name="topic" type="zope.schema.Field"/>'
+        self.assertEquals(transformed_string, expected)
 
 
 def test_suite():
