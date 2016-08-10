@@ -1,10 +1,11 @@
 from plone import api
 from zope import schema
 from plone.supermodel.exportimport import BaseHandler
-
+from Products.CMFPlone.utils import safe_unicode
 
 # Get all the PFG forms present in the site.
 # PFG_Forms = api.content.find(context=api.portal.get(), portal_type='FormFolder')
+
 
 def migrate_pfg_content(pfg_form):
     """
@@ -21,3 +22,11 @@ def migrate_pfg_content(pfg_form):
         el = model_Schema_field.write(schema.Field, 'myfield', 'zope.schema.Field')
         final_content += el
     return final_content
+
+
+def migrate_pfg_string_field(pfg_string_field):
+    tl = schema.TextLine()
+    tl.title = safe_unicode(pfg_string_field.title)
+    tl.description = safe_unicode(pfg_string_field.Description())
+    tl.required = bool(pfg_string_field.getRequired())
+    return tl
