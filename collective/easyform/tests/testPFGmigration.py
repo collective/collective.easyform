@@ -5,12 +5,7 @@
 # Run this test only: bin/test -s collective.easyform -t testPFGmigration
 #
 
-# from collective.easyform.migrations import migrate_pfg_content
-<<<<<<< HEAD
-from collective.easyform.migrations import migrate_pfg_string_field, migrate_pfg_content
-=======
 from collective.easyform.migrations import add_pfg_field_to_schema
->>>>>>> Now working with PFG string and text fields
 from collective.easyform.tests import base
 from plone.supermodel import serializeSchema
 # from plone.supermodel.model import SchemaClass
@@ -93,11 +88,6 @@ class TestPFGmigration(MigrationFormTestCase):
         self.assertEqual(object_ids, ['ef1', 'pfgff1'])
         self.assertEqual(self.ef1.portal_type, 'EasyForm')
         self.assertEqual(self.pfgff1.portal_type, 'FormFolder')
-
-    def testStringField(self):
-        transformed_string = migrate_pfg_content(self.pfgff1)
-        expected = '<field name="replyto" type="zope.schema.Field" /><field name="topic" type="zope.schema.Field" />'
-        self.assertEquals(transformed_string, expected)
 
     def testStringFieldConversion(self):
         sample_pfg_string_field = self.pfgff1.replyto

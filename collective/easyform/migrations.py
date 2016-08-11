@@ -6,6 +6,8 @@ import zope.schema
 
 # Get all the PFG forms present in the site.
 # PFG_Forms = api.content.find(context=api.portal.get(), portal_type='FormFolder')
+#
+# TODO: change the field factory lookup to an adaptor mechanism
 
 
 def setTaggedValue(schema, tag, fieldname, value):
