@@ -6,11 +6,14 @@
 #
 
 # from collective.easyform.migrations import migrate_pfg_content
+<<<<<<< HEAD
 from collective.easyform.migrations import migrate_pfg_string_field, migrate_pfg_content
+=======
+from collective.easyform.migrations import add_pfg_field_to_schema
+>>>>>>> Now working with PFG string and text fields
 from collective.easyform.tests import base
 from plone.supermodel import serializeSchema
 # from plone.supermodel.model import SchemaClass
-from plone.schemaeditor.interfaces import IEditableSchema
 from plone.testing import z2
 from zope.interface import Interface
 
@@ -23,7 +26,7 @@ except ImportError:
     HAVE_PFG = False
 
 
-SUBJECT_FIELD_XML = u'''<field name="topic" type="zope.schema.TextLine"> <title>Subject</title> </field>'''
+REPLY_FIELD_XML = u"""<field name="replyto" type="zope.schema.TextLine" easyform:TDefault="here/memberEmail" easyform:TValidator="python:False" easyform:serverSide="False" easyform:validators="isEmail"> <max_length>255</max_length> <title>Your E-Mail Address</title> </field>"""
 
 
 class MyFixture(base.Fixture):
@@ -55,19 +58,21 @@ class MigrationFormTestCase(base.EasyFormTestCase):
     layer = INTEGRATION_TESTING
 
 
-def serializeField(afield, name):
+def serializeField(schema):
     # return an XML serialization of an individual field,
     # normalize for spacing, eols
 
-    class TestClass(Interface):
-        pass
-    schema = TestClass
-    IEditableSchema(TestClass).addField(afield, name=name)
     s = serializeSchema(schema)
     found = re.findall('<field.+?</field>', s.replace('\n', ' '))
     if len(found) == 1:
         return re.sub(u' +', ' ', found[0])
     return u''
+
+
+def emptySchema():
+    class TestClass(Interface):
+        pass
+    return TestClass
 
 
 class TestPFGmigration(MigrationFormTestCase):
@@ -95,15 +100,24 @@ class TestPFGmigration(MigrationFormTestCase):
         self.assertEquals(transformed_string, expected)
 
     def testStringFieldConversion(self):
-        sample_pfg_string_field = self.pfgff1.topic
-        tsf = migrate_pfg_string_field(sample_pfg_string_field)
-        self.assertEqual(SUBJECT_FIELD_XML, serializeField(tsf, name=u'topic'))
+        sample_pfg_string_field = self.pfgff1.replyto
+        schema = emptySchema()
+        add_pfg_field_to_schema(schema, sample_pfg_string_field, name=u'replyto')
+        self.assertEqual(REPLY_FIELD_XML, serializeField(schema))
+
+    def testTextFieldConversion(self):
+        sample_pfg_field = self.pfgff1.comments
+        schema = emptySchema()
+        add_pfg_field_to_schema(schema, sample_pfg_field, name=u'comments')
+        expected = u'<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <title>Comments</title> </field>'
+        self.assertEqual(expected, serializeField(schema))
 
     def testNonRequiredFieldConversion(self):
         sample_pfg_string_field = self.pfgff1.topic
         sample_pfg_string_field.setRequired(False)
-        tsf = migrate_pfg_string_field(sample_pfg_string_field)
-        self.assertTrue(u'<required>False</required>' in serializeField(tsf, name=u'topic'))
+        schema = emptySchema()
+        add_pfg_field_to_schema(schema, sample_pfg_string_field, name=u'topic')
+        self.assertTrue(u'<required>False</required>' in serializeField(schema))
 
 
 def test_suite():
