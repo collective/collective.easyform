@@ -66,7 +66,7 @@ class TestPFGmigration(MigrationFormTestCase):
 
     def testStringField(self):
         transformed_string = migrate_pfg_content(self.pfgff1)
-        expected = '<field name="reply_to" type="zope.schema.Field"/><field name="topic" type="zope.schema.Field"/>'
+        expected = '<field name="replyto" type="zope.schema.Field" /><field name="topic" type="zope.schema.Field" />'
         self.assertEquals(transformed_string, expected)
 
 

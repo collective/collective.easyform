@@ -1,6 +1,7 @@
 from plone import api
 from zope import schema
 from plone.supermodel.exportimport import BaseHandler
+from xml.etree.ElementTree import tostring
 
 
 # Get all the PFG forms present in the site.
@@ -18,6 +19,6 @@ def migrate_pfg_content(pfg_form):
     for field in fields:
         string_obj = field.getObject()
         model_Schema_field = BaseHandler(string_obj)
-        el = model_Schema_field.write(schema.Field, 'myfield', 'zope.schema.Field')
-        final_content += el
+        el = model_Schema_field.write(schema.Field, field.id, 'zope.schema.Field')
+        final_content += tostring(el)
     return final_content
