@@ -42,18 +42,19 @@ def setIntAttributeFromAccessor(sfield, pfg_field, attribute_name, accessor_id):
         setattr(sfield, attribute_name, value)
 
 
-def setBaseFieldAttributes(schema, pfg_string_field, tl, name):
+def setBaseFieldAttributes(schema, pfg_field, tl, name):
     # Set common schema attributes
     tl.__name__ = name
-    tl.title = safe_unicode(pfg_string_field.title)
-    setSimpleAttributeFromAccessor(tl, pfg_string_field, 'required', 'getDescription')
-    setSimpleAttributeFromAccessor(tl, pfg_string_field, 'required', 'getRequired')
-    setIntAttributeFromAccessor(tl, pfg_string_field, 'max_length', 'getRawFgmaxlength')
+    tl.title = safe_unicode(pfg_field.title)
+    setSimpleAttributeFromAccessor(tl, pfg_field, 'required', 'getDescription')
+    setSimpleAttributeFromAccessor(tl, pfg_field, 'required', 'getRequired')
+    setIntAttributeFromAccessor(tl, pfg_field, 'max_length', 'getRawFgmaxlength')
+    setSimpleAttributeFromAccessor(tl, pfg_field, 'default', 'getFgDefault')
     # set tagged values that are not standard schema attributes
-    setTaggedValue(schema, 'TDefault', name, pfg_string_field.getRawFgTDefault())
-    setTaggedValue(schema, 'TEnabled', name, pfg_string_field.getRawFgTEnabled())
-    setTaggedValue(schema, 'TValidator', name, pfg_string_field.getRawFgTValidator())
-    setTaggedValue(schema, 'serverSide', name, bool(pfg_string_field.getRawServerSide()))
+    setTaggedValue(schema, 'TDefault', name, pfg_field.getRawFgTDefault())
+    setTaggedValue(schema, 'TEnabled', name, pfg_field.getRawFgTEnabled())
+    setTaggedValue(schema, 'TValidator', name, pfg_field.getRawFgTValidator())
+    setTaggedValue(schema, 'serverSide', name, bool(pfg_field.getRawServerSide()))
 
 
 def add_pfg_string_field_to_schema(schema, pfg_string_field, name):

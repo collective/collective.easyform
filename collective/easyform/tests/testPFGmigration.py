@@ -21,9 +21,6 @@ except ImportError:
     HAVE_PFG = False
 
 
-REPLY_FIELD_XML = u"""<field name="replyto" type="zope.schema.TextLine" easyform:TDefault="here/memberEmail" easyform:TValidator="python:False" easyform:serverSide="False" easyform:validators="isEmail"> <max_length>255</max_length> <title>Your E-Mail Address</title> </field>"""
-
-
 class MyFixture(base.Fixture):
 
     defaultBases = (base.PLONE_FIXTURE,)
@@ -93,13 +90,23 @@ class TestPFGmigration(MigrationFormTestCase):
         sample_pfg_string_field = self.pfgff1.replyto
         schema = emptySchema()
         add_pfg_field_to_schema(schema, sample_pfg_string_field, name=u'replyto')
-        self.assertEqual(REPLY_FIELD_XML, serializeField(schema))
+        expected = """<field name="replyto" type="zope.schema.TextLine" easyform:TDefault="here/memberEmail" easyform:TValidator="python:False" easyform:serverSide="False" easyform:validators="isEmail"> <default>dynamically overridden</default> <max_length>255</max_length> <title>Your E-Mail Address</title> </field>"""
+        self.assertEqual(expected, serializeField(schema))
 
     def testTextFieldConversion(self):
         sample_pfg_field = self.pfgff1.comments
         schema = emptySchema()
         add_pfg_field_to_schema(schema, sample_pfg_field, name=u'comments')
-        expected = u'<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <title>Comments</title> </field>'
+        expected = u"""<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <default></default> <title>Comments</title> </field>"""
+        self.assertEqual(expected, serializeField(schema))
+
+    def testIntFieldConversion(self):
+        self.pfgff1.invokeFactory('FormIntegerField', 'intfield')
+        sample_pfg_field = self.pfgff1['intfield']
+        sample_pfg_field.fgField.__name__ = 'intfield'
+        schema = emptySchema()
+        add_pfg_field_to_schema(schema, sample_pfg_field, name=u'intfield')
+        expected = u"""<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <default></default> <title>Comments</title> </field>"""
         self.assertEqual(expected, serializeField(schema))
 
     def testNonRequiredFieldConversion(self):
