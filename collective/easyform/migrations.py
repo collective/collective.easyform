@@ -72,9 +72,16 @@ def add_pfg_text_field_to_schema(schema, pfg_field, name):
         tl.max_length = None
 
 
+def add_pfg_int_field_to_schema(schema, pfg_field, name):
+    tl = zope.schema.Int()
+    IEditableSchema(schema).addField(tl, name=name)
+    setBaseFieldAttributes(schema, pfg_field, tl, name)
+
+
 fieldFactories = dict(
     FormStringField=add_pfg_string_field_to_schema,
     FormTextField=add_pfg_text_field_to_schema,
+    FormIntegerField=add_pfg_int_field_to_schema,
 )
 
 
