@@ -95,26 +95,23 @@ class TestPFGmigration(MigrationFormTestCase):
 
     def testTextFieldConversion(self):
         sample_pfg_field = self.pfgff1.comments
+        sample_pfg_field.setFgDefault('Now is the\ntime.')
         schema = emptySchema()
         add_pfg_field_to_schema(schema, sample_pfg_field, name=u'comments')
-        expected = u"""<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <default></default> <title>Comments</title> </field>"""
+        expected = u"""<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <default>Now is the time.</default> <title>Comments</title> </field>"""
         self.assertEqual(expected, serializeField(schema))
 
     def testIntFieldConversion(self):
         self.pfgff1.invokeFactory('FormIntegerField', 'intfield')
         sample_pfg_field = self.pfgff1['intfield']
         sample_pfg_field.fgField.__name__ = 'intfield'
+        sample_pfg_field.setMinval(1)
+        sample_pfg_field.setMaxval(100)
+        sample_pfg_field.setFgDefault('3')
         schema = emptySchema()
         add_pfg_field_to_schema(schema, sample_pfg_field, name=u'intfield')
-        expected = u"""<field name="comments" type="zope.schema.Text" easyform:TValidator="python:False" easyform:serverSide="False"> <default></default> <title>Comments</title> </field>"""
+        expected = u"""<field name="intfield" type="zope.schema.Int" easyform:TValidator="python:False"> <default>3</default> <max>100</max> <min>1</min> <required>False</required> </field>"""
         self.assertEqual(expected, serializeField(schema))
-
-    def testNonRequiredFieldConversion(self):
-        sample_pfg_string_field = self.pfgff1.topic
-        sample_pfg_string_field.setRequired(False)
-        schema = emptySchema()
-        add_pfg_field_to_schema(schema, sample_pfg_string_field, name=u'topic')
-        self.assertTrue(u'<required>False</required>' in serializeField(schema))
 
 
 def test_suite():
