@@ -251,7 +251,7 @@ class Mailer(Action):
         from_addr = (
             from_addr or
             site_props.getProperty('email_from_address') or
-            portal.getProperty('email_from_address') or 
+            portal.getProperty('email_from_address') or
             registry.get('plone.email_from_address')
         )
 
