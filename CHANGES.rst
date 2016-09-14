@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.0.0a1.dev0 (unreleased)
+------------------
+
+- Housekeeping, Update for Plone 5
+  [agitator]
+
+
 1.0a4 (unreleased)
 ------------------
 
