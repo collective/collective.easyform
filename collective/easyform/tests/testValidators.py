@@ -7,6 +7,7 @@ try:
     from Products.CMFDefault.exceptions import EmailAddressInvalid
 except ImportError:
     from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
+
 from Products.validation import validation
 from ZPublisher.BaseRequest import BaseRequest
 from collective.easyform import validators
@@ -189,8 +190,11 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
         from collective.easyform.validators import update_validators
         update_validators()
 
-        validator = lambda n: getUtility(IFieldValidator, name=n)
-        validate = lambda n, v: validator(n) and validator(n)(v)
+        def validator(n):
+            return getUtility(IFieldValidator, name=n)
+
+        def validate(n, v):
+            return validator(n) and validator(n)(v)
 
         self.assertRaises(
             ComponentLookupError, validate, 'noValidator', 'test')
@@ -201,11 +205,6 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
 
         self.assertEqual(validate('isZipCode', '12345'), None)
         self.assertNotEqual(validate('isZipCode', '12345-1234'), None)
-        # self.assertEqual(validate('isZipCode', '12345-1234'), None)
-        # Canadian zip codes
-        # self.assertEqual(validate('isZipCode', 'T2X 1V4'), None)
-        # self.assertEqual(validate('isZipCode', 'T2X1V4'), None)
-        # self.assertEqual(validate('isZipCode', 't2x 1v4'), None)
 
 
 def test_suite():

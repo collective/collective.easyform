@@ -5,10 +5,20 @@ collective.easyform
 Collective.easyform enables creation of custom forms using dexterity. This Plone package is similar to Products.PloneFormGen that is based on Archetypes. Dexterity is a new platform for content types in Plone and will be used instead of Archetypes in Plone 5. Easyform provides a Plone form builder through-the-web using fields, widgets, actions and validators.
 
 Similarly to PloneFormGen, Easyform is used to generate web forms that save or mail form input. Simple and user-friendly interface allows non-programmers to create custom forms.
+.. image:: https://travis-ci.org/collective/collective.easyform.png?branch=master
+    :target: https://travis-ci.org/collective/collective.easyform
+    :alt: Travis CI status
+
+.. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master :target: https://coveralls.io/github/collective/collective.easyform?branch=master 
+    :target: https://coveralls.io/r/collective/collective.easyform?branch=master
+    :alt: Coveralls status
 
 
 Usage
 -----
+.. image:: https://badge.fury.io/gh/collective%2Fcollective.easyform.svg
+    :target: http://badge.fury.io/gh/collective%2Fcollective.easyform
+    :alt: Fury Github
 
 - Install product (in your buildout.cfg add ‘collective.easyform’ to the eggs section), rerun your Plone instance and activate Collective.easyform.
 - Choose Easyform from the 'Add new' drop-down menu. Insert form title, description and other settings.
@@ -24,6 +34,13 @@ See quick overview of this product:
 
 Contribute
 ----------
+.. image:: https://pypip.in/license/collective.easyform/badge.png
+    :target: https://pypi.python.org/pypi/collective.easyform/
+    :alt: License
+    
+.. figure:: http://collective.com/services/plone-development/products/easyform/easyform.png
+    :target: https://github.com/collective/collective.easyform
+    :alt: Logo
 
 - Issue Tracker: https://github.com/collective/collective.easyform/issues
 - Source Code: https://github.com/collective/collective.easyform
@@ -34,9 +51,14 @@ License
 
 The project is licensed under the GPLv2.
 
+.. image:: http://collective.com/services/plone-development/products/easyform/easyform-youtube.png
+    :target: https://www.youtube.com/watch?v=DMCYnYE9RKU
+    :alt: Collective.easyform
 
 Compatibility
 -------------
 
 2.x targets Plone 5.x
 1.x targets Plone 4.x
+Plone 4.3.2
+Plone 5.0

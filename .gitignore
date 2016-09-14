@@ -6,12 +6,14 @@
 *.py?
 *.pyc
 *~
+._*
 .DS_Store
 .coverage
 .installed.cfg
 .mr.developer.cfg
 bin/
 buildout-cache/
+build/
 collective/easyform/tests/*.tar.gz
 develop-eggs/
 dist
@@ -23,7 +25,8 @@ extras/
 htmlcov/
 include/
 lib/
-lib64
+lib64/
+local/
 parts/
 pip-selfcheck.json
 src/

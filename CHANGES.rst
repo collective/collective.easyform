@@ -12,6 +12,17 @@ Changelog
 ------------------
 
 New:
+- Change recipient address field to Email type so it gets properly validated
+  [davilima6]
+
+- Make the default buildout use Plone 5. Update travis setup to the point where
+  tests actually run, though many still fail.
+  [smcmahon]
+
+Fixes:
+
+- look up email_from_address in registry
+  [kcleong]
 
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
@@ -32,6 +43,12 @@ New:
 
 - Depend on plone.schemaeditor > 2.0 for JS compatibility.
   [thet]
+
+- fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support.
+  [vangheem]
+
+- Fix modeleditor.pt markup so it works with barceloneta.
+  [ebrehault]
 
 Fixes:
 
@@ -56,6 +73,7 @@ Fixes:
 - Set script type correctly
   [fredvd]
 
+
 1.0a2 (2014-06-13)
 ------------------
 
@@ -76,6 +94,7 @@ Fixes:
 
 - Added fields parameter in Mailer override expressions
   [gborelli]
+
 
 1.0a1 (2014-03-18)
 ------------------

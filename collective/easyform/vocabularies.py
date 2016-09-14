@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from collective.easyform import easyformMessageFactory as _
+from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform.api import get_context
 from collective.easyform.api import get_fields
 from z3c.form.interfaces import IFieldWidget
@@ -18,10 +18,12 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 PMF = MessageFactory('plone')
 
-_make_vocabulary = lambda items: SimpleVocabulary([
-    SimpleVocabulary.createTerm(token, token, name)
-    for (name, token) in items
-])
+
+def _make_vocabulary(items):
+    return SimpleVocabulary([
+        SimpleVocabulary.createTerm(token, token, name)
+        for (name, token) in items
+    ])
 
 customActions = _make_vocabulary((
     (_(u'Traverse to'), u'traverse_to'),
@@ -64,10 +66,10 @@ vocabFormatDL = _make_vocabulary((
 ))
 
 
-class fields(object):
+class Fields(object):
 
-    """Context source binder to provide a vocabulary of users in a given
-    group.
+    """
+    Context source binder to provide a vocabulary of fields in a form.
     """
 
     implements(IContextSourceBinder, IVocabulary)
@@ -89,7 +91,7 @@ class fields(object):
                 SimpleVocabulary.createTerm(name, str(name), field.title))
         return SimpleVocabulary(terms)
 
-fieldsFactory = fields()
+fieldsFactory = Fields()
 
 
 class WidgetVocabulary(SimpleVocabulary):

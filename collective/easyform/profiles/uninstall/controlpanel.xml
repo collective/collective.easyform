@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel">
+ <configlet title="easyform" action_id="easyform" appId="easyform"
+    category="Products" condition_expr="" remove="True">
+ </configlet>
+</object>

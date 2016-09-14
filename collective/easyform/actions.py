@@ -36,10 +36,11 @@ from email.utils import formataddr
 from logging import getLogger
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
+from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from time import time
-from types import StringTypes
 from zope.component import queryUtility
+from zope.component import getUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implements
 from zope.schema import Bool
@@ -102,7 +103,6 @@ class ActionFactory(object):
 
 
 class Action(Bool):
-
     """ Base action class """
     implements(IAction)
 
@@ -128,6 +128,8 @@ class Mailer(Action):
         super(Mailer, self).__init__(**kw)
 
     def secure_header_line(self, line):
+        if not line:
+            return ''
         nlpos = line.find('\x0a')
         if nlpos >= 0:
             line = line[:nlpos]
@@ -146,10 +148,9 @@ class Mailer(Action):
             # TODO
             # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
             # 'showAll', True) and f.getServerSide())]
-            if not (self._is_file_data(fields[f]))
-            and not (
-                getattr(self, 'showAll', True)
-                and IFieldExtender(schema[f]).serverSide
+            if not (self._is_file_data(fields[f])) and not (
+                getattr(self, 'showAll', True) and
+                IFieldExtender(schema[f]).serverSide
             )
         ]
 
@@ -227,17 +228,19 @@ class Mailer(Action):
             toemail = portal.getProperty('email_from_address')
         assert toemail, """
                 Unable to mail form input because no recipient address has been specified.
-                Please check the recipient settings of the EasyForm "Mailer" within the
+                Please check the recipient settings of the EasyForm Mailer within the
                 current form folder.
             """
         return (fullname, toemail)
 
     def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
-        """Return addresses
+        """
+        Return addresses
         """
         pprops = getToolByName(context, 'portal_properties')
         site_props = getToolByName(pprops, 'site_properties')
         portal = getToolByName(context, 'portal_url').getPortalObject()
+        registry = getUtility(IRegistry)
 
         # get Reply-To
         reply_addr = None
@@ -248,7 +251,8 @@ class Mailer(Action):
         from_addr = (
             from_addr or
             site_props.getProperty('email_from_address') or
-            portal.getProperty('email_from_address')
+            portal.getProperty('email_from_address') or
+            registry.get('plone.email_from_address')
         )
 
         if hasattr(self, 'senderOverride') and self.senderOverride:
@@ -261,7 +265,8 @@ class Mailer(Action):
         if hasattr(self, 'to_field') and self.to_field:
             recip_email = fields.get(self.to_field, None)
         if not recip_email:
-            recip_email = self.recipient_email
+            if self.recipient_email != '':
+                recip_email = self.recipient_email
 
         if hasattr(self, 'recipientOverride') and self.recipientOverride:
             _recip = get_expression(
@@ -393,7 +398,6 @@ class Mailer(Action):
     def get_mail_text(self, fields, request, context):
         """Get header and body of e-mail as text (string)
         """
-
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
 
@@ -508,12 +512,12 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn('Python script ' + self.__name__
-                        + ' has warning:' + str(script.warnings))
+            logger.warn('Python script ' + self.__name__ +
+                        ' has warning:' + str(script.warnings))
 
         if len(script.errors) > 0:
-            logger.error('Python script ' + self.__name__
-                         + ' has errors: ' + str(script.errors))
+            logger.error('Python script ' + self.__name__ +
+                         ' has errors: ' + str(script.errors))
             raise ValueError(
                 'Python script ' + self.__name__ + ' has errors: ' + str(script.errors))
 

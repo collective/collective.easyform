@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel">
+ <configlet title="easyform" action_id="easyform" appId="easyform"
+    category="Products" condition_expr=""
+    icon_expr="string:$portal_url/Form.gif"
+    url_expr="string:${portal_url}/@@easyform-controlpanel" visible="True">
+  <permission>Manage portal</permission>
+ </configlet>
+</object>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="portal_properties">
+ <object name="site_properties" >
+  <property name="use_folder_tabs" type="lines">
+   <element value="EasyForm"  remove="True"/>
+  </property>
+  <property name="typesLinkToFolderContentsInFC" type="lines">
+   <element value="EasyForm"  remove="True"/>
+  </property>
+  <property name="default_page_types" type="lines">
+   <element value="EasyForm"  remove="True"/>
+  </property>
+ </object>
+</object>

@@ -23,4 +23,5 @@ def test_suite():
                 layer=base.ROBOT_TESTING
             ),
         ])
+    suite.level = 3
     return suite

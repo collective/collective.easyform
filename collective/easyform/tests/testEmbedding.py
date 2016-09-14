@@ -145,9 +145,6 @@ class TestEmbedding(base.EasyFormTestCase):
         self.assertTrue('Thank You' in res)
         self.assertTrue('Thanks for your input.' in res)
 
-        # self.assertEqual(self.app.REQUEST._orig_env['PATH_INFO'],
-        #                  '/plone/Members/test_user_1_/ff1/thank-you')
-
         # make sure the transaction was committed
         self.assertTrue(committed)
 
@@ -159,10 +156,6 @@ class TestEmbedding(base.EasyFormTestCase):
 
         self.assertTrue('Thank You' in res)
         self.assertTrue('Thanks for your input.' in res)
-        # self.assertRaises(Retry, view)
-        # self.assertEqual(self.app.REQUEST._orig_env['PATH_INFO'],
-        #                  '/VirtualHostBase/http/nohost:80/VirtualHostRoot/plone/Members/test_user_1_/ff1/thank-you')
-
         # clean up
         transaction.commit = real_transaction_commit
 

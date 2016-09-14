@@ -27,4 +27,12 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="EasyForm (uninstall)"
+      directory="profiles/uninstall"
+      description="UnInstall the collective.easyform package"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
 </configure>

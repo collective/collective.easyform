@@ -3,16 +3,17 @@
 <body>
     <metal:block fill-slot="content">
         <script type="text/javascript">
-jQuery(function($) {
-    $(document).on('onLoad', function(e){
-        initTinyMCE(e.target);
-    });
-});
+            jQuery(function($) {
+                $(document).on('onLoad', function(e){
+                    initTinyMCE(e.target);
+                });
+            });
         </script>
+
         <style type="text/css">
-.overlay .richTextWidget iframe {
-    box-shadow: none;
-}
+            .overlay .richTextWidget iframe {
+                box-shadow: none;
+            }
         </style>
         <div id="edit-bar"
              tal:on-error="nothing"
