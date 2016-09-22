@@ -32,6 +32,7 @@ setup(name='collective.easyform',
           'plone.autoform',
           'plone.dexterity',
           'plone.namedfile',
+          'plone.schema',
           'plone.schemaeditor >= 2.0.0',
           'plone.supermodel',
           # -*- Extra requirements: -*-
