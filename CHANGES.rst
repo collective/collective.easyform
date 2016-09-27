@@ -11,6 +11,9 @@ New:
 
 Fixes:
 
+- Don't show the reset button after form submission at the summary page.
+  [thet]
+
 - Housekeeping: isort, zca decorators, autopep8 and manual cleanup.
   [jensens]
 
