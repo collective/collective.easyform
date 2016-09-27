@@ -14,8 +14,8 @@ optionflags = (
     doctest.REPORTING_FLAGS)
 
 testfiles = (
-    'browser.txt',
-    'attachment.txt',
+    'browser.rst',
+    'attachment.rst',
     'ssl.txt',
     'serverside_field.txt',
     '../api.py',

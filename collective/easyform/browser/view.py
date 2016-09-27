@@ -216,7 +216,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     @button.buttonAndHandler(
         _(u'Reset'),
         name='reset',
-        condition=lambda form: form.context.useCancelButton or form.thanksPage
+        condition=lambda form: form.context.useCancelButton
     )
     def handleReset(self, action):
         self.request.response.redirect(self.nextURL())

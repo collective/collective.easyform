@@ -60,13 +60,9 @@ base class)::
     <sent mail from ...to ['mdummy@address.com']>
     >>> browser.url
     'http://nohost/plone/testform'
+
     >>> 'Thanks for your input.' in browser.contents
     True
-    >>> browser.getControl('Reset').click()
-    >>> browser.url
-    'http://nohost/plone/testform'
-    >>> 'Thanks for your input.' in browser.contents
-    False
 
 Add a new fieldset::
 
