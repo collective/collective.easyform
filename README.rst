@@ -10,10 +10,9 @@ Similarly to PloneFormGen, Easyform is used to generate web forms that save or m
     :target: https://travis-ci.org/collective/collective.easyform
     :alt: Travis CI status
 
-.. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master :target: https://coveralls.io/github/collective/collective.easyform?branch=master
-    :target: https://coveralls.io/r/collective/collective.easyform?branch=master
+.. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master
+    :target: https://coveralls.io/github/collective/collective.easyform?branch=master
     :alt: Coveralls status
-
 
 Usage
 -----
