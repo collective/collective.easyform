@@ -137,12 +137,11 @@ class SecureFakeRequest(dict):
     def __init__(self, **kwargs):
         self.form = kwargs
 
-    security.declareProtected(permissions.ManagePortal,
-                              'fooProtected')
-
+    @security.protected(permissions.ManagePortal)
     def fooProtected(self):
         ''' Only manager can access this '''
         return 'foo'
+
 
 InitializeClass(SecureFakeRequest)
 
@@ -288,7 +287,10 @@ class TestCustomScript(base.EasyFormTestCase):
         adapter.ScriptBody = default_params_script
 
         request = FakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         errors = adapter.onSuccess({}, request)
         self.assertEqual(errors, None)
@@ -383,7 +385,9 @@ class TestCustomScript(base.EasyFormTestCase):
 
     # XXX TODO: We need to find another way to test this.
     def testProxyRole(self):
-        ''' Test seeing how setting proxy role affects unauthorized exception '''
+        """ Test seeing how setting proxy role affects unauthorized
+        Exception
+        """
 
         # TODO: Zope security system kills me
         self.createScript()

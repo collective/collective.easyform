@@ -1,4 +1,11 @@
-recursive-include collective *
-recursive-include docs *
-include *
+exclude *.sh
+exclude .*.cfg
+exclude .coveragerc
+exclude .tx
+exclude .tx/config
+exclude bootstrap-buildout.py
+exclude buildout.cfg
 global-exclude *.pyc
+graft docs
+graft src/collective
+include *.rst

@@ -22,7 +22,7 @@ from zope.component import getSiteManager
 class MailHostMock(MailHost):
 
     def _send(self, mfrom, mto, messageText, immediate=False):
-        print '<sent mail from {0} to {1}>'.format(mfrom, mto)
+        print('<sent mail from {0} to {1}>'.format(mfrom, mto))  # noqa: T003
         self.msgtext = messageText
         self.msg = message_from_string(messageText.lstrip())
 
@@ -49,14 +49,16 @@ class Fixture(PloneSandboxLayer):
         try:
             import plone.formwidget.recaptcha
             self.loadZCML(
-                package=plone.formwidget.recaptcha, context=configurationContext)
+                package=plone.formwidget.recaptcha,
+                context=configurationContext
+            )
         except ImportError:
             pass
 
     def setUpPloneSite(self, portal):
         try:
             self.applyProfile(portal, 'plone.app.contenttypes:default')
-        except:
+        except Exception:
             pass
 
         # Install the collective.easyform product

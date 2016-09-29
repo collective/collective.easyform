@@ -57,7 +57,10 @@ class TestInstallation(base.EasyFormTestCase):
 
     def ttestControlPanelConfigletInstalled(self):
         self.assertTrue(
-            'EasyForm' in [action.id for action in self.controlpanel.listActions()])
+            'EasyForm' in [
+                action.id for action in self.controlpanel.listActions()
+            ]
+        )
 
     def ttestAddPermissions(self):
         ''' Test to make sure add permissions are as intended '''
@@ -68,22 +71,35 @@ class TestInstallation(base.EasyFormTestCase):
         SDA_ADD_CONTENT_PERMISSION = 'EasyForm: Add Data Savers'
 
         self.assertEqual(
-            getAddPermission('EasyForm', 'EasyForm'), ADD_CONTENT_PERMISSION)
+            getAddPermission('EasyForm', 'EasyForm'),
+            ADD_CONTENT_PERMISSION
+        )
         self.assertEqual(
-            getAddPermission('EasyForm', 'Mailer Adapter'), MA_ADD_CONTENT_PERMISSION)
+            getAddPermission('EasyForm', 'Mailer Adapter'),
+            MA_ADD_CONTENT_PERMISSION
+        )
         self.assertEqual(
-            getAddPermission('EasyForm', 'Save Data Adapter'), SDA_ADD_CONTENT_PERMISSION)
+            getAddPermission('EasyForm', 'Save Data Adapter'),
+            SDA_ADD_CONTENT_PERMISSION
+        )
         self.assertEqual(
-            getAddPermission('EasyForm', 'Custom Script Adapter'), CSA_ADD_CONTENT_PERMISSION)
+            getAddPermission('EasyForm', 'Custom Script Adapter'),
+            CSA_ADD_CONTENT_PERMISSION
+        )
 
     def testActionsInstalled(self):
         # self.setRoles(['Manager', ])
         self.assertTrue(
-            self.portal.portal_actions.getActionInfo('object_buttons/export'))
+            self.portal.portal_actions.getActionInfo('object_buttons/export')
+        )
         self.assertTrue(
-            self.portal.portal_actions.getActionInfo('object_buttons/import'))
+            self.portal.portal_actions.getActionInfo('object_buttons/import')
+        )
         self.assertTrue(
-            self.portal.portal_actions.getActionInfo('object_buttons/saveddata'))
+            self.portal.portal_actions.getActionInfo(
+                'object_buttons/saveddata'
+            )
+        )
 
     def ttest_FormGenTool(self):
         self.assertTrue(getToolByName(self.portal, 'formgen_tool'))
@@ -114,9 +130,14 @@ class TestInstallation(base.EasyFormTestCase):
         for mapping in property_mappings:
             sheet = self.properties[mapping['propsheet']]
             for lines_prop in mapping['added_props']:
-                self.assertTrue('foo' in sheet.getProperty(lines_prop),
-                                "Our garbage item didn't survive reinstall for property {0}"
-                                " within property sheet {1}".format(lines_prop, mapping['propsheet']))
+                self.assertTrue(
+                    'foo' in sheet.getProperty(lines_prop),
+                    "Our garbage item didn't survive reinstall for property "
+                    "{0} within property sheet {1}".format(
+                        lines_prop,
+                        mapping['propsheet']
+                    )
+                )
 
     def test_EasyFormInDefaultPageTypes(self):
         propsTool = getToolByName(self.portal, 'portal_properties')
@@ -327,13 +348,21 @@ class TestContentCreation(base.EasyFormTestCase):
             self.assertEqual(f1.Description(), 'description')
 
     def testCreateFieldsAdaptersOutsideEasyForm(self):
-        for f in self.fieldTypes + self.adapterTypes + self.thanksTypes + self.fieldsetTypes:
+        types = (
+            self.fieldTypes +
+            self.adapterTypes +
+            self.thanksTypes +
+            self.fieldsetTypes
+        )
+        for f in types:
             try:
                 self.folder.invokeFactory(f, 'f1')
             except (Unauthorized, ValueError):
                 return
             self.fail(
-                'Expected error when creating form field or adapter outside form folder.')
+                'Expected error when creating form field or adapter outside '
+                'form folder.'
+            )
 
     def testBadIdField(self):
         # test for tracker # 32 - Field with id 'language' causes problems with
@@ -392,8 +421,12 @@ class TestContentCreation(base.EasyFormTestCase):
         ''' test for issue # 102, 104: utf8, non-ascii in field title or description
         '''
 
-        self.ff1.invokeFactory('FormStringField', 'sf1',
-                               title='Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8'))
+        self.ff1.invokeFactory(
+            'FormStringField', 'sf1',
+            title='Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode(
+                'utf8'
+            )
+        )
 
         self.ff1.sf1.setDescription(
             'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8'))
@@ -404,8 +437,12 @@ class TestContentCreation(base.EasyFormTestCase):
         ''' test for utf8, non-ascii in form title or description
         '''
 
-        self.folder.invokeFactory('EasyForm', 'ff2',
-                                  title='Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8'))
+        self.folder.invokeFactory(
+            'EasyForm', 'ff2',
+            title='Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode(
+                'utf8'
+            )
+        )
 
         self.folder.ff2.setDescription(
             'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8'))
@@ -460,7 +497,7 @@ class TestGPG(base.EasyFormTestCase):
         from collective.easyform.content.ya_gpg import gpg, GPGError
 
         if gpg is None:
-            print '\nSkipping GPG tests; gpg binary not found'
+            print('\nSkipping GPG tests; gpg binary not found')  # noqa: T003
         else:
             self.assertRaises(GPGError, gpg.encrypt, 'spam', 'eggs')
 
