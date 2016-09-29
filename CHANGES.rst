@@ -6,16 +6,21 @@ Changelog
 
 New:
 
-- Housekeeping, Update for Plone 5
+- Update for Plone 5, no longer support Plone 4.x
   [agitator]
 
 Fixes:
 
+- Fix: Overhaul TravisCI setup to really use caches.
+  Use bobtemplates.plone travis setup as best practice.
+  [jensens]
+
 - Don't show the reset button after form submission at the summary page.
   [thet]
 
-- Housekeeping: isort, zca decorators, autopep8 and manual cleanup.
-  [jensens]
+- Housekeeping: isort, zca decorators, autopep8 and major manual cleanup.
+  Includes structural cleanup and
+  [jensens, agitator]
 
 
 1.0a4 (unreleased)
