@@ -5,11 +5,12 @@ collective.easyform
 Collective.easyform enables creation of custom forms using dexterity. This Plone package is similar to Products.PloneFormGen that is based on Archetypes. Dexterity is a new platform for content types in Plone and will be used instead of Archetypes in Plone 5. Easyform provides a Plone form builder through-the-web using fields, widgets, actions and validators.
 
 Similarly to PloneFormGen, Easyform is used to generate web forms that save or mail form input. Simple and user-friendly interface allows non-programmers to create custom forms.
+
 .. image:: https://travis-ci.org/collective/collective.easyform.png?branch=master
     :target: https://travis-ci.org/collective/collective.easyform
     :alt: Travis CI status
 
-.. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master :target: https://coveralls.io/github/collective/collective.easyform?branch=master 
+.. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master :target: https://coveralls.io/github/collective/collective.easyform?branch=master
     :target: https://coveralls.io/r/collective/collective.easyform?branch=master
     :alt: Coveralls status
 
@@ -37,7 +38,7 @@ Contribute
 .. image:: https://pypip.in/license/collective.easyform/badge.png
     :target: https://pypi.python.org/pypi/collective.easyform/
     :alt: License
-    
+
 .. figure:: http://collective.com/services/plone-development/products/easyform/easyform.png
     :target: https://github.com/collective/collective.easyform
     :alt: Logo
