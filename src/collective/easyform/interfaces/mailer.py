@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from collective.easyform import vocabularies
@@ -29,8 +28,10 @@ class IMailer(IAction):
     recipient_name = zope.schema.TextLine(
         title=_(u'label_formmailer_recipient_fullname',
                 default=u"Recipient's full name"),
-        description=_(u'help_formmailer_recipient_fullname',
-                      default=u'The full name of the recipient of the mailed form.'),
+        description=_(
+            u'help_formmailer_recipient_fullname',
+            default=u'The full name of the recipient of the mailed form.'
+        ),
         default=u'',
         missing_value=u'',
         required=False,
@@ -56,12 +57,14 @@ class IMailer(IAction):
     to_field = zope.schema.Choice(
         title=_(u'label_formmailer_to_extract',
                 default=u'Extract Recipient From'),
-        description=_(u'help_formmailer_to_extract', default=u''
-                      u'Choose a form field from which you wish to extract '
-                      u'input for the To header. If you choose anything other '
-                      u'than "None", this will override the "Recipient\'s e-mail address" '
-                      u'setting above. Be very cautious about allowing unguarded user '
-                      u'input for this purpose.'),
+        description=_(
+            u'help_formmailer_to_extract',
+            default=u'Choose a form field from which you wish to extract '
+                    u'input for the To header. If you choose anything other '
+                    u'than "None", this will override the "Recipient\'s " '
+                    u'e-mail address setting above. Be very cautious about '
+                    u'allowing unguarded user input for this purpose.'
+        ),
         required=False,
         vocabulary=vocabularies.fieldsFactory,
     )
@@ -72,8 +75,10 @@ class IMailer(IAction):
     cc_recipients = zope.schema.Text(
         title=_(u'label_formmailer_cc_recipients',
                 default=u'CC Recipients'),
-        description=_(u'help_formmailer_cc_recipients',
-                      default=u'E-mail addresses which receive a carbon copy.'),
+        description=_(
+            u'help_formmailer_cc_recipients',
+            default=u'E-mail addresses which receive a carbon copy.'
+        ),
         default=u'',
         missing_value=u'',
         required=False,
@@ -85,8 +90,10 @@ class IMailer(IAction):
     bcc_recipients = zope.schema.Text(
         title=_(u'label_formmailer_bcc_recipients',
                 default=u'BCC Recipients'),
-        description=_(u'help_formmailer_bcc_recipients',
-                      default=u'E-mail addresses which receive a blind carbon copy.'),
+        description=_(
+            u'help_formmailer_bcc_recipients',
+            default=u'E-mail addresses which receive a blind carbon copy.'
+        ),
         default=u'',
         missing_value=u'',
         required=False,
@@ -96,11 +103,13 @@ class IMailer(IAction):
     replyto_field = zope.schema.Choice(
         title=_(u'label_formmailer_replyto_extract',
                 default=u'Extract Reply-To From'),
-        description=_(u'help_formmailer_replyto_extract', default=u''
-                      u'Choose a form field from which you wish to extract '
-                      u'input for the Reply-To header. NOTE: You should '
-                      u'activate e-mail address verification for the designated '
-                      u'field.'),
+        description=_(
+            u'help_formmailer_replyto_extract',
+            default=u'Choose a form field from which you wish to extract '
+                    u'input for the Reply-To header. NOTE: You should '
+                    u'activate e-mail address verification for the '
+                    u'designated field.'
+        ),
         required=False,
         vocabulary=vocabularies.fieldsFactory,
     )
@@ -173,8 +182,11 @@ class IMailer(IAction):
     directives.read_permission(showFields=MODIFY_PORTAL_CONTENT)
     showFields = zope.schema.List(
         title=_(u'label_mailfields_text', default=u'Show Responses'),
-        description=_(u'help_mailfields_text',
-                      default=u'Pick the fields whose inputs you\'d like to include in the e-mail.'),
+        description=_(
+            u'help_mailfields_text',
+            default=u'Pick the fields whose inputs you\'d like to include in '
+                    u'the e-mail.'
+        ),
         unique=True,
         required=False,
         value_type=zope.schema.Choice(vocabulary=vocabularies.fieldsFactory),
@@ -198,11 +210,13 @@ class IMailer(IAction):
     directives.read_permission(body_pt=MODIFY_PORTAL_CONTENT)
     body_pt = zope.schema.Text(
         title=_(u'label_formmailer_body_pt', default=u'Mail-Body Template'),
-        description=_(u'help_formmailer_body_pt', default=u''
-                      u'This is a Zope Page Template '
-                      u'used for rendering of the mail-body. You don\'t need to modify '
-                      u'it, but if you know TAL (Zope\'s Template Attribute Language) '
-                      u'you have the full power to customize your outgoing mails.'),
+        description=_(
+            u'help_formmailer_body_pt',
+            default=u'This is a Zope Page Template used for rendering of '
+                    u'the mail-body. You don\'t need to modify it, but if you '
+                    u'know TAL (Zope\'s Template Attribute Language) have '
+                    u'the full power to customize your outgoing mails.'
+        ),
         default=config.MAIL_BODY_DEFAULT,
         missing_value=u'',
     )
@@ -211,10 +225,12 @@ class IMailer(IAction):
     directives.read_permission(body_type=MODIFY_PORTAL_CONTENT)
     body_type = zope.schema.Choice(
         title=_(u'label_formmailer_body_type', default=u'Mail Format'),
-        description=_(u'help_formmailer_body_type', default=u''
-                      u'Set the mime-type of the mail-body. '
-                      u'Change this setting only if you know exactly what you are doing. '
-                      u'Leave it blank for default behaviour.'),
+        description=_(
+            u'help_formmailer_body_type',
+            default=u'Set the mime-type of the mail-body. Change this '
+                    u'setting only if you know exactly what you are doing. '
+                    u'Leave it blank for default behaviour.'
+        ),
         default=u'html',
         vocabulary=vocabularies.MIME_LIST,
     )
@@ -242,8 +258,11 @@ class IMailer(IAction):
     additional_headers = zope.schema.List(
         title=_(u'label_formmailer_additional_headers',
                 default=u'Additional Headers'),
-        description=_(u'help_formmailer_additional_headers',
-                      default=u'Additional e-mail-header lines. Only use RFC822-compliant headers.'),
+        description=_(
+            u'help_formmailer_additional_headers',
+            default=u'Additional e-mail-header lines. Only use '
+                    u'RFC822-compliant headers.'
+        ),
         unique=True,
         required=False,
         value_type=zope.schema.TextLine(
@@ -262,11 +281,14 @@ class IMailer(IAction):
 #                 widget=StringWidget(
 #                     description=_(u'help_gpg_key_id', default=u"""
 #                         Give your key-id, e-mail address or
-#                         whatever works to match a public key from current keyring.
-#                         It will be used to encrypt the message body (not attachments).
+#                         whatever works to match a public key from current
+#                         keyring.
+#                         It will be used to encrypt the message body (not
+#                         attachments).
 #                         Contact the site administrator if you need to
 #                         install a new public key.
-#                         Note that you will probably wish to change your message
+#                         Note that you will probably wish to change your
+#                         message
 #                         template to plain text if you're using encryption.
 #                         TEST THIS FEATURE BEFORE GOING PUBLIC!
 #                        """),
@@ -274,18 +296,30 @@ class IMailer(IAction):
 #                    ),
 #                ),
 #            ))
-    fieldset(u'overrides', label=_('Overrides'), fields=[
-             'subjectOverride', 'senderOverride', 'recipientOverride', 'ccOverride', 'bccOverride'])
+    fieldset(
+        u'overrides',
+        label=_('Overrides'),
+        fields=[
+            'subjectOverride',
+            'senderOverride',
+            'recipientOverride',
+            'ccOverride',
+            'bccOverride'
+        ]
+    )
     directives.write_permission(subjectOverride=config.EDIT_TALES_PERMISSION)
     directives.read_permission(subjectOverride=MODIFY_PORTAL_CONTENT)
     subjectOverride = zope.schema.TextLine(
         title=_(u'label_subject_override_text', default=u'Subject Expression'),
-        description=_(u'help_subject_override_text', default=u''
-                      u'A TALES expression that will be evaluated to override any value '
-                      u'otherwise entered for the e-mail subject header. '
-                      u'Leave empty if unneeded. Your expression should evaluate as a string. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                      u'an error on form display.'),
+        description=_(
+            u'help_subject_override_text',
+            default=u'A TALES expression that will be evaluated to override '
+                    u'any value otherwise entered for the e-mail subject '
+                    u'header. Leave empty if unneeded. Your expression '
+                    u'should evaluate as a string. PLEASE NOTE: errors in '
+                    u'the evaluation of this expression will cause an error '
+                    u'on form display.'
+        ),
         required=False,
         default=u'',
         missing_value=u'',
@@ -295,11 +329,13 @@ class IMailer(IAction):
     directives.read_permission(senderOverride=MODIFY_PORTAL_CONTENT)
     senderOverride = zope.schema.TextLine(
         title=_(u'label_sender_override_text', default=u'Sender Expression'),
-        description=_(u'help_sender_override_text', default=u''
-                      u'A TALES expression that will be evaluated to override the "From" header. '
-                      u'Leave empty if unneeded. Your expression should evaluate as a string. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                      u'an error on form display.'),
+        description=_(
+            u'help_sender_override_text',
+            default=u'A TALES expression that will be evaluated to override '
+                    u'the "From" header. Leave empty if unneeded. '
+                    u'Your expression should evaluate as a string. '
+                    u'PLEASE NOTE: errors in the evaluation of this '
+                    u'expression will cause an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -310,13 +346,16 @@ class IMailer(IAction):
     recipientOverride = zope.schema.TextLine(
         title=_(u'label_recipient_override_text',
                 default=u'Recipient Expression'),
-        description=_(u'help_recipient_override_text', default=u''
-                      u'A TALES expression that will be evaluated to override any value '
-                      u'otherwise entered for the recipient e-mail address. You are strongly '
-                      u'cautioned against using unvalidated data from the request for this purpose. '
-                      u'Leave empty if unneeded. Your expression should evaluate as a string. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                      u'an error on form display.'),
+        description=_(
+            u'help_recipient_override_text',
+            default=u'A TALES expression that will be evaluated to override '
+                    u'any value otherwise entered for the recipient '
+                    u'e-mail address. You are strongly cautioned against using'
+                    u'unvalidated data from the request for this purpose. '
+                    u'Leave empty if unneeded. Your expression should '
+                    u'evaluate as a string. PLEASE NOTE: errors in the '
+                    u'evaluation of this expression will cause '
+                    u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -326,13 +365,15 @@ class IMailer(IAction):
     directives.read_permission(ccOverride=MODIFY_PORTAL_CONTENT)
     ccOverride = zope.schema.TextLine(
         title=_(u'label_cc_override_text', default=u'CC Expression'),
-        description=_(u'help_cc_override_text', default=u''
-                      u'A TALES expression that will be evaluated to override any value '
-                      u'otherwise entered for the CC list. You are strongly '
-                      u'cautioned against using unvalidated data from the request for this purpose. '
-                      u'Leave empty if unneeded. Your expression should evaluate as a sequence of strings. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                      u'an error on form display.'),
+        description=_(
+            u'help_cc_override_text',
+            default=u'A TALES expression that will be evaluated to override '
+                    u'any value otherwise entered for the CC list. You are '
+                    u'strongly cautioned against using unvalidated data from '
+                    u'the request for this purpose. Leave empty if unneeded. '
+                    u'Your expression should evaluate as a sequence of '
+                    u'strings. PLEASE NOTE: errors in the evaluation of this '
+                    u'expression will cause an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',
@@ -342,13 +383,16 @@ class IMailer(IAction):
     directives.read_permission(bccOverride=MODIFY_PORTAL_CONTENT)
     bccOverride = zope.schema.TextLine(
         title=_(u'label_bcc_override_text', default=u'BCC Expression'),
-        description=_(u'help_bcc_override_text', default=u''
-                      u'A TALES expression that will be evaluated to override any value '
-                      u'otherwise entered for the BCC list. You are strongly '
-                      u'cautioned against using unvalidated data from the request for this purpose. '
-                      u'Leave empty if unneeded. Your expression should evaluate as a sequence of strings. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                      u'an error on form display.'),
+        description=_(
+            u'help_bcc_override_text',
+            default=u'A TALES expression that will be evaluated to override '
+                    u'any value otherwise entered for the BCC list. '
+                    u'You are strongly cautioned against using '
+                    u'unvalidated data from the request for this purpose. '
+                    u'Leave empty if unneeded. Your expression should '
+                    u'evaluate as a sequence of strings. PLEASE NOTE: errors '
+                    u'in the evaluation of this expression will cause '
+                    u'an error on form display.'),
         required=False,
         default=u'',
         missing_value=u'',

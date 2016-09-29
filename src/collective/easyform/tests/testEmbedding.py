@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform.api import get_actions
 from collective.easyform.api import set_actions
 from collective.easyform.tests import base
@@ -151,7 +150,8 @@ class TestEmbedding(base.EasyFormTestCase):
 
         # make sure it can deal with VHM URLs
         self.app.REQUEST._orig_env[
-            'PATH_TRANSLATED'] = '/VirtualHostBase/http/nohost:80/VirtualHostRoot'
+            'PATH_TRANSLATED'
+        ] = '/VirtualHostBase/http/nohost:80/VirtualHostRoot'
         view = self.ff1.restrictedTraverse('@@embedded')
         res = view()
 

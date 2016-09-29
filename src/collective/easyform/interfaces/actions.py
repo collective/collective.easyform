@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from plone.autoform import directives
@@ -67,10 +66,20 @@ class INewAction(Interface):
     @zope.interface.invariant
     def checkTitleAndDescriptionTypes(data):  # NOQA
         if data.__name__ is not None and data.factory is not None:
-            if data.__name__ == 'title' and data.factory.fieldcls is not zope.schema.TextLine:
+            if (
+                data.__name__ == 'title' and
+                data.factory.fieldcls is not zope.schema.TextLine
+            ):
                 raise zope.interface.Invalid(
-                    __(u"The 'title' field must be a Text line (string) field."))
-            if data.__name__ == 'description' and data.factory.fieldcls is not zope.schema.Text:
+                    __(
+                        u"The 'title' field must be a Text line (string) "
+                        u"field."
+                    )
+                )
+            if (
+                data.__name__ == 'description' and
+                data.factory.fieldcls is not zope.schema.Text
+            ):
                 raise zope.interface.Invalid(
                     __(u"The 'description' field must be a Text field."))
 
@@ -95,14 +104,16 @@ class IActionExtender(Schema):
     directives.write_permission(execCondition=config.EDIT_TALES_PERMISSION)
     execCondition = zope.schema.TextLine(
         title=_(u'label_execcondition_text', default=u'Execution Condition'),
-        description=(_(u'help_execcondition_text', default=u''
-                       u'A TALES expression that will be evaluated to determine whether '
-                       u'or not to execute this action. Leave empty if unneeded, and '
-                       u'the action will be executed. Your expression should evaluate '
-                       u'as a boolean; return True if you wish the action to execute. '
-                       u'PLEASE NOTE: errors in the evaluation of this expression will '
-                       u'cause an error on form display.')
-                     ),
+        description=_(
+            u'help_execcondition_text',
+            default=u'A TALES expression that will be evaluated to determine '
+                    u'whether or not to execute this action. Leave empty if '
+                    u'unneeded, and the action will be executed. Your '
+                    u'expression should evaluate as a boolean; return True '
+                    u'if you wish the action to execute. PLEASE NOTE: errors '
+                    u'in the evaluation of this expression will  cause an '
+                    u'error on form display.'
+        ),
         default=u'',
         constraint=isTALES,
         required=False,

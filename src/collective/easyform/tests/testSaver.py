@@ -72,7 +72,9 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
         self.assertEqual(saver.itemsSaved(), 0)
         request = FakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.ExtraData = ('dt',)
         saver.onSuccess(request.form, request)
 
@@ -99,7 +101,9 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
         self.assertEqual(saver.itemsSaved(), 0)
         request = FakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.showFields = ('topic', 'comments')
         saver.onSuccess(request.form, request)
 
@@ -125,7 +129,9 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
         self.assertEqual(saver.itemsSaved(), 0)
         request = FakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
 
         view = self.ff1.restrictedTraverse('@@actions')
@@ -169,7 +175,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(res, '')
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
@@ -188,7 +196,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.ExtraData = ('dt',)
         saver.onSuccess(request.form, request)
 
@@ -205,7 +215,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
@@ -226,7 +238,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
@@ -248,7 +262,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
@@ -270,7 +286,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.ExtraData = ('dt', 'HTTP_USER_AGENT')
         saver.onSuccess(request.form, request)
 
@@ -283,7 +301,8 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):
-        ''' test save data adapter action and direct access to SavedFormInput '''
+        """ test save data adapter action and direct access to
+        SavedFormInput """
 
         self.createSaver()
 
@@ -291,7 +310,9 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
@@ -299,7 +320,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(len(row), 4)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
         self.assertEqual(saver.itemsSaved(), 2)
 
@@ -321,7 +344,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
-            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
+            items[0][1],
+            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+        )
         self.assertEqual(saver.getSavedFormInputForEdit(), 'one,two,three\r\n')
 
         # save a couple of \n-delimited rows - \n eol
@@ -329,11 +354,17 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 2)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
-            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
+            items[0][1],
+            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+        )
         self.assertEqual(
-            items[1][1], dict(zip(['id'] + fields, [items[1][0], 'four', 'five', 'six'])))
+            items[1][1],
+            dict(zip(['id'] + fields, [items[1][0], 'four', 'five', 'six']))
+        )
         self.assertEqual(
-            saver.getSavedFormInputForEdit(), 'one,two,three\r\nfour,five,six\r\n')
+            saver.getSavedFormInputForEdit(),
+            'one,two,three\r\nfour,five,six\r\n'
+        )
 
         # save empty string
         saver.clearSavedFormInput()
@@ -355,7 +386,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
-            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
+            items[0][1],
+            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+        )
 
     def testDeleteSavedFormInput(self):
         ''' test manage_deleteData functionality '''
@@ -377,9 +410,13 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 2)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
-            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
+            items[0][1],
+            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+        )
         self.assertEqual(
-            items[1][1], dict(zip(['id'] + fields, [items[1][0], 'seven', 'eight', 'nine'])))
+            items[1][1],
+            dict(zip(['id'] + fields, [items[1][0], 'seven', 'eight', 'nine']))
+        )
 
     def testSaverInputAsDictionaries(self):
         ''' test save data adapter's InputAsDictionaries '''
@@ -391,12 +428,15 @@ class TestFunctions(base.EasyFormTestCase):
 
         # self.ff1.setActionAdapter(('saver',))
 
-        # self.assertEqual(saver.inputAsDictionaries, saver.InputAsDictionaries)
+        # self.assertEqual(saver.inputAsDictionaries,
+        # saver.InputAsDictionaries)
 
         self.assertEqual(saver.itemsSaved(), 0)
 
         request = FakeRequest(
-            add_auth=True, method='POST', topic='test subject', replyto='test@test.org', comments='test comments')
+            add_auth=True, method='POST', topic='test subject',
+            replyto='test@test.org',
+            comments='test comments')
         saver.onSuccess(request.form, request)
         # errors = self.ff1.fgvalidate(REQUEST=request)
         # self.assertEqual(errors, {})
@@ -465,8 +505,13 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
         saver.showFields = ('topic', 'comments')
 
-        request = FakeRequest(add_auth=True, method='POST',
-                              topic='test subject', replyto='test@test.org', comments='test comments')
+        request = FakeRequest(
+            add_auth=True,
+            method='POST',
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from collective.easyform import vocabularies
@@ -29,6 +28,8 @@ def default_submitLabel(context):
         default=u'Submit',
         context=getRequest()
     )
+
+
 # dummy msgid for i18ndude to translate
 dummy = _(u'default_submitLabel', u'Submit')
 
@@ -41,6 +42,8 @@ def default_resetLabel(context):
         default=u'Reset',
         context=getRequest()
     )
+
+
 # dummy msgid for i18ndude to translate
 dummy = _(u'default_resetLabel', u'Reset')
 
@@ -53,6 +56,8 @@ def default_thankstitle(context):
         default=u'Thank You',
         context=getRequest()
     )
+
+
 # dummy msgid for i18ndude to translate
 dummy = _(u'default_thankstitle', u'Thank You')
 
@@ -65,6 +70,8 @@ def default_thanksdescription(context):
         default=u'Thanks for your input.',
         context=getRequest()
     )
+
+
 # dummy msgid for i18ndude to translate
 dummy = _(u'default_thanksdescription', u'Thanks for your input.')
 
@@ -119,8 +126,10 @@ class IEasyForm(Schema):
     default_fieldset_label = zope.schema.TextLine(
         title=_(u'label_default_fieldset_label_text',
                 default=u'Custom Default Fieldset Label'),
-        description=_(u'help_default_fieldset_label_text',
-                      default=u'This field allows you to change default fieldset label.'),
+        description=_(
+            u'help_default_fieldset_label_text',
+            default=u'This field allows you to change default fieldset label.'
+        ),
         required=False,
         default=u'',
     )
@@ -142,25 +151,32 @@ class IEasyForm(Schema):
     directives.write_permission(forceSSL=config.EDIT_ADVANCED_PERMISSION)
     forceSSL = zope.schema.Bool(
         title=_(u'label_force_ssl', default=u'Force SSL connection'),
-        description=_(u'help_force_ssl', default=u''
-                      u'Check this to make the form redirect to an SSL-enabled '
-                      u'version of itself (https://) if accessed via a non-SSL '
-                      u'URL (http://).  In order to function properly, '
-                      u'this requires a web server that has been configured to '
-                      u'handle the HTTPS protocol on port 443 and forward it to Zope.'),
+        description=_(
+            u'help_force_ssl',
+            default=u'Check this to make the form redirect to an SSL-enabled '
+                    u'version of itself (https://) if accessed via a non-SSL '
+                    u'URL (http://).  In order to function properly, '
+                    u'this requires a web server that has been configured to '
+                    u'handle the HTTPS protocol on port 443 and forward it to '
+                    u'Zope.'
+        ),
         default=False,
         required=False,
     )
     formPrologue = RichText(
         title=_(u'label_prologue_text', default=u'Form Prologue'),
-        description=_(u'help_prologue_text',
-                      default=u'This text will be displayed above the form fields.'),
+        description=_(
+            u'help_prologue_text',
+            default=u'This text will be displayed above the form fields.'
+        ),
         required=False,
     )
     formEpilogue = RichText(
         title=_(u'label_epilogue_text', default=u'Form Epilogue'),
-        description=_(u'help_epilogue_text',
-                      default=u'The text will be displayed after the form fields.'),
+        description=_(
+            u'help_epilogue_text',
+            default=u'The text will be displayed after the form fields.'
+        ),
         required=False,
     )
     fieldset(
@@ -181,18 +197,19 @@ class IEasyForm(Schema):
     thanksPageOverrideAction = zope.schema.Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
-        description=_(u'help_thankspageoverrideaction_text', default=u''
-                      u'Use this field in place of a thanks-page designation '
-                      u'to determine final action after calling '
-                      u'your action adapter (if you have one). You would usually use '
-                      u'this for a custom success template or script. '
-                      u'Leave empty if unneeded. Otherwise, specify as you would a '
-                      u'CMFFormController action type and argument, '
-                      u'complete with type of action to execute '
-                      u'(e.g., "redirect_to" or "traverse_to") '
-                      u'and a TALES expression. For example, '
-                      u'"Redirect to" and "string:thanks-page" would redirect to '
-                      u'"thanks-page".'),
+        description=_(
+            u'help_thankspageoverrideaction_text',
+            default=u'Use this field in place of a thanks-page designation '
+                    u'to determine final action after calling '
+                    u'your action adapter (if you have one). You would '
+                    u'usually use this for a custom success template or '
+                    u'script. Leave empty if unneeded. Otherwise, specify as '
+                    u'you would a CMFFormController action type and argument, '
+                    u'complete with type of action to execute '
+                    u'(e.g., "redirect_to" or "traverse_to") '
+                    u'and a TALES expression. For example, '
+                    u'"Redirect to" and "string:thanks-page" would redirect '
+                    u'to "thanks-page".'),
         default=u'redirect_to',
         required=False,
         vocabulary=vocabularies.customActions,
@@ -202,18 +219,19 @@ class IEasyForm(Schema):
     thanksPageOverride = zope.schema.TextLine(
         title=_(u'label_thankspageoverride_text',
                 default=u'Custom Success Action'),
-        description=_(u'help_thankspageoverride_text', default=u''
-                      u'Use this field in place of a thanks-page designation '
-                      u'to determine final action after calling '
-                      u'your action adapter (if you have one). You would usually use '
-                      u'this for a custom success template or script. '
-                      u'Leave empty if unneeded. Otherwise, specify as you would a '
-                      u'CMFFormController action type and argument, '
-                      u'complete with type of action to execute '
-                      u'(e.g., "redirect_to" or "traverse_to") '
-                      u'and a TALES expression. For example, '
-                      u'"Redirect to" and "string:thanks-page" would redirect to '
-                      u'"thanks-page".'),
+        description=_(
+            u'help_thankspageoverride_text',
+            default=u'Use this field in place of a thanks-page designation '
+                    u'to determine final action after calling your action '
+                    u'adapter (if you have one). You would usually use '
+                    u'this for a custom success template or script. '
+                    u'Leave empty if unneeded. Otherwise, specify as you '
+                    u'would a CMFFormController action type and argument, '
+                    u'complete with type of action to execute '
+                    u'(e.g., "redirect_to" or "traverse_to") '
+                    u'and a TALES expression. For example, '
+                    u'"Redirect to" and "string:thanks-page" would redirect '
+                    u'to "thanks-page".'),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -223,11 +241,13 @@ class IEasyForm(Schema):
     formActionOverride = zope.schema.TextLine(
         title=_(u'label_formactionoverride_text',
                 default=u'Custom Form Action'),
-        description=_(u'help_formactionoverride_text', default=u''
-                      u'Use this field to override the form action attribute. '
-                      u'Specify a URL to which the form will post. '
-                      u'This will bypass form validation, success action '
-                      u'adapter and thanks page.'),
+        description=_(
+            u'help_formactionoverride_text',
+            default=u'Use this field to override the form action attribute. '
+                    u'Specify a URL to which the form will post. '
+                    u'This will bypass form validation, success action '
+                    u'adapter and thanks page.'
+        ),
         default=u'',
         required=False,
         constraint=isTALES,
@@ -235,16 +255,17 @@ class IEasyForm(Schema):
     directives.write_permission(onDisplayOverride=config.EDIT_TALES_PERMISSION)
     onDisplayOverride = zope.schema.TextLine(
         title=_(u'label_OnDisplayOverride_text', default=u'Form Setup Script'),
-        description=_(u'help_OnDisplayOverride_text', default=u''
-                      u'A TALES expression that will be called when the form is '
-                      u'displayed. '
-                      u'Leave empty if unneeded. '
-                      u'The most common use of this field is to call a python script '
-                      u'that sets defaults for multiple fields by pre-populating '
-                      u'request.form. '
-                      u'Any value returned by the expression is ignored. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression '
-                      u'will cause an error on form display.'),
+        description=_(
+            u'help_OnDisplayOverride_text',
+            default=u'A TALES expression that will be called when the form is '
+                    u'displayed. Leave empty if unneeded. The most common '
+                    u'use of this field is to call a python script that '
+                    u'sets defaults for multiple fields by pre-populating '
+                    u'request.form. '
+                    u'Any value returned by the expression is ignored. '
+                    u'PLEASE NOTE: errors in the evaluation of this '
+                    u'expression will cause an error on form display.'
+        ),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -254,17 +275,19 @@ class IEasyForm(Schema):
     afterValidationOverride = zope.schema.TextLine(
         title=_(u'label_AfterValidationOverride_text',
                 default=u'After Validation Script'),
-        description=_(u'help_AfterValidationOverride_text', default=u''
-                      u'A TALES expression that will be called after the form is'
-                      u'successfully validated, but before calling an action adapter'
-                      u'(if any) or displaying a thanks page.'
-                      u'Form input will be in the request.form dictionary.'
-                      u'Leave empty if unneeded.'
-                      u'The most common use of this field is to call a python script'
-                      u'to clean up form input or to script an alternative action.'
-                      u'Any value returned by the expression is ignored.'
-                      u'PLEASE NOTE: errors in the evaluation of this expression will'
-                      u'cause an error on form display.'),
+        description=_(
+            u'help_AfterValidationOverride_text',
+            default=u'A TALES expression that will be called after the form is'
+                    u'successfully validated, but before calling an action '
+                    u'adapter (if any) or displaying a thanks page.'
+                    u'Form input will be in the request.form dictionary.'
+                    u'Leave empty if unneeded. The most '
+                    u'common use of this field is to call a python script'
+                    u'to clean up form input or to script an alternative '
+                    u'action. Any value returned by the expression is ignored.'
+                    u'PLEASE NOTE: errors in the evaluation of this '
+                    u'expression willcause an error on form display.'
+        ),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -272,13 +295,15 @@ class IEasyForm(Schema):
     directives.write_permission(headerInjection=config.EDIT_TALES_PERMISSION)
     headerInjection = zope.schema.TextLine(
         title=_(u'label_headerInjection_text', default=u'Header Injection'),
-        description=_(u'help_headerInjection_text', default=u''
-                      u'This override field allows you to insert content into the xhtml '
-                      u'head. The typical use is to add custom CSS or JavaScript. '
-                      u'Specify a TALES expression returning a string. The string will '
-                      u'be inserted with no interpretation. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will '
-                      u'cause an error on form display.'),
+        description=_(
+            u'help_headerInjection_text',
+            default=u'This override field allows you to insert content into '
+                    u'the xhtml head. The typical use is to add custom CSS '
+                    u'or JavaScript. Specify a TALES expression returning a '
+                    u'string. The string will be inserted with no '
+                    u'interpretation. PLEASE NOTE: errors in the evaluation '
+                    u'of this expression will cause an error on form display.'
+        ),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -288,12 +313,14 @@ class IEasyForm(Schema):
     submitLabelOverride = zope.schema.TextLine(
         title=_(u'label_submitlabeloverride_text',
                 default=u'Custom Submit Button Label'),
-        description=_(u'help_submitlabeloverride_text', default=u''
-                      u'This override field allows you to change submit button label. '
-                      u'The typical use is to set label with request parameters. '
-                      u'Specify a TALES expression returning a string. '
-                      u'PLEASE NOTE: errors in the evaluation of this expression will '
-                      u'cause an error on form display.'),
+        description=_(
+            u'help_submitlabeloverride_text',
+            default=u'This override field allows you to change submit button '
+                    u'label. The typical use is to set label with request '
+                    u'parameters. Specify a TALES expression returning a '
+                    u'string. PLEASE NOTE: errors in the evaluation of this '
+                    u'expression will cause an error on form display.'
+        ),
         constraint=isTALES,
         required=False,
         default=u'',
@@ -328,7 +355,9 @@ class IEasyForm(Schema):
     )
 #     TODO
 #     obj.setTitle(_(u'pfg_thankyou_title', u'Thank You'))
-#     obj.setDescription(_(u'pfg_thankyou_description', u'Thanks for your input.'))
+#     obj.setDescription(
+#         _(u'pfg_thankyou_description', u'Thanks for your input.')
+#     )
     showAll = zope.schema.Bool(
         title=_(u'label_showallfields_text', default=u'Show All Fields'),
         description=_(u'help_showallfields_text', default=u''
@@ -341,8 +370,10 @@ class IEasyForm(Schema):
     )
     showFields = zope.schema.List(
         title=_(u'label_showfields_text', default=u'Show Responses'),
-        description=_(u'help_showfields_text',
-                      default=u'Pick the fields whose inputs you\'d like to display on the success page.'),
+        description=_(
+            u'help_showfields_text',
+            default=u'Pick the fields whose inputs you\'d like to display on '
+                    u'the success page.'),
         unique=True,
         required=False,
         value_type=zope.schema.Choice(vocabulary=vocabularies.fieldsFactory),
@@ -358,14 +389,19 @@ class IEasyForm(Schema):
     )
     thanksPrologue = RichText(
         title=_(u'label_thanksprologue_text', default=u'Thanks Prologue'),
-        description=_(u'help_thanksprologue_text',
-                      default=u'This text will be displayed above the selected field inputs.'),
+        description=_(
+            u'help_thanksprologue_text',
+            default=u'This text will be displayed above the selected field '
+                    u'inputs.'
+        ),
         required=False,
     )
     thanksEpilogue = RichText(
         title=_(u'label_thanksepilogue_text', default=u'Thanks Epilogue'),
-        description=_(u'help_thanksepilogue_text',
-                      default=u'The text will be displayed after the field inputs.'),
+        description=_(
+            u'help_thanksepilogue_text',
+            default=u'The text will be displayed after the field inputs.'
+        ),
         required=False,
     )
 

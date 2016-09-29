@@ -10,7 +10,8 @@ class IEasyFormControlPanel(Interface):
 
     migrate_all_forms = schema.Bool(
         title=u'migrate all the forms to dexterity',
-        description=u'This will migrate all the forms already present in the site from archetype to dexterity',
+        description=u'This will migrate all the forms already present '
+                    u'in the site from archetype to dexterity',
         required=False,
         default=False,
     )

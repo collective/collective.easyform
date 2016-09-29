@@ -46,7 +46,10 @@ class TestLikertField(base.EasyFormTestCase):
 
         # try it with no input, unrequired
         request = FakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
         self.assertEqual(self.saver.itemsSaved(), 1)

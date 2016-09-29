@@ -24,7 +24,7 @@ setup(
     author='Roman Kozlovskyi',
     author_email='krzroman@gmail.com',
     url='https://github.com/quintagroup/collective.easyform',
-    license='GPL',
+    license='GPLv2',
     packages=find_packages('src', exclude=['ez_setup']),
     namespace_packages=['collective'],
     package_dir={'': 'src'},

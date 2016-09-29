@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from collective.easyform import vocabularies
@@ -35,12 +34,14 @@ class IFieldExtender(Schema):
     directives.write_permission(TDefault=config.EDIT_TALES_PERMISSION)
     TDefault = zope.schema.TextLine(
         title=_(u'label_tdefault_text', default=u'Default Expression'),
-        description=(_(u'help_tdefault_text', default=u''
-                       u'A TALES expression that will be evaluated when the form is displayed '
-                       u'to get the field default value. '
-                       u'Leave empty if unneeded. Your expression should evaluate as a string. '
-                       u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                       u'an error on form display.')),
+        description=_(
+            u'help_tdefault_text',
+            default=u'A TALES expression that will be evaluated when the form'
+                    u'is displayed to get the field default value. Leave '
+                    u'empty if unneeded. Your expression should evaluate as a '
+                    u'string. PLEASE NOTE: errors in the evaluation of this '
+                    u'expression will cause an error on form display.'
+        ),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -48,14 +49,17 @@ class IFieldExtender(Schema):
     directives.write_permission(TEnabled=config.EDIT_TALES_PERMISSION)
     TEnabled = zope.schema.TextLine(
         title=_(u'label_tenabled_text', default=u'Enabling Expression'),
-        description=(_(u'help_tenabled_text', default=u''
-                       u'A TALES expression that will be evaluated when the form is displayed '
-                       u'to determine whether or not the field is enabled. '
-                       u'Your expression should evaluate as True if '
-                       u'the field should be included in the form, False if it should be omitted. '
-                       u'Leave this expression field empty if unneeded: the field will be included. '
-                       u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                       u'an error on form display.')),
+        description=_(
+            u'help_tenabled_text',
+            default=u'A TALES expression that will be evaluated when the form '
+                    u'is displayed to determine whether or not the field is '
+                    u'enabled. Your expression should evaluate as True if '
+                    u'the field should be included in the form, False if it '
+                    u'should be omitted. Leave this expression field empty '
+                    u'if unneeded: the field will be included. PLEASE NOTE: '
+                    u'errors in the evaluation of this expression will cause '
+                    u'an error on form display.'
+        ),
         default=u'',
         constraint=isTALES,
         required=False,
@@ -63,14 +67,17 @@ class IFieldExtender(Schema):
     directives.write_permission(TValidator=config.EDIT_TALES_PERMISSION)
     TValidator = zope.schema.TextLine(
         title=_(u'label_tvalidator_text', default=u'Custom Validator'),
-        description=(_(u'help_tvalidator_text', default=u''
-                       u'A TALES expression that will be evaluated when the form is validated. '
-                       u'Validate against \'value\', which will contain the field input. '
-                       u'Return False if valid; if not valid return a string error message. '
-                       u'E.G., "python: test(value==\'eggs\', False, \'input must be eggs\')" will '
-                       u'require "eggs" for input. '
-                       u'PLEASE NOTE: errors in the evaluation of this expression will cause '
-                       u'an error on form display.')),
+        description=_(
+            u'help_tvalidator_text',
+            default=u'A TALES expression that will be evaluated when the form '
+                    u'is validated. Validate against \'value\', which will '
+                    u'contain the field input. Return False if valid; if not '
+                    u'valid return a string error message. E.G., '
+                    u'"python: test(value==\'eggs\', False, \'input must be '
+                    u'eggs\')" will require "eggs" for input. '
+                    u'PLEASE NOTE: errors in the evaluation of this '
+                    u'expression will cause an error on form display.'
+        ),
         default=u'',
         constraint=isTALES,
         required=False,

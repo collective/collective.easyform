@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from actions import IAction
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config

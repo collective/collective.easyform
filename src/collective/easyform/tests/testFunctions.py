@@ -50,7 +50,8 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.actions_model = (
             self.ff1.actions_model.replace(
                 u'<description>E-Mails Form Input</description>',
-                u'<recipient_email>mdummy@address.com</recipient_email><description>E-Mails Form Input</description>'))
+                u'<recipient_email>mdummy@address.com</recipient_email>'
+                u'<description>E-Mails Form Input</description>'))
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         classImplements(BaseRequest, IFormLayer)
@@ -110,12 +111,18 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(errors.get('topic') is None)
 
         request = self.fakeRequest(
-            topic='test subject', replyto='testtest.org', comments='test comments')
+            topic='test subject',
+            replyto='testtest.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertTrue(errors['replyto'])
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
 
@@ -165,12 +172,18 @@ class TestFunctions(base.EasyFormTestCase):
         # also check in form context (form validating field)
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
 
         request = self.fakeRequest(
-            topic='no subject', replyto='test@test.org', comments='test comments')
+            topic='no subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertTrue(errors['topic'] == 'test is missing')
 
@@ -272,7 +285,10 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(self.ff1.actionAdapter, ('bogus',))
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
 
@@ -324,7 +340,10 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.fsf.setFgFormat('radio')
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.ff1.fsf.htmlValue(request)
 
     def testEmptyMultiSelectionField(self):
@@ -336,23 +355,36 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.fsf.setFgFormat('checkbox')
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.ff1.fsf.htmlValue(request)
 
     def testTrailSpacesValidation(self):
         """ check MSF for issue  # 79:
-            Trailing space in recipient address of mailer causes validation failure"""
+            Trailing space in recipient address of mailer causes
+            validation failure
+        """
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
 
     def testTrailSpacesSave(self):
-        """ We really don't want to save or act on trailing spaces in inputs """
+        """ We really don't want to save or act on trailing spaces
+        in inputs
+        """
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments'
+        )
         self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(request.form['replyto'], 'test@test.org')
 
@@ -360,7 +392,10 @@ class TestFunctions(base.EasyFormTestCase):
         """ white-space only shouldn't validate in required fields  """
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='\n')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='\n'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(len(errors), 1)
 
@@ -386,7 +421,10 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.fsf.fgVocabulary = ('one', 'two', 'three', 'four', 'five')
         self.ff1.fsf.setFgFormat('checkbox')
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test', fsf=['one', 'two', ''])
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test', fsf=['one', 'two', '']
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
         # print request.form['fsf']
@@ -400,21 +438,24 @@ class TestFunctions(base.EasyFormTestCase):
 
         # no enabling condition: should not validate
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org')
+            topic='test subject',
+            replyto='test@test.org')
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(len(errors), 1)
 
         # explicity enabling: should not validate
         self.ff1.comments.setFgTEnabled('python: True')
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org')
+            topic='test subject',
+            replyto='test@test.org')
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(len(errors), 1)
 
         # explicity disabling: should validate
         self.ff1.comments.setFgTEnabled('python: False')
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org')
+            topic='test subject',
+            replyto='test@test.org')
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(len(errors), 0)
 
@@ -454,12 +495,6 @@ class TestFunctions(base.EasyFormTestCase):
         xlation = translate(msg, target_language='en')
         self.assertEqual(xlation, u'Clear Saved Input')
 
-        # xlation = translate(msg, target_language='fr')
-        # self.assertEqual( xlation, 'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'.decode('utf8') )
-
-        # xlation = translate(msg, target_language='de')
-        # self.assertEqual( xlation, 'Die gespeicherten Eingaben l\xc3\xb6schen'.decode('utf8') )
-
     def testDateValidation(self):
         """ Dates should be validated """
 
@@ -467,7 +502,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         # set non-date fields in request
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments'
+        )
 
         # try with no date at all. should validate, since fdf isn't required
         errors = self.ff1.fgvalidate(REQUEST=request)
@@ -476,16 +514,25 @@ class TestFunctions(base.EasyFormTestCase):
 
         # try with good date. should validate.
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments',
-            fdf='2007/02/20')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments',
+            fdf='2007/02/20'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(request.form['replyto'], 'test@test.org')
         self.assertEqual(errors, {})
 
         # try with bad date. should not validate.
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments',
-            fdf='2007/02/31', fdf_year='2007', fdf_month='02', fdf_day='31')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments',
+            fdf='2007/02/31',
+            fdf_year='2007',
+            fdf_month='02',
+            fdf_day='31'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(request.form['replyto'], 'test@test.org')
         self.assertEqual(len(errors), 1)
@@ -493,8 +540,14 @@ class TestFunctions(base.EasyFormTestCase):
         # try required and bad date. should not validate.
         self.ff1.fdf.setRequired(True)
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments',
-            fdf='2007/02/31', fdf_year='2007', fdf_month='02', fdf_day='31')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments',
+            fdf='2007/02/31',
+            fdf_year='2007',
+            fdf_month='02',
+            fdf_day='31'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(request.form['replyto'], 'test@test.org')
         self.assertEqual(len(errors), 1)
@@ -502,7 +555,10 @@ class TestFunctions(base.EasyFormTestCase):
         # try required and no date. should not validate.
         self.ff1.fdf.setRequired(True)
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(request.form['replyto'], 'test@test.org')
         self.assertEqual(len(errors), 1)
@@ -510,8 +566,14 @@ class TestFunctions(base.EasyFormTestCase):
         # try required and good date. should validate.
         self.ff1.fdf.setRequired(True)
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org ', comments='test comments',
-            fdf='2007/02/21', fdf_year='2007', fdf_month='02', fdf_day='21')
+            topic='test subject',
+            replyto='test@test.org ',
+            comments='test comments',
+            fdf='2007/02/21',
+            fdf_year='2007',
+            fdf_month='02',
+            fdf_day='21'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(request.form['replyto'], 'test@test.org')
         self.assertEqual(errors, {})
@@ -525,7 +587,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1()
 
     def testActionAdapterReturns(self):
-        """ test to make sure that the return status of action adapters is handled right """
+        """ test to make sure that the return status of action adapters
+        is handled right
+        """
 
         # Script code to imitate a Custom Script adapter
         # script returning something other than a dict
@@ -571,7 +635,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         # fake request to fake post
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         # Run a script that returns a non-error status;
         # Something should be saved to both savers,
@@ -652,7 +719,10 @@ class TestFunctions(base.EasyFormTestCase):
         self.ff1.fbf.setRequired(True)
 
         request = self.fakeRequest(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         errors = self.ff1.fgvalidate(REQUEST=request)
         self.assertEqual(errors, {})
 

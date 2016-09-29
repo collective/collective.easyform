@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from Products.PageTemplates.Expressions import getEngine
 
 import zope.interface

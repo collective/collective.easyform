@@ -44,9 +44,16 @@ class TestFormGenInterfaces(base.EasyFormTestCase):
 
     def testContentClassInterfaces(self):
         self.assertTrue(
-            interfaces.IEasyFormFieldset.implementedBy(content.fieldset.FieldsetFolder))
+            interfaces.IEasyFormFieldset.implementedBy(
+                content.fieldset.FieldsetFolder
+            )
+        )
         self.assertTrue(
-            verifyClass(interfaces.IEasyFormFieldset, content.fieldset.FieldsetFolder))
+            verifyClass(
+                interfaces.IEasyFormFieldset,
+                content.fieldset.FieldsetFolder
+            )
+        )
 
 
 def test_suite():
