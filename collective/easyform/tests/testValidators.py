@@ -8,17 +8,18 @@ try:
 except ImportError:
     from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 
-from Products.validation import validation
-from ZPublisher.BaseRequest import BaseRequest
 from collective.easyform import validators
 from collective.easyform.api import get_fields
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
+from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import classImplements
+from ZPublisher.BaseRequest import BaseRequest
+
 
 IFieldValidator = validators.IFieldValidator
 

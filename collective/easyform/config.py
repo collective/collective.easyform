@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from Products.CMFPlone.utils import safe_unicode
+
 import os
+
 
 this_path = os.path.dirname(__file__)
 

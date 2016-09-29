@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl import getSecurityManager
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from ZPublisher.mapply import mapply
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
 from collective.easyform.api import get_actions
@@ -14,22 +12,25 @@ from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import layout
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
-from zope.interface import implements
-from zope.schema import ValidationError
+from zope.interface import implementer
 from zope.schema import getFieldsInOrder
+from zope.schema import ValidationError
+from ZPublisher.mapply import mapply
+
 
 logger = getLogger('collective.easyform')
 PMF = MessageFactory('plone')
 
 
+@implementer(IEasyFormForm)
 class EasyFormForm(AutoExtensibleForm, form.Form):
-    implements(IEasyFormForm)
 
     """
     EasyForm form
@@ -45,7 +46,10 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     @property
     def default_fieldset_label(self):
-        return self.context.default_fieldset_label or super(EasyFormForm, self).default_fieldset_label
+        return (
+            self.context.default_fieldset_label or
+            super(EasyFormForm, self).default_fieldset_label
+        )
 
     def action(self):
         """ Redefine <form action=''> attribute.
@@ -73,19 +77,35 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     @property
     def label(self):
-        return self.thanksPage and self.context.thankstitle or self.context.Title()
+        return (
+            self.thanksPage and
+            self.context.thankstitle or
+            self.context.Title()
+        )
 
     @property
     def description(self):
-        return self.thanksPage and self.context.thanksdescription or self.context.Description()
+        return (
+            self.thanksPage and
+            self.context.thanksdescription or
+            self.context.Description()
+        )
 
     @property
     def prologue(self):
-        return self.thanksPage and self.thanksPrologue or self.context.formPrologue.output
+        return (
+            self.thanksPage and
+            self.thanksPrologue or
+            self.context.formPrologue.output
+        )
 
     @property
     def epilogue(self):
-        return self.thanksPage and self.thanksEpilogue or self.context.formEpilogue.output
+        return (
+            self.thanksPage and
+            self.thanksEpilogue or
+            self.context.formEpilogue.output
+        )
 
     @property
     def schema(self):
@@ -149,7 +169,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.widgets[field].error = view
         self.status = self.formErrorsMessage
 
-    @button.buttonAndHandler(PMF(u'Submit'), name='submit', condition=lambda form: not form.thanksPage)
+    @button.buttonAndHandler(
+        PMF(u'Submit'),
+        name='submit',
+        condition=lambda form: not form.thanksPage
+    )
     def handleSubmit(self, action):
         data, errors = self.extractData()
         if errors:
@@ -169,7 +193,10 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 thanksPage = self.context.restrictedTraverse(
                     thanksPage.encode('utf-8'))
                 thanksPage = mapply(
-                    thanksPage, self.request.args, self.request).encode('utf-8')
+                    thanksPage,
+                    self.request.args,
+                    self.request
+                ).encode('utf-8')
                 self.request.response.write(thanksPage)
         else:
             self.thanksPage = True
@@ -186,7 +213,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.setDisplayMode(DISPLAY_MODE)
             self.updateActions()
 
-    @button.buttonAndHandler(_(u'Reset'), name='reset', condition=lambda form: form.context.useCancelButton or form.thanksPage)
+    @button.buttonAndHandler(
+        _(u'Reset'),
+        name='reset',
+        condition=lambda form: form.context.useCancelButton or form.thanksPage
+    )
     def handleReset(self, action):
         self.request.response.redirect(self.nextURL())
 
@@ -200,7 +231,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             efield = IFieldExtender(field)
             TEnabled = getattr(efield, 'TEnabled', None)
             serverSide = getattr(efield, 'serverSide', False)
-            if TEnabled and not get_expression(self.context, TEnabled) or serverSide:
+            if (
+                TEnabled and
+                not get_expression(self.context, TEnabled) or
+                serverSide
+            ):
                 omit.append(fname)
         if omit:
             fields = fields.omit(*omit)
@@ -243,7 +278,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             properly.  These users will still get an SSL-ified form
             action for when the form is submitted.
         """
-        if self.context.forceSSL and not getSecurityManager().checkPermission('cmf.ModifyPortalContent', self):
+        sm = getSecurityManager()
+        if (
+            self.context.forceSSL and
+            not sm.checkPermission('cmf.ModifyPortalContent', self)
+        ):
             # Make sure we're being accessed via a secure connection
             if self.request['SERVER_URL'].startswith('http://'):
                 secure_url = self.request['URL'].replace('http://', 'https://')

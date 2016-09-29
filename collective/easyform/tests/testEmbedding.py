@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from ZPublisher.BaseRequest import BaseRequest
 from collective.easyform.api import get_actions
 from collective.easyform.api import set_actions
 from collective.easyform.tests import base
 from z3c.form.interfaces import IFormLayer
 from zope.interface import classImplements
+from ZPublisher.BaseRequest import BaseRequest
+
 import transaction
 
 

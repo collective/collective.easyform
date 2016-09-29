@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
+from collective.easyform import config
 from collective.easyform import vocabularies
 from plone.app.textfield import RichText
 from plone.autoform import directives
@@ -10,8 +10,8 @@ from plone.supermodel.model import Schema
 from validators import isTALES
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import provider
 from zope.interface import Interface
+from zope.interface import provider
 
 import zope.i18nmessageid
 import zope.interface
@@ -29,7 +29,8 @@ def default_submitLabel(context):
         default=u'Submit',
         context=getRequest()
     )
-dummy = _(u'default_submitLabel', u'Submit')  # dummy msgid for i18ndude to translate
+# dummy msgid for i18ndude to translate
+dummy = _(u'default_submitLabel', u'Submit')
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
@@ -40,7 +41,8 @@ def default_resetLabel(context):
         default=u'Reset',
         context=getRequest()
     )
-dummy = _(u'default_resetLabel', u'Reset')  # dummy msgid for i18ndude to translate
+# dummy msgid for i18ndude to translate
+dummy = _(u'default_resetLabel', u'Reset')
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
@@ -51,7 +53,8 @@ def default_thankstitle(context):
         default=u'Thank You',
         context=getRequest()
     )
-dummy = _(u'default_thankstitle', u'Thank You')  # dummy msgid for i18ndude to translate
+# dummy msgid for i18ndude to translate
+dummy = _(u'default_thankstitle', u'Thank You')
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
@@ -62,7 +65,8 @@ def default_thanksdescription(context):
         default=u'Thanks for your input.',
         context=getRequest()
     )
-dummy = _(u'default_thanksdescription', u'Thanks for your input.')  # dummy msgid for i18ndude to translate
+# dummy msgid for i18ndude to translate
+dummy = _(u'default_thanksdescription', u'Thanks for your input.')
 
 
 class IEasyForm(Schema):
@@ -172,7 +176,8 @@ class IEasyForm(Schema):
             'submitLabelOverride'
         ]
     )
-    directives.write_permission(thanksPageOverrideAction=config.EDIT_TALES_PERMISSION)
+    directives.write_permission(
+        thanksPageOverrideAction=config.EDIT_TALES_PERMISSION)
     thanksPageOverrideAction = zope.schema.Choice(
         title=_(u'label_thankspageoverrideaction_text',
                 default=u'Custom Success Action Type'),
@@ -192,7 +197,8 @@ class IEasyForm(Schema):
         required=False,
         vocabulary=vocabularies.customActions,
     )
-    directives.write_permission(thanksPageOverride=config.EDIT_TALES_PERMISSION)
+    directives.write_permission(
+        thanksPageOverride=config.EDIT_TALES_PERMISSION)
     thanksPageOverride = zope.schema.TextLine(
         title=_(u'label_thankspageoverride_text',
                 default=u'Custom Success Action'),
@@ -212,7 +218,8 @@ class IEasyForm(Schema):
         constraint=isTALES,
         required=False,
     )
-    directives.write_permission(formActionOverride=config.EDIT_TALES_PERMISSION)
+    directives.write_permission(
+        formActionOverride=config.EDIT_TALES_PERMISSION)
     formActionOverride = zope.schema.TextLine(
         title=_(u'label_formactionoverride_text',
                 default=u'Custom Form Action'),
@@ -242,7 +249,8 @@ class IEasyForm(Schema):
         required=False,
         default=u'',
     )
-    directives.write_permission(afterValidationOverride=config.EDIT_TALES_PERMISSION)
+    directives.write_permission(
+        afterValidationOverride=config.EDIT_TALES_PERMISSION)
     afterValidationOverride = zope.schema.TextLine(
         title=_(u'label_AfterValidationOverride_text',
                 default=u'After Validation Script'),
@@ -275,7 +283,8 @@ class IEasyForm(Schema):
         required=False,
         default=u'',
     )
-    directives.write_permission(submitLabelOverride=config.EDIT_TALES_PERMISSION)
+    directives.write_permission(
+        submitLabelOverride=config.EDIT_TALES_PERMISSION)
     submitLabelOverride = zope.schema.TextLine(
         title=_(u'label_submitlabeloverride_text',
                 default=u'Custom Submit Button Label'),

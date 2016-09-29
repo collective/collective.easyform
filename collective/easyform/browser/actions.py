@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from Products.Five import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from ZPublisher.BaseRequest import DefaultPublishTraverse
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_context
@@ -32,20 +28,24 @@ from plone.z3cform import layout
 from plone.z3cform.crud import crud
 from plone.z3cform.interfaces import IDeferSecurityCheck
 from plone.z3cform.traversal import WrapperWidgetTraversal
+from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
 from zope.cachedescriptors.property import Lazy as lazy_property
-from zope.component import adapts
+from zope.component import adapter
 from zope.component import getAdapters
 from zope.component import queryUtility
 from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zope.interface import alsoProvides
-from zope.interface import implements
+from zope.interface import implementer
 from zope.interface import noLongerProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFieldsInOrder
+from ZPublisher.BaseRequest import DefaultPublishTraverse
+
 
 try:
     import plone.resourceeditor
@@ -57,8 +57,8 @@ except ImportError:
 PMF = MessageFactory('plone')
 
 
+@adapter(ISavedDataFormWrapper, IBrowserRequest)
 class SavedDataTraversal(WrapperWidgetTraversal):
-    adapts(ISavedDataFormWrapper, IBrowserRequest)
 
     def traverse(self, name, ignored):
         form = self._prepareForm()
@@ -72,7 +72,12 @@ class SavedDataTraversal(WrapperWidgetTraversal):
                 if not name.startswith(subsubform.prefix):
                     continue
                 for id_ in subsubform.widgets:
-                    if subsubform.prefix + subsubform.widgets.prefix + id_ == name:
+                    subformname = (
+                        subsubform.prefix +
+                        subsubform.widgets.prefix +
+                        id_
+                    )
+                    if subformname == name:
                         target = self._form_traverse(subsubform, id_)
                         target.__parent__ = aq_inner(self.context)
                         return target
@@ -114,7 +119,10 @@ class SavedDataForm(crud.CrudForm):
         return get_fields(get_context(self.field))
 
     def description(self):
-        return _(u"${items} input(s) saved", mapping={'items': self.field.itemsSaved()})
+        return _(
+            u"${items} input(s) saved",
+            mapping={'items': self.field.itemsSaved()}
+        )
 
     @property
     def update_schema(self):
@@ -156,19 +164,21 @@ class SavedDataForm(crud.CrudForm):
         self.field.clearSavedFormInput()
 
 
+@implementer(ISavedDataFormWrapper)
 class SavedDataFormWrapper(layout.FormWrapper):
-    implements(ISavedDataFormWrapper)
+    pass
 
 
 ActionSavedDataView = layout.wrap_form(
-    SavedDataForm, __wrapper_class=SavedDataFormWrapper)
+    SavedDataForm,
+    __wrapper_class=SavedDataFormWrapper
+)
 
 
+@implementer(IEasyFormActionContext)
 class EasyFormActionContext(FieldContext):
-
     """ wrapper for published zope 3 schema fields
     """
-    implements(IEasyFormActionContext)
 
     def publishTraverse(self, request, name):
         """ It's not valid to traverse to anything below a field context.
@@ -178,11 +188,14 @@ class EasyFormActionContext(FieldContext):
         if name == self.__name__:
             return ActionEditView(self, request).__of__(self)
 
-        return DefaultPublishTraverse(self, request).publishTraverse(request, name)
+        return DefaultPublishTraverse(
+            self,
+            request
+        ).publishTraverse(request, name)
 
 
+@implementer(IEasyFormActionsContext)
 class EasyFormActionsView(SchemaContext):
-    implements(IEasyFormActionsContext)
 
     schema = None
 
@@ -195,15 +208,23 @@ class EasyFormActionsView(SchemaContext):
         )
 
     def publishTraverse(self, request, name):
-        """ Look up the field whose name matches the next URL path element, and wrap it.
+        """ Look up the field whose name matches the next URL path element,
+        and wrap it.
         """
         try:
-            return EasyFormActionContext(self.schema[name], self.request).__of__(self)
+            return EasyFormActionContext(
+                self.schema[name],
+                self.request
+            ).__of__(self)
         except KeyError:
-            return DefaultPublishTraverse(self, request).publishTraverse(request, name)
+            return DefaultPublishTraverse(
+                self,
+                request
+            ).publishTraverse(request, name)
 
     def browserDefault(self, request):
-        """ If not traversing through the schema to a field, show the SchemaListingPage.
+        """ If not traversing through the schema to a field, show the
+        SchemaListingPage.
         """
         return self, ('@@listing',)
 
@@ -257,8 +278,8 @@ class ActionAddForm(FieldAddForm):
 ActionAddFormPage = layout.wrap_form(ActionAddForm)
 
 
+@implementer(IActionEditForm)
 class ActionEditForm(AutoExtensibleForm, form.EditForm):
-    implements(IActionEditForm)
 
     def __init__(self, context, request):
         super(form.EditForm, self).__init__(context, request)
@@ -274,7 +295,11 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
     @lazy_property
     def additionalSchemata(self):
         schema_context = self.context.aq_parent
-        return [v for k, v in getAdapters((schema_context, self.field), IEasyFormActionsEditorExtender)]
+        adapters = getAdapters(
+            (schema_context, self.field),
+            IEasyFormActionsEditorExtender
+        )
+        return [v for k, v in adapters]
 
     @button.buttonAndHandler(PMF(u'Save'), name='save')
     def handleSave(self, action):
@@ -312,7 +337,10 @@ class ActionEditView(layout.FormWrapper):
 
     @lazy_property
     def label(self):
-        return _(u"Edit Action '${fieldname}'", mapping={'fieldname': self.field.__name__})
+        return _(
+            u"Edit Action '${fieldname}'",
+            mapping={'fieldname': self.field.__name__}
+        )
 
 
 if HAVE_RESOURCE_EDITOR:

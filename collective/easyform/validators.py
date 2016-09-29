@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.interfaces import IFieldValidator
+from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
+from zope.component import provideUtility
+
 
 try:
     from Products.validation import validation
@@ -11,15 +18,6 @@ try:
     from Products.CMFDefault.exceptions import EmailAddressInvalid
 except ImportError:
     from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
-
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.interfaces import IFieldValidator
-from types import BooleanType
-from types import StringTypes
-from zope.component import getUtility
-from zope.component import provideUtility
 
 
 def isValidEmail(value):
@@ -37,19 +35,23 @@ def isCommaSeparatedEmails(value):
     reg_tool = getToolByName(portal, 'portal_registration')
     for v in value.split(','):
         if not reg_tool.isValidEmail(v.strip()):
-            return _(u'Must be a valid list of email addresses (separated by commas).')
+            return _(
+                u'Must be a valid list of email addresses '
+                u'(separated by commas).'
+            )
 
 
 def isChecked(value):
-    if (type(value) == BooleanType) and value or (type(value) in StringTypes) and (value == '1'):
-        return
-    return _(u'Must be checked.')
+    if not (
+        (isinstance(value, bool) and value) or
+        (isinstance(value, basestring) and value == '1')
+    ):
+        return _(u'Must be checked.')
 
 
 def isUnchecked(value):
-    if (type(value) == BooleanType) and not value or (type(value) in StringTypes) and (value == '0'):
-        return
-    return _(u'Must be unchecked.')
+    if not isChecked(value):
+        return _(u'Must be unchecked.')
 
 
 def isNotLinkSpam(value):
@@ -60,9 +62,8 @@ def isNotLinkSpam(value):
         if s in value:
             return _('Links are not allowed.')
 
+
 # Base validators
-
-
 def update_validators():
     if validation and baseValidators:
         def method(name):
@@ -74,6 +75,11 @@ def update_validators():
                     return res
             return validate
         for validator in baseValidators:
-            provideUtility(method(validator.name),
-                           provides=IFieldValidator, name=validator.name)
+            provideUtility(
+                method(validator.name),
+                provides=IFieldValidator,
+                name=validator.name
+            )
+
+
 update_validators()

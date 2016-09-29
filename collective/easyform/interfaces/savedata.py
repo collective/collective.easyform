@@ -65,7 +65,8 @@ class ISaveData(IAction):
         description=_(u'help_savedataextra_text',
                       default=u'Pick any extra data you\'d like saved with the form input.'),
         unique=True,
-        value_type=zope.schema.Choice(vocabulary=vocabularies.vocabExtraDataDL),
+        value_type=zope.schema.Choice(
+            vocabulary=vocabularies.vocabExtraDataDL),
     )
     DownloadFormat = zope.schema.Choice(
         title=_(u'label_downloadformat_text', default=u'Download Format'),

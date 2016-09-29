@@ -2,16 +2,24 @@ Changelog
 =========
 
 2.0.0a1.dev0 (unreleased)
-------------------
+-------------------------
+
+New:
 
 - Housekeeping, Update for Plone 5
   [agitator]
+
+Fixes:
+
+- Housekeeping: isort, zca decorators, autopep8 and manual cleanup.
+  [jensens]
 
 
 1.0a4 (unreleased)
 ------------------
 
 New:
+
 - Change recipient address field to Email type so it gets properly validated
   [davilima6]
 
@@ -19,7 +27,6 @@ New:
   tests actually run, though many still fail.
   [smcmahon]
 
-Fixes:
 
 - look up email_from_address in registry
   [kcleong]

@@ -4,17 +4,18 @@ from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from plone.autoform import directives
 from plone.schemaeditor.interfaces import ID_RE
-from plone.schemaeditor.interfaces import ISchemaContext
-from plone.schemaeditor.interfaces import IFieldEditorExtender
-from plone.supermodel.model import Schema
-from plone.supermodel.model import fieldset
-from zope.interface import Interface
-from validators import isTALES
 from plone.schemaeditor.interfaces import IFieldContext
+from plone.schemaeditor.interfaces import IFieldEditorExtender
+from plone.schemaeditor.interfaces import ISchemaContext
+from plone.supermodel.model import fieldset
+from plone.supermodel.model import Schema
+from validators import isTALES
+from zope.interface import Interface
 
+import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
-import z3c.form.interfaces
+
 
 try:
     from plone.schemaeditor import SchemaEditorMessageFactory as __  # NOQA
@@ -122,7 +123,8 @@ class IActionEditForm(z3c.form.interfaces.IEditForm):
 
 
 class IAction(Schema, zope.schema.interfaces.IField):
-    directives.omitted('required', 'order', 'default', 'missing_value', 'readonly')
+    directives.omitted('required', 'order', 'default',
+                       'missing_value', 'readonly')
 #     required = zope.schema.Bool(
 #         title=_('Enabled'),
 #        description=_('Tells whether a action is enabled.'),

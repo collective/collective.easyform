@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl import Unauthorized
-from Products.Five import BrowserView
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from ZPublisher.BaseRequest import DefaultPublishTraverse
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_fields
 from collective.easyform.interfaces import IEasyFormFieldContext
@@ -19,11 +16,15 @@ from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel import loadString
 from plone.supermodel.parser import SupermodelParseError
+from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getAdapters
 from zope.component import queryMultiAdapter
-from zope.interface import implements
+from zope.interface import implementer
+from ZPublisher.BaseRequest import DefaultPublishTraverse
+
 
 try:
     from plone.schemaeditor import SchemaEditorMessageFactory as __
@@ -38,15 +39,15 @@ except ImportError:  # pragma: no cover
     HAVE_RESOURCE_EDITOR = False
 
 
+@implementer(IEasyFormFieldContext)
 class EasyFormFieldContext(FieldContext):
 
     """ wrapper for published zope 3 schema fields
     """
-    implements(IEasyFormFieldContext)
 
 
+@implementer(IEasyFormFieldsContext)
 class EasyFormFieldsView(SchemaContext):
-    implements(IEasyFormFieldsContext)
 
     schema = None
 
@@ -59,15 +60,23 @@ class EasyFormFieldsView(SchemaContext):
         )
 
     def publishTraverse(self, request, name):
-        """ Look up the field whose name matches the next URL path element, and wrap it.
+        """ Look up the field whose name matches the next URL path element,
+        and wrap it.
         """
         try:
-            return EasyFormFieldContext(self.schema[name], self.request).__of__(self)
+            return EasyFormFieldContext(
+                self.schema[name],
+                self.request
+            ).__of__(self)
         except KeyError:
-            return DefaultPublishTraverse(self, request).publishTraverse(request, name)
+            return DefaultPublishTraverse(
+                self,
+                request
+            ).publishTraverse(request, name)
 
     def browserDefault(self, request):
-        """ If not traversing through the schema to a field, show the SchemaListingPage.
+        """ If not traversing through the schema to a field, show the
+        SchemaListingPage.
         """
         return self, ('@@listing',)
 
@@ -77,7 +86,10 @@ class FieldsSchemaListing(SchemaListing):
 
     @property
     def default_fieldset_label(self):
-        return self.context.aq_parent.default_fieldset_label or super(FieldsSchemaListing, self).default_fieldset_label
+        return (
+            self.context.aq_parent.default_fieldset_label or
+            super(FieldsSchemaListing, self).default_fieldset_label
+        )
 
     def handleModelEdit(self, action):
         self.request.response.redirect('@@modeleditor')
@@ -107,7 +119,11 @@ class FieldEditForm(FieldEditForm):
     @lazy_property
     def additionalSchemata(self):
         schema_context = self.context.aq_parent
-        return [v for k, v in getAdapters((schema_context, self.field), IEasyFormFieldsEditorExtender)]
+        adapters = getAdapters(
+            (schema_context, self.field),
+            IEasyFormFieldsEditorExtender
+        )
+        return [v for k, v in adapters]
 
 
 class EditView(EditView):
@@ -149,20 +165,25 @@ class AjaxSaveHandler(BrowserView):
             except etree.XMLSyntaxError, e:
                 return dumps({
                     'success': False,
-                    'message': "XMLSyntaxError: {0}".format(e.message.encode('utf8'))
+                    'message': "XMLSyntaxError: {0}".format(
+                        e.message.encode('utf8')
+                    )
                 })
 
             # a little more sanity checking, look at first two element levels
-            if root.tag != '{http://namespaces.plone.org/supermodel/schema}model':
+            basens = '{http://namespaces.plone.org/supermodel/schema}'
+            if root.tag != basens + 'model':
                 return dumps({
                     'success': False,
                     'message': __(u"Error: root tag must be 'model'")
                 })
             for element in root.getchildren():
-                if element.tag != '{http://namespaces.plone.org/supermodel/schema}schema':
+                if element.tag != basens + 'schema':
                     return dumps({
                         'success': False,
-                        'message': __(u"Error: all model elements must be 'schema'")
+                        'message': __(
+                            u"Error: all model elements must be 'schema'"
+                        )
                     })
 
             # can supermodel parse it?

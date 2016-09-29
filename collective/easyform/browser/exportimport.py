@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from collective.easyform import easyformMessageFactory as _
+from collective.easyform.interfaces import IEasyFormImportFormSchema
+from datetime import datetime
+from plone.z3cform import layout
 from Products.Five import BrowserView
 from Products.GenericSetup.context import TarballExportContext
 from Products.GenericSetup.context import TarballImportContext
 from Products.GenericSetup.interfaces import IFilesystemExporter
 from Products.GenericSetup.interfaces import IFilesystemImporter
 from Products.statusmessages.interfaces import IStatusMessage
-from collective.easyform import easyformMessageFactory as _
-from collective.easyform.interfaces import IEasyFormImportFormSchema
-from datetime import datetime
-from plone.z3cform import layout
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form

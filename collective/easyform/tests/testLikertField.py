@@ -3,8 +3,8 @@
 # Likert Field related tests
 #
 
-from ZPublisher.HTTPRequest import record
 from collective.easyform.tests import base
+from ZPublisher.HTTPRequest import record
 
 
 class FakeRequest(dict):

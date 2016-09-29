@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_expression
 from collective.easyform.interfaces import IEasyForm
@@ -14,23 +13,22 @@ from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator as z3c_validator
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
-from zope.component import adapts
+from zope.component import adapter
 from zope.component import queryUtility
+from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
-from zope.interface import implementer
-from zope.interface import implements
 from zope.schema import Field
 from zope.schema import TextLine
 from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
+@implementer(IValidator)
+@adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
 
     """ z3c.form validator class for easyform fields """
-    implements(IValidator)
-    adapts(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 
     def validate(self, value):
         """ Validate field by TValidator """
@@ -55,11 +53,11 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
                 raise Invalid(cerr)
 
 
+@implementer(IValue)
+@adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderDefault(object):
 
     """ z3c.form default class for easyform fields """
-    implements(IValue)
-    adapts(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 
     def __init__(self, context, request, view, field, widget):
         self.context = context
@@ -76,12 +74,11 @@ class FieldExtenderDefault(object):
         return get_expression(self.context, TDefault) if TDefault else fdefault
 
 
-@implementer(IFromUnicode)
+@implementer(IFromUnicode, ILabel)
 class Label(Field):
 
     """A Label field
     """
-    implements(ILabel)
 
     def validate(self, value):
         pass
@@ -92,31 +89,37 @@ class Label(Field):
         return
 
 
+@implementer(IRichLabel)
 class RichLabel(Label):
 
     """A Rich Label field
     """
-    implements(IRichLabel)
     rich_label = u''
 
     def __init__(self, rich_label=u'', **kw):
         self.rich_label = rich_label
         super(RichLabel, self).__init__(**kw)
 
+
 LabelFactory = FieldFactory(Label, _(u'label_label_field', default=u'Label'))
 RichLabelFactory = FieldFactory(
-    RichLabel, _(u'label_richlabel_field', default=u'Rich Label'))
+    RichLabel,
+    _(u'label_richlabel_field', default=u'Rich Label')
+)
 
 LabelHandler = BaseHandler(Label)
 RichLabelHandler = BaseHandler(RichLabel)
 
 
+@implementer(IReCaptcha)
 class ReCaptcha(TextLine):
 
     """A ReCaptcha field
     """
-    implements(IReCaptcha)
+
 
 ReCaptchaFactory = FieldFactory(
-    ReCaptcha, _(u'label_recaptcha_field', default=u'ReCaptcha'))
+    ReCaptcha,
+    _(u'label_recaptcha_field', default=u'ReCaptcha')
+)
 ReCaptchaHandler = BaseHandler(ReCaptcha)

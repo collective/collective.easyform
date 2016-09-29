@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-
 from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
-from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
-from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
-from Products.PythonScripts.PythonScript import PythonScript
-from StringIO import StringIO
 from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
@@ -25,6 +19,7 @@ from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
 from copy import deepcopy
 from csv import writer as csvwriter
+from DateTime import DateTime
 from email import Encoders
 from email.Header import Header
 from email.MIMEAudio import MIMEAudio
@@ -38,14 +33,20 @@ from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
+from Products.CMFCore.utils import getToolByName
+from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+from Products.PythonScripts.PythonScript import PythonScript
+from StringIO import StringIO
 from time import time
-from zope.component import queryUtility
 from zope.component import getUtility
+from zope.component import queryUtility
 from zope.contenttype import guess_content_type
-from zope.interface import implements
+from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
+
+
 try:
     from BTrees.LOBTree import LOBTree
     SavedDataBTree = LOBTree
@@ -72,8 +73,8 @@ class OrderedDict(BaseDict):
 InitializeClass(OrderedDict)
 
 
+@implementer(IActionFactory)
 class ActionFactory(object):
-    implements(IActionFactory)
 
     title = u''
 
@@ -102,9 +103,9 @@ class ActionFactory(object):
         return self.fieldcls(*(self.args + args), **kwargs)
 
 
+@implementer(IAction)
 class Action(Bool):
     """ Base action class """
-    implements(IAction)
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -118,8 +119,8 @@ class Action(Bool):
         return False
 
 
+@implementer(IMailer)
 class Mailer(Action):
-    implements(IMailer)
     __doc__ = IMailer.__doc__
 
     def __init__(self, **kw):
@@ -226,14 +227,22 @@ class Mailer(Action):
         if not toemail:
             portal = getToolByName(context, 'portal_url').getPortalObject()
             toemail = portal.getProperty('email_from_address')
-        assert toemail, """
-                Unable to mail form input because no recipient address has been specified.
-                Please check the recipient settings of the EasyForm Mailer within the
-                current form folder.
-            """
+        if not toemail:
+            raise ValueError(
+                u"Unable to mail form input because no recipient address has "
+                u"been specified. Please check the recipient settings of the "
+                u"EasyForm Mailer within the current form folder."
+            )
         return (fullname, toemail)
 
-    def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
+    def get_addresses(
+        self,
+        fields,
+        request,
+        context,
+        from_addr=None,
+        to_addr=None
+    ):
         """
         Return addresses
         """
@@ -468,8 +477,8 @@ class Mailer(Action):
         host.send(mailtext)
 
 
+@implementer(ICustomScript)
 class CustomScript(Action):
-    implements(ICustomScript)
     __doc__ = ICustomScript.__doc__
 
     def __init__(self, **kw):
@@ -519,7 +528,10 @@ class CustomScript(Action):
             logger.error('Python script ' + self.__name__ +
                          ' has errors: ' + str(script.errors))
             raise ValueError(
-                'Python script ' + self.__name__ + ' has errors: ' + str(script.errors))
+                'Python script {0} has errors: {1}'.format(
+                    self.__name__, str(script.errors)
+                )
+            )
 
     def executeCustomScript(self, result, form, req):
         # Execute in-place script
@@ -539,8 +551,8 @@ class CustomScript(Action):
         return self.executeCustomScript(resultData, form, request)
 
 
+@implementer(ISaveData)
 class SaveData(Action):
-    implements(ISaveData)
     __doc__ = ISaveData.__doc__
 
     def __init__(self, **kw):
@@ -637,8 +649,10 @@ class SaveData(Action):
     def download_csv(self, response):
         # """Download the saved data as csv
         # """
-        response.setHeader('Content-Disposition',
-                           'attachment; filename="{0}.csv"'.format(self.__name__))
+        response.setHeader(
+            'Content-Disposition',
+            'attachment; filename="{0}.csv"'.format(self.__name__)
+        )
         response.setHeader('Content-Type', 'text/comma-separated-values')
         response.write(self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter=','))
@@ -646,8 +660,10 @@ class SaveData(Action):
     def download_tsv(self, response):
         # """Download the saved data as tsv
         # """
-        response.setHeader('Content-Disposition',
-                           'attachment; filename="{0}.tsv"'.format(self.__name__))
+        response.setHeader(
+            'Content-Disposition',
+            'attachment; filename="{0}.tsv"'.format(self.__name__)
+        )
         response.setHeader('Content-Type', 'text/tab-separated-values')
         response.write(self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter='\t'))
@@ -725,11 +741,20 @@ class SaveData(Action):
 
 
 MailerAction = ActionFactory(
-    Mailer, _(u'label_mailer_action', default=u'Mailer'), 'collective.easyform.AddMailers')
+    Mailer, _
+    (u'label_mailer_action', default=u'Mailer'),
+    'collective.easyform.AddMailers'
+)
 CustomScriptAction = ActionFactory(
-    CustomScript, _(u'label_customscript_action', default=u'Custom Script'), 'collective.easyform.AddCustomScripts')
+    CustomScript, _
+    (u'label_customscript_action', default=u'Custom Script'),
+    'collective.easyform.AddCustomScripts'
+)
 SaveDataAction = ActionFactory(
-    SaveData, _(u'label_savedata_action', default=u'Save Data'), 'collective.easyform.AddDataSavers')
+    SaveData, _
+    (u'label_savedata_action', default=u'Save Data'),
+    'collective.easyform.AddDataSavers'
+)
 
 MailerHandler = BaseHandler(Mailer)
 CustomScriptHandler = BaseHandler(CustomScript)

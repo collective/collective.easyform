@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from Products.Five.browser import BrowserView
-from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from collective.easyform.interfaces import ILabelWidget
 from collective.easyform.interfaces import IRichLabelWidget
+from Products.Five.browser import BrowserView
+from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
 from z3c.form.browser import widget
 from z3c.form.widget import FieldWidget

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform.api import get_context
 from collective.easyform.api import get_fields
@@ -8,8 +7,8 @@ from zope.component import getGlobalSiteManager
 from zope.component import getUtilitiesFor
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
-from zope.interface import directlyProvides
-from zope.interface import implements
+from zope.interface import implementer
+from zope.interface import provider
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabulary
@@ -24,6 +23,7 @@ def _make_vocabulary(items):
         SimpleVocabulary.createTerm(token, token, name)
         for (name, token) in items
     ])
+
 
 customActions = _make_vocabulary((
     (_(u'Traverse to'), u'traverse_to'),
@@ -66,13 +66,12 @@ vocabFormatDL = _make_vocabulary((
 ))
 
 
+@implementer(IContextSourceBinder, IVocabulary)
 class Fields(object):
 
     """
     Context source binder to provide a vocabulary of fields in a form.
     """
-
-    implements(IContextSourceBinder, IVocabulary)
 
     def __contains__(self, value):
         return True
@@ -91,6 +90,7 @@ class Fields(object):
                 SimpleVocabulary.createTerm(name, str(name), field.title))
         return SimpleVocabulary(terms)
 
+
 fieldsFactory = Fields()
 
 
@@ -104,12 +104,17 @@ class WidgetVocabulary(SimpleVocabulary):
         return self.getTermByToken(value)
 
 
+@provider(IContextSourceBinder)
 def widgetsFactory(context):
     terms = []
     adapters = [
         a.factory
         for a in getGlobalSiteManager().registeredAdapters()
-        if a.provided == IFieldWidget and len(a.required) == 2 and a.required[0].providedBy(context)
+        if (
+            a.provided == IFieldWidget and
+            len(a.required) == 2 and
+            a.required[0].providedBy(context)
+        )
     ]
     for adapter in set(adapters):
         name = u'{0}.{1}'.format(
@@ -117,8 +122,6 @@ def widgetsFactory(context):
         terms.append(WidgetVocabulary.createTerm(
             name, str(name), adapter.__name__))
     return WidgetVocabulary(terms)
-
-directlyProvides(widgetsFactory, IContextSourceBinder)
 
 
 def EasyFormActionsVocabularyFactory(context):

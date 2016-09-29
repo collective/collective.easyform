@@ -3,14 +3,15 @@
 # Integration tests. See other test modules for specific components.
 #
 
-from Testing.makerequest import makerequest
-from ZPublisher.BaseRequest import BaseRequest
 from collective.easyform.api import get_fields
 from collective.easyform.tests import base
 from plone.protect.authenticator import AuthenticatorView
+from Testing.makerequest import makerequest
 from z3c.form.interfaces import IFormLayer
 from zope.component import getMultiAdapter
 from zope.interface import classImplements
+from ZPublisher.BaseRequest import BaseRequest
+
 import plone.protect
 import sys
 import zExceptions

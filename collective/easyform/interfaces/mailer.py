@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
+from collective.easyform import config
 from collective.easyform import vocabularies
 from collective.easyform.interfaces import IAction
 from plone.autoform import directives
@@ -14,6 +14,7 @@ import zope.i18nmessageid
 import zope.interface
 import zope.schema.interfaces
 
+
 PMF = zope.i18nmessageid.MessageFactory('plone')
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
 
@@ -22,7 +23,8 @@ class IMailer(IAction):
 
     """A form action adapter that will e-mail form input."""
 #     default_method='getDefaultRecipientName',
-    directives.write_permission(recipient_name=config.EDIT_ADDRESSING_PERMISSION)
+    directives.write_permission(
+        recipient_name=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(recipient_name=MODIFY_PORTAL_CONTENT)
     recipient_name = zope.schema.TextLine(
         title=_(u'label_formmailer_recipient_fullname',
@@ -37,7 +39,8 @@ class IMailer(IAction):
 #     validators=('isEmail',),
 #     TODO defaultFactory
 #     TODO IContextAwareDefaultFactory
-    directives.write_permission(recipient_email=config.EDIT_ADDRESSING_PERMISSION)
+    directives.write_permission(
+        recipient_email=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(recipient_email=MODIFY_PORTAL_CONTENT)
     recipient_email = Email(
         title=_(u'label_formmailer_recipient_email',
@@ -63,7 +66,8 @@ class IMailer(IAction):
         vocabulary=vocabularies.fieldsFactory,
     )
 #     default_method='getDefaultCC',
-    directives.write_permission(cc_recipients=config.EDIT_ADDRESSING_PERMISSION)
+    directives.write_permission(
+        cc_recipients=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(cc_recipients=MODIFY_PORTAL_CONTENT)
     cc_recipients = zope.schema.Text(
         title=_(u'label_formmailer_cc_recipients',
@@ -75,7 +79,8 @@ class IMailer(IAction):
         required=False,
     )
 #     default_method='getDefaultBCC',
-    directives.write_permission(bcc_recipients=config.EDIT_ADDRESSING_PERMISSION)
+    directives.write_permission(
+        bcc_recipients=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(bcc_recipients=MODIFY_PORTAL_CONTENT)
     bcc_recipients = zope.schema.Text(
         title=_(u'label_formmailer_bcc_recipients',
@@ -231,7 +236,8 @@ class IMailer(IAction):
         value_type=zope.schema.Choice(vocabulary=vocabularies.XINFO_HEADERS),
     )
 #     default_method='getDefaultAddHdrs',
-    directives.write_permission(additional_headers=config.EDIT_ADVANCED_PERMISSION)
+    directives.write_permission(
+        additional_headers=config.EDIT_ADVANCED_PERMISSION)
     directives.read_permission(additional_headers=MODIFY_PORTAL_CONTENT)
     additional_headers = zope.schema.List(
         title=_(u'label_formmailer_additional_headers',

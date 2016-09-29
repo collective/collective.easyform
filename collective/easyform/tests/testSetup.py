@@ -4,8 +4,9 @@
 #
 
 from AccessControl import Unauthorized
-from Products.CMFCore.utils import getToolByName
 from collective.easyform.tests import base
+from Products.CMFCore.utils import getToolByName
+
 import Products
 
 
@@ -125,8 +126,8 @@ class TestInstallation(base.EasyFormTestCase):
         self.assertTrue('EasyForm' in defaultPageTypes)
 
     def testTypeViews(self):
-            self.assertEqual(
-                self.types.EasyForm.getAvailableViewMethods(self.types), ('view',))
+        self.assertEqual(
+            self.types.EasyForm.getAvailableViewMethods(self.types), ('view',))
 
 
 class TestContentCreation(base.EasyFormTestCase):

@@ -9,6 +9,7 @@ from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
+
 import email
 
 
@@ -95,7 +96,10 @@ class TestFunctions(base.EasyFormTestCase):
     def test_MailerLongSubject(self):
         """ Test mailer with subject line > 76 chars (Tracker # 84) """
 
-        long_subject = 'Now is the time for all good persons to come to the aid of the quick brown fox.'
+        long_subject = (
+            'Now is the time for all good persons to come to'
+            'the aid of the quick brown fox.'
+        )
 
         mailer = get_actions(self.ff1)['mailer']
         # fields = self.ff1._getFieldObjects()
@@ -111,8 +115,8 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_SubjectDollarReplacement(self):
         """
-        Simple subject lines should do ${identifier} replacement from request.form --
-        but only for a basic override.
+        Simple subject lines should do ${identifier} replacement from
+        request.form -- but only for a basic override.
         """
 
         mailer = get_actions(self.ff1)['mailer']
@@ -120,7 +124,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         # baseline unchanged
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(self.messageText.find(
@@ -128,7 +135,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         # no substitution on field replacement (default situation)
         request = self.LoadRequestForm(
-            topic='test ${subject}', replyto='test@test.org', comments='test comments')
+            topic='test ${subject}',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(self.messageText.find(
@@ -137,7 +147,10 @@ class TestFunctions(base.EasyFormTestCase):
         # we should get substitution in a basic override
         mailer.subject_field = ''
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(self.messageText.find(
@@ -152,7 +165,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         # we don't want substitution on user input
         request = self.LoadRequestForm(
-            topic='test ${subject}', replyto='test@test.org', comments='test comments')
+            topic='test ${subject}',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(self.messageText.find(
@@ -172,7 +188,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         # we should get substitution
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(self.messageBody.find('Hello test subject,') > 0)
@@ -311,14 +330,17 @@ class TestFunctions(base.EasyFormTestCase):
     def test_ExecConditions(self):
         """ Test mailer with various exec conditions """
 
-        # if an action adapter's execCondition is filled in and evaluates false,
-        # the action adapter should not fire.
+        # if an action adapter's execCondition is filled in and evaluates
+        # false, the action adapter should not fire.
 
         view = self.ff1.restrictedTraverse('view')
         form = view.form_instance
 
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         self.messageText = ''
         self.setExecCondition('python: False')
@@ -346,7 +368,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer = get_actions(self.ff1)['mailer']
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         # make sure all fields are sent unless otherwise specified
         self.messageText = ''
@@ -410,7 +435,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer = get_actions(self.ff1)['mailer']
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         mailer.cc_recipients = 'test@testme.com'
         self.messageText = ''
@@ -440,7 +468,10 @@ class TestFunctions(base.EasyFormTestCase):
         """ Test override for BCC field """
         mailer = get_actions(self.ff1)['mailer']
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         mailer.bcc_recipients = 'test@testme.com'
         self.messageText = ''
@@ -477,15 +508,16 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.replyto_field = None
 
         request = self.LoadRequestForm(
-            topic='test subject', replyto='test@test.org', comments='test comments')
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
 
         self.messageText = ''
         with self.assertRaises(Exception) as context:
             mailer.onSuccess(request.form, request)
-
-        self.assertEqual(
-            str('\n                Unable to mail form input because no recipient address has been specified.\n                Please check the recipient settings of the EasyForm Mailer within the\n                current form folder.\n            ',),
-            str(context.exception)
+        self.assertTrue(
+            isinstance(context.exception, ValueError)
         )
 
 

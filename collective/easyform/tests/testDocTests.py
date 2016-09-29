@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from Testing import ZopeTestCase as ztc
 from collective.easyform.tests.base import EasyFormFunctionalTestCase
+from Testing import ZopeTestCase as ztc
+
 # from plone.testing import layered
 import doctest
 import unittest2 as unittest
+
 
 optionflags = (
     doctest.REPORT_ONLY_FIRST_FAILURE |

@@ -3,12 +3,13 @@
 # Integration tests specific to save-data adapter.
 #
 
-from StringIO import StringIO
-from ZPublisher.HTTPRequest import HTTPRequest
-from ZPublisher.HTTPResponse import HTTPResponse
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_fields
 from collective.easyform.tests import base
+from StringIO import StringIO
+from ZPublisher.HTTPRequest import HTTPRequest
+from ZPublisher.HTTPResponse import HTTPResponse
+
 import plone.protect
 import sys
 

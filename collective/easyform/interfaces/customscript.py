@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from actions import IAction
-from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
+from collective.easyform import config
 from collective.easyform import vocabularies
 from plone.autoform import directives
 
 import zope.interface
 import zope.schema.interfaces
+
 
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
 

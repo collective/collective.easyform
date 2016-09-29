@@ -3,8 +3,8 @@
 # Test EasyForm top-level functionality
 #
 
-from Products.CMFCore.utils import getToolByName
 from collective.easyform.tests import base
+from Products.CMFCore.utils import getToolByName
 
 
 class FakeRequest(dict):

@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-
-from Products.CMFCore.Expression import Expression
-from Products.CMFCore.Expression import getExprContext
-from Products.CMFPlone.utils import safe_unicode
 from collective.easyform.config import MODEL_DEFAULT
+from email.utils import formataddr
 from hashlib import md5
 from plone.memoize import ram
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
-from email.utils import formataddr
+from Products.CMFCore.Expression import Expression
+from Products.CMFCore.Expression import getExprContext
+from Products.CMFPlone.utils import safe_unicode
 from re import compile
 from types import StringTypes
+
 
 # SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'

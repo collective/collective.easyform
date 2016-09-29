@@ -40,7 +40,7 @@ class TestFormGenInterfaces(base.EasyFormTestCase):
         # self.assertTrue(isinstance(
         #     form_folder_export, exportimport.EasyFormExportView))
         self.assertTrue(verifyObject(interfaces.IEasyFormExportView,
-                        form_folder_export))
+                                     form_folder_export))
 
     def testContentClassInterfaces(self):
         self.assertTrue(

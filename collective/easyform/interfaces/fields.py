@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
+from collective.easyform import config
 from collective.easyform import vocabularies
 from plone.app.textfield import RichText
 from plone.autoform import directives
@@ -13,9 +13,9 @@ from plone.supermodel.model import Schema
 from validators import isTALES
 from zope.interface import Interface
 
+import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
-import z3c.form.interfaces
 
 
 class IEasyFormFieldsEditorExtender(IFieldEditorExtender):
