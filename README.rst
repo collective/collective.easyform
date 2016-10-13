@@ -2,9 +2,9 @@
 EasyForm - Form Builder for CMS Plone
 =====================================
 
-.. image:: https://badge.fury.io/gh/collective%2Fcollective.easyform.svg
-    :target: http://badge.fury.io/gh/collective%2Fcollective.easyform
-    :alt: Fury Github
+.. image:: https://badge.fury.io/py/collective.easyform.svg
+    :target: https://badge.fury.io/py/collective.easyform
+    :alt: latest release version badge by Badge Fury
 
 .. image:: https://travis-ci.org/collective/collective.easyform.png?branch=master
     :target: https://travis-ci.org/collective/collective.easyform
