@@ -20,7 +20,7 @@ setup(
         'Operating System :: OS Independent',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
     ],
-    keywords='form plone ttw',
+    keywords='form plone ttw builder email',
     author='Roman Kozlovskyi',
     author_email='krzroman@gmail.com',
     url='https://github.com/quintagroup/collective.easyform',
