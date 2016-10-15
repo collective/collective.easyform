@@ -11,6 +11,7 @@
 .coverage
 .installed.cfg
 .mr.developer.cfg
+.Python
 bin/
 buildout-cache/
 build/
@@ -29,5 +30,5 @@ lib64/
 local/
 parts/
 pip-selfcheck.json
-src/
+share/
 var/

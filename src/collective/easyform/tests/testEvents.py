@@ -4,7 +4,7 @@
 #
 
 from collective.easyform.api import get_actions
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.tests import base
 
 
@@ -30,7 +30,7 @@ class TestAdapterPaste(base.EasyFormTestCase):
         ff2 = getattr(self.folder, new_id)
         active_adapters = tuple(get_actions(ff2))
         self.assertEqual(active_adapters, ('mailer',))
-        active_fields = tuple(get_fields(ff2))
+        active_fields = tuple(get_schema(ff2))
         self.assertEqual(active_fields, ('replyto', 'topic', 'comments'))
 
 

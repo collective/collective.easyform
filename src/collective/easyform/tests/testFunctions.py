@@ -3,7 +3,7 @@
 # Integration tests. See other test modules for specific components.
 #
 
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.tests import base
 from plone.protect.authenticator import AuthenticatorView
 from Testing.makerequest import makerequest
@@ -61,7 +61,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         # in v 1.0.2, this caused "'unicode' object has no attribute 'decode'"
         # w/ Plone 2.5.1 and Zope 2.8.7
-        fields = get_fields(self.ff1)
+        fields = get_schema(self.ff1)
         res = dict([(i, fields[i]) for i in fields])
 
         self.assertEqual(len(res), 3)
@@ -87,7 +87,7 @@ class TestFunctions(base.EasyFormTestCase):
         """ test EasyForm's fgFields displayOnly option """
 
         ff = self.ff1
-        fields = get_fields(ff)
+        fields = get_schema(ff)
         res = dict([(i, fields[i]) for i in fields])
         len1 = len(res)
 
@@ -96,7 +96,7 @@ class TestFunctions(base.EasyFormTestCase):
         # ff.invokeFactory('FormRichLabelField', 'rlf')
 
         # when displayOnly==True, fgFields should not return label fields
-        self.assertEqual(len(get_fields(ff)), len1)
+        self.assertEqual(len(get_schema(ff)), len1)
         # when displayOnly is omitted, all fields should be returned
         self.assertEqual(len(ff.fgFields()), len1 + 2)
 

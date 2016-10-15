@@ -2,7 +2,7 @@
 
 from AccessControl import Unauthorized
 from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IEasyFormFieldContext
 from collective.easyform.interfaces import IEasyFormFieldsContext
 from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
@@ -52,7 +52,7 @@ class EasyFormFieldsView(SchemaContext):
     schema = None
 
     def __init__(self, context, request):
-        self.schema = get_fields(context)
+        self.schema = get_schema(context)
         super(EasyFormFieldsView, self).__init__(
             self.schema,
             request,

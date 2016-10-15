@@ -4,7 +4,15 @@ Changelog
 2.0.0a2 (unreleased)
 --------------------
 
-- Nothing changed yet.
+New:
+
+- Rename api.get_fields to api.get_schema
+  [jensens, agitator]
+
+Fixes:
+
+- Fix field order
+  [jensens, agitator]
 
 
 2.0.0a1 (2016-10-13)

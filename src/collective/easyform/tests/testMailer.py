@@ -4,7 +4,7 @@
 #
 
 from collective.easyform.api import get_actions
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
@@ -417,7 +417,7 @@ class TestFunctions(base.EasyFormTestCase):
         )
 
         # now, turn off required for a field and leave it empty
-        fields = get_fields(self.ff1)
+        fields = get_schema(self.ff1)
         fields['comments'].required = False
         set_fields(self.ff1, fields)
         request = self.LoadRequestForm(
@@ -425,10 +425,12 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         self.assertTrue(
-            self.messageBody.find('Subject') > 0 and
-            self.messageBody.find('Your E-Mail Address') > 0 and
-            self.messageBody.find('Comments') < 0
+            self.messageBody.find('Subject') > 0
         )
+        self.assertTrue(
+            self.messageBody.find('Your E-Mail Address') > 0
+        )
+        self.assertEqual(self.messageBody.find('Comments'), -1)
 
     def test_ccOverride(self):
         """ Test override for CC field """

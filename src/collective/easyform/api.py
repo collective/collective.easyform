@@ -92,15 +92,15 @@ def get_context(field):
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 
-def get_fields_cache(method, context):
+def get_schema_cache(method, context):
     data = context.fields_model + str(context.modification_date)
     if isinstance(data, unicode):
         data = data.encode('utf-8')
     return md5(data).hexdigest()
 
 
-@ram.cache(get_fields_cache)
-def get_fields(context):
+@ram.cache(get_schema_cache)
+def get_schema(context):
     data = context.fields_model
     try:
         schema = loadString(data).schema
