@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl import getSecurityManager
+from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
@@ -109,7 +110,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     @property
     def schema(self):
-        return get_fields(self.context)
+        return get_schema(self.context)
 
     def updateServerSideData(self, data):
         for fname in self.schema:
@@ -125,7 +126,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             data[fname] = value
         return data
 
-    def processActions(self, data):
+    def processActions(self, fields):
         # get a list of adapters with no duplicates, retaining order
         actions = getFieldsInOrder(get_actions(self.context))
         for name, action in actions:
@@ -139,7 +140,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             else:
                 doit = True
             if doit and hasattr(action, 'onSuccess'):
-                result = action.onSuccess(data, self.request)
+                result = action.onSuccess(fields, self.request)
                 if isinstance(result, dict) and len(result):
                     return result
 
@@ -175,15 +176,20 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         condition=lambda form: not form.thanksPage
     )
     def handleSubmit(self, action):
-        data, errors = self.extractData()
+        unsorted_data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
             return
-        data = self.updateServerSideData(data)
-        errors = self.processActions(data)
+        unsorted_data = self.updateServerSideData(unsorted_data)
+        errors = self.processActions(unsorted_data)
         if errors:
             return self.setErrorsMessage(errors)
+        data = OrderedDict(
+            [x for x in getFieldsInOrder(self.schema) if x[0] in unsorted_data]
+        )
+        data.update(unsorted_data)
         thanksPageOverride = self.context.thanksPageOverride
+
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
             thanksPage = get_expression(self.context, thanksPageOverride)

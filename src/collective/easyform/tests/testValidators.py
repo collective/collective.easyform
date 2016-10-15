@@ -9,7 +9,7 @@ except ImportError:
     from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 
 from collective.easyform import validators
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
@@ -57,7 +57,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(data, FORM_DATA)
 
     def test_basevalidator(self):
-        fields = get_fields(self.ff1)
+        fields = get_schema(self.ff1)
         IFieldExtender(fields['replyto']).validators = ["isEmail"]
         set_fields(self.ff1, fields)
         view = self.ff1.restrictedTraverse('view')
@@ -69,7 +69,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(data, FORM_DATA)
 
     def test_basevalidator2(self):
-        fields = get_fields(self.ff1)
+        fields = get_schema(self.ff1)
         IFieldExtender(fields['comments']).validators = ["isInt", "isURL"]
         set_fields(self.ff1, fields)
         view = self.ff1.restrictedTraverse('view')
@@ -80,7 +80,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(len(errors), 1)
 
     def test_talvalidator(self):
-        fields = get_fields(self.ff1)
+        fields = get_schema(self.ff1)
         IFieldExtender(
             fields['comments']).TValidator = "python: value == 'comments'"
         set_fields(self.ff1, fields)
@@ -93,7 +93,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(data, FORM_DATA)
 
     def test_talvalidator2(self):
-        fields = get_fields(self.ff1)
+        fields = get_schema(self.ff1)
         IFieldExtender(fields['comments']).TValidator = "python: !value"
         set_fields(self.ff1, fields)
         view = self.ff1.restrictedTraverse('view')

@@ -4,7 +4,7 @@ from Acquisition import aq_parent
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_context
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.browser.fields import AjaxSaveHandler
 from collective.easyform.interfaces import IActionEditForm
 from collective.easyform.interfaces import IActionFactory
@@ -115,8 +115,8 @@ class SavedDataForm(crud.CrudForm):
         return self.field.__name__
 
     @property
-    def get_fields(self):
-        return get_fields(get_context(self.field))
+    def get_schema(self):
+        return get_schema(get_context(self.field))
 
     def description(self):
         return _(
@@ -126,7 +126,7 @@ class SavedDataForm(crud.CrudForm):
 
     @property
     def update_schema(self):
-        fields = field.Fields(self.get_fields)
+        fields = field.Fields(self.get_schema)
         showFields = getattr(self.field, 'showFields', [])
         if showFields:
             fields = fields.select(*showFields)

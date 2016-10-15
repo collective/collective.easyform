@@ -4,7 +4,7 @@
 #
 
 from collective.easyform.api import get_actions
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.tests import base
 from StringIO import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -339,7 +339,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.getSavedFormInputForEdit(), '')
 
         # save a row
-        fields = list(get_fields(self.ff1))
+        fields = list(get_schema(self.ff1))
         saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
@@ -380,7 +380,7 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
 
         # save a row
-        fields = list(get_fields(self.ff1))
+        fields = list(get_schema(self.ff1))
         # saver.savedFormInput = 'one,two,three'
         saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         self.assertEqual(saver.itemsSaved(), 1)
@@ -399,7 +399,7 @@ class TestFunctions(base.EasyFormTestCase):
         saver = get_actions(self.ff1)['saver']
 
         # save a few rows
-        fields = list(get_fields(self.ff1))
+        fields = list(get_schema(self.ff1))
         saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
         saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
         saver.addDataRow(dict(zip(fields, ['seven', 'eight', 'nine'])))

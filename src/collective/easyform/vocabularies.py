@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform.api import get_context
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from z3c.form.interfaces import IFieldWidget
 from zope.component import getGlobalSiteManager
 from zope.component import getUtilitiesFor
@@ -84,7 +84,7 @@ class Fields(object):
             form = context
         else:
             return SimpleVocabulary(terms)
-        fields = getFieldsInOrder(get_fields(form))
+        fields = getFieldsInOrder(get_schema(form))
         for name, field in fields:
             terms.append(
                 SimpleVocabulary.createTerm(name, str(name), field.title))

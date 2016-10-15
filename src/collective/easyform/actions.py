@@ -9,7 +9,7 @@ from collective.easyform.api import DollarVarReplacer
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
-from collective.easyform.api import get_fields
+from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -139,51 +139,56 @@ class Mailer(Action):
             line = line[:nlpos]
         return line
 
-    def get_mail_body(self, fields, request, context):
+    def get_mail_body(self, unsorted_data, request, context):
         """Returns the mail-body with footer.
         """
 
-        schema = get_fields(context)
-        all_fields = [
-            f for f in fields
+        schema = get_schema(context)
+        data = OrderedDict(
+            [x for x in getFieldsInOrder(schema) if x[0] in unsorted_data]
+        )
+
+        data.update(unsorted_data)
+
+        all_data = [
+            f for f in data
             # TODO
             # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
             # 'showAll', True) and f.getServerSide())]
-            if not (self._is_file_data(fields[f])) and not (
+            if not (self._is_file_data(data[f])) and not (
                 getattr(self, 'showAll', True) and
                 IFieldExtender(schema[f]).serverSide
             )
         ]
 
-        # which fields should we show?
+        # which data should we show?
         if getattr(self, 'showAll', True):
-            live_fields = all_fields
+            live_data = all_data
         else:
             showFields = getattr(self, 'showFields', [])
             if showFields is None:
                 showFields = []
 
-            live_fields = [
-                f for f in all_fields if f in showFields]
+            live_data = [
+                f for f in all_data if f in showFields]
 
         if not getattr(self, 'includeEmpties', True):
-            all_fields = live_fields
-            live_fields = [f for f in all_fields if fields[f]]
-            for f in all_fields:
-                value = fields[f]
+            all_data = live_data
+            live_data = [f for f in all_data if data[f]]
+            for f in all_data:
+                value = data[f]
                 if value:
-                    live_fields.append(f)
+                    live_data.append(f)
 
-        # bare_fields = [schema[f] for f in live_fields]
-        bare_fields = OrderedDict([(f, fields[f]) for f in live_fields])
+        bare_data = OrderedDict([(f, data[f]) for f in live_data])
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
-        replacer = DollarVarReplacer(fields).sub
+        replacer = DollarVarReplacer(data).sub
         extra = {
-            'data': bare_fields,
+            'data': bare_data,
             'fields': OrderedDict([
                 (i, j.title)
                 for i, j in getFieldsInOrder(schema)
@@ -621,7 +626,7 @@ class SaveData(Action):
             showFields = []
         names = [
             name
-            for name, field in getFieldsInOrder(get_fields(context))
+            for name, field in getFieldsInOrder(get_schema(context))
             if not showFields or name in showFields
         ]
         if self.ExtraData:
@@ -638,7 +643,7 @@ class SaveData(Action):
 
         names = [
             field.title
-            for name, field in getFieldsInOrder(get_fields(context))
+            for name, field in getFieldsInOrder(get_schema(context))
             if not showFields or name in showFields
         ]
         if self.ExtraData:
