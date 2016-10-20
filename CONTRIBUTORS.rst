@@ -15,3 +15,4 @@ Google Summer of Code student Prakhar Joshi pushed a lot further.
 - Nathan Van Gheem, vangheem@gmail.com
 - Jens W. Klein, jens@bluedynamics.com
 - Peter Holzer, peter.holzer@agitator.com
+- Thomas Massmann, thomas.massmann@it-spir.it
