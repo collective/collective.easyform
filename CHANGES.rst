@@ -4,7 +4,8 @@ Changelog
 2.0.0a3 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Use site email address as default recipient address also for Plone 5.
+  [tmassman]
 
 
 2.0.0a2 (2016-10-14)

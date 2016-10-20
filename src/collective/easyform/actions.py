@@ -230,8 +230,15 @@ class Mailer(Action):
         if userdest is not None:
             toemail = userdest.getProperty('email', '')
         if not toemail:
+            pprops = getToolByName(context, 'portal_properties')
+            site_props = getToolByName(pprops, 'site_properties')
             portal = getToolByName(context, 'portal_url').getPortalObject()
-            toemail = portal.getProperty('email_from_address')
+            registry = getUtility(IRegistry)
+            toemail = (
+                site_props.getProperty('email_from_address') or
+                portal.getProperty('email_from_address') or
+                registry.get('plone.email_from_address')
+            )
         if not toemail:
             raise ValueError(
                 u"Unable to mail form input because no recipient address has "
