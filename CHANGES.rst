@@ -4,7 +4,8 @@ Changelog
 2.0.0a3 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Update README
+  [svx]
 
 
 2.0.0a2 (2016-10-14)
