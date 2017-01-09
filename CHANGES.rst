@@ -7,6 +7,9 @@ Changelog
 - Use site email address as default recipient address also for Plone 5.
   [tmassman]
 
+- Update README
+  [svx]
+
 
 2.0.0a2 (2016-10-14)
 --------------------
