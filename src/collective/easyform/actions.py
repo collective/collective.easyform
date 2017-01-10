@@ -128,6 +128,33 @@ class Mailer(Action):
             setattr(self, i, kw.pop(i, f.default))
         super(Mailer, self).__init__(**kw)
 
+    def get_portal_email_address(self, context):
+        """Return the email address defined in the Plone site."""
+        address = None
+
+        if not address:
+            # Check for plone.registry based settings (Plone 5).
+            registry = getUtility(IRegistry)
+            if registry is not None:
+                address = registry.get('plone.email_from_address')
+
+        if not address:
+            # Check for settings on Plone site (Plone 4)
+            portal_url = getToolByName(context, 'portal_url')
+            if portal_url is not None:
+                portal = portal_url.getPortalObject()
+                address = portal.getProperty('email_from_address')
+
+        if not address:
+            # Check for site_properties settings.
+            pprops = getToolByName(context, 'portal_properties')
+            if pprops is not None:
+                site_props = getToolByName(pprops, 'site_properties')
+                if site_props is not None:
+                    address = site_props.getProperty('email_from_address')
+
+        return address
+
     def secure_header_line(self, line):
         if not line:
             return ''
@@ -230,15 +257,7 @@ class Mailer(Action):
         if userdest is not None:
             toemail = userdest.getProperty('email', '')
         if not toemail:
-            pprops = getToolByName(context, 'portal_properties')
-            site_props = getToolByName(pprops, 'site_properties')
-            portal = getToolByName(context, 'portal_url').getPortalObject()
-            registry = getUtility(IRegistry)
-            toemail = (
-                site_props.getProperty('email_from_address') or
-                portal.getProperty('email_from_address') or
-                registry.get('plone.email_from_address')
-            )
+            toemail = self.get_portal_email_address(context)
         if not toemail:
             raise ValueError(
                 u"Unable to mail form input because no recipient address has "
@@ -258,23 +277,14 @@ class Mailer(Action):
         """
         Return addresses
         """
-        pprops = getToolByName(context, 'portal_properties')
-        site_props = getToolByName(pprops, 'site_properties')
-        portal = getToolByName(context, 'portal_url').getPortalObject()
-        registry = getUtility(IRegistry)
-
         # get Reply-To
         reply_addr = None
         if hasattr(self, 'replyto_field'):
             reply_addr = fields.get(self.replyto_field, None)
 
         # Get From address
-        from_addr = (
-            from_addr or
-            site_props.getProperty('email_from_address') or
-            portal.getProperty('email_from_address') or
-            registry.get('plone.email_from_address')
-        )
+        portal_addr = self.get_portal_email_address(context)
+        from_addr = from_addr or portal_addr
 
         if hasattr(self, 'senderOverride') and self.senderOverride:
             _from = get_expression(context, self.senderOverride, fields=fields)
