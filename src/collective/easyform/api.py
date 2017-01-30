@@ -171,10 +171,16 @@ def format_addresses(addresses, names=[]):
     >>> format_addresses('sim@sala.bim, hokus@pokus.fidibus')
     'sim@sala.bim, hokus@pokus.fidibus'
 
+    >>> format_addresses('sim@sala.bim\nhokus@pokus.fidibus')
+    'sim@sala.bim, hokus@pokus.fidibus'
+
     >>> format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim')
     'sim <sim@sala.bim>, hokus@pokus.fidibus'
 
     >>> format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim, hokus')
+    'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+
+    >>> format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim\nhokus')
     'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
 
     >>> format_addresses(['sim@sala.bim', 'hokus@pokus.fidibus'],
@@ -193,14 +199,20 @@ def format_addresses(addresses, names=[]):
 
     """
     if type(addresses) in StringTypes:
-        addresses = [s for s in addresses.split(',')]
+        # replace common separators `;` and `,` with newlines so the
+        # splitlines method works
+        addresses = addresses.replace(',', '\n').replace(';', '\n')
+        addresses = [s.strip() for s in addresses.splitlines()]
     assert(isinstance(addresses, list) or isinstance(addresses, tuple))  # ensure iterable  # noqa
     addresses = [
         safe_unicode(s).strip().encode('utf-8') for s in addresses if s
     ]
 
     if names and type(names) in StringTypes:
-        names = [s for s in names.split(',')]
+        # replace common separators `;` and `,` with newlines so the
+        # splitlines method works
+        names = names.replace(',', '\n').replace(';', '\n')
+        names = [s for s in names.splitlines()]
     if not names:
         names = []
     assert(isinstance(names, list) or isinstance(names, tuple))
