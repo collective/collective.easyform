@@ -10,6 +10,9 @@ Changelog
 - Update README
   [svx]
 
+- Allow emails (CC, BCC) separated by ';' and newlines
+  https://github.com/collective/collective.easyform/issues/49
+  [tomgross]
 
 2.0.0a2 (2016-10-14)
 --------------------
