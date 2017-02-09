@@ -221,9 +221,12 @@ class Mailer(Action):
                 for i, j in getFieldsInOrder(schema)
             ]),
             'mailer': self,
-            'body_pre': self.body_pre and replacer(self.body_pre),
-            'body_post': self.body_post and replacer(self.body_post),
-            'body_footer': self.body_footer and replacer(self.body_footer),
+            'body_pre': self.body_pre.output and replacer(
+                self.body_pre.output),
+            'body_post': self.body_post.output and replacer(
+                self.body_post.output),
+            'body_footer': self.body_footer.output and replacer(
+                self.body_footer.output),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
