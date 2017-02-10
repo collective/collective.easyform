@@ -33,7 +33,7 @@ setup(
     install_requires=[
         'setuptools',
         'plone.app.dexterity',
-        'plone.app.textfield',
+        'plone.app.textfield >= 1.2.8',
         'plone.autoform',
         'plone.dexterity',
         'plone.namedfile',
