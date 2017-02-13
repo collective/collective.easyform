@@ -214,6 +214,22 @@ class Mailer(Action):
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
         replacer = DollarVarReplacer(data).sub
+
+        if isinstance(self.body_pre, basestring):
+            body_pre = self.body_pre
+        else:
+            body_pre = self.body_pre.output
+
+        if isinstance(self.body_post, basestring):
+            body_post = self.body_post
+        else:
+            body_post = self.body_post.output
+
+        if isinstance(self.body_footer, basestring):
+            body_footer = self.body_footer
+        else:
+            body_footer = self.body_footer.output
+
         extra = {
             'data': bare_data,
             'fields': OrderedDict([
@@ -221,12 +237,9 @@ class Mailer(Action):
                 for i, j in getFieldsInOrder(schema)
             ]),
             'mailer': self,
-            'body_pre': self.body_pre.output and replacer(
-                self.body_pre.output),
-            'body_post': self.body_post.output and replacer(
-                self.body_post.output),
-            'body_footer': self.body_footer.output and replacer(
-                self.body_footer.output),
+            'body_pre': body_pre and replacer(body_pre),
+            'body_post': body_post and replacer(body_post),
+            'body_footer': body_footer and replacer(body_footer),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
@@ -434,7 +447,6 @@ class Mailer(Action):
         """
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
-
         if not isinstance(body, unicode):
             body = unicode(body, 'UTF-8')
         email_charset = 'utf-8'
