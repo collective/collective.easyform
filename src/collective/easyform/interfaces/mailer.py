@@ -3,11 +3,13 @@ from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from collective.easyform import vocabularies
 from collective.easyform.interfaces import IAction
+from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schema import Email
 from plone.supermodel.model import fieldset
 from validators import isTALES
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
+from z3c.form.browser.textarea import TextAreaWidget
 
 import zope.i18nmessageid
 import zope.interface
@@ -140,25 +142,35 @@ class IMailer(IAction):
     )
 #     accessor='getBody_pre',
     directives.read_permission(body_pre=MODIFY_PORTAL_CONTENT)
-    body_pre = zope.schema.Text(
+    directives.widget('body_pre', TextAreaWidget)
+
+    body_pre = RichText(
         title=_(u'label_formmailer_body_pre', default=u'Body (prepended)'),
         description=_(u'help_formmailer_body_pre',
                       default=u'Text prepended to fields listed in mail-body'),
         default=u'',
         missing_value=u'',
+        default_mime_type='text/x-web-intelligent',
+        allowed_mime_types=('text/x-web-intelligent', ),
+        output_mime_type='text/x-html-safe',
         required=False,
     )
     directives.read_permission(body_post=MODIFY_PORTAL_CONTENT)
-    body_post = zope.schema.Text(
+    directives.widget('body_post', TextAreaWidget)
+    body_post = RichText(
         title=_(u'label_formmailer_body_post', default=u'Body (appended)'),
         description=_(u'help_formmailer_body_post',
                       default=u'Text appended to fields listed in mail-body'),
         default=u'',
         missing_value=u'',
+        default_mime_type='text/x-web-intelligent',
+        allowed_mime_types=('text/x-web-intelligent', ),
+        output_mime_type='text/x-html-safe',
         required=False,
     )
     directives.read_permission(body_footer=MODIFY_PORTAL_CONTENT)
-    body_footer = zope.schema.Text(
+    directives.widget('body_footer', TextAreaWidget)
+    body_footer = RichText(
         title=_(u'label_formmailer_body_footer',
                 default=u'Body (signature)'),
         description=_(u'help_formmailer_body_footer',
@@ -166,6 +178,9 @@ class IMailer(IAction):
                       u'bottom, delimited from the body by a dashed line.'),
         default=u'',
         missing_value=u'',
+        default_mime_type='text/x-web-intelligent',
+        allowed_mime_types=('text/x-web-intelligent', ),
+        output_mime_type='text/x-html-safe',
         required=False,
     )
     directives.read_permission(showAll=MODIFY_PORTAL_CONTENT)

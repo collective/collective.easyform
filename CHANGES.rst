@@ -4,6 +4,10 @@ Changelog
 2.0.0a3 (unreleased)
 --------------------
 
+- Keep line breaks for body_pre, body_post and body_footer field.
+  Changed field type to RichText with TextAreaWidget and default_mime_type='text/x-web-intelligent'.
+  Updated default mailer template.
+
 - Use site email address as default recipient address also for Plone 5.
   [tmassman]
 
