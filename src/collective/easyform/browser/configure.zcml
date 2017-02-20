@@ -42,5 +42,11 @@
         name="easyform.css"
         file="easyform.css"
         />
+    <browser:page
+        for="collective.easyform.interfaces.IEasyForm"
+        name="z3cform_validate_field"
+        class=".view.EasyFormInlineValidationView"
+        permission="zope2.View"
+        />
 
 </configure>

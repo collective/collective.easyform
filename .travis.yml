@@ -22,5 +22,5 @@ script:
   - bin/test
 after_success:
   - bin/createcoverage
-  - pip install coveralls
+  - pip install coveralls coverage==4.3.4
   - coveralls
