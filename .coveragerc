@@ -6,7 +6,8 @@ omit =
     buildout-cache/eggs/*
     eggs/*
     parts/*
-    src/*
     collective/easyform/tests/*
     */lib/*
     collective/__init__.py
+    *.txt
+    *.rst
