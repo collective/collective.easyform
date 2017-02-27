@@ -8,6 +8,7 @@ from collective.easyform.interfaces import IEasyFormFieldsContext
 from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
 from json import dumps
 from lxml import etree
+from plone import api
 from plone.schemaeditor.browser.field.edit import EditView
 from plone.schemaeditor.browser.field.edit import FieldEditForm
 from plone.schemaeditor.browser.field.traversal import FieldContext
@@ -79,6 +80,11 @@ class EasyFormFieldsView(SchemaContext):
         SchemaListingPage.
         """
         return self, ('@@listing',)
+
+    @property
+    def allowedFields(self):
+        fields = api.portal.get_registry_record('easyform.allowedFields')
+        return fields
 
 
 class FieldsSchemaListing(SchemaListing):

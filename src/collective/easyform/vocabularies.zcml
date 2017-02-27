@@ -11,4 +11,15 @@
         provides="zope.schema.interfaces.IVocabularyFactory"
         name="collective.easyform.validators"
         />
+
+    <!-- utility
+        component=".browser.controlpanel.get_allowed_fields"
+        provides="zope.schema.interfaces.IVocabularyFactory"
+        name="allowedFields"
+        /-->
+    <utility
+      component=".browser.controlpanel.FieldsVocabularyFactory"
+      provides="zope.schema.interfaces.IVocabularyFactory"
+      name="collective.easyform.FieldsVocabulary"
+      />
 </configure>
