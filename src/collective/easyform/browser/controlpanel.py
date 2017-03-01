@@ -10,11 +10,11 @@ from zope import schema
 from zope.component import getUtilitiesFor
 from zope.component import getUtility
 from zope.globalrequest import getRequest
-from zope.interface import Interface
-from zope.interface import implementer
-from zope.schema.vocabulary import SimpleVocabulary
-from zope.schema.interfaces import IVocabularyFactory
 from zope.i18n import translate
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 
 import operator
 
@@ -68,7 +68,7 @@ class IEasyFormControlPanel(Interface):
 
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel
-    schema_prefix = "easyform"
+    schema_prefix = 'easyform'
     label = u'easyform Settings'
 
     def updateFields(self):
