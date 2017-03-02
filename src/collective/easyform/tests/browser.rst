@@ -74,7 +74,14 @@ Add a new fieldset::
 
 Change fieldset of Comments field::
 
-    >>> browser.open(self.portal_url + '/testform/fields/comments/@@changefieldset?fieldset_index=1')
+    >>> from plone.protect.authenticator import _getKeyring
+    >>> import hmac
+    >>> from hashlib import sha1 as sha
+    >>> ring = _getKeyring('foo')
+    >>> secret = ring.random()
+    >>> token = hmac.new(secret, 'admin', sha).hexdigest()
+    >>> url = self.portal_url + '/testform/fields/comments/@@changefieldset?fieldset_index=1&_authenticator=' + token
+    >>> browser.open(url)
 
 Submit the form::
 

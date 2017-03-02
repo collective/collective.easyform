@@ -11,15 +11,15 @@
         easyform:serverSide="False"
         easyform:validators="isValidEmail">
       <description/>
-      <title i18n:translate="">Your E-Mail Address</title>
+      <title>Your E-Mail Address</title>
     </field>
     <field name="topic" type="zope.schema.TextLine">
       <description/>
-      <title i18n:translate="">Subject</title>
+      <title>Subject</title>
     </field>
     <field name="comments" type="zope.schema.Text">
       <description/>
-      <title i18n:translate="">Comments</title>
+      <title>Comments</title>
     </field>
   </schema>
 </model>

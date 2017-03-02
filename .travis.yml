@@ -19,8 +19,6 @@ before_script:
 - firefox -v
 script:
   - bin/code-analysis
-  - bin/test
+  - bin/coverage run bin/test
 after_success:
-  - bin/createcoverage
-  - pip install coveralls
-  - coveralls
+  - bin/coveralls

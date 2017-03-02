@@ -145,7 +145,7 @@ the file field is not listed in the mailer's showFields::
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> self.portal.MailHost.msg.get_payload(decode=True)
-    '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n        \n    </dl>\n    <p></p>\n    <pre></pre>\n  </body>\n</html>'
+    '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n        \n    </dl>\n    <p></p>\n    <p></p>\n  </body>\n</html>'
 
     >> browser.getControl('Reset').click()
 
