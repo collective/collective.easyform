@@ -6,6 +6,7 @@ Changelog
 
 New:
 
+
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
   translate the ``FIELDS_DEFAULT`` fields.
@@ -29,6 +30,12 @@ New:
 Fixes:
 
 - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
+
+- Reverted some Plone 5 fixes that prevented collective.easyform from working
+  anymore on Plone 4.3, in particular some modals/overlays. [fredvd]
+
+- Pin to plone.schemaeditor 2.0.7 in setup.py, lower and higher versions break
+  on Plone 4.3. See #30 [fredvd]
 
 
 1.0a3 (2015-06-02)
