@@ -1,26 +1,26 @@
-<html xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal"
-      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-      tal:omit-tag="" i18n:domain="plone.schemaeditor">
+<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     tal:omit-tag="" i18n:domain="plone.schemaeditor">
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:description-slot metal:fill-slot="description">
       <div class="extraActions">
-        <a id="add-field" class="pat-modal pat-plone-modal"
-           href="${context/absolute_url}/@@add-field">
-            <button style="float: right; display: block;"
-                i18n:translate="add_new_field_hellip">Add new field&hellip;</button>
-        </a>
-
-        <a id="add-fieldset" class="pat-modal pat-plone-modal" tal:condition="context/enableFieldsets"
-           href="${context/absolute_url}/@@add-fieldset">
-            <button style="float: right; display: block;"
-                i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</button>
-        </a>
+        <form id="add-field" method="GET"
+              tal:attributes="action string:${context/absolute_url}/@@add-field">
+          <input type="submit"
+                 i18n:attributes="value"
+                 value="Add new field&hellip;"/>
+        </form>
+        <form id="add-fieldset" method="GET"
+              tal:attributes="action string:${context/absolute_url}/@@add-fieldset">
+          <input type="submit"
+                 i18n:attributes="value"
+                 value="Add new fieldset&hellip;"/>
+        </form>
       </div>
     </metal:description-slot>
 
     <metal:top-slot metal:fill-slot="formtop">
-      <input tal:replace="structure context/@@authenticator/authenticator" />
       <script type="text/javascript"
               tal:attributes="src context/++resource++schemaeditor.js"></script>
       <link media="screen" type="text/css" rel="stylesheet"
@@ -32,7 +32,7 @@
       <tal:block tal:repeat="group python:[view] + list(view.groups)">
         <fieldset tal:define="fieldset_name repeat/group/index"
                   tal:attributes="id string:fieldset-${fieldset_name};
-                                  class string:kssattr-fieldset-${fieldset_name}">
+class string:kssattr-fieldset-${fieldset_name}">
 
           <legend tal:define="group_name python:group.label or view.default_fieldset_label"
                   tal:content="group_name">Fieldset name</legend>
@@ -69,7 +69,7 @@
 
               <div class="fieldControls"
                    i18n:domain="plone.schemaeditor">
-                  <a class="fieldSettings pat-modal pat-plone-modal"
+                  <a class="fieldSettings"
                      tal:define="edit_url python:view.edit_url(widget.field)"
                      tal:condition="edit_url"
                      i18n:translate=""
@@ -96,4 +96,4 @@
       </tal:block>
     </metal:fields-slot>
   </metal:form>
-</html>
+</div>
