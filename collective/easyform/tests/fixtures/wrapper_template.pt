@@ -13,7 +13,7 @@
     <metal:fill fill-slot="main">
       <metal:main define-macro="main">
 
-        <h1 class="documentFirstHeading" i18n:translate="">
+        <h1 class="documentFirstHeading">
           Embedded form
         </h1>
 
