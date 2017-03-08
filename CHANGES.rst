@@ -22,6 +22,9 @@ Changelog
   https://github.com/collective/collective.easyform/issues/49
   [tomgross]
 
+- Allow managment of fields enabled for c.easyform in controlpanel
+  [karalics]
+
 2.0.0a2 (2016-10-14)
 --------------------
 
