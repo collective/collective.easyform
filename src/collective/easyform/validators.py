@@ -47,7 +47,7 @@ def isUnchecked(value):
         return _(u'Must be unchecked.')
 
 
-BAD_SIGNS = frozenset('<a ', 'www.', 'http:', '.com', 'https:')
+BAD_SIGNS = frozenset(['<a ', 'www.', 'http:', '.com', 'https:'])
 
 
 def isNotLinkSpam(value):
