@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.interfaces import IFieldValidator
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
-from zope.component import getUtility
+from plone import api
 from zope.component import provideUtility
 
 
@@ -14,25 +12,20 @@ except ImportError:  # pragma: no cover
     validation = {}
     baseValidators = []
 
-try:
-    from Products.CMFDefault.exceptions import EmailAddressInvalid
-except ImportError:
-    from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
+
+from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 
 
 def isValidEmail(value):
     """Check for the user email address"""
-    portal = getUtility(ISiteRoot)
-
-    reg_tool = getToolByName(portal, 'portal_registration')
+    reg_tool = api.portal.get_tool('portal_registration')
     if not (value and reg_tool.isValidEmail(value)):
         raise EmailAddressInvalid
 
 
 def isCommaSeparatedEmails(value):
     """Check for one or more E-Mail Addresses separated by commas"""
-    portal = getUtility(ISiteRoot)
-    reg_tool = getToolByName(portal, 'portal_registration')
+    reg_tool = api.portal.get_tool('portal_registration')
     for v in value.split(','):
         if not reg_tool.isValidEmail(v.strip()):
             return _(
@@ -54,11 +47,15 @@ def isUnchecked(value):
         return _(u'Must be unchecked.')
 
 
+BAD_SIGNS = frozenset('<a ', 'www.', 'http:', '.com', 'https:')
+
+
 def isNotLinkSpam(value):
+    if not value:
+        return    # No value can't be SPAM
     # validation is optional and configured on the field
-    bad_signs = ('<a ', 'www.', 'http:', '.com', )
     value = value.lower()
-    for s in bad_signs:
+    for s in BAD_SIGNS:
         if s in value:
             return _('Links are not allowed.')
 

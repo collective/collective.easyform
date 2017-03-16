@@ -37,7 +37,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     """
     EasyForm form
     """
-    template = ViewPageTemplateFile('easyform_form.pt')
+    form_template = ViewPageTemplateFile('easyform_form.pt')
+    thank_you_template = ViewPageTemplateFile('thank_you.pt')
     ignoreContext = True
     css_class = 'easyformForm'
     thanksPage = False
@@ -91,22 +92,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.thanksPage and
             self.context.thanksdescription or
             self.context.Description()
-        )
-
-    @property
-    def prologue(self):
-        return (
-            self.thanksPage and
-            self.thanksPrologue or
-            self.context.formPrologue.output
-        )
-
-    @property
-    def epilogue(self):
-        return (
-            self.thanksPage and
-            self.thanksEpilogue or
-            self.context.formEpilogue.output
         )
 
     @property
@@ -299,6 +284,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def update(self):
         '''See interfaces.IForm'''
         self.formMaybeForceSSL()
+        if self.request.method == 'POST':
+            self.template = self.thank_you_template
+            self.thanksPage = True
+        else:
+            self.template = self.form_template
         super(EasyFormForm, self).update()
 
 

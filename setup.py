@@ -32,6 +32,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'plone.api',
         'plone.app.dexterity',
         'plone.app.textfield >= 1.2.8',
         'plone.autoform',
