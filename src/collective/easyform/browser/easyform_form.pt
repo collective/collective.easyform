@@ -6,13 +6,15 @@
     <metal:title-slot fill-slot="title"></metal:title-slot>
     <metal:top-slot fill-slot="formtop">
       <div id="formPrologue"
-           tal:condition="view/prologue|nothing"
-           tal:content="structure view/prologue" />
+           tal:define="prologue context/formPrologue|nothing"
+           tal:condition="prologue"
+           tal:content="structure prologue/output" />
     </metal:top-slot>
     <metal:top-slot fill-slot="formbottom">
       <div id="formEpilogue"
-           tal:condition="view/epilogue|nothing"
-           tal:content="structure view/epilogue" />
+           tal:define="epilogue context/formEpilogue"
+           tal:condition="epilogue"
+           tal:content="structure epilogue/output" />
     </metal:top-slot>
   </metal:form>
 </html>
