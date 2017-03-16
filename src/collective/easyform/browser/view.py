@@ -3,7 +3,7 @@
 from AccessControl import getSecurityManager
 from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import dollar_replacer
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
@@ -130,17 +130,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 if isinstance(result, dict) and len(result):
                     return result
 
-    def setDisplayMode(self, mode):
-        self.mode = mode
-        for widget in self.widgets.values():
-            widget.mode = mode
-        self.updateWidgets()
-        for group in self.groups:
-            group.widgets.mode = mode
-            for field in group.widgets:
-                del group.widgets[field]
-            group.widgets.update()
-
     def setErrorsMessage(self, errors):
         for field in errors:
             if field not in self.widgets:
@@ -162,20 +151,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         condition=lambda form: not form.thanksPage
     )
     def handleSubmit(self, action):
-        unsorted_data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-        unsorted_data = self.updateServerSideData(unsorted_data)
-        errors = self.processActions(unsorted_data)
-        if errors:
-            return self.setErrorsMessage(errors)
-        data = OrderedDict(
-            [x for x in getFieldsInOrder(self.schema) if x[0] in unsorted_data]
-        )
-        data.update(unsorted_data)
         thanksPageOverride = self.context.thanksPageOverride
-
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
             thanksPage = get_expression(self.context, thanksPageOverride)
@@ -191,19 +167,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 ).encode('utf-8')
                 self.request.response.write(thanksPage)
         else:
-            self.thanksPage = True
-            replacer = DollarVarReplacer(data).sub
-            self.thanksPrologue = self.context.thanksPrologue and replacer(
-                self.context.thanksPrologue.output)
-            self.thanksEpilogue = self.context.thanksEpilogue and replacer(
-                self.context.thanksEpilogue.output)
-            if not self.context.showAll:
-                self.fields = self.setThanksFields(self.base_fields)
-                for group in self.groups:
-                    group.fields = self.setThanksFields(
-                        self.base_groups.get(group.label))
-            self.setDisplayMode(DISPLAY_MODE)
-            self.updateActions()
+            pass   # we come back to the form itself.
+            # the thanks page is handled in the __call__ method
 
     @button.buttonAndHandler(
         _(u'Reset'),
@@ -215,6 +180,21 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     def nextURL(self):
         return self.context.absolute_url()
+
+    def get_form_data(self):
+        unsorted_data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        unsorted_data = self.updateServerSideData(unsorted_data)
+        errors = self.processActions(unsorted_data)
+        if errors:
+            return self.setErrorsMessage(errors)
+        data = OrderedDict(
+            [x for x in getFieldsInOrder(self.schema) if x[0] in unsorted_data]
+        )
+        data.update(unsorted_data)
+        return data
 
     def setOmitFields(self, fields):
         omit = []
@@ -282,14 +262,28 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                     secure_url, status='movedtemporarily')
 
     def update(self):
-        '''See interfaces.IForm'''
+        """ Update form - see interfaces.IForm """
         self.formMaybeForceSSL()
-        if self.request.method == 'POST':
+        if self.request.method == 'POST':   # Thanks page
+            self.mode = DISPLAY_MODE
             self.template = self.thank_you_template
             self.thanksPage = True
-        else:
+            prefix = self.prefix + 'widgets.'
+            data = {key[len(prefix):]: val
+                    for key, val in self.request.form.items()
+                    if key.startswith(prefix)}
+            self.thanksPrologue = self.context.thanksPrologue and dollar_replacer(
+                self.context.thanksPrologue.output, data)
+            self.thanksEpilogue = self.context.thanksEpilogue and dollar_replacer(
+                self.context.thanksEpilogue.output, data)
+            super(EasyFormForm, self).update()
+            if not self.context.showAll:
+                self.widgets = {name: widget
+                                for name, widget in self.widgets.items()
+                                if widget.field.__name__ in self.context.showFields}
+        else:   # Form
             self.template = self.form_template
-        super(EasyFormForm, self).update()
+            super(EasyFormForm, self).update()
 
 
 EasyFormView = layout.wrap_form(EasyFormForm)
