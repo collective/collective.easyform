@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      i18n:domain="collective.easyform"
+      tal:omit-tag="">
+
+      <div id="formPrologue"
+           tal:define="prologue view/thanksPrologue|nothing"
+           tal:condition="prologue"
+           tal:content="structure prologue" />
+
+  thanks!
+
+
+      <div id="formEpilogue"
+           tal:define="epilogue view/thanksEpilogue|nothing"
+           tal:condition="epilogue"
+           tal:content="structure epilogue" />
+
+
+</html>

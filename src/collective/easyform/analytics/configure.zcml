@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+    <adapter
+        for="* zope.publisher.interfaces.IRequest"
+        name="EasyForm forms"
+        factory=".tracking.FormAnalyticsPlugin"
+        />
+
+</configure>
+
