@@ -167,8 +167,16 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 ).encode('utf-8')
                 self.request.response.write(thanksPage)
         else:
-            pass   # we come back to the form itself.
+            # we come back to the form itself.
             # the thanks page is handled in the __call__ method
+            unsorted_data, errors = self.extractData()
+            if errors:
+                self.status = self.formErrorsMessage
+                return
+            unsorted_data = self.updateServerSideData(unsorted_data)
+            errors = self.processActions(unsorted_data)
+            if errors:
+                return self.setErrorsMessage(errors)
 
     @button.buttonAndHandler(
         _(u'Reset'),
@@ -180,21 +188,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     def nextURL(self):
         return self.context.absolute_url()
-
-    def get_form_data(self):
-        unsorted_data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-        unsorted_data = self.updateServerSideData(unsorted_data)
-        errors = self.processActions(unsorted_data)
-        if errors:
-            return self.setErrorsMessage(errors)
-        data = OrderedDict(
-            [x for x in getFieldsInOrder(self.schema) if x[0] in unsorted_data]
-        )
-        data.update(unsorted_data)
-        return data
 
     def setOmitFields(self, fields):
         omit = []
@@ -264,26 +257,24 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def update(self):
         """ Update form - see interfaces.IForm """
         self.formMaybeForceSSL()
-        if self.request.method == 'POST':   # Thanks page
-            self.mode = DISPLAY_MODE
-            self.template = self.thank_you_template
-            self.thanksPage = True
-            prefix = self.prefix + 'widgets.'
-            data = {key[len(prefix):]: val
-                    for key, val in self.request.form.items()
-                    if key.startswith(prefix)}
-            self.thanksPrologue = self.context.thanksPrologue and dollar_replacer(
-                self.context.thanksPrologue.output, data)
-            self.thanksEpilogue = self.context.thanksEpilogue and dollar_replacer(
-                self.context.thanksEpilogue.output, data)
-            super(EasyFormForm, self).update()
-            if not self.context.showAll:
-                self.widgets = {name: widget
-                                for name, widget in self.widgets.items()
-                                if widget.field.__name__ in self.context.showFields}
-        else:   # Form
-            self.template = self.form_template
-            super(EasyFormForm, self).update()
+        super(EasyFormForm, self).update()
+        self.template = self.form_template
+        if self.request.method == 'POST':
+            data, errors = self.extractData()
+            if not errors:
+                self.thanksPage = True
+                self.template = self.thank_you_template
+                self.mode = DISPLAY_MODE
+                # we need to update the widgets in display mode again
+                super(EasyFormForm, self).update()
+                self.thanksPrologue = self.context.thanksPrologue and dollar_replacer(
+                    self.context.thanksPrologue.output, data)
+                self.thanksEpilogue = self.context.thanksEpilogue and dollar_replacer(
+                    self.context.thanksEpilogue.output, data)
+                if not self.context.showAll:
+                    self.widgets = {name: widget
+                                    for name, widget in self.widgets.items()
+                                    if widget.field.__name__ in self.context.showFields}
 
 
 EasyFormView = layout.wrap_form(EasyFormForm)

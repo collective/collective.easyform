@@ -3,6 +3,14 @@
       i18n:domain="collective.easyform"
       tal:omit-tag="">
 
+    <p  class="discreet"
+        tal:define="description view/description | nothing"
+        tal:condition="description"
+        tal:content="structure description">
+        Description
+    </p>
+
+
       <div id="formPrologue"
            tal:define="prologue view/thanksPrologue|nothing"
            tal:condition="prologue"
