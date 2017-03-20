@@ -99,7 +99,7 @@ def get_schema_cache(method, context):
     return md5(data).hexdigest()
 
 
-@ram.cache(get_schema_cache)
+#@ram.cache(get_schema_cache)
 def get_schema(context):
     data = context.fields_model
     try:
@@ -115,7 +115,7 @@ def get_actions_cache(method, context):
     return md5(data).hexdigest()
 
 
-@ram.cache(get_actions_cache)
+#@ram.cache(get_actions_cache)
 def get_actions(context):
     data = context.actions_model
     try:
