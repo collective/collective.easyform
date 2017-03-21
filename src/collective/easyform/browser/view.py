@@ -219,6 +219,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         return fields
 
     def updateFields(self):
+        if self.thanksPage:
+            return
         super(EasyFormForm, self).updateFields()
         if not hasattr(self, 'base_fields'):
             self.base_fields = self.fields
@@ -274,7 +276,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 for group in self.groups:
                     group.fields = self.setThanksFields(
                         self.base_groups.get(group.label))
-                #import pdb; pdb.set_trace()
                 self.mode = DISPLAY_MODE
                 # we need to update the widgets in display mode again
                 super(EasyFormForm, self).update()
