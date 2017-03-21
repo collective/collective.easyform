@@ -72,7 +72,8 @@ you page, and then it should show up in mail and thanks page::
 
     >>> self.portal.testform.showAll
     False
-    >>> print self.portal.testform.showFields
+    >>> print(self.portal.testform.showFields)
     ['topic']
+
     >>> 'Subject' in browser.contents
     True

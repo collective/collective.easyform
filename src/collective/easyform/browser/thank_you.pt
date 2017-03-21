@@ -17,9 +17,9 @@
            tal:content="structure prologue" />
 
       <div tal:repeat="w view/widgets/values" class="field">
-          <label class="horizontal" tal:attributes="for w/__name__" tal:content="w/field/title"></label>
+          <label class="horizontal" tal:attributes="for string:form-widgets-${w/__name__}" tal:content="w/field/title"></label>
           <div></div>
-          <span tal:content="structure w/render" tal:attributes="id w/__name__"></span>
+          <span tal:replace="structure w/render"></span>
       </div>
 
       <div id="formEpilogue"

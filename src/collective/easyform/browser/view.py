@@ -151,6 +151,18 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         condition=lambda form: not form.thanksPage
     )
     def handleSubmit(self, action):
+        unsorted_data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+        unsorted_data = self.updateServerSideData(unsorted_data)
+        errors = self.processActions(unsorted_data)
+        if errors:
+            return self.setErrorsMessage(errors)
+        data = OrderedDict(
+            [x for x in getFieldsInOrder(self.schema) if x[0] in unsorted_data]
+        )
+        data.update(unsorted_data)
         thanksPageOverride = self.context.thanksPageOverride
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
@@ -169,14 +181,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         else:
             # we come back to the form itself.
             # the thanks page is handled in the __call__ method
-            unsorted_data, errors = self.extractData()
-            if errors:
-                self.status = self.formErrorsMessage
-                return
-            unsorted_data = self.updateServerSideData(unsorted_data)
-            errors = self.processActions(unsorted_data)
-            if errors:
-                return self.setErrorsMessage(errors)
+            pass
 
     @button.buttonAndHandler(
         _(u'Reset'),
@@ -262,8 +267,14 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if self.request.method == 'POST':
             data, errors = self.extractData()
             if not errors:
+                data = self.updateServerSideData(data)
                 self.thanksPage = True
                 self.template = self.thank_you_template
+                self.fields = self.setThanksFields(self.base_fields)
+                for group in self.groups:
+                    group.fields = self.setThanksFields(
+                        self.base_groups.get(group.label))
+                #import pdb; pdb.set_trace()
                 self.mode = DISPLAY_MODE
                 # we need to update the widgets in display mode again
                 super(EasyFormForm, self).update()
@@ -271,11 +282,19 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                     self.context.thanksPrologue.output, data)
                 self.thanksEpilogue = self.context.thanksEpilogue and dollar_replacer(
                     self.context.thanksEpilogue.output, data)
-                if not self.context.showAll:
-                    self.widgets = {name: widget
-                                    for name, widget in self.widgets.items()
-                                    if widget.field.__name__ in self.context.showFields}
-
+                # if self.context.showAll:
+                #     def check_visibility(widget):
+                #         return True
+                # else:
+                #     def check_visibility(widget):
+                #         return widget.field.__name__ in self.context.showFields
+                # self.widgets = {name: widget
+                #                 for name, widget in self.widgets.items()
+                #                 if check_visibility(widget)}
+                # for group in self.groups:
+                #     self.widgets.update({name: widget
+                #                 for name, widget in group.widgets.items()
+                #                 if check_visibility(widget)})
 
 EasyFormView = layout.wrap_form(EasyFormForm)
 
@@ -285,7 +304,7 @@ class EasyFormFormEmbedded(EasyFormForm):
     """
     EasyForm form embedded
     """
-    template = ViewPageTemplateFile('easyform_form_embedded.pt')
+    form_template = ViewPageTemplateFile('easyform_form_embedded.pt')
 
 
 class EasyFormInlineValidationView(InlineValidationView):
