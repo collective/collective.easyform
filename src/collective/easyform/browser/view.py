@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from AccessControl import getSecurityManager
 from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
@@ -266,36 +265,29 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
         self.template = self.form_template
-        if self.request.method == 'POST':
+        if self.request.method == 'POST' and \
+                not self.context.thanksPageOverride:
             data, errors = self.extractData()
-            if not errors:
-                data = self.updateServerSideData(data)
-                self.thanksPage = True
-                self.template = self.thank_you_template
+            if errors:
+                return
+            data = self.updateServerSideData(data)
+            self.thanksPage = True
+            self.template = self.thank_you_template
+            if self.context.showFields:
                 self.fields = self.setThanksFields(self.base_fields)
                 for group in self.groups:
                     group.fields = self.setThanksFields(
                         self.base_groups.get(group.label))
-                self.mode = DISPLAY_MODE
-                # we need to update the widgets in display mode again
-                super(EasyFormForm, self).update()
-                self.thanksPrologue = self.context.thanksPrologue and dollar_replacer(
-                    self.context.thanksPrologue.output, data)
-                self.thanksEpilogue = self.context.thanksEpilogue and dollar_replacer(
-                    self.context.thanksEpilogue.output, data)
-                # if self.context.showAll:
-                #     def check_visibility(widget):
-                #         return True
-                # else:
-                #     def check_visibility(widget):
-                #         return widget.field.__name__ in self.context.showFields
-                # self.widgets = {name: widget
-                #                 for name, widget in self.widgets.items()
-                #                 if check_visibility(widget)}
-                # for group in self.groups:
-                #     self.widgets.update({name: widget
-                #                 for name, widget in group.widgets.items()
-                #                 if check_visibility(widget)})
+            self.mode = DISPLAY_MODE
+            # we need to update the widgets in display mode again
+            super(EasyFormForm, self).update()
+            prologue = self.context.thanksPrologue
+            epilogue = self.context.thanksEpilogue
+            self.thanksPrologue = prologue and dollar_replacer(
+                prologue.output, data)
+            self.thanksEpilogue = epilogue and dollar_replacer(
+                epilogue.output, data)
+
 
 EasyFormView = layout.wrap_form(EasyFormForm)
 

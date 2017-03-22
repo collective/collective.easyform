@@ -10,7 +10,6 @@
         Description
     </p>
 
-
       <div id="formPrologue"
            tal:define="prologue view/thanksPrologue|nothing"
            tal:condition="prologue"
@@ -22,10 +21,17 @@
           <span tal:replace="structure w/render"></span>
       </div>
 
+      <tal:loop repeat="group view/groups">
+      <div tal:repeat="w group/widgets/values" class="field">
+          <label class="horizontal" tal:attributes="for string:form-widgets-${w/__name__}" tal:content="w/field/title"></label>
+          <div></div>
+          <span tal:replace="structure w/render"></span>
+      </div>
+     </tal:loop>
+
       <div id="formEpilogue"
            tal:define="epilogue view/thanksEpilogue|nothing"
            tal:condition="epilogue"
            tal:content="structure epilogue" />
-
 
 </html>
