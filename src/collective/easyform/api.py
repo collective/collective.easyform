@@ -12,7 +12,6 @@ from re import compile
 from types import StringTypes
 
 
-# SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
@@ -226,3 +225,8 @@ def format_addresses(addresses, names=[]):
         ))
     ret = ', '.join([formataddr(pair) for pair in address_pairs])
     return ret
+
+
+def dollar_replacer(s, data):
+    dr = DollarVarReplacer(data)
+    return dr.sub(s)

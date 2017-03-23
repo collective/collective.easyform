@@ -5,7 +5,7 @@ from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
 from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import dollar_replacer
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
@@ -213,8 +213,6 @@ class Mailer(Action):
         # pass both the bare_fields (fgFields only) and full fields.
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
-        replacer = DollarVarReplacer(data).sub
-
         if isinstance(self.body_pre, basestring):
             body_pre = self.body_pre
         else:
@@ -237,9 +235,9 @@ class Mailer(Action):
                 for i, j in getFieldsInOrder(schema)
             ]),
             'mailer': self,
-            'body_pre': body_pre and replacer(body_pre),
-            'body_post': body_post and replacer(body_post),
-            'body_footer': body_footer and replacer(body_footer),
+            'body_pre': body_pre and dollar_replacer(body_pre, data),
+            'body_post': body_post and dollar_replacer(body_post, data),
+            'body_footer': body_footer and dollar_replacer(body_footer, data),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
@@ -360,8 +358,7 @@ class Mailer(Action):
                 subject = subjectField
             else:
                 # we only do subject expansion if there's no field chosen
-                subject = DollarVarReplacer(fields).sub(subject)
-
+                subject = dollar_replacer(subject, fields)
         return subject
 
     def get_header_info(self, fields, request, context,
