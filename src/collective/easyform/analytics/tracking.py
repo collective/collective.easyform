@@ -18,7 +18,7 @@ class PFGAnalyticsPlugin(AnalyticsBaseTrackingPlugin):
         """
 
         if not IEasyForm.providedBy(self.context):
-	    return None
+            return None
 
         if 'form_submit' in self.request.form.keys():
                 return 'error'
