@@ -138,11 +138,11 @@ class TestEmbedding(base.EasyFormTestCase):
         # with the new URL
         # XXX do a full publish for this test
         self.app.REQUEST._orig_env['PATH_TRANSLATED'] = '/plone'
+        self.app.REQUEST.method = 'POST'
         view = self.ff1.restrictedTraverse('@@embedded')
         # self.assertRaises(Retry, view)
         res = view()
 
-        self.assertTrue('Thank You' in res)
         self.assertTrue('Thanks for your input.' in res)
 
         # make sure the transaction was committed
@@ -155,14 +155,6 @@ class TestEmbedding(base.EasyFormTestCase):
         view = self.ff1.restrictedTraverse('@@embedded')
         res = view()
 
-        self.assertTrue('Thank You' in res)
         self.assertTrue('Thanks for your input.' in res)
         # clean up
         transaction.commit = real_transaction_commit
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestEmbedding))
-    return suite

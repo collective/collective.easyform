@@ -1,18 +1,10 @@
 # -*- coding: utf-8 -*-
-#
-# Test EasyForm initialisation and set-up
-#
-
-try:
-    from Products.CMFDefault.exceptions import EmailAddressInvalid
-except ImportError:
-    from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
-
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
+from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility

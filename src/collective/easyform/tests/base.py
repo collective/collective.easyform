@@ -15,7 +15,7 @@ from Products.MailHost.interfaces import IMailHost
 from Products.MailHost.MailHost import MailHost
 from Testing.ZopeTestCase import FunctionalTestCase
 from transaction import commit
-from unittest2 import TestCase
+from unittest import TestCase
 from zope.component import getSiteManager
 
 
