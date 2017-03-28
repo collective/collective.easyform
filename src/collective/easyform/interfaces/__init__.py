@@ -1,30 +1,30 @@
 # -*- coding: utf-8 -*-
-
-from actions import IAction  # NOQA
-from actions import IActionEditForm  # NOQA
-from actions import IActionExtender  # NOQA
-from actions import IActionFactory  # NOQA
-from actions import IEasyFormActionContext  # NOQA
-from actions import IEasyFormActionsContext  # NOQA
-from actions import IEasyFormActionsEditorExtender  # NOQA
-from actions import INewAction  # NOQA
-from customscript import ICustomScript  # NOQA
-from easyform import IEasyForm  # NOQA
-from easyform import IEasyFormImportFormSchema  # NOQA
-from fields import IEasyFormFieldContext  # NOQA
-from fields import IEasyFormFieldsContext  # NOQA
-from fields import IEasyFormFieldsEditorExtender  # NOQA
-from fields import IFieldExtender  # NOQA
-from fields import IFieldValidator  # NOQA
-from fields import ILabel  # NOQA
-from fields import ILabelWidget  # NOQA
-from fields import IReCaptcha  # NOQA
-from fields import IRichLabel  # NOQA
-from fields import IRichLabelWidget  # NOQA
-from mailer import IMailer  # NOQA
-from savedata import IExtraData  # NOQA
-from savedata import ISaveData  # NOQA
-from savedata import ISavedDataFormWrapper  # NOQA
+from collective.easyform.interfaces.actions import IAction  # noqa
+from collective.easyform.interfaces.actions import IActionEditForm  # noqa
+from collective.easyform.interfaces.actions import IActionExtender  # noqa
+from collective.easyform.interfaces.actions import IActionFactory  # noqa
+from collective.easyform.interfaces.actions import IEasyFormActionContext  # noqa
+from collective.easyform.interfaces.actions import IEasyFormActionsContext  # noqa
+from collective.easyform.interfaces.actions import IEasyFormActionsEditorExtender  # noqa
+from collective.easyform.interfaces.actions import INewAction  # noqa
+from collective.easyform.interfaces.customscript import ICustomScript  # noqa
+from collective.easyform.interfaces.easyform import IEasyForm  # noqa
+from collective.easyform.interfaces.easyform import IEasyFormImportFormSchema  # noqa
+from collective.easyform.interfaces.fields import IEasyFormFieldContext  # noqa
+from collective.easyform.interfaces.fields import IEasyFormFieldsContext  # noqa
+from collective.easyform.interfaces.fields import IEasyFormFieldsEditorExtender  # noqa
+from collective.easyform.interfaces.fields import IFieldExtender  # noqa
+from collective.easyform.interfaces.fields import IFieldValidator  # noqa
+from collective.easyform.interfaces.fields import ILabel  # noqa
+from collective.easyform.interfaces.fields import ILabelWidget  # noqa
+from collective.easyform.interfaces.fields import IReCaptcha  # noqa
+from collective.easyform.interfaces.fields import IRichLabel  # noqa
+from collective.easyform.interfaces.fields import IRichLabelWidget  # noqa
+from collective.easyform.interfaces.mailer import IMailer  # noqa
+from collective.easyform.interfaces.savedata import IExtraData  # noqa
+from collective.easyform.interfaces.savedata import ISaveData  # noqa
+from collective.easyform.interfaces.savedata import ISavedDataFormWrapper  # noqa
+from plone.app.z3cform.interfaces import IPloneFormLayer
 from zope.interface import Interface
 
 
@@ -39,4 +39,14 @@ class IEasyFormForm(Interface):
 
     """
     EasyForm view interface
+    """
+
+
+class IEasyFormLayer(IPloneFormLayer):
+    """Browserlayer for EasyForm
+    """
+
+
+class IEasyFormFormLayer(IEasyFormLayer):
+    """Browserlayer for EasyForm
     """

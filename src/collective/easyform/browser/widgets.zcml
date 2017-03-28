@@ -16,6 +16,15 @@
         layer="z3c.form.interfaces.IFormLayer"
         template="action_input.pt"
         />
+    <!--
+        explicit use the radio display renderer here over the SingleCheckBox
+        which was registered before
+    -->
+    <adapter
+      factory="z3c.form.browser.radio.RadioFieldWidget"
+      for="zope.schema.interfaces.IBool
+           collective.easyform.interfaces.IEasyFormFormLayer"
+        />
     <class class=".widgets.LabelWidget">
         <require
             permission="zope.Public"

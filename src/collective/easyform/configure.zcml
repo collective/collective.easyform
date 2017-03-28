@@ -34,5 +34,9 @@
       description="UnInstall the collective.easyform package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.easyform-hiddenprofiles"
+  />
 
 </configure>

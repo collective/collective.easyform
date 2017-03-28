@@ -4,7 +4,15 @@ Changelog
 2.0.0a3 (unreleased)
 --------------------
 
-- Update german translations. 
+- Fixes #62: Value of Boolean field is not displayed on thank you page.
+  Bind Boolean (Yes No) widget to RadioWidget.
+  Prior it was (on display) bound to SingleCheckBoxWidget.
+  [jensens]
+
+- Added browser layer ``IEasyFormLayer``.
+  [jensens]
+
+- Update german translations.
   [tomgross, jensens]
 
 - Keep line breaks for body_pre, body_post and body_footer field.
