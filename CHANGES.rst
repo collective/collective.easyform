@@ -44,6 +44,9 @@ Fixes:
 - Allow managment of fields enabled for c.easyform in controlpanel
   [karalics]
 
+- Add filesize upload validator
+  [tomgross]
+
 2.0.0a2 (2016-10-14)
 --------------------
 

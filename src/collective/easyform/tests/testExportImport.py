@@ -45,17 +45,10 @@ class ExportImportTester(base.EasyFormTestCase, TarballTester):
     def afterSetUp(self):
         super(ExportImportTester, self).afterSetUp()
         fiveconfigure.debug_mode = True
-        try:
-            zcml.load_string(zcml_string)
-        except:
-            pass
+        zcml.load_string(zcml_string)
         fiveconfigure.debug_mode = False
-
-        try:
-            self.portal.portal_setup.runAllImportStepsFromProfile(
-                'profile-collective.easyform:testing')
-        except:
-            pass
+        self.portal.portal_setup.runAllImportStepsFromProfile(
+            'profile-collective.easyform:testing')
 
     def _makeForm(self):
         self.folder.invokeFactory('EasyForm', 'ff1')
@@ -103,7 +96,7 @@ class ExportImportTester(base.EasyFormTestCase, TarballTester):
         env = {'REQUEST_METHOD': 'PUT'}
         headers = {'content-type': 'text/html',
                    'content-length': len(in_file.read()),
-                   'content-disposition': 'attachment; filename={0}'.format(in_file.name)}
+                   'content-disposition': 'attachment; filename={0}'.format(in_file.name)}  # noqa
         in_file.seek(0)
         fs = FieldStorage(fp=in_file, environ=env, headers=headers)
         return FileUpload(fs)
@@ -120,29 +113,39 @@ class ExportImportTester(base.EasyFormTestCase, TarballTester):
     def _verifyProfileFormSettings(self, form_ctx):
         form_values = {
             'title': 'My OOTB Form',
-            #'isDiscussable':False,
+            # 'isDiscussable':False,
             'description': 'The description for our OOTB form',
             # XXX andrewb enable when form props are supported
             # 'submitLabel':'Hit Me',
         }
 
         for k, v in form_values.items():
-            self.assertEqual(v, self._extractFieldValue(form_ctx[k]),
-                             "Expected '{0}' for field {1}, Got '{2}'".format(v, k, form_ctx[k]))
+            self.assertEqual(
+                v,
+                self._extractFieldValue(form_ctx[k]),
+                "Expected '{0}' for field {1}, Got '{2}'".format(v, k, form_ctx[k])  # noqa
+            )
 
     def _verifyFormStockFields(self, form_ctx, purge):
         """ helper method to verify adherence to profile-based
             form folder in tests/profiles/testing directory
         """
         form_field_ids = form_ctx.objectIds()
-        for form_field in ('comments', 'replyto', 'topic', 'mailer', 'thank-you'):
+        check_fields = ('comments', 'replyto', 'topic', 'mailer', 'thank-you')
+        for form_field in check_fields:
             if purge:
-                self.assertFalse(form_field in form_field_ids,
-                                 '{0} unexpectedly found in {1}'.format(form_field, form_ctx.getId()))
+                self.assertNotIn(
+                    form_field,
+                    form_field_ids,
+                    '{0} unexpectedly found in {1}'.format(form_field, form_ctx.getId())  # noqa
+                )
                 continue
 
-            self.assertTrue(form_field in form_field_ids,
-                            '{0} not found in {1}'.format(form_field, form_ctx.getId()))
+            self.assertIn(
+                form_field,
+                form_field_ids,
+                '{0} not found in {1}'.format(form_field, form_ctx.getId())
+            )
 
     def _verifyProfileForm(self, form_ctx, form_fields=None):
         """ helper method to verify adherence to profile-based
@@ -156,13 +159,11 @@ class ExportImportTester(base.EasyFormTestCase, TarballTester):
                     'id': '{0}replyto'.format(form_id_prefix),
                     'title': 'Test Form Your E-Mail Address',
                     'required': True,
-                    #'isDiscussable':False,
                     'fgTDefault': 'here/memberEmail', },
                 {
                     'id': '{0}hidden'.format(form_id_prefix),
                     'title': 'This is a sample hidden field',
                     'required': False,
-                    #'isDiscussable':False,
                     'hidden': True, },
                 {
                     'id': '{0}fieldset-folder'.format(form_id_prefix),
@@ -172,13 +173,11 @@ class ExportImportTester(base.EasyFormTestCase, TarballTester):
                         'id': '{0}hidden_fieldset'.format(form_id_prefix),
                         'title': 'This is a sample hidden field fieldset',
                         'required': True,
-                        #'isDiscussable':False,
                         'hidden': True,
                     }, ], },
                 {
                     'id': '{0}topic'.format(form_id_prefix),
                     'title': 'Test Form Subject',
-                    # 'isDiscussable':False,
                     'required': True, },
                 {
                     'id': '{0}comments'.format(form_id_prefix),
@@ -194,8 +193,10 @@ class ExportImportTester(base.EasyFormTestCase, TarballTester):
                     self._verifyProfileForm(sub_form_item, v)
                 else:
                     self.assertEqual(
-                        v, self._extractFieldValue(sub_form_item[k]),
-                        "Expected '{0}' for field {1}, Got '{2}'".format(v, k, sub_form_item[k]))
+                        v,
+                        self._extractFieldValue(sub_form_item[k]),
+                        "Expected '{0}' for field {1}, Got '{2}'".format(v, k, sub_form_item[k])  # noqa
+                    )
 
 
 class TestFormExport(ExportImportTester):
@@ -385,16 +386,3 @@ class TestFormImport(ExportImportTester):
         import_form.update()
         self._verifyProfileForm(self.ff1)
         self._verifyFormStockFields(self.ff1, purge=True)
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    try:
-        # flake8: noqa
-        from plone.dexterity.exportimport import DexterityContentExporterImporter
-        suite.addTest(makeSuite(TestFormExport))
-        suite.addTest(makeSuite(TestFormImport))
-    except ImportError:
-        pass
-    return suite

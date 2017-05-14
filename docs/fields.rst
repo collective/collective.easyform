@@ -34,3 +34,14 @@ Edit XML Fields Model
 .. image:: images/edit-xml-fields-model-button.png
 
 .. image:: images/edit-xml-fields-model-page.png
+
+Validating fields
+-----------------
+
+For validation of filesize put the following line into
+the custom validator of a file upload field:
+
+ `python:portal.restrictedTraverse('validate_file_size')(value, size=300)` 
+
+where `size` is the maximum allowed size in bytes.
+
