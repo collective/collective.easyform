@@ -14,8 +14,9 @@ env:
     - PLONE_VERSION=5.0
     - PLONE_VERSION=5.1
 install:
+  - virtualenv .
+  - bin/pip install -r requirements.txt
   - sed -ie "s#test-5.0#test-$PLONE_VERSION#" buildout.cfg
-  - python bootstrap-buildout.py  --buildout-version=2.8.0
   - bin/buildout -N buildout:download-cache=downloads -c tests.cfg annotate
   - bin/buildout -N buildout:download-cache=downloads -c tests.cfg
 before_script:

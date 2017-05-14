@@ -27,8 +27,7 @@ docs/make.bat
 extras/
 htmlcov/
 include/
-lib/
-lib64/
+/lib*
 local/
 parts/
 pip-selfcheck.json

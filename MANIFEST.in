@@ -10,3 +10,4 @@ global-exclude *.pyc
 graft docs
 graft src/collective
 include *.rst
+include *.txt
