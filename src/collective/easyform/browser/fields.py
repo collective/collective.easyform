@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from AccessControl import Unauthorized
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_schema
@@ -42,7 +41,6 @@ except ImportError:  # pragma: no cover
 
 @implementer(IEasyFormFieldContext)
 class EasyFormFieldContext(FieldContext):
-
     """ wrapper for published zope 3 schema fields
     """
 
@@ -109,7 +107,6 @@ if HAVE_RESOURCE_EDITOR:
 
 
 class EasyFormFieldsListingPage(SchemaListingPage):
-
     """ Form wrapper so we can get a form with layout.
 
         We define an explicit subclass rather than using the wrap_form method
@@ -137,7 +134,6 @@ class EditView(EditView):
 
 
 class ModelEditorView(BrowserView):
-
     """ editor view """
     title = _(u'Edit XML Fields Model')
 
@@ -146,7 +142,6 @@ class ModelEditorView(BrowserView):
 
 
 class AjaxSaveHandler(BrowserView):
-
     """ handle AJAX save posts """
 
     def authorized(self):

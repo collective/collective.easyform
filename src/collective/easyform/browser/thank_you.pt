@@ -15,17 +15,17 @@
            tal:condition="prologue"
            tal:content="structure prologue" />
 
-      <div tal:repeat="w view/widgets/values" class="field">
-          <label class="horizontal" tal:attributes="for string:form-widgets-${w/__name__}" tal:content="w/field/title"></label>
+      <div tal:repeat="widget view/widgets/values" class="field">
+          <label class="horizontal" tal:attributes="for string:form-widgets-${widget/__name__}" tal:content="widget/field/title"></label>
           <div></div>
-          <span tal:replace="structure w/render"></span>
+          <span tal:replace="structure widget/render"></span>
       </div>
 
       <tal:loop repeat="group view/groups">
-      <div tal:repeat="w group/widgets/values" class="field">
-          <label class="horizontal" tal:attributes="for string:form-widgets-${w/__name__}" tal:content="w/field/title"></label>
+      <div tal:repeat="widget group/widgets/values" class="field">
+          <label class="horizontal" tal:attributes="for string:form-widgets-${widget/__name__}" tal:content="widget/field/title"></label>
           <div></div>
-          <span tal:replace="structure w/render"></span>
+          <span tal:replace="structure widget/render"></span>
       </div>
      </tal:loop>
 

@@ -1,0 +1,7 @@
+<layers>
+  <layer
+      interface="collective.easyform.interfaces.IEasyFormLayer"
+      name="collective.easyform"
+      remove="True"
+  />
+</layers>

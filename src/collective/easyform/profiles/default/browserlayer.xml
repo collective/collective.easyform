@@ -1,0 +1,6 @@
+<layers>
+  <layer
+      interface="collective.easyform.interfaces.IEasyFormLayer"
+      name="collective.easyform"
+  />
+</layers>
