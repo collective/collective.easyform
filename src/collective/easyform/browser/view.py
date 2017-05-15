@@ -252,7 +252,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         sm = getSecurityManager()
         if (
             self.context.forceSSL and
-            not sm.checkPermission('cmf.ModifyPortalContent', self)
+            not sm.checkPermission('cmf.ModifyPortalContent', self.context)
         ):
             # Make sure we're being accessed via a secure connection
             if self.request['SERVER_URL'].startswith('http://'):

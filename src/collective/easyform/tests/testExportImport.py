@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 #
-# Integration tests for interaction with GenericSetup infrastructure
+# Test export and import of easyforms via GenericSetup
 #
 
 from cgi import FieldStorage
 from collective.easyform.tests import base
-from Products.Five import fiveconfigure
-from Products.Five import zcml
+from plone import api
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import TarballTester
 from StringIO import StringIO
@@ -18,36 +17,13 @@ import os
 import re
 
 
-zcml_string = """\
-<configure xmlns="http://namespaces.zope.org/genericsetup"
-           package="collective.easyform"
-           i18n_domain="collective.easyform">
-
-    <include package="Products.GenericSetup" file="meta.zcml" />
-
-    <registerProfile
-        name="testing"
-        title="EasyForm testing"
-        description="Used for testing only"
-        directory="tests/profiles/testing"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-
-</configure>
-"""
-
-
 class ExportImportTester(base.EasyFormTestCase, TarballTester):
 
     """Base class for integration test suite for export/import """
 
     def afterSetUp(self):
-        super(ExportImportTester, self).afterSetUp()
-        fiveconfigure.debug_mode = True
-        zcml.load_string(zcml_string)
-        fiveconfigure.debug_mode = False
-        self.portal.portal_setup.runAllImportStepsFromProfile(
+        portal_setup = api.portal.get_tool(name='portal_setup')
+        portal_setup.runAllImportStepsFromProfile(
             'profile-collective.easyform:testing')
 
     def _makeForm(self):

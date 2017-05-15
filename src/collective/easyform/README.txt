@@ -5,8 +5,8 @@ In this section we are tesing the EasyForm content type by performing
 basic operations like adding, updadating and deleting EasyForm content
 items.
 
-    >>> browser = self.browser
-    >>> portal_url = self.portal_url
+    >>> browser = get_browser(layer)
+    >>> portal_url = layer['portal'].absolute_url()
     >>> browser.open(portal_url)
 
 Adding a new EasyForm content item
