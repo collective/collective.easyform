@@ -372,7 +372,6 @@ class Mailer(Action):
         request -- (optional) alternate request object to use
         """
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        utils = getToolByName(context, 'plone_utils')
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
         subject = self.get_subject(fields, request, context)
 
@@ -386,9 +385,12 @@ class Mailer(Action):
         # transform subject into mail header encoded string
         email_charset = portal.getProperty('email_charset', 'utf-8')
 
-        if not isinstance(subject, unicode):
-            site_charset = utils.getSiteEncoding()
-            subject = unicode(subject, site_charset, 'replace')
+        if isinstance(subject, str):
+            subject = unicode(subject, 'utf-8', 'replace')
+        elif subject and isinstance(subject, (set, tuple, list)):
+            subject = ', '.join([unicode(s, 'utf-8', 'replace') for s in subject])
+        else:
+            subject = 'Mail from Plone form'   # TODO: translate
 
         msgSubject = self.secure_header_line(
             subject).encode(email_charset, 'replace')
