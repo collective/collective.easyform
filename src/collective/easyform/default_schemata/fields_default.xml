@@ -3,7 +3,5 @@
     xmlns:easyform="http://namespaces.plone.org/supermodel/easyform"
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="collective.easyform">
-  <schema>
- 
-  </schema>
+  <schema></schema>
 </model>

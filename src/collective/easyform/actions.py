@@ -10,6 +10,7 @@ from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
+from collective.easyform.api import lnbr
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -235,27 +236,14 @@ class Mailer(Action):
                 for i, j in getFieldsInOrder(schema)
             ]),
             'mailer': self,
-            'body_pre': body_pre and dollar_replacer(body_pre, data),
-            'body_post': body_post and dollar_replacer(body_post, data),
-            'body_footer': body_footer and dollar_replacer(body_footer, data),
+            'body_pre': body_pre and lnbr(dollar_replacer(body_pre, data)),
+            'body_post': body_post and lnbr(dollar_replacer(body_post, data)),
+            'body_footer': body_footer and lnbr(dollar_replacer(body_footer, data)),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
         template = template.__of__(context)
-        body = template.pt_render(extra_context=extra)
-
-        # if isinstance(body, unicode):
-        # body = body.encode("utf-8")
-
-        # keyid = getattr(self, 'gpg_keyid', None)
-        # encryption = gpg and keyid
-
-        # if encryption:
-        # bodygpg = gpg.encrypt(body, keyid)
-        # if bodygpg.strip():
-        # body = bodygpg
-
-        return body
+        return template.pt_render(extra_context=extra)
 
     def get_owner_info(self, context):
         """Return owner info

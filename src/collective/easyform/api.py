@@ -230,3 +230,9 @@ def format_addresses(addresses, names=[]):
 def dollar_replacer(s, data):
     dr = DollarVarReplacer(data)
     return dr.sub(s)
+
+
+def lnbr(text):
+    """Converts line breaks to html breaks
+    """
+    return "<br/>".join(text.strip().splitlines()) if text else text
