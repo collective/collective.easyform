@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from Products.PageTemplates.Expressions import getEngine
+from zope.tales import tales
 
 import zope.schema.interfaces
-from zope.tales import tales
 
 
 class InvalidTALESError(zope.schema.ValidationError):

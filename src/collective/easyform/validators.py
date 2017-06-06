@@ -2,6 +2,7 @@
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.interfaces import IFieldValidator
 from plone import api
+from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from zope.component import provideUtility
 
 
@@ -11,9 +12,6 @@ try:
 except ImportError:  # pragma: no cover
     validation = {}
     baseValidators = []
-
-
-from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 
 
 def isValidEmail(value):

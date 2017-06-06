@@ -238,7 +238,8 @@ class Mailer(Action):
             'mailer': self,
             'body_pre': body_pre and lnbr(dollar_replacer(body_pre, data)),
             'body_post': body_post and lnbr(dollar_replacer(body_post, data)),
-            'body_footer': body_footer and lnbr(dollar_replacer(body_footer, data)),
+            'body_footer': body_footer and lnbr(
+                dollar_replacer(body_footer, data)),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
@@ -376,7 +377,8 @@ class Mailer(Action):
         if isinstance(subject, str):
             subject = unicode(subject, 'utf-8', 'replace')
         elif subject and isinstance(subject, (set, tuple, list)):
-            subject = ', '.join([unicode(s, 'utf-8', 'replace') for s in subject])
+            subject = ', '.join([unicode(s, 'utf-8', 'replace')
+                                 for s in subject])
         else:
             subject = 'Mail from Plone form'   # TODO: translate
 

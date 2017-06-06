@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
+from collective.easyform.interfaces import IEasyForm
+from collective.easyform.interfaces import IEasyFormThanksPage
+from collective.googleanalytics.tracking import AnalyticsBaseTrackingPlugin
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
-from collective.googleanalytics.tracking import AnalyticsBaseTrackingPlugin
-from collective.easyform.interfaces import IEasyForm
 
 class PFGAnalyticsPlugin(AnalyticsBaseTrackingPlugin):
     """
@@ -21,8 +23,7 @@ class PFGAnalyticsPlugin(AnalyticsBaseTrackingPlugin):
             return None
 
         if 'form_submit' in self.request.form.keys():
-                return 'error'
-            return 'form'
-        elif IPloneFormGenThanksPage.providedBy(self.context):
+            return 'error'
+        elif IEasyFormThanksPage.providedBy(self.request):
             return 'thank-you'
         return None

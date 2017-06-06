@@ -2,7 +2,7 @@
 from collective.easyform.config import MODEL_DEFAULT
 from email.utils import formataddr
 from hashlib import md5
-from plone.memoize import ram
+# from plone.memoize import ram
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from Products.CMFCore.Expression import Expression
@@ -98,7 +98,8 @@ def get_schema_cache(method, context):
     return md5(data).hexdigest()
 
 
-#@ram.cache(get_schema_cache)
+# breaks with memcached
+# @ram.cache(get_schema_cache)
 def get_schema(context):
     data = context.fields_model
     try:
@@ -114,7 +115,8 @@ def get_actions_cache(method, context):
     return md5(data).hexdigest()
 
 
-#@ram.cache(get_actions_cache)
+# breaks with memcached
+# @ram.cache(get_actions_cache)
 def get_actions(context):
     data = context.actions_model
     try:

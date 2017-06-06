@@ -413,3 +413,7 @@ class IEasyFormImportFormSchema(Interface):
     upload = zope.schema.Bytes(
         title=PMF(u'Upload'),
         required=True)
+
+
+class IEasyFormThanksPage(Interface):
+    """ Marker interface for thanks page """

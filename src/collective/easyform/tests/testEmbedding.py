@@ -158,4 +158,3 @@ class TestEmbedding(base.EasyFormTestCase):
         self.assertTrue('Thanks for your input.' in res)
         # clean up
         transaction.commit = real_transaction_commit
-
