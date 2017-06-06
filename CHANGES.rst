@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0.0a3 (unreleased)
---------------------
+2.0.0a2.post1 (2017-06-06)
+--------------------------
 
 - Update german translations. 
   [tomgross, jensens]
