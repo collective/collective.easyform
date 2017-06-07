@@ -35,6 +35,7 @@ from plone.namedfile.interfaces import INamedFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
@@ -374,8 +375,8 @@ class Mailer(Action):
         # transform subject into mail header encoded string
         email_charset = portal.getProperty('email_charset', 'utf-8')
 
-        if isinstance(subject, str):
-            subject = unicode(subject, 'utf-8', 'replace')
+        if isinstance(subject, basestring):
+            subject = safe_unicode(subject)
         elif subject and isinstance(subject, (set, tuple, list)):
             subject = ', '.join([unicode(s, 'utf-8', 'replace')
                                  for s in subject])
