@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0.0a3 (unreleased)
---------------------
+2.0.0a2.post2 (2017-06-07)
+--------------------------
 
 - Fix https://gitlab.fhnw.ch/webteam/fhnw.webauftritt/issues/713
 
