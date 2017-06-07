@@ -21,7 +21,7 @@ from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
-from zope.interface import directlyProvides
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
@@ -289,7 +289,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 prologue.output, data)
             self.thanksEpilogue = epilogue and dollar_replacer(
                 epilogue.output, data)
-            directlyProvides(self.request, IEasyFormThanksPage)  # noqa
+            alsoProvides(self.request, IEasyFormThanksPage)
 
 
 EasyFormView = layout.wrap_form(EasyFormForm)
