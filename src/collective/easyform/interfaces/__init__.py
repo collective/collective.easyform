@@ -11,6 +11,7 @@ from actions import INewAction  # NOQA
 from customscript import ICustomScript  # NOQA
 from easyform import IEasyForm  # NOQA
 from easyform import IEasyFormImportFormSchema  # NOQA
+from easyform import IEasyFormThanksPage  # NOQA
 from fields import IEasyFormFieldContext  # NOQA
 from fields import IEasyFormFieldsContext  # NOQA
 from fields import IEasyFormFieldsEditorExtender  # NOQA

@@ -10,12 +10,17 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add filesize upload validator
+  [tomgross]
 
 Bug fixes:
 
-- *add item here*
+- Take over signature linebreaks to HTML email
+  [tomgross]
 
+- Allow multi-select fields as subject field
+  https://github.com/collective/collective.easyform/issues/71
+  [tomgross]
 
 
 2.0.0b1 (2017-06-14)
@@ -23,7 +28,7 @@ Bug fixes:
 
 Fixes:
 
-- Update german translations.
+- Update german translations. 
   [tomgross, jensens]
 
 - Keep line breaks for body_pre, body_post and body_footer field.
@@ -43,9 +48,6 @@ Fixes:
 
 - Allow managment of fields enabled for c.easyform in controlpanel
   [karalics]
-
-- Add filesize upload validator
-  [tomgross]
 
 2.0.0a2 (2016-10-14)
 --------------------

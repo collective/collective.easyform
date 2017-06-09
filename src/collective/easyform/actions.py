@@ -10,6 +10,7 @@ from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
+from collective.easyform.api import lnbr
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -34,6 +35,7 @@ from plone.namedfile.interfaces import INamedFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
@@ -235,27 +237,15 @@ class Mailer(Action):
                 for i, j in getFieldsInOrder(schema)
             ]),
             'mailer': self,
-            'body_pre': body_pre and dollar_replacer(body_pre, data),
-            'body_post': body_post and dollar_replacer(body_post, data),
-            'body_footer': body_footer and dollar_replacer(body_footer, data),
+            'body_pre': body_pre and lnbr(dollar_replacer(body_pre, data)),
+            'body_post': body_post and lnbr(dollar_replacer(body_post, data)),
+            'body_footer': body_footer and lnbr(
+                dollar_replacer(body_footer, data)),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
         template = template.__of__(context)
-        body = template.pt_render(extra_context=extra)
-
-        # if isinstance(body, unicode):
-        # body = body.encode("utf-8")
-
-        # keyid = getattr(self, 'gpg_keyid', None)
-        # encryption = gpg and keyid
-
-        # if encryption:
-        # bodygpg = gpg.encrypt(body, keyid)
-        # if bodygpg.strip():
-        # body = bodygpg
-
-        return body
+        return template.pt_render(extra_context=extra)
 
     def get_owner_info(self, context):
         """Return owner info
@@ -372,7 +362,6 @@ class Mailer(Action):
         request -- (optional) alternate request object to use
         """
         portal = getToolByName(context, 'portal_url').getPortalObject()
-        utils = getToolByName(context, 'plone_utils')
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
         subject = self.get_subject(fields, request, context)
 
@@ -386,9 +375,13 @@ class Mailer(Action):
         # transform subject into mail header encoded string
         email_charset = portal.getProperty('email_charset', 'utf-8')
 
-        if not isinstance(subject, unicode):
-            site_charset = utils.getSiteEncoding()
-            subject = unicode(subject, site_charset, 'replace')
+        if isinstance(subject, basestring):
+            subject = safe_unicode(subject)
+        elif subject and isinstance(subject, (set, tuple, list)):
+            subject = ', '.join([unicode(s, 'utf-8', 'replace')
+                                 for s in subject])
+        else:
+            subject = 'Mail from Plone form'   # TODO: translate
 
         msgSubject = self.secure_header_line(
             subject).encode(email_charset, 'replace')

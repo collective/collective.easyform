@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.interfaces import IEasyForm
+from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.googleanalytics.tracking import AnalyticsBaseTrackingPlugin
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 
@@ -21,10 +22,8 @@ class FormAnalyticsPlugin(AnalyticsBaseTrackingPlugin):
         if not IEasyForm.providedBy(self.context):
             return None
 
-#         if 'form_submit' in self.request.form.keys():
-#             result = 'error'
-#         elif IEasyForm.providedBy(self.context):
-#             result = 'thank-you'
-#         else:
-#             result = 'form'
-#         return result
+        if 'form_submit' in self.request.form.keys():
+            return 'error'
+        elif IEasyFormThanksPage.providedBy(self.request):
+            return 'thank-you'
+        return None
