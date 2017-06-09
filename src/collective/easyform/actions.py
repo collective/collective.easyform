@@ -3,6 +3,7 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
+from BTrees.LOBTree import LOBTree as SavedDataBTree
 from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
@@ -49,11 +50,6 @@ from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
 
 
-try:
-    from BTrees.LOBTree import LOBTree
-    SavedDataBTree = LOBTree
-except ImportError:
-    SavedDataBTree = IOBTree
 logger = getLogger('collective.easyform')
 
 
@@ -331,7 +327,7 @@ class Mailer(Action):
         """Return subject
         """
         # get subject header
-        nosubject = '(no subject)'
+        nosubject = u'(no subject)'  # TODO: translate
         subject = None
         if hasattr(self, 'subjectOverride') and self.subjectOverride:
             # subject has a TALES override
@@ -349,7 +345,20 @@ class Mailer(Action):
             else:
                 # we only do subject expansion if there's no field chosen
                 subject = dollar_replacer(subject, fields)
-        return subject
+
+        if isinstance(subject, basestring):
+            subject = safe_unicode(subject)
+        elif subject and isinstance(subject, (set, tuple, list)):
+            subject = ', '.join([safe_unicode(s) for s in subject])
+        else:
+            subject = nosubject
+
+        # transform subject into mail header encoded string
+        email_charset = 'utf-8'
+        msgSubject = self.secure_header_line(
+            subject).encode(email_charset, 'replace')
+        msgSubject = str(Header(msgSubject, email_charset))
+        return msgSubject
 
     def get_header_info(self, fields, request, context,
                         from_addr=None, to_addr=None,
@@ -361,32 +370,14 @@ class Mailer(Action):
         Keyword arguments:
         request -- (optional) alternate request object to use
         """
-        portal = getToolByName(context, 'portal_url').getPortalObject()
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
-        subject = self.get_subject(fields, request, context)
 
         headerinfo = OrderedDict()
-
         headerinfo['To'] = self.secure_header_line(to)
         headerinfo['From'] = self.secure_header_line(from_addr)
         if reply:
             headerinfo['Reply-To'] = self.secure_header_line(reply)
-
-        # transform subject into mail header encoded string
-        email_charset = portal.getProperty('email_charset', 'utf-8')
-
-        if isinstance(subject, basestring):
-            subject = safe_unicode(subject)
-        elif subject and isinstance(subject, (set, tuple, list)):
-            subject = ', '.join([unicode(s, 'utf-8', 'replace')
-                                 for s in subject])
-        else:
-            subject = 'Mail from Plone form'   # TODO: translate
-
-        msgSubject = self.secure_header_line(
-            subject).encode(email_charset, 'replace')
-        msgSubject = str(Header(msgSubject, email_charset))
-        headerinfo['Subject'] = msgSubject
+        headerinfo['Subject'] = self.get_subject(fields, request, context)
 
         # CC
         cc_recips = filter(None, self.cc_recipients)

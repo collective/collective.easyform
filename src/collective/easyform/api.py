@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.config import MODEL_DEFAULT
 from email.utils import formataddr
-from hashlib import md5
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from Products.CMFCore.Expression import Expression
@@ -90,13 +89,6 @@ def get_context(field):
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 
-def get_schema_cache(method, context):
-    data = context.fields_model + str(context.modification_date)
-    if isinstance(data, unicode):
-        data = data.encode('utf-8')
-    return md5(data).hexdigest()
-
-
 # caching this breaks with memcached
 def get_schema(context):
     data = context.fields_model
@@ -106,11 +98,6 @@ def get_schema(context):
         schema = loadString(MODEL_DEFAULT).schema
     schema.setTaggedValue(CONTEXT_KEY, context)
     return schema
-
-
-def get_actions_cache(method, context):
-    data = context.actions_model + str(context.modification_date)
-    return md5(data).hexdigest()
 
 
 # caching this breaks with memcached
