@@ -2,6 +2,7 @@
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
+from collective.easyform.browser.view import ValidateFileSize
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
 from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
@@ -9,6 +10,7 @@ from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
+from zope.i18n import translate
 from zope.interface import classImplements
 from ZPublisher.BaseRequest import BaseRequest
 
@@ -27,15 +29,13 @@ class TestBaseValidators(base.EasyFormTestCase):
     """ test base validators """
 
     def afterSetUp(self):
-        base.EasyFormTestCase.afterSetUp(self)
         self.folder.invokeFactory('EasyForm', 'ff1')
         self.ff1 = getattr(self.folder, 'ff1')
         self.ff1.CSRFProtection = False  # no csrf protection
         classImplements(BaseRequest, IFormLayer)
-        from collective.easyform.validators import update_validators
-        update_validators()
+        validators.update_validators()
 
-        request = self.app.REQUEST
+        request = self.layer['request']
         for i in FORM_DATA:
             request.form['form.widgets.{0}'.format(i)] = FORM_DATA[i]
 
@@ -174,14 +174,12 @@ class TestCustomValidators(base.EasyFormTestCase):
 
 
 class TestCustomValidatorMessages(base.EasyFormTestCase):
-
     """ Test friendlier validation framework """
 
     def test_stringValidators(self):
         """ Test string validation
         """
-        from collective.easyform.validators import update_validators
-        update_validators()
+        validators.update_validators()
 
         def validator(n):
             return getUtility(IFieldValidator, name=n)
@@ -200,10 +198,38 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
         self.assertNotEqual(validate('isZipCode', '12345-1234'), None)
 
 
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestBaseValidators))
-    suite.addTest(makeSuite(TestCustomValidators))
-    suite.addTest(makeSuite(TestCustomValidatorMessages))
-    return suite
+class DummyFile(object):
+
+    def __init__(self, size):
+        self.size = size
+
+    def getSize(self):
+        return self.size
+
+
+class TestSizeValidator(base.EasyFormTestCase):
+
+    def afterSetUp(self):
+        self.request = self.layer['request']
+
+    def test_filesize_none_validation(self):
+        view = ValidateFileSize(self.portal, self.request)
+        self.assertFalse(view(None))
+
+    def test_filiesize_smallsize_validation(self):
+        view = ValidateFileSize(self.portal, self.request)
+        self.assertFalse(view(DummyFile(1024)))
+
+    def test_filiesize_bigsize_validation(self):
+        view = ValidateFileSize(self.portal, self.request)
+        self.assertEqual(
+            translate(view(DummyFile(1000000000))),
+            u'File is bigger than allowed size of 1048576 bytes!'
+        )
+
+    def test_filiesize_bigsize_custom_validation(self):
+        view = ValidateFileSize(self.portal, self.request)
+        self.assertEqual(
+            translate(view(DummyFile(1025), 1024)),
+            u'File is bigger than allowed size of 1024 bytes!'
+        )

@@ -521,10 +521,3 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(
             isinstance(context.exception, ValueError)
         )
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestFunctions))
-    return suite

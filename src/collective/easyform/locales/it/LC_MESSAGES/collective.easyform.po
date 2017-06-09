@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-05-14 13:13+0000\n"
+"POT-Creation-Date: 2017-06-09 08:02+0000\n"
 "PO-Revision-Date: 2014-05-06 16.00+0000\n"
 "Last-Translator: Giorgio Borelli\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,10 @@ msgstr ""
 
 #: collective/easyform/configure.zcml:36
 msgid "EasyForm (uninstall)"
+msgstr ""
+
+#: collective/easyform/configure.zcml:45
+msgid "EasyForm testing"
 msgstr ""
 
 #: collective/easyform/browser/actions.py:340
@@ -127,7 +131,7 @@ msgstr ""
 msgid "Redirect to"
 msgstr ""
 
-#: collective/easyform/browser/view.py:187
+#: collective/easyform/browser/view.py:186
 msgid "Reset"
 msgstr "Annulla"
 
@@ -154,6 +158,10 @@ msgstr ""
 
 #: collective/easyform/configure.zcml:36
 msgid "UnInstall the collective.easyform package"
+msgstr ""
+
+#: collective/easyform/configure.zcml:45
+msgid "Used for testing only"
 msgstr ""
 
 #: collective/easyform/interfaces/fields.py:96
@@ -799,7 +807,7 @@ msgstr "Includi i nomi delle colonne"
 msgid "label_xinfo_headers_text"
 msgstr ""
 
-#: collective/easyform/browser/view.py:319
+#: collective/easyform/browser/view.py:318
 msgid "msg_file_too_big"
 msgstr ""
 
