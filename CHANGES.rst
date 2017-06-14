@@ -2,6 +2,7 @@ Changelog
 =========
 
 2.0.0b2dev0 (unreleased)
+2.0.0b1 (2017-06-14)
 --------------------
 
 Breaking changes:
