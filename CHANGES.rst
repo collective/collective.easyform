@@ -29,6 +29,9 @@ Bug fixes:
 Fixes:
 
 - Update german translations. 
+Fixes:
+
+- Update german translations.
   [tomgross, jensens]
 
 - Keep line breaks for body_pre, body_post and body_footer field.
