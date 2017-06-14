@@ -1,6 +1,23 @@
 Changelog
 =========
 
+2.0.0b2dev0 (unreleased)
+--------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
+
 2.0.0b1 (2017-06-14)
 --------------------
 
