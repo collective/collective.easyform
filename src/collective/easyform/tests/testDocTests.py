@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-from collective.easyform.tests.base import EasyFormFunctionalTestCase
-from Testing import ZopeTestCase as ztc
+from collective.easyform.tests.base import FUNCTIONAL_TESTING
+from plone import api
+from plone.testing import layered
+from plone.testing.z2 import Browser
 
-# from plone.testing import layered
 import doctest
+import transaction
 import unittest
 
 
@@ -23,11 +25,27 @@ testfiles = (
 )
 
 
+def get_browser(layer):
+    api.user.create(
+        username='adm', password='secret', email='a@example.org',
+        roles=('Manager', )
+    )
+    transaction.commit()
+    browser = Browser(layer['app'])
+    browser.addHeader('Authorization', 'Basic adm:secret')
+    return browser
+
+
 def test_suite():
-    return unittest.TestSuite([
-        ztc.FunctionalDocFileSuite(
-            f, package='collective.easyform.tests',
-            test_class=EasyFormFunctionalTestCase,
-            optionflags=optionflags)
-        for f in testfiles
-    ])
+    suite = unittest.TestSuite()
+    suite.addTests([
+        layered(
+            doctest.DocFileSuite(
+                f,
+                optionflags=optionflags,
+                globs={'get_browser': get_browser, }
+            ),
+            layer=FUNCTIONAL_TESTING
+        )
+        for f in testfiles])
+    return suite

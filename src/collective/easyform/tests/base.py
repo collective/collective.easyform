@@ -1,20 +1,16 @@
 # -*- coding: utf-8 -*-
 from email import message_from_string
+from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
-from plone.app.testing import login
-from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.testing import Layer
-from plone.testing.z2 import Browser
 from plone.testing.z2 import ZSERVER_FIXTURE
 from Products.MailHost.interfaces import IMailHost
 from Products.MailHost.MailHost import MailHost
-from Testing.ZopeTestCase import FunctionalTestCase
-from transaction import commit
 from unittest import TestCase
 from zope.component import getSiteManager
 
@@ -29,48 +25,29 @@ class MailHostMock(MailHost):
 
 class Fixture(PloneSandboxLayer):
 
-    defaultBases = (PLONE_FIXTURE,)
+    defaultBases = (PLONE_APP_CONTENTTYPES_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
-        # Load ZCML
-        try:
-            import plone.app.contenttypes
-            import plone.app.dexterity
-            self.loadZCML(
-                package=plone.app.dexterity, context=configurationContext)
-            self.loadZCML(
-                package=plone.app.contenttypes, context=configurationContext)
-        except ImportError:
-            pass
-
+        from plone.protect import auto  # noqa
+        auto.CSRF_DISABLED = True
         import collective.easyform
-        self.loadZCML(
-            package=collective.easyform, context=configurationContext)
+        self.loadZCML(package=collective.easyform)
         try:
             import plone.formwidget.recaptcha
-            self.loadZCML(
-                package=plone.formwidget.recaptcha,
-                context=configurationContext
-            )
+            self.loadZCML(package=plone.formwidget.recaptcha)
         except ImportError:
             pass
 
     def setUpPloneSite(self, portal):
-        try:
-            self.applyProfile(portal, 'plone.app.contenttypes:default')
-        except Exception:
-            pass
-
         # Install the collective.easyform product
         self.applyProfile(portal, 'collective.easyform:default')
-        portal.acl_users.userFolderAddUser('admin',
-                                           'secret',
-                                           ['Manager'],
-                                           [])
-        login(portal, 'admin')
         setRoles(portal, TEST_USER_ID, ['Manager'])
         portal.manage_changeProperties(
-            **{'email_from_address': 'mdummy@address.com'})
+            email_from_address='mdummy@address.com')
+        portal.MailHost = mailhost = MailHostMock()
+        sm = getSiteManager(context=portal)
+        sm.unregisterUtility(provided=IMailHost)
+        sm.registerUtility(mailhost, provided=IMailHost)
 
 
 FIXTURE = Fixture()
@@ -103,27 +80,6 @@ class EasyFormTestCase(TestCase):
         pass
 
 
-class EasyFormFunctionalTestCase(FunctionalTestCase):
+class EasyFormFunctionalTestCase(TestCase):
 
     layer = FUNCTIONAL_TESTING
-
-    def setUp(self):
-        self.app = self.layer['app']
-        self.portal = self.layer['portal']
-        self.portal.invokeFactory('Folder', 'news')
-        self.browser = Browser(self.app)
-        self.browser.addHeader('Authorization', 'Basic admin:secret')
-        self.anon_browser = Browser(self.app)
-        self.portal_url = 'http://nohost/plone'
-        self.afterSetUp()
-        commit()
-
-    def afterSetUp(self):
-        self.portal.MailHost = mailhost = MailHostMock()
-        sm = getSiteManager(context=self.portal)
-        sm.unregisterUtility(provided=IMailHost)
-        sm.registerUtility(mailhost, provided=IMailHost)
-
-    def setStatusCode(self, key, value):
-        from ZPublisher import HTTPResponse
-        HTTPResponse.status_codes[key.lower()] = value

@@ -2,7 +2,9 @@ Changelog
 =========
 
 2.0.0b2dev0 (unreleased)
+2.0.0b1 (2017-06-14)
 --------------------
+------------------------
 
 Breaking changes:
 
@@ -10,18 +12,29 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Add filesize upload validator
+  [tomgross]
 
 Bug fixes:
 
-- *add item here*
+- Take over signature linebreaks to HTML email
+  [tomgross]
 
+- Allow multi-select fields as subject field
+  https://github.com/collective/collective.easyform/issues/71
+  [tomgross]
 
 
 2.0.0b1 (2017-06-14)
 --------------------
 
 Fixes:
+
+- Update german translations. 
+Fixes:
+
+2.0.0b1 (2017-06-14)
+--------------------
 
 - Update german translations.
   [tomgross, jensens]

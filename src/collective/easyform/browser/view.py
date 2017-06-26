@@ -8,11 +8,13 @@ from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
+from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
 from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import layout
+from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import form
@@ -20,6 +22,7 @@ from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
@@ -32,7 +35,6 @@ PMF = MessageFactory('plone')
 
 @implementer(IEasyFormForm)
 class EasyFormForm(AutoExtensibleForm, form.Form):
-
     """
     EasyForm form
     """
@@ -252,7 +254,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         sm = getSecurityManager()
         if (
             self.context.forceSSL and
-            not sm.checkPermission('cmf.ModifyPortalContent', self)
+            not sm.checkPermission('cmf.ModifyPortalContent', self.context)
         ):
             # Make sure we're being accessed via a secure connection
             if self.request['SERVER_URL'].startswith('http://'):
@@ -287,6 +289,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 prologue.output, data)
             self.thanksEpilogue = epilogue and dollar_replacer(
                 epilogue.output, data)
+            alsoProvides(self.request, IEasyFormThanksPage)
 
 
 EasyFormView = layout.wrap_form(EasyFormForm)
@@ -305,3 +308,18 @@ class EasyFormInlineValidationView(InlineValidationView):
     def __call__(self, fname=None, fset=None):
         self.context = EasyFormForm(self.context, self.request)
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
+
+
+class ValidateFileSize(BrowserView):
+
+    def __call__(self, value, size=1048576):
+        if not value:
+            return False
+        if value.getSize() <= size:
+            return False
+        else:
+            return _(
+                'msg_file_too_big',
+                mapping={'size': size},
+                default=u'File is bigger than allowed size of ${size} bytes!'
+            )

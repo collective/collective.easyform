@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.config import MODEL_DEFAULT
 from email.utils import formataddr
-from hashlib import md5
-from plone.memoize import ram
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from Products.CMFCore.Expression import Expression
@@ -91,14 +89,7 @@ def get_context(field):
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 
-def get_schema_cache(method, context):
-    data = context.fields_model + str(context.modification_date)
-    if isinstance(data, unicode):
-        data = data.encode('utf-8')
-    return md5(data).hexdigest()
-
-
-@ram.cache(get_schema_cache)
+# caching this breaks with memcached
 def get_schema(context):
     data = context.fields_model
     try:
@@ -109,12 +100,7 @@ def get_schema(context):
     return schema
 
 
-def get_actions_cache(method, context):
-    data = context.actions_model + str(context.modification_date)
-    return md5(data).hexdigest()
-
-
-@ram.cache(get_actions_cache)
+# caching this breaks with memcached
 def get_actions(context):
     data = context.actions_model
     try:
@@ -230,3 +216,9 @@ def format_addresses(addresses, names=[]):
 def dollar_replacer(s, data):
     dr = DollarVarReplacer(data)
     return dr.sub(s)
+
+
+def lnbr(text):
+    """Converts line breaks to html breaks
+    """
+    return "<br/>".join(text.strip().splitlines()) if text else text

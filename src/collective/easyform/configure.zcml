@@ -35,4 +35,12 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:registerProfile
+        name="testing"
+        title="EasyForm testing"
+        description="Used for testing only"
+        directory="profiles/testing"
+        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 </configure>
