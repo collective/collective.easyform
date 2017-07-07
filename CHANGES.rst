@@ -1,14 +1,25 @@
 Changelog
 =========
 
-2.0.0b2dev0 (unreleased)
-2.0.0b1 (2017-06-14)
+2.0.0b2 (unreleased)
 --------------------
-------------------------
 
 Breaking changes:
 
 - *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- In the schema editor for fields, Fix the URL to ACE library according to the modeleditor in plone.app.dexterity.
+  [thet]
+
+
+2.0.0b1 (2017-06-14)
+--------------------
 
 New features:
 
@@ -23,18 +34,6 @@ Bug fixes:
 - Allow multi-select fields as subject field
   https://github.com/collective/collective.easyform/issues/71
   [tomgross]
-
-
-2.0.0b1 (2017-06-14)
---------------------
-
-Fixes:
-
-- Update german translations. 
-Fixes:
-
-2.0.0b1 (2017-06-14)
---------------------
 
 - Update german translations.
   [tomgross, jensens]
@@ -56,6 +55,7 @@ Fixes:
 
 - Allow managment of fields enabled for c.easyform in controlpanel
   [karalics]
+
 
 2.0.0a2 (2016-10-14)
 --------------------
