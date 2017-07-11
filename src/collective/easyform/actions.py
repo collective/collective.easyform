@@ -622,7 +622,7 @@ class SaveData(Action):
             def get_data(row, i):
                 data = row.get(i, '')
                 if self._is_file_data(data):
-                    return data.filename
+                    data = data.filename
                 if isinstance(data, unicode):
                     return data.encode('utf-8')
                 return data

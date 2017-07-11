@@ -209,3 +209,21 @@ Check saved data::
     >>> browser.getControl("Download").click()
 
 
+Test file uploads with non ASCII characters in the title
+
+    >>> browser.open(portal_url + '/attachmentform')
+    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
+    >>> browser.getControl('Subject').value = u'München'.encode('latin-1')
+    >>> browser.getControl('Comments').value = 'PFG rocks!'
+    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('file contents'), 'text/plain', u'Zürich.txt'.encode('latin-1'))
+    >>> browser.getControl('Submit').click()
+    <sent mail from ...to ['mdummy@address.com']>
+    >>> 'Thanks for your input.' in browser.contents
+    True
+    >>> from collective.easyform.api import get_actions
+    >>> saver = get_actions(layer['portal']['attachmentform'])['saver']
+    >>> print(saver.getSavedFormInputForEdit())
+    test@example.com,München,PFG rocks!,Zürich.txt
+    <BLANKLINE>
+
+
