@@ -17,6 +17,8 @@ Bug fixes:
 - In the schema editor for fields, Fix the URL to ACE library according to the modeleditor in plone.app.dexterity.
   [thet]
 
+- Fix saver action with non ASCII filename uploads #77
+  [tomgross]
 
 2.0.0b1 (2017-06-14)
 --------------------
