@@ -4,22 +4,5 @@
     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
     i18n:domain="collective.easyform">
   <schema>
-    <field
-        name="replyto"
-        type="zope.schema.TextLine"
-        easyform:TDefault="python:member and member.getProperty('email', '') or ''"
-        easyform:serverSide="False"
-        easyform:validators="isValidEmail">
-      <description/>
-      <title>Your E-Mail Address</title>
-    </field>
-    <field name="topic" type="zope.schema.TextLine">
-      <description/>
-      <title>Subject</title>
-    </field>
-    <field name="comments" type="zope.schema.Text">
-      <description/>
-      <title>Comments</title>
-    </field>
   </schema>
 </model>

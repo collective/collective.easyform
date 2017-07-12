@@ -118,4 +118,5 @@ Compatibility
 =============
 
 - 1.x targets Plone 4.x
-- 2.x targets Plone 5.x
+- 2.x targets Plone 5.1.x onwards
+

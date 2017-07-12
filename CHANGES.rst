@@ -3,6 +3,26 @@ Changelog
 
 2.0.0b2 (unreleased)
 --------------------
+2.0.0b2dev0 (unreleased)
+------------------------
+2.0.0b1.post3 (unreleased)
+--------------------------
+
+- Nothing changed yet.
+
+
+2.0.0b1.post2 (2017-06-28)
+--------------------------
+
+FHNW Patches:
+
+- No default fields on form creation
+
+- Use FHNW email template https://gitlab.fhnw.ch/webteam/fhnw.webauftritt/issues/770
+  [karalics,tomgross]
+
+2.0.0b2 (unreleased)
+--------------------
 
 Breaking changes:
 
@@ -10,6 +30,8 @@ Breaking changes:
 
 New features:
 
+- Enhance file validation view with type check
+  [tomgross]
 - *add item here*
 
 Bug fixes:

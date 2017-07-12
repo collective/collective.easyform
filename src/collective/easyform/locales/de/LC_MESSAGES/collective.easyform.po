@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.easyform\n"
-"POT-Creation-Date: 2017-06-09 08:02+0000\n"
+"POT-Creation-Date: 2017-07-12 18:10+0000\n"
 "PO-Revision-Date: 2017-01-20 09:48+0000\n"
 "Last-Translator: Johannes Raggam <raggam-nl@adm.at>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Language: de\n"
 "X-Generator: Poedit 1.8.11\n"
 
-#: collective/easyform/browser/actions.py:122
+#: collective/easyform/browser/actions.py:115
 msgid "${items} input(s) saved"
 msgstr "${items} Eingabe(n) gespeichert."
 
@@ -28,7 +28,7 @@ msgstr "Art der Aktion"
 msgid "Actions Model"
 msgstr "Aktionsmodell"
 
-#: collective/easyform/browser/actions.py:275
+#: collective/easyform/browser/actions.py:268
 msgid "Add new action"
 msgstr "Eine neue Aktion hinzufügen"
 
@@ -41,7 +41,7 @@ msgstr "Adressierung"
 msgid "Allowed Fields"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:162
+#: collective/easyform/browser/actions.py:155
 msgid "Clear all"
 msgstr "Alles löschen"
 
@@ -66,11 +66,11 @@ msgstr "EasyForm deinstallieren"
 msgid "EasyForm testing"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:340
+#: collective/easyform/browser/actions.py:333
 msgid "Edit Action '${fieldname}'"
 msgstr "Aktion '${fieldname}' bearbeiten"
 
-#: collective/easyform/browser/actions.py:347
+#: collective/easyform/browser/actions.py:339
 msgid "Edit XML Actions Model"
 msgstr "XML Aktionsmodell bearbeiten"
 
@@ -132,7 +132,7 @@ msgstr "Datum/Zeit des Eintrags"
 msgid "Redirect to"
 msgstr "Weiterleiten nach"
 
-#: collective/easyform/browser/view.py:186
+#: collective/easyform/browser/view.py:189
 msgid "Reset"
 msgstr "Zurücksetzen"
 
@@ -808,7 +808,11 @@ msgstr "Spaltennamen inkludieren"
 msgid "label_xinfo_headers_text"
 msgstr "HTTP Headers"
 
-#: collective/easyform/browser/view.py:318
+#: collective/easyform/browser/view.py:329
+msgid "msg_file_not_allowed"
+msgstr "Der Filetype ${ftype} ist als Upload nicht erlaubt!"
+
+#: collective/easyform/browser/view.py:322
 msgid "msg_file_too_big"
 msgstr "Die hochgeladene Datei ist grösser als ${size} Bytes!"
 
