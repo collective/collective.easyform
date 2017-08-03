@@ -4,8 +4,6 @@ Changelog
 2.0.0b2 (unreleased)
 --------------------
 
-- Update italian translations.
-  [arsenico13]
 Breaking changes:
 
 - *add item here*
@@ -15,6 +13,9 @@ New features:
 - *add item here*
 
 Bug fixes:
+
+- Update italian translations.
+  [arsenico13]
 
 - In the schema editor for fields, Fix the URL to ACE library according to the modeleditor in plone.app.dexterity.
   [thet]
