@@ -1,19 +1,20 @@
 # -*- coding: utf-8 -*-
-
 from AccessControl import getSecurityManager
 from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import dollar_replacer
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
+from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
 from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import layout
+from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import form
@@ -21,6 +22,7 @@ from z3c.form.interfaces import DISPLAY_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
@@ -33,11 +35,11 @@ PMF = MessageFactory('plone')
 
 @implementer(IEasyFormForm)
 class EasyFormForm(AutoExtensibleForm, form.Form):
-
     """
     EasyForm form
     """
-    template = ViewPageTemplateFile('easyform_form.pt')
+    form_template = ViewPageTemplateFile('easyform_form.pt')
+    thank_you_template = ViewPageTemplateFile('thank_you.pt')
     ignoreContext = True
     css_class = 'easyformForm'
     thanksPage = False
@@ -94,22 +96,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         )
 
     @property
-    def prologue(self):
-        return (
-            self.thanksPage and
-            self.thanksPrologue or
-            self.context.formPrologue.output
-        )
-
-    @property
-    def epilogue(self):
-        return (
-            self.thanksPage and
-            self.thanksEpilogue or
-            self.context.formEpilogue.output
-        )
-
-    @property
     def schema(self):
         return get_schema(self.context)
 
@@ -145,17 +131,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 if isinstance(result, dict) and len(result):
                     return result
 
-    def setDisplayMode(self, mode):
-        self.mode = mode
-        for widget in self.widgets.values():
-            widget.mode = mode
-        self.updateWidgets()
-        for group in self.groups:
-            group.widgets.mode = mode
-            for field in group.widgets:
-                del group.widgets[field]
-            group.widgets.update()
-
     def setErrorsMessage(self, errors):
         for field in errors:
             if field not in self.widgets:
@@ -190,7 +165,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         )
         data.update(unsorted_data)
         thanksPageOverride = self.context.thanksPageOverride
-
         if thanksPageOverride:
             thanksPageOverrideAction = self.context.thanksPageOverrideAction
             thanksPage = get_expression(self.context, thanksPageOverride)
@@ -206,19 +180,9 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 ).encode('utf-8')
                 self.request.response.write(thanksPage)
         else:
-            self.thanksPage = True
-            replacer = DollarVarReplacer(data).sub
-            self.thanksPrologue = self.context.thanksPrologue and replacer(
-                self.context.thanksPrologue.output)
-            self.thanksEpilogue = self.context.thanksEpilogue and replacer(
-                self.context.thanksEpilogue.output)
-            if not self.context.showAll:
-                self.fields = self.setThanksFields(self.base_fields)
-                for group in self.groups:
-                    group.fields = self.setThanksFields(
-                        self.base_groups.get(group.label))
-            self.setDisplayMode(DISPLAY_MODE)
-            self.updateActions()
+            # we come back to the form itself.
+            # the thanks page is handled in the __call__ method
+            pass
 
     @button.buttonAndHandler(
         _(u'Reset'),
@@ -256,6 +220,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         return fields
 
     def updateFields(self):
+        if self.thanksPage:
+            return
         super(EasyFormForm, self).updateFields()
         if not hasattr(self, 'base_fields'):
             self.base_fields = self.fields
@@ -288,7 +254,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         sm = getSecurityManager()
         if (
             self.context.forceSSL and
-            not sm.checkPermission('cmf.ModifyPortalContent', self)
+            not sm.checkPermission('cmf.ModifyPortalContent', self.context)
         ):
             # Make sure we're being accessed via a secure connection
             if self.request['SERVER_URL'].startswith('http://'):
@@ -297,9 +263,33 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                     secure_url, status='movedtemporarily')
 
     def update(self):
-        '''See interfaces.IForm'''
+        """ Update form - see interfaces.IForm """
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
+        self.template = self.form_template
+        if self.request.method == 'POST' and \
+                not self.context.thanksPageOverride:
+            data, errors = self.extractData()
+            if errors:
+                return
+            data = self.updateServerSideData(data)
+            self.thanksPage = True
+            self.template = self.thank_you_template
+            if self.context.showFields:
+                self.fields = self.setThanksFields(self.base_fields)
+                for group in self.groups:
+                    group.fields = self.setThanksFields(
+                        self.base_groups.get(group.label))
+            self.mode = DISPLAY_MODE
+            # we need to update the widgets in display mode again
+            super(EasyFormForm, self).update()
+            prologue = self.context.thanksPrologue
+            epilogue = self.context.thanksEpilogue
+            self.thanksPrologue = prologue and dollar_replacer(
+                prologue.output, data)
+            self.thanksEpilogue = epilogue and dollar_replacer(
+                epilogue.output, data)
+            alsoProvides(self.request, IEasyFormThanksPage)
 
 
 EasyFormView = layout.wrap_form(EasyFormForm)
@@ -310,7 +300,7 @@ class EasyFormFormEmbedded(EasyFormForm):
     """
     EasyForm form embedded
     """
-    template = ViewPageTemplateFile('easyform_form_embedded.pt')
+    form_template = ViewPageTemplateFile('easyform_form_embedded.pt')
 
 
 class EasyFormInlineValidationView(InlineValidationView):
@@ -318,3 +308,18 @@ class EasyFormInlineValidationView(InlineValidationView):
     def __call__(self, fname=None, fset=None):
         self.context = EasyFormForm(self.context, self.request)
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
+
+
+class ValidateFileSize(BrowserView):
+
+    def __call__(self, value, size=1048576):
+        if not value:
+            return False
+        if value.getSize() <= size:
+            return False
+        else:
+            return _(
+                'msg_file_too_big',
+                mapping={'size': size},
+                default=u'File is bigger than allowed size of ${size} bytes!'
+            )

@@ -218,12 +218,10 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_UnicodeSubject(self):
         """ Test mailer with Unicode encoded subject line """
-
         utf8_subject = 'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'
         unicode_subject = utf8_subject.decode('UTF-8')
 
         mailer = get_actions(self.ff1)['mailer']
-        # fields = self.ff1._getFieldObjects()
         request = self.LoadRequestForm(topic=unicode_subject)
         mailer.onSuccess(request.form, request)
 
@@ -234,6 +232,25 @@ class TestFunctions(base.EasyFormTestCase):
 
         self.assertEqual(decoded_header, utf8_subject)
 
+    def test_Utf8ListSubject(self):
+        """ Test mailer with Unicode encoded subject line """
+        utf8_subject_list = [
+            'Effacer les entr\xc3\xa9es',
+            'sauvegard\xc3\xa9es'
+        ]
+        mailer = get_actions(self.ff1)['mailer']
+        request = self.LoadRequestForm(topic=utf8_subject_list)
+        mailer.onSuccess(request.form, request)
+
+        msg = email.message_from_string(self.messageText)
+        encoded_subject_header = msg['subject']
+        decoded_header = email.Header.decode_header(
+            encoded_subject_header)[0][0]
+
+        self.assertEqual(
+            decoded_header,
+            ', '.join(utf8_subject_list))
+
     def test_MailerOverrides(self):
         """ Test mailer override functions """
 
@@ -241,9 +258,6 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.subjectOverride = "python: '{0} and {1}'.format('eggs', 'spam')"
         mailer.senderOverride = 'string: spam@eggs.com'
         mailer.recipientOverride = 'string: eggs@spam.com'
-
-        # fields = self.ff1._getFieldObjects()
-
         request = self.LoadRequestForm(topic='test subject')
 
         mailer.onSuccess(request.form, request)
@@ -521,10 +535,3 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(
             isinstance(context.exception, ValueError)
         )
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestFunctions))
-    return suite

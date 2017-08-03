@@ -47,13 +47,6 @@ from zope.schema import getFieldsInOrder
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 
 
-try:
-    import plone.resourceeditor
-    plone.resourceeditor  # avoid PEP 8 warning
-    HAVE_RESOURCE_EDITOR = True
-except ImportError:
-    HAVE_RESOURCE_EDITOR = False
-
 PMF = MessageFactory('plone')
 
 
@@ -343,11 +336,10 @@ class ActionEditView(layout.FormWrapper):
         )
 
 
-if HAVE_RESOURCE_EDITOR:
-    but = button.Button("modeleditor", title=_(u'Edit XML Actions Model'))
-    EasyFormActionsListing.buttons += button.Buttons(but)
-    handler = button.Handler(but, EasyFormActionsListing.handleModelEdit)
-    EasyFormActionsListing.handlers.addHandler(but, handler)
+but = button.Button("modeleditor", title=_(u'Edit XML Actions Model'))
+EasyFormActionsListing.buttons += button.Buttons(but)
+handler = button.Handler(but, EasyFormActionsListing.handleModelEdit)
+EasyFormActionsListing.handlers.addHandler(but, handler)
 
 
 class ModelEditorView(BrowserView):

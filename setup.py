@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.0.0a3.dev0'
+version = '2.0.0b2dev0'
 
 setup(
     name='collective.easyform',
@@ -32,6 +32,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'plone.api',
         'plone.app.dexterity',
         'plone.app.textfield >= 1.2.8',
         'plone.autoform',
@@ -49,6 +50,7 @@ setup(
         'test': [
             'plone.app.testing[robot]',
             'plone.app.robotframework',
+            'collective.googleanalytics',
         ]
     },
     entry_points="""

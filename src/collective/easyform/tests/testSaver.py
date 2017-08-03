@@ -519,12 +519,3 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(len(row), 3)
         self.assertEqual(row['topic'], 'test subject')
         self.assertEqual(row['comments'], 'test comments')
-
-    # the csrf test has moved to browser.txt
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestFunctions))
-    return suite

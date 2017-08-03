@@ -3,13 +3,15 @@ from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
 from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
+from BTrees.LOBTree import LOBTree as SavedDataBTree
 from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import dollar_replacer
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
+from collective.easyform.api import lnbr
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -34,6 +36,7 @@ from plone.namedfile.interfaces import INamedFile
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
@@ -47,11 +50,6 @@ from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
 
 
-try:
-    from BTrees.LOBTree import LOBTree
-    SavedDataBTree = LOBTree
-except ImportError:
-    SavedDataBTree = IOBTree
 logger = getLogger('collective.easyform')
 
 
@@ -213,8 +211,6 @@ class Mailer(Action):
         # pass both the bare_fields (fgFields only) and full fields.
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
-        replacer = DollarVarReplacer(data).sub
-
         if isinstance(self.body_pre, basestring):
             body_pre = self.body_pre
         else:
@@ -237,27 +233,15 @@ class Mailer(Action):
                 for i, j in getFieldsInOrder(schema)
             ]),
             'mailer': self,
-            'body_pre': body_pre and replacer(body_pre),
-            'body_post': body_post and replacer(body_post),
-            'body_footer': body_footer and replacer(body_footer),
+            'body_pre': body_pre and lnbr(dollar_replacer(body_pre, data)),
+            'body_post': body_post and lnbr(dollar_replacer(body_post, data)),
+            'body_footer': body_footer and lnbr(
+                dollar_replacer(body_footer, data)),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
         template = template.__of__(context)
-        body = template.pt_render(extra_context=extra)
-
-        # if isinstance(body, unicode):
-        # body = body.encode("utf-8")
-
-        # keyid = getattr(self, 'gpg_keyid', None)
-        # encryption = gpg and keyid
-
-        # if encryption:
-        # bodygpg = gpg.encrypt(body, keyid)
-        # if bodygpg.strip():
-        # body = bodygpg
-
-        return body
+        return template.pt_render(extra_context=extra)
 
     def get_owner_info(self, context):
         """Return owner info
@@ -343,7 +327,7 @@ class Mailer(Action):
         """Return subject
         """
         # get subject header
-        nosubject = '(no subject)'
+        nosubject = u'(no subject)'  # TODO: translate
         subject = None
         if hasattr(self, 'subjectOverride') and self.subjectOverride:
             # subject has a TALES override
@@ -360,9 +344,21 @@ class Mailer(Action):
                 subject = subjectField
             else:
                 # we only do subject expansion if there's no field chosen
-                subject = DollarVarReplacer(fields).sub(subject)
+                subject = dollar_replacer(subject, fields)
 
-        return subject
+        if isinstance(subject, basestring):
+            subject = safe_unicode(subject)
+        elif subject and isinstance(subject, (set, tuple, list)):
+            subject = ', '.join([safe_unicode(s) for s in subject])
+        else:
+            subject = nosubject
+
+        # transform subject into mail header encoded string
+        email_charset = 'utf-8'
+        msgSubject = self.secure_header_line(
+            subject).encode(email_charset, 'replace')
+        msgSubject = str(Header(msgSubject, email_charset))
+        return msgSubject
 
     def get_header_info(self, fields, request, context,
                         from_addr=None, to_addr=None,
@@ -374,29 +370,14 @@ class Mailer(Action):
         Keyword arguments:
         request -- (optional) alternate request object to use
         """
-        portal = getToolByName(context, 'portal_url').getPortalObject()
-        utils = getToolByName(context, 'plone_utils')
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
-        subject = self.get_subject(fields, request, context)
 
         headerinfo = OrderedDict()
-
         headerinfo['To'] = self.secure_header_line(to)
         headerinfo['From'] = self.secure_header_line(from_addr)
         if reply:
             headerinfo['Reply-To'] = self.secure_header_line(reply)
-
-        # transform subject into mail header encoded string
-        email_charset = portal.getProperty('email_charset', 'utf-8')
-
-        if not isinstance(subject, unicode):
-            site_charset = utils.getSiteEncoding()
-            subject = unicode(subject, site_charset, 'replace')
-
-        msgSubject = self.secure_header_line(
-            subject).encode(email_charset, 'replace')
-        msgSubject = str(Header(msgSubject, email_charset))
-        headerinfo['Subject'] = msgSubject
+        headerinfo['Subject'] = self.get_subject(fields, request, context)
 
         # CC
         cc_recips = filter(None, self.cc_recipients)
@@ -641,7 +622,7 @@ class SaveData(Action):
             def get_data(row, i):
                 data = row.get(i, '')
                 if self._is_file_data(data):
-                    return data.filename
+                    data = data.filename
                 if isinstance(data, unicode):
                     return data.encode('utf-8')
                 return data

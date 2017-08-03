@@ -32,10 +32,3 @@ class TestAdapterPaste(base.EasyFormTestCase):
         self.assertEqual(active_adapters, ('mailer',))
         active_fields = tuple(get_schema(ff2))
         self.assertEqual(active_fields, ('replyto', 'topic', 'comments'))
-
-
-def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestAdapterPaste))
-    return suite
