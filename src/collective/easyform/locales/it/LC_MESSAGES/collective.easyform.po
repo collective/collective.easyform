@@ -38,22 +38,15 @@ msgstr "Indirizzi"
 #: collective/easyform/browser/controlpanel.py:55
 #: collective/easyform/profiles/default/registry.xml
 msgid "Allowed Fields"
-msgstr ""
+msgstr "Campi consentiti"
 
 #: collective/easyform/browser/actions.py:162
 msgid "Clear all"
 msgstr "Cancella i dati salvati"
 
-<<<<<<< HEAD
-#: collective/easyform/default_schemata/fields_default.xml
-msgid "Comments"
-msgstr "Commenti"
-
-=======
->>>>>>> master
 #: collective/easyform/profiles/default/actions.xml
 msgid "Define form actions"
-msgstr ""
+msgstr "Definisci le action del form"
 
 #: collective/easyform/profiles/default/actions.xml
 msgid "Define form fields"
@@ -110,7 +103,7 @@ msgstr "Installa il pacchetto collective.easyform"
 
 #: collective/easyform/validators.py:52
 msgid "Links are not allowed."
-msgstr "Non sono consentiti link"
+msgstr "Non sono consentiti link."
 
 #: collective/easyform/validators.py:26
 msgid "Must be a valid list of email addresses (separated by commas)."
@@ -136,7 +129,7 @@ msgstr ""
 
 #: collective/easyform/vocabularies.py:30
 msgid "Redirect to"
-msgstr ""
+msgstr "Reindirizza a"
 
 #: collective/easyform/browser/view.py:186
 msgid "Reset"
@@ -150,13 +143,6 @@ msgstr ""
 msgid "Saved data"
 msgstr "Dati salvati"
 
-<<<<<<< HEAD
-#: collective/easyform/default_schemata/fields_default.xml
-msgid "Subject"
-msgstr "Oggetto"
-
-=======
->>>>>>> master
 #: collective/easyform/interfaces/easyform.py:330
 msgid "Thanks Page"
 msgstr "Pagina di ringraziamento"
@@ -176,19 +162,12 @@ msgstr "Disinstalla il pacchetto collective.easyform"
 
 #: collective/easyform/configure.zcml:45
 msgid "Used for testing only"
-msgstr ""
+msgstr "Usato solo per test"
 
 #: collective/easyform/interfaces/fields.py:96
 msgid "Validators"
 msgstr "Validatori"
 
-<<<<<<< HEAD
-#: collective/easyform/default_schemata/fields_default.xml
-msgid "Your E-Mail Address"
-msgstr "Il tuo indirizzo E-Mail"
-
-=======
->>>>>>> master
 #. Default: "Reset"
 #: collective/easyform/interfaces/easyform.py:48
 msgid "default_resetLabel"
