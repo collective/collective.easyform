@@ -41,6 +41,7 @@ setup(
         'plone.schema',
         'plone.schemaeditor >= 2.0.0',
         'plone.supermodel',
+        'Products.validation',
         # -*- Extra requirements: -*-
     ],
     extras_require={
