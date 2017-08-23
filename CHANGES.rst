@@ -14,6 +14,9 @@ New features:
 
 Bug fixes:
 
+- Added Products.validation dependency to make it work for archetypes-free sites.
+  [thet]
+
 - In the schema editor for fields, Fix the URL to ACE library according to the modeleditor in plone.app.dexterity.
   [thet]
 
