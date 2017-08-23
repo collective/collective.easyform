@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-06-09 08:02+0000\n"
+"POT-Creation-Date: 2017-07-12 18:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: collective/easyform/browser/actions.py:122
+#: collective/easyform/browser/actions.py:115
 msgid "${items} input(s) saved"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Actions Model"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:275
+#: collective/easyform/browser/actions.py:268
 msgid "Add new action"
 msgstr ""
 
@@ -39,7 +39,7 @@ msgstr ""
 msgid "Allowed Fields"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:162
+#: collective/easyform/browser/actions.py:155
 msgid "Clear all"
 msgstr ""
 
@@ -64,11 +64,11 @@ msgstr ""
 msgid "EasyForm testing"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:340
+#: collective/easyform/browser/actions.py:333
 msgid "Edit Action '${fieldname}'"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:347
+#: collective/easyform/browser/actions.py:339
 msgid "Edit XML Actions Model"
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Redirect to"
 msgstr ""
 
-#: collective/easyform/browser/view.py:186
+#: collective/easyform/browser/view.py:189
 msgid "Reset"
 msgstr ""
 
@@ -806,9 +806,13 @@ msgstr ""
 msgid "label_xinfo_headers_text"
 msgstr ""
 
-#: collective/easyform/browser/view.py:318
+#: collective/easyform/browser/view.py:329
+msgid "msg_file_not_allowed"
+msgstr "The type '${ftype}' of the uploaded file is not allowed!"
+
+#: collective/easyform/browser/view.py:322
 msgid "msg_file_too_big"
-msgstr "File is bigger than allowed size of ${size} bytes!"
+msgstr "The uploaded file is bigger than the allowed size of ${size} bytes!"
 
 #. Default: "Comma-Separated Values"
 #: collective/easyform/vocabularies.py:65

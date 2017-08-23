@@ -1,15 +1,256 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal">
-  <head><title></title></head>
-  <body>
-    <p tal:content="structure body_pre | nothing" />
-    <dl>
-        <tal:block repeat="field data | nothing">
-            <dt tal:content="python:fields[field]" />
-            <dd tal:content="structure python:data[field]" />
-        </tal:block>
-    </dl>
-    <p tal:content="structure body_post | nothing" />
-    <p tal:content="structure body_footer | nothing" />
-  </body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:tal="http://xml.zope.org/namespaces/tal">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <style type="text/css">
+    #outlook a {
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: #767573;
+      width: 100% !important;
+      -webkit-text-size-adjust: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    img {
+      border: 0;
+      height: auto;
+      line-height: 100%;
+      outline: none;
+      text-decoration: none;
+    }
+
+    table td {
+      border-collapse: collapse;
+    }
+
+    table tr td+td {
+      font-weight: 700;
+      line-height: 24px;
+    }
+
+    #backgroundTable {
+      height: 100% !important;
+      margin: 0;
+      padding: 0;
+      width: 100% !important;
+    }
+
+    .tdb-color {
+      border-bottom: 5px solid #deded9;
+    }
+
+    body,
+    #backgroundTable {
+      background-color: #fff;
+      font-family: 'Roboto', sans-serif;
+      color: #767573;
+    }
+
+    #templateContainer {
+      border: none;
+    }
+
+    h1,
+    .h1 {
+      color: #202020;
+      display: block;
+      font-size: 34px;
+      font-weight: bold;
+      line-height: 100%;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: 10px;
+      margin-left: 0;
+      text-align: left;
+    }
+
+    h2,
+    .h2 {
+      color: #202020;
+      display: block;
+      font-size: 30px;
+      font-weight: bold;
+      line-height: 100%;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: 10px;
+      margin-left: 0;
+      text-align: left;
+    }
+
+    h3,
+    .h3 {
+      color: #202020;
+      display: block;
+      font-size: 26px;
+      font-weight: bold;
+      line-height: 100%;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: 10px;
+      margin-left: 0;
+      text-align: left;
+    }
+
+    h4,
+    .h4 {
+      color: #202020;
+      display: block;
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 100%;
+      margin-top: 0;
+      margin-right: 0;
+      margin-bottom: 10px;
+      margin-left: 0;
+      text-align: left;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    #templateHeader {
+      background: #deded9;
+      border-bottom: 0;
+    }
+
+    .headerContent {
+      padding: 0 25px;
+      text-align: left;
+      height: 20px;
+      vertical-align: middle;
+      background: #f1f1ed;
+    }
+
+    #templateContainer,
+    .bodyContent {
+      background-color: #FFFFFF;
+    }
+
+    .bodyContent div h1 {
+      color: #767573;
+      font-size: 26px;
+      font-weight: 100;
+      line-height: 130%;
+      text-align: left;
+      margin-top: 60px;
+      margin-bottom: 30px;
+    }
+
+    .bodyContent div a:link,
+    .bodyContent div a:visited {
+      color: #336699;
+      font-weight: normal;
+      text-decoration: underline;
+    }
+
+    .bodyContent img {
+      display: inline;
+      height: auto;
+    }
+
+    #templateBody {
+      width: 50%;
+    }
+
+    .contents div {
+      color: #4c4c4c;
+      font-size: 18px;
+      line-height: 25px;
+      text-align: left;
+      margin: 15px 0 0 0;
+      padding: 25px 0;
+    }
+
+    #mailtxt div {
+      margin-top: 0;
+    }
+
+    #templateFooter {
+      background-color: #FFFFFF;
+      border-top: 0;
+    }
+  </style>
+</head>
+
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
+  <center>
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
+      <tr>
+        <td align="center" valign="top">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateContainer">
+            <tr>
+              <td align="left" valign="top">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateHeader">
+                  <tr>
+                    <td align="left" class="headerContent">
+                      <!-- FHNW Logo -->
+                      <img src="http://web.fhnw.ch/plattformen/relaunch/fhnw-logo.png" alt="Fachhochschule Nordwestschweiz" style="height: 110px;" />
+                      <!-- End FHNW Logo -->
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" valign="top">
+                <table border="0" cellpadding="0" cellspacing="0" height="100%" width="50%" id="templateBody">
+                  <tr>
+                    <td valign="top" class="bodyContent">
+                      <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                          <td valign="top" class="tdb-color">
+                            <div>
+                              <h1 tal:content="structure body_pre | nothing" />
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td valign="top" class="contents tdb-color" id="mailtxt">
+                            <div>
+                              <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="templateBody">
+                                <!-- Form Datas -->
+                                <tal:block repeat="field data | nothing">
+                                  <tr>
+                                    <td width="30%" tal:content="python:fields[field]" />
+                                    <td width="70%" tal:content="structure python:data[field]" />
+                                  </tr>
+                                </tal:block>
+                                <!-- End Form Datas -->
+                              </table>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td valign="top" class="contents">
+                            <div>
+                              <p tal:content="structure body_post | nothing" />
+                              <!-- Signature -->
+                              <!--  End Signature -->
+                              <p tal:content="structure body_footer | nothing" />
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+          <br />
+        </td>
+      </tr>
+    </table>
+  </center>
+</body>
+
 </html>

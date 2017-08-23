@@ -18,6 +18,8 @@ install:
   - sed -ie "s#test-5.0#test-$PLONE_VERSION#" buildout.cfg
   - buildout -N buildout:download-cache=downloads -c tests.cfg annotate
   - buildout -N buildout:download-cache=downloads -c tests.cfg
+  - pip install zest.pocompile
+  - pocompile src
 before_script:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start

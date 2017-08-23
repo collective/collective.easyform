@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.0.0b2dev0'
+version = '2.0.0b1.post3.dev0'
 
 setup(
     name='collective.easyform',
