@@ -39,7 +39,7 @@ setup(
         'plone.dexterity',
         'plone.namedfile',
         'plone.schema',
-        'plone.schemaeditor >= 2.0.0',
+        'plone.schemaeditor >= 2.0.18',
         'plone.supermodel',
         'Products.validation',
         # -*- Extra requirements: -*-
