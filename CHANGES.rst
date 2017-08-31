@@ -4,12 +4,6 @@ Changelog
 2.0.0b3 (unreleased)
 --------------------
 
-- Nothing changed yet.
-
-
-2.0.0b2 (2017-08-31)
---------------------
-
 Breaking changes:
 
 - *add item here*
@@ -17,6 +11,14 @@ Breaking changes:
 New features:
 
 - *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
+2.0.0b2 (2017-08-31)
+--------------------
 
 Bug fixes:
 
