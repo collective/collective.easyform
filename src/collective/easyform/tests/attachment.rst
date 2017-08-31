@@ -157,7 +157,7 @@ Saved data
 Check saved data::
 
     >>> browser.getLink('Saved data').click()
-    >>> 'http://nohost/plone/attachmentform/actions/saver/data' in browser.contents
+    >>> 'http://nohost/plone/attachmentform/actions/saver/@@data' in browser.contents
     True
     >>> browser.getLink('Saver').click()
     >>> "5 input(s) saved" in browser.contents
@@ -180,7 +180,7 @@ Check saved data::
     True
     >>> browser.getLink('test.txt').click()
     >>> browser.url
-    'http://nohost/plone/attachmentform/@@actions/saver/data/++widget++crud-edit...widgets.attachment/@@download/test.txt'
+    'http://nohost/plone/attachmentform/@@actions/saver/@@data/++widget++crud-edit...widgets.attachment/@@download/test.txt'
     >>> browser.contents
     'file contents'
     >>> browser.goBack()

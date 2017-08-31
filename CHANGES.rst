@@ -4,17 +4,9 @@ Changelog
 2.0.0b3 (unreleased)
 --------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
+- Fix broken access to saved data due to acquisition problems if action is called 'data'.
+  Fixes: #87.
+  [sverbois]
 
 
 2.0.0b2 (2017-08-31)
