@@ -83,6 +83,42 @@ Click on the picture below for a short introduction video:
 	:alt: EasyForm instructional video
 
 
+ReCaptcha support
+=================
+
+Install ``collective.easyform`` with the  ``recaptcha`` extra:
+
+.. code-block:: shell
+
+	[buildout]
+
+	...
+
+	eggs =
+		collective.easyform [recaptcha]
+
+
+And run buildout and install EasyForm as described above.
+
+Then go to the EasyFrom controlpanel (``/@@easyform-controlpanel``) and add the "ReCaptcha" field to "Allowed Fields".
+Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:
+
+.. code-block:: xml
+
+    <record name="easyform.allowedFields">
+      <value purge="False">
+        <element>collective.easyform.fields.ReCaptcha</element>
+      </value>
+    </record>
+
+Then add the ReCaptcha field to the forms where you want to use it.
+As field type use ``ReCaptcha`` and set ``require`` to false.
+
+As last step you might want to not include the recaptcha field in the thanks page and mailer action.
+To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
+Likewise for the mailing: Open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
+ 
+
 Source Code and Contributions
 =============================
 

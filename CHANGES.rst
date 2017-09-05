@@ -4,9 +4,6 @@ Changelog
 2.0.0b3 (unreleased)
 --------------------
 
-- Fix broken access to saved data due to acquisition problems if action is called 'data'.
-  Fixes: #87.
-  [sverbois]
 Breaking changes:
 
 - *add item here*
@@ -20,6 +17,10 @@ Bug fixes:
 - Register the recaptcha validator more specifically, so that it overrides the default easyform validator.
   Fixes an issue where plone.formwidget.recaptcha had no effect when used.
   [thet]
+
+- Fix broken access to saved data due to acquisition problems if action is called 'data'.
+  Fixes: #87.
+  [sverbois]
 
 
 2.0.0b2 (2017-08-31)
