@@ -36,7 +36,13 @@
         component=".fields.ReCaptchaHandler"
         />
     <adapter
-        for="* * * collective.easyform.interfaces.IReCaptcha *"
+        for="
+        collective.easyform.interfaces.IEasyForm
+        *
+        collective.easyform.interfaces.IEasyFormForm
+        collective.easyform.interfaces.IReCaptcha
+        *
+        "
         provides="z3c.form.interfaces.IValidator"
         factory="plone.formwidget.recaptcha.ReCaptchaValidator"
         />
