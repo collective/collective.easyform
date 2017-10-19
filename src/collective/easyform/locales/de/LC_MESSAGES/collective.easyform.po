@@ -177,7 +177,7 @@ msgstr "Zurücksetzen"
 #. Default: "Submit"
 #: collective/easyform/interfaces/easyform.py:34
 msgid "default_submitLabel"
-msgstr "Einreichen"
+msgstr "Absenden"
 
 #. Default: "Thanks for your input."
 #: collective/easyform/interfaces/easyform.py:76

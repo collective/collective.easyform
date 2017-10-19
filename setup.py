@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '2.0.0b2dev0'
+version = '2.0.0b3.dev0'
 
 setup(
     name='collective.easyform',
@@ -39,7 +39,7 @@ setup(
         'plone.dexterity',
         'plone.namedfile',
         'plone.schema',
-        'plone.schemaeditor >= 2.0.0',
+        'plone.schemaeditor >= 2.0.18',
         'plone.supermodel',
         'Products.validation',
         # -*- Extra requirements: -*-
