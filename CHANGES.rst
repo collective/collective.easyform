@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Basque translation
+  [erral]
 
 Bug fixes:
 
