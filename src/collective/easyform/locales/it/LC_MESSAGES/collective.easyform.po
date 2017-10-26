@@ -227,7 +227,7 @@ msgstr "Selezionare per abilitare la protezione Cross-Site Request Forgery (CSRF
 #. Default: "This field allows you to change default fieldset label."
 #: collective/easyform/interfaces/easyform.py:129
 msgid "help_default_fieldset_label_text"
-msgstr ""
+msgstr "Questo campo permette di personalizzare il titolo del fieldset di default."
 
 #. Default: "The text will be displayed after the form fields."
 #: collective/easyform/interfaces/easyform.py:176
@@ -260,7 +260,7 @@ msgstr "Usare questo campo per sovrascrivere l'attributo action del form. Spefic
 #. Default: "Additional e-mail-header lines. Only use RFC822-compliant headers."
 #: collective/easyform/interfaces/mailer.py:276
 msgid "help_formmailer_additional_headers"
-msgstr ""
+msgstr "Righe di e-mail-header aggiuntive. Usare solo stringhe conformi RFC822."
 
 #. Default: "E-mail addresses which receive a blind carbon copy."
 #: collective/easyform/interfaces/mailer.py:95
@@ -275,22 +275,22 @@ msgstr "Testo usato come footer, staccato dal body principale con una linea trat
 #. Default: "Text appended to fields listed in mail-body"
 #: collective/easyform/interfaces/mailer.py:162
 msgid "help_formmailer_body_post"
-msgstr ""
+msgstr "Testo aggiunto sotto alla lista dei campi nel mail-body"
 
 #. Default: "Text prepended to fields listed in mail-body"
 #: collective/easyform/interfaces/mailer.py:149
 msgid "help_formmailer_body_pre"
-msgstr ""
+msgstr "Testo aggiunto sopra alla lista dei campi nel mail-body"
 
 #. Default: "This is a Zope Page Template used for rendering of the mail-body. You don't need to modify it, but if you know TAL (Zope's Template Attribute Language) have the full power to customize your outgoing mails."
 #: collective/easyform/interfaces/mailer.py:228
 msgid "help_formmailer_body_pt"
-msgstr ""
+msgstr "Questo è uno Zope Page Template usato per creare il mail-body. Non è necessario modificarlo, ma se conosci TAL (il linguaggio di templating di Zope) hai il potere di personalizzare totalmente le e-mail inviate."
 
 #. Default: "Set the mime-type of the mail-body. Change this setting only if you know exactly what you are doing. Leave it blank for default behaviour."
 #: collective/easyform/interfaces/mailer.py:243
 msgid "help_formmailer_body_type"
-msgstr ""
+msgstr "Definisci il mime-type per il mail-body. Cambia questo settaggio solo se sai esattamente quello che stai facendo. Lascia il campo vuoto per lasciare il comportamento di default."
 
 #. Default: "E-mail addresses which receive a carbon copy."
 #: collective/easyform/interfaces/mailer.py:80
@@ -300,12 +300,12 @@ msgstr "Indirizzi E-mail in copia (cc)."
 #. Default: "The recipients e-mail address."
 #: collective/easyform/interfaces/mailer.py:51
 msgid "help_formmailer_recipient_email"
-msgstr ""
+msgstr "L'indirizzo e-mail del destinatario."
 
 #. Default: "The full name of the recipient of the mailed form."
 #: collective/easyform/interfaces/mailer.py:33
 msgid "help_formmailer_recipient_fullname"
-msgstr ""
+msgstr "Il nome completo del destinatario del form."
 
 #. Default: "Choose a form field from which you wish to extract input for the Reply-To header. NOTE: You should activate e-mail address verification for the designated field."
 #: collective/easyform/interfaces/mailer.py:108
@@ -325,7 +325,7 @@ msgstr ""
 #. Default: "Choose a form field from which you wish to extract input for the To header. If you choose anything other than \"None\", this will override the \"Recipient's \" e-mail address setting above. Be very cautious about allowing unguarded user input for this purpose."
 #: collective/easyform/interfaces/mailer.py:62
 msgid "help_formmailer_to_extract"
-msgstr ""
+msgstr "Scegli un campo del form dal quale vorresti estrarre l'indirizzo del destinatario. Se scegli qualcosa di diverso da \"-\", questo campo sovrascrive l'impostazione \"Indirizzo e-mail del destinatario\" precedente. Presta molta attenzione nell'utilizzare input dall'utente senza controlli."
 
 #. Default: "This override field allows you to insert content into the xhtml head. The typical use is to add custom CSS or JavaScript. Specify a TALES expression returning a string. The string will be inserted with no interpretation. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
 #: collective/easyform/interfaces/easyform.py:298
@@ -340,17 +340,17 @@ msgstr "Spuntare per mostrare i titoli dei campi che non sono stati compilati. L
 #. Default: "Check this to include titles for fields that received no input. Uncheck to leave fields with no input out of the e-mail."
 #: collective/easyform/interfaces/mailer.py:212
 msgid "help_mailEmpties_text"
-msgstr ""
+msgstr "Spuntare per includere i titoli dei campi che non sono stati compilati. Lasciare senza spunta per non includerli nella mail."
 
 #. Default: "Check this to include input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
 #: collective/easyform/interfaces/mailer.py:189
 msgid "help_mailallfields_text"
-msgstr ""
+msgstr "Spuntare per includere tutti i campi nella mail inviata (tranne label e file). Se attivi questa opzione, le selezioni del box qui sotto verranno ignorate."
 
 #. Default: "Pick the fields whose inputs you'd like to include in the e-mail."
 #: collective/easyform/interfaces/mailer.py:200
 msgid "help_mailfields_text"
-msgstr ""
+msgstr "Scegli quali campi vuoi includere nella mail inviata."
 
 #: collective/easyform/interfaces/easyform.py:114
 msgid "help_method"
@@ -404,7 +404,7 @@ msgstr ""
 #. Default: "Check this to display input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
 #: collective/easyform/interfaces/easyform.py:363
 msgid "help_showallfields_text"
-msgstr ""
+msgstr "Spuntare per mostrare tutti i campi del form (tranne label e file). Se attivi questa opzione, le selezioni del box qui sotto verranno ignorate."
 
 #: collective/easyform/interfaces/easyform.py:102
 msgid "help_showcancel_text"
@@ -486,7 +486,7 @@ msgstr "Selezionare i validatori da usare per questo campo"
 #. Default: "Pick any items from the HTTP headers that you'd like to insert as X- headers in the message."
 #: collective/easyform/interfaces/mailer.py:260
 msgid "help_xinfo_headers_text"
-msgstr ""
+msgstr "Scegli dalla lista quali HTTP header vorresti inserire come X- header nel messaggio."
 
 #: collective/easyform/browser/exportimport.py:49
 msgid "import"
@@ -520,7 +520,7 @@ msgstr ""
 #. Default: "Custom Default Fieldset Label"
 #: collective/easyform/interfaces/easyform.py:127
 msgid "label_default_fieldset_label_text"
-msgstr ""
+msgstr "Titolo del fieldset di default"
 
 #. Default: "Download Format"
 #: collective/easyform/interfaces/savedata.py:85
@@ -550,7 +550,7 @@ msgstr "Forza connessione SSL"
 #. Default: "Turn fieldsets to tabs"
 #: collective/easyform/interfaces/easyform.py:120
 msgid "label_form_tabbing"
-msgstr ""
+msgstr "Mostra i fieldset in tab separati"
 
 #. Default: "Custom Form Action"
 #: collective/easyform/interfaces/easyform.py:242
@@ -570,17 +570,17 @@ msgstr "Destinatari in BCC"
 #. Default: "Body (signature)"
 #: collective/easyform/interfaces/mailer.py:174
 msgid "label_formmailer_body_footer"
-msgstr ""
+msgstr "Body (firma)"
 
 #. Default: "Body (appended)"
 #: collective/easyform/interfaces/mailer.py:161
 msgid "label_formmailer_body_post"
-msgstr ""
+msgstr "Body (aggiungi sotto)"
 
 #. Default: "Body (prepended)"
 #: collective/easyform/interfaces/mailer.py:148
 msgid "label_formmailer_body_pre"
-msgstr ""
+msgstr "Body (aggiungi sopra)"
 
 #. Default: "Mail-Body Template"
 #: collective/easyform/interfaces/mailer.py:227
@@ -595,22 +595,22 @@ msgstr ""
 #. Default: "CC Recipients"
 #: collective/easyform/interfaces/mailer.py:78
 msgid "label_formmailer_cc_recipients"
-msgstr ""
+msgstr "Destinatari in CC"
 
 #. Default: "Recipient's e-mail address"
 #: collective/easyform/interfaces/mailer.py:49
 msgid "label_formmailer_recipient_email"
-msgstr ""
+msgstr "Indirizzo e-mail del destinatario."
 
 #. Default: "Recipient's full name"
 #: collective/easyform/interfaces/mailer.py:31
 msgid "label_formmailer_recipient_fullname"
-msgstr ""
+msgstr "Nome completo destinatario"
 
 #. Default: "Extract Reply-To From"
 #: collective/easyform/interfaces/mailer.py:106
 msgid "label_formmailer_replyto_extract"
-msgstr ""
+msgstr "Estrai il Reply-To da"
 
 #. Default: "Subject"
 #: collective/easyform/interfaces/mailer.py:123
@@ -620,12 +620,12 @@ msgstr "Oggetto"
 #. Default: "Extract Subject From"
 #: collective/easyform/interfaces/mailer.py:135
 msgid "label_formmailer_subject_extract"
-msgstr ""
+msgstr "Estrai l'Oggetto da"
 
 #. Default: "Extract Recipient From"
 #: collective/easyform/interfaces/mailer.py:60
 msgid "label_formmailer_to_extract"
-msgstr ""
+msgstr "Estrai il Destinatario da"
 
 #. Default: "Header Injection"
 #: collective/easyform/interfaces/easyform.py:297
@@ -650,7 +650,7 @@ msgstr "Includi elementi vuoti"
 #. Default: "Include All Fields"
 #: collective/easyform/interfaces/mailer.py:188
 msgid "label_mailallfields_text"
-msgstr ""
+msgstr "Includi tutti i campi"
 
 #. Default: "Show Responses"
 #: collective/easyform/interfaces/mailer.py:199
