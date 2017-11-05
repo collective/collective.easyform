@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Update italian translations.
+  [arsenico13]
 
 Bug fixes:
 
