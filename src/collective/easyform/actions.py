@@ -161,42 +161,34 @@ class Mailer(Action):
         form.prefix = 'form'
         form._update()
         widgets = {name: widget.render() for name, widget in form.w.items()}
-        data = OrderedDict(
-            [x for x in getFieldsInOrder(schema) if x[0] in unsorted_data]
-        )
 
-        data.update(unsorted_data)
-        all_data = [
+        data = OrderedDict([
+            (x[0], unsorted_data[x[0]])
+            for x in getFieldsInOrder(schema)
+            if x[0] in unsorted_data
+        ])
+
+        # TODO: Exclude labels
+        fields = [
             f for f in data
-            # TODO
-            # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
-            # 'showAll', True) and f.getServerSide())]
             if not (self._is_file_data(data[f])) and not (
+                # TODO: serverSide should always be excluded
+                # Also, when shoAll = 0 and serverSite = 1, it will be included
+                # which is wrong.
                 getattr(self, 'showAll', True) and
                 IFieldExtender(schema[f]).serverSide
             )
         ]
 
-        # which data should we show?
-        if getattr(self, 'showAll', True):
-            live_data = all_data
-        else:
-            showFields = getattr(self, 'showFields', [])
-            if showFields is None:
-                showFields = []
-
-            live_data = [
-                f for f in all_data if f in showFields]
+        if not getattr(self, 'showAll', True):
+            showFields = getattr(self, 'showFields', []) or []
+            fields = [f for f in fields if f in showFields]
 
         if not getattr(self, 'includeEmpties', True):
-            all_data = live_data
-            live_data = [f for f in all_data if data[f]]
-            for f in all_data:
-                value = data[f]
-                if value:
-                    live_data.append(f)
+            fields = [f for f in fields if data[f]]
 
-        bare_data = OrderedDict([(f, data[f]) for f in live_data])
+        filtered_data = OrderedDict([(f, data[f]) for f in fields])
+
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
@@ -218,7 +210,7 @@ class Mailer(Action):
             body_footer = self.body_footer.output
 
         extra = {
-            'data': bare_data,
+            'data': filtered_data,
             'fields': OrderedDict([
                 (i, j.title)
                 for i, j in getFieldsInOrder(schema)
