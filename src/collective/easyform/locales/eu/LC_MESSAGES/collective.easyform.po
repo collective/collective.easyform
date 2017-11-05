@@ -1,0 +1,828 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-10-22 12:17+0000\n"
+"PO-Revision-Date: 2017-10-22 16:42+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: eu\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: collective/easyform/browser/actions.py:115
+msgid "${items} input(s) saved"
+msgstr "${items} elementu gorde dira"
+
+#: collective/easyform/interfaces/actions.py:61
+msgid "Action type"
+msgstr "Akzio mota"
+
+#: collective/easyform/interfaces/easyform.py:91
+msgid "Actions Model"
+msgstr "Akzioen eredua"
+
+#: collective/easyform/browser/actions.py:268
+msgid "Add new action"
+msgstr "Akzio berria gehitu"
+
+#: collective/easyform/interfaces/mailer.py:55
+msgid "Addressing"
+msgstr "Helbideak"
+
+#: collective/easyform/browser/controlpanel.py:55
+#: collective/easyform/profiles/default/registry.xml
+msgid "Allowed Fields"
+msgstr "Onartutako eremuak"
+
+#: collective/easyform/browser/actions.py:155
+msgid "Clear all"
+msgstr "Guztiak ezabatu"
+
+#: collective/easyform/profiles/default/actions.xml
+msgid "Define form actions"
+msgstr "Formularioaren akzioak konfiguratu"
+
+#: collective/easyform/profiles/default/actions.xml
+msgid "Define form fields"
+msgstr "Formularioaren eremuak konfiguratu"
+
+#: collective/easyform/configure.zcml:28
+#: collective/easyform/profiles/default/types/EasyForm.xml
+msgid "EasyForm"
+msgstr "EasyForm"
+
+#: collective/easyform/configure.zcml:36
+msgid "EasyForm (uninstall)"
+msgstr "EasyForm (kendu)"
+
+#: collective/easyform/configure.zcml:45
+msgid "EasyForm testing"
+msgstr "EasyForm testing"
+
+#: collective/easyform/browser/actions.py:333
+msgid "Edit Action '${fieldname}'"
+msgstr "'${fieldname}' akzioa aldatu"
+
+#: collective/easyform/browser/actions.py:339
+msgid "Edit XML Actions Model"
+msgstr "Akzioen XML eredua editatu"
+
+#: collective/easyform/browser/fields.py:105
+msgid "Edit XML Fields Model"
+msgstr "Eremuen XML eredua editatu"
+
+#: collective/easyform/profiles/default/actions.xml
+msgid "Export"
+msgstr "Esportatu"
+
+#: collective/easyform/interfaces/easyform.py:87
+msgid "Fields Model"
+msgstr "Eremuen eredua"
+
+#: collective/easyform/browser/exportimport.py:59
+msgid "Form imported."
+msgstr "Formulario ondo inportatu da."
+
+#: collective/easyform/interfaces/mailer.py:252
+msgid "Headers"
+msgstr "Goiburukoak"
+
+#: collective/easyform/profiles/default/actions.xml
+msgid "Import"
+msgstr "Inportatu"
+
+#: collective/easyform/configure.zcml:28
+msgid "Installs the collective.easyform package"
+msgstr "collective.easyform instalatu"
+
+#: collective/easyform/validators.py:52
+msgid "Links are not allowed."
+msgstr "Ez dira loturak onartzen."
+
+#: collective/easyform/validators.py:26
+msgid "Must be a valid list of email addresses (separated by commas)."
+msgstr "Eposta helbideen zerrenda bat izan behar da (komarekin banatuta)."
+
+#: collective/easyform/validators.py:37
+msgid "Must be checked."
+msgstr "Aukeratuta egon behar da"
+
+#: collective/easyform/validators.py:42
+msgid "Must be unchecked."
+msgstr "Ezin da aukeratuta egon"
+
+#: collective/easyform/interfaces/actions.py:102
+#: collective/easyform/interfaces/easyform.py:184
+#: collective/easyform/interfaces/fields.py:32
+msgid "Overrides"
+msgstr "Gainidazketak"
+
+#: collective/easyform/interfaces/savedata.py:20
+msgid "Posting Date/Time"
+msgstr "Bidalketaren data/ordua"
+
+#: collective/easyform/vocabularies.py:30
+msgid "Redirect to"
+msgstr "Berbideratu (redirect_to)"
+
+#: collective/easyform/browser/view.py:188
+msgid "Reset"
+msgstr "Garbitu"
+
+#: collective/easyform/interfaces/fields.py:130
+msgid "Rich Label"
+msgstr "Etiketa aberatsa"
+
+#: collective/easyform/profiles/default/actions.xml
+msgid "Saved data"
+msgstr "Gordetako datuak"
+
+#: collective/easyform/interfaces/easyform.py:330
+msgid "Thanks Page"
+msgstr "Eskertza-orria"
+
+#: collective/easyform/browser/controlpanel.py:56
+#: collective/easyform/profiles/default/registry.xml
+msgid "This Fields are available for your forms."
+msgstr "Eremu hauek gehitu daitezke formularioetan."
+
+#: collective/easyform/vocabularies.py:29
+msgid "Traverse to"
+msgstr "Joan (traverse_to)"
+
+#: collective/easyform/configure.zcml:36
+msgid "UnInstall the collective.easyform package"
+msgstr "collective.easyform kendu"
+
+#: collective/easyform/configure.zcml:45
+msgid "Used for testing only"
+msgstr "Testak exekutatzeko bakarrik"
+
+#: collective/easyform/interfaces/fields.py:96
+msgid "Validators"
+msgstr "Balidadoreak"
+
+#. Default: "Reset"
+#: collective/easyform/interfaces/easyform.py:48
+msgid "default_resetLabel"
+msgstr "Garbitu"
+
+#. Default: "Submit"
+#: collective/easyform/interfaces/easyform.py:34
+msgid "default_submitLabel"
+msgstr "Bidali"
+
+#. Default: "Thanks for your input."
+#: collective/easyform/interfaces/easyform.py:76
+msgid "default_thanksdescription"
+msgstr "Eskerrik asko bidalketagatik"
+
+#. Default: "Thank You"
+#: collective/easyform/interfaces/easyform.py:62
+msgid "default_thankstitle"
+msgstr "Eskerrik asko"
+
+#. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
+#: collective/easyform/interfaces/fields.py:88
+msgid "description_server_side_text"
+msgstr "Aktibatuz gero, eremu honen balioa akzioek erabiliko dute bakarrik eta ez da formularioan erakutsiko."
+
+#. Default: "${name} Header"
+#: collective/easyform/interfaces/mailer.py:284
+#: collective/easyform/interfaces/savedata.py:26
+msgid "extra_header"
+msgstr "${name} goiburukoa"
+
+#. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter (if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded. The most common use of this field is to call a python scriptto clean up form input or to script an alternative action. Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
+#: collective/easyform/interfaces/easyform.py:278
+msgid "help_AfterValidationOverride_text"
+msgstr "Formularioa ondo balidatu ostean baina edozein akzio exekutatu edo eskertza orrialde erakutsi baino lehen exekutatuko den TALES espresioa. Formularioan sartutako datuak request.form-en egongo dira. Utzi hutsik ez baduzu behar. Eremu honen erabilpen arruntena, formularioko datuak garbitzeko edo akzio gisa erabiliko den python script bati deitzea da. Espresioak itzulitako edozein erantzun ez da kontuan hartuko. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "A TALES expression that will be called when the form is displayed. Leave empty if unneeded. The most common use of this field is to call a python script that sets defaults for multiple fields by pre-populating request.form. Any value returned by the expression is ignored. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/easyform.py:258
+msgid "help_OnDisplayOverride_text"
+msgstr "Formularioa erakustean exekutatuko den TALES espresioa. Utzi hutsik ez baduzu behar. Eremu honen erabilpen arruntena formularioaren eremuen defektuzko balioak ezarriko dituen python script bati deitzea da, horretarako request.form-en balioak ezarriko dituelarik. Espresioak itzulitako edozein erantzun ez da kontuan hartuko. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the BCC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/mailer.py:401
+msgid "help_bcc_override_text"
+msgstr "BCC zerrendaren balioak gainidatziko dituen TALES espresioa. Kontuz honetarako balioztatu gabeko edozein balio erabiltzearekin. Utzi hutsik ez baduzu behar. Espresioak testu-kate zerrenda bat itzuli behar du. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the CC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/mailer.py:383
+msgid "help_cc_override_text"
+msgstr "CC zerrendaren balioak gainidatziko dituen TALES espresioa. Kontuz honetarako balioztatu gabeko edozein balio erabiltzearekin. Utzi hutsik ez baduzu behar. Espresioak testu-kate zerrenda bat itzuli behar du. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "Check this to employ Cross-Site Request Forgery protection. Note that only HTTP Post actions will be allowed."
+#: collective/easyform/interfaces/easyform.py:145
+msgid "help_csrf"
+msgstr "Aktibatuta badago CSRF edo Cross-Site-Request-Forgery deritzon babesa erabiltzen du. Izan kontuan kasu horretan HTTP POST erako akzioak bakarrik onartuko direla."
+
+#. Default: "This field allows you to change default fieldset label."
+#: collective/easyform/interfaces/easyform.py:129
+msgid "help_default_fieldset_label_text"
+msgstr "Eremu honek defektuzko eremu-multzoaren etiketa aldatzen uzten dizu."
+
+#. Default: "The text will be displayed after the form fields."
+#: collective/easyform/interfaces/easyform.py:176
+msgid "help_epilogue_text"
+msgstr "Formularioaren eremuen ostean agertuko den testua."
+
+#. Default: "A TALES expression that will be evaluated to determine whether or not to execute this action. Leave empty if unneeded, and the action will be executed. Your expression should evaluate as a boolean; return True if you wish the action to execute. PLEASE NOTE: errors in the evaluation of this expression will  cause an error on form display."
+#: collective/easyform/interfaces/actions.py:107
+msgid "help_execcondition_text"
+msgstr "Akzio hau exekutatu ala ez erabakitzeko exekutatuko den TALES espresioa. Utzi hutsik ez baduzu behar. Espresioak balio boolear bat itzuli behar du; True itzuli akzioa exekutatzeko. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#: collective/easyform/interfaces/fields.py:28
+msgid "help_field_widget"
+msgstr " "
+
+#. Default: "Check this to make the form redirect to an SSL-enabled version of itself (https://) if accessed via a non-SSL URL (http://).  In order to function properly, this requires a web server that has been configured to handle the HTTPS protocol on port 443 and forward it to Zope."
+#: collective/easyform/interfaces/easyform.py:154
+msgid "help_force_ssl"
+msgstr "Aktibatuta badago, automatikoki HTTPS darabilen helbidera berbideratuko da formularioa (https://). Ondo funtzionatzeko aurrez web zerbitzaria konfiguratu behar duzu HTTPS protokoloarekin funtzionatu dezan eta eskaerak Plone zerbitzari bidera ditzan."
+
+#: collective/easyform/interfaces/easyform.py:122
+msgid "help_form_tabbing"
+msgstr " "
+
+#. Default: "Use this field to override the form action attribute. Specify a URL to which the form will post. This will bypass form validation, success action adapter and thanks page."
+#: collective/easyform/interfaces/easyform.py:244
+msgid "help_formactionoverride_text"
+msgstr "Formularioaren 'action' atributua gainidazteko erabili eremu hau. Idatzi hemen formularioaren datuak zein URLtara bidali behar diren. Hau erabiliz gero formularioaren balidazioa, eta konfiguratutako akzioak eta eskertza-orriak ez dira kontuan hartuko."
+
+#. Default: "Additional e-mail-header lines. Only use RFC822-compliant headers."
+#: collective/easyform/interfaces/mailer.py:276
+msgid "help_formmailer_additional_headers"
+msgstr "Eposta mezuan gehitu beharreko goiburu gehigarriak. RFC822rekin bat datozen goiburuak bakarrik erabili."
+
+#. Default: "E-mail addresses which receive a blind carbon copy."
+#: collective/easyform/interfaces/mailer.py:95
+msgid "help_formmailer_bcc_recipients"
+msgstr "BCC kopia ezkutu bat jasoko duten helbideak."
+
+#. Default: "Text used as the footer at bottom, delimited from the body by a dashed line."
+#: collective/easyform/interfaces/mailer.py:176
+msgid "help_formmailer_body_footer"
+msgstr "Mezuaren oinean gehituko den testua, mezuaren azpian agertuko da marradun lerro baten ostean."
+
+#. Default: "Text appended to fields listed in mail-body"
+#: collective/easyform/interfaces/mailer.py:162
+msgid "help_formmailer_body_post"
+msgstr "Mezuaren gorputzean dauden eremuei ondoren gehituko zaien testua"
+
+#. Default: "Text prepended to fields listed in mail-body"
+#: collective/easyform/interfaces/mailer.py:149
+msgid "help_formmailer_body_pre"
+msgstr "Mezuaren gorputzean dauden eremuei aurretik gehituko zaien testua"
+
+#. Default: "This is a Zope Page Template used for rendering of the mail-body. You don't need to modify it, but if you know TAL (Zope's Template Attribute Language) have the full power to customize your outgoing mails."
+#: collective/easyform/interfaces/mailer.py:228
+msgid "help_formmailer_body_pt"
+msgstr "Mezuaren gorputza sortzeko erabiliko den txantilioia (ZPT). Ez duzu zertan aldatu, baina TAL baldin badakizu, bidalitako mezuaren itxura osorik pertsonalizatu dezakezu."
+
+#. Default: "Set the mime-type of the mail-body. Change this setting only if you know exactly what you are doing. Leave it blank for default behaviour."
+#: collective/easyform/interfaces/mailer.py:243
+msgid "help_formmailer_body_type"
+msgstr "Mezuaren mime-type-a zehaztu. Zer egiten ari zaren badakizu bakarrik aldatu. Utzi hutsik defektuzko portaerarako."
+
+#. Default: "E-mail addresses which receive a carbon copy."
+#: collective/easyform/interfaces/mailer.py:80
+msgid "help_formmailer_cc_recipients"
+msgstr "CC kopia bat jasoko duten helbideak."
+
+#. Default: "The recipients e-mail address."
+#: collective/easyform/interfaces/mailer.py:51
+msgid "help_formmailer_recipient_email"
+msgstr "Jasotzailearen eposta helbidea"
+
+#. Default: "The full name of the recipient of the mailed form."
+#: collective/easyform/interfaces/mailer.py:33
+msgid "help_formmailer_recipient_fullname"
+msgstr "Jasotzailearen izena"
+
+#. Default: "Choose a form field from which you wish to extract input for the Reply-To header. NOTE: You should activate e-mail address verification for the designated field."
+#: collective/easyform/interfaces/mailer.py:108
+msgid "help_formmailer_replyto_extract"
+msgstr "Reply-To goiburukoaren balioa ateratzeko formularioko eremua aukeratu. OHARRA: aukeratu duzun eremuarentzat eposta balidatzailea aktibatzea gomendatzen dizugu"
+
+#. Default: "Subject line of message. This is used if you do not specify a subject field or if the field is empty."
+#: collective/easyform/interfaces/mailer.py:124
+msgid "help_formmailer_subject"
+msgstr "Mezuaren gaia. Hauxe erabiliko da ez baduzu gai eremua erabili edo eremua hutsik badago"
+
+#. Default: "Choose a form field from which you wish to extract input for the mail subject line."
+#: collective/easyform/interfaces/mailer.py:137
+msgid "help_formmailer_subject_extract"
+msgstr "Mezuaren gaia formularioko zein eremutatik atera aukeratu."
+
+#. Default: "Choose a form field from which you wish to extract input for the To header. If you choose anything other than \"None\", this will override the \"Recipient's \" e-mail address setting above. Be very cautious about allowing unguarded user input for this purpose."
+#: collective/easyform/interfaces/mailer.py:62
+msgid "help_formmailer_to_extract"
+msgstr "To goiburuaren balioa (mezuaren jasotzailea) zein eremutatik atera aukeratu. \"None\" ez den beste zerbait aukeratzen baduzu, honek \"Jasotzaileak\" goiko ezarpena gainidatziko du. Kontuz ibili balidatu gabeko balioak onartzearekin."
+
+#. Default: "This override field allows you to insert content into the xhtml head. The typical use is to add custom CSS or JavaScript. Specify a TALES expression returning a string. The string will be inserted with no interpretation. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/easyform.py:298
+msgid "help_headerInjection_text"
+msgstr "HTML goiburuan edukia txertatu dezakezu. Erabilpen arruntena CSS eta JavaScripta txertatzea izaten da. Idatzi testu-kate bat itzuliko duen TALES espresio bat. Testu katea interpretatu gabe txertatuko da. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "Check this to display field titles for fields that received no input. Uncheck to leave fields with no input off the list."
+#: collective/easyform/interfaces/easyform.py:383
+msgid "help_includeEmpties_text"
+msgstr "Aukeratuta badago baliorik jaso ez duten formularioko eremuen etiketak erakutsi egingo dira. "
+
+#. Default: "Check this to include titles for fields that received no input. Uncheck to leave fields with no input out of the e-mail."
+#: collective/easyform/interfaces/mailer.py:212
+msgid "help_mailEmpties_text"
+msgstr "Aukeratuta badago baliorik jaso ez duten formularioko eremuen etiketak erakutsi egingo dira bidalitako epostan. "
+
+#. Default: "Check this to include input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
+#: collective/easyform/interfaces/mailer.py:189
+msgid "help_mailallfields_text"
+msgstr "Aukeratuta badago eremu guztien balioak (etiketak eta fitxategiak izan ezik) sartuko dira eposta mezuan. Aukeratzen baduzu, beheko kutxako aukerak ez dira kontuan hartuko."
+
+#. Default: "Pick the fields whose inputs you'd like to include in the e-mail."
+#: collective/easyform/interfaces/mailer.py:200
+msgid "help_mailfields_text"
+msgstr "Aukeratu zein eremuren balioak bidali nahi dutuzun eposta mezuan."
+
+#: collective/easyform/interfaces/easyform.py:114
+msgid "help_method"
+msgstr " "
+
+#. Default: "This text will be displayed above the form fields."
+#: collective/easyform/interfaces/easyform.py:168
+msgid "help_prologue_text"
+msgstr "Formularioko eremuen aurretik agertuko den testua."
+
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against usingunvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/mailer.py:364
+msgid "help_recipient_override_text"
+msgstr "Jasotzailearen epostaren balioa gainidazteko exekutatuko den TALES espresioa. Kontuz ibili balidatu gabeko balioak erabiltzearekin. Utzi hutsik ez baduzu behar. Espresioak testu-katea bat itzuli beharko luke. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "Select the registry items you desire to modify"
+#: collective/easyform/browser/controlpanel.py:58
+#: collective/easyform/profiles/default/registry.xml
+msgid "help_registry_items"
+msgstr "Aldatu nahi dituzun erregistroko balioak aukeratu."
+
+#: collective/easyform/interfaces/easyform.py:108
+msgid "help_reset_button"
+msgstr " "
+
+#. Default: "Pick any extra data you'd like saved with the form input."
+#: collective/easyform/interfaces/savedata.py:75
+msgid "help_savedataextra_text"
+msgstr "Formularioaren datuekin batera gorde nahi duzun beste edozein balio gehigarri aukeratu."
+
+#. Default: "Pick the fields whose inputs you'd like to include in the saved data. If empty, all fields will be saved."
+#: collective/easyform/interfaces/savedata.py:63
+msgid "help_savefields_text"
+msgstr "Aukeratu zein balio gorde nahi dituzun. Hutsik uzten baduzu, eremu guztien balioak gordeko dira."
+
+#. Default: "Write your script here."
+#: collective/easyform/interfaces/customscript.py:32
+msgid "help_script_body"
+msgstr "Idatzi hemen zuren scripta"
+
+#. Default: "Role under which to run the script."
+#: collective/easyform/interfaces/customscript.py:22
+msgid "help_script_proxy"
+msgstr "Scripta zein rolekin exekutatuko den."
+
+#. Default: "A TALES expression that will be evaluated to override the \"From\" header. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/mailer.py:347
+msgid "help_sender_override_text"
+msgstr "\"From\" (bidaltzailea) goiburukoaren balioa gainidazteko erabiliko den TALES espresioa. Utzi hutsik ez baduzu behar. Espresioak testu-kate bat itzuli beharko luke. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "Check this to display input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
+#: collective/easyform/interfaces/easyform.py:363
+msgid "help_showallfields_text"
+msgstr "Aukeratuta badago eremu guztien balioak erakutsiko ditu (etiketak eta fitxategiak izan ezik). Aukeratzen baduzu, beheko kutxako aukerak ez dira kontuan hartuko."
+
+#: collective/easyform/interfaces/easyform.py:102
+msgid "help_showcancel_text"
+msgstr " "
+
+#. Default: "Pick the fields whose inputs you'd like to display on the success page."
+#: collective/easyform/interfaces/easyform.py:373
+msgid "help_showfields_text"
+msgstr "Aukeratu zein eremuren balioak erakutsi nahi dituzun eskertza-orrian."
+
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the e-mail subject header. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/mailer.py:329
+msgid "help_subject_override_text"
+msgstr "Epostaren gaia gainidazteko exekutatuko den TALES espresioa. Utzi hutsik ez baduzu behar. Espresioak testu-kate bat itzuli beharko luke. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#: collective/easyform/interfaces/easyform.py:96
+msgid "help_submitlabel_text"
+msgstr " "
+
+#. Default: "This override field allows you to change submit button label. The typical use is to set label with request parameters. Specify a TALES expression returning a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/easyform.py:316
+msgid "help_submitlabeloverride_text"
+msgstr "Bidalketa botoiaren etiketa aldatzeko TALES espresioa. Espresioak testu-kate bat itzuli beharko luke. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "A TALES expression that will be evaluated when the formis displayed to get the field default value. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/fields.py:37
+msgid "help_tdefault_text"
+msgstr "Eremuaren defektuzko balioa lortzeko formularioa erakustean exekutatuko den TALES espresioa. Utzi hutsik behar ez baduzu. Espresioak testu-kate bat itzuli beharko luke. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "A TALES expression that will be evaluated when the form is displayed to determine whether or not the field is enabled. Your expression should evaluate as True if the field should be included in the form, False if it should be omitted. Leave this expression field empty if unneeded: the field will be included. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/fields.py:52
+msgid "help_tenabled_text"
+msgstr "Eremua aktibo egongo den edo ez erabakitzeko formularioa erakustean exekutatuko den TALES espresioa. Espresioak True balio boolearra itzuli beharko du eremua formularioan erakustarazi nahi baduzu, aldiz, False ez bada erakutsi behar. Utzi hutsik behar ez baduzu: horrela eremua erakutsi egingo da. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#. Default: "Used in thanks page."
+#: collective/easyform/interfaces/easyform.py:348
+msgid "help_thanksdescription"
+msgstr "Eskertza-orrian erabiliko da."
+
+#. Default: "The text will be displayed after the field inputs."
+#: collective/easyform/interfaces/easyform.py:401
+msgid "help_thanksepilogue_text"
+msgstr "Eremuen balioen ostean erakutsiko den testua."
+
+#. Default: "Use this field in place of a thanks-page designation to determine final action after calling your action adapter (if you have one). You would usually use this for a custom success template or script. Leave empty if unneeded. Otherwise, specify as you would a CMFFormController action type and argument, complete with type of action to execute (e.g., \"redirect_to\" or \"traverse_to\") and a TALES expression. For example, \"Redirect to\" and \"string:thanks-page\" would redirect to \"thanks-page\"."
+#: collective/easyform/interfaces/easyform.py:222
+msgid "help_thankspageoverride_text"
+msgstr "Erabili eremu hau eskertza orriaren ordez, formularioaren akzioaren ondoren erakutsiko den helbidea zehazteko. Erabilpen arrunta arrakasta orrialde bat edo script bat exekutatzea da. Utzi hutsik behar ez baduzu. Bestela CMFFormController erako akzio gisa idatzi behar duzu. Adibidez: \"redirect_to\" edo \"traverse_to\" eta ondoren TALES espresio bat. Esaterako: \"redirect_to: string:thanks-page\"."
+
+#. Default: "Use this field in place of a thanks-page designation to determine final action after calling your action adapter (if you have one). You would usually use this for a custom success template or script. Leave empty if unneeded. Otherwise, specify as you would a CMFFormController action type and argument, complete with type of action to execute (e.g., \"redirect_to\" or \"traverse_to\") and a TALES expression. For example, \"Redirect to\" and \"string:thanks-page\" would redirect to \"thanks-page\"."
+#: collective/easyform/interfaces/easyform.py:200
+msgid "help_thankspageoverrideaction_text"
+msgstr "Erabili eremu hau eskertza orriaren ordez, formularioaren akzioaren ondoren erakutsiko den helbidea zehazteko. Erabilpen arrunta arrakasta orrialde bat edo script bat exekutatzea da. Utzi hutsik behar ez baduzu. Bestela CMFFormController erako akzio gisa idatzi behar duzu. Adibidez: \"redirect_to\" edo \"traverse_to\" eta ondoren TALES espresio bat. Esaterako: \"redirect_to: string:thanks-page\"."
+
+#. Default: "This text will be displayed above the selected field inputs."
+#: collective/easyform/interfaces/easyform.py:392
+msgid "help_thanksprologue_text"
+msgstr "Eremuen balioen aurretik erakutsiko den testua."
+
+#. Default: "A TALES expression that will be evaluated when the form is validated. Validate against 'value', which will contain the field input. Return False if valid; if not valid return a string error message. E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" will require \"eggs\" for input. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#: collective/easyform/interfaces/fields.py:70
+msgid "help_tvalidator_text"
+msgstr "Formularioa balidatzean exekutatuko den TALES espresioa. Erabili 'value' aldagaia balidaziorako, bertan egongo da-eta eremuaren balioa. Itzuli False balio boolearra balioa zuzena bada; bestela itzuli errore mezua. Adb.: \"python:test(value='arrautzak', False, 'Balioa arrautzak izan behar da')\" idatzi gero, eremuaren balioa \"arrautzak\" izan beharko da. OHARRA: espresio hau ebaluatzean erroreren bat gertatzen bada, formularioaren bistan errore mezua agertuko da."
+
+#: collective/easyform/interfaces/easyform.py:139
+msgid "help_unload_protection"
+msgstr " "
+
+#. Default: "Do you wish to have column names on the first line of downloaded input?"
+#: collective/easyform/interfaces/savedata.py:91
+msgid "help_usecolumnnames_text"
+msgstr "Deskargatuko den fitxategiaren lehenengo lerroak eremuen izenak txertatu nahi dituzu?"
+
+#. Default: "Select the validators to use on this field"
+#: collective/easyform/interfaces/fields.py:97
+msgid "help_userfield_validators"
+msgstr "Aukeratu eremu honetan erabiliko diren balidadoreak."
+
+#. Default: "Pick any items from the HTTP headers that you'd like to insert as X- headers in the message."
+#: collective/easyform/interfaces/mailer.py:260
+msgid "help_xinfo_headers_text"
+msgstr "Mezuan X-Goiburuko bezala txertatuko diren HTTP goiburukoak aukeratu."
+
+#: collective/easyform/browser/exportimport.py:49
+msgid "import"
+msgstr "Inportatu"
+
+#. Default: "After Validation Script"
+#: collective/easyform/interfaces/easyform.py:276
+msgid "label_AfterValidationOverride_text"
+msgstr "Balidazioaren osteko scripta"
+
+#. Default: "Form Setup Script"
+#: collective/easyform/interfaces/easyform.py:257
+msgid "label_OnDisplayOverride_text"
+msgstr "Formularioa ezartzeko scripta"
+
+#. Default: "BCC Expression"
+#: collective/easyform/interfaces/mailer.py:400
+msgid "label_bcc_override_text"
+msgstr "BCC espresioa"
+
+#. Default: "CC Expression"
+#: collective/easyform/interfaces/mailer.py:382
+msgid "label_cc_override_text"
+msgstr "CC espresioa"
+
+#. Default: "CSRF Protection"
+#: collective/easyform/interfaces/easyform.py:144
+msgid "label_csrf"
+msgstr "CSRF babesa"
+
+#. Default: "Custom Default Fieldset Label"
+#: collective/easyform/interfaces/easyform.py:127
+msgid "label_default_fieldset_label_text"
+msgstr "Eremu-multzoaren defektuzko etiketa"
+
+#. Default: "Download Format"
+#: collective/easyform/interfaces/savedata.py:85
+msgid "label_downloadformat_text"
+msgstr "Deskargatzeko formatua"
+
+#. Default: "Form Epilogue"
+#: collective/easyform/interfaces/easyform.py:175
+msgid "label_epilogue_text"
+msgstr "Formularioaren epilogoa"
+
+#. Default: "Execution Condition"
+#: collective/easyform/interfaces/actions.py:106
+msgid "label_execcondition_text"
+msgstr "Exekuzio baldintza"
+
+#. Default: "Field Widget"
+#: collective/easyform/interfaces/fields.py:26
+msgid "label_field_widget"
+msgstr "Eremuaren widgeta"
+
+#. Default: "Force SSL connection"
+#: collective/easyform/interfaces/easyform.py:153
+msgid "label_force_ssl"
+msgstr "SSL konexioa derrigortu"
+
+#. Default: "Turn fieldsets to tabs"
+#: collective/easyform/interfaces/easyform.py:120
+msgid "label_form_tabbing"
+msgstr "Eremu-multzoak fitxa bihurtu"
+
+#. Default: "Custom Form Action"
+#: collective/easyform/interfaces/easyform.py:242
+msgid "label_formactionoverride_text"
+msgstr "Pertsonalizatutako akzioa"
+
+#. Default: "Additional Headers"
+#: collective/easyform/interfaces/mailer.py:274
+msgid "label_formmailer_additional_headers"
+msgstr "Goiburuko gehigarriak"
+
+#. Default: "BCC Recipients"
+#: collective/easyform/interfaces/mailer.py:93
+msgid "label_formmailer_bcc_recipients"
+msgstr "BCC jasotzaileak"
+
+#. Default: "Body (signature)"
+#: collective/easyform/interfaces/mailer.py:174
+msgid "label_formmailer_body_footer"
+msgstr "Gorputza (sinadura)"
+
+#. Default: "Body (appended)"
+#: collective/easyform/interfaces/mailer.py:161
+msgid "label_formmailer_body_post"
+msgstr "Gorputza (ondoren gehituko dena)"
+
+#. Default: "Body (prepended)"
+#: collective/easyform/interfaces/mailer.py:148
+msgid "label_formmailer_body_pre"
+msgstr "Gorputza (aurretik gehituko dena)"
+
+#. Default: "Mail-Body Template"
+#: collective/easyform/interfaces/mailer.py:227
+msgid "label_formmailer_body_pt"
+msgstr "Mezuaren txantilioia"
+
+#. Default: "Mail Format"
+#: collective/easyform/interfaces/mailer.py:242
+msgid "label_formmailer_body_type"
+msgstr "Mezuaren formatua"
+
+#. Default: "CC Recipients"
+#: collective/easyform/interfaces/mailer.py:78
+msgid "label_formmailer_cc_recipients"
+msgstr "CC jasotzaileak"
+
+#. Default: "Recipient's e-mail address"
+#: collective/easyform/interfaces/mailer.py:49
+msgid "label_formmailer_recipient_email"
+msgstr "Jasotzailearen eposta"
+
+#. Default: "Recipient's full name"
+#: collective/easyform/interfaces/mailer.py:31
+msgid "label_formmailer_recipient_fullname"
+msgstr "Jasotzailearen izena"
+
+#. Default: "Extract Reply-To From"
+#: collective/easyform/interfaces/mailer.py:106
+msgid "label_formmailer_replyto_extract"
+msgstr "Reply-To goiburukoa nondik atera"
+
+#. Default: "Subject"
+#: collective/easyform/interfaces/mailer.py:123
+msgid "label_formmailer_subject"
+msgstr "Gaia"
+
+#. Default: "Extract Subject From"
+#: collective/easyform/interfaces/mailer.py:135
+msgid "label_formmailer_subject_extract"
+msgstr "Mezuaren gaia nondik atera"
+
+#. Default: "Extract Recipient From"
+#: collective/easyform/interfaces/mailer.py:60
+msgid "label_formmailer_to_extract"
+msgstr "Mezuaren jasotzailea nondik atera"
+
+#. Default: "Header Injection"
+#: collective/easyform/interfaces/easyform.py:297
+msgid "label_headerInjection_text"
+msgstr "Goiburukoak txertatu"
+
+#. Default: "Include Empties"
+#: collective/easyform/interfaces/easyform.py:382
+msgid "label_includeEmpties_text"
+msgstr "Hutsik daudenak sartu"
+
+#. Default: "Label"
+#: collective/easyform/fields.py:104
+msgid "label_label_field"
+msgstr "Etiketa"
+
+#. Default: "Include Empties"
+#: collective/easyform/interfaces/mailer.py:211
+msgid "label_mailEmpties_text"
+msgstr "Hutsik daudenak sartu"
+
+#. Default: "Include All Fields"
+#: collective/easyform/interfaces/mailer.py:188
+msgid "label_mailallfields_text"
+msgstr "Eremu guztiak sartu"
+
+#. Default: "Show Responses"
+#: collective/easyform/interfaces/mailer.py:199
+msgid "label_mailfields_text"
+msgstr "Erantzunak erakutsi"
+
+#. Default: "Form method"
+#: collective/easyform/interfaces/easyform.py:113
+msgid "label_method"
+msgstr "Formularioaren metodoa"
+
+#. Default: "Form Prologue"
+#: collective/easyform/interfaces/easyform.py:167
+msgid "label_prologue_text"
+msgstr "Formularioaren prologoa"
+
+#. Default: "ReCaptcha"
+#: collective/easyform/fields.py:123
+msgid "label_recaptcha_field"
+msgstr "ReCaptcha"
+
+#. Default: "Recipient Expression"
+#: collective/easyform/interfaces/mailer.py:362
+msgid "label_recipient_override_text"
+msgstr "Jasotzailearen espresioa"
+
+#. Default: "Reset Button Label"
+#: collective/easyform/interfaces/easyform.py:107
+msgid "label_reset_button"
+msgstr "Reset botoiaren etiketa"
+
+#. Default: "Rich Label"
+#: collective/easyform/fields.py:107
+msgid "label_richlabel_field"
+msgstr "Etiketa aberatsa"
+
+#. Default: "Extra Data"
+#: collective/easyform/interfaces/savedata.py:74
+msgid "label_savedataextra_text"
+msgstr "Datu gehigarriak"
+
+#. Default: "Saved Fields"
+#: collective/easyform/interfaces/savedata.py:62
+msgid "label_savefields_text"
+msgstr "Gordetako eremuak"
+
+#. Default: "Script body"
+#: collective/easyform/interfaces/customscript.py:31
+msgid "label_script_body"
+msgstr "Scriptaren gorputza"
+
+#. Default: "Proxy role"
+#: collective/easyform/interfaces/customscript.py:21
+msgid "label_script_proxy"
+msgstr "Scriptaren proxy-rola"
+
+#. Default: "Sender Expression"
+#: collective/easyform/interfaces/mailer.py:346
+msgid "label_sender_override_text"
+msgstr "Bidaltzailearen espresioa"
+
+#. Default: "Server-Side Variable"
+#: collective/easyform/interfaces/fields.py:87
+msgid "label_server_side_text"
+msgstr "Zerbitzariaren aldeko aldagaia"
+
+#. Default: "Show All Fields"
+#: collective/easyform/interfaces/easyform.py:362
+msgid "label_showallfields_text"
+msgstr "Eremu guztiak erakutsi"
+
+#. Default: "Show Reset Button"
+#: collective/easyform/interfaces/easyform.py:101
+msgid "label_showcancel_text"
+msgstr "Reset botoia erakutsi"
+
+#. Default: "Show Responses"
+#: collective/easyform/interfaces/easyform.py:372
+msgid "label_showfields_text"
+msgstr "Erantzunak erakutsi"
+
+#. Default: "Subject Expression"
+#: collective/easyform/interfaces/mailer.py:328
+msgid "label_subject_override_text"
+msgstr "Gaiaren espresioa"
+
+#. Default: "Submit Button Label"
+#: collective/easyform/interfaces/easyform.py:95
+msgid "label_submitlabel_text"
+msgstr "Bidalketa botoiaren etiketa"
+
+#. Default: "Custom Submit Button Label"
+#: collective/easyform/interfaces/easyform.py:314
+msgid "label_submitlabeloverride_text"
+msgstr "Bidalketa botoiaren etiketa pertsonalizatua"
+
+#. Default: "Default Expression"
+#: collective/easyform/interfaces/fields.py:36
+msgid "label_tdefault_text"
+msgstr "Defektuzko espresioa"
+
+#. Default: "Enabling Expression"
+#: collective/easyform/interfaces/fields.py:51
+msgid "label_tenabled_text"
+msgstr "Aktibatzeko espresioa"
+
+#. Default: "Thanks summary"
+#: collective/easyform/interfaces/easyform.py:347
+msgid "label_thanksdescription"
+msgstr "Eskertzaren laburpena"
+
+#. Default: "Thanks Epilogue"
+#: collective/easyform/interfaces/easyform.py:400
+msgid "label_thanksepilogue_text"
+msgstr "Eskertzaren epilogoa"
+
+#. Default: "Custom Success Action"
+#: collective/easyform/interfaces/easyform.py:220
+msgid "label_thankspageoverride_text"
+msgstr "Arrakasta akzio pertsonalizatua"
+
+#. Default: "Custom Success Action Type"
+#: collective/easyform/interfaces/easyform.py:198
+msgid "label_thankspageoverrideaction_text"
+msgstr "Arrakasta akzio pertsonalizatu-mota"
+
+#. Default: "Thanks Prologue"
+#: collective/easyform/interfaces/easyform.py:391
+msgid "label_thanksprologue_text"
+msgstr "Eskertzaren prologoa"
+
+#. Default: "Thanks title"
+#: collective/easyform/interfaces/easyform.py:342
+msgid "label_thankstitle"
+msgstr "Eskertzaren izenburua"
+
+#. Default: "Custom Validator"
+#: collective/easyform/interfaces/fields.py:69
+msgid "label_tvalidator_text"
+msgstr "Balidadore pertsonalizatua"
+
+#. Default: "Unload protection"
+#: collective/easyform/interfaces/easyform.py:137
+msgid "label_unload_protection"
+msgstr "Babesa"
+
+#. Default: "Include Column Names"
+#: collective/easyform/interfaces/savedata.py:90
+msgid "label_usecolumnnames_text"
+msgstr "Eremu izenak sartu"
+
+#. Default: "HTTP Headers"
+#: collective/easyform/interfaces/mailer.py:259
+msgid "label_xinfo_headers_text"
+msgstr "HTTP Goiburukoak"
+
+#: collective/easyform/browser/view.py:321
+msgid "msg_file_too_big"
+msgstr "Fitxategia handiegia da"
+
+#. Default: "Comma-Separated Values"
+#: collective/easyform/vocabularies.py:65
+msgid "vocabulary_csv_text"
+msgstr "CSV: komekin banatutako balioak"
+
+#. Default: "Posting Date/Time"
+#: collective/easyform/vocabularies.py:57
+msgid "vocabulary_postingdt_text"
+msgstr "Bidalketaren data/ordua"
+
+#. Default: "Tab-Separated Values"
+#: collective/easyform/vocabularies.py:64
+msgid "vocabulary_tsv_text"
+msgstr "TSV: Tabulazioekin banatutako balioak"

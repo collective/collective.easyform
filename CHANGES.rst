@@ -10,6 +10,9 @@ Breaking changes:
 
 New features:
 
+- Basque translation
+  [erral]
+
 - Update italian translations.
   [arsenico13]
 
