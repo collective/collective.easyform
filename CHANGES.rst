@@ -13,6 +13,9 @@ New features:
 - Basque translation
   [erral]
 
+- Update italian translations.
+  [arsenico13]
+
 Bug fixes:
 
 - Register the recaptcha validator more specifically, so that it overrides the default easyform validator.
