@@ -26,10 +26,7 @@ from .mailer import IMailer  # NOQA
 from .savedata import IExtraData  # NOQA
 from .savedata import ISaveData  # NOQA
 from .savedata import ISavedDataFormWrapper  # NOQA
-from z3c.form.interfaces import IFieldWidget
-from zope.component import getGlobalSiteManager
 from zope.interface import Interface
-
 
 
 class IEasyFormView(Interface):

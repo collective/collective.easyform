@@ -24,6 +24,9 @@ New features:
 
 Bug fixes:
 
+- Support ``showAll`` and ``includeEmpties`` also for the thanks page.
+  [thet]
+
 - Register the recaptcha validator more specifically, so that it overrides the default easyform validator.
   Fixes an issue where plone.formwidget.recaptcha had no effect when used.
   [thet]

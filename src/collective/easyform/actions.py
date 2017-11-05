@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
-from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
-from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
-from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
+from collective.easyform.api import filter_fields
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
+from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
+from collective.easyform.api import OrderedDict
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
 from collective.easyform.interfaces import IExtraData
-from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
 from copy import deepcopy
@@ -52,24 +51,6 @@ from zope.security.interfaces import IPermission
 
 
 logger = getLogger('collective.easyform')
-
-
-class OrderedDict(BaseDict):
-    """
-    A wrapper around dictionary objects that provides an ordering for
-    keys() and items().
-    """
-
-    security = ClassSecurityInfo()
-    security.setDefaultAccess('allow')
-
-    def reverse(self):
-        items = list(self.items())
-        items.reverse()
-        return items
-
-
-InitializeClass(OrderedDict)
 
 
 @implementer(IActionFactory)
@@ -109,13 +90,6 @@ class Action(Bool):
     def onSuccess(self, fields, request):
         raise NotImplementedError(
             "There is not implemented 'onSuccess' of {0!r}".format(self))
-
-    def _is_file_data(self, value):
-        ifaces = (INamedFile, INamedBlobFile)
-        for i in ifaces:
-            if i.providedBy(value):
-                return True
-        return False
 
 
 class DummyFormView(WidgetsView):
@@ -162,32 +136,7 @@ class Mailer(Action):
         form._update()
         widgets = {name: widget.render() for name, widget in form.w.items()}
 
-        data = OrderedDict([
-            (x[0], unsorted_data[x[0]])
-            for x in getFieldsInOrder(schema)
-            if x[0] in unsorted_data
-        ])
-
-        # TODO: Exclude labels
-        fields = [
-            f for f in data
-            if not (self._is_file_data(data[f])) and not (
-                # TODO: serverSide should always be excluded
-                # Also, when shoAll = 0 and serverSite = 1, it will be included
-                # which is wrong.
-                getattr(self, 'showAll', True) and
-                IFieldExtender(schema[f]).serverSide
-            )
-        ]
-
-        if not getattr(self, 'showAll', True):
-            showFields = getattr(self, 'showFields', []) or []
-            fields = [f for f in fields if f in showFields]
-
-        if not getattr(self, 'includeEmpties', True):
-            fields = [f for f in fields if data[f]]
-
-        filtered_data = OrderedDict([(f, data[f]) for f in fields])
+        data = filter_fields(self, schema, unsorted_data)
 
         bodyfield = self.body_pt
 
@@ -210,7 +159,7 @@ class Mailer(Action):
             body_footer = self.body_footer.output
 
         extra = {
-            'data': filtered_data,
+            'data': data,
             'fields': OrderedDict([
                 (i, j.title)
                 for i, j in getFieldsInOrder(schema)
@@ -398,7 +347,7 @@ class Mailer(Action):
             field = fields[fname]
             showFields = getattr(self, 'showFields', []) or []
 
-            if self._is_file_data(field) and (
+            if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
                 data = field.data
                 filename = field.filename
@@ -604,7 +553,7 @@ class SaveData(Action):
         for row in self.getSavedFormInput():
             def get_data(row, i):
                 data = row.get(i, '')
-                if self._is_file_data(data):
+                if is_file_data(data):
                     data = data.filename
                 if isinstance(data, unicode):
                     return data.encode('utf-8')
