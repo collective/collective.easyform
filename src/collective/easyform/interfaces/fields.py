@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from .validators import isTALES
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
-from collective.easyform import vocabularies
 from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schemaeditor.interfaces import IFieldContext
@@ -9,12 +9,46 @@ from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
 from plone.supermodel.model import fieldset
 from plone.supermodel.model import Schema
-from validators import isTALES
+from z3c.form.interfaces import IFieldWidget
+from zope.component import getGlobalSiteManager
 from zope.interface import Interface
+from zope.interface import provider
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleVocabulary
 
 import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
+
+
+class WidgetVocabulary(SimpleVocabulary):
+
+    def getTerm(self, value):
+        """See zope.schema.interfaces.IBaseVocabulary"""
+        if not isinstance(value, basestring):
+            value = '{0}.{1}'.format(
+                value.widget_factory.__module__, value.widget_factory.__name__)
+        return self.getTermByToken(value)
+
+
+@provider(IContextSourceBinder)
+def widgetsFactory(context):
+    terms = []
+    adapters = [
+        a.factory
+        for a in getGlobalSiteManager().registeredAdapters()
+        if (
+            a.provided == IFieldWidget and
+            len(a.required) == 2 and
+            a.required[0].providedBy(context)
+        )
+    ]
+    for adapter in set(adapters):
+        name = u'{0}.{1}'.format(
+            adapter.__module__, adapter.__name__)
+        terms.append(WidgetVocabulary.createTerm(
+            name, str(name), adapter.__name__))
+    return WidgetVocabulary(terms)
 
 
 class IEasyFormFieldsEditorExtender(IFieldEditorExtender):
@@ -27,7 +61,7 @@ class IFieldExtender(Schema):
                 default=u'Field Widget'),
         description=_(u'help_field_widget', default=u''),
         required=False,
-        source=vocabularies.widgetsFactory,
+        source=widgetsFactory,
     )
     fieldset(u'overrides', label=_('Overrides'),
              fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
@@ -100,7 +134,7 @@ class IFieldExtender(Schema):
         unique=True,
         required=False,
         value_type=zope.schema.Choice(
-            vocabulary='collective.easyform.validators'),
+            vocabulary='easyform.Validators'),
     )
 
 

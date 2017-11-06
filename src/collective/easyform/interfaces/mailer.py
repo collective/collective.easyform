@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+from .validators import isTALES
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
-from collective.easyform import vocabularies
 from collective.easyform.interfaces import IAction
 from plone import api
 from plone.app.textfield import RichText
@@ -9,7 +9,6 @@ from plone.autoform import directives
 from plone.schema import Email
 from plone.supermodel.model import fieldset
 from Products.CMFPlone.utils import safe_unicode
-from validators import isTALES
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
 
@@ -80,7 +79,7 @@ class IMailer(IAction):
                     u'allowing unguarded user input for this purpose.'
         ),
         required=False,
-        vocabulary=vocabularies.fieldsFactory,
+        vocabulary='easyform.Fields',
     )
 
     directives.write_permission(
@@ -126,7 +125,7 @@ class IMailer(IAction):
                     u'designated field.'
         ),
         required=False,
-        vocabulary=vocabularies.fieldsFactory,
+        vocabulary='easyform.Fields',
     )
     fieldset(u'message', label=PMF('Message'), fields=[
              'msg_subject', 'subject_field', 'body_pre', 'body_post',
@@ -152,7 +151,7 @@ class IMailer(IAction):
                       u'Choose a form field from which you wish to extract '
                       u'input for the mail subject line.'),
         required=False,
-        vocabulary=vocabularies.fieldsFactory,
+        vocabulary='easyform.Fields',
     )
     directives.read_permission(body_pre=MODIFY_PORTAL_CONTENT)
     directives.widget('body_pre', TextAreaWidget)
@@ -219,7 +218,7 @@ class IMailer(IAction):
         ),
         unique=True,
         required=False,
-        value_type=zope.schema.Choice(vocabulary=vocabularies.fieldsFactory),
+        value_type=zope.schema.Choice(vocabulary='easyform.Fields'),
     )
 
     directives.read_permission(includeEmpties=MODIFY_PORTAL_CONTENT)
@@ -260,7 +259,7 @@ class IMailer(IAction):
                     u'Leave it blank for default behaviour.'
         ),
         default=u'html',
-        vocabulary=vocabularies.MIME_LIST,
+        vocabulary='easyform.MimeList',
     )
     fieldset(u'headers', label=_('Headers'),
              fields=['xinfo_headers', 'additional_headers'])
@@ -276,7 +275,7 @@ class IMailer(IAction):
         required=False,
         default=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
         missing_value=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
-        value_type=zope.schema.Choice(vocabulary=vocabularies.XINFO_HEADERS),
+        value_type=zope.schema.Choice(vocabulary='easyform.XinfoHeaders'),
     )
     directives.write_permission(
         additional_headers=config.EDIT_ADVANCED_PERMISSION)

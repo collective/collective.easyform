@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+from .validators import isTALES
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
-from collective.easyform import vocabularies
 from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.supermodel.model import fieldset
 from plone.supermodel.model import Schema
 from Products.CMFPlone.utils import safe_unicode
-from validators import isTALES
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
@@ -107,7 +106,7 @@ class IEasyForm(Schema):
         description=_(u'help_method', default=u''),
         default=u'post',
         required=False,
-        vocabulary=vocabularies.FORM_METHODS,
+        vocabulary='easyform.FormMethods',
     )
     form_tabbing = zope.schema.Bool(
         title=_(u'label_form_tabbing',
@@ -205,7 +204,7 @@ class IEasyForm(Schema):
                     u'to "thanks-page".'),
         default=u'redirect_to',
         required=False,
-        vocabulary=vocabularies.customActions,
+        vocabulary='easyform.CustomActions',
     )
     directives.write_permission(
         thanksPageOverride=config.EDIT_TALES_PERMISSION)
@@ -364,7 +363,7 @@ class IEasyForm(Schema):
                     u'the success page.'),
         unique=True,
         required=False,
-        value_type=zope.schema.Choice(vocabulary=vocabularies.fieldsFactory),
+        value_type=zope.schema.Choice(vocabulary='easyform.Fields'),  # noqa
     )
     includeEmpties = zope.schema.Bool(
         title=_(u'label_includeEmpties_text', default=u'Include Empties'),

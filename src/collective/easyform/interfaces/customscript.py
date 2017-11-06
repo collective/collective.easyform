@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from actions import IAction
-from collective.easyform import easyformMessageFactory as _  # NOQA
+from .actions import IAction
+from collective.easyform import easyformMessageFactory as _
 from collective.easyform import config
-from collective.easyform import vocabularies
 from plone.autoform import directives
 
 import zope.interface
@@ -23,7 +22,7 @@ class ICustomScript(IAction):
                       default=u'Role under which to run the script.'),
         default=u'none',
         required=True,
-        vocabulary=vocabularies.getProxyRoleChoices,
+        vocabulary='easyform.ProxyRoleChoices',
     )
     directives.read_permission(ScriptBody=MODIFY_PORTAL_CONTENT)
     directives.write_permission(ScriptBody=config.EDIT_PYTHON_PERMISSION)

@@ -10,7 +10,7 @@
         <value_type type="plone.registry.field.Choice">
           <description xmlns:ns0="http://xml.zope.org/namespaces/i18n" ns0:domain="collective.easyform" ns0:translate="help_registry_items">Select the registry items you desire to modify</description>
           <required>False</required>
-          <vocabulary>collective.easyform.FieldsVocabulary</vocabulary>
+          <vocabulary>easyform.SchemaEditorFields</vocabulary>
         </value_type>
       </field>
       <value>
