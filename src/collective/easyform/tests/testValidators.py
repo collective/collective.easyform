@@ -2,9 +2,10 @@
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
-from collective.easyform.browser.view import ValidateFileSize
+from collective.easyform.browser.view import ValidateFile
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
+from plone.namedfile.interfaces import INamed
 from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
@@ -200,36 +201,74 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
 
 class DummyFile(object):
 
-    def __init__(self, size):
+    def __init__(self, size=1, filename=''):
         self.size = size
+        self.filename = filename
 
     def getSize(self):
         return self.size
+
+
+classImplements(DummyFile, INamed)
 
 
 class TestSizeValidator(base.EasyFormTestCase):
 
     def afterSetUp(self):
         self.request = self.layer['request']
+        self.validate_view = ValidateFile(self.portal, self.request)
 
     def test_filesize_none_validation(self):
-        view = ValidateFileSize(self.portal, self.request)
-        self.assertFalse(view(None))
+        self.assertFalse(self.validate_view(None))
+
+    def test_filesize_no_file_validation(self):
+        self.assertFalse(self.validate_view('not a file'))
 
     def test_filiesize_smallsize_validation(self):
-        view = ValidateFileSize(self.portal, self.request)
-        self.assertFalse(view(DummyFile(1024)))
+        self.assertFalse(self.validate_view(DummyFile(1024)))
 
     def test_filiesize_bigsize_validation(self):
-        view = ValidateFileSize(self.portal, self.request)
         self.assertEqual(
-            translate(view(DummyFile(1000000000))),
-            u'File is bigger than allowed size of 1048576 bytes!'
+            translate(self.validate_view(DummyFile(1000000000))),
+            u'The uploaded file is bigger than the allowed size of 1048576 bytes!'  # noqa
         )
 
     def test_filiesize_bigsize_custom_validation(self):
-        view = ValidateFileSize(self.portal, self.request)
         self.assertEqual(
-            translate(view(DummyFile(1025), 1024)),
-            u'File is bigger than allowed size of 1024 bytes!'
+            translate(self.validate_view(DummyFile(1025), 1024)),
+            u'The uploaded file is bigger than the allowed size of 1024 bytes!'
+        )
+
+    def test_forbidden_type_validation_fail(self):
+        validation = self.validate_view(
+            DummyFile(filename='foo.ZIP'), forbidden_types=('zip',))
+        self.assertEqual(
+            translate(validation),
+            u"The type 'zip' of the uploaded file is not allowed!"
+        )
+
+    def test_forbidden_type_validation_pass(self):
+        validation = self.validate_view(
+            DummyFile(filename='foo.txt'), forbidden_types=('zip',))
+        self.assertFalse(validation)
+
+    def test_allowed_type_validation_fail(self):
+        validation = self.validate_view(
+            DummyFile(filename='foo.ZIP'), allowed_types=('txt',))
+        self.assertEqual(
+            translate(validation),
+            u"The type 'zip' of the uploaded file is not allowed!"
+        )
+
+    def test_allowed_type_validation_pass(self):
+        validation = self.validate_view(
+            DummyFile(filename='foo.txt'), allowed_types=('txt',))
+        self.assertFalse(validation)
+
+    def test_allowed_type_no_ext(self):
+        validation = self.validate_view(
+            DummyFile(filename='foo'), allowed_types=('txt',))
+        self.assertEqual(
+            translate(validation),
+            u"The type '' of the uploaded file is not allowed!"
         )

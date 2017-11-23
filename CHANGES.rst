@@ -6,15 +6,16 @@ Changelog
 
 Breaking changes:
 
-- *add item here*
-
-New features:
-
 - Basque translation
   [erral]
 
 - Update italian translations.
   [arsenico13]
+
+New features:
+
+- Enhance file validation view with type check
+  [tomgross]
 
 Bug fixes:
 
@@ -26,6 +27,19 @@ Bug fixes:
   Fixes: #87.
   [sverbois]
 
+2.0.0b1.post3 (2017-07-13)
+--------------------------
+
+FHNW Patches:
+
+- No default fields on form creation
+
+- Use FHNW email template https://gitlab.fhnw.ch/webteam/fhnw.webauftritt/issues/770
+  [karalics,tomgross]
+
+- Base64 encoding for logo in E-Mail
+
+- Fix action URLs to savedata, export, import
 
 2.0.0b2 (2017-08-31)
 --------------------
@@ -44,6 +58,11 @@ Bug fixes:
 - Fix saver action with non ASCII filename uploads #77
   [tomgross]
 
+- In the schema editor for fields, Fix the URL to ACE library according to the modeleditor in plone.app.dexterity.
+  [thet]
+
+- Fix saver action with non ASCII filename uploads #77
+  [tomgross]
 
 2.0.0b1 (2017-06-14)
 --------------------

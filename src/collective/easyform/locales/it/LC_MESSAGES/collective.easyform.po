@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2017-06-09 08:02+0000\n"
+"POT-Creation-Date: 2017-07-12 18:10+0000\n"
 "PO-Revision-Date: 2014-05-06 16.00+0000\n"
 "Last-Translator: Giorgio Borelli\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.easyform\n"
 
-#: collective/easyform/browser/actions.py:122
+#: collective/easyform/browser/actions.py:115
 msgid "${items} input(s) saved"
 msgstr "${items} elemento/i salvato/i"
 
@@ -27,7 +27,7 @@ msgstr "Tipo di azione"
 msgid "Actions Model"
 msgstr "Modello azioni"
 
-#: collective/easyform/browser/actions.py:275
+#: collective/easyform/browser/actions.py:268
 msgid "Add new action"
 msgstr "Aggiungi azione"
 
@@ -40,7 +40,7 @@ msgstr "Indirizzi"
 msgid "Allowed Fields"
 msgstr "Campi consentiti"
 
-#: collective/easyform/browser/actions.py:162
+#: collective/easyform/browser/actions.py:155
 msgid "Clear all"
 msgstr "Cancella i dati salvati"
 
@@ -65,11 +65,11 @@ msgstr "EasyForm (disinstalla)"
 msgid "EasyForm testing"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:340
+#: collective/easyform/browser/actions.py:333
 msgid "Edit Action '${fieldname}'"
 msgstr "Modifica azione '${fieldname}'"
 
-#: collective/easyform/browser/actions.py:347
+#: collective/easyform/browser/actions.py:339
 msgid "Edit XML Actions Model"
 msgstr "Modifica l'XML delle azioni"
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Redirect to"
 msgstr "Reindirizza a"
 
-#: collective/easyform/browser/view.py:186
+#: collective/easyform/browser/view.py:189
 msgid "Reset"
 msgstr "Annulla"
 
@@ -807,7 +807,11 @@ msgstr "Includi i nomi delle colonne"
 msgid "label_xinfo_headers_text"
 msgstr ""
 
-#: collective/easyform/browser/view.py:318
+#: collective/easyform/browser/view.py:329
+msgid "msg_file_not_allowed"
+msgstr ""
+
+#: collective/easyform/browser/view.py:322
 msgid "msg_file_too_big"
 msgstr ""
 
