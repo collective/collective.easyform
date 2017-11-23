@@ -49,10 +49,20 @@
         permission="zope2.View"
         />
 
+    <!-- BBB -->
     <browser:page
         for="*"
         name="validate_file_size"
         class=".view.ValidateFileSize"
         permission="zope2.View"
         />
+
+    <browser:page
+        for="*"
+        name="validate_file"
+        class=".view.ValidateFileSize"
+        permission="zope2.View"
+        />
+
+
 </configure>

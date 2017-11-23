@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.easyform\n"
-"POT-Creation-Date: 2017-06-09 08:02+0000\n"
+"POT-Creation-Date: 2017-07-12 18:10+0000\n"
 "PO-Revision-Date: 2015-10-13 11:16+0200\n"
 "Last-Translator: Zoriana Zaiats <sorenabell@quintagroup.com>\n"
 "Language-Team: Ukrainian <support@quintagroup.com>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Language: uk\n"
 "X-Generator: Poedit 1.7.6\n"
 
-#: collective/easyform/browser/actions.py:122
+#: collective/easyform/browser/actions.py:115
 msgid "${items} input(s) saved"
 msgstr "${items} елементів збережено."
 
@@ -29,7 +29,7 @@ msgstr "Тип дії"
 msgid "Actions Model"
 msgstr "Модель дій"
 
-#: collective/easyform/browser/actions.py:275
+#: collective/easyform/browser/actions.py:268
 msgid "Add new action"
 msgstr "Додати нову дію"
 
@@ -42,7 +42,7 @@ msgstr "Адреси"
 msgid "Allowed Fields"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:162
+#: collective/easyform/browser/actions.py:155
 msgid "Clear all"
 msgstr "Очистити все"
 
@@ -67,11 +67,11 @@ msgstr ""
 msgid "EasyForm testing"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:340
+#: collective/easyform/browser/actions.py:333
 msgid "Edit Action '${fieldname}'"
 msgstr "Редагувати дію '${fieldname}'"
 
-#: collective/easyform/browser/actions.py:347
+#: collective/easyform/browser/actions.py:339
 msgid "Edit XML Actions Model"
 msgstr "Редагувати XML модель дій"
 
@@ -133,7 +133,7 @@ msgstr "Дата/час заповнення"
 msgid "Redirect to"
 msgstr "Перенаправити до"
 
-#: collective/easyform/browser/view.py:186
+#: collective/easyform/browser/view.py:189
 msgid "Reset"
 msgstr "Відновити"
 
@@ -815,7 +815,11 @@ msgstr "Включати назви колонок"
 msgid "label_xinfo_headers_text"
 msgstr "HTTP Заголовки"
 
-#: collective/easyform/browser/view.py:318
+#: collective/easyform/browser/view.py:329
+msgid "msg_file_not_allowed"
+msgstr ""
+
+#: collective/easyform/browser/view.py:322
 msgid "msg_file_too_big"
 msgstr ""
 

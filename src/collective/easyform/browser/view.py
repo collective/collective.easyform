@@ -11,8 +11,10 @@ from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
+from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
+from plone.namedfile.interfaces import INamed
 from plone.z3cform import layout
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -310,16 +312,36 @@ class EasyFormInlineValidationView(InlineValidationView):
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
 
 
-class ValidateFileSize(BrowserView):
+class ValidateFile(BrowserView):
 
-    def __call__(self, value, size=1048576):
+    def __call__(self, value, size=1048576, allowed_types=None,
+                 forbidden_types=None):
         if not value:
             return False
-        if value.getSize() <= size:
+        if not INamed.providedBy(value):
             return False
-        else:
+        if size and value.getSize() > size:
             return _(
                 'msg_file_too_big',
                 mapping={'size': size},
                 default=u'File is bigger than allowed size of ${size} bytes!'
             )
+        ftype = splitext(value.filename)[-1]
+        # remove leading dot '.' from file extension
+        ftype = ftype and ftype[1:].lower() or ''
+        if allowed_types and ftype not in allowed_types:
+            return _(
+                'msg_file_not_allowed',
+                mapping={'ftype': ftype},
+                default=u'File type ${ftype} is not allowed!'
+            )
+        if forbidden_types and ftype in forbidden_types:
+            return _(
+                'msg_file_not_allowed',
+                mapping={'ftype': ftype},
+                default=u'File type ${ftype} is not allowed!'
+            )
+        return False
+
+# BBB
+ValidateFileSize = ValidateFile
