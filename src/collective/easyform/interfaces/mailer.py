@@ -3,6 +3,7 @@ from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from collective.easyform import vocabularies
 from collective.easyform.interfaces import IAction
+from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schema import Email
@@ -10,6 +11,7 @@ from plone.supermodel.model import fieldset
 from validators import isTALES
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 import zope.i18nmessageid
 import zope.interface
@@ -20,10 +22,22 @@ PMF = zope.i18nmessageid.MessageFactory('plone')
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
 
 
-class IMailer(IAction):
+@zope.interface.provider(IContextAwareDefaultFactory)
+def default_mail_body(context):
+    """ Default mail body for mailer action
 
+        Acquire 'mail_body_default.pt' or return hard coded default
+    """
+    portal = api.portal.get()
+    mail_body_default = portal.restrictedTraverse(
+        'easyform_mail_body_default.pt', default=None)
+    if not mail_body_default:
+        return config.MAIL_BODY_DEFAULT
+
+
+class IMailer(IAction):
     """A form action adapter that will e-mail form input."""
-#     default_method='getDefaultRecipientName',
+
     directives.write_permission(
         recipient_name=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(recipient_name=MODIFY_PORTAL_CONTENT)
@@ -38,10 +52,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-#     default_method='getDefaultRecipient',
-#     validators=('isEmail',),
-#     TODO defaultFactory
-#     TODO IContextAwareDefaultFactory
+
     directives.write_permission(
         recipient_email=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(recipient_email=MODIFY_PORTAL_CONTENT)
@@ -70,7 +81,7 @@ class IMailer(IAction):
         required=False,
         vocabulary=vocabularies.fieldsFactory,
     )
-#     default_method='getDefaultCC',
+
     directives.write_permission(
         cc_recipients=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(cc_recipients=MODIFY_PORTAL_CONTENT)
@@ -85,7 +96,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
-#     default_method='getDefaultBCC',
+
     directives.write_permission(
         bcc_recipients=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(bcc_recipients=MODIFY_PORTAL_CONTENT)
@@ -100,6 +111,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
+
     directives.write_permission(replyto_field=config.EDIT_ADVANCED_PERMISSION)
     directives.read_permission(replyto_field=MODIFY_PORTAL_CONTENT)
     replyto_field = zope.schema.Choice(
@@ -129,6 +141,7 @@ class IMailer(IAction):
         missing_value=u'',
         required=False,
     )
+
     directives.write_permission(subject_field=config.EDIT_ADVANCED_PERMISSION)
     directives.read_permission(subject_field=MODIFY_PORTAL_CONTENT)
     subject_field = zope.schema.Choice(
@@ -140,7 +153,6 @@ class IMailer(IAction):
         required=False,
         vocabulary=vocabularies.fieldsFactory,
     )
-#     accessor='getBody_pre',
     directives.read_permission(body_pre=MODIFY_PORTAL_CONTENT)
     directives.widget('body_pre', TextAreaWidget)
 
@@ -183,6 +195,7 @@ class IMailer(IAction):
         output_mime_type='text/x-html-safe',
         required=False,
     )
+
     directives.read_permission(showAll=MODIFY_PORTAL_CONTENT)
     showAll = zope.schema.Bool(
         title=_(u'label_mailallfields_text', default=u'Include All Fields'),
@@ -194,6 +207,7 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
+
     directives.read_permission(showFields=MODIFY_PORTAL_CONTENT)
     showFields = zope.schema.List(
         title=_(u'label_mailfields_text', default=u'Show Responses'),
@@ -206,6 +220,7 @@ class IMailer(IAction):
         required=False,
         value_type=zope.schema.Choice(vocabulary=vocabularies.fieldsFactory),
     )
+
     directives.read_permission(includeEmpties=MODIFY_PORTAL_CONTENT)
     includeEmpties = zope.schema.Bool(
         title=_(u'label_mailEmpties_text', default=u'Include Empties'),
@@ -218,9 +233,6 @@ class IMailer(IAction):
     )
     fieldset(u'template', label=PMF(
         'Template'), fields=['body_pt', 'body_type'])
-#     ZPTField('body_pt',
-#     default_method='getMailBodyDefault',
-#     validators=('zptvalidator',),
     directives.write_permission(body_pt=config.EDIT_TALES_PERMISSION)
     directives.read_permission(body_pt=MODIFY_PORTAL_CONTENT)
     body_pt = zope.schema.Text(
@@ -232,10 +244,10 @@ class IMailer(IAction):
                     u'know TAL (Zope\'s Template Attribute Language) have '
                     u'the full power to customize your outgoing mails.'
         ),
-        default=config.MAIL_BODY_DEFAULT,
+        defaultFactory=default_mail_body,
         missing_value=u'',
     )
-#     default_method='getMailBodyTypeDefault',
+
     directives.write_permission(body_type=config.EDIT_ADVANCED_PERMISSION)
     directives.read_permission(body_type=MODIFY_PORTAL_CONTENT)
     body_type = zope.schema.Choice(
@@ -252,7 +264,6 @@ class IMailer(IAction):
     fieldset(u'headers', label=_('Headers'),
              fields=['xinfo_headers', 'additional_headers'])
     directives.widget(xinfo_headers=CheckBoxFieldWidget)
-#     default_method='getDefaultXInfo',
     directives.write_permission(xinfo_headers=config.EDIT_ADVANCED_PERMISSION)
     directives.read_permission(xinfo_headers=MODIFY_PORTAL_CONTENT)
     xinfo_headers = zope.schema.List(
@@ -266,7 +277,6 @@ class IMailer(IAction):
         missing_value=[u'HTTP_X_FORWARDED_FOR', u'REMOTE_ADDR', u'PATH_INFO'],
         value_type=zope.schema.Choice(vocabulary=vocabularies.XINFO_HEADERS),
     )
-#     default_method='getDefaultAddHdrs',
     directives.write_permission(
         additional_headers=config.EDIT_ADVANCED_PERMISSION)
     directives.read_permission(additional_headers=MODIFY_PORTAL_CONTENT)
@@ -285,32 +295,7 @@ class IMailer(IAction):
                     default=u'${name} Header', mapping={u'name': u'HTTP'}),
         ),
     )
-#     if gpg is not None:
-#         formMailerAdapterSchema = formMailerAdapterSchema + Schema((
-#             StringField('gpg_keyid',
-#                 schemata='encryption',
-#                 accessor='getGPGKeyId',
-#                 mutator='setGPGKeyId',
-#                 write_permission=USE_ENCRYPTION_PERMISSION,
-#                 read_permission=ModifyPortalContent,
-#                 widget=StringWidget(
-#                     description=_(u'help_gpg_key_id', default=u"""
-#                         Give your key-id, e-mail address or
-#                         whatever works to match a public key from current
-#                         keyring.
-#                         It will be used to encrypt the message body (not
-#                         attachments).
-#                         Contact the site administrator if you need to
-#                         install a new public key.
-#                         Note that you will probably wish to change your
-#                         message
-#                         template to plain text if you're using encryption.
-#                         TEST THIS FEATURE BEFORE GOING PUBLIC!
-#                        """),
-#                    label=_(u'label_gpg_key_id', default=u'Key-Id'),
-#                    ),
-#                ),
-#            ))
+
     fieldset(
         u'overrides',
         label=_('Overrides'),
@@ -322,6 +307,7 @@ class IMailer(IAction):
             'bccOverride'
         ]
     )
+
     directives.write_permission(subjectOverride=config.EDIT_TALES_PERMISSION)
     directives.read_permission(subjectOverride=MODIFY_PORTAL_CONTENT)
     subjectOverride = zope.schema.TextLine(
@@ -340,6 +326,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
+
     directives.write_permission(senderOverride=config.EDIT_TALES_PERMISSION)
     directives.read_permission(senderOverride=MODIFY_PORTAL_CONTENT)
     senderOverride = zope.schema.TextLine(
@@ -356,6 +343,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
+
     directives.write_permission(recipientOverride=config.EDIT_TALES_PERMISSION)
     directives.read_permission(recipientOverride=MODIFY_PORTAL_CONTENT)
     recipientOverride = zope.schema.TextLine(
@@ -376,6 +364,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
+
     directives.write_permission(ccOverride=config.EDIT_TALES_PERMISSION)
     directives.read_permission(ccOverride=MODIFY_PORTAL_CONTENT)
     ccOverride = zope.schema.TextLine(
@@ -394,6 +383,7 @@ class IMailer(IAction):
         missing_value=u'',
         constraint=isTALES,
     )
+
     directives.write_permission(bccOverride=config.EDIT_TALES_PERMISSION)
     directives.read_permission(bccOverride=MODIFY_PORTAL_CONTENT)
     bccOverride = zope.schema.TextLine(

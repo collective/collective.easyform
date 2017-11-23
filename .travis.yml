@@ -5,8 +5,12 @@ cache:
   directories:
   - eggs
   - downloads
+addons:
+  # XXX: use an older Firefox ESR as we are stuck with selenium = 2.53.5
+  #      https://github.com/SeleniumHQ/selenium/issues/2739#issuecomment-249482533
+  firefox: 45.9.0esr
 python:
-  - 2.7.9
+  - 2.7.13
 matrix:
   fast_finish: true
 env:
@@ -14,14 +18,17 @@ env:
     - PLONE_VERSION=5.0
     - PLONE_VERSION=5.1
 install:
-  - pip install -r requirements.txt
+  - virtualenv -p `which python` .
+  - bin/pip install -r requirements.txt
   - sed -ie "s#test-5.0#test-$PLONE_VERSION#" buildout.cfg
-  - buildout -N buildout:download-cache=downloads -c tests.cfg annotate
-  - buildout -N buildout:download-cache=downloads -c tests.cfg
+  - bin/buildout -N buildout:download-cache=downloads -c tests.cfg annotate
+  - bin/buildout -N buildout:download-cache=downloads -c tests.cfg
+  - bin/pip install zest.pocompile
+  - bin/pocompile src
 before_script:
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
-- firefox -v
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - firefox -v
 script:
   - bin/code-analysis
   - bin/coverage run bin/test

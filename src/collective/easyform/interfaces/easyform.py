@@ -7,7 +7,6 @@ from plone.autoform import directives
 from plone.supermodel.model import fieldset
 from plone.supermodel.model import Schema
 from validators import isTALES
-from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
@@ -22,74 +21,68 @@ PMF = zope.i18nmessageid.MessageFactory('plone')
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_submitLabel(context):
-    return translate(
-        'default_submitLabel',
-        'collective.easyform',
-        default=u'Submit',
-        context=getRequest()
-    )
-
-
-# dummy msgid for i18ndude to translate
-dummy = _(u'default_submitLabel', u'Submit')
+    return translate(_(u'default_submitLabel', u'Submit'))
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_resetLabel(context):
-    return translate(
-        'default_resetLabel',
-        'collective.easyform',
-        default=u'Reset',
-        context=getRequest()
-    )
-
-
-# dummy msgid for i18ndude to translate
-dummy = _(u'default_resetLabel', u'Reset')
+    return translate(_(u'default_resetLabel', u'Reset'))
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_thankstitle(context):
-    return translate(
-        'default_thankstitle',
-        'collective.easyform',
-        default=u'Thank You',
-        context=getRequest()
-    )
-
-
-# dummy msgid for i18ndude to translate
-dummy = _(u'default_thankstitle', u'Thank You')
+    return translate(_(u'default_thankstitle', u'Thank You'))
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_thanksdescription(context):
     return translate(
-        'default_thanksdescription',
-        'collective.easyform',
-        default=u'Thanks for your input.',
-        context=getRequest()
-    )
+        _(u'default_thanksdescription', u'Thanks for your input.'))
 
 
-# dummy msgid for i18ndude to translate
-dummy = _(u'default_thanksdescription', u'Thanks for your input.')
+@zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
+def default_actions(context):
+    """ Default mail body for mailer action
+
+        Acquire 'mail_body_default.pt' or return hard coded default
+    """
+    default_actions = None
+    if context:
+        default_actions = context.restrictedTraverse(
+            'easyform_default_actions.xml', default=None)
+    if default_actions:
+        return default_actions
+    else:
+        return config.ACTIONS_DEFAULT
+
+
+@zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
+def default_fields(context):
+    """ Default mail body for mailer action
+
+        Acquire 'mail_body_default.pt' or return hard coded default
+    """
+    default_fields = None
+    if context:
+        default_fields = context.restrictedTraverse(
+            'easyform_default_fields.xml', default=None)
+    if default_fields:
+        return default_fields
+    else:
+        return config.FIELDS_DEFAULT
 
 
 class IEasyForm(Schema):
-
     """Forms for Plone"""
 
-#     fieldset(u'models', label=_('Models'),
-#                   fields=['fields_model', 'actions_model'])
     directives.omitted('fields_model', 'actions_model')
     fields_model = zope.schema.Text(
         title=_(u'Fields Model'),
-        default=config.FIELDS_DEFAULT,
+        defaultFactory=default_fields,
     )
     actions_model = zope.schema.Text(
         title=_(u'Actions Model'),
-        default=config.ACTIONS_DEFAULT,
+        defaultFactory=default_actions,
     )
     submitLabel = zope.schema.TextLine(
         title=_(u'label_submitlabel_text', default=u'Submit Button Label'),
@@ -353,11 +346,6 @@ class IEasyForm(Schema):
         required=False,
         missing_value=u'',
     )
-#     TODO
-#     obj.setTitle(_(u'pfg_thankyou_title', u'Thank You'))
-#     obj.setDescription(
-#         _(u'pfg_thankyou_description', u'Thanks for your input.')
-#     )
     showAll = zope.schema.Bool(
         title=_(u'label_showallfields_text', default=u'Show All Fields'),
         description=_(u'help_showallfields_text', default=u''
