@@ -6,16 +6,18 @@ Changelog
 
 Breaking changes:
 
-- Basque translation
-  [erral]
-
-- Update italian translations.
-  [arsenico13]
+- 
 
 New features:
 
 - Enhance file validation view with type check
   [tomgross]
+
+- Basque translation
+  [erral]
+
+- Update italian translations.
+  [arsenico13]
 
 Bug fixes:
 
@@ -26,18 +28,6 @@ Bug fixes:
 - Fix broken access to saved data due to acquisition problems if action is called 'data'.
   Fixes: #87.
   [sverbois]
-
-2.0.0b1.post3 (2017-07-13)
---------------------------
-
-FHNW Patches:
-
-- No default fields on form creation
-
-- Use FHNW email template https://gitlab.fhnw.ch/webteam/fhnw.webauftritt/issues/770
-  [karalics,tomgross]
-
-- Base64 encoding for logo in E-Mail
 
 - Fix action URLs to savedata, export, import
 
