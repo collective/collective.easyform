@@ -27,7 +27,7 @@ def default_mail_body(context):
 
         Acquire 'mail_body_default.pt' or return hard coded default
     """
-    mail_body_default = context.get('mail_body_default.pt')
+    mail_body_default = context.get('easyform_mail_body_default.pt')
     if not mail_body_default:
         return config.MAIL_BODY_DEFAULT
 
