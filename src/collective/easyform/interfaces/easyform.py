@@ -7,7 +7,6 @@ from plone.autoform import directives
 from plone.supermodel.model import fieldset
 from plone.supermodel.model import Schema
 from validators import isTALES
-from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider

@@ -35,7 +35,6 @@ from plone import api
 from plone.autoform.view import WidgetsView
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
-from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
@@ -44,7 +43,6 @@ from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
 from time import time
 from z3c.form.interfaces import DISPLAY_MODE
-from zope.component import getUtility
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implementer
@@ -161,8 +159,6 @@ class Mailer(Action):
         form.schema = schema
         form._update()
         widgets = {name: widget.render() for name, widget in form.w.items()}
-
-
         data = OrderedDict(
             [x for x in getFieldsInOrder(schema) if x[0] in unsorted_data]
         )

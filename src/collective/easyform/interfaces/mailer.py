@@ -8,9 +8,9 @@ from plone.autoform import directives
 from plone.schema import Email
 from plone.supermodel.model import fieldset
 from validators import isTALES
-from zope.schema.interfaces import IContextAwareDefaultFactory
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 import zope.i18nmessageid
 import zope.interface
