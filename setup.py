@@ -51,7 +51,6 @@ setup(
         'test': [
             'plone.app.testing[robot]',
             'plone.app.robotframework',
-            'collective.googleanalytics',
         ]
     },
     entry_points="""

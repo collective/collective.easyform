@@ -31,9 +31,10 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.utils import formataddr
 from logging import getLogger
+from plone import api
+from plone.autoform.view import WidgetsView
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
-from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
@@ -41,7 +42,7 @@ from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
 from time import time
-from zope.component import getUtility
+from z3c.form.interfaces import DISPLAY_MODE
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implementer
@@ -117,6 +118,14 @@ class Action(Bool):
         return False
 
 
+class DummyFormView(WidgetsView):
+    """ A dummy form to get the widgets rendered for the mailer action
+    """
+
+    mode = DISPLAY_MODE
+    ignoreContext = True
+
+
 @implementer(IMailer)
 class Mailer(Action):
     __doc__ = IMailer.__doc__
@@ -128,30 +137,7 @@ class Mailer(Action):
 
     def get_portal_email_address(self, context):
         """Return the email address defined in the Plone site."""
-        address = None
-
-        if not address:
-            # Check for plone.registry based settings (Plone 5).
-            registry = getUtility(IRegistry)
-            if registry is not None:
-                address = registry.get('plone.email_from_address')
-
-        if not address:
-            # Check for settings on Plone site (Plone 4)
-            portal_url = getToolByName(context, 'portal_url')
-            if portal_url is not None:
-                portal = portal_url.getPortalObject()
-                address = portal.getProperty('email_from_address')
-
-        if not address:
-            # Check for site_properties settings.
-            pprops = getToolByName(context, 'portal_properties')
-            if pprops is not None:
-                site_props = getToolByName(pprops, 'site_properties')
-                if site_props is not None:
-                    address = site_props.getProperty('email_from_address')
-
-        return address
+        return api.portal.get_registry_record('plone.email_from_address')
 
     def secure_header_line(self, line):
         if not line:
@@ -167,8 +153,12 @@ class Mailer(Action):
     def get_mail_body(self, unsorted_data, request, context):
         """Returns the mail-body with footer.
         """
-
         schema = get_schema(context)
+
+        form = DummyFormView(context, request)
+        form.schema = schema
+        form._update()
+        widgets = {name: widget.render() for name, widget in form.w.items()}
         data = OrderedDict(
             [x for x in getFieldsInOrder(schema) if x[0] in unsorted_data]
         )
@@ -232,6 +222,7 @@ class Mailer(Action):
                 (i, j.title)
                 for i, j in getFieldsInOrder(schema)
             ]),
+            'widgets': widgets,
             'mailer': self,
             'body_pre': body_pre and lnbr(dollar_replacer(body_pre, data)),
             'body_post': body_post and lnbr(dollar_replacer(body_post, data)),
@@ -248,8 +239,7 @@ class Mailer(Action):
         """
         pms = getToolByName(context, 'portal_membership')
         ownerinfo = context.getOwner()
-        ownerid = ownerinfo.getId()
-        fullname = ownerid
+        ownerid = fullname = ownerinfo.getId()
         userdest = pms.getMemberById(ownerid)
         if userdest is not None:
             fullname = userdest.getProperty('fullname', ownerid)
@@ -491,7 +481,7 @@ class Mailer(Action):
         """
         context = get_context(self)
         mailtext = self.get_mail_text(fields, request, context)
-        host = context.MailHost
+        host = api.portal.get_tool(name='MailHost')
         host.send(mailtext)
 
 

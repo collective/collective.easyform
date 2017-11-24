@@ -89,26 +89,35 @@ def get_context(field):
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 
-# caching this breaks with memcached
-def get_schema(context):
-    data = context.fields_model
+def get_model(data, context):
+    schema = None
+    # if schema is set on context it has priority
     try:
         schema = loadString(data).schema
-    except Exception:
+    except ImportError:
+        pass
+
+    # 2nd we try aquire the model
+    if not schema:
+        schema = context.get('easyform_model_default.xml')
+
+    # finally we fall back to the hardcoded example
+    if not schema:
         schema = loadString(MODEL_DEFAULT).schema
     schema.setTaggedValue(CONTEXT_KEY, context)
     return schema
+
+
+# caching this breaks with memcached
+def get_schema(context):
+    data = context.fields_model
+    return get_model(data, context)
 
 
 # caching this breaks with memcached
 def get_actions(context):
     data = context.actions_model
-    try:
-        schema = loadString(data).schema
-    except Exception:
-        schema = loadString(MODEL_DEFAULT).schema
-    schema.setTaggedValue(CONTEXT_KEY, context)
-    return schema
+    return get_model(data, context)
 
 
 def set_fields(context, schema):

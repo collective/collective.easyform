@@ -6,7 +6,7 @@
    <property name="title" i18n:translate="">Export</property>
    <property name="description" i18n:translate=""></property>
    <property
-      name="url_expr">string:${object_url}/@@export-easyform</property>
+      name="url_expr">python:object_url + '/@@export-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@export-easyform'</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.portal_type == 'EasyForm'</property>
@@ -19,7 +19,7 @@
    <property name="title" i18n:translate="">Import</property>
    <property name="description" i18n:translate=""></property>
    <property
-      name="url_expr">string:${object_url}/@@import-easyform</property>
+      name="url_expr">python:object_url + '/@@import-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@import-easyform'</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.portal_type == 'EasyForm'</property>
@@ -32,7 +32,7 @@
    <property name="title" i18n:translate="">Saved data</property>
    <property name="description" i18n:translate=""></property>
    <property
-      name="url_expr">string:${object_url}/@@saveddata</property>
+      name="url_expr">python:object_url + '/@@saveddata' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@saveddata'</property>
    <property name="icon_expr"></property>
    <property
       name="available_expr">python:object.portal_type == 'EasyForm'</property>
