@@ -117,7 +117,21 @@ As field type use ``ReCaptcha`` and set ``require`` to false.
 As last step you might want to not include the recaptcha field in the thanks page and mailer action.
 To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
 Likewise for the mailing: Open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
- 
+
+Actions
+=======
+
+You can choose between the following actions after form submission:
+
+ * Mailer
+ * DataStorage
+ * CustomScript
+
+The mailer stores a HTML template for sending the results of the form. You can override it with a file named
+`easyform_mail_body_default.pt` in your site. If it is not found the default from the `default_schemata` directory
+of this package is taken. If you plan to override start with the the `mail_body_default.pt` file and make sure
+it is a valid pagetemplate.
+
 
 Source Code and Contributions
 =============================

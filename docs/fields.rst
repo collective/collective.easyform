@@ -14,6 +14,13 @@ Adding new field
 
 .. image:: images/added-new-field.png
 
+Default fields and actions
+--------------------------
+
+Put a file `easyform_default_fields.xml` in your site to override the default fields model found in
+the `default_schemata` directory of this package. The same applies for actions which use the file
+`easyform_default_actions.xml`
+
 Adding new fieldset
 -------------------
 

@@ -6,7 +6,7 @@ Changelog
 
 Breaking changes:
 
-- 
+- *add item here*
 
 New features:
 
@@ -18,6 +18,9 @@ New features:
 
 - Update italian translations.
   [arsenico13]
+
+- Allow default fields, actions & mailtemplate in DB
+  [tomgross]
 
 Bug fixes:
 
