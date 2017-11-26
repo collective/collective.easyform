@@ -124,6 +124,7 @@ class DummyFormView(WidgetsView):
 
     mode = DISPLAY_MODE
     ignoreContext = True
+    ignoreRequest = False
 
 
 @implementer(IMailer)
@@ -157,6 +158,7 @@ class Mailer(Action):
 
         form = DummyFormView(context, request)
         form.schema = schema
+        form.prefix = 'form'
         form._update()
         widgets = {name: widget.render() for name, widget in form.w.items()}
         data = OrderedDict(
