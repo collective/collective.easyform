@@ -166,7 +166,6 @@ class Mailer(Action):
         )
 
         data.update(unsorted_data)
-
         all_data = [
             f for f in data
             # TODO

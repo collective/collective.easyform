@@ -2,10 +2,12 @@
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from collective.easyform import vocabularies
+from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.supermodel.model import fieldset
 from plone.supermodel.model import Schema
+from Products.CMFPlone.utils import safe_unicode
 from validators import isTALES
 from zope.i18n import translate
 from zope.interface import Interface
@@ -46,12 +48,11 @@ def default_actions(context):
 
         Acquire 'mail_body_default.pt' or return hard coded default
     """
-    default_actions = None
-    if context:
-        default_actions = context.restrictedTraverse(
-            'easyform_default_actions.xml', default=None)
+    portal = api.portal.get()
+    default_actions = portal.restrictedTraverse(
+        'easyform_default_actions.xml', default=None)
     if default_actions:
-        return default_actions
+        return safe_unicode(default_actions.file.data)
     else:
         return config.ACTIONS_DEFAULT
 
@@ -62,12 +63,11 @@ def default_fields(context):
 
         Acquire 'mail_body_default.pt' or return hard coded default
     """
-    default_fields = None
-    if context:
-        default_fields = context.restrictedTraverse(
-            'easyform_default_fields.xml', default=None)
+    portal = api.portal.get()
+    default_fields = portal.restrictedTraverse(
+        'easyform_default_fields.xml', default=None)
     if default_fields:
-        return default_fields
+        return safe_unicode(default_fields.file.data)
     else:
         return config.FIELDS_DEFAULT
 

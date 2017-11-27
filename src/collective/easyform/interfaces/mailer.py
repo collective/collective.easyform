@@ -8,10 +8,10 @@ from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schema import Email
 from plone.supermodel.model import fieldset
+from Products.CMFPlone.utils import safe_unicode
 from validators import isTALES
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
-from zope.schema.interfaces import IContextAwareDefaultFactory
 
 import zope.i18nmessageid
 import zope.interface
@@ -22,8 +22,7 @@ PMF = zope.i18nmessageid.MessageFactory('plone')
 MODIFY_PORTAL_CONTENT = 'cmf.ModifyPortalContent'
 
 
-@zope.interface.provider(IContextAwareDefaultFactory)
-def default_mail_body(context):
+def default_mail_body():
     """ Default mail body for mailer action
 
         Acquire 'mail_body_default.pt' or return hard coded default
@@ -31,7 +30,9 @@ def default_mail_body(context):
     portal = api.portal.get()
     mail_body_default = portal.restrictedTraverse(
         'easyform_mail_body_default.pt', default=None)
-    if not mail_body_default:
+    if mail_body_default:
+        return safe_unicode(mail_body_default.file.data)
+    else:
         return config.MAIL_BODY_DEFAULT
 
 

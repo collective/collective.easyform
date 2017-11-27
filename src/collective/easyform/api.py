@@ -4,6 +4,7 @@ from email.utils import formataddr
 from plone import api
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
+from plone.supermodel.parser import SupermodelParseError
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from Products.CMFPlone.utils import safe_unicode
@@ -96,7 +97,7 @@ def get_model(data, context):
     if data is not None:
         try:
             schema = loadString(data).schema
-        except ImportError:
+        except SupermodelParseError:  # pragma: no cover
             pass
 
     # 2nd we try aquire the model
