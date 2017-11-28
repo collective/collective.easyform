@@ -63,6 +63,14 @@ class IFieldExtender(Schema):
         required=False,
         source=widgetsFactory,
     )
+    directives.write_permission(THidden=config.EDIT_TALES_PERMISSION)
+    THidden = zope.schema.Bool(
+        title=_(u'label_hidden',
+                default=u'Hidden'),
+        description=_(u'help_hidden', default=u'Field is hidden'),
+        required=False,
+        default=False,
+    )
     fieldset(u'overrides', label=_('Overrides'),
              fields=['TDefault', 'TEnabled', 'TValidator', 'serverSide'])
     directives.write_permission(TDefault=config.EDIT_TALES_PERMISSION)
