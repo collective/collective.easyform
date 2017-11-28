@@ -6,7 +6,7 @@
     <dl>
         <tal:block repeat="field data | nothing">
             <dt tal:content="python:fields[field]" />
-            <dd tal:content="structure python:data[field]" />
+            <dd tal:content="structure python:widgets[field]" />
         </tal:block>
     </dl>
     <p tal:content="structure body_post | nothing" />

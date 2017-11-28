@@ -10,11 +10,17 @@ Breaking changes:
 
 New features:
 
+- Enhance file validation view with type check
+  [tomgross]
+
 - Basque translation
   [erral]
 
 - Update italian translations.
   [arsenico13]
+
+- Allow default fields, actions & mailtemplate in DB
+  [tomgross]
 
 Bug fixes:
 
@@ -25,6 +31,12 @@ Bug fixes:
 - Fix broken access to saved data due to acquisition problems if action is called 'data'.
   Fixes: #87.
   [sverbois]
+
+- Fix action URLs to savedata, export, import
+  [tomgross]
+
+- Fix display of values in mailer template  #76
+  [tomgross]
 
 
 2.0.0b2 (2017-08-31)
@@ -44,6 +56,8 @@ Bug fixes:
 - Fix saver action with non ASCII filename uploads #77
   [tomgross]
 
+- In the schema editor for fields, Fix the URL to ACE library according to the modeleditor in plone.app.dexterity.
+  [thet]
 
 2.0.0b1 (2017-06-14)
 --------------------

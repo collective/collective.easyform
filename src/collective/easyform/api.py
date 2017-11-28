@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.config import MODEL_DEFAULT
 from email.utils import formataddr
+from plone import api
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
+from plone.supermodel.parser import SupermodelParseError
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from Products.CMFPlone.utils import safe_unicode
@@ -89,26 +91,43 @@ def get_context(field):
     return field.interface.getTaggedValue(CONTEXT_KEY)
 
 
-# caching this breaks with memcached
-def get_schema(context):
-    data = context.fields_model
-    try:
-        schema = loadString(data).schema
-    except Exception:
+def get_model(data, context):
+    schema = None
+    # if schema is set on context it has priority
+    if data is not None:
+        try:
+            schema = loadString(data).schema
+        except SupermodelParseError:  # pragma: no cover
+            pass
+
+    # 2nd we try aquire the model
+    if not schema:
+        nav_root = api.portal.get_navigation_root(context)
+        schema = nav_root.get('easyform_model_default.xml')
+
+    # finally we fall back to the hardcoded example
+    if not schema:
         schema = loadString(MODEL_DEFAULT).schema
     schema.setTaggedValue(CONTEXT_KEY, context)
     return schema
+
+
+# caching this breaks with memcached
+def get_schema(context):
+    try:
+        data = context.fields_model
+    except AttributeError:
+        data = None
+    return get_model(data, context)
 
 
 # caching this breaks with memcached
 def get_actions(context):
-    data = context.actions_model
     try:
-        schema = loadString(data).schema
-    except Exception:
-        schema = loadString(MODEL_DEFAULT).schema
-    schema.setTaggedValue(CONTEXT_KEY, context)
-    return schema
+        data = context.actions_model
+    except AttributeError:
+        data = None
+    return get_model(data, context)
 
 
 def set_fields(context, schema):
