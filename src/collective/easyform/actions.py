@@ -32,8 +32,6 @@ from email.utils import formataddr
 from logging import getLogger
 from plone import api
 from plone.autoform.view import WidgetsView
-from plone.namedfile.interfaces import INamedBlobFile
-from plone.namedfile.interfaces import INamedFile
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode

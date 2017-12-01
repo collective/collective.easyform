@@ -37,8 +37,8 @@ def CustomActionsVocabularyFactory(context):
 @provider(IVocabularyFactory)
 def MimeListVocabularyFactory(context):
     items = [
-       (u'HTML', u'html'),
-       (PMF(u'Text'), u'plain'),
+        (u'HTML', u'html'),
+        (PMF(u'Text'), u'plain'),
     ]
     return _make_vocabulary(items)
 
