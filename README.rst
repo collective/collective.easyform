@@ -3,16 +3,16 @@ EasyForm - Form Builder for Plone
 =================================
 
 .. image:: https://badge.fury.io/py/collective.easyform.svg
-	:target: https://badge.fury.io/py/collective.easyform
-	:alt: latest release version badge by Badge Fury
+    :target: https://badge.fury.io/py/collective.easyform
+    :alt: latest release version badge by Badge Fury
 
 .. image:: https://travis-ci.org/collective/collective.easyform.png?branch=master
-	:target: https://travis-ci.org/collective/collective.easyform
-	:alt: Travis CI status
+    :target: https://travis-ci.org/collective/collective.easyform
+    :alt: Travis CI status
 
 .. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master
-	:target: https://coveralls.io/github/collective/collective.easyform?branch=master
-	:alt: Coveralls status
+    :target: https://coveralls.io/github/collective/collective.easyform?branch=master
+    :alt: Coveralls status
 
 
 The add on ``collective.easyform`` adds Plone content types for form creation.
@@ -33,19 +33,19 @@ Install collective.easyform by adding it to your buildout:
 
 .. code-block:: shell
 
-	[buildout]
+    [buildout]
 
-	...
+    ...
 
-	eggs =
-		collective.easyform
+    eggs =
+        collective.easyform
 
 
 Run buildout:
 
 .. code-block:: shell
 
-	bin/buildout
+    bin/buildout
 
 The last step is to activate ``EasyForm`` in the Control Panel.
 
@@ -79,8 +79,8 @@ Usage
 Click on the picture below for a short introduction video:
 
 .. image:: http://quintagroup.com/services/plone-development/products/easyform/easyform-youtube.png
-	:target: https://www.youtube.com/watch?v=DMCYnYE9RKU
-	:alt: EasyForm instructional video
+    :target: https://www.youtube.com/watch?v=DMCYnYE9RKU
+    :alt: EasyForm instructional video
 
 
 ReCaptcha support
@@ -90,12 +90,12 @@ Install ``collective.easyform`` with the  ``recaptcha`` extra:
 
 .. code-block:: shell
 
-	[buildout]
+    [buildout]
 
-	...
+    ...
 
-	eggs =
-		collective.easyform [recaptcha]
+    eggs =
+        collective.easyform [recaptcha]
 
 
 And run buildout and install EasyForm as described above.
