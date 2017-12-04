@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .validators import isTALES
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
 from plone.autoform import directives
@@ -8,7 +9,6 @@ from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
 from plone.supermodel.model import fieldset
 from plone.supermodel.model import Schema
-from validators import isTALES
 from zope.interface import Interface
 
 import z3c.form.interfaces

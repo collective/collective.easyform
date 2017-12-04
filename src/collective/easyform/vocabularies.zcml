@@ -1,19 +1,58 @@
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    i18n_domain="collective.easyform">
+<configure xmlns="http://namespaces.zope.org/zope">
+
+    <utility
+        component=".vocabularies.CustomActionsVocabularyFactory"
+        name="easyform.CustomActions"
+        />
+
+    <utility
+        component=".vocabularies.MimeListVocabularyFactory"
+        name="easyform.MimeList"
+        />
+
+    <utility
+        component=".vocabularies.FormMethodsVocabularyFactory"
+        name="easyform.FormMethods"
+        />
+
+    <utility
+        component=".vocabularies.XinfoHeadersVocabularyFactory"
+        name="easyform.XinfoHeaders"
+        />
+
+    <utility
+        component=".vocabularies.ProxyRoleChoicesVocabularyFactory"
+        name="easyform.ProxyRoleChoices"
+        />
+
+    <utility
+        component=".vocabularies.ExtraDataDLVocabularyFactory"
+        name="easyform.ExtraDataDL"
+        />
+
+    <utility
+        component=".vocabularies.FormatDLVocabularyFactory"
+        name="easyform.FormatDL"
+        />
+
+    <utility
+        component=".vocabularies.FieldsVocabularyFactory"
+        name="easyform.Fields"
+        />
+
     <utility
         component=".vocabularies.EasyFormActionsVocabularyFactory"
-        provides="zope.schema.interfaces.IVocabularyFactory"
         name="EasyFormActions"
         />
+
     <utility
         component=".vocabularies.ValidatorsVocabularyFactory"
-        provides="zope.schema.interfaces.IVocabularyFactory"
-        name="collective.easyform.validators"
+        name="easyform.Validators"
         />
+
     <utility
-      component=".browser.controlpanel.FieldsVocabularyFactory"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      name="collective.easyform.FieldsVocabulary"
+      component=".vocabularies.SchemaEditorFieldsVocabularyFactory"
+      name="easyform.SchemaEditorFields"
       />
+
 </configure>

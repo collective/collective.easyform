@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
-from AccessControl import ClassSecurityInfo
 from AccessControl import getSecurityManager
-from App.class_init import InitializeClass
 from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
-from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
+from collective.easyform.api import filter_fields
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
+from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
+from collective.easyform.api import OrderedDict
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
 from collective.easyform.interfaces import IExtraData
-from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
 from copy import deepcopy
@@ -33,8 +32,6 @@ from email.utils import formataddr
 from logging import getLogger
 from plone import api
 from plone.autoform.view import WidgetsView
-from plone.namedfile.interfaces import INamedBlobFile
-from plone.namedfile.interfaces import INamedFile
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
@@ -52,24 +49,6 @@ from zope.security.interfaces import IPermission
 
 
 logger = getLogger('collective.easyform')
-
-
-class OrderedDict(BaseDict):
-    """
-    A wrapper around dictionary objects that provides an ordering for
-    keys() and items().
-    """
-
-    security = ClassSecurityInfo()
-    security.setDefaultAccess('allow')
-
-    def reverse(self):
-        items = list(self.items())
-        items.reverse()
-        return items
-
-
-InitializeClass(OrderedDict)
 
 
 @implementer(IActionFactory)
@@ -109,13 +88,6 @@ class Action(Bool):
     def onSuccess(self, fields, request):
         raise NotImplementedError(
             "There is not implemented 'onSuccess' of {0!r}".format(self))
-
-    def _is_file_data(self, value):
-        ifaces = (INamedFile, INamedBlobFile)
-        for i in ifaces:
-            if i.providedBy(value):
-                return True
-        return False
 
 
 class DummyFormView(WidgetsView):
@@ -161,42 +133,9 @@ class Mailer(Action):
         form.prefix = 'form'
         form._update()
         widgets = {name: widget.render() for name, widget in form.w.items()}
-        data = OrderedDict(
-            [x for x in getFieldsInOrder(schema) if x[0] in unsorted_data]
-        )
 
-        data.update(unsorted_data)
-        all_data = [
-            f for f in data
-            # TODO
-            # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
-            # 'showAll', True) and f.getServerSide())]
-            if not (self._is_file_data(data[f])) and not (
-                getattr(self, 'showAll', True) and
-                IFieldExtender(schema[f]).serverSide
-            )
-        ]
+        data = filter_fields(self, schema, unsorted_data)
 
-        # which data should we show?
-        if getattr(self, 'showAll', True):
-            live_data = all_data
-        else:
-            showFields = getattr(self, 'showFields', [])
-            if showFields is None:
-                showFields = []
-
-            live_data = [
-                f for f in all_data if f in showFields]
-
-        if not getattr(self, 'includeEmpties', True):
-            all_data = live_data
-            live_data = [f for f in all_data if data[f]]
-            for f in all_data:
-                value = data[f]
-                if value:
-                    live_data.append(f)
-
-        bare_data = OrderedDict([(f, data[f]) for f in live_data])
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
@@ -218,7 +157,7 @@ class Mailer(Action):
             body_footer = self.body_footer.output
 
         extra = {
-            'data': bare_data,
+            'data': data,
             'fields': OrderedDict([
                 (i, j.title)
                 for i, j in getFieldsInOrder(schema)
@@ -406,7 +345,7 @@ class Mailer(Action):
             field = fields[fname]
             showFields = getattr(self, 'showFields', []) or []
 
-            if self._is_file_data(field) and (
+            if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
                 data = field.data
                 filename = field.filename
@@ -612,7 +551,7 @@ class SaveData(Action):
         for row in self.getSavedFormInput():
             def get_data(row, i):
                 data = row.get(i, '')
-                if self._is_file_data(data):
+                if is_file_data(data):
                     data = data.filename
                 if isinstance(data, unicode):
                     return data.encode('utf-8')

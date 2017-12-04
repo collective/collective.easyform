@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from actions import IAction
-from collective.easyform import easyformMessageFactory as _  # NOQA
-from collective.easyform import vocabularies
+from .actions import IAction
+from collective.easyform import easyformMessageFactory as _
 from plone.autoform import directives
 from plone.z3cform.interfaces import IFormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
@@ -67,7 +66,7 @@ class ISaveData(IAction):
         ),
         unique=True,
         required=False,
-        value_type=zope.schema.Choice(vocabulary=vocabularies.fieldsFactory),
+        value_type=zope.schema.Choice(vocabulary='easyform.Fields'),
     )
     directives.widget(ExtraData=CheckBoxFieldWidget)
     ExtraData = zope.schema.List(
@@ -78,13 +77,12 @@ class ISaveData(IAction):
                     u'input.'
         ),
         unique=True,
-        value_type=zope.schema.Choice(
-            vocabulary=vocabularies.vocabExtraDataDL),
+        value_type=zope.schema.Choice(vocabulary='easyform.ExtraDataDL'),
     )
     DownloadFormat = zope.schema.Choice(
         title=_(u'label_downloadformat_text', default=u'Download Format'),
         default=u'csv',
-        vocabulary=vocabularies.vocabFormatDL,
+        vocabulary='easyform.FormatDL',
     )
     UseColumnNames = zope.schema.Bool(
         title=_(u'label_usecolumnnames_text', default=u'Include Column Names'),

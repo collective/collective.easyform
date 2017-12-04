@@ -3,6 +3,7 @@ from AccessControl import getSecurityManager
 from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
+from collective.easyform.api import filter_fields
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
@@ -214,9 +215,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             fields = fields.omit(*omit)
         return fields
 
-    def setThanksFields(self, fields):
-        showFields = self.context.showFields
-        omit = [fname for fname in fields if fname not in showFields]
+    def setThanksFields(self, fields, data):
+        omit = filter_fields(self.context, self.schema, data, omit=True)
         if omit:
             fields = fields.omit(*omit)
         return fields
@@ -277,11 +277,12 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             data = self.updateServerSideData(data)
             self.thanksPage = True
             self.template = self.thank_you_template
-            if self.context.showFields:
-                self.fields = self.setThanksFields(self.base_fields)
-                for group in self.groups:
-                    group.fields = self.setThanksFields(
-                        self.base_groups.get(group.label))
+
+            self.fields = self.setThanksFields(self.base_fields, data)
+            for group in self.groups:
+                group.fields = self.setThanksFields(
+                    self.base_groups.get(group.label), data)
+
             self.mode = DISPLAY_MODE
             # we need to update the widgets in display mode again
             super(EasyFormForm, self).update()
