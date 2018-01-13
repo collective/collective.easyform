@@ -29,6 +29,7 @@ from email.MIMEImage import MIMEImage
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.utils import formataddr
+from io import BytesIO
 from logging import getLogger
 from plone import api
 from plone.autoform.view import WidgetsView
@@ -341,9 +342,19 @@ class Mailer(Action):
 
         attachments = []
 
+        # if requested, generate CSV attachment of form values
+        sendCSV = getattr(self, 'sendCSV', None)
+        if sendCSV:
+            csvdata = []
+
         for fname in fields:
             field = fields[fname]
             showFields = getattr(self, 'showFields', []) or []
+
+            if sendCSV:
+                if not is_file_data(field) and (
+                        getattr(self, 'showAll', True) or fname in showFields):
+                    csvdata.append(field)
 
             if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
@@ -351,6 +362,15 @@ class Mailer(Action):
                 filename = field.filename
                 mimetype, enc = guess_content_type(filename, data, None)
                 attachments.append((filename, mimetype, enc, data))
+
+        if sendCSV:
+            output = BytesIO()
+            writer = csvwriter(output)
+            writer.writerow(csvdata)
+            csv = output.getvalue()
+            now = DateTime().ISO().replace(' ', '-').replace(':', '')
+            filename = 'formdata_{0}.csv'.format(now)
+            attachments.append((filename, 'text/plain', 'utf-8', csv))
         return attachments
 
     def get_mail_text(self, fields, request, context):

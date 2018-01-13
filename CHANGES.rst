@@ -22,6 +22,9 @@ New features:
 - Allow default fields, actions & mailtemplate in DB
   [tomgross]
 
+- New mailer adapter checkbox to send CSV data attachment
+  [tkimnguyen]
+
 Bug fixes:
 
 - Support ``showAll`` and ``includeEmpties`` also for the thanks page.
