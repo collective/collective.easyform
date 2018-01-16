@@ -129,7 +129,8 @@ class IMailer(IAction):
     )
     fieldset(u'message', label=PMF('Message'), fields=[
              'msg_subject', 'subject_field', 'body_pre', 'body_post',
-             'body_footer', 'showAll', 'showFields', 'includeEmpties'])
+             'body_footer', 'showAll', 'showFields', 'includeEmpties',
+             'sendCSV', ])
     directives.read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
     msg_subject = zope.schema.TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
@@ -231,6 +232,18 @@ class IMailer(IAction):
         default=True,
         required=False,
     )
+
+    directives.read_permission(sendCSV=MODIFY_PORTAL_CONTENT)
+    sendCSV = zope.schema.Bool(
+        title=_(u'label_sendCSV_text', default=u'Send CSV data attachment'),
+        description=_(u'help_sendCSV_text', default=u''
+                      u'Check this to send a CSV file '
+                      u'attachment containing the values '
+                      u'filled out in the form.'),
+        default=False,
+        required=False,
+    )
+
     fieldset(u'template', label=PMF(
         'Template'), fields=['body_pt', 'body_type'])
     directives.write_permission(body_pt=config.EDIT_TALES_PERMISSION)
