@@ -26,6 +26,9 @@ New features:
   [tkimnguyen]
 
 Bug fixes:
+- Remove ProtectedEmail and ProtectedTextLine  as addable fields
+  https://github.com/collective/collective.easyform/issues/94
+  [fgrcon]
 
 - Support ``showAll`` and ``includeEmpties`` also for the thanks page.
   [thet]

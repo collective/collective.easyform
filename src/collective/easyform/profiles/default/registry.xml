@@ -20,7 +20,6 @@
         <element>zope.schema._field.Date</element>
         <element>zope.schema._field.Datetime</element>
         <element>plone.namedfile.field.NamedBlobFile</element>
-        <element>plone.app.users.schema.ProtectedEmail</element>
         <element>plone.schema.email.Email</element>
         <element>zope.schema._field.Float</element>
         <element>zope.schema._bootstrapfields.Int</element>
@@ -33,7 +32,6 @@
         <element>zope.schema._bootstrapfields.TextLine</element>
         <element>zope.schema._bootstrapfields.Text</element>
         <element>zope.schema._field.URI</element>
-        <element>plone.app.users.schema.ProtectedTextLine</element>
         <element>zope.schema._bootstrapfields.Bool</element>
       </value>
     </record>

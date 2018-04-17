@@ -56,5 +56,16 @@
         run_deps="false"
         />
   </genericsetup:upgradeSteps>
-
+  <genericsetup:upgradeSteps
+      source="1001"
+      destination="1002"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Remove ProtectedEmail and ProtectedTextLine as addable fields"
+        description="https://github.com/collective/collective.easyform/issues/94"
+        import_profile="collective.easyform:default"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+    </genericsetup:upgradeSteps>
 </configure>
