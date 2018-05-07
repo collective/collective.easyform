@@ -103,7 +103,12 @@ def FieldsVocabularyFactory(context):
     fields = getFieldsInOrder(get_schema(form))
     for name, field in fields:
         terms.append(
-            SimpleVocabulary.createTerm(name, str(name), field.title))
+            SimpleVocabulary.createTerm(
+                name,
+                str(name),
+                field.title
+            )
+        )
     return SimpleVocabulary(terms)
 
 
