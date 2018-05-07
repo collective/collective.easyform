@@ -22,7 +22,7 @@ from .fields import ILabelWidget  # noqa
 from .fields import IReCaptcha  # noqa
 from .fields import IRichLabel  # noqa
 from .fields import IRichLabelWidget  # noqa
-from .layer import IEasyformLayer  # noqa
+from .layer import IEasyFormLayer  # noqa
 from .mailer import IMailer  # noqa
 from .savedata import IExtraData  # noqa
 from .savedata import ISaveData  # noqa

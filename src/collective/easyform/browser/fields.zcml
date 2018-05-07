@@ -12,35 +12,35 @@
     <browser:page
         name="listing"
         for="collective.easyform.interfaces.IEasyFormFieldsContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class=".fields.EasyFormFieldsListingPage"
         permission="cmf.ModifyPortalContent"
         />
     <browser:page
         name="add-field"
         for="collective.easyform.interfaces.IEasyFormFieldsContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class="plone.schemaeditor.browser.schema.add_field.FieldAddFormPage"
         permission="cmf.ModifyPortalContent"
         />
     <browser:page
         name="add-fieldset"
         for="collective.easyform.interfaces.IEasyFormFieldsContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class="plone.schemaeditor.browser.schema.add_fieldset.FieldsetAddFormPage"
         permission="cmf.ModifyPortalContent"
         />
     <browser:page
         name="edit"
         for="collective.easyform.interfaces.IEasyFormFieldContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class=".fields.EditView"
         permission="cmf.ModifyPortalContent"
         />
     <browser:page
         name="order"
         for="collective.easyform.interfaces.IEasyFormFieldContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class="plone.schemaeditor.browser.field.order.FieldOrderView"
         attribute="move"
         permission="cmf.ModifyPortalContent"
@@ -48,7 +48,7 @@
     <browser:page
         name="delete"
         for="collective.easyform.interfaces.IEasyFormFieldContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class="plone.schemaeditor.browser.field.order.FieldOrderView"
         attribute="delete"
         permission="cmf.ModifyPortalContent"
@@ -56,7 +56,7 @@
     <browser:page
         name="changefieldset"
         for="collective.easyform.interfaces.IEasyFormFieldContext"
-        layer="..interfaces.IEasyformLayer"
+        layer="..interfaces.IEasyFormLayer"
         class="plone.schemaeditor.browser.field.fieldset.ChangeFieldsetView"
         attribute="change"
         permission="cmf.ModifyPortalContent"
@@ -65,7 +65,7 @@
         <browser:page
             name="modeleditor"
             for="collective.easyform.interfaces.IEasyFormFieldsContext"
-            layer="..interfaces.IEasyformLayer"
+            layer="..interfaces.IEasyFormLayer"
             class=".fields.ModelEditorView"
             permission="cmf.ModifyPortalContent"
             template="modeleditor.pt"
@@ -73,7 +73,7 @@
         <browser:page
             name="model-edit-save"
             for="collective.easyform.interfaces.IEasyFormFieldsContext"
-            layer="..interfaces.IEasyformLayer"
+            layer="..interfaces.IEasyFormLayer"
             class=".fields.AjaxSaveHandler"
             permission="cmf.ModifyPortalContent"
             />
