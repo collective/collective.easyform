@@ -168,24 +168,24 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         )
         data.update(unsorted_data)
         thanksPageOverride = self.context.thanksPageOverride
-        if thanksPageOverride:
-            thanksPageOverrideAction = self.context.thanksPageOverrideAction
-            thanksPage = get_expression(self.context, thanksPageOverride)
-            if thanksPageOverrideAction == 'redirect_to':
-                self.request.response.redirect(thanksPage)
-            elif thanksPageOverrideAction == 'traverse_to':
-                thanksPage = self.context.restrictedTraverse(
-                    thanksPage.encode('utf-8'))
-                thanksPage = mapply(
-                    thanksPage,
-                    self.request.args,
-                    self.request
-                ).encode('utf-8')
-                self.request.response.write(thanksPage)
-        else:
+        if not thanksPageOverride:
             # we come back to the form itself.
             # the thanks page is handled in the __call__ method
-            pass
+            return
+        thanksPageOverrideAction = self.context.thanksPageOverrideAction
+        thanksPage = get_expression(self.context, thanksPageOverride)
+        if thanksPageOverrideAction == 'redirect_to':
+            self.request.response.redirect(thanksPage)
+            return
+        if thanksPageOverrideAction == 'traverse_to':
+            thanksPage = self.context.restrictedTraverse(
+                thanksPage.encode('utf-8'))
+            thanksPage = mapply(
+                thanksPage,
+                self.request.args,
+                self.request
+            ).encode('utf-8')
+            self.request.response.write(thanksPage)
 
     @button.buttonAndHandler(
         _(u'Reset'),
@@ -269,30 +269,38 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
         self.template = self.form_template
-        if self.request.method == 'POST' and \
-                not self.context.thanksPageOverride:
-            data, errors = self.extractData()
-            if errors:
-                return
-            data = self.updateServerSideData(data)
-            self.thanksPage = True
-            self.template = self.thank_you_template
-
-            self.fields = self.setThanksFields(self.base_fields, data)
-            for group in self.groups:
-                group.fields = self.setThanksFields(
-                    self.base_groups.get(group.label), data)
-
-            self.mode = DISPLAY_MODE
-            # we need to update the widgets in display mode again
-            super(EasyFormForm, self).update()
-            prologue = self.context.thanksPrologue
-            epilogue = self.context.thanksEpilogue
-            self.thanksPrologue = prologue and dollar_replacer(
-                prologue.output, data)
-            self.thanksEpilogue = epilogue and dollar_replacer(
-                epilogue.output, data)
-            alsoProvides(self.request, IEasyFormThanksPage)
+        if (
+            self.request.method != 'POST' or
+            self.context.thanksPageOverride
+        ):
+            # go with all but default thank you page rendering
+            return
+        data, errors = self.extractData()
+        if errors:
+            # render errors
+            return
+        data = self.updateServerSideData(data)
+        self.thanksPage = True
+        self.template = self.thank_you_template
+        self.fields = self.setThanksFields(self.base_fields, data)
+        for group in self.groups:
+            group.fields = self.setThanksFields(
+                self.base_groups.get(group.label),
+                data
+            )
+        self.widgets.mode = self.mode = DISPLAY_MODE
+        self.widgets.update()
+        prologue = self.context.thanksPrologue
+        epilogue = self.context.thanksEpilogue
+        self.thanksPrologue = (
+            prologue and
+            dollar_replacer(prologue.output, data)
+        )
+        self.thanksEpilogue = (
+            epilogue and
+            dollar_replacer(epilogue.output, data)
+        )
+        alsoProvides(self.request, IEasyFormThanksPage)
 
 
 EasyFormView = layout.wrap_form(EasyFormForm)

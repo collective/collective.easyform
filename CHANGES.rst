@@ -30,6 +30,10 @@ New features:
 
 Bug fixes:
 
+- Do not override configured widgets with default widgets in thank-you-page.
+  This fixes #111. Includes code cleanup.
+  [jensens]
+
 - Hide profiles not used for regular install.
   [jensens]
 
