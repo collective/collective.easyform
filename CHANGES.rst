@@ -10,6 +10,9 @@ Breaking changes:
 
 New features:
 
+- Add browserlayer.
+  [jensens]
+
 - Enhance file validation view with type check
   [tomgross]
 

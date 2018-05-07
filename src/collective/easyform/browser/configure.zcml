@@ -13,30 +13,34 @@
         permission="zope2.View"
         />
     <browser:page
-        for="collective.easyform.interfaces.IEasyForm"
         name="embedded"
+        for="collective.easyform.interfaces.IEasyForm"
+        layer="..interfaces.IEasyformLayer"
         class=".view.EasyFormFormEmbedded"
         permission="zope2.View"
         />
     <browser:page
         name="easyform-controlpanel"
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+        layer="..interfaces.IEasyformLayer"
         permission="cmf.ManagePortal"
         class=".controlpanel.EasyFormControlPanelView"
         />
     <configure zcml:condition="installed plone.dexterity.exportimport">
-    <browser:page
-        for="collective.easyform.interfaces.IEasyForm"
-        name="export-easyform"
-        class=".exportimport.EasyFormExportView"
-        permission="cmf.ManagePortal"
-        />
-    <browser:page
-        for="collective.easyform.interfaces.IEasyForm"
-        name="import-easyform"
-        class=".exportimport.EasyFormImportView"
-        permission="cmf.ManagePortal"
-        />
+        <browser:page
+            for="collective.easyform.interfaces.IEasyForm"
+            layer="..interfaces.IEasyformLayer"
+            name="export-easyform"
+            class=".exportimport.EasyFormExportView"
+            permission="cmf.ManagePortal"
+            />
+        <browser:page
+            for="collective.easyform.interfaces.IEasyForm"
+            layer="..interfaces.IEasyformLayer"
+            name="import-easyform"
+            class=".exportimport.EasyFormImportView"
+            permission="cmf.ManagePortal"
+            />
     </configure>
     <browser:resource
         name="easyform.css"
@@ -44,6 +48,7 @@
         />
     <browser:page
         for="collective.easyform.interfaces.IEasyForm"
+        layer="..interfaces.IEasyformLayer"
         name="z3cform_validate_field"
         class=".view.EasyFormInlineValidationView"
         permission="zope2.View"
@@ -52,6 +57,7 @@
     <!-- BBB -->
     <browser:page
         for="*"
+        layer="..interfaces.IEasyformLayer"
         name="validate_file_size"
         class=".view.ValidateFileSize"
         permission="zope2.View"
@@ -59,6 +65,7 @@
 
     <browser:page
         for="*"
+        layer="..interfaces.IEasyformLayer"
         name="validate_file"
         class=".view.ValidateFileSize"
         permission="zope2.View"

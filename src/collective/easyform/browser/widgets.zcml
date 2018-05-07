@@ -13,7 +13,7 @@
         for="collective.easyform.interfaces.IEasyFormActionsContext"
         mode="input"
         widget="z3c.form.interfaces.ICheckBoxWidget"
-        layer="z3c.form.interfaces.IFormLayer"
+        layer="..interfaces.IEasyformLayer"
         template="action_input.pt"
         />
     <class class=".widgets.LabelWidget">
@@ -41,32 +41,32 @@
     <z3c:widgetTemplate
         mode="display"
         widget="collective.easyform.interfaces.ILabelWidget"
-        layer="z3c.form.interfaces.IFormLayer"
+        layer="..interfaces.IEasyformLayer"
         template="empty.pt"
         />
     <z3c:widgetTemplate
         mode="input"
         widget="collective.easyform.interfaces.ILabelWidget"
-        layer="z3c.form.interfaces.IFormLayer"
+        layer="..interfaces.IEasyformLayer"
         template="empty.pt"
         />
     <z3c:widgetTemplate
         mode="hidden"
         widget="collective.easyform.interfaces.ILabelWidget"
-        layer="z3c.form.interfaces.IFormLayer"
+        layer="..interfaces.IEasyformLayer"
         template="empty.pt"
         />
     <browser:page
         name="ploneform-render-widget"
         for="collective.easyform.interfaces.ILabelWidget"
-        layer="z3c.form.interfaces.IFormLayer"
+        layer="..interfaces.IEasyformLayer"
         class=".widgets.LabelRenderWidget"
         permission="zope.Public"
         />
     <browser:page
         name="ploneform-render-widget"
         for="collective.easyform.interfaces.IRichLabelWidget"
-        layer="z3c.form.interfaces.IFormLayer"
+        layer="..interfaces.IEasyformLayer"
         class=".widgets.RichLabelRenderWidget"
         permission="zope.Public"
         />
