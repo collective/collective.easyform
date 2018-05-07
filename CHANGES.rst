@@ -26,6 +26,10 @@ New features:
   [tkimnguyen]
 
 Bug fixes:
+
+- Hide profiles not used for regular install.
+  [jensens]
+
 - Remove ProtectedEmail and ProtectedTextLine  as addable fields
   https://github.com/collective/collective.easyform/issues/94
   [fgrcon]
