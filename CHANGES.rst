@@ -4,10 +4,6 @@ Changelog
 2.0.0b3 (unreleased)
 --------------------
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Add browserlayer.
