@@ -4,7 +4,16 @@ Changelog
 2.0.0b4 (unreleased)
 --------------------
 
-- Nothing changed yet.
+New features:
+
+- Add support for hidden fields
+  [tomgross]
+
+
+Bug fixes:
+
+- Fix filtering regression introduced with 2.0.0b3
+  [tomgross]
 
 
 2.0.0b3 (2018-05-08)
