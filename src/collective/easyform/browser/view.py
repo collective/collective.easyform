@@ -226,8 +226,15 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     def setThanksFields(self, fields, data):
         omit = filter_fields(self.context, self.schema, data, omit=True)
+        new_fields = []
+        for fname, field in fields.items():
+            if field.mode == HIDDEN_MODE:
+                field.mode = DISPLAY_MODE
+            new_fields.append(field)
+        fields = fields.__class__(*new_fields)
         if omit:
             fields = fields.omit(*omit)
+
         return fields
 
     def updateFields(self):
@@ -292,11 +299,17 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.thanksPage = True
         self.template = self.thank_you_template
         self.fields = self.setThanksFields(self.base_fields, data)
+        for name in list(self.widgets.keys()):
+            if name not in self.fields:
+                del self.widgets[name]
         for group in self.groups:
             group.fields = self.setThanksFields(
                 self.base_groups.get(group.label),
                 data
             )
+            for name in group.widgets:
+                if name not in group.fields:
+                    del group.widgets[name]
         self.widgets.mode = self.mode = DISPLAY_MODE
         self.widgets.update()
         prologue = self.context.thanksPrologue

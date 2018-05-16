@@ -50,7 +50,7 @@ class FieldExtender(object):
     validators = property(lambda x: _get_(x, 'validators'),
                           lambda x, value: _set_(x, value, 'validators'))
     THidden = property(lambda x: _get_(x, 'THidden'),
-                          lambda x, value: _set_(x, value, 'THidden'))
+                       lambda x, value: _set_(x, value, 'THidden'))
 
 
 @implementer(IFieldMetadataHandler)

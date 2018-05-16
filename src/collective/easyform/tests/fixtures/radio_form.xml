@@ -1,0 +1,11 @@
+<model xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:lingua="http://namespaces.plone.org/supermodel/lingua" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:users="http://namespaces.plone.org/supermodel/users" xmlns="http://namespaces.plone.org/supermodel/schema">
+  <schema>
+    <field name="yes" type="zope.schema.Bool">
+      <description/>
+      <required>False</required>
+      <title>Yes?</title>
+      <!-- form:widget type="plone.app.z3cform.widget.SingleCheckBoxBoolFieldWidget"/ -->
+      <form:widget type="z3c.form.browser.radio.RadioFieldWidget"/>
+    </field>
+  </schema>
+</model>
