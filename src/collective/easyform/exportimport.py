@@ -49,6 +49,8 @@ class FieldExtender(object):
                           lambda x, value: _set_(x, value, 'serverSide'))
     validators = property(lambda x: _get_(x, 'validators'),
                           lambda x, value: _set_(x, value, 'validators'))
+    THidden = property(lambda x: _get_(x, 'THidden'),
+                       lambda x, value: _set_(x, value, 'THidden'))
 
 
 @implementer(IFieldMetadataHandler)
@@ -72,7 +74,7 @@ class EasyFormFieldMetadataHandler(object):
         value = fieldNode.get(ns('serverSide', self.namespace))
         if value:
             data = schema.queryTaggedValue('serverSide', {})
-            data[name] = value == 'True' or value == 'true'
+            data[name] = value.lower() == 'true'
             schema.setTaggedValue('serverSide', data)
         # validators
         value = fieldNode.get(ns('validators', self.namespace))
@@ -80,6 +82,12 @@ class EasyFormFieldMetadataHandler(object):
             data = schema.queryTaggedValue('validators', {})
             data[name] = value.split('|')
             schema.setTaggedValue('validators', data)
+        # hidden
+        value = fieldNode.get(ns('THidden', self.namespace))
+        if value:
+            data = schema.queryTaggedValue('THidden', {})
+            data[name] = value.lower() == 'true'
+            schema.setTaggedValue('THidden', data)
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
@@ -95,6 +103,10 @@ class EasyFormFieldMetadataHandler(object):
         value = schema.queryTaggedValue('validators', {}).get(name, None)
         if value:
             fieldNode.set(ns('validators', self.namespace), "|".join(value))
+        # hidden
+        value = schema.queryTaggedValue('THidden', {}).get(name, None)
+        if isinstance(value, bool):
+            fieldNode.set(ns('THidden', self.namespace), str(value))
 
 
 @adapter(IEasyFormActionsContext, IAction)

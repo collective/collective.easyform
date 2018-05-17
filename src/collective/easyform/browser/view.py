@@ -22,6 +22,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
@@ -46,6 +47,9 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     ignoreContext = True
     css_class = 'easyformForm'
     thanksPage = False
+
+    # allow prefill - see Products/CMFPlone/patches/z3c_form
+    allow_prefill_from_GET_request = True
 
     @property
     def method(self):
@@ -200,9 +204,9 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     def setOmitFields(self, fields):
         omit = []
-        for fname in fields:
-            field = fields[fname].field
-            efield = IFieldExtender(field)
+        new_fields = []
+        for fname, field in fields.items():
+            efield = IFieldExtender(field.field)
             TEnabled = getattr(efield, 'TEnabled', None)
             serverSide = getattr(efield, 'serverSide', False)
             if (
@@ -211,14 +215,26 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 serverSide
             ):
                 omit.append(fname)
+            if getattr(efield, 'THidden', False):
+                field.mode = HIDDEN_MODE
+                field.field.ignoreRequest = False
+            new_fields.append(field)
+        fields = fields.__class__(*new_fields)
         if omit:
             fields = fields.omit(*omit)
         return fields
 
     def setThanksFields(self, fields, data):
         omit = filter_fields(self.context, self.schema, data, omit=True)
+        new_fields = []
+        for fname, field in fields.items():
+            if field.mode == HIDDEN_MODE:
+                field.mode = DISPLAY_MODE
+            new_fields.append(field)
+        fields = fields.__class__(*new_fields)
         if omit:
             fields = fields.omit(*omit)
+
         return fields
 
     def updateFields(self):
@@ -283,11 +299,17 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.thanksPage = True
         self.template = self.thank_you_template
         self.fields = self.setThanksFields(self.base_fields, data)
+        for name in list(self.widgets.keys()):
+            if name not in self.fields:
+                del self.widgets[name]
         for group in self.groups:
             group.fields = self.setThanksFields(
                 self.base_groups.get(group.label),
                 data
             )
+            for name in group.widgets:
+                if name not in group.fields:
+                    del group.widgets[name]
         self.widgets.mode = self.mode = DISPLAY_MODE
         self.widgets.update()
         prologue = self.context.thanksPrologue
