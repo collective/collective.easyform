@@ -1,6 +1,7 @@
 exclude *.sh
 exclude .*.cfg
 exclude .coveragerc
+exclude .DS_Store
 exclude .tx
 exclude .tx/config
 exclude bootstrap-buildout.py
