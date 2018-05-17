@@ -39,7 +39,7 @@ msgstr "Adressierung"
 #: collective/easyform/browser/controlpanel.py:55
 #: collective/easyform/profiles/default/registry.xml
 msgid "Allowed Fields"
-msgstr ""
+msgstr "Erlaubte Felder"
 
 #: collective/easyform/browser/actions.py:155
 msgid "Clear all"
@@ -112,11 +112,11 @@ msgstr "Muss eine gültige Liste von E-Mail Adressen sein (getrennt durch Kommas
 
 #: collective/easyform/validators.py:37
 msgid "Must be checked."
-msgstr "Muss angehackt sein."
+msgstr "Erforderliche Eingabe fehlt."
 
 #: collective/easyform/validators.py:42
 msgid "Must be unchecked."
-msgstr "Darf nicht angehackt sein."
+msgstr "Darf nicht angewählt sein."
 
 #: collective/easyform/interfaces/actions.py:102
 #: collective/easyform/interfaces/easyform.py:184
@@ -151,7 +151,7 @@ msgstr "Danke-Seite"
 #: collective/easyform/browser/controlpanel.py:56
 #: collective/easyform/profiles/default/registry.xml
 msgid "This Fields are available for your forms."
-msgstr ""
+msgstr "Diese Felder stehen für das Formular zur Verfügung."
 
 #: collective/easyform/vocabularies.py:29
 msgid "Traverse to"
