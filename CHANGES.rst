@@ -4,7 +4,10 @@ Changelog
 2.0.0b5 (unreleased)
 --------------------
 
-- Nothing changed yet.
+Bug fixes:
+
+- Fix display of items in fieldset on thanks page
+  [tomgross]
 
 
 2.0.0b4 (2018-05-17)

@@ -13,7 +13,6 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Plone',
-        'Framework :: Plone :: 5.0',
         'Framework :: Plone :: 5.1',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
@@ -41,6 +40,7 @@ setup(
         'plone.schema',
         'plone.schemaeditor >= 2.0.18',
         'plone.supermodel',
+        'Products.CMFPlone',
         'Products.validation',
         # -*- Extra requirements: -*-
     ],
@@ -51,6 +51,7 @@ setup(
         'test': [
             'plone.app.testing[robot]',
             'plone.app.robotframework',
+            'plone.app.contenttypes',
         ]
     },
     entry_points="""

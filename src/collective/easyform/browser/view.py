@@ -302,6 +302,9 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         for name in list(self.widgets.keys()):
             if name not in self.fields:
                 del self.widgets[name]
+        self.widgets.mode = self.mode = DISPLAY_MODE
+        self.widgets.update()
+
         for group in self.groups:
             group.fields = self.setThanksFields(
                 self.base_groups.get(group.label),
@@ -310,8 +313,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             for name in group.widgets:
                 if name not in group.fields:
                     del group.widgets[name]
-        self.widgets.mode = self.mode = DISPLAY_MODE
-        self.widgets.update()
+            group.widgets.mode = DISPLAY_MODE
+            group.widgets.update()
         prologue = self.context.thanksPrologue
         epilogue = self.context.thanksEpilogue
         self.thanksPrologue = (
