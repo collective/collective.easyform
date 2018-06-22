@@ -1,0 +1,16 @@
+<model xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:indexer="http://namespaces.plone.org/supermodel/indexer" xmlns:lingua="http://namespaces.plone.org/supermodel/lingua" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:users="http://namespaces.plone.org/supermodel/users" xmlns="http://namespaces.plone.org/supermodel/schema">
+  <schema>
+    <field name="front" type="zope.schema.TextLine">
+      <description/>
+      <required>False</required>
+      <title>front</title>
+    </field>
+    <fieldset name="second" label="second">
+      <field name="back" type="zope.schema.TextLine">
+        <description/>
+        <required>False</required>
+        <title>back</title>
+      </field>
+    </fieldset>
+  </schema>
+</model>

@@ -92,3 +92,18 @@ class TestFunctions(base.EasyFormTestCase):
             '<span id="form-widgets-hide" class="text-widget textline-field">hello hidden</span>',  # noqa
             form
         )
+
+    def test_no_widget_on_thankspage_fieldset(self):
+        self.ff1.showAll = True
+        field_template = api.content.create(
+            self.layer['portal'], 'File', id='easyform_default_fields.xml')
+        with open(join(dirname(__file__),
+                  'fixtures', 'fieldset_form.xml')) as f:
+            filecontent = NamedFile(f.read(), contentType='application/xml')
+        field_template.file = filecontent
+
+        data = {'front': 'hello front', 'back': 'hello back'}
+        request = self.LoadRequestForm(**data)
+        request.method = 'POST'
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('<input id="form-widgets-back"', form)
