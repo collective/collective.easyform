@@ -39,6 +39,9 @@ New features:
 - add @@get_save_data_adapters view
   [tkimnguyen]
 
+- New method in api: filter_widgets. If a isn't selected, mailer action don't try
+  to render its widget. This is useful when we want to avoid to show some widgets
+  like recaptcha, that could breaks if it's in the wrong context.
 
 2.0.0b5 (2018-06-22)
 --------------------
