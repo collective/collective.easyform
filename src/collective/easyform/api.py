@@ -314,3 +314,20 @@ def filter_fields(context, schema, unsorted_data, omit=False):
         ret = OrderedDict([(f, data[f]) for f in fields])
 
     return ret
+
+
+def filter_widgets(context, widgets):
+    """Filter according to ``showAll`` and ``showFields``
+    settings to return proper widgets for result mailings,
+    thanks pages and the like.
+    """
+    filtered_widgets = {}
+    show_all = getattr(context, 'showAll', True)
+    show_fields = getattr(context, 'showFields', []) or []
+    for field_id, widget in widgets.items():
+        if not show_all:
+            if show_fields and field_id in show_fields:
+                filtered_widgets[field_id] = widget.render()
+        else:
+            filtered_widgets[field_id] = widget.render()
+    return filtered_widgets

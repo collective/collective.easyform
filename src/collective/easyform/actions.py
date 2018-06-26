@@ -5,6 +5,7 @@ from BTrees.LOBTree import LOBTree as SavedDataBTree
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import filter_fields
+from collective.easyform.api import filter_widgets
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
@@ -136,8 +137,7 @@ class Mailer(Action):
         form.schema = schema
         form.prefix = 'form'
         form._update()
-        widgets = {name: widget.render() for name, widget in form.w.items()}
-
+        widgets = filter_widgets(self, form.w)
         data = filter_fields(self, schema, unsorted_data)
 
         bodyfield = self.body_pt
