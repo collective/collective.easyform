@@ -4,7 +4,8 @@ Changelog
 2.0.0b6 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Fix permission for saveddata action form
+  [eikichi18]
 
 
 2.0.0b5 (2018-06-22)
