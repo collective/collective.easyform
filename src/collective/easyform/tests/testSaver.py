@@ -5,6 +5,7 @@
 
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
+from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from StringIO import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -519,3 +520,14 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(len(row), 3)
         self.assertEqual(row['topic'], 'test subject')
         self.assertEqual(row['comments'], 'test comments')
+
+    def testGetSaveDataAdaptersView(self):
+        ''' test the @@get_save_data_adapters view '''
+
+        self.createSaver()
+
+        view = self.ff1.restrictedTraverse('@@get_save_data_adapters')
+        results = view()
+        self.assertEqual(len(results), 1)
+        saver = results[0]
+        self.assertTrue(ISaveData.providedBy(saver))

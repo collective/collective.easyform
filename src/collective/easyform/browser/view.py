@@ -346,6 +346,22 @@ class EasyFormInlineValidationView(InlineValidationView):
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
 
 
+class GetSaveDataAdaptersView(BrowserView):
+
+    def __call__(self, *args, **kwargs):
+        """return all contained save data adapters"""
+        from collective.easyform.api import get_actions
+        from collective.easyform.interfaces import ISaveData
+        self.context = EasyFormForm(self.context, self.request)
+        form = self.context.context
+        adapters = []
+        for action_id in get_actions(form):
+            action = get_actions(form)[action_id]
+            if ISaveData.providedBy(action):
+                adapters.append(action)
+        return adapters
+
+
 class ValidateFile(BrowserView):
 
     def __call__(self, value, size=1048576, allowed_types=None,
