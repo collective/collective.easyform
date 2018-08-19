@@ -11,6 +11,7 @@ from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IFieldExtender
+from collective.easyform.interfaces import ISaveData
 from logging import getLogger
 from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
@@ -344,6 +345,21 @@ class EasyFormInlineValidationView(InlineValidationView):
     def __call__(self, fname=None, fset=None):
         self.context = EasyFormForm(self.context, self.request)
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
+
+
+class GetSaveDataAdaptersView(BrowserView):
+
+    def __call__(self, *args, **kwargs):
+        """return all contained save data adapters"""
+        view = EasyFormForm(self.context, self.request)
+        form = view.context
+        adapters = []
+        actions = get_actions(form)
+        for action_id in actions:
+            action = actions[action_id]
+            if ISaveData.providedBy(action):
+                adapters.append(action)
+        return adapters
 
 
 class ValidateFile(BrowserView):

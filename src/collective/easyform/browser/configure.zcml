@@ -53,6 +53,13 @@
         class=".view.EasyFormInlineValidationView"
         permission="zope2.View"
         />
+    <browser:page
+        for="collective.easyform.interfaces.IEasyForm"
+        layer="..interfaces.IEasyFormLayer"
+        name="get_save_data_adapters"
+        class=".view.GetSaveDataAdaptersView"
+        permission="zope2.View"
+        />
 
     <!-- BBB -->
     <browser:page

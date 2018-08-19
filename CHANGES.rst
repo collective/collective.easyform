@@ -4,7 +4,10 @@ Changelog
 2.0.0b6 (unreleased)
 --------------------
 
-- Nothing changed yet.
+New features:
+
+- add @@get_save_data_adapters view
+  [tkimnguyen]
 
 
 2.0.0b5 (2018-06-22)
