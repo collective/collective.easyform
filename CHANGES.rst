@@ -4,6 +4,12 @@ Changelog
 2.0.0b6 (unreleased)
 --------------------
 
+- Bug fixes:
+
+- update some old documentation, add documentation for @@get_save_data_adapters view
+  [tkimnguyen]
+
+
 New features:
 
 - add @@get_save_data_adapters view
