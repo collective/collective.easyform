@@ -47,7 +47,7 @@ from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
-
+import xml.etree.ElementTree  as ET
 
 logger = getLogger('collective.easyform')
 
@@ -346,7 +346,9 @@ class Mailer(Action):
         sendCSV = getattr(self, 'sendCSV', None)
         if sendCSV:
             csvdata = []
-
+        sendXML = getattr(self, 'sendXML', None)
+        if sendXML:
+            xmlRoot = ET.Element("form")
         for fname in fields:
             field = fields[fname]
             showFields = getattr(self, 'showFields', []) or []
@@ -355,6 +357,11 @@ class Mailer(Action):
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
                     csvdata.append(field)
+
+            if sendXML:
+                if not is_file_data(field) and (
+                        getattr(self, 'showAll', True) or fname in showFields):
+                    ET.SubElement(xmlRoot, "field", name=fname).text = field
 
             if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
@@ -371,6 +378,13 @@ class Mailer(Action):
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.csv'.format(now)
             attachments.append((filename, 'text/plain', 'utf-8', csv))
+
+        if sendXML:
+            xmlstr = ET.tostring(xmlRoot, encoding='utf8', method='xml')
+            now = DateTime().ISO().replace(' ', '-').replace(':', '')
+            filename = 'formdata_{0}.xml'.format(now)
+            attachments.append((filename, 'text/xml', 'utf-8', xmlstr))
+
         return attachments
 
     def get_mail_text(self, fields, request, context):

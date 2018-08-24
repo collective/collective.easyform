@@ -130,7 +130,7 @@ class IMailer(IAction):
     fieldset(u'message', label=PMF('Message'), fields=[
              'msg_subject', 'subject_field', 'body_pre', 'body_post',
              'body_footer', 'showAll', 'showFields', 'includeEmpties',
-             'sendCSV', ])
+             'sendCSV','sendXML' ])
     directives.read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
     msg_subject = zope.schema.TextLine(
         title=_(u'label_formmailer_subject', default=u'Subject'),
@@ -240,6 +240,17 @@ class IMailer(IAction):
                       u'Check this to send a CSV file '
                       u'attachment containing the values '
                       u'filled out in the form.'),
+        default=False,
+        required=False,
+    )
+
+    directives.read_permission(sendXML=MODIFY_PORTAL_CONTENT)
+    sendXML = zope.schema.Bool(
+        title=_(u'label_sendXML_text', default=u'Send XML data attachment'),
+        description=_(u'help_sendXML_text', default=u''
+                                                    u'Check this to send a XML file '
+                                                    u'attachment containing the values '
+                                                    u'filled out in the form.'),
         default=False,
         required=False,
     )
