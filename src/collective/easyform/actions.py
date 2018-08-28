@@ -47,7 +47,7 @@ from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
-import xml.etree.ElementTree  as ET
+import xml.etree.ElementTree as ET
 
 logger = getLogger('collective.easyform')
 

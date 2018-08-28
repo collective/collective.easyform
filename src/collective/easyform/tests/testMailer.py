@@ -522,3 +522,18 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.onSuccess({}, self.layer['request'])
         self.assertIn(u'Custom e-mail template!', self.messageText)
+
+    def test_MailerXMLAttachments(self):
+        """ Test mailer with dummy_send """
+        actions = get_actions(self.ff1)
+        mailer = get_actions(self.ff1)['mailer']
+        mailer.sendXML = True
+        mailer.sendCSV = False
+        fields = dict(
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments'
+        )
+        request = self.LoadRequestForm(**fields)
+        attachments = actions.get_attachments(fields, request)
+        self.assertEqual(1, len(attachments))
