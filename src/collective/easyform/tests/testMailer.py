@@ -526,7 +526,6 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_MailerXMLAttachments(self):
         """ Test mailer with dummy_send """
-        actions = get_actions(self.ff1)
         mailer = get_actions(self.ff1)['mailer']
         mailer.sendXML = True
         mailer.sendCSV = False
@@ -534,9 +533,9 @@ class TestFunctions(base.EasyFormTestCase):
             topic='test subject',
             replyto='test@test.org',
             comments='test comments',
-            choices=set(['A','B']),
+            choices=set(['A', 'B']),
             richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
-        attachments = actions.get_attachments(fields, request)
+        attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
