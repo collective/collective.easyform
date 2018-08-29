@@ -10,6 +10,7 @@ from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
 from plone import api
+from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 
 import email
@@ -532,7 +533,9 @@ class TestFunctions(base.EasyFormTestCase):
         fields = dict(
             topic='test subject',
             replyto='test@test.org',
-            comments='test comments'
+            comments='test comments',
+            choices=set(['A','B']),
+            richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
         attachments = actions.get_attachments(fields, request)
