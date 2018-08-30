@@ -4,7 +4,8 @@ Changelog
 2.0.0b7 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Add option to attach form data in XML format to email
+  [nngu6036]
 
 
 2.0.0b6 (2018-08-20)
@@ -15,7 +16,6 @@ Changelog
 - update some old documentation, add documentation for @@get_save_data_adapters view
   [tkimnguyen]
 
-- add option to attach form data in XML format to email [nngu6036]
 
 New features:
 

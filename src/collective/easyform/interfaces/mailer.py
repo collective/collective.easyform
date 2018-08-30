@@ -248,7 +248,7 @@ class IMailer(IAction):
     sendXML = zope.schema.Bool(
         title=_(u'label_sendXML_text', default=u'Send XML data attachment'),
         description=_(u'help_sendXML_text', default=u''
-                      u'Check this to send a XML file '
+                      u'Check this to send an XML file '
                       u'attachment containing the values '
                       u'filled out in the form.'),
         default=False,
