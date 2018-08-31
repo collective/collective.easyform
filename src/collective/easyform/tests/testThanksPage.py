@@ -102,8 +102,33 @@ class TestFunctions(base.EasyFormTestCase):
             filecontent = NamedFile(f.read(), contentType='application/xml')
         field_template.file = filecontent
 
-        data = {'front': 'hello front', 'back': 'hello back'}
+        data = {'first-field': 'hello ff',
+                'second-field-one': 'hello sf1',
+                'second-field-two': 'hello sf2',
+                'second-field-three': 'hello sf3'}
         request = self.LoadRequestForm(**data)
         request.method = 'POST'
         form = EasyFormForm(self.ff1, request)()
-        self.assertNotIn('<input id="form-widgets-back"', form)
+        self.assertNotIn('<input id="form-widgets-second-field-one"', form)
+        self.assertNotIn('<input id="form-widgets-second-field-two"', form)
+        self.assertNotIn('<input id="form-widgets-second-field-three"', form)
+
+    def test_not_showall_on_thankspage_fieldset(self):
+        self.ff1.showAll = False
+        field_template = api.content.create(
+            self.layer['portal'], 'File', id='easyform_default_fields.xml')
+        with open(join(dirname(__file__),
+                       'fixtures', 'fieldset_form.xml')) as f:
+            filecontent = NamedFile(f.read(), contentType='application/xml')
+        field_template.file = filecontent
+
+        data = {'first-field': 'hello ff',
+                'second-field-one': 'hello sf1',
+                'second-field-two': 'hello sf2',
+                'second-field-three': 'hello sf3'}
+        request = self.LoadRequestForm(**data)
+        request.method = 'POST'
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('<input id="form-widgets-second-field-one"', form)
+        self.assertNotIn('<input id="form-widgets-second-field-two"', form)
+        self.assertNotIn('<input id="form-widgets-second-field-three"', form)
