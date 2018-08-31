@@ -311,7 +311,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 self.base_groups.get(group.label),
                 data
             )
-            for name in group.widgets:
+            for name in list(group.widgets.keys()):
                 if name not in group.fields:
                     del group.widgets[name]
             group.widgets.mode = DISPLAY_MODE
