@@ -4,7 +4,10 @@ Changelog
 2.0.0b7 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Bug fixes:
+
+- Fix to thanks page regression introduced in 2.0.0b4
+  [instification]
 
 
 2.0.0b6 (2018-08-20)

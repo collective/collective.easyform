@@ -17,4 +17,5 @@ Google Summer of Code student Prakhar Joshi pushed a lot further.
 - Peter Holzer, peter.holzer@agitator.com
 - Thomas Massmann, thomas.massmann@it-spir.it
 - T. Kim Nguyen, kim.nguyen@wildcardcorp.com
-
+- Quang Nguyen, quang.nguyen@pretagov.com.au
+- Jon Pentland, jon.pentland@pretagov.co.uk
