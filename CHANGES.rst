@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0.0b7 (unreleased)
+2.0.0b7 (2018-09-01)
 --------------------
 
 - Add option to attach form data in XML format to email
