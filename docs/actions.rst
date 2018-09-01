@@ -80,4 +80,19 @@ This is what `count_items` outputs:
     </ul>
 
 
+Mailer Adapter
+--------------
 
+When you create an EasyForm, it includes a mailer adapter action that is activated by default.
+
+You can view an EasyForm's actions by clicking on the Actions toolbar menu, choosing "Define form actions".
+
+.. image:: images/define-actions-menu-choice.png
+
+You can view and change the settings of that mailer by clicking on its "Settings..." link.
+
+.. image:: images/default-actions-mailer.png
+
+In the mailer's settings, the "Message" tab contains checkboxes that let you send submitted data as a CSV or XML file attachment.
+
+.. image:: images/mailer-adapter-message-settings.png

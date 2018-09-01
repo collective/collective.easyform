@@ -7,6 +7,9 @@ Changelog
 - Add option to attach form data in XML format to email
   [nngu6036]
 
+- add some mailer adapter documentation, add required package version pins
+  [tkimnguyen]
+
 
 2.0.0b6 (2018-08-20)
 --------------------
