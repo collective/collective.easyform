@@ -4,7 +4,9 @@ Changelog
 2.0.0b6 (unreleased)
 --------------------
 
-- Fix permission for saveddata action form
+Bug fixes:
+
+- changed the permission of saveddata action from "Manage portal" to "Modify portal content" so "action" and "view" have the same permission
   [eikichi18]
 
 
