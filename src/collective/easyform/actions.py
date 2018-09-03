@@ -30,8 +30,10 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.utils import formataddr
 from io import BytesIO
+from json import dumps
 from logging import getLogger
 from plone import api
+from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
@@ -40,6 +42,7 @@ from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from StringIO import StringIO
 from time import time
+from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
@@ -336,6 +339,16 @@ class Mailer(Action):
 
         return headerinfo
 
+    def serialize(self, field):
+        """Serializa field to save to XML.
+        """
+        if isinstance(field, set) or isinstance(field, list):
+            list_value = list([str(f) for f in field])
+            return dumps(list_value)
+        if isinstance(field, RichTextValue):
+            return field.raw
+        return str(field)
+
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form.
         """
@@ -346,7 +359,9 @@ class Mailer(Action):
         sendCSV = getattr(self, 'sendCSV', None)
         if sendCSV:
             csvdata = []
-
+        sendXML = getattr(self, 'sendXML', None)
+        if sendXML:
+            xmlRoot = ET.Element("form")
         for fname in fields:
             field = fields[fname]
             showFields = getattr(self, 'showFields', []) or []
@@ -355,6 +370,12 @@ class Mailer(Action):
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
                     csvdata.append(field)
+
+            if sendXML:
+                if not is_file_data(field) and (
+                        getattr(self, 'showAll', True) or fname in showFields):
+                    ET.SubElement(xmlRoot, "field", name=fname).text \
+                        = self.serialize(field)
 
             if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
@@ -371,6 +392,13 @@ class Mailer(Action):
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.csv'.format(now)
             attachments.append((filename, 'text/plain', 'utf-8', csv))
+
+        if sendXML:
+            xmlstr = ET.tostring(xmlRoot, encoding='utf8', method='xml')
+            now = DateTime().ISO().replace(' ', '-').replace(':', '')
+            filename = 'formdata_{0}.xml'.format(now)
+            attachments.append((filename, 'text/xml', 'utf-8', xmlstr))
+
         return attachments
 
     def get_mail_text(self, fields, request, context):

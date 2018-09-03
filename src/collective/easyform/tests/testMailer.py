@@ -10,6 +10,7 @@ from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
 from plone import api
+from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 
 import email
@@ -522,3 +523,19 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.onSuccess({}, self.layer['request'])
         self.assertIn(u'Custom e-mail template!', self.messageText)
+
+    def test_MailerXMLAttachments(self):
+        """ Test mailer with dummy_send """
+        mailer = get_actions(self.ff1)['mailer']
+        mailer.sendXML = True
+        mailer.sendCSV = False
+        fields = dict(
+            topic='test subject',
+            replyto='test@test.org',
+            comments='test comments',
+            choices=set(['A', 'B']),
+            richtext=RichTextValue(raw='Raw')
+        )
+        request = self.LoadRequestForm(**fields)
+        attachments = mailer.get_attachments(fields, request)
+        self.assertEqual(1, len(attachments))

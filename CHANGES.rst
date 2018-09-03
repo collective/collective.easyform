@@ -1,13 +1,26 @@
 Changelog
 =========
 
-2.0.0b7 (unreleased)
+2.0.0b8 (unreleased)
 --------------------
 
-- Bug fixes:
+Bug fixes:
+
+- changed the permission of saveddata action from "Manage portal" to "Modify portal content" so "action" and "view" have the same permission
+  [eikichi18]
 
 - Fix to thanks page regression introduced in 2.0.0b4
   [instification]
+
+
+2.0.0b7 (2018-09-01)
+--------------------
+
+- Add option to attach form data in XML format to email
+  [nngu6036]
+
+- add some mailer adapter documentation, add required package version pins
+  [tkimnguyen]
 
 
 2.0.0b6 (2018-08-20)
