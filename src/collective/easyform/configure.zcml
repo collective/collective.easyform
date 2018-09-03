@@ -79,6 +79,17 @@
         run_deps="false"
         />
   </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      source="1003"
+      destination="1004"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Changed permission of saveddata action"
+        import_profile="collective.easyform:default"
+        import_steps="actions"
+        run_deps="false"
+        />
+  </genericsetup:upgradeSteps>
 
   <utility
       factory=".setuphandlers.HiddenProfiles"

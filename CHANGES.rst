@@ -4,7 +4,10 @@ Changelog
 2.0.0b8 (unreleased)
 --------------------
 
-- Nothing changed yet.
+Bug fixes:
+
+- changed the permission of saveddata action from "Manage portal" to "Modify portal content" so "action" and "view" have the same permission
+  [eikichi18]
 
 
 2.0.0b7 (2018-09-01)
