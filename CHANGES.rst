@@ -9,6 +9,9 @@ Bug fixes:
 - changed the permission of saveddata action from "Manage portal" to "Modify portal content" so "action" and "view" have the same permission
   [eikichi18]
 
+- Fix to thanks page regression introduced in 2.0.0b4
+  [instification]
+
 
 2.0.0b7 (2018-09-01)
 --------------------
