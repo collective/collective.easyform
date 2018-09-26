@@ -457,8 +457,11 @@ class Mailer(Action):
                 Encoders.encode_base64(msg)
 
             # Set the filename parameter
+            if isinstance(filename, unicode):
+                filename = filename.encode('utf-8')
             msg.add_header(
-                'Content-Disposition', 'attachment', filename=filename)
+                'Content-Disposition', 'attachment',
+                filename=('utf-8', '', filename))
             outer.attach(msg)
 
         return outer.as_string()

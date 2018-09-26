@@ -12,6 +12,8 @@ Bug fixes:
 - Fix to thanks page regression introduced in 2.0.0b4
   [instification]
 
+- Fix e-mail attachments with non ASCII chars
+  [tomgross]
 
 2.0.0b7 (2018-09-01)
 --------------------
