@@ -112,7 +112,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
         self.assertEqual(decoded_header, long_subject)
@@ -213,7 +213,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
         self.assertEqual(decoded_header, utf8_subject)
@@ -230,7 +230,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
         self.assertEqual(decoded_header, utf8_subject)
@@ -248,7 +248,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
         self.assertEqual(

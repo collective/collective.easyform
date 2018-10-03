@@ -7,12 +7,13 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
-from StringIO import StringIO
+from six import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 
 import plone.protect
 import sys
+from six.moves import zip
 
 
 def FakeRequest(method='GET', add_auth=False, **kwargs):
@@ -62,7 +63,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.createSaver()
 
         view = self.ff1.restrictedTraverse('saveddata')
-        self.assertEqual(view.items(), [('saver', u'Saver')])
+        self.assertEqual(list(view.items()), [('saver', u'Saver')])
 
     def testSaverDataFormExtraData(self):
         ''' test saver data form extra data'''
@@ -317,7 +318,7 @@ class TestFunctions(base.EasyFormTestCase):
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
-        row = iter(saver.getSavedFormInput()).next()
+        row = next(iter(saver.getSavedFormInput()))
         self.assertEqual(len(row), 4)
 
         request = FakeRequest(
@@ -341,26 +342,26 @@ class TestFunctions(base.EasyFormTestCase):
 
         # save a row
         fields = list(get_schema(self.ff1))
-        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
+        saver.addDataRow(dict(list(zip(fields, ['one', 'two', 'three']))))
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
             items[0][1],
-            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+            dict(list(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         )
         self.assertEqual(saver.getSavedFormInputForEdit(), 'one,two,three\r\n')
 
         # save a couple of \n-delimited rows - \n eol
-        saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
+        saver.addDataRow(dict(list(zip(fields, ['four', 'five', 'six']))))
         self.assertEqual(saver.itemsSaved(), 2)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
             items[0][1],
-            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+            dict(list(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         )
         self.assertEqual(
             items[1][1],
-            dict(zip(['id'] + fields, [items[1][0], 'four', 'five', 'six']))
+            dict(list(zip(['id'] + fields, [items[1][0], 'four', 'five', 'six'])))
         )
         self.assertEqual(
             saver.getSavedFormInputForEdit(),
@@ -383,12 +384,12 @@ class TestFunctions(base.EasyFormTestCase):
         # save a row
         fields = list(get_schema(self.ff1))
         # saver.savedFormInput = 'one,two,three'
-        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
+        saver.addDataRow(dict(list(zip(fields, ['one', 'two', 'three']))))
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
             items[0][1],
-            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+            dict(list(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         )
 
     def testDeleteSavedFormInput(self):
@@ -401,9 +402,9 @@ class TestFunctions(base.EasyFormTestCase):
 
         # save a few rows
         fields = list(get_schema(self.ff1))
-        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
-        saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
-        saver.addDataRow(dict(zip(fields, ['seven', 'eight', 'nine'])))
+        saver.addDataRow(dict(list(zip(fields, ['one', 'two', 'three']))))
+        saver.addDataRow(dict(list(zip(fields, ['four', 'five', 'six']))))
+        saver.addDataRow(dict(list(zip(fields, ['seven', 'eight', 'nine']))))
         self.assertEqual(saver.itemsSaved(), 3)
 
         # saver.manage_deleteData(saver._storage.keys()[1])
@@ -412,11 +413,11 @@ class TestFunctions(base.EasyFormTestCase):
         items = saver.getSavedFormInputItems()
         self.assertEqual(
             items[0][1],
-            dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three']))
+            dict(list(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         )
         self.assertEqual(
             items[1][1],
-            dict(zip(['id'] + fields, [items[1][0], 'seven', 'eight', 'nine']))
+            dict(list(zip(['id'] + fields, [items[1][0], 'seven', 'eight', 'nine'])))
         )
 
     def testSaverInputAsDictionaries(self):
@@ -445,7 +446,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 1)
 
         iad = saver.getSavedFormInput()
-        row = iter(iad).next()
+        row = next(iter(iad))
         self.assertEqual(len(row), 4)
         self.assertEqual(row['topic'], 'test subject')
 
@@ -516,7 +517,7 @@ class TestFunctions(base.EasyFormTestCase):
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
-        row = iter(saver.getSavedFormInput()).next()
+        row = next(iter(saver.getSavedFormInput()))
         self.assertEqual(len(row), 3)
         self.assertEqual(row['topic'], 'test subject')
         self.assertEqual(row['comments'], 'test comments')

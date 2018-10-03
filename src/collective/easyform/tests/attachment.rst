@@ -1,12 +1,13 @@
 File attachments
 ================
 
-    >>> import cStringIO
+    >>> from six import BytesIO
     >>> browser = get_browser(layer)
 
 Add a new EasyForm::
 
     >>> portal_url = layer['portal'].absolute_url()
+    >>> browser.handleErrors = False
     >>> browser.open(portal_url)
     >>> browser.getLink('EasyForm').click()
     >>> browser.getControl('Title').value = 'attachmentform'
@@ -52,7 +53,7 @@ Submit the form with an text attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('file contents'), 'text/plain', 'test.txt')
+    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'file contents'), 'text/plain', 'test.txt')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
@@ -63,7 +64,7 @@ Make sure the attachment was included in the email message::
 
     >>> portal = layer['portal']
     >>> portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
-    'file contents'
+    b'file contents'
 
 Submit the form with an image attachment::
 
@@ -74,7 +75,7 @@ Submit the form with an image attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('image content'), 'image/gif', 'test.gif')
+    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'image content'), 'image/gif', 'test.gif')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
@@ -84,7 +85,7 @@ Make sure the attachment was included in the email message::
 
 
     >>> portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
-    'image content'
+    b'image content'
 
 Submit the form with an audio attachment::
 
@@ -95,7 +96,7 @@ Submit the form with an audio attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('audio content'), 'audio/mpeg', 'test.mp3')
+    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'audio content'), 'audio/mpeg', 'test.mp3')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
@@ -105,7 +106,7 @@ Make sure the attachment was included in the email message::
 
 
     >>> portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
-    'audio content'
+    b'audio content'
 
 Submit the form with an zip attachment::
 
@@ -116,7 +117,7 @@ Submit the form with an zip attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('zip content'), 'application/zip', 'test.zip')
+    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'zip content'), 'application/zip', 'test.zip')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
@@ -126,7 +127,7 @@ Make sure the attachment was included in the email message::
 
 
     >>> portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
-    'zip content'
+    b'zip content'
 
 Excluded fields
 ---------------
@@ -143,11 +144,11 @@ the file field is not listed in the mailer's showFields::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('file contents'), 'text/plain', 'test.txt')
+    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'file contents'), 'text/plain', 'test.txt')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> portal.MailHost.msg.get_payload(decode=True)
-    '<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n        \n    </dl>\n    <p></p>\n    <p></p>\n  </body>\n</html>'
+    b'<html xmlns="http://www.w3.org/1999/xhtml">\n  <head><title></title></head>\n  <body>\n    <p></p>\n    <dl>\n        \n    </dl>\n    <p></p>\n    <p></p>\n  </body>\n</html>'
 
     >> browser.getControl('Reset').click()
 
@@ -185,10 +186,9 @@ Check saved data::
     'file contents'
     >>> browser.goBack()
     >>> def first_item(browser, type_="checkbox"):
-    ...     for form in browser.mech_browser.forms():
-    ...         for control in form.controls:
-    ...             if control.type == type_ and control.name.startswith('crud-edit.'):
-    ...                 return control.name
+    ...     for control in browser.getForm(index=1).controls:
+    ...         if getattr(control, 'type', None) == type_ and control.name.startswith('crud-edit.'):
+    ...             return control.name
     ...
     >>> fcb = browser.getControl(name=first_item(browser))
     >>> fcb.value = fcb.options
@@ -213,9 +213,9 @@ Test file uploads with non ASCII characters in the title
 
     >>> browser.open(portal_url + '/attachmentform')
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
-    >>> browser.getControl('Subject').value = u'München'.encode('latin-1')
+    >>> browser.getControl('Subject').value = u'München'.encode('utf-8')
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(cStringIO.StringIO('file contents'), 'text/plain', u'Zürich.txt'.encode('latin-1'))
+    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'file contents'), 'text/plain', u'Zürich.txt'.encode('utf-8'))
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents

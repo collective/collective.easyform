@@ -39,8 +39,8 @@ well (so the user sees a security icon in their browser.) ::
     >>> browser.open(portal_url + '/testform/content_status_modify?workflow_action=publish')
 
 Remove authorization header
-    >>> headers = browser.mech_browser.addheaders
-    >>> headers.remove(('Authorization', 'Basic adm:secret'))
+
+    >>> browser.addHeader('Authorization', '')
     >>> browser.open(portal_url + '/testform')
     >>> 'Location' in browser.headers
     True

@@ -13,6 +13,7 @@ from collective.easyform.api import get_actions
 from collective.easyform.tests import base
 from plone.app.testing import logout
 from Products.CMFCore import permissions
+import six
 
 
 test_script = '''
@@ -79,7 +80,7 @@ from Products.CMFCore.utils import getToolByName
 portal_url = getToolByName(context, 'portal_url')
 portal = portal_url.getPortalObject()
 
-print portal
+print(portal)
 
 # Try set left_slots
 portal.manage_addProperty('foo', ['foo'], 'lines')
@@ -327,7 +328,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.request['form.widgets.title'] = u'Adapter'
         self.request['form.widgets.description'] = u''
         self.request['form.widgets.ProxyRole'] = [u'Manager']
-        self.request['form.widgets.ScriptBody'] = unicode(proxied_script)
+        self.request['form.widgets.ScriptBody'] = six.text_type(proxied_script)
         self.request['form.widgets.IActionExtender.execCondition'] = u''
         self.request['form.buttons.save'] = u'Save'
         view = self.ff1.restrictedTraverse('actions')
@@ -340,7 +341,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.request['form.widgets.title'] = u'Adapter'
         self.request['form.widgets.description'] = u''
         self.request['form.widgets.ProxyRole'] = [u'none']
-        self.request['form.widgets.ScriptBody'] = unicode(proxied_script)
+        self.request['form.widgets.ScriptBody'] = six.text_type(proxied_script)
         self.request['form.widgets.IActionExtender.execCondition'] = u''
         self.request['form.buttons.save'] = u'Save'
         view = self.ff1.restrictedTraverse('actions')
@@ -353,7 +354,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.request['form.widgets.title'] = u'Adapter'
         self.request['form.widgets.description'] = u''
         self.request['form.widgets.ProxyRole'] = [u'bogus']
-        self.request['form.widgets.ScriptBody'] = unicode(proxied_script)
+        self.request['form.widgets.ScriptBody'] = six.text_type(proxied_script)
         self.request['form.widgets.IActionExtender.execCondition'] = u''
         self.request['form.buttons.save'] = u'Save'
         view = self.ff1.restrictedTraverse('actions')

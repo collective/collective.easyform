@@ -15,8 +15,9 @@ from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from Products.CMFPlone.utils import safe_unicode
 from re import compile
-from types import StringTypes
 from zope.schema import getFieldsInOrder
+
+import six
 
 
 CONTEXT_KEY = u'context'
@@ -95,7 +96,7 @@ def get_expression(context, expression_string, **kwargs):
     :param dict kwargs: additional arguments for expression
     :returns: result of TALES expression
     """
-    if isinstance(expression_string, unicode):
+    if six.PY2 and isinstance(expression_string, six.text_type):
         expression_string = expression_string.encode('utf-8')
 
     expression_context = getExprContext(context, context)
@@ -171,7 +172,7 @@ def set_actions(context, schema):
     context.notifyModified()
 
 
-def format_addresses(addresses, names=[]):
+def format_addresses(addresses, names=None):
     """
     Format destination (To) input.
     Input may be a string or sequence of strings;
@@ -225,25 +226,10 @@ def format_addresses(addresses, names=[]):
     ''
 
     """
-    if type(addresses) in StringTypes:
-        # replace common separators `;` and `,` with newlines so the
-        # splitlines method works
-        addresses = addresses.replace(',', '\n').replace(';', '\n')
-        addresses = [s.strip() for s in addresses.splitlines()]
-    assert(isinstance(addresses, list) or isinstance(addresses, tuple))  # ensure iterable  # noqa
-    addresses = [
-        safe_unicode(s).strip().encode('utf-8') for s in addresses if s
-    ]
-
-    if names and type(names) in StringTypes:
-        # replace common separators `;` and `,` with newlines so the
-        # splitlines method works
-        names = names.replace(',', '\n').replace(';', '\n')
-        names = [s for s in names.splitlines()]
     if not names:
         names = []
-    assert(isinstance(names, list) or isinstance(names, tuple))
-    names = [safe_unicode(s).strip().encode('utf-8') for s in names if s]
+    names = cleanup(names)
+    addresses = cleanup(addresses)
 
     address_pairs = []
     for cnt, address in enumerate(addresses):
@@ -253,6 +239,24 @@ def format_addresses(addresses, names=[]):
         ))
     ret = ', '.join([formataddr(pair) for pair in address_pairs])
     return ret
+
+
+def cleanup(value):
+    """Accepts lists, tuples or comma/semicolon-separated strings
+    and returns a list of native strings.
+    """
+    if isinstance(value, six.string_types):
+        value = safe_unicode(value).strip()
+        value = value.replace(u',', u'\n').replace(u';', u'\n')
+        value = [s for s in value.splitlines()]
+
+    if isinstance(value, (list, tuple)):
+        value = [safe_unicode(s).strip() for s in value]
+
+    if six.PY2:
+        # py2 expects needs a list of bytes
+        value = [s.encode('utf-8') for s in value if s]
+    return value
 
 
 def dollar_replacer(s, data):

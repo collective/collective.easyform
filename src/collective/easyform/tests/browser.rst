@@ -32,6 +32,7 @@ Let's add one now::
 
 Return to form and confirm that it renders properly::
 
+    >>> browser.handleErrors = False
     >>> browser.open(portal_url + '/testform')
     >>> browser.url
     'http://nohost/plone/testform'

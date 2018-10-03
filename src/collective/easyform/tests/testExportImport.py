@@ -8,7 +8,7 @@ from collective.easyform.tests import base
 from plone import api
 from Products.GenericSetup.tests.common import DummyExportContext
 from Products.GenericSetup.tests.common import TarballTester
-from StringIO import StringIO
+from six import BytesIO
 from tarfile import TarFile
 from zope.component import getMultiAdapter
 from ZPublisher.HTTPRequest import FileUpload
@@ -272,7 +272,7 @@ class TestFormExport(ExportImportTester):
         form_folder_export = getMultiAdapter(
             (self.folder.ff1, self.app.REQUEST),
             name='export-easyform')
-        fileish = StringIO(form_folder_export())
+        fileish = BytesIO(form_folder_export())
         try:
             self._verifyTarballContents(fileish, toc_list)
         except AssertionError:
@@ -320,7 +320,7 @@ class TestFormImport(ExportImportTester):
         form_folder_export = getMultiAdapter(
             (self.ff1, self.app.REQUEST),
             name='export-easyform')
-        in_file = StringIO(form_folder_export())
+        in_file = BytesIO(form_folder_export())
         env = {'REQUEST_METHOD': 'PUT'}
         headers = {'content-type': 'text/html',
                    'content-length': len(in_file.read()),

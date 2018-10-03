@@ -25,6 +25,11 @@ New features:
   like recaptcha, that could breaks if it's in the wrong context.
   [cekk]
 
+New features:
+
+- Add Support for Python 3.
+  [pbauer]
+
 Bug fixes:
 
 - changed the permission of saveddata action from "Manage portal" to "Modify portal content" so "action" and "view" have the same permission

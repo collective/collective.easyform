@@ -6,6 +6,7 @@ from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from Products.validation.validators.BaseValidators import baseValidators
 from zope.component import provideUtility
+import six
 
 
 BAD_SIGNS = frozenset(['<a ', 'www.', 'http:', '.com', 'https:'])
@@ -32,7 +33,7 @@ def isCommaSeparatedEmails(value):
 def isChecked(value):
     if not (
         (isinstance(value, bool) and value) or
-        (isinstance(value, basestring) and value == '1')
+        (isinstance(value, six.string_types) and value == '1')
     ):
         return _(u'Must be checked.')
 
@@ -57,7 +58,7 @@ def update_validators():
     if validation and baseValidators:
         def method(name):
             def validate(value):
-                if isinstance(value, unicode):
+                if six.PY2 and isinstance(value, six.text_type):
                     value = value.encode('utf-8')
                 res = validation(name, value)
                 if res != 1:

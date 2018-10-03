@@ -20,6 +20,7 @@ from plone.namedfile.interfaces import INamed
 from plone.z3cform import layout
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.CMFPlone.utils import safe_encode
 from z3c.form import button
 from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
@@ -33,6 +34,7 @@ from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
 from ZPublisher.mapply import mapply
 
+import six
 
 logger = getLogger('collective.easyform')
 PMF = MessageFactory('plone')
@@ -179,18 +181,19 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             return
         thanksPageOverrideAction = self.context.thanksPageOverrideAction
         thanksPage = get_expression(self.context, thanksPageOverride)
+        if six.PY2 and isinstance(thanksPage, six.text_type):
+            thanksPage = thanksPage.encode('utf-8')
         if thanksPageOverrideAction == 'redirect_to':
             self.request.response.redirect(thanksPage)
             return
         if thanksPageOverrideAction == 'traverse_to':
-            thanksPage = self.context.restrictedTraverse(
-                thanksPage.encode('utf-8'))
+            thanksPage = self.context.restrictedTraverse(thanksPage)
             thanksPage = mapply(
                 thanksPage,
                 self.request.args,
                 self.request
-            ).encode('utf-8')
-            self.request.response.write(thanksPage)
+            )
+            self.request.response.write(safe_encode(thanksPage))
 
     @button.buttonAndHandler(
         _(u'Reset'),
