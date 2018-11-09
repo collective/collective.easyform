@@ -4,7 +4,8 @@ Changelog
 2.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Spanish translation.
+  [erral]
 
 
 2.0.0 (2018-10-03)
