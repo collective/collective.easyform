@@ -30,7 +30,7 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
-from io import BytesIO
+from six import StringIO
 from json import dumps
 from logging import getLogger
 from plone import api
@@ -41,7 +41,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
-from six import StringIO
+# from six import BytesIO
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
@@ -390,7 +390,7 @@ class Mailer(Action):
                 attachments.append((filename, mimetype, enc, data))
 
         if sendCSV:
-            output = BytesIO()
+            output = StringIO()
             writer = csvwriter(output)
             writer.writerow(csvdata)
             csv = output.getvalue()
@@ -411,7 +411,7 @@ class Mailer(Action):
         """
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
-        if not isinstance(body, six.text_type):
+        if six.PY2 and isinstance(body, six.text_type):
             body = body.encode('utf8')
         email_charset = 'utf-8'
         # always use text/plain for encrypted bodies
@@ -614,7 +614,8 @@ class SaveData(Action):
                 if six.PY2 and isinstance(data, six.text_type):
                     return data.encode('utf-8')
                 return data
-            writer.writerow([get_data(row, i) for i in names])
+            row_data = [get_data(row, i) for i in names]
+            writer.writerow(row_data)
         res = sbuf.getvalue()
         sbuf.close()
         return res
@@ -662,7 +663,7 @@ class SaveData(Action):
         response.setHeader('Content-Type', 'text/comma-separated-values')
         value = self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter=',')
-        if six.PY2 and isinstance(value, six.text_type):
+        if isinstance(value, six.text_type):
             value = value.encode('utf8')
         response.write(value)
 
@@ -674,12 +675,16 @@ class SaveData(Action):
             'attachment; filename="{0}.tsv"'.format(self.__name__)
         )
         response.setHeader('Content-Type', 'text/tab-separated-values')
-        response.write(self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter='\t'))
+        value = self.getSavedFormInputForEdit(
+            getattr(self, 'UseColumnNames', False), delimiter='\t')
+        if isinstance(value, six.text_type):
+            value = value.encode('utf8')
+        response.write(value)
 
     def download(self, response):
         # """Download the saved data
         # """
+        import pdb; pdb.set_trace()
         format = getattr(self, 'DownloadFormat', 'tsv')
         if format == 'tsv':
             return self.download_tsv(response)
