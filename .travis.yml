@@ -10,7 +10,7 @@ addons:
   #      https://github.com/SeleniumHQ/selenium/issues/2739#issuecomment-249482533
   firefox: 45.9.0esr
 python:
-  - 2.7.13
+  - 2.7.14
 matrix:
   fast_finish: true
 env:
