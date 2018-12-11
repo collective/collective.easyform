@@ -4,6 +4,7 @@
 #
 
 from collective.easyform.tests import base
+from plone import api
 from Products.CMFCore.utils import getToolByName
 
 import Products
@@ -135,11 +136,8 @@ class TestInstallation(base.EasyFormTestCase):
                 )
 
     def test_EasyFormInDefaultPageTypes(self):
-        propsTool = getToolByName(self.portal, 'portal_properties')
-        siteProperties = getattr(propsTool, 'site_properties')
-        defaultPageTypes = list(
-            siteProperties.getProperty('default_page_types'))
-        self.assertTrue('EasyForm' in defaultPageTypes)
+        values = api.portal.get_registry_record('plone.default_page_types')
+        self.assertIn('EasyForm', values)
 
     def testTypeViews(self):
         self.assertEqual(

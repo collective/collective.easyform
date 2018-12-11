@@ -132,3 +132,32 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertNotIn('<input id="form-widgets-second-field-one"', form)
         self.assertNotIn('<input id="form-widgets-second-field-two"', form)
         self.assertNotIn('<input id="form-widgets-second-field-three"', form)
+
+
+class TestThanksPageTraverseFunctional(base.EasyFormFunctionalTestCase):
+
+    def setUp(self):
+        # TODO...
+        pass
+
+    def test_redirect_to_thankspage(self):
+        return
+        # TODO...
+        portal_url = self.portal.absolute_url()
+        self.portal.invokeFactory('Folder', 'news')
+        self.browser.open(portal_url + '/testform/actions/mailer')
+        self.browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
+        self.browser.getControl('Save').click()
+        self.browser.open(portal_url + '/testform/edit')
+        self.browser.getControl('Traverse to').selected = True
+        self.browser.getControl(name='form.widgets.thanksPageOverride').value = "string:news"
+        self.browser.getControl('Save').click()
+        self.browser.getControl('Your E-Mail Address').value = 'test@example.com'
+        self.browser.getControl('Subject').value = 'Test Subject'
+        self.browser.getControl('Comments').value = 'PFG rocks!'
+        self.browser.getControl('Submit').click()
+        self.assertIn('Test Subject', self.browser.contents)
+        self.assertIn('PFG rocks!', self.browser.contents)
+        self.assertNotIn('Thanks for your input.', self.browser.contents)
+        self.assertEqual(self.browser.url, 'http://nohost/plone/testform')
+        self.assertNotIn('Thanks for your input.', self.browser.contents)

@@ -193,9 +193,6 @@ def format_addresses(addresses, names=None):
     >>> format_addresses('sim@sala.bim', 'sim')
     'sim <sim@sala.bim>'
 
-    >>> format_addresses('ähm@öhm.ühm', 'ähm')
-    '\xc3\xa4hm <\xc3\xa4hm@\xc3\xb6hm.\xc3\xbchm>'
-
     >>> format_addresses('sim@sala.bim, hokus@pokus.fidibus')
     'sim@sala.bim, hokus@pokus.fidibus'
 
@@ -254,7 +251,7 @@ def cleanup(value):
         value = [safe_unicode(s).strip() for s in value]
 
     if six.PY2:
-        # py2 expects needs a list of bytes
+        # py2 expects a list of bytes
         value = [s.encode('utf-8') for s in value if s]
     return value
 

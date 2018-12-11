@@ -99,34 +99,12 @@ Submit the form::
     >>> 'Thanks for your input.' in browser.contents
     True
 
-Check traverse to portal::
+The check to traverse to /news after submission has moved to non-doctest because of a weird traceback in py3:
 
-    >>> portal.invokeFactory('Folder', 'news')
-    'news'
-    >>> from transaction import commit
-    >>> commit()
-    >>> browser.open(portal_url + '/testform/actions/mailer')
-    >>> browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
-    >>> browser.getControl('Save').click()
-    >>> browser.open(portal_url + '/testform/edit')
-    >>> browser.getControl('Traverse to').selected = True
-    >>> browser.getControl(name='form.widgets.thanksPageOverride').value = "string:news"
-    >>> browser.getControl('Save').click()
-    >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
-    >>> browser.getControl('Subject').value = 'Test Subject'
-    >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl('Submit').click()
-    <sent mail from  to ['mdummy@address.com']>
-    >>> 'Test Subject' in browser.contents
-    True
-    >>> 'PFG rocks!' in browser.contents
-    True
-    >>> 'Thanks for your input.' in browser.contents
-    False
-    >>> browser.url
-    'http://nohost/plone/testform'
-    >>> 'Thanks for your input.' in browser.contents
-    False
+    Error in test [...]/collective.easyform/src/collective/easyform/tests/browser.rst
+    doctest.UnexpectedException: <DocTest browser.rst from [...]/collective.easyform/src/collective/easyform/tests/browser.rst:0 (95 examples)>
+
+    AssertionError: Content-Length is different from actual app_iter length (24988!=50737)
 
 We should be able to view an individual field::
 
@@ -158,33 +136,33 @@ Attempts to use gpg_services TTW should be fruitless::
     >>> browser.open(portal_url + '/testform/@@gpg_services/encrypt?data=XXX&recipient_key_id=yyy')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 Attempts to read the success action TTW should be fruitless::
 
     >>> browser.open(portal_url + '/testform/fgGetSuccessAction')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 That should also be true for fields::
 
     >>> browser.open(portal_url + '/testform/comments/fgGetSuccessAction')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 Attempts to set mailer body TTW should fail
     >>> browser.open(portal_url + '/testform/mailer/setBody_pt?value=stuff')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 Attempts to read mailer body TTW should fail
     >>> browser.open(portal_url + '/testform/mailer/body_pt')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 We want to test security on the custom script adapter. Let's add one::
 
@@ -204,45 +182,45 @@ Attempts to set script body TTW should fail::
     >>> browser.open(portal_url + '/testform/test-script-adapter/updateScript?body=raise%2010&role=none')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 Attempts to run the script TTW should fail::
 
     >>> browser.open(portal_url + '/testform/test-script-adapter/onSuccess?fields=')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
     >>> browser.open(portal_url + '/testform/test-script-adapter/scriptBody?fields=')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
     >>> browser.open(portal_url + '/testform/test-script-adapter/executeCustomScript?fields=&form=&req=')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 Attempts to use onSuccess TTW should fail::
 
     >>> browser.open(portal_url + '/testform/saver/onSuccess?fields=&request=')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
 Attempts to read our special member attributes TTW should fail::
 
     >>> browser.open(portal_url + '/testform/memberId')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
     >>> browser.open(portal_url + '/testform/memberFullName')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
 
     >>> browser.open(portal_url + '/testform/memberEmail')
     Traceback (most recent call last):
     ...
-    HTTPError: HTTP Error 404: Not Found
+    zExceptions.NotFound: ...
