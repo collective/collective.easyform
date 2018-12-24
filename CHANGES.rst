@@ -4,7 +4,8 @@ Changelog
 2.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- a11y: Added role attribute for portalMessage
+  [nzambello]
 
 
 2.0.1 (2018-12-04)

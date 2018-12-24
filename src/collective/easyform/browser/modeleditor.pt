@@ -24,7 +24,7 @@
                 </a>
             </div>
             <div id="rules-editor">
-                <div class="portalMessage info">
+                <div class="portalMessage info" role="status">
                   <span id="messagespan" style="display:none">
                     &nbsp;
                   </span>&nbsp;
