@@ -6,6 +6,7 @@
       tal:omit-tag="">
 
   <div class="portalMessage"
+       role="status"
        tal:condition="view/status" tal:content="view/status">
   </div>
 
