@@ -79,4 +79,13 @@
              *"
         />
     </configure>
+        <configure
+        zcml:condition="installed plone.formwidget.captcha">
+    <adapter
+        factory="plone.formwidget.captcha.widget.CaptchaFieldWidget"
+        provides="z3c.form.interfaces.IFieldWidget"
+        for="collective.easyform.interfaces.ICaptcha
+             *"
+        />
+    </configure>
 </configure>
