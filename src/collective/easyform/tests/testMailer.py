@@ -532,10 +532,40 @@ class TestFunctions(base.EasyFormTestCase):
         fields = dict(
             topic='test subject',
             replyto='test@test.org',
-            comments='test comments',
+            comments=u'test comments😀',
             choices=set(['A', 'B']),
             richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
+        name, mime, enc, xml = attachments[0]
+        self.assertEqual(
+            """<?xml version=\'1.0\' encoding=\'utf8\'?>\n<form>"""
+            """<field name="replyto">test@test.org</field>"""
+            """<field name="topic">test subject</field>"""
+            """<field name="richtext">Raw</field>"""
+            """<field name="comments">test comments\xf0\x9f\x98\x80</field>"""
+            """<field name="choices">["A", "B"]</field></form>""", xml)
+
+    # def test_MailerCSVAttachments(self):
+    #     """ Test mailer with dummy_send """
+    #     mailer = get_actions(self.ff1)['mailer']
+    #     mailer.sendXML = False
+    #     mailer.sendCSV = True
+    #     fields = dict(
+    #         topic='test subject',
+    #         replyto='test@test.org',
+    #         comments=u'test comments😀',
+    #         choices=set(['A', 'B']),
+    #         richtext=RichTextValue(raw='Raw')
+    #     )
+    #     request = self.LoadRequestForm(**fields)
+    #     attachments = mailer.get_attachments(fields, request)
+    #     self.assertEqual(1, len(attachments))
+    #     name, mime, enc, xml = attachments[0]
+    #     self.assertEqual(
+    #         """test@test.org,test subject,Raw,"""
+    #         """test comments\xf0\x9f\x98\x80,"""
+    #         """"[\'A\', \'B\']"\r\n""",
+    #         xml)
