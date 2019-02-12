@@ -33,6 +33,17 @@ def get_browser(layer):
     transaction.commit()
     browser = Browser(layer['app'])
     browser.addHeader('Authorization', 'Basic adm:secret')
+
+    browser.handleErrors = False
+
+    def raising(self, info):
+        import traceback
+        traceback.print_tb(info[2])
+        print info[1]  # noqa: T001
+
+    from Products.SiteErrorLog.SiteErrorLog import SiteErrorLog
+    SiteErrorLog.raising = raising
+
     return browser
 
 
