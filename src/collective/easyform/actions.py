@@ -684,7 +684,6 @@ class SaveData(Action):
     def download(self, response):
         # """Download the saved data
         # """
-        import pdb; pdb.set_trace()
         format = getattr(self, 'DownloadFormat', 'tsv')
         if format == 'tsv':
             return self.download_tsv(response)
