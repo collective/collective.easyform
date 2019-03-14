@@ -7,6 +7,9 @@ Changelog
 - a11y: Added role attribute for portalMessage
   [nzambello]
 
+- fixed startup ResourceWarning on open files
+  [ajung]
+
 
 2.0.1 (2018-12-04)
 ------------------
