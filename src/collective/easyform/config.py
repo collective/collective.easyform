@@ -14,16 +14,16 @@ EDIT_ADDRESSING_PERMISSION = 'collective.easyform.EditMailAddresses'
 USE_ENCRYPTION_PERMISSION = 'collective.easyform.EditEncryptionSpecs'
 DOWNLOAD_SAVED_PERMISSION = 'collective.easyform.DownloadSavedInput'
 
-with open(os.path.join(this_path, "default_schemata", "model_default.xml")) as fp:
+with open(os.path.join(this_path, "default_schemata", "model_default.xml")) as fp:  # noqa
     MODEL_DEFAULT = safe_unicode(fp.read())
 
-with open(os.path.join(this_path, "default_schemata", "fields_default.xml")) as fp:
+with open(os.path.join(this_path, "default_schemata", "fields_default.xml")) as fp:  # noqa
     FIELDS_DEFAULT = safe_unicode(fp.read())
 
-with  open(os.path.join( this_path, "default_schemata", "actions_default.xml")) as fp:
+with open(os.path.join(this_path, "default_schemata", "actions_default.xml")) as fp:  # noqa
     ACTIONS_DEFAULT = safe_unicode(fp.read())
 
-with open(os.path.join(this_path, "default_schemata", "mail_body_default.pt")) as fp:
+with open(os.path.join(this_path, "default_schemata", "mail_body_default.pt")) as fp:  # noqa
     MAIL_BODY_DEFAULT = safe_unicode(fp.read())
 
 

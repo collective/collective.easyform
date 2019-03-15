@@ -33,3 +33,4 @@ parts/
 pip-selfcheck.json
 share/
 var/
+pyvenv.cfg

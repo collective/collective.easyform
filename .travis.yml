@@ -51,7 +51,7 @@ script:
   - python --version 2> /dev/stdout | grep 3.6 || bin/code-analysis
   - bin/test $TEST_OPTIONS
   - bin/code-analysis
-  - bin/coverage run bin/test
+  - bin/createcoverage
 after_success:
   - pip install -q coveralls
   - coveralls
