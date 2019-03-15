@@ -68,7 +68,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         self.assertIn('To: mdummy@address.com', self.messageText)
         self.assertIn(
-            'Subject: test subject', self.messageText)
+            'Subject: =?utf-8?q?test_subject?=', self.messageText)
         msg = email.message_from_string(self.messageText)
         self.assertIn(
             'test comments', msg.get_payload(decode=False))
@@ -92,7 +92,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn('Token: abc', self.messageText)
         self.assertIn('To: mdummy@address.com', self.messageText)
         self.assertIn(
-            'Subject: test subject', self.messageText)
+            'Subject: =?utf-8?q?test_subject?=', self.messageText)
         msg = email.message_from_string(self.messageText)
         self.assertIn(
             'test comments', msg.get_payload(decode=False))
@@ -116,7 +116,7 @@ class TestFunctions(base.EasyFormTestCase):
         decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
-        self.assertEqual(decoded_header, long_subject)
+        self.assertEqual(decoded_header, long_subject.encode('utf-8'))
 
     def test_SubjectDollarReplacement(self):
         """
@@ -135,8 +135,7 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**data)
         self.messageText = ''
         mailer.onSuccess(data, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: test subject') > 0)
+        self.assertIn('Subject: =?utf-8?q?test_subject?=', self.messageText)
 
         data2 = dict(
             topic='test ${subject}',
@@ -149,7 +148,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageText = ''
         mailer.onSuccess(data2, request)
         self.assertIn(
-            'Subject: test_=24=7Bsubject=7D', self.messageText)
+            'Subject: =?utf-8?q?test_=24=7Bsubject=7D?=', self.messageText)
 
         # we should get substitution in a basic override
         mailer.subject_field = ''
@@ -157,7 +156,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageText = ''
         mailer.onSuccess(data, request)
         self.assertIn(
-            'Subject: This_is_my_test_subject_now',
+            'Subject: =?utf-8?q?This_is_my_test_subject_now?=',
             self.messageText)
 
         # we should get substitution in a basic override
@@ -165,7 +164,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageText = ''
         mailer.onSuccess(data, request)
         self.assertIn(
-            'Subject: This_is_my_=3F=3F=3F_now',
+            'Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=',
             self.messageText)
 
         # we don't want substitution on user input
@@ -173,7 +172,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageText = ''
         mailer.onSuccess(data2, request)
         self.assertIn(
-            'Subject: This_is_my_=3F=3F=3F_now',
+            'Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=',
             self.messageText)
 
     def test_TemplateReplacement(self):
@@ -267,7 +266,7 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**data)
 
         mailer.onSuccess(data, request)
-        self.assertIn('Subject: eggs_and_spam', self.messageText)
+        self.assertIn('Subject: =?utf-8?q?eggs_and_spam?=', self.messageText)
         self.assertIn('From: spam@eggs.com', self.messageText)
         self.assertIn('To: eggs@spam.com', self.messageText)
 
@@ -279,7 +278,7 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
-        self.assertIn('Subject: eggs_and_spam', self.messageText)
+        self.assertIn('Subject: =?utf-8?q?eggs_and_spam?=', self.messageText)
         self.assertIn('To: test@test.ts', self.messageText)
 
     def testMultiRecipientOverrideByString(self):

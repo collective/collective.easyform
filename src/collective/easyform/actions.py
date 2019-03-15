@@ -293,8 +293,7 @@ class Mailer(Action):
         email_charset = 'utf-8'
         msgSubject = self.secure_header_line(
             subject).encode(email_charset, 'replace')
-        msgSubject = str(Header(msgSubject, email_charset))
-        return msgSubject
+        return Header(msgSubject, email_charset)
 
     def get_header_info(self, fields, request, context,
                         from_addr=None, to_addr=None,
@@ -316,7 +315,10 @@ class Mailer(Action):
         headerinfo['Subject'] = self.get_subject(fields, request, context)
 
         # CC
-        cc_recips = [_f for _f in self.cc_recipients if _f]
+        if isinstance(self.cc_recipients, six.string_types):
+            cc_recips = self.cc_recipients
+        else:
+            cc_recips = [_f for _f in self.cc_recipients if _f]
         if hasattr(self, 'ccOverride') and self.ccOverride:
             _cc = get_expression(context, self.ccOverride, fields=fields)
             if _cc:
@@ -399,7 +401,7 @@ class Mailer(Action):
             attachments.append((filename, 'text/plain', 'utf-8', csv))
 
         if sendXML:
-            xmlstr = ET.tostring(xmlRoot, encoding='utf8', method='xml')
+            xmlstr = ET.tostring(xmlRoot, encoding='utf-8', method='xml')
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.xml'.format(now)
             attachments.append((filename, 'text/xml', 'utf-8', xmlstr))
@@ -412,13 +414,14 @@ class Mailer(Action):
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
         if six.PY2 and isinstance(body, six.text_type):
-            body = body.encode('utf8')
+            body = body.encode('utf-8')
         email_charset = 'utf-8'
         # always use text/plain for encrypted bodies
         subtype = getattr(
             self, 'gpg_keyid', False) and 'plain' or self.body_type or 'html'
-        mime_text = MIMEText(body.encode(email_charset, 'replace'),
-                             _subtype=subtype, _charset=email_charset)
+        mime_text = MIMEText(
+            safe_unicode(body).encode(email_charset, 'replace'),
+            _subtype=subtype, _charset=email_charset)
 
         attachments = self.get_attachments(fields, request)
 
@@ -444,7 +447,7 @@ class Mailer(Action):
             # encoding = attachment[2]
             content = attachment[3]
             if not six.PY2 and isinstance(content, six.binary_type):
-                content = content.decode('utf8')
+                content = content.decode('utf-8')
             if ctype is None:
                 ctype = 'application/octet-stream'
 
@@ -618,6 +621,8 @@ class SaveData(Action):
             writer.writerow(row_data)
         res = sbuf.getvalue()
         sbuf.close()
+        if isinstance(res, six.text_type):
+            res = res.encode('utf-8')
         return res
 
     def getColumnNames(self):
@@ -664,7 +669,7 @@ class SaveData(Action):
         value = self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter=',')
         if isinstance(value, six.text_type):
-            value = value.encode('utf8')
+            value = value.encode('utf-8')
         response.write(value)
 
     def download_tsv(self, response):
@@ -678,7 +683,7 @@ class SaveData(Action):
         value = self.getSavedFormInputForEdit(
             getattr(self, 'UseColumnNames', False), delimiter='\t')
         if isinstance(value, six.text_type):
-            value = value.encode('utf8')
+            value = value.encode('utf-8')
         response.write(value)
 
     def download(self, response):

@@ -7,7 +7,6 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
-from six import StringIO
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 
@@ -21,9 +20,7 @@ def FakeRequest(method='GET', add_auth=False, **kwargs):
     environ.setdefault('SERVER_NAME', 'foo')
     environ.setdefault('SERVER_PORT', '80')
     environ.setdefault('REQUEST_METHOD', method)
-    request = HTTPRequest(sys.stdin,
-                          environ,
-                          HTTPResponse(stdout=StringIO()))
+    request = HTTPRequest(sys.stdin, environ, HTTPResponse())
     request.form = kwargs
     if add_auth:
         request.form['_authenticator'] = plone.protect.createToken()
@@ -174,7 +171,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
         res = saver.getSavedFormInputForEdit()
-        self.assertEqual(res, '')
+        self.assertEqual(res, b'')
 
         request = FakeRequest(
             add_auth=True, method='POST', topic='test subject',
@@ -186,7 +183,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         res = saver.getSavedFormInputForEdit()
         self.assertEqual(
-            res.strip(), 'test@test.org,test subject,test comments')
+            res.strip(), b'test@test.org,test subject,test comments')
 
     def testSaverExtraData(self):
         ''' test save data adapter action '''
@@ -225,9 +222,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 1)
         saver.download(request.response)
         res = request.response.stdout.getvalue()
-        self.assertTrue('Content-Type: text/comma-separated-values' in res)
+        self.assertTrue(b'Content-Type: text/comma-separated-values' in res)
         self.assertTrue(
-            'Content-Disposition: attachment; filename="saver.csv"' in res)
+            b'Content-Disposition: attachment; filename="saver.csv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverDownloadTSV(self):
@@ -249,9 +246,9 @@ class TestFunctions(base.EasyFormTestCase):
         saver.DownloadFormat = 'tsv'
         saver.download(request.response)
         res = request.response.stdout.getvalue()
-        self.assertTrue('Content-Type: text/tab-separated-values' in res)
+        self.assertTrue(b'Content-Type: text/tab-separated-values' in res)
         self.assertTrue(
-            'Content-Disposition: attachment; filename="saver.tsv"' in res)
+            b'Content-Disposition: attachment; filename="saver.tsv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter='\t') in res)
 
     def testSaverDownloadWithTitles(self):
@@ -273,9 +270,9 @@ class TestFunctions(base.EasyFormTestCase):
         saver.UseColumnNames = True
         saver.download(request.response)
         res = request.response.stdout.getvalue()
-        self.assertTrue('Content-Type: text/comma-separated-values' in res)
+        self.assertTrue(b'Content-Type: text/comma-separated-values' in res)
         self.assertTrue(
-            'Content-Disposition: attachment; filename="saver.csv"' in res)
+            b'Content-Disposition: attachment; filename="saver.csv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit(header=True) in res)
 
     def testSaverDownloadExtraData(self):
@@ -297,9 +294,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 1)
         saver.download(request.response)
         res = request.response.stdout.getvalue()
-        self.assertTrue('Content-Type: text/comma-separated-values' in res)
+        self.assertTrue(b'Content-Type: text/comma-separated-values' in res)
         self.assertTrue(
-            'Content-Disposition: attachment; filename="saver.csv"' in res)
+            b'Content-Disposition: attachment; filename="saver.csv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):
@@ -338,7 +335,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.createSaver()
         self.assertTrue('saver' in get_actions(self.ff1))
         saver = get_actions(self.ff1)['saver']
-        self.assertEqual(saver.getSavedFormInputForEdit(), '')
+        self.assertEqual(saver.getSavedFormInputForEdit(), b'')
 
         # save a row
         fields = list(get_schema(self.ff1))
@@ -349,7 +346,7 @@ class TestFunctions(base.EasyFormTestCase):
             items[0][1],
             dict(list(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
         )
-        self.assertEqual(saver.getSavedFormInputForEdit(), 'one,two,three\r\n')
+        self.assertEqual(saver.getSavedFormInputForEdit(), b'one,two,three\r\n')
 
         # save a couple of \n-delimited rows - \n eol
         saver.addDataRow(dict(list(zip(fields, ['four', 'five', 'six']))))
@@ -365,13 +362,13 @@ class TestFunctions(base.EasyFormTestCase):
         )
         self.assertEqual(
             saver.getSavedFormInputForEdit(),
-            'one,two,three\r\nfour,five,six\r\n'
+            b'one,two,three\r\nfour,five,six\r\n'
         )
 
         # save empty string
         saver.clearSavedFormInput()
         self.assertEqual(saver.itemsSaved(), 0)
-        self.assertEqual(saver.getSavedFormInputForEdit(), '')
+        self.assertEqual(saver.getSavedFormInputForEdit(), b'')
 
     def testEditSavedFormInput(self):
         ''' test manage_saveData functionality '''
