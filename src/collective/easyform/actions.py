@@ -354,7 +354,7 @@ class Mailer(Action):
             return dumps(list_value)
         if isinstance(field, RichTextValue):
             return field.raw
-        return str(field)
+        return unicode(field)
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form.
@@ -376,7 +376,7 @@ class Mailer(Action):
             if sendCSV:
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
-                    csvdata.append(field)
+                    csvdata.append(self.serialize(field).encode('utf8'))
 
             if sendXML:
                 if not is_file_data(field) and (
