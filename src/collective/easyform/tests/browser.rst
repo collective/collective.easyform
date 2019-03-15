@@ -70,7 +70,7 @@ base class)::
 Add a new fieldset::
 
     >>> browser.getLink('Define form fields').click()
-    >>> browser.getLink('Add new fieldset…').click()
+    >>> browser.getLink(id='add-fieldset').click()
     >>> browser.getControl('Title').value = 'New fieldset'
     >>> browser.getControl('Short Name').value = 'new_fieldset'
     >>> browser.getControl('Add').click()

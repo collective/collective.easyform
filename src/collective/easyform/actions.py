@@ -621,8 +621,6 @@ class SaveData(Action):
             writer.writerow(row_data)
         res = sbuf.getvalue()
         sbuf.close()
-        if isinstance(res, six.text_type):
-            res = res.encode('utf-8')
         return res
 
     def getColumnNames(self):
