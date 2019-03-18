@@ -2,7 +2,13 @@
 from AccessControl import getSecurityManager
 from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
+from DateTime import DateTime
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
+from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+from Products.PythonScripts.PythonScript import PythonScript
 from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import OrderedDict
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
@@ -12,7 +18,6 @@ from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
-from collective.easyform.api import OrderedDict
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -21,7 +26,6 @@ from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
 from copy import deepcopy
 from csv import writer as csvwriter
-from DateTime import DateTime
 from email import encoders
 from email.header import Header
 from email.mime.audio import MIMEAudio
@@ -30,18 +34,14 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
-from six import StringIO
 from json import dumps
 from logging import getLogger
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
 from plone.supermodel.exportimport import BaseHandler
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
-from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
-from Products.PythonScripts.PythonScript import PythonScript
-# from six import BytesIO
+from six import BytesIO
+from six import StringIO
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
@@ -354,7 +354,7 @@ class Mailer(Action):
             return dumps(list_value)
         if isinstance(field, RichTextValue):
             return field.raw
-        return unicode(field)
+        return safe_unicode(field)
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form.
@@ -365,24 +365,26 @@ class Mailer(Action):
         # if requested, generate CSV attachment of form values
         sendCSV = getattr(self, 'sendCSV', None)
         if sendCSV:
-            csvdata = []
+            csvdata = ()
         sendXML = getattr(self, 'sendXML', None)
         if sendXML:
             xmlRoot = ET.Element("form")
+        showFields = getattr(self, 'showFields', []) or []
         for fname in fields:
             field = fields[fname]
-            showFields = getattr(self, 'showFields', []) or []
 
             if sendCSV:
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
-                    csvdata.append(self.serialize(field).encode('utf8'))
+                    val = self.serialize(field)
+                    if six.PY2:
+                        val = val.encode('utf-8')
+                    csvdata += (val, )
 
             if sendXML:
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
-                    ET.SubElement(xmlRoot, "field", name=fname).text \
-                        = self.serialize(field)
+                    ET.SubElement(xmlRoot, "field", name=fname).text = self.serialize(field)  # noqa
 
             if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
@@ -396,12 +398,18 @@ class Mailer(Action):
             writer = csvwriter(output)
             writer.writerow(csvdata)
             csv = output.getvalue()
+            if six.PY3:
+                csv = csv.encode('utf-8')
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.csv'.format(now)
             attachments.append((filename, 'text/plain', 'utf-8', csv))
 
         if sendXML:
-            xmlstr = ET.tostring(xmlRoot, encoding='utf-8', method='xml')
+            # use ET.write to get a proper XML Header line
+            output = BytesIO()
+            doc = ET.ElementTree(xmlRoot)
+            doc.write(output, encoding='utf-8', xml_declaration=True)
+            xmlstr = output.getvalue()
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.xml'.format(now)
             attachments.append((filename, 'text/xml', 'utf-8', xmlstr))

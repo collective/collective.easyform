@@ -530,23 +530,33 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.sendXML = True
         mailer.sendCSV = False
         fields = dict(
-            topic='test subject',
             replyto='test@test.org',
+            topic='test subject',
+            richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
             choices=set(['A', 'B']),
-            richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         name, mime, enc, xml = attachments[0]
-        self.assertEqual(
-            """<?xml version=\'1.0\' encoding=\'utf8\'?>\n<form>"""
-            """<field name="replyto">test@test.org</field>"""
-            """<field name="topic">test subject</field>"""
-            """<field name="richtext">Raw</field>"""
-            """<field name="comments">test comments\xf0\x9f\x98\x80</field>"""
-            """<field name="choices">["A", "B"]</field></form>""", xml)
+        output_nodes = (
+            b'<field name="replyto">test@test.org</field>',
+            b'<field name="topic">test subject</field>',
+            b'<field name="richtext">Raw</field>',
+            b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
+        )
+
+        self.assertIn(
+            b'<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<form>', xml)
+
+        # the order of the nodes can change ... check each line
+        for node in output_nodes:
+            self.assertIn(node, xml)
+
+        # the order of ["A", "B"] can change ... check separately
+        self.assertIn(b'"A"', xml)
+        self.assertIn(b'"B"', xml)
 
     def test_MailerCSVAttachments(self):
         """ Test mailer with dummy_send """
@@ -556,20 +566,26 @@ class TestFunctions(base.EasyFormTestCase):
         fields = dict(
             topic='test subject',
             replyto='test@test.org',
+            richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
             choices=set(['A', 'B']),
-            richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
-        name, mime, enc, xml = attachments[0]
+        name, mime, enc, csv = attachments[0]
+        output = (
+            b'test@test.org',
+            b'test subject',
+            b'Raw',
+            b'test comments\xf0\x9f\x98\x80',
+        )
 
+        # the order of the columns can change ... check each
         # TODO should really have a header row
-        self.assertEqual(
-            """test@test.org,"""
-            """test subject,"""
-            """Raw,"""
-            """test comments\xf0\x9f\x98\x80,"""
-            """"[""A"", ""B""]"\r\n""",
-            xml)
+        for value in output:
+            self.assertIn(value, csv)
+
+        # the order of [""A"", ""B""] can change ... check separately
+        self.assertIn(b'""A""', csv)
+        self.assertIn(b'""B""', csv)
