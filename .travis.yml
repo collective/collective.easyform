@@ -18,8 +18,6 @@ matrix:
       env: PLONE_VERSION=5.2.x
       dist: xenial
       sudo: true
-  allow_failures:
-    - env: PLONE_VERSION=5.1.x
 cache:
   pip: true
   directories:

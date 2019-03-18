@@ -43,10 +43,10 @@ well (so the user sees a security icon in their browser.) ::
 Log out and go back to the form.
 We should be redirected to https://
 
-    >>> browser.addHeader('Authorization', '')
-    >>> browser.open(portal_url + '/testform')
-    >>> 'Location' in browser.headers
+    >>> anon_browser = get_browser(layer, auth=False)
+    >>> anon_browser.open(portal_url + '/testform')
+    >>> 'Location' in anon_browser.headers
     True
-    >>> browser.headers['Location']
+    >>> anon_browser.headers['Location']
     'https://nohost/plone/testform/view'
 

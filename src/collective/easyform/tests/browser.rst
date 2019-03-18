@@ -111,8 +111,7 @@ We should be able to view an individual field::
     >>> browser.open(portal_url + '/testform/fields/comments')
     >>> browser.url
     'http://nohost/plone/testform/fields/comments'
-
-    >>> print browser.contents # doctest: +SKIP
+    >>> print(browser.contents)  # doctest: +SKIP
     <!DOCTYPE...
     ...
      <div class="pfg-form formid-comments">
