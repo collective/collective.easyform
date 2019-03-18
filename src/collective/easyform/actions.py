@@ -538,8 +538,8 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn('Python script ' + self.__name__ +
-                        ' has warning:' + str(script.warnings))
+            logger.warning('Python script ' + self.__name__ +
+                           ' has warning:' + str(script.warnings))
 
         if len(script.errors) > 0:
             logger.error('Python script ' + self.__name__ +
