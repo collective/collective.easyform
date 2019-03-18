@@ -38,9 +38,9 @@ before_install:
   - echo "[buildout]" > $HOME/.buildout/default.cfg
   - echo "download-cache = $HOME/buildout-cache/downloads" >> $HOME/.buildout/default.cfg
   - echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/.buildout/default.cfg
+  - pip install zc.buildout
+  - cp tests-$PLONE_VERSION.cfg buildout.cfg
 install:
-  - pip install -r requirements.txt
-  - sed -ie "s#test-5.1.x#test-$PLONE_VERSION#" buildout.cfg
   - buildout -N -c tests.cfg annotate
   - buildout -N -c tests.cfg
   - pip install zest.pocompile
@@ -56,3 +56,5 @@ script:
 after_success:
   - pip install -q coveralls
   - coveralls
+notifications:
+  irc: irc.freenode.org#plone-testing

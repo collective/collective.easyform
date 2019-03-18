@@ -6,7 +6,6 @@ First let's get our test browser and make sure that it won't re-raise Redirect e
     >>> browser = get_browser(layer)
     >>> from ZPublisher import HTTPResponse
     >>> HTTPResponse.status_codes['movedtemporarily'] = 200
-    >>> browser.addHeader('Authorization', 'Basic adm:secret')
 
 Set up a form with the 'force SSL' setting on::
 

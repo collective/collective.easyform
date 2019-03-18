@@ -42,6 +42,7 @@ def get_browser(layer):
     transaction.commit()
     browser = Browser(layer['app'])
     browser.handleErrors = False
+    browser.addHeader('Authorization', 'Basic adm:secret')
     return browser
 
 
