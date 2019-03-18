@@ -37,7 +37,7 @@ before_install:
   - echo "download-cache = $HOME/buildout-cache/downloads" >> $HOME/.buildout/default.cfg
   - echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/.buildout/default.cfg
 install:
-  - pip install -r requirements-$PLONE_VERSION.txt
+  - pip install -r requirements.txt
   - sed -ie "s#test-5.1.x#test-$PLONE_VERSION#" buildout.cfg
   - buildout -N -c tests.cfg annotate
   - buildout -N -c tests.cfg
@@ -48,10 +48,8 @@ before_script:
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
   - sleep 3
 script:
-  # Run code-analysis, except on Python 3.6, which mysteriously fails to find zc.buildout.
-  - python --version 2> /dev/stdout | grep 3.6 || bin/code-analysis
-  - bin/test $TEST_OPTIONS
   - bin/code-analysis
+  - bin/test $TEST_OPTIONS
   - bin/createcoverage
 after_success:
   - pip install -q coveralls
