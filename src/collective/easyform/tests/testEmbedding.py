@@ -126,7 +126,8 @@ class TestEmbedding(base.EasyFormTestCase):
         # before the Retry exception, without actually committing our test
         # fixtures.
         real_transaction_commit = transaction.commit
-        transaction.commit = committed = TrueOnceCalled()
+        transaction.commit = TrueOnceCalled()
+        # committed = TrueOnceCalled()
 
         self.LoadRequestForm(**{
             'form.widgets.topic': u'monkeys',

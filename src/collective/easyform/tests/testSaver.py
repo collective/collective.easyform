@@ -12,6 +12,8 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
+from plone import api
+from six import BytesIO
 from six.moves import zip
 
 
@@ -20,9 +22,12 @@ def FakeRequest(method='GET', add_auth=False, **kwargs):
     environ.setdefault('SERVER_NAME', 'foo')
     environ.setdefault('SERVER_PORT', '80')
     environ.setdefault('REQUEST_METHOD', method)
-    # NOTE: stdout of HTTPResponse has to be BytesIO
-    # remember to decode it in your tests
-    request = HTTPRequest(sys.stdin, environ, HTTPResponse())
+    if api.env.plone_version() < '5.2':
+        # manually set stdout for Plone < 5.2
+        request = HTTPRequest(
+            sys.stdin, environ, HTTPResponse(stdout=BytesIO()))
+    else:
+        request = HTTPRequest(sys.stdin, environ, HTTPResponse())
     request.form = kwargs
     if add_auth:
         request.form['_authenticator'] = plone.protect.createToken()
