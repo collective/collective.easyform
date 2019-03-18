@@ -41,8 +41,8 @@ before_install:
   - pip install zc.buildout
   - cp tests-$PLONE_VERSION.cfg buildout.cfg
 install:
-  - buildout -N -c tests.cfg annotate
-  - buildout -N -c tests.cfg
+  - buildout -N annotate
+  - buildout -N
   - pip install zest.pocompile
   - pocompile src
 before_script:
