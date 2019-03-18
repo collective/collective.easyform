@@ -2,13 +2,12 @@
 from __future__ import print_function
 from email import message_from_string
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
-from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
+from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.testing import Layer
 from plone.testing.z2 import ZSERVER_FIXTURE
 from Products.MailHost.interfaces import IMailHost
 from Products.MailHost.MailHost import MailHost
@@ -61,9 +60,8 @@ FUNCTIONAL_TESTING = FunctionalTesting(
     name='collective.easyform:Functional',
 )
 ACCEPTANCE_TESTING = FunctionalTesting(
-    bases=(FIXTURE, AUTOLOGIN_LIBRARY_FIXTURE, ZSERVER_FIXTURE),
+    bases=(FIXTURE, REMOTE_LIBRARY_BUNDLE_FIXTURE, ZSERVER_FIXTURE),
     name='collective.easyform:Acceptance')
-ROBOT_TESTING = Layer(name='collective.easyform:Robot')
 
 
 class EasyFormTestCase(TestCase):

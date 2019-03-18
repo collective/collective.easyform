@@ -41,7 +41,7 @@ def get_browser(layer):
     )
     transaction.commit()
     browser = Browser(layer['app'])
-    browser.addHeader('Authorization', 'Basic adm:secret')
+    browser.handleErrors = False
     return browser
 
 
@@ -52,7 +52,7 @@ def test_suite():
             doctest.DocFileSuite(
                 f,
                 optionflags=optionflags,
-                globs={'get_browser': get_browser, },
+                globs={'get_browser': get_browser},
                 checker=Py23DocChecker(),
             ),
             layer=FUNCTIONAL_TESTING

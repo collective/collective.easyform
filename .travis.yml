@@ -51,7 +51,7 @@ before_script:
   - sleep 3
 script:
   - bin/code-analysis
-  - bin/test $TEST_OPTIONS
+  - bin/test --all $TEST_OPTIONS
   - bin/createcoverage
 after_success:
   - pip install -q coveralls

@@ -186,7 +186,9 @@ Check saved data::
     'file contents'
     >>> browser.goBack()
     >>> def first_item(browser, type_="checkbox"):
-    ...     for control in browser.getForm(index=1).controls:
+    ...     form = browser.getForm(index=1)
+    ...     controls = form.controls if hasattr(form, 'controls') else form.mech_form.controls
+    ...     for control in controls:
     ...         if getattr(control, 'type', None) == type_ and control.name.startswith('crud-edit.'):
     ...             return control.name
     ...

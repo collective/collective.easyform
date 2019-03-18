@@ -6,6 +6,7 @@ First let's get our test browser and make sure that it won't re-raise Redirect e
     >>> browser = get_browser(layer)
     >>> from ZPublisher import HTTPResponse
     >>> HTTPResponse.status_codes['movedtemporarily'] = 200
+    >>> browser.addHeader('Authorization', 'Basic adm:secret')
 
 Set up a form with the 'force SSL' setting on::
 
@@ -37,8 +38,11 @@ who doesn't have permission to edit the form, SSL will be forced on initial form
 well (so the user sees a security icon in their browser.) ::
 
     >>> browser.open(portal_url + '/testform/content_status_modify?workflow_action=publish')
+    >>> 'Item state changed' in browser.contents
+    True
 
-Remove authorization header
+Log out and go back to the form.
+We should be redirected to https://
 
     >>> browser.addHeader('Authorization', '')
     >>> browser.open(portal_url + '/testform')
