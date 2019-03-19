@@ -13,6 +13,7 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Plone',
+        'Framework :: Plone :: Addon',
         'Framework :: Plone :: 5.1',
         'Framework :: Plone :: 5.2',
         'Programming Language :: Python',
@@ -33,8 +34,6 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'setuptools',
-        'six',
         'plone.api',
         'plone.app.dexterity',
         'plone.app.textfield >= 1.2.8',
@@ -46,6 +45,8 @@ setup(
         'plone.supermodel',
         'Products.CMFPlone',
         'Products.validation',
+        'setuptools',
+        'six',
         # -*- Extra requirements: -*-
     ],
     extras_require={

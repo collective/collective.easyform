@@ -1,11 +1,18 @@
 Changelog
 =========
 
-2.0.2 (unreleased)
+2.1.0 (unreleased)
 ------------------
+
+New features:
+
+- Add Support for Python 3.
+  [pbauer]
 
 - a11y: Added role attribute for portalMessage
   [nzambello]
+
+Bug fixes:
 
 - fixed startup ResourceWarning on open files
   [ajung]
@@ -27,11 +34,6 @@ New features:
   to render its widget. This is useful when we want to avoid to show some widgets
   like recaptcha, that could breaks if it's in the wrong context.
   [cekk]
-
-New features:
-
-- Add Support for Python 3.
-  [pbauer]
 
 Bug fixes:
 
