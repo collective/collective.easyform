@@ -22,10 +22,6 @@ EasyForm provides a Plone form builder through-the-web using fields, widgets, ac
 Form input can be saved or emailed.
 A simple and user-friendly interface allows non-programmers to create custom forms.
 
-**Note:** This Plone package is similar to `Archetypes <http://docs.plone.org/develop/plone/content/archetypes/>`_ based `Products.PloneFormGen <https://github.com/smcmahon/Products.PloneFormGen>`_ for Plone versions 1 to 4.
-
-Dexterity is the default framework for building content types in Plone 5.
-
 Installation
 ============
 
@@ -131,6 +127,11 @@ The mailer stores a HTML template for sending the results of the form. You can o
 `easyform_mail_body_default.pt` in your site. If it is not found the default from the `default_schemata` directory
 of this package is taken. If you plan to override start with the the `mail_body_default.pt` file and make sure
 it is a valid pagetemplate.
+
+Related Addons
+==============
+
+**Note:** This Plone package is similar to `Archetypes <http://docs.plone.org/develop/plone/content/archetypes/>`_ based `Products.PloneFormGen <https://github.com/smcmahon/Products.PloneFormGen>`_ for Plone versions 1 to 4. Now, Dexterity is the default framework for building content types in Plone 5. ``collective.easyform`` is based on Dexterity.
 
 
 Source Code and Contributions
