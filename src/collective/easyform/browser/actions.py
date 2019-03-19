@@ -145,7 +145,8 @@ class SavedDataForm(crud.CrudForm):
         item.update(data)
         self.field.setDataRow(id_, item.copy())
 
-    def remove(self, (id, item)):
+    def remove(self, id_and_item):
+        (id, item) = id_and_item
         self.field.delDataRow(id)
 
     @button.buttonAndHandler(PMF(u'Download'), name='download')
@@ -179,7 +180,7 @@ class EasyFormActionContext(FieldContext):
         # hack to make inline validation work
         # (plone.app.z3cform doesn't know the form is the default view)
         if name == self.__name__:
-            return ActionEditView(self, request).__of__(self)
+            return ActionEditView(self, request)
 
         return DefaultPublishTraverse(
             self,

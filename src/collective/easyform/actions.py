@@ -2,7 +2,13 @@
 from AccessControl import getSecurityManager
 from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
+from DateTime import DateTime
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
+from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+from Products.PythonScripts.PythonScript import PythonScript
 from collective.easyform import easyformMessageFactory as _
+from collective.easyform.api import OrderedDict
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
@@ -12,7 +18,6 @@ from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
-from collective.easyform.api import OrderedDict
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -21,27 +26,22 @@ from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
 from copy import deepcopy
 from csv import writer as csvwriter
-from DateTime import DateTime
-from email import Encoders
-from email.Header import Header
-from email.MIMEAudio import MIMEAudio
-from email.MIMEBase import MIMEBase
-from email.MIMEImage import MIMEImage
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
+from email import encoders
+from email.header import Header
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from email.utils import formataddr
-from io import BytesIO
 from json import dumps
 from logging import getLogger
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
 from plone.supermodel.exportimport import BaseHandler
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
-from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
-from Products.PythonScripts.PythonScript import PythonScript
-from StringIO import StringIO
+from six import BytesIO
+from six import StringIO
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
@@ -51,6 +51,8 @@ from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
+
+import six
 
 
 logger = getLogger('collective.easyform')
@@ -145,17 +147,17 @@ class Mailer(Action):
         # pass both the bare_fields (fgFields only) and full fields.
         # bare_fields for compatability with older templates,
         # full fields to enable access to htmlValue
-        if isinstance(self.body_pre, basestring):
+        if isinstance(self.body_pre, six.string_types):
             body_pre = self.body_pre
         else:
             body_pre = self.body_pre.output
 
-        if isinstance(self.body_post, basestring):
+        if isinstance(self.body_post, six.string_types):
             body_post = self.body_post
         else:
             body_post = self.body_post.output
 
-        if isinstance(self.body_footer, basestring):
+        if isinstance(self.body_footer, six.string_types):
             body_footer = self.body_footer
         else:
             body_footer = self.body_footer.output
@@ -280,7 +282,7 @@ class Mailer(Action):
                 # we only do subject expansion if there's no field chosen
                 subject = dollar_replacer(subject, fields)
 
-        if isinstance(subject, basestring):
+        if isinstance(subject, six.string_types):
             subject = safe_unicode(subject)
         elif subject and isinstance(subject, (set, tuple, list)):
             subject = ', '.join([safe_unicode(s) for s in subject])
@@ -291,8 +293,7 @@ class Mailer(Action):
         email_charset = 'utf-8'
         msgSubject = self.secure_header_line(
             subject).encode(email_charset, 'replace')
-        msgSubject = str(Header(msgSubject, email_charset))
-        return msgSubject
+        return Header(msgSubject, email_charset)
 
     def get_header_info(self, fields, request, context,
                         from_addr=None, to_addr=None,
@@ -314,7 +315,10 @@ class Mailer(Action):
         headerinfo['Subject'] = self.get_subject(fields, request, context)
 
         # CC
-        cc_recips = filter(None, self.cc_recipients)
+        if isinstance(self.cc_recipients, six.string_types):
+            cc_recips = self.cc_recipients
+        else:
+            cc_recips = [_f for _f in self.cc_recipients if _f]
         if hasattr(self, 'ccOverride') and self.ccOverride:
             _cc = get_expression(context, self.ccOverride, fields=fields)
             if _cc:
@@ -324,7 +328,10 @@ class Mailer(Action):
             headerinfo['Cc'] = format_addresses(cc_recips)
 
         # BCC
-        bcc_recips = filter(None, self.bcc_recipients)
+        if isinstance(self.bcc_recipients, six.string_types):
+            bcc_recips = self.bcc_recipients
+        else:
+            bcc_recips = [_f for _f in self.bcc_recipients if _f]
         if hasattr(self, 'bccOverride') and self.bccOverride:
             _bcc = get_expression(context, self.bccOverride, fields=fields)
             if _bcc:
@@ -347,7 +354,7 @@ class Mailer(Action):
             return dumps(list_value)
         if isinstance(field, RichTextValue):
             return field.raw
-        return unicode(field)
+        return safe_unicode(field)
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form.
@@ -358,24 +365,26 @@ class Mailer(Action):
         # if requested, generate CSV attachment of form values
         sendCSV = getattr(self, 'sendCSV', None)
         if sendCSV:
-            csvdata = []
+            csvdata = ()
         sendXML = getattr(self, 'sendXML', None)
         if sendXML:
             xmlRoot = ET.Element("form")
+        showFields = getattr(self, 'showFields', []) or []
         for fname in fields:
             field = fields[fname]
-            showFields = getattr(self, 'showFields', []) or []
 
             if sendCSV:
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
-                    csvdata.append(self.serialize(field).encode('utf8'))
+                    val = self.serialize(field)
+                    if six.PY2:
+                        val = val.encode('utf-8')
+                    csvdata += (val, )
 
             if sendXML:
                 if not is_file_data(field) and (
                         getattr(self, 'showAll', True) or fname in showFields):
-                    ET.SubElement(xmlRoot, "field", name=fname).text \
-                        = self.serialize(field)
+                    ET.SubElement(xmlRoot, "field", name=fname).text = self.serialize(field)  # noqa
 
             if is_file_data(field) and (
                     getattr(self, 'showAll', True) or fname in showFields):
@@ -385,16 +394,22 @@ class Mailer(Action):
                 attachments.append((filename, mimetype, enc, data))
 
         if sendCSV:
-            output = BytesIO()
+            output = StringIO()
             writer = csvwriter(output)
             writer.writerow(csvdata)
             csv = output.getvalue()
+            if six.PY3:
+                csv = csv.encode('utf-8')
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.csv'.format(now)
             attachments.append((filename, 'text/plain', 'utf-8', csv))
 
         if sendXML:
-            xmlstr = ET.tostring(xmlRoot, encoding='utf8', method='xml')
+            # use ET.write to get a proper XML Header line
+            output = BytesIO()
+            doc = ET.ElementTree(xmlRoot)
+            doc.write(output, encoding='utf-8', xml_declaration=True)
+            xmlstr = output.getvalue()
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.xml'.format(now)
             attachments.append((filename, 'text/xml', 'utf-8', xmlstr))
@@ -406,14 +421,15 @@ class Mailer(Action):
         """
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
-        if not isinstance(body, unicode):
-            body = unicode(body, 'UTF-8')
+        if six.PY2 and isinstance(body, six.text_type):
+            body = body.encode('utf-8')
         email_charset = 'utf-8'
         # always use text/plain for encrypted bodies
         subtype = getattr(
             self, 'gpg_keyid', False) and 'plain' or self.body_type or 'html'
-        mime_text = MIMEText(body.encode(email_charset, 'replace'),
-                             _subtype=subtype, _charset=email_charset)
+        mime_text = MIMEText(
+            safe_unicode(body).encode(email_charset, 'replace'),
+            _subtype=subtype, _charset=email_charset)
 
         attachments = self.get_attachments(fields, request)
 
@@ -438,7 +454,8 @@ class Mailer(Action):
             ctype = attachment[1]
             # encoding = attachment[2]
             content = attachment[3]
-
+            if not six.PY2 and isinstance(content, six.binary_type):
+                content = content.decode('utf-8')
             if ctype is None:
                 ctype = 'application/octet-stream'
 
@@ -454,10 +471,10 @@ class Mailer(Action):
                 msg = MIMEBase(maintype, subtype)
                 msg.set_payload(content)
                 # Encode the payload using Base64
-                Encoders.encode_base64(msg)
+                encoders.encode_base64(msg)
 
             # Set the filename parameter
-            if isinstance(filename, unicode):
+            if six.PY2 and isinstance(filename, six.text_type):
                 filename = filename.encode('utf-8')
             msg.add_header(
                 'Content-Disposition', 'attachment',
@@ -500,7 +517,8 @@ class CustomScript(Action):
         if role != u'none':
             script.manage_proxy((role,))
 
-        body = body.encode('utf-8')
+        if six.PY2 and isinstance(body, six.text_type):
+            body = body.encode('utf-8')
         params = 'fields, easyform, request'
         script.ZPythonScript_edit(params, body)
         return script
@@ -520,8 +538,8 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warn('Python script ' + self.__name__ +
-                        ' has warning:' + str(script.warnings))
+            logger.warning('Python script ' + self.__name__ +
+                           ' has warning:' + str(script.warnings))
 
         if len(script.errors) > 0:
             logger.error('Python script ' + self.__name__ +
@@ -577,13 +595,13 @@ class SaveData(Action):
             each row is a sequence of fields.
         """
 
-        return self._storage.values()
+        return list(self._storage.values())
 
     def getSavedFormInputItems(self):
         """ returns saved input as an iterable;
             each row is an (id, sequence of fields) tuple
         """
-        return self._storage.items()
+        return list(self._storage.items())
 
     def getSavedFormInputForEdit(self, header=False, delimiter=','):
         """ returns saved as CSV text """
@@ -595,7 +613,7 @@ class SaveData(Action):
         if header:
             encoded_titles = []
             for t in titles:
-                if isinstance(t, unicode):
+                if six.PY2 and isinstance(t, six.text_type):
                     t = t.encode('utf-8')
                 encoded_titles.append(t)
             writer.writerow(encoded_titles)
@@ -604,10 +622,11 @@ class SaveData(Action):
                 data = row.get(i, '')
                 if is_file_data(data):
                     data = data.filename
-                if isinstance(data, unicode):
+                if six.PY2 and isinstance(data, six.text_type):
                     return data.encode('utf-8')
                 return data
-            writer.writerow([get_data(row, i) for i in names])
+            row_data = [get_data(row, i) for i in names]
+            writer.writerow(row_data)
         res = sbuf.getvalue()
         sbuf.close()
         return res
@@ -653,8 +672,11 @@ class SaveData(Action):
             'attachment; filename="{0}.csv"'.format(self.__name__)
         )
         response.setHeader('Content-Type', 'text/comma-separated-values')
-        response.write(self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter=','))
+        value = self.getSavedFormInputForEdit(
+            getattr(self, 'UseColumnNames', False), delimiter=',')
+        if isinstance(value, six.text_type):
+            value = value.encode('utf-8')
+        response.write(value)
 
     def download_tsv(self, response):
         # """Download the saved data as tsv
@@ -664,8 +686,11 @@ class SaveData(Action):
             'attachment; filename="{0}.tsv"'.format(self.__name__)
         )
         response.setHeader('Content-Type', 'text/tab-separated-values')
-        response.write(self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter='\t'))
+        value = self.getSavedFormInputForEdit(
+            getattr(self, 'UseColumnNames', False), delimiter='\t')
+        if isinstance(value, six.text_type):
+            value = value.encode('utf-8')
+        response.write(value)
 
     def download(self, response):
         # """Download the saved data

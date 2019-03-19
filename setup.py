@@ -14,8 +14,11 @@ setup(
         'Environment :: Web Environment',
         'Framework :: Plone',
         'Framework :: Plone :: 5.1',
+        'Framework :: Plone :: 5.2',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Operating System :: OS Independent',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
     ],
@@ -31,6 +34,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
+        'six',
         'plone.api',
         'plone.app.dexterity',
         'plone.app.textfield >= 1.2.8',
@@ -52,6 +56,8 @@ setup(
             'plone.app.testing[robot]',
             'plone.app.robotframework',
             'plone.app.contenttypes',
+            'robotframework-selenium2library',
+            'robotframework-selenium2screenshots',
         ]
     },
     entry_points="""

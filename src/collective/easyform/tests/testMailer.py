@@ -9,6 +9,7 @@ from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
+from Products.CMFPlone.utils import safe_unicode
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
@@ -70,7 +71,7 @@ class TestFunctions(base.EasyFormTestCase):
             'Subject: =?utf-8?q?test_subject?=', self.messageText)
         msg = email.message_from_string(self.messageText)
         self.assertIn(
-            'test comments', msg.get_payload(decode=True))
+            'test comments', msg.get_payload(decode=False))
 
     def test_MailerAdditionalHeaders(self):
         """ Test mailer with dummy_send """
@@ -94,7 +95,7 @@ class TestFunctions(base.EasyFormTestCase):
             'Subject: =?utf-8?q?test_subject?=', self.messageText)
         msg = email.message_from_string(self.messageText)
         self.assertIn(
-            'test comments', msg.get_payload(decode=True))
+            'test comments', msg.get_payload(decode=False))
 
     def test_MailerLongSubject(self):
         """ Test mailer with subject line > 76 chars (Tracker # 84) """
@@ -112,10 +113,10 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
-        self.assertEqual(decoded_header, long_subject)
+        self.assertEqual(decoded_header, long_subject.encode('utf-8'))
 
     def test_SubjectDollarReplacement(self):
         """
@@ -134,8 +135,7 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**data)
         self.messageText = ''
         mailer.onSuccess(data, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?test_subject?=') > 0)
+        self.assertIn('Subject: =?utf-8?q?test_subject?=', self.messageText)
 
         data2 = dict(
             topic='test ${subject}',
@@ -203,7 +203,7 @@ class TestFunctions(base.EasyFormTestCase):
     def test_UTF8Subject(self):
         """ Test mailer with uft-8 encoded subject line """
 
-        utf8_subject = 'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'
+        utf8_subject = u'Effacer les entrées sauvegardées'
         data = {'topic': utf8_subject}
 
         mailer = get_actions(self.ff1)['mailer']
@@ -213,15 +213,15 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
-        self.assertEqual(decoded_header, utf8_subject)
+        self.assertEqual(safe_unicode(decoded_header), utf8_subject)
 
     def test_UnicodeSubject(self):
         """ Test mailer with Unicode encoded subject line """
-        utf8_subject = 'Effacer les entr\xc3\xa9es sauvegard\xc3\xa9es'
-        unicode_subject = utf8_subject.decode('UTF-8')
+        utf8_subject = u'Effacer les entrées sauvegardées'
+        unicode_subject = utf8_subject
         data = {'topic': unicode_subject}
 
         mailer = get_actions(self.ff1)['mailer']
@@ -230,16 +230,16 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
-        self.assertEqual(decoded_header, utf8_subject)
+        self.assertEqual(safe_unicode(decoded_header), utf8_subject)
 
     def test_Utf8ListSubject(self):
         """ Test mailer with Unicode encoded subject line """
         utf8_subject_list = [
-            'Effacer les entr\xc3\xa9es',
-            'sauvegard\xc3\xa9es'
+            u'Effacer les entrées',
+            u'sauvegardées'
         ]
         data = {'topic': utf8_subject_list}
         mailer = get_actions(self.ff1)['mailer']
@@ -248,11 +248,11 @@ class TestFunctions(base.EasyFormTestCase):
 
         msg = email.message_from_string(self.messageText)
         encoded_subject_header = msg['subject']
-        decoded_header = email.Header.decode_header(
+        decoded_header = email.header.decode_header(
             encoded_subject_header)[0][0]
 
         self.assertEqual(
-            decoded_header,
+            safe_unicode(decoded_header),
             ', '.join(utf8_subject_list))
 
     def test_MailerOverrides(self):
@@ -530,23 +530,33 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.sendXML = True
         mailer.sendCSV = False
         fields = dict(
-            topic='test subject',
             replyto='test@test.org',
+            topic='test subject',
+            richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
             choices=set(['A', 'B']),
-            richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         name, mime, enc, xml = attachments[0]
-        self.assertEqual(
-            """<?xml version=\'1.0\' encoding=\'utf8\'?>\n<form>"""
-            """<field name="replyto">test@test.org</field>"""
-            """<field name="topic">test subject</field>"""
-            """<field name="richtext">Raw</field>"""
-            """<field name="comments">test comments\xf0\x9f\x98\x80</field>"""
-            """<field name="choices">["A", "B"]</field></form>""", xml)
+        output_nodes = (
+            b'<field name="replyto">test@test.org</field>',
+            b'<field name="topic">test subject</field>',
+            b'<field name="richtext">Raw</field>',
+            b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
+        )
+
+        self.assertIn(
+            b'<?xml version=\'1.0\' encoding=\'utf-8\'?>\n<form>', xml)
+
+        # the order of the nodes can change ... check each line
+        for node in output_nodes:
+            self.assertIn(node, xml)
+
+        # the order of ["A", "B"] can change ... check separately
+        self.assertIn(b'"A"', xml)
+        self.assertIn(b'"B"', xml)
 
     def test_MailerCSVAttachments(self):
         """ Test mailer with dummy_send """
@@ -556,20 +566,26 @@ class TestFunctions(base.EasyFormTestCase):
         fields = dict(
             topic='test subject',
             replyto='test@test.org',
+            richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
             choices=set(['A', 'B']),
-            richtext=RichTextValue(raw='Raw')
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
-        name, mime, enc, xml = attachments[0]
+        name, mime, enc, csv = attachments[0]
+        output = (
+            b'test@test.org',
+            b'test subject',
+            b'Raw',
+            b'test comments\xf0\x9f\x98\x80',
+        )
 
+        # the order of the columns can change ... check each
         # TODO should really have a header row
-        self.assertEqual(
-            """test@test.org,"""
-            """test subject,"""
-            """Raw,"""
-            """test comments\xf0\x9f\x98\x80,"""
-            """"[""A"", ""B""]"\r\n""",
-            xml)
+        for value in output:
+            self.assertIn(value, csv)
+
+        # the order of [""A"", ""B""] can change ... check separately
+        self.assertIn(b'""A""', csv)
+        self.assertIn(b'""B""', csv)

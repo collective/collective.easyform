@@ -14,17 +14,17 @@ EDIT_ADDRESSING_PERMISSION = 'collective.easyform.EditMailAddresses'
 USE_ENCRYPTION_PERMISSION = 'collective.easyform.EditEncryptionSpecs'
 DOWNLOAD_SAVED_PERMISSION = 'collective.easyform.DownloadSavedInput'
 
-MODEL_DEFAULT = safe_unicode(open(os.path.join(
-    this_path, "default_schemata", "model_default.xml")).read())
+with open(os.path.join(this_path, "default_schemata", "model_default.xml")) as fp:  # noqa
+    MODEL_DEFAULT = safe_unicode(fp.read())
 
-FIELDS_DEFAULT = safe_unicode(open(os.path.join(
-    this_path, "default_schemata", "fields_default.xml")).read())
+with open(os.path.join(this_path, "default_schemata", "fields_default.xml")) as fp:  # noqa
+    FIELDS_DEFAULT = safe_unicode(fp.read())
 
-ACTIONS_DEFAULT = safe_unicode(open(os.path.join(
-    this_path, "default_schemata", "actions_default.xml")).read())
+with open(os.path.join(this_path, "default_schemata", "actions_default.xml")) as fp:  # noqa
+    ACTIONS_DEFAULT = safe_unicode(fp.read())
 
-MAIL_BODY_DEFAULT = safe_unicode(open(os.path.join(
-    this_path, "default_schemata", "mail_body_default.pt")).read())
+with open(os.path.join(this_path, "default_schemata", "mail_body_default.pt")) as fp:  # noqa
+    MAIL_BODY_DEFAULT = safe_unicode(fp.read())
 
 
 DEFAULT_SCRIPT = u"""

@@ -1,36 +1,59 @@
 language: python
 sudo: false
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+matrix:
+  include:
+    - python: "2.7"
+      env: PLONE_VERSION=5.1.x
+    - python: "2.7"
+      env: PLONE_VERSION=5.2.x
+    - python: "3.6"
+      env: PLONE_VERSION=5.2.x
+    - python: "3.7"
+      env: PLONE_VERSION=5.2.x
+      dist: xenial
+      sudo: true
 cache:
   pip: true
   directories:
   - eggs
   - downloads
-addons:
-  # XXX: use an older Firefox ESR as we are stuck with selenium = 2.53.5
-  #      https://github.com/SeleniumHQ/selenium/issues/2739#issuecomment-249482533
-  firefox: 45.9.0esr
-python:
-  - 2.7.13
-matrix:
-  fast_finish: true
-env:
-  matrix:
-    - PLONE_VERSION=5.0
-    - PLONE_VERSION=5.1
+before_install:
+# install chrome webdriver
+  - mkdir webdriver;
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.20.0/geckodriver-v0.20.0-linux64.tar.gz;
+    tar -xzf geckodriver-v0.20.0-linux64.tar.gz -C webdriver;
+    wget https://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip;
+    unzip chromedriver_linux64.zip -d webdriver;
+    export PATH=$PATH:$(pwd)/webdriver;
+  - mkdir -p $HOME/buildout-cache/{eggs,downloads}
+  - mkdir $HOME/.buildout
+  - echo "[buildout]" > $HOME/.buildout/default.cfg
+  - echo "download-cache = $HOME/buildout-cache/downloads" >> $HOME/.buildout/default.cfg
+  - echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/.buildout/default.cfg
+  - pip install zc.buildout
+  - cp tests-$PLONE_VERSION.cfg buildout.cfg
 install:
-  - virtualenv -p `which python` .
-  - bin/pip install -r requirements.txt
-  - sed -ie "s#test-5.0#test-$PLONE_VERSION#" buildout.cfg
-  - bin/buildout -N buildout:download-cache=downloads -c tests.cfg annotate
-  - bin/buildout -N buildout:download-cache=downloads -c tests.cfg
-  - bin/pip install zest.pocompile
-  - bin/pocompile src
+  - buildout -N annotate
+  - buildout -N
+  - pip install zest.pocompile
+  - pocompile src
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - firefox -v
+  - 'export DISPLAY=:99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+  - sleep 3
 script:
-  - bin/code-analysis
-  - bin/coverage run bin/test
+# Run code-analysis, except on Python 3.6, which mysteriously fails to find zc.buildout.
+  - python --version 2> /dev/stdout | grep 3.6 || bin/code-analysis
+  - bin/test --all $TEST_OPTIONS
+  - bin/createcoverage
 after_success:
-  - bin/coveralls
+  - pip install -q coveralls
+  - coveralls
+notifications:
+  irc: irc.freenode.org#plone-testing

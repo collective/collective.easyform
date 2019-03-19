@@ -19,13 +19,14 @@ from zope.schema.vocabulary import SimpleVocabulary
 import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
+import six
 
 
 class WidgetVocabulary(SimpleVocabulary):
 
     def getTerm(self, value):
         """See zope.schema.interfaces.IBaseVocabulary"""
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             value = '{0}.{1}'.format(
                 value.widget_factory.__module__, value.widget_factory.__name__)
         return self.getTermByToken(value)

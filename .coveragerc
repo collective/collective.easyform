@@ -1,13 +1,13 @@
 [report]
 omit =
     /home/*/.buildout/eggs/*
+    /home/travis/buildout-cache/eggs/*
+    /home/travis/virtualenv/*
     /usr/*
     bin/test
-    buildout-cache/eggs/*
     eggs/*
     parts/*
     src/collective/easyform/tests/*
     */lib/*
-    collective/__init__.py
     *.txt
     *.rst

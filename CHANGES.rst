@@ -7,6 +7,9 @@ Changelog
 - a11y: Added role attribute for portalMessage
   [nzambello]
 
+- fixed startup ResourceWarning on open files
+  [ajung]
+
 
 2.0.1 (2018-12-04)
 ------------------
@@ -24,6 +27,11 @@ New features:
   to render its widget. This is useful when we want to avoid to show some widgets
   like recaptcha, that could breaks if it's in the wrong context.
   [cekk]
+
+New features:
+
+- Add Support for Python 3.
+  [pbauer]
 
 Bug fixes:
 

@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from Products.MailHost.MailHost import MailHost
+from Products.MailHost.interfaces import IMailHost
 from email import message_from_string
+from plone import api
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
-from plone.app.robotframework.testing import AUTOLOGIN_LIBRARY_FIXTURE
+from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.testing import Layer
+from plone.app.testing import setRoles
 from plone.testing.z2 import ZSERVER_FIXTURE
-from Products.MailHost.interfaces import IMailHost
-from Products.MailHost.MailHost import MailHost
 from unittest import TestCase
 from zope.component import getSiteManager
 
@@ -38,6 +39,14 @@ class Fixture(PloneSandboxLayer):
         except ImportError:
             pass
 
+        # set default publisher encoding for Plone 5.1
+        # this is set in zope.conf via plone.recipe.zope2instance but for
+        # testbrowser in doctests we have to manually set it here
+        # see https://github.com/collective/collective.easyform/pull/139
+        if api.env.plone_version() < '5.2':
+            from Zope2.Startup.datatypes import default_zpublisher_encoding
+            default_zpublisher_encoding('utf-8')
+
     def setUpPloneSite(self, portal):
         # Install the collective.easyform product
         self.applyProfile(portal, 'collective.easyform:default')
@@ -60,9 +69,8 @@ FUNCTIONAL_TESTING = FunctionalTesting(
     name='collective.easyform:Functional',
 )
 ACCEPTANCE_TESTING = FunctionalTesting(
-    bases=(FIXTURE, AUTOLOGIN_LIBRARY_FIXTURE, ZSERVER_FIXTURE),
+    bases=(FIXTURE, REMOTE_LIBRARY_BUNDLE_FIXTURE, ZSERVER_FIXTURE),
     name='collective.easyform:Acceptance')
-ROBOT_TESTING = Layer(name='collective.easyform:Robot')
 
 
 class EasyFormTestCase(TestCase):

@@ -25,18 +25,18 @@ class TestFunctions(base.EasyFormTestCase):
         """ Test selective inclusion of widgets for mail and thank you page """
 
         self.assertEqual(
-            filter_widgets(self.ff1, self.dummy_form.w).keys(),
+            list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
             ['replyto', 'topic', 'comments']
         )
 
         self.ff1.showFields = ('topic', 'comments',)
         self.assertEqual(
-            filter_widgets(self.ff1, self.dummy_form.w).keys(),
+            list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
             ['replyto', 'topic', 'comments']
         )
 
         self.ff1.showAll = False
         self.assertEqual(
-            filter_widgets(self.ff1, self.dummy_form.w).keys(),
+            list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
             ['topic', 'comments']
         )

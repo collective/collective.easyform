@@ -4,7 +4,6 @@ exclude .coveragerc
 exclude .DS_Store
 exclude .tx
 exclude .tx/config
-exclude bootstrap-buildout.py
 exclude buildout.cfg
 exclude tests.cfg
 global-exclude *.pyc

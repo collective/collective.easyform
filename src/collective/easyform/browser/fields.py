@@ -168,7 +168,7 @@ class AjaxSaveHandler(BrowserView):
             # Is it valid XML?
             try:
                 root = etree.fromstring(source)
-            except etree.XMLSyntaxError, e:
+            except etree.XMLSyntaxError as e:
                 return dumps({
                     'success': False,
                     'message': "XMLSyntaxError: {0}".format(
@@ -196,7 +196,7 @@ class AjaxSaveHandler(BrowserView):
             # This is mainly good for catching bad dotted names.
             try:
                 loadString(source)
-            except SupermodelParseError, e:
+            except SupermodelParseError as e:
                 message = e.args[0].replace('\n  File "<unknown>"', '')
                 return dumps({
                     'success': False,

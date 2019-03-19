@@ -37,13 +37,16 @@ who doesn't have permission to edit the form, SSL will be forced on initial form
 well (so the user sees a security icon in their browser.) ::
 
     >>> browser.open(portal_url + '/testform/content_status_modify?workflow_action=publish')
-
-Remove authorization header
-    >>> headers = browser.mech_browser.addheaders
-    >>> headers.remove(('Authorization', 'Basic adm:secret'))
-    >>> browser.open(portal_url + '/testform')
-    >>> 'Location' in browser.headers
+    >>> 'Item state changed' in browser.contents
     True
-    >>> browser.headers['Location']
+
+Log out and go back to the form.
+We should be redirected to https://
+
+    >>> anon_browser = get_browser(layer, auth=False)
+    >>> anon_browser.open(portal_url + '/testform')
+    >>> 'Location' in anon_browser.headers
+    True
+    >>> anon_browser.headers['Location']
     'https://nohost/plone/testform/view'
 

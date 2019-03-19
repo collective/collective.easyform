@@ -62,7 +62,7 @@ contributor role assigned.
     >>> browser.open(portal_url + '/login_form')
     >>> browser.getControl(name='__ac_name').value = 'contributor'
     >>> browser.getControl(name='__ac_password').value = 'secret'
-    >>> browser.getControl(name='submit').click()
+    >>> browser.getControl('Log in').click()
     >>> browser.open(portal_url)
 
 We use the 'Add new' menu to add a new content item.

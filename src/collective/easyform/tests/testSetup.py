@@ -4,7 +4,14 @@
 #
 
 from collective.easyform.tests import base
+from plone import api
 from Products.CMFCore.utils import getToolByName
+
+try:
+    from Products.CMFPlone.utils import get_installer
+except ImportError:
+    # BBB for Plone 5.0 and lower.
+    get_installer = None
 
 import Products
 
@@ -118,7 +125,10 @@ class TestInstallation(base.EasyFormTestCase):
                 sheet.manage_changeProperties({lines_prop: propitems})
 
         # reinstall
-        qi = self.portal.portal_quickinstaller
+        if get_installer is None:
+            qi = self.portal['portal_quickinstaller']
+        else:
+            qi = get_installer(self.portal)
         qi.reinstallProducts(['collective.easyform'])
 
         # now make sure our garbage values survived the reinstall
@@ -135,11 +145,8 @@ class TestInstallation(base.EasyFormTestCase):
                 )
 
     def test_EasyFormInDefaultPageTypes(self):
-        propsTool = getToolByName(self.portal, 'portal_properties')
-        siteProperties = getattr(propsTool, 'site_properties')
-        defaultPageTypes = list(
-            siteProperties.getProperty('default_page_types'))
-        self.assertTrue('EasyForm' in defaultPageTypes)
+        values = api.portal.get_registry_record('plone.default_page_types')
+        self.assertIn('EasyForm', values)
 
     def testTypeViews(self):
         self.assertEqual(
