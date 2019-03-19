@@ -9,5 +9,6 @@ exclude tests.cfg
 global-exclude *.pyc
 graft docs
 graft src/collective
+include *.cfg
 include *.rst
 include *.txt
