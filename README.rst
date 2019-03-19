@@ -119,9 +119,9 @@ Actions
 
 You can choose between the following actions after form submission:
 
- * Mailer
- * DataStorage
- * CustomScript
+* Mailer
+* DataStorage
+* CustomScript
 
 The mailer stores a HTML template for sending the results of the form. You can override it with a file named
 `easyform_mail_body_default.pt` in your site. If it is not found the default from the `default_schemata` directory
