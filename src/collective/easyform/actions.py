@@ -412,7 +412,7 @@ class Mailer(Action):
             xmlstr = output.getvalue()
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.xml'.format(now)
-            attachments.append((filename, 'text/xml', 'utf-8', xmlstr))
+            attachments.append((filename, 'application/xml', 'utf-8', xmlstr))
 
         return attachments
 

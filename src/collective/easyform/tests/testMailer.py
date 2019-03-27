@@ -15,7 +15,8 @@ from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 
 import email
-
+import random
+import string
 
 class TestFunctions(base.EasyFormTestCase):
     """ Test mailer action """
@@ -529,10 +530,11 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.sendXML = True
         mailer.sendCSV = False
+        very_long_line = ''.join(random.choice(string.ascii_lowercase) for i in range(2000))
         fields = dict(
             replyto='test@test.org',
             topic='test subject',
-            richtext=RichTextValue(raw='Raw'),
+            richtext=RichTextValue(raw=very_long_line),
             comments=u'test comments😀',
             choices=set(['A', 'B']),
         )
@@ -543,7 +545,7 @@ class TestFunctions(base.EasyFormTestCase):
         output_nodes = (
             b'<field name="replyto">test@test.org</field>',
             b'<field name="topic">test subject</field>',
-            b'<field name="richtext">Raw</field>',
+            b'<field name="richtext">%s</field>' % very_long_line,
             b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
         )
 

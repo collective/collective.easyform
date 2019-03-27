@@ -23,6 +23,8 @@ Bug fixes:
 - fixed startup ResourceWarning on open files
   [ajung]
 
+- fix line length limit to 998 in XML attachment
+  [nngu6036]
 
 2.0.1 (2018-12-04)
 ------------------
