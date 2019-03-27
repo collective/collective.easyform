@@ -18,6 +18,7 @@ import email
 import random
 import string
 
+
 class TestFunctions(base.EasyFormTestCase):
     """ Test mailer action """
 
