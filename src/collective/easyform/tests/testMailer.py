@@ -580,7 +580,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u'Content-Type: application/octet-stream\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment',
+            u'Content-Type: application/csv\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment',
             mailer.get_mail_text(fields, request, context))
         name, mime, enc, csv = attachments[0]
         output = (
