@@ -402,7 +402,8 @@ class Mailer(Action):
                 csv = csv.encode('utf-8')
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.csv'.format(now)
-            attachments.append((filename, 'text/plain', 'utf-8', csv))
+            # Set MIME type of attachment so that it will be encoded with base64
+            attachments.append((filename, 'application/octet-stream', 'utf-8', csv))
 
         if sendXML:
             # use ET.write to get a proper XML Header line
@@ -412,6 +413,7 @@ class Mailer(Action):
             xmlstr = output.getvalue()
             now = DateTime().ISO().replace(' ', '-').replace(':', '')
             filename = 'formdata_{0}.xml'.format(now)
+            # Set MIME type of attachment so that it will be encoded with base64
             attachments.append((filename, 'application/xml', 'utf-8', xmlstr))
 
         return attachments
