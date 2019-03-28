@@ -16,8 +16,6 @@ from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 
 import email
-import random
-import string
 
 
 class TestFunctions(base.EasyFormTestCase):
@@ -543,7 +541,7 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
-        self.assertIn(u'Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment',mailer.get_mail_text(fields, request,context) )
+        self.assertIn(u'Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment', mailer.get_mail_text(fields, request, context))
         name, mime, enc, xml = attachments[0]
         output_nodes = (
             b'<field name="replyto">test@test.org</field>',
