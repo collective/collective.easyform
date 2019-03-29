@@ -4,6 +4,7 @@
 #
 
 from collective.easyform.api import get_actions
+from collective.easyform.api import get_context
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
@@ -529,6 +530,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.sendXML = True
         mailer.sendCSV = False
+        context = get_context(mailer)
         fields = dict(
             replyto='test@test.org',
             topic='test subject',
@@ -539,6 +541,7 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
+        self.assertIn(u'Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment', mailer.get_mail_text(fields, request, context))
         name, mime, enc, xml = attachments[0]
         output_nodes = (
             b'<field name="replyto">test@test.org</field>',
@@ -563,6 +566,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)['mailer']
         mailer.sendXML = False
         mailer.sendCSV = True
+        context = get_context(mailer)
         fields = dict(
             topic='test subject',
             replyto='test@test.org',
@@ -573,6 +577,9 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
+        self.assertIn(
+            u'Content-Type: application/csv\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment',
+            mailer.get_mail_text(fields, request, context))
         name, mime, enc, csv = attachments[0]
         output = (
             b'test@test.org',
