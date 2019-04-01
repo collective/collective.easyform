@@ -50,7 +50,6 @@ except ImportError:
             value = value.encode(encoding)
         return value
 
-
     safe_encode = safe_bytes
 
 
