@@ -26,6 +26,9 @@ Bug fixes:
 - fix bug where lines longer than 998 in XML or CSV attachmentments can get wrapped
   [nngu6036]
 
+- fix bug when different field types can be serialized for XML or CSV attachment
+  [nngu6036]
+
 2.0.1 (2018-12-04)
 ------------------
 

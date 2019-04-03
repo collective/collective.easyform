@@ -354,7 +354,7 @@ class Mailer(Action):
             return dumps(list_value)
         if isinstance(field, RichTextValue):
             return field.raw
-        return safe_unicode(field)
+        return safe_unicode(repr(field))
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form.
