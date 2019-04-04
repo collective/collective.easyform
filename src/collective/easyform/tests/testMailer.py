@@ -555,10 +555,10 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(u'Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment', mailer.get_mail_text(fields, request, context))
         name, mime, enc, xml = attachments[0]
         output_nodes = (
-            b'<field name="replyto">\'test@test.org\'</field>',
-            b'<field name="topic">\'test subject\'</field>',
+            b'<field name="replyto">test@test.org</field>',
+            b'<field name="topic">test subject</field>',
             b'<field name="richtext">Raw</field>',
-            b'<field name="comments">u\'test comments\\U0001f600\'</field>',
+            b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
             b'<field name="datetime">04/01/2019, 00:00:00</field>',
             b'<field name="date">2019/04/02</field>',
             b'<field name="delta">86400.0</field>',
@@ -615,7 +615,7 @@ class TestFunctions(base.EasyFormTestCase):
             b'test@test.org',
             b'test subject',
             b'Raw',
-            b"u\'test comments\\U0001f600\'",
+            b'test comments\xf0\x9f\x98\x80',
             b'04/01/2019, 00:00:00',
             b'2019/04/02',
             b'86400.0',

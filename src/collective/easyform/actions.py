@@ -53,6 +53,7 @@ from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
 
 from datetime import datetime, date, timedelta
+from decimal import Decimal
 import six
 
 
@@ -364,6 +365,10 @@ class Mailer(Action):
             return field.strftime("%Y/%m/%d")
         if isinstance(field, timedelta):
             return str(field.total_seconds())
+        if isinstance(field, int)  or isinstance(field, float) or isinstance(field, Decimal) or isinstance(field, bool):
+            return str(field)
+        if isinstance(field, unicode) or isinstance(field, str):
+            return safe_unicode(field)
         return safe_unicode(repr(field))
 
     def get_attachments(self, fields, request):
