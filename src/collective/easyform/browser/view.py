@@ -20,7 +20,6 @@ from plone.namedfile.interfaces import INamed
 from plone.z3cform import layout
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFPlone.utils import safe_encode
 from z3c.form import button
 from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
@@ -36,8 +35,22 @@ from ZPublisher.mapply import mapply
 
 import six
 
+
 logger = getLogger('collective.easyform')
 PMF = MessageFactory('plone')
+
+try:
+    from Products.CMFPlone.utils import safe_encode
+except ImportError:
+    # only thing needed to maintain 5.0.x compatibility
+    def safe_bytes(value, encoding='utf-8'):
+        """Convert text to bytes of the specified encoding.
+        """
+        if isinstance(value, six.text_type):
+            value = value.encode(encoding)
+        return value
+
+    safe_encode = safe_bytes
 
 
 @implementer(IEasyFormForm)
