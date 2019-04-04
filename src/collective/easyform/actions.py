@@ -354,7 +354,7 @@ class Mailer(Action):
             list_value = list([str(f) for f in field])
             return dumps(list_value)
         if isinstance(field, dict):
-            dict_value = {str(key): str(val) for key, val in field.iteritems()}
+            dict_value = {str(key): str(val) for key, val in six.iteritems(field)}
             return dumps(dict_value)
         if isinstance(field, RichTextValue):
             return field.raw
