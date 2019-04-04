@@ -367,7 +367,7 @@ class Mailer(Action):
             return str(field.total_seconds())
         if isinstance(field, int) or isinstance(field, float) or isinstance(field, Decimal) or isinstance(field, bool):
             return str(field)
-        if isinstance(field, unicode) or isinstance(field, str):
+        if isinstance(field, six.string_types) or isinstance(field, six.text_type):
             return safe_unicode(field)
         return safe_unicode(repr(field))
 
