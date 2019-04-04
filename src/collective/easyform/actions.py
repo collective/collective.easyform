@@ -365,7 +365,7 @@ class Mailer(Action):
             return field.strftime("%Y/%m/%d")
         if isinstance(field, timedelta):
             return str(field.total_seconds())
-        if isinstance(field, int)  or isinstance(field, float) or isinstance(field, Decimal) or isinstance(field, bool):
+        if isinstance(field, int) or isinstance(field, float) or isinstance(field, Decimal) or isinstance(field, bool):
             return str(field)
         if isinstance(field, unicode) or isinstance(field, str):
             return safe_unicode(field)
