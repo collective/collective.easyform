@@ -539,7 +539,7 @@ class TestFunctions(base.EasyFormTestCase):
             richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
             datetime=datetime.datetime(2019, 4, 1),
-            date=datetime.date(2019, 4, 02),
+            date=datetime.date(2019, 4, 2),
             delta=datetime.timedelta(1),
             bool=True,
             number=1981,
