@@ -559,15 +559,15 @@ class TestFunctions(base.EasyFormTestCase):
             b'<field name="topic">\'test subject\'</field>',
             b'<field name="richtext">Raw</field>',
             b'<field name="comments">u\'test comments\\U0001f600\'</field>',
-            b'<field name="datetime">datetime.datetime(2019, 4, 1, 0, 0)</field>',
-            b'<field name="date">datetime.date(2019, 4, 2)</field>',
-            b'<field name="delta">datetime.timedelta(1)</field>',
+            b'<field name="datetime">04/01/2019, 00:00:00</field>',
+            b'<field name="date">2019/04/02</field>',
+            b'<field name="delta">86400.0</field>',
             b'<field name="bool">True</field>',
             b'<field name="number">1981</field>',
             b'<field name="floating">3.14</field>',
-            b'<field name="tuple">(\'elemenet1\', \'element2\')</field>',
+            b'<field name="tuple">["elemenet1", "element2"]</field>',
             b'<field name="list">["1", "2", "3", "4"]</field>',
-            b'<field name="map">{\'fruit\': \'apple\'}</field>',
+            b'<field name="map">{"fruit": "apple"}</field>',
         )
 
         self.assertIn(
@@ -616,15 +616,15 @@ class TestFunctions(base.EasyFormTestCase):
             b'test subject',
             b'Raw',
             b'test comments\\U0001f600',
-            b'datetime.datetime(2019, 4, 1, 0, 0)',
-            b'datetime.date(2019, 4, 2)',
-            b'datetime.timedelta(1)',
+            b'04/01/2019, 00:00:00',
+            b'2019/04/02',
+            b'86400.0',
             b'True',
             b'1981',
             b'3.14',
-            b"('elemenet1', 'element2')",
+            b'[""elemenet1"", ""element2""]',
             b'[""1"", ""2"", ""3"", ""4""]',
-            b"{'fruit': 'apple'}"
+            b'{""fruit"": ""apple""}'
         )
 
         # the order of the columns can change ... check each

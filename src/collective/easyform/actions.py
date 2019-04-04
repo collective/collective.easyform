@@ -52,6 +52,7 @@ from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
 
+from datetime import datetime, date, timedelta
 import six
 
 
@@ -349,11 +350,20 @@ class Mailer(Action):
     def serialize(self, field):
         """Serializa field to save to XML.
         """
-        if isinstance(field, set) or isinstance(field, list):
+        if isinstance(field, set) or isinstance(field, list) or isinstance(field, tuple):
             list_value = list([str(f) for f in field])
             return dumps(list_value)
+        if isinstance(field, dict):
+            dict_value = {str(key): str(val) for key, val in field.iteritems()}
+            return dumps(dict_value)
         if isinstance(field, RichTextValue):
             return field.raw
+        if isinstance(field, datetime):
+            return field.strftime("%m/%d/%Y, %H:%M:%S")
+        if isinstance(field, date):
+            return field.strftime("%Y/%m/%d")
+        if isinstance(field, timedelta):
+            return str(field.total_seconds())
         return safe_unicode(repr(field))
 
     def get_attachments(self, fields, request):
