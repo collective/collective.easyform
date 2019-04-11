@@ -371,8 +371,6 @@ class Mailer(Action):
             return str(field)
         if isinstance(field, six.string_types):
             return safe_unicode(field)
-        if  isinstance(field, six.text_type):
-            field
         return safe_unicode(repr(field))
 
     def get_attachments(self, fields, request):
