@@ -59,4 +59,14 @@
     </value>
   </record>
 
+  <records prefix="plone.bundles/easyform"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="enabled">True</value>
+    <value key="compile">False</value>
+    <value key="csscompilation">++resource++easyform.css</value>
+    <value key="depends">plone</value>
+    <value key="merge_with">default</value>
+  </records>
+
+
 </registry>

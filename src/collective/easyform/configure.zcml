@@ -16,6 +16,7 @@
   <include file="subscribers.zcml" />
   <include file="validators.zcml" />
   <include file="vocabularies.zcml" />
+  <include file="upgrades.zcml" />
 
   <include package=".browser" />
 
@@ -43,53 +44,6 @@
         for="Products.CMFPlone.interfaces.IPloneSiteRoot"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
-
-  <genericsetup:upgradeSteps
-      source="1000"
-      destination="1001"
-      profile="collective.easyform:default">
-    <genericsetup:upgradeDepends
-        title="Reload profile to register new vocabulary name"
-        description=""
-        import_profile="collective.easyform:default"
-        import_steps="plone.app.registry"
-        run_deps="false"
-        />
-  </genericsetup:upgradeSteps>
-  <genericsetup:upgradeSteps
-      source="1001"
-      destination="1002"
-      profile="collective.easyform:default">
-    <genericsetup:upgradeDepends
-        title="Remove ProtectedEmail and ProtectedTextLine as addable fields"
-        description="https://github.com/collective/collective.easyform/issues/94"
-        import_profile="collective.easyform:default"
-        import_steps="plone.app.registry"
-        run_deps="false"
-        />
-  </genericsetup:upgradeSteps>
-  <genericsetup:upgradeSteps
-      source="1002"
-      destination="1003"
-      profile="collective.easyform:default">
-    <genericsetup:upgradeDepends
-        title="Add Browserlayer"
-        import_profile="collective.easyform:default"
-        import_steps="browserlayer"
-        run_deps="false"
-        />
-  </genericsetup:upgradeSteps>
-  <genericsetup:upgradeSteps
-      source="1003"
-      destination="1004"
-      profile="collective.easyform:default">
-    <genericsetup:upgradeDepends
-        title="Changed permission of saveddata action"
-        import_profile="collective.easyform:default"
-        import_steps="actions"
-        run_deps="false"
-        />
-  </genericsetup:upgradeSteps>
 
   <utility
       factory=".setuphandlers.HiddenProfiles"

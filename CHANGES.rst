@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- Added style bundle with toolbar icon
+  [agitator]
+
 - fix bug where lines longer than 998 in XML or CSV attachmentments can get wrapped
   [nngu6036]
 
