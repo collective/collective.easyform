@@ -4,7 +4,11 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix bug where lines longer than 998 in XML or CSV attachmentments can get wrapped
+  [nngu6036]
+
+- nicer representation of complex field types such as bools and dates when serialized to XML or CSV attachments
+  [nngu6036]
 
 
 2.1.0rc1 (2019-03-19)
@@ -22,9 +26,6 @@ Bug fixes:
 
 - fixed startup ResourceWarning on open files
   [ajung]
-
-- fix bug where lines longer than 998 in XML or CSV attachmentments can get wrapped
-  [nngu6036]
 
 2.0.1 (2018-12-04)
 ------------------

@@ -3,6 +3,7 @@
 # Integeration tests specific to the mailer
 #
 
+import datetime
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_context
 from collective.easyform.api import get_schema
@@ -531,11 +532,21 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.sendXML = True
         mailer.sendCSV = False
         context = get_context(mailer)
+        # Test all dexterity field type listed at https://docs.plone.org/external/plone.app.dexterity/docs/reference/fields.html
         fields = dict(
             replyto='test@test.org',
             topic='test subject',
             richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
+            datetime=datetime.datetime(2019, 4, 1),
+            date=datetime.date(2019, 4, 2),
+            delta=datetime.timedelta(1),
+            bool=True,
+            number=1981,
+            floating=3.14,
+            tuple=('elemenet1', 'element2'),
+            list=[1, 2, 3, 4],
+            map=dict(fruit='apple'),
             choices=set(['A', 'B']),
         )
         request = self.LoadRequestForm(**fields)
@@ -548,6 +559,15 @@ class TestFunctions(base.EasyFormTestCase):
             b'<field name="topic">test subject</field>',
             b'<field name="richtext">Raw</field>',
             b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
+            b'<field name="datetime">2019/04/01, 00:00:00</field>',
+            b'<field name="date">2019/04/02</field>',
+            b'<field name="delta">1 day, 0:00:00</field>',
+            b'<field name="bool">True</field>',
+            b'<field name="number">1981</field>',
+            b'<field name="floating">3.14</field>',
+            b'<field name="tuple">["elemenet1", "element2"]</field>',
+            b'<field name="list">["1", "2", "3", "4"]</field>',
+            b'<field name="map">{"fruit": "apple"}</field>',
         )
 
         self.assertIn(
@@ -567,11 +587,21 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.sendXML = False
         mailer.sendCSV = True
         context = get_context(mailer)
+        # Test all dexterity field type listed at https://docs.plone.org/external/plone.app.dexterity/docs/reference/fields.html
         fields = dict(
             topic='test subject',
             replyto='test@test.org',
             richtext=RichTextValue(raw='Raw'),
             comments=u'test comments😀',
+            datetime=datetime.datetime(2019, 4, 1),
+            date=datetime.date(2019, 4, 2),
+            delta=datetime.timedelta(1),
+            bool=True,
+            number=1981,
+            floating=3.14,
+            tuple=('elemenet1', 'element2'),
+            list=[1, 2, 3, 4],
+            map=dict(fruit='apple'),
             choices=set(['A', 'B']),
         )
         request = self.LoadRequestForm(**fields)
@@ -586,6 +616,15 @@ class TestFunctions(base.EasyFormTestCase):
             b'test subject',
             b'Raw',
             b'test comments\xf0\x9f\x98\x80',
+            b'2019/04/01, 00:00:00',
+            b'2019/04/02',
+            b'1 day, 0:00:00',
+            b'True',
+            b'1981',
+            b'3.14',
+            b'[""elemenet1"", ""element2""]',
+            b'[""1"", ""2"", ""3"", ""4""]',
+            b'{""fruit"": ""apple""}'
         )
 
         # the order of the columns can change ... check each
