@@ -1,0 +1,67 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.easyform">
+
+  <genericsetup:upgradeSteps
+      source="1000"
+      destination="1001"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Reload profile to register new vocabulary name"
+        description=""
+        import_profile="collective.easyform:default"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+  </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      source="1001"
+      destination="1002"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Remove ProtectedEmail and ProtectedTextLine as addable fields"
+        description="https://github.com/collective/collective.easyform/issues/94"
+        import_profile="collective.easyform:default"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+  </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      source="1002"
+      destination="1003"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Add Browserlayer"
+        import_profile="collective.easyform:default"
+        import_steps="browserlayer"
+        run_deps="false"
+        />
+  </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      source="1003"
+      destination="1004"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Changed permission of saveddata action"
+        import_profile="collective.easyform:default"
+        import_steps="actions"
+        run_deps="false"
+        />
+  </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      source="1004"
+      destination="1005"
+      profile="collective.easyform:default">
+    <genericsetup:upgradeDepends
+        title="Reload profile to register bundle"
+        description=""
+        import_profile="collective.easyform:default"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+  </genericsetup:upgradeSteps>
+
+</configure>
