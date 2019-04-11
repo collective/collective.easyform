@@ -360,11 +360,11 @@ class Mailer(Action):
         if isinstance(field, RichTextValue):
             return field.raw
         if isinstance(field, datetime):
-            return field.strftime("%m/%d/%Y, %H:%M:%S")
+            return field.strftime("%Y/%m/%d, %H:%M:%S")
         if isinstance(field, date):
             return field.strftime("%Y/%m/%d")
         if isinstance(field, timedelta):
-            return str(field.total_seconds())
+            return str(field)
         if isinstance(field, int) or isinstance(field, float) or isinstance(field, Decimal) or isinstance(field, bool):
             return str(field)
         if isinstance(field, six.string_types) or isinstance(field, six.text_type):
