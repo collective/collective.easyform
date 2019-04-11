@@ -65,4 +65,5 @@
 #edit-zone #plone-contentmenu-factories .plonetoolbar-contenttype .contenttype-easyform::before {
     font-family: 'Glyphicons Halflings';
     content: '\e028';
+    top: 2px;
 }
