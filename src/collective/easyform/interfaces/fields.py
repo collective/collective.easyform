@@ -190,6 +190,11 @@ class IReCaptcha(zope.schema.interfaces.ITextLine):
     """ReCaptcha Field."""
 
 
+class INorobotCaptcha(zope.schema.interfaces.ITextLine):
+
+    """Norobot Field."""
+
+
 class IFieldValidator(Interface):
 
     """Base marker for field validators"""
