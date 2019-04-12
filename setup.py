@@ -57,6 +57,9 @@ setup(
         'recaptcha': [
             'plone.formwidget.recaptcha'
         ],
+        'norobots': [
+            'collective.z3cform.norobots'
+        ],
         'test': [
             'plone.app.testing[robot]',
             'plone.app.robotframework',
