@@ -6,6 +6,7 @@ from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import IReCaptcha
+from collective.easyform.interfaces import INorobotCaptcha
 from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
@@ -123,3 +124,17 @@ ReCaptchaFactory = FieldFactory(
     _(u'label_recaptcha_field', default=u'ReCaptcha')
 )
 ReCaptchaHandler = BaseHandler(ReCaptcha)
+
+
+@implementer(INorobotCaptcha)
+class NorobotCaptcha(TextLine):
+
+    """A NorobotCaptcha field
+    """
+
+
+NorobotFactory = FieldFactory(
+    NorobotCaptcha,
+    _(u'label_norobot_field', default=u'NorobotCaptcha')
+)
+NorobotCaptchaHandler = BaseHandler(NorobotCaptcha)
