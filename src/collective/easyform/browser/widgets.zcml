@@ -70,6 +70,20 @@
         class=".widgets.RichLabelRenderWidget"
         permission="zope.Public"
         />
+    <!-- add CheckboxFieldWidget for ISet to enable checkbox list -->
+    <adapter
+        factory="z3c.form.browser.checkbox.CheckBoxFieldWidget"
+        for="zope.schema.interfaces.ISet
+             ..interfaces.IEasyFormFieldContext"
+        />
+
+    <!-- add RadioFieldWidget for ISet to enable checkbox list -->
+    <adapter
+        factory="z3c.form.browser.radio.RadioFieldWidget"
+        for="zope.schema.interfaces.IChoice
+             ..interfaces.IEasyFormFieldContext"
+        />
+
     <configure
         zcml:condition="installed plone.formwidget.recaptcha">
     <adapter
