@@ -77,7 +77,7 @@
              ..interfaces.IEasyFormFieldContext"
         />
 
-    <!-- add RadioFieldWidget for ISet to enable checkbox list -->
+    <!-- add RadioFieldWidget for IChoice to enable checkbox list -->
     <adapter
         factory="z3c.form.browser.radio.RadioFieldWidget"
         for="zope.schema.interfaces.IChoice
