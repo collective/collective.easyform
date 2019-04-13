@@ -17,6 +17,7 @@
   <include file="validators.zcml" />
   <include file="vocabularies.zcml" />
   <include file="upgrades.zcml" />
+  <include file="widgets.zcml" />
 
   <include package=".browser" />
 
