@@ -4,6 +4,9 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+- add ``plone.formwidget.recaptcha`` to test dependencies
+  [petschki]
+
 - Added style bundle with toolbar icon
   [agitator]
 
