@@ -17,7 +17,8 @@ from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
 from plone.namedfile.interfaces import INamed
-from plone.z3cform import layout
+from plone.z3cform import interfaces
+from plone.z3cform.layout import FormWrapper
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
@@ -34,6 +35,7 @@ from zope.schema import ValidationError
 from ZPublisher.mapply import mapply
 
 import six
+import zope.interface
 
 
 logger = getLogger('collective.easyform')
@@ -344,8 +346,25 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         )
         alsoProvides(self.request, IEasyFormThanksPage)
 
+    def header_injection(self):
+        tal_expression = self.context.headerInjection
+        header_to_inject = get_expression(self.context, tal_expression)
+        if six.PY2 and isinstance(header_to_inject, six.text_type):
+            header_to_inject = header_to_inject.encode('utf-8')
 
-EasyFormView = layout.wrap_form(EasyFormForm)
+        return header_to_inject
+
+
+class EasyFormFormWrapper(FormWrapper):
+    form = EasyFormForm
+    index = ViewPageTemplateFile('easyform_layout.pt')
+
+    def header_injection(self):
+        header_injection = self.form_instance.header_injection()
+        return header_injection
+
+
+EasyFormView = EasyFormFormWrapper
 
 
 class EasyFormFormEmbedded(EasyFormForm):
