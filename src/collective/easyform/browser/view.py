@@ -17,7 +17,6 @@ from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
 from plone.namedfile.interfaces import INamed
-from plone.z3cform import interfaces
 from plone.z3cform.layout import FormWrapper
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -35,7 +34,6 @@ from zope.schema import ValidationError
 from ZPublisher.mapply import mapply
 
 import six
-import zope.interface
 
 
 logger = getLogger('collective.easyform')
