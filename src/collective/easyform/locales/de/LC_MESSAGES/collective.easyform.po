@@ -631,7 +631,7 @@ msgstr "entnehme Empfänger E-Mail aus"
 #. Default: "Header Injection"
 #: collective/easyform/interfaces/easyform.py:297
 msgid "label_headerInjection_text"
-msgstr "Zusätzliche E-Mail-Kopfzeilen einsetzen"
+msgstr "Zusätzliche Tags in HTML-Head einfügen"
 
 #. Default: "Include Empties"
 #: collective/easyform/interfaces/easyform.py:382
