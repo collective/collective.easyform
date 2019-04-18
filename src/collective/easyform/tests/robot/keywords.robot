@@ -59,3 +59,9 @@ Clicked Actions
     Click Link  css=#plone-contentmenu-actions a
     Element should be visible  css=#plone-contentmenu-actions ul
     Click Link  css=#plone-contentmenu-actions ul a#plone-contentmenu-actions-Actions
+
+Click Edit
+    Click Link  css=#edit-zone #contentview-edit a
+
+Click Overrides
+    Click Link  css=#autotoc-item-autotoc-1
