@@ -58,6 +58,7 @@ setup(
             'plone.app.testing[robot]',
             'plone.app.robotframework',
             'plone.app.contenttypes',
+            'plone.formwidget.recaptcha',
             'robotframework-selenium2library',
             'robotframework-selenium2screenshots',
         ]

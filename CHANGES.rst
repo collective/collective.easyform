@@ -9,6 +9,9 @@ New features:
 - Add "CheckBoxFieldWidget" for Multi-Choice-Field and "RadioFieldWidget" for Single-Choice-Field
   [petschki]
 
+- add ``plone.formwidget.recaptcha`` to test dependencies
+  [petschki]
+
 - Added style bundle with toolbar icon
   [agitator]
 
