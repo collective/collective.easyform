@@ -4,17 +4,25 @@ Changelog
 2.1.0 (unreleased)
 ------------------
 
+New features:
+
+- Add "CheckBoxFieldWidget" for Multi-Choice-Field and "RadioFieldWidget" for Single-Choice-Field
+  [petschki]
+
 - add ``plone.formwidget.recaptcha`` to test dependencies
   [petschki]
 
 - Added style bundle with toolbar icon
   [agitator]
 
+- nicer representation of complex field types such as bools and dates when serialized to XML or CSV attachments
+  [nngu6036]
+
+Bug fixes:
+
 - fix bug where lines longer than 998 in XML or CSV attachmentments can get wrapped
   [nngu6036]
 
-- nicer representation of complex field types such as bools and dates when serialized to XML or CSV attachments
-  [nngu6036]
 
 
 2.1.0rc1 (2019-03-19)
