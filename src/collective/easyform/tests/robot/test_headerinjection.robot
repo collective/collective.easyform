@@ -14,9 +14,7 @@ Add headerinjecation as Manager
 
     And Click Edit
     And Click Overrides
-    And Input text for sure  css=#form-widgets-headerInjection  python:'<style type="text/css"> * { color: red !important; } </style>' + '<script>alert("hello world")</script>'
+    And Input text for sure  css=#form-widgets-headerInjection  python:'<style type="text/css"> * { color: red !important; } </style>' + '<script>$(function(){$("#content-core").append("hello world");})</script>'
     When Click Button  Save
-    ${message}=  Handle Alert
-    Then Should Be equal  ${message}  hello world
     And Page Should Contain  color: red !important
-    And Page Should Contain  hello world
+    And Element Should Contain  css=#content-core  hello world
