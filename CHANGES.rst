@@ -23,6 +23,8 @@ Bug fixes:
 - fix bug where lines longer than 998 in XML or CSV attachmentments can get wrapped
   [nngu6036]
 
+- add missing ``header_injection`` implementation
+  [krissik]
 
 
 2.1.0rc1 (2019-03-19)
