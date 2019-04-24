@@ -12,7 +12,7 @@ New features:
 - add ``plone.formwidget.recaptcha`` to test dependencies
   [petschki]
 
-- Added style bundle with toolbar icon
+- Added style bundle with content type icon for toolbar and folder_contents
   [agitator]
 
 - nicer representation of complex field types such as bools and dates when serialized to XML or CSV attachments
