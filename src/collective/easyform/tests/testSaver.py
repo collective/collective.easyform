@@ -3,11 +3,6 @@
 # Integration tests specific to save-data adapter.
 #
 
-import plone.protect
-import sys
-
-from ZPublisher.HTTPRequest import HTTPRequest
-from ZPublisher.HTTPResponse import HTTPResponse
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
@@ -15,6 +10,11 @@ from collective.easyform.tests import base
 from plone import api
 from six import BytesIO
 from six.moves import zip
+from ZPublisher.HTTPRequest import HTTPRequest
+from ZPublisher.HTTPResponse import HTTPResponse
+
+import plone.protect
+import sys
 
 
 def FakeRequest(method="GET", add_auth=False, **kwargs):

@@ -3,7 +3,6 @@
 # Integeration tests specific to the mailer
 #
 
-import datetime
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_context
 from collective.easyform.api import get_schema
@@ -11,11 +10,12 @@ from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
-from Products.CMFPlone.utils import safe_unicode
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
+from Products.CMFPlone.utils import safe_unicode
 
+import datetime
 import email
 
 

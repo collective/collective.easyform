@@ -13,6 +13,7 @@ from collective.easyform.api import get_actions
 from collective.easyform.tests import base
 from plone.app.testing import logout
 from Products.CMFCore import permissions
+
 import six
 
 

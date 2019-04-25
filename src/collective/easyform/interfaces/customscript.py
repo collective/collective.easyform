@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .actions import IAction
-from collective.easyform import easyformMessageFactory as _
 from collective.easyform import config
+from collective.easyform import easyformMessageFactory as _
 from plone.autoform import directives
 
 import zope.interface

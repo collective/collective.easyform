@@ -10,6 +10,7 @@ import six
 import transaction
 import unittest
 
+
 optionflags = (
     doctest.REPORT_ONLY_FIRST_FAILURE
     | doctest.NORMALIZE_WHITESPACE

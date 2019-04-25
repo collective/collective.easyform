@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .validators import isTALES
-from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
+from collective.easyform import easyformMessageFactory as _  # NOQA
 from plone.autoform import directives
 from plone.schemaeditor.interfaces import ID_RE
 from plone.schemaeditor.interfaces import IFieldContext

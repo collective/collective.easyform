@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .validators import isTALES
-from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform import config
+from collective.easyform import easyformMessageFactory as _  # NOQA
 from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schemaeditor.interfaces import IFieldContext
@@ -16,10 +16,10 @@ from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
+import six
 import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
-import six
 
 
 class WidgetVocabulary(SimpleVocabulary):

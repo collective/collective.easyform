@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
-from Products.MailHost.MailHost import MailHost
-from Products.MailHost.interfaces import IMailHost
 from email import message_from_string
 from plone import api
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
@@ -9,9 +7,11 @@ from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.testing.z2 import ZSERVER_FIXTURE
+from Products.MailHost.interfaces import IMailHost
+from Products.MailHost.MailHost import MailHost
 from unittest import TestCase
 from zope.component import getSiteManager
 

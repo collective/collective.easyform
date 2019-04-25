@@ -6,6 +6,7 @@ from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from Products.validation.validators.BaseValidators import baseValidators
 from zope.component import provideUtility
+
 import six
 
 

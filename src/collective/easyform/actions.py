@@ -2,13 +2,7 @@
 from AccessControl import getSecurityManager
 from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
-from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
-from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
-from Products.PythonScripts.PythonScript import PythonScript
 from collective.easyform import easyformMessageFactory as _
-from collective.easyform.api import OrderedDict
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
@@ -18,6 +12,7 @@ from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
+from collective.easyform.api import OrderedDict
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -26,6 +21,11 @@ from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
 from copy import deepcopy
 from csv import writer as csvwriter
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
+from DateTime import DateTime
+from decimal import Decimal
 from email import encoders
 from email.header import Header
 from email.mime.audio import MIMEAudio
@@ -40,6 +40,10 @@ from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
 from plone.supermodel.exportimport import BaseHandler
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
+from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
+from Products.PythonScripts.PythonScript import PythonScript
 from six import BytesIO
 from six import StringIO
 from time import time
@@ -52,10 +56,6 @@ from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
 
-from datetime import datetime
-from datetime import date
-from datetime import timedelta
-from decimal import Decimal
 import six
 
 

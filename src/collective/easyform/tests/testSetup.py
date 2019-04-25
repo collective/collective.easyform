@@ -7,13 +7,14 @@ from collective.easyform.tests import base
 from plone import api
 from Products.CMFCore.utils import getToolByName
 
+import Products
+
+
 try:
     from Products.CMFPlone.utils import get_installer
 except ImportError:
     # BBB for Plone 5.0 and lower.
     get_installer = None
-
-import Products
 
 
 def getAddPermission(product, name):
