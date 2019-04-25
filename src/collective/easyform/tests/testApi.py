@@ -14,11 +14,11 @@ class TestFunctions(base.EasyFormTestCase):
 
     def afterSetUp(self):
         super(TestFunctions, self).afterSetUp()
-        self.folder.invokeFactory('EasyForm', 'ff1')
-        self.ff1 = getattr(self.folder, 'ff1')
-        self.dummy_form = DummyFormView(self.ff1, self.layer['request'])
+        self.folder.invokeFactory("EasyForm", "ff1")
+        self.ff1 = getattr(self.folder, "ff1")
+        self.dummy_form = DummyFormView(self.ff1, self.layer["request"])
         self.dummy_form.schema = get_schema(self.ff1)
-        self.dummy_form.prefix = 'form'
+        self.dummy_form.prefix = "form"
         self.dummy_form._update()
 
     def test_selective_widgets(self):
@@ -26,17 +26,17 @@ class TestFunctions(base.EasyFormTestCase):
 
         self.assertEqual(
             list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            ['replyto', 'topic', 'comments']
+            ["replyto", "topic", "comments"],
         )
 
-        self.ff1.showFields = ('topic', 'comments',)
+        self.ff1.showFields = ("topic", "comments")
         self.assertEqual(
             list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            ['replyto', 'topic', 'comments']
+            ["replyto", "topic", "comments"],
         )
 
         self.ff1.showAll = False
         self.assertEqual(
             list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            ['topic', 'comments']
+            ["topic", "comments"],
         )

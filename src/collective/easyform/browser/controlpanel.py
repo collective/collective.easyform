@@ -11,17 +11,15 @@ from zope.interface import Interface
 
 
 def getContent(self):
-        return getUtility(IRegistry).forInterface(
-            self.schema,
-            prefix=self.schema_prefix)
+    return getUtility(IRegistry).forInterface(self.schema, prefix=self.schema_prefix)
 
 
 class IEasyFormControlPanel(Interface):
 
     migrate_all_forms = schema.Bool(
-        title=u'migrate all the forms to dexterity',
-        description=u'This will migrate all the forms already present '
-                    u'in the site from archetype to dexterity',
+        title=u"migrate all the forms to dexterity",
+        description=u"This will migrate all the forms already present "
+        u"in the site from archetype to dexterity",
         required=False,
         default=False,
     )
@@ -32,10 +30,10 @@ class IEasyFormControlPanel(Interface):
         value_type=schema.Choice(
             description=_(
                 u"help_registry_items",
-                default=u"Select the registry items you desire to modify"
+                default=u"Select the registry items you desire to modify",
             ),
             required=False,
-            vocabulary='easyform.SchemaEditorFields',
+            vocabulary="easyform.SchemaEditorFields",
         ),
         default=[],
     )
@@ -43,14 +41,14 @@ class IEasyFormControlPanel(Interface):
 
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel
-    schema_prefix = 'easyform'
-    label = u'easyform Settings'
+    schema_prefix = "easyform"
+    label = u"easyform Settings"
 
     def updateFields(self):
         super(EasyFormControlPanelForm, self).updateFields()
-        self.fields['allowedFields'].widgetFactory = \
-            CheckBoxFieldWidget
+        self.fields["allowedFields"].widgetFactory = CheckBoxFieldWidget
 
 
 EasyFormControlPanelView = layout.wrap_form(
-    EasyFormControlPanelForm, ControlPanelFormWrapper)
+    EasyFormControlPanelForm, ControlPanelFormWrapper
+)

@@ -59,13 +59,13 @@ from decimal import Decimal
 import six
 
 
-logger = getLogger('collective.easyform')
+logger = getLogger("collective.easyform")
 
 
 @implementer(IActionFactory)
 class ActionFactory(object):
 
-    title = u''
+    title = u""
 
     def __init__(self, fieldcls, title, permission, *args, **kw):
         self.fieldcls = fieldcls
@@ -98,7 +98,8 @@ class Action(Bool):
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
-            "There is not implemented 'onSuccess' of {0!r}".format(self))
+            "There is not implemented 'onSuccess' of {0!r}".format(self)
+        )
 
 
 class DummyFormView(WidgetsView):
@@ -121,15 +122,15 @@ class Mailer(Action):
 
     def get_portal_email_address(self, context):
         """Return the email address defined in the Plone site."""
-        return api.portal.get_registry_record('plone.email_from_address')
+        return api.portal.get_registry_record("plone.email_from_address")
 
     def secure_header_line(self, line):
         if not line:
-            return ''
-        nlpos = line.find('\x0a')
+            return ""
+        nlpos = line.find("\x0a")
         if nlpos >= 0:
             line = line[:nlpos]
-        nlpos = line.find('\x0d')
+        nlpos = line.find("\x0d")
         if nlpos >= 0:
             line = line[:nlpos]
         return line
@@ -141,7 +142,7 @@ class Mailer(Action):
 
         form = DummyFormView(context, request)
         form.schema = schema
-        form.prefix = 'form'
+        form.prefix = "form"
         form._update()
         widgets = filter_widgets(self, form.w)
         data = filter_fields(self, schema, unsorted_data)
@@ -167,17 +168,13 @@ class Mailer(Action):
             body_footer = self.body_footer.output
 
         extra = {
-            'data': data,
-            'fields': OrderedDict([
-                (i, j.title)
-                for i, j in getFieldsInOrder(schema)
-            ]),
-            'widgets': widgets,
-            'mailer': self,
-            'body_pre': body_pre and lnbr(dollar_replacer(body_pre, data)),
-            'body_post': body_post and lnbr(dollar_replacer(body_post, data)),
-            'body_footer': body_footer and lnbr(
-                dollar_replacer(body_footer, data)),
+            "data": data,
+            "fields": OrderedDict([(i, j.title) for i, j in getFieldsInOrder(schema)]),
+            "widgets": widgets,
+            "mailer": self,
+            "body_pre": body_pre and lnbr(dollar_replacer(body_pre, data)),
+            "body_post": body_post and lnbr(dollar_replacer(body_post, data)),
+            "body_footer": body_footer and lnbr(dollar_replacer(body_footer, data)),
         }
         template = ZopePageTemplate(self.__name__)
         template.write(bodyfield)
@@ -187,15 +184,15 @@ class Mailer(Action):
     def get_owner_info(self, context):
         """Return owner info
         """
-        pms = getToolByName(context, 'portal_membership')
+        pms = getToolByName(context, "portal_membership")
         ownerinfo = context.getOwner()
         ownerid = fullname = ownerinfo.getId()
         userdest = pms.getMemberById(ownerid)
         if userdest is not None:
-            fullname = userdest.getProperty('fullname', ownerid)
-        toemail = ''
+            fullname = userdest.getProperty("fullname", ownerid)
+        toemail = ""
         if userdest is not None:
-            toemail = userdest.getProperty('email', '')
+            toemail = userdest.getProperty("email", "")
         if not toemail:
             toemail = self.get_portal_email_address(context)
         if not toemail:
@@ -206,45 +203,34 @@ class Mailer(Action):
             )
         return (fullname, toemail)
 
-    def get_addresses(
-        self,
-        fields,
-        request,
-        context,
-        from_addr=None,
-        to_addr=None
-    ):
+    def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
         """
         Return addresses
         """
         # get Reply-To
         reply_addr = None
-        if hasattr(self, 'replyto_field'):
+        if hasattr(self, "replyto_field"):
             reply_addr = fields.get(self.replyto_field, None)
 
         # Get From address
         portal_addr = self.get_portal_email_address(context)
         from_addr = from_addr or portal_addr
 
-        if hasattr(self, 'senderOverride') and self.senderOverride:
+        if hasattr(self, "senderOverride") and self.senderOverride:
             _from = get_expression(context, self.senderOverride, fields=fields)
             if _from:
                 from_addr = _from
 
         # Get To address and full name
         recip_email = None
-        if hasattr(self, 'to_field') and self.to_field:
+        if hasattr(self, "to_field") and self.to_field:
             recip_email = fields.get(self.to_field, None)
         if not recip_email:
-            if self.recipient_email != '':
+            if self.recipient_email != "":
                 recip_email = self.recipient_email
 
-        if hasattr(self, 'recipientOverride') and self.recipientOverride:
-            _recip = get_expression(
-                context,
-                self.recipientOverride,
-                fields=fields
-            )
+        if hasattr(self, "recipientOverride") and self.recipientOverride:
+            _recip = get_expression(context, self.recipientOverride, fields=fields)
             if _recip:
                 recip_email = _recip
 
@@ -252,33 +238,28 @@ class Mailer(Action):
         if to_addr:
             to = format_addresses(to_addr)
         elif recip_email:
-            to = format_addresses(
-                recip_email,
-                self.recipient_name
-            )
+            to = format_addresses(recip_email, self.recipient_name)
         else:
             # Use owner adress or fall back to portal email_from_address.
             to = formataddr(self.get_owner_info(context))
 
-        assert(to)
+        assert to
         return (to, from_addr, reply_addr)
 
     def get_subject(self, fields, request, context):
         """Return subject
         """
         # get subject header
-        nosubject = u'(no subject)'  # TODO: translate
+        nosubject = u"(no subject)"  # TODO: translate
         subject = None
-        if hasattr(self, 'subjectOverride') and self.subjectOverride:
+        if hasattr(self, "subjectOverride") and self.subjectOverride:
             # subject has a TALES override
             subject = get_expression(
-                context,
-                self.subjectOverride,
-                fields=fields
+                context, self.subjectOverride, fields=fields
             ).strip()
 
         if not subject:
-            subject = getattr(self, 'msg_subject', nosubject)
+            subject = getattr(self, "msg_subject", nosubject)
             subjectField = fields.get(self.subject_field, None)
             if subjectField is not None:
                 subject = subjectField
@@ -289,19 +270,18 @@ class Mailer(Action):
         if isinstance(subject, six.string_types):
             subject = safe_unicode(subject)
         elif subject and isinstance(subject, (set, tuple, list)):
-            subject = ', '.join([safe_unicode(s) for s in subject])
+            subject = ", ".join([safe_unicode(s) for s in subject])
         else:
             subject = nosubject
 
         # transform subject into mail header encoded string
-        email_charset = 'utf-8'
-        msgSubject = self.secure_header_line(
-            subject).encode(email_charset, 'replace')
+        email_charset = "utf-8"
+        msgSubject = self.secure_header_line(subject).encode(email_charset, "replace")
         return Header(msgSubject, email_charset)
 
-    def get_header_info(self, fields, request, context,
-                        from_addr=None, to_addr=None,
-                        subject=None):
+    def get_header_info(
+        self, fields, request, context, from_addr=None, to_addr=None, subject=None
+    ):
         """Return header info
 
         header info is a dictionary
@@ -312,41 +292,42 @@ class Mailer(Action):
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
 
         headerinfo = OrderedDict()
-        headerinfo['To'] = self.secure_header_line(to)
-        headerinfo['From'] = self.secure_header_line(from_addr)
+        headerinfo["To"] = self.secure_header_line(to)
+        headerinfo["From"] = self.secure_header_line(from_addr)
         if reply:
-            headerinfo['Reply-To'] = self.secure_header_line(reply)
-        headerinfo['Subject'] = self.get_subject(fields, request, context)
+            headerinfo["Reply-To"] = self.secure_header_line(reply)
+        headerinfo["Subject"] = self.get_subject(fields, request, context)
 
         # CC
         if isinstance(self.cc_recipients, six.string_types):
             cc_recips = self.cc_recipients
         else:
             cc_recips = [_f for _f in self.cc_recipients if _f]
-        if hasattr(self, 'ccOverride') and self.ccOverride:
+        if hasattr(self, "ccOverride") and self.ccOverride:
             _cc = get_expression(context, self.ccOverride, fields=fields)
             if _cc:
                 cc_recips = _cc
 
         if cc_recips:
-            headerinfo['Cc'] = format_addresses(cc_recips)
+            headerinfo["Cc"] = format_addresses(cc_recips)
 
         # BCC
         if isinstance(self.bcc_recipients, six.string_types):
             bcc_recips = self.bcc_recipients
         else:
             bcc_recips = [_f for _f in self.bcc_recipients if _f]
-        if hasattr(self, 'bccOverride') and self.bccOverride:
+        if hasattr(self, "bccOverride") and self.bccOverride:
             _bcc = get_expression(context, self.bccOverride, fields=fields)
             if _bcc:
                 bcc_recips = _bcc
 
         if bcc_recips:
-            headerinfo['Bcc'] = format_addresses(bcc_recips)
+            headerinfo["Bcc"] = format_addresses(bcc_recips)
 
-        for key in getattr(self, 'xinfo_headers', []):
-            headerinfo['X-{0}'.format(key)] = self.secure_header_line(
-                request.get(key, 'MISSING'))
+        for key in getattr(self, "xinfo_headers", []):
+            headerinfo["X-{0}".format(key)] = self.secure_header_line(
+                request.get(key, "MISSING")
+            )
 
         return headerinfo
 
@@ -380,31 +361,36 @@ class Mailer(Action):
         attachments = []
 
         # if requested, generate CSV attachment of form values
-        sendCSV = getattr(self, 'sendCSV', None)
+        sendCSV = getattr(self, "sendCSV", None)
         if sendCSV:
             csvdata = ()
-        sendXML = getattr(self, 'sendXML', None)
+        sendXML = getattr(self, "sendXML", None)
         if sendXML:
             xmlRoot = ET.Element("form")
-        showFields = getattr(self, 'showFields', []) or []
+        showFields = getattr(self, "showFields", []) or []
         for fname in fields:
             field = fields[fname]
 
             if sendCSV:
                 if not is_file_data(field) and (
-                        getattr(self, 'showAll', True) or fname in showFields):
+                    getattr(self, "showAll", True) or fname in showFields
+                ):
                     val = self.serialize(field)
                     if six.PY2:
-                        val = val.encode('utf-8')
-                    csvdata += (val, )
+                        val = val.encode("utf-8")
+                    csvdata += (val,)
 
             if sendXML:
                 if not is_file_data(field) and (
-                        getattr(self, 'showAll', True) or fname in showFields):
-                    ET.SubElement(xmlRoot, "field", name=fname).text = self.serialize(field)  # noqa
+                    getattr(self, "showAll", True) or fname in showFields
+                ):
+                    ET.SubElement(xmlRoot, "field", name=fname).text = self.serialize(
+                        field
+                    )  # noqa
 
             if is_file_data(field) and (
-                    getattr(self, 'showAll', True) or fname in showFields):
+                getattr(self, "showAll", True) or fname in showFields
+            ):
                 data = field.data
                 filename = field.filename
                 mimetype, enc = guess_content_type(filename, data, None)
@@ -416,22 +402,22 @@ class Mailer(Action):
             writer.writerow(csvdata)
             csv = output.getvalue()
             if six.PY3:
-                csv = csv.encode('utf-8')
-            now = DateTime().ISO().replace(' ', '-').replace(':', '')
-            filename = 'formdata_{0}.csv'.format(now)
+                csv = csv.encode("utf-8")
+            now = DateTime().ISO().replace(" ", "-").replace(":", "")
+            filename = "formdata_{0}.csv".format(now)
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
-            attachments.append((filename, 'application/csv', 'utf-8', csv))
+            attachments.append((filename, "application/csv", "utf-8", csv))
 
         if sendXML:
             # use ET.write to get a proper XML Header line
             output = BytesIO()
             doc = ET.ElementTree(xmlRoot)
-            doc.write(output, encoding='utf-8', xml_declaration=True)
+            doc.write(output, encoding="utf-8", xml_declaration=True)
             xmlstr = output.getvalue()
-            now = DateTime().ISO().replace(' ', '-').replace(':', '')
-            filename = 'formdata_{0}.xml'.format(now)
+            now = DateTime().ISO().replace(" ", "-").replace(":", "")
+            filename = "formdata_{0}.xml".format(now)
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
-            attachments.append((filename, 'application/xml', 'utf-8', xmlstr))
+            attachments.append((filename, "application/xml", "utf-8", xmlstr))
 
         return attachments
 
@@ -441,14 +427,17 @@ class Mailer(Action):
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
         if six.PY2 and isinstance(body, six.text_type):
-            body = body.encode('utf-8')
-        email_charset = 'utf-8'
+            body = body.encode("utf-8")
+        email_charset = "utf-8"
         # always use text/plain for encrypted bodies
-        subtype = getattr(
-            self, 'gpg_keyid', False) and 'plain' or self.body_type or 'html'
+        subtype = (
+            getattr(self, "gpg_keyid", False) and "plain" or self.body_type or "html"
+        )
         mime_text = MIMEText(
-            safe_unicode(body).encode(email_charset, 'replace'),
-            _subtype=subtype, _charset=email_charset)
+            safe_unicode(body).encode(email_charset, "replace"),
+            _subtype=subtype,
+            _charset=email_charset,
+        )
 
         attachments = self.get_attachments(fields, request)
 
@@ -465,7 +454,7 @@ class Mailer(Action):
         # write additional header
         additional_headers = self.additional_headers or []
         for a in additional_headers:
-            key, value = a.split(':', 1)
+            key, value = a.split(":", 1)
             outer.add_header(key, value.strip())
 
         for attachment in attachments:
@@ -474,17 +463,17 @@ class Mailer(Action):
             # encoding = attachment[2]
             content = attachment[3]
             if not six.PY2 and isinstance(content, six.binary_type):
-                content = content.decode('utf-8')
+                content = content.decode("utf-8")
             if ctype is None:
-                ctype = 'application/octet-stream'
+                ctype = "application/octet-stream"
 
-            maintype, subtype = ctype.split('/', 1)
+            maintype, subtype = ctype.split("/", 1)
 
-            if maintype == 'text':
+            if maintype == "text":
                 msg = MIMEText(content, _subtype=subtype)
-            elif maintype == 'image':
+            elif maintype == "image":
                 msg = MIMEImage(content, _subtype=subtype)
-            elif maintype == 'audio':
+            elif maintype == "audio":
                 msg = MIMEAudio(content, _subtype=subtype)
             else:
                 msg = MIMEBase(maintype, subtype)
@@ -494,10 +483,10 @@ class Mailer(Action):
 
             # Set the filename parameter
             if six.PY2 and isinstance(filename, six.text_type):
-                filename = filename.encode('utf-8')
+                filename = filename.encode("utf-8")
             msg.add_header(
-                'Content-Disposition', 'attachment',
-                filename=('utf-8', '', filename))
+                "Content-Disposition", "attachment", filename=("utf-8", "", filename)
+            )
             outer.attach(msg)
 
         return outer.as_string()
@@ -508,7 +497,7 @@ class Mailer(Action):
         """
         context = get_context(self)
         mailtext = self.get_mail_text(fields, request, context)
-        host = api.portal.get_tool(name='MailHost')
+        host = api.portal.get_tool(name="MailHost")
         host.send(mailtext)
 
 
@@ -533,12 +522,12 @@ class CustomScript(Action):
         script._validateProxy = lambda i=None: None
 
         # Force proxy role
-        if role != u'none':
+        if role != u"none":
             script.manage_proxy((role,))
 
         if six.PY2 and isinstance(body, six.text_type):
-            body = body.encode('utf-8')
-        params = 'fields, easyform, request'
+            body = body.encode("utf-8")
+        params = "fields, easyform, request"
         script.ZPythonScript_edit(params, body)
         return script
 
@@ -557,14 +546,19 @@ class CustomScript(Action):
         # compiling
 
         if len(script.warnings) > 0:
-            logger.warning('Python script ' + self.__name__ +
-                           ' has warning:' + str(script.warnings))
+            logger.warning(
+                "Python script "
+                + self.__name__
+                + " has warning:"
+                + str(script.warnings)
+            )
 
         if len(script.errors) > 0:
-            logger.error('Python script ' + self.__name__ +
-                         ' has errors: ' + str(script.errors))
+            logger.error(
+                "Python script " + self.__name__ + " has errors: " + str(script.errors)
+            )
             raise ValueError(
-                'Python script {0} has errors: {1}'.format(
+                "Python script {0} has errors: {1}".format(
                     self.__name__, str(script.errors)
                 )
             )
@@ -599,7 +593,7 @@ class SaveData(Action):
     @property
     def _storage(self):
         context = get_context(self)
-        if not hasattr(context, '_inputStorage'):
+        if not hasattr(context, "_inputStorage"):
             context._inputStorage = {}
         if self.__name__ not in context._inputStorage:
             context._inputStorage[self.__name__] = SavedDataBTree()
@@ -622,7 +616,7 @@ class SaveData(Action):
         """
         return list(self._storage.items())
 
-    def getSavedFormInputForEdit(self, header=False, delimiter=','):
+    def getSavedFormInputForEdit(self, header=False, delimiter=","):
         """ returns saved as CSV text """
         sbuf = StringIO()
         writer = csvwriter(sbuf, delimiter=delimiter)
@@ -633,17 +627,19 @@ class SaveData(Action):
             encoded_titles = []
             for t in titles:
                 if six.PY2 and isinstance(t, six.text_type):
-                    t = t.encode('utf-8')
+                    t = t.encode("utf-8")
                 encoded_titles.append(t)
             writer.writerow(encoded_titles)
         for row in self.getSavedFormInput():
+
             def get_data(row, i):
-                data = row.get(i, '')
+                data = row.get(i, "")
                 if is_file_data(data):
                     data = data.filename
                 if six.PY2 and isinstance(data, six.text_type):
-                    return data.encode('utf-8')
+                    return data.encode("utf-8")
                 return data
+
             row_data = [get_data(row, i) for i in names]
             writer.writerow(row_data)
         res = sbuf.getvalue()
@@ -653,7 +649,7 @@ class SaveData(Action):
     def getColumnNames(self):
         # """Returns a list of column names"""
         context = get_context(self)
-        showFields = getattr(self, 'showFields', [])
+        showFields = getattr(self, "showFields", [])
         if showFields is None:
             showFields = []
         names = [
@@ -669,7 +665,7 @@ class SaveData(Action):
     def getColumnTitles(self):
         # """Returns a list of column titles"""
         context = get_context(self)
-        showFields = getattr(self, 'showFields', [])
+        showFields = getattr(self, "showFields", [])
         if showFields is None:
             showFields = []
 
@@ -687,38 +683,40 @@ class SaveData(Action):
         # """Download the saved data as csv
         # """
         response.setHeader(
-            'Content-Disposition',
-            'attachment; filename="{0}.csv"'.format(self.__name__)
+            "Content-Disposition",
+            'attachment; filename="{0}.csv"'.format(self.__name__),
         )
-        response.setHeader('Content-Type', 'text/comma-separated-values')
+        response.setHeader("Content-Type", "text/comma-separated-values")
         value = self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter=',')
+            getattr(self, "UseColumnNames", False), delimiter=","
+        )
         if isinstance(value, six.text_type):
-            value = value.encode('utf-8')
+            value = value.encode("utf-8")
         response.write(value)
 
     def download_tsv(self, response):
         # """Download the saved data as tsv
         # """
         response.setHeader(
-            'Content-Disposition',
-            'attachment; filename="{0}.tsv"'.format(self.__name__)
+            "Content-Disposition",
+            'attachment; filename="{0}.tsv"'.format(self.__name__),
         )
-        response.setHeader('Content-Type', 'text/tab-separated-values')
+        response.setHeader("Content-Type", "text/tab-separated-values")
         value = self.getSavedFormInputForEdit(
-            getattr(self, 'UseColumnNames', False), delimiter='\t')
+            getattr(self, "UseColumnNames", False), delimiter="\t"
+        )
         if isinstance(value, six.text_type):
-            value = value.encode('utf-8')
+            value = value.encode("utf-8")
         response.write(value)
 
     def download(self, response):
         # """Download the saved data
         # """
-        format = getattr(self, 'DownloadFormat', 'tsv')
-        if format == 'tsv':
+        format = getattr(self, "DownloadFormat", "tsv")
+        if format == "tsv":
             return self.download_tsv(response)
         else:
-            assert format == 'csv', 'Unknown download format'
+            assert format == "csv", "Unknown download format"
             return self.download_csv(response)
 
     def itemsSaved(self):
@@ -744,7 +742,7 @@ class SaveData(Action):
             id = int(time() * 1000)
             while id in storage:  # avoid collisions during testing
                 id += 1
-        value['id'] = id
+        value["id"] = id
         storage[id] = value
 
     def onSuccess(self, fields, request):
@@ -767,7 +765,7 @@ class SaveData(Action):
         # target.onSuccess(fields, request, loopstop=True)
         # return
         data = {}
-        showFields = getattr(self, 'showFields', []) or self.getColumnNames()
+        showFields = getattr(self, "showFields", []) or self.getColumnNames()
         for f in fields:
             if f not in showFields:
                 continue
@@ -775,28 +773,28 @@ class SaveData(Action):
 
         if self.ExtraData:
             for f in self.ExtraData:
-                if f == 'dt':
+                if f == "dt":
                     data[f] = str(DateTime())
                 else:
-                    data[f] = getattr(request, f, '')
+                    data[f] = getattr(request, f, "")
 
         self.addDataRow(data)
 
 
 MailerAction = ActionFactory(
-    Mailer, _
-    (u'label_mailer_action', default=u'Mailer'),
-    'collective.easyform.AddMailers'
+    Mailer,
+    _(u"label_mailer_action", default=u"Mailer"),
+    "collective.easyform.AddMailers",
 )
 CustomScriptAction = ActionFactory(
-    CustomScript, _
-    (u'label_customscript_action', default=u'Custom Script'),
-    'collective.easyform.AddCustomScripts'
+    CustomScript,
+    _(u"label_customscript_action", default=u"Custom Script"),
+    "collective.easyform.AddCustomScripts",
 )
 SaveDataAction = ActionFactory(
-    SaveData, _
-    (u'label_savedata_action', default=u'Save Data'),
-    'collective.easyform.AddDataSavers'
+    SaveData,
+    _(u"label_savedata_action", default=u"Save Data"),
+    "collective.easyform.AddDataSavers",
 )
 
 MailerHandler = BaseHandler(Mailer)

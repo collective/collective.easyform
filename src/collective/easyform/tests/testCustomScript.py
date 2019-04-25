@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 
     Unit test for EasyForm custom scripts
 
     Copyright 2006 Red Innovation http://www.redinnovation.com
 
-'''
+"""
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from App.class_init import InitializeClass
@@ -16,7 +16,7 @@ from Products.CMFCore import permissions
 import six
 
 
-test_script = '''
+test_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -29,9 +29,9 @@ from Products.CMFCore.utils import getToolByName
 
 assert fields['test_field'] == '123'
 return 'foo'
-'''
+"""
 
-bad_parameters_script = '''
+bad_parameters_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -41,9 +41,9 @@ bad_parameters_script = '''
 ##
 
 return 'foo'
-'''
+"""
 
-syntax_error_script = '''
+syntax_error_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -53,9 +53,9 @@ syntax_error_script = '''
 ##
 if:
 return asdfaf
-'''
+"""
 
-runtime_error_script = '''
+runtime_error_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -64,9 +64,9 @@ runtime_error_script = '''
 ##title=
 ##
 return 'asdfaf' + 1
-'''
+"""
 
-security_script = '''
+security_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -84,9 +84,9 @@ print(portal)
 
 # Try set left_slots
 portal.manage_addProperty('foo', ['foo'], 'lines')
-'''
+"""
 
-proxied_script = '''
+proxied_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -97,9 +97,9 @@ proxied_script = '''
 
 # Should raise Unauthorized
 return request.fooProtected()
-'''
+"""
 
-return_error_script = '''
+return_error_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
@@ -108,17 +108,16 @@ return_error_script = '''
 ##title=
 ##
 return {'comments': 'Please enter more text'}
-'''
+"""
 
-default_params_script = '''
+default_params_script = """
 fields
 easyform
 request
-'''
+"""
 
 
 class FakeRequest(dict):
-
     def __init__(self, **kwargs):
         self.form = kwargs
 
@@ -132,8 +131,8 @@ class SecureFakeRequest(dict):
 
     @security.protected(permissions.ManagePortal)
     def fooProtected(self):
-        ''' Only manager can access this '''
-        return 'foo'
+        """ Only manager can access this """
+        return "foo"
 
 
 InitializeClass(SecureFakeRequest)
@@ -141,69 +140,69 @@ InitializeClass(SecureFakeRequest)
 
 class TestCustomScript(base.EasyFormTestCase):
 
-    ''' Test FormCustomScriptAdapter functionality in EasyForm '''
+    """ Test FormCustomScriptAdapter functionality in EasyForm """
 
     def afterSetUp(self):
-        self.request = self.layer['request']
+        self.request = self.layer["request"]
 
-        self.folder.invokeFactory('EasyForm', 'ff1')
-        self.ff1 = getattr(self.folder, 'ff1')
+        self.folder.invokeFactory("EasyForm", "ff1")
+        self.ff1 = getattr(self.folder, "ff1")
         self.ff1.CSRFProtection = False
-        self.request['form.widgets.title'] = u'Test field'
-        self.request['form.widgets.__name__'] = u'test_field'
-        self.request['form.widgets.description'] = u'foobar'
-        self.request['form.widgets.factory'] = ['label_textline_field']
-        self.request['form.widgets.required'] = ['selected']
-        self.request['form.buttons.add'] = u'Add'
-        view = self.ff1.restrictedTraverse('fields/@@add-field')
+        self.request["form.widgets.title"] = u"Test field"
+        self.request["form.widgets.__name__"] = u"test_field"
+        self.request["form.widgets.description"] = u"foobar"
+        self.request["form.widgets.factory"] = ["label_textline_field"]
+        self.request["form.widgets.required"] = ["selected"]
+        self.request["form.buttons.add"] = u"Add"
+        view = self.ff1.restrictedTraverse("fields/@@add-field")
         view.update()
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
 
     def createScript(self):
-        ''' Creates FormCustomScript object '''
+        """ Creates FormCustomScript object """
         # 1. Create custom script adapter in the form folder
-        self.request['form.widgets.title'] = u'Adapter'
-        self.request['form.widgets.__name__'] = u'adapter'
-        self.request['form.widgets.description'] = u''
-        self.request['form.widgets.factory'] = ['Custom Script']
-        self.request['form.buttons.add'] = u'Add'
-        view = self.ff1.restrictedTraverse('actions/@@add-action')
+        self.request["form.widgets.title"] = u"Adapter"
+        self.request["form.widgets.__name__"] = u"adapter"
+        self.request["form.widgets.description"] = u""
+        self.request["form.widgets.factory"] = ["Custom Script"]
+        self.request["form.buttons.add"] = u"Add"
+        view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
-        self.assertTrue('adapter' in actions)
+        self.assertTrue("adapter" in actions)
 
     def testSuccess(self):
-        ''' Succesful script execution
+        """ Succesful script execution
 
         Creates a script, some form content,
         executes form handling.
-        '''
+        """
 
         self.createScript()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = test_script
 
-        req = FakeRequest(test_field='123')
+        req = FakeRequest(test_field="123")
 
         reply = adapter.onSuccess({}, req)
-        assert reply == 'foo', 'Script returned:' + str(reply)
+        assert reply == "foo", "Script returned:" + str(reply)
 
     def testRunTimeError(self):
-        ''' Script has run-time error '''
+        """ Script has run-time error """
         self.createScript()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = runtime_error_script
@@ -216,15 +215,14 @@ class TestCustomScript(base.EasyFormTestCase):
             reply = None
             throwed = True
 
-        assert throwed, "Bad script didn't throw run-time exception, got " + \
-            str(reply)
+        assert throwed, "Bad script didn't throw run-time exception, got " + str(reply)
         assert reply is None
 
     def testSyntaxError(self):
-        ''' Script has syntax errors
+        """ Script has syntax errors
 
         TODO: Syntax errors are not returned in validation?
-        '''
+        """
 
         # Note: this test logs an error message; it does not indicate test
         # failure
@@ -232,7 +230,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.createScript()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = syntax_error_script
@@ -247,12 +245,12 @@ class TestCustomScript(base.EasyFormTestCase):
         assert throwed, "Bad script didn't throw run-time exception"
 
     def testBadParameters(self):
-        ''' Invalid number of script parameters '''
+        """ Invalid number of script parameters """
 
         self.createScript()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = bad_parameters_script
@@ -263,38 +261,36 @@ class TestCustomScript(base.EasyFormTestCase):
             adapter.onSuccess([])
         except TypeError:
             throwed = True
-        assert throwed, 'Invalid parameters failed silently'
+        assert throwed, "Invalid parameters failed silently"
 
     def testDefaultParameters(self):
-        ''' Test to make sure the documented parameters are available '''
+        """ Test to make sure the documented parameters are available """
 
         self.createScript()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = default_params_script
 
         request = FakeRequest(
-            topic='test subject',
-            replyto='test@test.org',
-            comments='test comments'
+            topic="test subject", replyto="test@test.org", comments="test comments"
         )
 
         errors = adapter.onSuccess({}, request)
         self.assertEqual(errors, None)
 
     def testSecurity(self):
-        ''' Script needing proxy role
+        """ Script needing proxy role
 
         TODO: Why no security exceptions are raised?
-        '''
+        """
         self.createScript()
         logout()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = security_script
@@ -306,65 +302,65 @@ class TestCustomScript(base.EasyFormTestCase):
         except Unauthorized:
             throwed = True
 
-        if self.portal.hasProperty('foo'):
-            assert 'Script executed under full priviledges'
+        if self.portal.hasProperty("foo"):
+            assert "Script executed under full priviledges"
 
-        self.assertTrue(throwed, 'Bypassed security, baaad!')
+        self.assertTrue(throwed, "Bypassed security, baaad!")
 
-        adapter.ProxyRole = u'Manager'
+        adapter.ProxyRole = u"Manager"
         throwed = False
         try:
             adapter.onSuccess({}, FakeRequest())
         except Unauthorized:
             throwed = True
 
-        if not self.portal.hasProperty('foo'):
-            assert 'Script not executed thru proxy role'
-        self.assertFalse(throwed, 'Unauthorized was raised!')
+        if not self.portal.hasProperty("foo"):
+            assert "Script not executed thru proxy role"
+        self.assertFalse(throwed, "Unauthorized was raised!")
 
     def testSetProxyRole(self):
-        ''' Exercise setProxyRole '''
+        """ Exercise setProxyRole """
         self.createScript()
-        self.request['form.widgets.title'] = u'Adapter'
-        self.request['form.widgets.description'] = u''
-        self.request['form.widgets.ProxyRole'] = [u'Manager']
-        self.request['form.widgets.ScriptBody'] = six.text_type(proxied_script)
-        self.request['form.widgets.IActionExtender.execCondition'] = u''
-        self.request['form.buttons.save'] = u'Save'
-        view = self.ff1.restrictedTraverse('actions')
-        view = view.publishTraverse(view.request, 'adapter')
-        view = view.publishTraverse(view.request, 'adapter')
+        self.request["form.widgets.title"] = u"Adapter"
+        self.request["form.widgets.description"] = u""
+        self.request["form.widgets.ProxyRole"] = [u"Manager"]
+        self.request["form.widgets.ScriptBody"] = six.text_type(proxied_script)
+        self.request["form.widgets.IActionExtender.execCondition"] = u""
+        self.request["form.buttons.save"] = u"Save"
+        view = self.ff1.restrictedTraverse("actions")
+        view = view.publishTraverse(view.request, "adapter")
+        view = view.publishTraverse(view.request, "adapter")
         view.update()
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
-        self.request['form.widgets.title'] = u'Adapter'
-        self.request['form.widgets.description'] = u''
-        self.request['form.widgets.ProxyRole'] = [u'none']
-        self.request['form.widgets.ScriptBody'] = six.text_type(proxied_script)
-        self.request['form.widgets.IActionExtender.execCondition'] = u''
-        self.request['form.buttons.save'] = u'Save'
-        view = self.ff1.restrictedTraverse('actions')
-        view = view.publishTraverse(view.request, 'adapter')
-        view = view.publishTraverse(view.request, 'adapter')
+        self.request["form.widgets.title"] = u"Adapter"
+        self.request["form.widgets.description"] = u""
+        self.request["form.widgets.ProxyRole"] = [u"none"]
+        self.request["form.widgets.ScriptBody"] = six.text_type(proxied_script)
+        self.request["form.widgets.IActionExtender.execCondition"] = u""
+        self.request["form.buttons.save"] = u"Save"
+        view = self.ff1.restrictedTraverse("actions")
+        view = view.publishTraverse(view.request, "adapter")
+        view = view.publishTraverse(view.request, "adapter")
         view.update()
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
-        self.request['form.widgets.title'] = u'Adapter'
-        self.request['form.widgets.description'] = u''
-        self.request['form.widgets.ProxyRole'] = [u'bogus']
-        self.request['form.widgets.ScriptBody'] = six.text_type(proxied_script)
-        self.request['form.widgets.IActionExtender.execCondition'] = u''
-        self.request['form.buttons.save'] = u'Save'
-        view = self.ff1.restrictedTraverse('actions')
-        view = view.publishTraverse(view.request, 'adapter')
-        view = view.publishTraverse(view.request, 'adapter')
+        self.request["form.widgets.title"] = u"Adapter"
+        self.request["form.widgets.description"] = u""
+        self.request["form.widgets.ProxyRole"] = [u"bogus"]
+        self.request["form.widgets.ScriptBody"] = six.text_type(proxied_script)
+        self.request["form.widgets.IActionExtender.execCondition"] = u""
+        self.request["form.buttons.save"] = u"Save"
+        view = self.ff1.restrictedTraverse("actions")
+        view = view.publishTraverse(view.request, "adapter")
+        view = view.publishTraverse(view.request, "adapter")
         view.update()
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
-        self.assertEqual(errors[0].message, u'Required input is missing.')
+        self.assertEqual(errors[0].message, u"Required input is missing.")
 
     def testProxyRole(self):
         """ Test seeing how setting proxy role affects unauthorized
@@ -373,10 +369,10 @@ class TestCustomScript(base.EasyFormTestCase):
         self.createScript()
 
         actions = get_actions(self.ff1)
-        adapter = actions['adapter']
+        adapter = actions["adapter"]
 
         # 4. Set script data
         adapter.ScriptBody = proxied_script
 
-        req = SecureFakeRequest(test_field='123')
+        req = SecureFakeRequest(test_field="123")
         self.assertRaises(Unauthorized, adapter.onSuccess, {}, req)

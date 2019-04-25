@@ -20,9 +20,9 @@ class LabelWidget(widget.HTMLFormElement, Widget):
 
     """Textarea widget implementation."""
 
-    klass = u'label-widget'
-    css = u'label'
-    value = u''
+    klass = u"label-widget"
+    css = u"label"
+    value = u""
 
     def update(self):
         super(LabelWidget, self).update()
@@ -41,9 +41,9 @@ class RichLabelWidget(widget.HTMLFormElement, Widget):
 
     """Textarea widget implementation."""
 
-    klass = u'rich-label-widget'
-    css = u'richlabel'
-    value = u''
+    klass = u"rich-label-widget"
+    css = u"richlabel"
+    value = u""
 
     def update(self):
         super(RichLabelWidget, self).update()
@@ -58,8 +58,8 @@ def RichLabelFieldWidget(field, request):
 
 
 class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
-    index = ViewPageTemplateFile('label.pt')
+    index = ViewPageTemplateFile("label.pt")
 
 
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
-    index = ViewPageTemplateFile('rich_label.pt')
+    index = ViewPageTemplateFile("rich_label.pt")

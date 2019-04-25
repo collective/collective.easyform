@@ -34,7 +34,7 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
         """ Validate field by TValidator """
         super(FieldExtenderValidator, self).validate(value)
         efield = IFieldExtender(self.field)
-        validators = getattr(efield, 'validators', [])
+        validators = getattr(efield, "validators", [])
         if validators:
             for validator in validators:
                 vmethod = queryUtility(IFieldValidator, name=validator)
@@ -43,7 +43,7 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
                 res = vmethod(value)
                 if res:
                     raise Invalid(res)
-        TValidator = getattr(efield, 'TValidator', None)
+        TValidator = getattr(efield, "TValidator", None)
         if TValidator:
             try:
                 cerr = get_expression(self.context, TValidator, value=value)
@@ -70,7 +70,7 @@ class FieldExtenderDefault(object):
         """ get default value of field from TDefault """
         fdefault = self.field.default
         efield = IFieldExtender(self.field)
-        TDefault = getattr(efield, 'TDefault', None)
+        TDefault = getattr(efield, "TDefault", None)
         return get_expression(self.context, TDefault) if TDefault else fdefault
 
 
@@ -94,17 +94,17 @@ class RichLabel(Label):
 
     """A Rich Label field
     """
-    rich_label = u''
 
-    def __init__(self, rich_label=u'', **kw):
+    rich_label = u""
+
+    def __init__(self, rich_label=u"", **kw):
         self.rich_label = rich_label
         super(RichLabel, self).__init__(**kw)
 
 
-LabelFactory = FieldFactory(Label, _(u'label_label_field', default=u'Label'))
+LabelFactory = FieldFactory(Label, _(u"label_label_field", default=u"Label"))
 RichLabelFactory = FieldFactory(
-    RichLabel,
-    _(u'label_richlabel_field', default=u'Rich Label')
+    RichLabel, _(u"label_richlabel_field", default=u"Rich Label")
 )
 
 LabelHandler = BaseHandler(Label)
@@ -119,7 +119,6 @@ class ReCaptcha(TextLine):
 
 
 ReCaptchaFactory = FieldFactory(
-    ReCaptcha,
-    _(u'label_recaptcha_field', default=u'ReCaptcha')
+    ReCaptcha, _(u"label_recaptcha_field", default=u"ReCaptcha")
 )
 ReCaptchaHandler = BaseHandler(ReCaptcha)

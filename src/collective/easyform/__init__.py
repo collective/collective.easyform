@@ -2,4 +2,4 @@
 from zope.i18nmessageid import MessageFactory
 
 
-easyformMessageFactory = MessageFactory('collective.easyform')
+easyformMessageFactory = MessageFactory("collective.easyform")

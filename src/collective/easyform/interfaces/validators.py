@@ -6,7 +6,7 @@ import zope.schema.interfaces
 
 
 class InvalidTALESError(zope.schema.ValidationError):
-    __doc__ = u'Please enter a valid TALES expression.'
+    __doc__ = u"Please enter a valid TALES expression."
 
 
 def isTALES(value):
