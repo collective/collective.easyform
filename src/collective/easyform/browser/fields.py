@@ -34,6 +34,7 @@ except ImportError:
 
 try:
     import plone.resourceeditor
+
     plone.resourceeditor  # avoid PEP 8 warning
     HAVE_RESOURCE_EDITOR = True
 except ImportError:  # pragma: no cover
@@ -54,55 +55,45 @@ class EasyFormFieldsView(SchemaContext):
 
     def __init__(self, context, request):
         self.schema = get_schema(context)
-        super(EasyFormFieldsView, self).__init__(
-            self.schema,
-            request,
-            name='fields'
-        )
+        super(EasyFormFieldsView, self).__init__(self.schema, request, name="fields")
 
     def publishTraverse(self, request, name):
         """ Look up the field whose name matches the next URL path element,
         and wrap it.
         """
         try:
-            return EasyFormFieldContext(
-                self.schema[name],
-                self.request
-            ).__of__(self)
+            return EasyFormFieldContext(self.schema[name], self.request).__of__(self)
         except KeyError:
-            return DefaultPublishTraverse(
-                self,
-                request
-            ).publishTraverse(request, name)
+            return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
     def browserDefault(self, request):
         """ If not traversing through the schema to a field, show the
         SchemaListingPage.
         """
-        return self, ('@@listing',)
+        return self, ("@@listing",)
 
     @property
     def allowedFields(self):
-        fields = api.portal.get_registry_record('easyform.allowedFields')
+        fields = api.portal.get_registry_record("easyform.allowedFields")
         return fields
 
 
 class FieldsSchemaListing(SchemaListing):
-    template = ViewPageTemplateFile('fields_listing.pt')
+    template = ViewPageTemplateFile("fields_listing.pt")
 
     @property
     def default_fieldset_label(self):
         return (
-            self.context.aq_parent.default_fieldset_label or
-            super(FieldsSchemaListing, self).default_fieldset_label
+            self.context.aq_parent.default_fieldset_label
+            or super(FieldsSchemaListing, self).default_fieldset_label
         )
 
     def handleModelEdit(self, action):
-        self.request.response.redirect('@@modeleditor')
+        self.request.response.redirect("@@modeleditor")
 
 
 if HAVE_RESOURCE_EDITOR:
-    but = button.Button("modeleditor", title=_(u'Edit XML Fields Model'))
+    but = button.Button("modeleditor", title=_(u"Edit XML Fields Model"))
     FieldsSchemaListing.buttons += button.Buttons(but)
     handler = button.Handler(but, FieldsSchemaListing.handleModelEdit)
     FieldsSchemaListing.handlers.addHandler(but, handler)
@@ -116,18 +107,17 @@ class EasyFormFieldsListingPage(SchemaListingPage):
         from plone.z3cform.layout so that we can inject the schema name into
         the form label.
     """
+
     form = FieldsSchemaListing
-    index = ViewPageTemplateFile('model_listing.pt')
+    index = ViewPageTemplateFile("model_listing.pt")
 
 
 class FieldEditForm(FieldEditForm):
-
     @lazy_property
     def additionalSchemata(self):
         schema_context = self.context.aq_parent
         adapters = getAdapters(
-            (schema_context, self.field),
-            IEasyFormFieldsEditorExtender
+            (schema_context, self.field), IEasyFormFieldsEditorExtender
         )
         return [v for k, v in adapters]
 
@@ -139,7 +129,8 @@ class EditView(EditView):
 class ModelEditorView(BrowserView):
 
     """ editor view """
-    title = _(u'Edit XML Fields Model')
+
+    title = _(u"Edit XML Fields Model")
 
     def modelSource(self):
         return self.context.aq_parent.fields_model
@@ -150,8 +141,9 @@ class AjaxSaveHandler(BrowserView):
     """ handle AJAX save posts """
 
     def authorized(self):
-        authenticator = queryMultiAdapter((self.context, self.request),
-                                          name=u'authenticator')
+        authenticator = queryMultiAdapter(
+            (self.context, self.request), name=u"authenticator"
+        )
         return authenticator and authenticator.verify()
 
     def save(self, source):
@@ -163,55 +155,60 @@ class AjaxSaveHandler(BrowserView):
         if not self.authorized():
             raise Unauthorized
 
-        source = self.request.form.get('source')
+        source = self.request.form.get("source")
         if source:
             # Is it valid XML?
             try:
                 root = etree.fromstring(source)
             except etree.XMLSyntaxError as e:
-                return dumps({
-                    'success': False,
-                    'message': "XMLSyntaxError: {0}".format(
-                        e.message.encode('utf8')
-                    )
-                })
+                return dumps(
+                    {
+                        "success": False,
+                        "message": "XMLSyntaxError: {0}".format(
+                            e.message.encode("utf8")
+                        ),
+                    }
+                )
 
             # a little more sanity checking, look at first two element levels
-            basens = '{http://namespaces.plone.org/supermodel/schema}'
-            if root.tag != basens + 'model':
-                return dumps({
-                    'success': False,
-                    'message': __(u"Error: root tag must be 'model'")
-                })
+            basens = "{http://namespaces.plone.org/supermodel/schema}"
+            if root.tag != basens + "model":
+                return dumps(
+                    {
+                        "success": False,
+                        "message": __(u"Error: root tag must be 'model'"),
+                    }
+                )
             for element in root.getchildren():
-                if element.tag != basens + 'schema':
-                    return dumps({
-                        'success': False,
-                        'message': __(
-                            u"Error: all model elements must be 'schema'"
-                        )
-                    })
+                if element.tag != basens + "schema":
+                    return dumps(
+                        {
+                            "success": False,
+                            "message": __(
+                                u"Error: all model elements must be 'schema'"
+                            ),
+                        }
+                    )
 
             # can supermodel parse it?
             # This is mainly good for catching bad dotted names.
             try:
                 loadString(source)
             except SupermodelParseError as e:
-                message = e.args[0].replace('\n  File "<unknown>"', '')
-                return dumps({
-                    'success': False,
-                    'message': u"SuperModelParseError: {0}".format(message)
-                })
+                message = e.args[0].replace('\n  File "<unknown>"', "")
+                return dumps(
+                    {
+                        "success": False,
+                        "message": u"SuperModelParseError: {0}".format(message),
+                    }
+                )
 
             # clean up formatting sins
             source = etree.tostring(
-                root,
-                pretty_print=True,
-                xml_declaration=True,
-                encoding='utf8'
+                root, pretty_print=True, xml_declaration=True, encoding="utf8"
             )
             # and save
             self.save(source)
 
-            self.request.response.setHeader('Content-Type', 'application/json')
-            return dumps({'success': True, 'message': __(u"Saved")})
+            self.request.response.setHeader("Content-Type", "application/json")
+            return dumps({"success": True, "message": __(u"Saved")})

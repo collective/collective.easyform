@@ -18,10 +18,7 @@ def get_field_extender(context, field):
 
 
 def _get_(self, key):
-    return self.field.interface.queryTaggedValue(
-        key,
-        {}
-    ).get(self.field.__name__)
+    return self.field.interface.queryTaggedValue(key, {}).get(self.field.__name__)
 
 
 def _set_(self, value, key):
@@ -33,24 +30,30 @@ def _set_(self, value, key):
 @implementer(IFieldExtender)
 @adapter(IField)
 class FieldExtender(object):
-
     def __init__(self, field):
         self.field = field
 
-    field_widget = property(lambda x: _get_(x, WIDGETS_KEY),
-                            lambda x, value: _set_(x, value, WIDGETS_KEY))
-    TDefault = property(lambda x: _get_(x, 'TDefault'),
-                        lambda x, value: _set_(x, value, 'TDefault'))
-    TEnabled = property(lambda x: _get_(x, 'TEnabled'),
-                        lambda x, value: _set_(x, value, 'TEnabled'))
-    TValidator = property(lambda x: _get_(x, 'TValidator'),
-                          lambda x, value: _set_(x, value, 'TValidator'))
-    serverSide = property(lambda x: _get_(x, 'serverSide'),
-                          lambda x, value: _set_(x, value, 'serverSide'))
-    validators = property(lambda x: _get_(x, 'validators'),
-                          lambda x, value: _set_(x, value, 'validators'))
-    THidden = property(lambda x: _get_(x, 'THidden'),
-                       lambda x, value: _set_(x, value, 'THidden'))
+    field_widget = property(
+        lambda x: _get_(x, WIDGETS_KEY), lambda x, value: _set_(x, value, WIDGETS_KEY)
+    )
+    TDefault = property(
+        lambda x: _get_(x, "TDefault"), lambda x, value: _set_(x, value, "TDefault")
+    )
+    TEnabled = property(
+        lambda x: _get_(x, "TEnabled"), lambda x, value: _set_(x, value, "TEnabled")
+    )
+    TValidator = property(
+        lambda x: _get_(x, "TValidator"), lambda x, value: _set_(x, value, "TValidator")
+    )
+    serverSide = property(
+        lambda x: _get_(x, "serverSide"), lambda x, value: _set_(x, value, "serverSide")
+    )
+    validators = property(
+        lambda x: _get_(x, "validators"), lambda x, value: _set_(x, value, "validators")
+    )
+    THidden = property(
+        lambda x: _get_(x, "THidden"), lambda x, value: _set_(x, value, "THidden")
+    )
 
 
 @implementer(IFieldMetadataHandler)
@@ -59,54 +62,54 @@ class EasyFormFieldMetadataHandler(object):
     """Support the easyform: namespace in model definitions.
     """
 
-    namespace = 'http://namespaces.plone.org/supermodel/easyform'
-    prefix = 'easyform'
+    namespace = "http://namespaces.plone.org/supermodel/easyform"
+    prefix = "easyform"
 
     def read(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ['TDefault', 'TEnabled', 'TValidator']:
+        for i in ["TDefault", "TEnabled", "TValidator"]:
             value = fieldNode.get(ns(i, self.namespace))
             if value:
                 data = schema.queryTaggedValue(i, {})
                 data[name] = value
                 schema.setTaggedValue(i, data)
         # serverSide
-        value = fieldNode.get(ns('serverSide', self.namespace))
+        value = fieldNode.get(ns("serverSide", self.namespace))
         if value:
-            data = schema.queryTaggedValue('serverSide', {})
-            data[name] = value.lower() == 'true'
-            schema.setTaggedValue('serverSide', data)
+            data = schema.queryTaggedValue("serverSide", {})
+            data[name] = value.lower() == "true"
+            schema.setTaggedValue("serverSide", data)
         # validators
-        value = fieldNode.get(ns('validators', self.namespace))
+        value = fieldNode.get(ns("validators", self.namespace))
         if value:
-            data = schema.queryTaggedValue('validators', {})
-            data[name] = value.split('|')
-            schema.setTaggedValue('validators', data)
+            data = schema.queryTaggedValue("validators", {})
+            data[name] = value.split("|")
+            schema.setTaggedValue("validators", data)
         # hidden
-        value = fieldNode.get(ns('THidden', self.namespace))
+        value = fieldNode.get(ns("THidden", self.namespace))
         if value:
-            data = schema.queryTaggedValue('THidden', {})
-            data[name] = value.lower() == 'true'
-            schema.setTaggedValue('THidden', data)
+            data = schema.queryTaggedValue("THidden", {})
+            data[name] = value.lower() == "true"
+            schema.setTaggedValue("THidden", data)
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ['TDefault', 'TEnabled', 'TValidator']:
+        for i in ["TDefault", "TEnabled", "TValidator"]:
             value = schema.queryTaggedValue(i, {}).get(name, None)
             if value:
                 fieldNode.set(ns(i, self.namespace), value)
         # serverSide
-        value = schema.queryTaggedValue('serverSide', {}).get(name, None)
+        value = schema.queryTaggedValue("serverSide", {}).get(name, None)
         if isinstance(value, bool):
-            fieldNode.set(ns('serverSide', self.namespace), str(value))
+            fieldNode.set(ns("serverSide", self.namespace), str(value))
         # validators
-        value = schema.queryTaggedValue('validators', {}).get(name, None)
+        value = schema.queryTaggedValue("validators", {}).get(name, None)
         if value:
-            fieldNode.set(ns('validators', self.namespace), "|".join(value))
+            fieldNode.set(ns("validators", self.namespace), "|".join(value))
         # hidden
-        value = schema.queryTaggedValue('THidden', {}).get(name, None)
+        value = schema.queryTaggedValue("THidden", {}).get(name, None)
         if isinstance(value, bool):
-            fieldNode.set(ns('THidden', self.namespace), str(value))
+            fieldNode.set(ns("THidden", self.namespace), str(value))
 
 
 @adapter(IEasyFormActionsContext, IAction)
@@ -117,12 +120,13 @@ def get_action_extender(context, action):
 @implementer(IActionExtender)
 @adapter(IAction)
 class ActionExtender(object):
-
     def __init__(self, field):
         self.field = field
 
-    execCondition = property(lambda x: _get_(x, 'execCondition'),
-                             lambda x, value: _set_(x, value, 'execCondition'))
+    execCondition = property(
+        lambda x: _get_(x, "execCondition"),
+        lambda x, value: _set_(x, value, "execCondition"),
+    )
 
 
 @implementer(IFieldMetadataHandler)
@@ -131,19 +135,19 @@ class EasyFormActionMetadataHandler(object):
     """Support the easyform: namespace in model definitions.
     """
 
-    namespace = 'http://namespaces.plone.org/supermodel/easyform'
-    prefix = 'easyform'
+    namespace = "http://namespaces.plone.org/supermodel/easyform"
+    prefix = "easyform"
 
     def read(self, fieldNode, schema, field):
         name = field.__name__
-        value = fieldNode.get(ns('execCondition', self.namespace))
-        data = schema.queryTaggedValue('execCondition', {})
+        value = fieldNode.get(ns("execCondition", self.namespace))
+        data = schema.queryTaggedValue("execCondition", {})
         if value:
             data[name] = value
-            schema.setTaggedValue('execCondition', data)
+            schema.setTaggedValue("execCondition", data)
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
-        value = schema.queryTaggedValue('execCondition', {}).get(name, None)
+        value = schema.queryTaggedValue("execCondition", {}).get(name, None)
         if value:
-            fieldNode.set(ns('execCondition', self.namespace), value)
+            fieldNode.set(ns("execCondition", self.namespace), value)

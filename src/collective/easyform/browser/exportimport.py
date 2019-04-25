@@ -27,13 +27,14 @@ class EasyFormExportView(BrowserView):
         ctx = TarballExportContext(self.context)
         response = self.request.RESPONSE
         disposition = 'attachment; filename="{0}-{1:{2}}.tar.gz"'.format(
-            self.context.getId(), datetime.now(), '%Y%m%d%H%M%S')
+            self.context.getId(), datetime.now(), "%Y%m%d%H%M%S"
+        )
 
-        response.setHeader('Content-type', 'application/x-gzip')
-        response.setHeader('Content-disposition', disposition)
+        response.setHeader("Content-type", "application/x-gzip")
+        response.setHeader("Content-disposition", disposition)
 
         # export the structure treating the current form as our root context
-        IFilesystemExporter(self.context).export(ctx, 'structure', True)
+        IFilesystemExporter(self.context).export(ctx, "structure", True)
 
         return ctx.getArchive()
 
@@ -42,25 +43,25 @@ class EasyFormImportForm(form.Form):
 
     """The form class for importing of exported easyforms
     """
+
     fields = field.Fields(IEasyFormImportFormSchema)
     ignoreContext = True
     ignoreReadonly = True
 
-    @button.buttonAndHandler(_(u'import'), name='import')
+    @button.buttonAndHandler(_(u"import"), name="import")
     def handleImport(self, action):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
             return
 
-        ctx = TarballImportContext(self.context, data['upload'])
-        IFilesystemImporter(self.context).import_(ctx, 'structure', True)
+        ctx = TarballImportContext(self.context, data["upload"])
+        IFilesystemImporter(self.context).import_(ctx, "structure", True)
 
-        self.status = _(u'Form imported.')
-        IStatusMessage(self.request).addStatusMessage(self.status, type='info')
+        self.status = _(u"Form imported.")
+        IStatusMessage(self.request).addStatusMessage(self.status, type="info")
 
-        url = getMultiAdapter(
-            (self.context, self.request), name='absolute_url')()
+        url = getMultiAdapter((self.context, self.request), name="absolute_url")()
         self.request.response.redirect(url)
 
 

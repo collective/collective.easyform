@@ -47,29 +47,24 @@ from zope.schema import getFieldsInOrder
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 
 
-PMF = MessageFactory('plone')
+PMF = MessageFactory("plone")
 
 
 @adapter(ISavedDataFormWrapper, IBrowserRequest)
 class SavedDataTraversal(WrapperWidgetTraversal):
-
     def traverse(self, name, ignored):
         form = self._prepareForm()
         alsoProvides(self.request, IDeferSecurityCheck)
         form.update()
         noLongerProvides(self.request, IDeferSecurityCheck)
         for subform in form.subforms:
-            if not hasattr(subform, 'subforms'):
+            if not hasattr(subform, "subforms"):
                 continue
             for subsubform in subform.subforms:
                 if not name.startswith(subsubform.prefix):
                     continue
                 for id_ in subsubform.widgets:
-                    subformname = (
-                        subsubform.prefix +
-                        subsubform.widgets.prefix +
-                        id_
-                    )
+                    subformname = subsubform.prefix + subsubform.widgets.prefix + id_
                     if subformname == name:
                         target = self._form_traverse(subsubform, id_)
                         target.__parent__ = aq_inner(self.context)
@@ -78,7 +73,6 @@ class SavedDataTraversal(WrapperWidgetTraversal):
 
 
 class SavedDataView(BrowserView):
-
     def items(self):
         return [
             (name, action.__doc__)
@@ -88,7 +82,6 @@ class SavedDataView(BrowserView):
 
 
 class DataWrapper(dict):
-
     def __init__(self, sid, data, parent):
         self.__sid__ = sid
         self.update(data)
@@ -96,7 +89,7 @@ class DataWrapper(dict):
 
 
 class SavedDataForm(crud.CrudForm):
-    template = ViewPageTemplateFile('saveddata_form.pt')
+    template = ViewPageTemplateFile("saveddata_form.pt")
     addform_factory = crud.NullForm
 
     @property
@@ -112,15 +105,12 @@ class SavedDataForm(crud.CrudForm):
         return get_schema(get_context(self.field))
 
     def description(self):
-        return _(
-            u"${items} input(s) saved",
-            mapping={'items': self.field.itemsSaved()}
-        )
+        return _(u"${items} input(s) saved", mapping={"items": self.field.itemsSaved()})
 
     @property
     def update_schema(self):
         fields = field.Fields(self.get_schema)
-        showFields = getattr(self.field, 'showFields', [])
+        showFields = getattr(self.field, "showFields", [])
         if showFields:
             fields = fields.select(*showFields)
         return fields
@@ -138,7 +128,7 @@ class SavedDataForm(crud.CrudForm):
         ]
 
     # def add(self, data):
-        # storage = self.context._inputStorage
+    # storage = self.context._inputStorage
 
     def before_update(self, item, data):
         id_ = item.__sid__
@@ -149,11 +139,11 @@ class SavedDataForm(crud.CrudForm):
         (id, item) = id_and_item
         self.field.delDataRow(id)
 
-    @button.buttonAndHandler(PMF(u'Download'), name='download')
+    @button.buttonAndHandler(PMF(u"Download"), name="download")
     def handleDownload(self, action):
         self.field.download(self.request.response)
 
-    @button.buttonAndHandler(_(u'Clear all'), name='clearall')
+    @button.buttonAndHandler(_(u"Clear all"), name="clearall")
     def handleClearAll(self, action):
         self.field.clearSavedFormInput()
 
@@ -164,8 +154,7 @@ class SavedDataFormWrapper(layout.FormWrapper):
 
 
 ActionSavedDataView = layout.wrap_form(
-    SavedDataForm,
-    __wrapper_class=SavedDataFormWrapper
+    SavedDataForm, __wrapper_class=SavedDataFormWrapper
 )
 
 
@@ -182,10 +171,7 @@ class EasyFormActionContext(FieldContext):
         if name == self.__name__:
             return ActionEditView(self, request)
 
-        return DefaultPublishTraverse(
-            self,
-            request
-        ).publishTraverse(request, name)
+        return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
 
 @implementer(IEasyFormActionsContext)
@@ -195,44 +181,33 @@ class EasyFormActionsView(SchemaContext):
 
     def __init__(self, context, request):
         self.schema = get_actions(context)
-        super(EasyFormActionsView, self).__init__(
-            self.schema,
-            request,
-            name='actions'
-        )
+        super(EasyFormActionsView, self).__init__(self.schema, request, name="actions")
 
     def publishTraverse(self, request, name):
         """ Look up the field whose name matches the next URL path element,
         and wrap it.
         """
         try:
-            return EasyFormActionContext(
-                self.schema[name],
-                self.request
-            ).__of__(self)
+            return EasyFormActionContext(self.schema[name], self.request).__of__(self)
         except KeyError:
-            return DefaultPublishTraverse(
-                self,
-                request
-            ).publishTraverse(request, name)
+            return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
     def browserDefault(self, request):
         """ If not traversing through the schema to a field, show the
         SchemaListingPage.
         """
-        return self, ('@@listing',)
+        return self, ("@@listing",)
 
 
 class EasyFormActionsListing(SchemaListing):
-    template = ViewPageTemplateFile('actions_listing.pt')
+    template = ViewPageTemplateFile("actions_listing.pt")
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = u'{0}.{1}'.format(
-            field.__module__, field.__class__.__name__)
+        field_identifier = u"{0}.{1}".format(field.__module__, field.__class__.__name__)
         return queryUtility(IActionFactory, name=field_identifier)
 
-    @button.buttonAndHandler(PMF(u'Save'))
+    @button.buttonAndHandler(PMF(u"Save"))
     def handleSaveDefaults(self, action):
         data, errors = self.extractData()
         if errors:
@@ -248,7 +223,7 @@ class EasyFormActionsListing(SchemaListing):
         self.request.response.redirect(self.context.absolute_url())
 
     def handleModelEdit(self, action):
-        self.request.response.redirect('@@modeleditor')
+        self.request.response.redirect("@@modeleditor")
 
 
 class EasyFormActionsListingPage(SchemaListingPage):
@@ -259,14 +234,15 @@ class EasyFormActionsListingPage(SchemaListingPage):
         from plone.z3cform.layout so that we can inject the schema name into
         the form label.
     """
+
     form = EasyFormActionsListing
-    index = ViewPageTemplateFile('model_listing.pt')
+    index = ViewPageTemplateFile("model_listing.pt")
 
 
 class ActionAddForm(FieldAddForm):
 
     fields = field.Fields(INewAction)
-    label = _('Add new action')
+    label = _("Add new action")
 
 
 ActionAddFormPage = layout.wrap_form(ActionAddForm)
@@ -274,7 +250,6 @@ ActionAddFormPage = layout.wrap_form(ActionAddForm)
 
 @implementer(IActionEditForm)
 class ActionEditForm(AutoExtensibleForm, form.EditForm):
-
     def __init__(self, context, request):
         super(form.EditForm, self).__init__(context, request)
         self.field = context.field
@@ -290,12 +265,11 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
     def additionalSchemata(self):
         schema_context = self.context.aq_parent
         adapters = getAdapters(
-            (schema_context, self.field),
-            IEasyFormActionsEditorExtender
+            (schema_context, self.field), IEasyFormActionsEditorExtender
         )
         return [v for k, v in adapters]
 
-    @button.buttonAndHandler(PMF(u'Save'), name='save')
+    @button.buttonAndHandler(PMF(u"Save"), name="save")
     def handleSave(self, action):
         data, errors = self.extractData()
         if errors:
@@ -312,7 +286,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         notify(SchemaModifiedEvent(self.context.aq_parent))
         self.redirectToParent()
 
-    @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
+    @button.buttonAndHandler(PMF(u"Cancel"), name="cancel")
     def handleCancel(self, action):
         self.redirectToParent()
 
@@ -332,12 +306,11 @@ class ActionEditView(layout.FormWrapper):
     @lazy_property
     def label(self):
         return _(
-            u"Edit Action '${fieldname}'",
-            mapping={'fieldname': self.field.__name__}
+            u"Edit Action '${fieldname}'", mapping={"fieldname": self.field.__name__}
         )
 
 
-but = button.Button("modeleditor", title=_(u'Edit XML Actions Model'))
+but = button.Button("modeleditor", title=_(u"Edit XML Actions Model"))
 EasyFormActionsListing.buttons += button.Buttons(but)
 handler = button.Handler(but, EasyFormActionsListing.handleModelEdit)
 EasyFormActionsListing.handlers.addHandler(but, handler)
@@ -346,7 +319,8 @@ EasyFormActionsListing.handlers.addHandler(but, handler)
 class ModelEditorView(BrowserView):
 
     """ editor view """
-    title = _(u'Edit XML Actions Model')
+
+    title = _(u"Edit XML Actions Model")
 
     def modelSource(self):
         return self.context.aq_parent.actions_model

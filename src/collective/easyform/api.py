@@ -20,10 +20,10 @@ from zope.schema import getFieldsInOrder
 import six
 
 
-CONTEXT_KEY = u'context'
+CONTEXT_KEY = u"context"
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
-dollarRE = compile(r'\$\{(.+?)\}')
+dollarRE = compile(r"\$\{(.+?)\}")
 
 
 class OrderedDict(BaseDict):
@@ -31,8 +31,9 @@ class OrderedDict(BaseDict):
     A wrapper around dictionary objects that provides an ordering for
     keys() and items().
     """
+
     security = ClassSecurityInfo()
-    security.setDefaultAccess('allow')
+    security.setDefaultAccess("allow")
 
     def reverse(self):
         items = list(self.items())
@@ -80,12 +81,12 @@ class DollarVarReplacer(object):
 
     def repl(self, mo):
         key = mo.group(1)
-        if key and key[0] not in ['_', '.']:
+        if key and key[0] not in ["_", "."]:
             try:
                 return self.adict[mo.group(1)]
             except KeyError:
                 pass
-        return '???'
+        return "???"
 
 
 def get_expression(context, expression_string, **kwargs):
@@ -97,7 +98,7 @@ def get_expression(context, expression_string, **kwargs):
     :returns: result of TALES expression
     """
     if six.PY2 and isinstance(expression_string, six.text_type):
-        expression_string = expression_string.encode('utf-8')
+        expression_string = expression_string.encode("utf-8")
 
     expression_context = getExprContext(context, context)
     for key in kwargs:
@@ -127,7 +128,7 @@ def get_model(data, context):
     # 2nd we try aquire the model
     if not schema:
         nav_root = api.portal.get_navigation_root(context)
-        schema = nav_root.get('easyform_model_default.xml')
+        schema = nav_root.get("easyform_model_default.xml")
 
     # finally we fall back to the hardcoded example
     if not schema:
@@ -164,7 +165,7 @@ def set_fields(context, schema):
 
 def set_actions(context, schema):
     # fix setting widgets
-    schema.setTaggedValue('plone.autoform.widgets', {})
+    schema.setTaggedValue("plone.autoform.widgets", {})
     # serialize the current schema
     snew_schema = serializeSchema(schema)
     # store the current schema
@@ -230,11 +231,8 @@ def format_addresses(addresses, names=None):
 
     address_pairs = []
     for cnt, address in enumerate(addresses):
-        address_pairs.append((
-            names[cnt] if len(names) > cnt else False,
-            address
-        ))
-    ret = ', '.join([formataddr(pair) for pair in address_pairs])
+        address_pairs.append((names[cnt] if len(names) > cnt else False, address))
+    ret = ", ".join([formataddr(pair) for pair in address_pairs])
     return ret
 
 
@@ -244,7 +242,7 @@ def cleanup(value):
     """
     if isinstance(value, six.string_types):
         value = safe_unicode(value).strip()
-        value = value.replace(u',', u'\n').replace(u';', u'\n')
+        value = value.replace(u",", u"\n").replace(u";", u"\n")
         value = [s for s in value.splitlines()]
 
     if isinstance(value, (list, tuple)):
@@ -252,7 +250,7 @@ def cleanup(value):
 
     if six.PY2:
         # py2 expects a list of bytes
-        value = [s.encode('utf-8') for s in value if s]
+        value = [s.encode("utf-8") for s in value if s]
     return value
 
 
@@ -281,29 +279,33 @@ def filter_fields(context, schema, unsorted_data, omit=False):
     """Filter according to ``showAll``, ``showFields`` and ``includeEmpties``
     settings to display in result mailings, thanks pages and the like.
     """
-    data = OrderedDict([
-        (x[0], unsorted_data[x[0]])
-        for x in getFieldsInOrder(schema)
-        if x[0] in unsorted_data
-    ])
+    data = OrderedDict(
+        [
+            (x[0], unsorted_data[x[0]])
+            for x in getFieldsInOrder(schema)
+            if x[0] in unsorted_data
+        ]
+    )
 
     # TODO: Exclude labels
     fields = [
-        f for f in data
-        if not (is_file_data(data[f])) and not (
+        f
+        for f in data
+        if not (is_file_data(data[f]))
+        and not (
             # TODO: serverSide should always be excluded
             # Also, when shoAll = 0 and serverSite = 1, it will be included
             # which is wrong.
-            getattr(context, 'showAll', True) and
-            IFieldExtender(schema[f]).serverSide
+            getattr(context, "showAll", True)
+            and IFieldExtender(schema[f]).serverSide
         )
     ]
 
-    if not getattr(context, 'showAll', True):
-        showFields = getattr(context, 'showFields', []) or []
+    if not getattr(context, "showAll", True):
+        showFields = getattr(context, "showFields", []) or []
         fields = [f for f in fields if f in showFields]
 
-    if not getattr(context, 'includeEmpties', True):
+    if not getattr(context, "includeEmpties", True):
         fields = [f for f in fields if data[f]]
 
     ret = []
@@ -323,8 +325,8 @@ def filter_widgets(context, widgets):
     thanks pages and the like.
     """
     filtered_widgets = {}
-    show_all = getattr(context, 'showAll', True)
-    show_fields = getattr(context, 'showFields', []) or []
+    show_all = getattr(context, "showAll", True)
+    show_fields = getattr(context, "showFields", []) or []
     for field_id, widget in widgets.items():
         if not show_all:
             if show_fields and field_id in show_fields:
