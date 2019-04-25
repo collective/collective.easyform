@@ -6,6 +6,9 @@ Changelog
 
 New features:
 
+- Code style black & isort.
+  [jensens]
+
 - Add "CheckBoxFieldWidget" for Multi-Choice-Field and "RadioFieldWidget" for Single-Choice-Field
   [petschki]
 
