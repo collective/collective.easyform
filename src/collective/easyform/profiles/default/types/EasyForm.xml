@@ -12,11 +12,12 @@
   <property name="model_file"></property>
   <property name="klass">collective.easyform.content.EasyForm</property>
   <property name="add_permission">collective.easyform.AddContent</property>
+
   <property name="behaviors">
-    <element value="plone.app.content.interfaces.INameFromTitle"/>
-    <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>
-    <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>
-    <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
+    <element value="plone.namefromtitle"/>
+    <element value="plone.allowdiscussion"/>
+    <element value="plone.excludefromnavigation"/>
+    <element value="plone.dublincore"/>
   </property>
 
   <!-- View information -->
