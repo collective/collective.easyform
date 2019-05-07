@@ -4,7 +4,8 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Moved from dotted to named behaviors.
+  [iham]
 
 
 2.1.0 (2019-04-25)
