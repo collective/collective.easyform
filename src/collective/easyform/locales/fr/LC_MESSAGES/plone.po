@@ -16,8 +16,8 @@ msgstr ""
 
 #: collective/easyform/profiles/default/types/EasyForm.xml
 msgid "Actions"
-msgstr ""
+msgstr "Actions"
 
 #: collective/easyform/profiles/default/types/EasyForm.xml
 msgid "Fields"
-msgstr ""
+msgstr "Champs"
