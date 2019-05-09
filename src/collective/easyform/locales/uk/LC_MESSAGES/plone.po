@@ -21,4 +21,3 @@ msgstr "Дії"
 #: collective/easyform/profiles/default/types/EasyForm.xml
 msgid "Fields"
 msgstr "Поля"
-

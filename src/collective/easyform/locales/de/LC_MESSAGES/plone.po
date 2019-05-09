@@ -21,4 +21,3 @@ msgstr "Aktionen"
 #: collective/easyform/profiles/default/types/EasyForm.xml
 msgid "Fields"
 msgstr "Felder"
-
