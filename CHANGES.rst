@@ -7,6 +7,8 @@ Changelog
 - Moved from dotted to named behaviors.
   [iham]
 
+- Convert None value to empty string in form serialization
+  [nngu6036]
 
 2.1.0 (2019-04-25)
 ------------------
