@@ -29,6 +29,8 @@ New:
 
 Fixes:
 
+- Fixed filtering of fields on thanks page.  [maurits]
+
 - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
 
 - Reverted some Plone 5 fixes that prevented collective.easyform from working

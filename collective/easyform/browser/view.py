@@ -180,9 +180,15 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 self.context.thanksEpilogue.output)
             if not self.context.showAll:
                 self.fields = self.setThanksFields(self.base_fields)
+                for name in list(self.widgets.keys()):
+                    if name not in self.fields:
+                        del self.widgets[name]
                 for group in self.groups:
                     group.fields = self.setThanksFields(
                         self.base_groups.get(group.label))
+                    for name in list(group.widgets.keys()):
+                        if name not in group.fields:
+                            del group.widgets[name]
             self.setDisplayMode(DISPLAY_MODE)
             self.updateActions()
 
