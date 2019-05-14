@@ -226,6 +226,15 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if omit:
             fields = fields.omit(*omit)
 
+        # We need extra handling to get the correct order.
+        showFields = getattr(self.context, "showFields", [])
+        if showFields:
+            # showFields may contain fields from other fieldsets,
+            # which we should first remove from this list.
+            field_order = [
+                fname for fname in showFields if fname in fields.keys()
+            ]
+            fields = fields.select(*field_order)
         return fields
 
     def updateFields(self):
