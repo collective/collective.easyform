@@ -5,6 +5,8 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from ZPublisher.mapply import mapply
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import filter_fields
+from collective.easyform.api import filter_widgets
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_fields
@@ -17,6 +19,7 @@ from plone.z3cform import layout
 from z3c.form import button
 from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
+from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.interfaces import IErrorViewSnippet
 from zope.component import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
@@ -179,13 +182,13 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.thanksEpilogue = self.context.thanksEpilogue and replacer(
                 self.context.thanksEpilogue.output)
             if not self.context.showAll:
-                self.fields = self.setThanksFields(self.base_fields)
+                self.fields = self.setThanksFields(self.base_fields, data)
                 for name in list(self.widgets.keys()):
                     if name not in self.fields:
                         del self.widgets[name]
                 for group in self.groups:
                     group.fields = self.setThanksFields(
-                        self.base_groups.get(group.label))
+                        self.base_groups.get(group.label), data)
                     for name in list(group.widgets.keys()):
                         if name not in group.fields:
                             del group.widgets[name]
@@ -212,14 +215,22 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             fields = fields.omit(*omit)
         return fields
 
-    def setThanksFields(self, fields):
-        showFields = self.context.showFields
-        omit = [fname for fname in fields if fname not in showFields]
+    def setThanksFields(self, fields, data):
+        omit = filter_fields(self.context, self.schema, data, omit=True)
+        new_fields = []
+        for fname, field in fields.items():
+            if field.mode == HIDDEN_MODE:
+                field.mode = DISPLAY_MODE
+            new_fields.append(field)
+        fields = fields.__class__(*new_fields)
         if omit:
             fields = fields.omit(*omit)
+
         return fields
 
     def updateFields(self):
+        # if self.thanksPage:
+        #     return
         super(EasyFormForm, self).updateFields()
         if not hasattr(self, 'base_fields'):
             self.base_fields = self.fields
