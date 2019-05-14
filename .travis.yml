@@ -8,7 +8,7 @@ before_install:
   - mkdir -p buildout-cache/downloads
 install:
   - ./bootstrap.sh
-  - bin/buildout -t 5 -Nq -c travis.cfg
+  - bin/buildout -t 5 -Nq
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
