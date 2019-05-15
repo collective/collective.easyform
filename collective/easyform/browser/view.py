@@ -14,7 +14,8 @@ from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
 from plone.autoform.form import AutoExtensibleForm
-from plone.z3cform import layout
+from plone.z3cform import interfaces
+from plone.z3cform.layout import FormWrapper
 from z3c.form import button
 from z3c.form import form
 from z3c.form.interfaces import DISPLAY_MODE
@@ -280,8 +281,23 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
 
+    def header_injection(self):
+        tal_expression = self.context.headerInjection
+        header_to_inject = get_expression(self.context, tal_expression)
+        if  isinstance(header_to_inject, unicode):
+            header_to_inject = header_to_inject.encode('utf-8')
+        return header_to_inject
 
-EasyFormView = layout.wrap_form(EasyFormForm)
+class EasyFormFormWrapper(FormWrapper):
+    form = EasyFormForm
+    index = ViewPageTemplateFile('easyform_layout.pt')
+
+    def header_injection(self):
+        header_injection = self.form_instance.header_injection()
+        return header_injection
+
+
+EasyFormView = EasyFormFormWrapper
 
 
 class EasyFormFormEmbedded(EasyFormForm):
