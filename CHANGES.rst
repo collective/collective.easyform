@@ -4,6 +4,9 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+- Avoid potential CannotGetPortalError on startup #164
+  [laulaz]
+
 - Moved from dotted to named behaviors.
   [iham]
 
