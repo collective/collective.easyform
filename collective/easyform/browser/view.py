@@ -6,7 +6,6 @@ from ZPublisher.mapply import mapply
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
 from collective.easyform.api import filter_fields
-from collective.easyform.api import filter_widgets
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_fields
