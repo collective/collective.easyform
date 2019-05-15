@@ -12,6 +12,7 @@ from StringIO import StringIO
 from collections import OrderedDict as BaseDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import DollarVarReplacer
+from collective.easyform.api import filter_fields
 from collective.easyform.api import format_addresses
 from collective.easyform.api import get_context
 from collective.easyform.api import get_expression
@@ -141,47 +142,17 @@ class Mailer(Action):
         """
 
         schema = get_fields(context)
-        all_fields = [
-            f for f in fields
-            # TODO
-            # if not (f.isLabel() or f.isFileField()) and not (getattr(self,
-            # 'showAll', True) and f.getServerSide())]
-            if not (self._is_file_data(fields[f]))
-            and not (
-                getattr(self, 'showAll', True)
-                and IFieldExtender(schema[f]).serverSide
-            )
-        ]
-
-        # which fields should we show?
-        if getattr(self, 'showAll', True):
-            live_fields = all_fields
-        else:
-            showFields = getattr(self, 'showFields', [])
-            if showFields is None:
-                showFields = []
-
-            live_fields = [
-                f for f in all_fields if f in showFields]
-
-        if not getattr(self, 'includeEmpties', True):
-            all_fields = live_fields
-            live_fields = [f for f in all_fields if fields[f]]
-            for f in all_fields:
-                value = fields[f]
-                if value:
-                    live_fields.append(f)
-
-        # bare_fields = [schema[f] for f in live_fields]
-        bare_fields = OrderedDict([(f, fields[f]) for f in live_fields])
+        data = filter_fields(self, schema, fields)
         bodyfield = self.body_pt
 
-        # pass both the bare_fields (fgFields only) and full fields.
-        # bare_fields for compatability with older templates,
+        # pass both the data (fgFields only) and full fields.
+        # data for compatability with older templates,
         # full fields to enable access to htmlValue
+        # The default mailer iterates over the data,
+        # so the order of the data is kept.
         replacer = DollarVarReplacer(fields).sub
         extra = {
-            'data': bare_fields,
+            'data': data,
             'fields': OrderedDict([
                 (i, j.title)
                 for i, j in getFieldsInOrder(schema)
@@ -195,17 +166,6 @@ class Mailer(Action):
         template.write(bodyfield)
         template = template.__of__(context)
         body = template.pt_render(extra_context=extra)
-
-        # if isinstance(body, unicode):
-        # body = body.encode("utf-8")
-
-        # keyid = getattr(self, 'gpg_keyid', None)
-        # encryption = gpg and keyid
-
-        # if encryption:
-        # bodygpg = gpg.encrypt(body, keyid)
-        # if bodygpg.strip():
-        # body = bodygpg
 
         return body
 

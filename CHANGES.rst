@@ -29,7 +29,7 @@ New:
 
 Fixes:
 
-- Fixed filtering of fields on thanks page.  [maurits]
+- Fixed filtering of fields on thanks page and mailer template.  [maurits]
 
 - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
 
