@@ -1,4 +1,5 @@
 recursive-include collective *
 recursive-include docs *
-include *
+include *.rst
 global-exclude *.pyc
+prune .tx

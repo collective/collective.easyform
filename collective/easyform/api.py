@@ -1,22 +1,46 @@
 # -*- coding: utf-8 -*-
-
+from AccessControl import ClassSecurityInfo
+from App.class_init import InitializeClass
+from collections import OrderedDict as BaseDict
+from collective.easyform.config import MODEL_DEFAULT
+from email.utils import formataddr
+from hashlib import md5
+from plone.memoize import ram
+from plone.namedfile.interfaces import INamedBlobFile
+from plone.namedfile.interfaces import INamedFile
+from plone.supermodel import loadString
+from plone.supermodel import serializeSchema
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
 from Products.CMFPlone.utils import safe_unicode
-from collective.easyform.config import MODEL_DEFAULT
-from hashlib import md5
-from plone.memoize import ram
-from plone.supermodel import loadString
-from plone.supermodel import serializeSchema
-from email.utils import formataddr
 from re import compile
 from types import StringTypes
+from zope.schema import getFieldsInOrder
+
 
 # SCHEMATA_KEY = u''
 CONTEXT_KEY = u'context'
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
 dollarRE = compile(r'\$\{(.+?)\}')
+
+
+class OrderedDict(BaseDict):
+    """
+    A wrapper around dictionary objects that provides an ordering for
+    keys() and items().
+    """
+
+    security = ClassSecurityInfo()
+    security.setDefaultAccess("allow")
+
+    def reverse(self):
+        items = list(self.items())
+        items.reverse()
+        return items
+
+
+InitializeClass(OrderedDict)
 
 
 class DollarVarReplacer(object):
@@ -214,4 +238,73 @@ def format_addresses(addresses, names=[]):
         ))
 
     ret = ', '.join([formataddr(pair) for pair in address_pairs])
+    return ret
+
+
+def is_file_data(field):
+    """Return True, if field is a file field.
+    """
+    ifaces = (INamedFile, INamedBlobFile)
+    for i in ifaces:
+        if i.providedBy(field):
+            return True
+    return False
+
+
+def filter_fields(context, schema, unsorted_data, omit=False):
+    """Filter according to ``showAll``, ``showFields`` and ``includeEmpties``
+    settings to display in result mailings, thanks pages and the like.
+    """
+    # Prevent cyclic import
+    from collective.easyform.interfaces import IFieldExtender
+
+    data = OrderedDict(
+        [
+            (x[0], unsorted_data[x[0]])
+            for x in getFieldsInOrder(schema)
+            if x[0] in unsorted_data
+        ]
+    )
+
+    # TODO: Exclude labels
+    fields = [
+        f
+        for f in data
+        if not (is_file_data(data[f]))
+        and not (
+            # TODO: serverSide should always be excluded
+            # Also, when shoAll = 0 and serverSite = 1, it will be included
+            # which is wrong.
+            getattr(context, "showAll", True)
+            and IFieldExtender(schema[f]).serverSide
+        )
+    ]
+
+    if not getattr(context, "showAll", True):
+        showFields = getattr(context, "showFields", []) or []
+        # Only show fields from 'showFields', and also keep the order,
+        # even when that is not always needed or used by code that calls us.
+        # Note that showFields may contain fields that are not in the schema
+        # or the data: the schema may be limited to one fieldset.
+        # fields = [f for f in fields if f in showFields]
+        ordered_fields = []
+        for fieldname in showFields:
+            for f in fields:
+                if f == fieldname:
+                    ordered_fields.append(f)
+                    fields.remove(f)
+                    break
+        fields = ordered_fields
+
+    if not getattr(context, "includeEmpties", True):
+        fields = [f for f in fields if data[f]]
+
+    ret = []
+    if omit:
+        # return field ids to omit
+        ret = [f for f in data if f not in fields]
+    else:
+        # return field ids and field instances to include
+        ret = OrderedDict([(f, data[f]) for f in fields])
+
     return ret

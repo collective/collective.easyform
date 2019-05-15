@@ -29,6 +29,10 @@ New:
 
 Fixes:
 
+- Fixed filtering of fields on thanks page and mailer template.
+  We show the correct fields now.  In the mailer, the order is also what we selected.
+  [maurits]
+
 - fix plone.schemaeditor i18n factory import. This fixes 5.0.1 support
 
 - Reverted some Plone 5 fixes that prevented collective.easyform from working
