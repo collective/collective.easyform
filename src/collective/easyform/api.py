@@ -303,7 +303,18 @@ def filter_fields(context, schema, unsorted_data, omit=False):
 
     if not getattr(context, "showAll", True):
         showFields = getattr(context, "showFields", []) or []
-        fields = [f for f in fields if f in showFields]
+        # Only show fields from 'showFields', and also keep the order,
+        # even when that is not always needed or used by code that calls us.
+        # Note that showFields may contain fields that are not in the schema
+        # or the data: the schema may be limited to one fieldset.
+        ordered_fields = []
+        for fieldname in showFields:
+            for f in fields:
+                if f == fieldname:
+                    ordered_fields.append(f)
+                    fields.remove(f)
+                    break
+        fields = ordered_fields
 
     if not getattr(context, "includeEmpties", True):
         fields = [f for f in fields if data[f]]
