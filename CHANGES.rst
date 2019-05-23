@@ -6,6 +6,10 @@ Changelog
 
 New:
 
+- Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
+  displayed. Combined with the header_injection field you can style elements
+  only for the thankspage, for example as a workaround to remove empty
+  fieldsets (#154). [fredvd]
 
 - Move the default xml configuration out into xml files. These can be picked up
   by ``i18ndude`` or other po file generators for translations strings. Also
