@@ -29,6 +29,8 @@ New:
 
 Fixes:
 
+- Fixed errors with ``header_injection`` implementation. [maurits]
+
 - Add missing ``header_injection`` implementation. Backport for 1.x from #152. [krissik, fredvd]
 
 - Fixed filtering of fields on thanks page and mailer template.
