@@ -283,6 +283,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     def header_injection(self):
         tal_expression = self.context.headerInjection
+        if not tal_expression:
+            return ''
         header_to_inject = get_expression(self.context, tal_expression)
         if  isinstance(header_to_inject, unicode):
             header_to_inject = header_to_inject.encode('utf-8')
