@@ -17,18 +17,21 @@ We'll want to test the save data adapter later.
 Let's add one now::
 
     >>> browser.getLink('Actions').click()
-    >>> browser.getLink('Add new action…').click()
+    >>> browser.getControl('Add new action…').click()
     >>> browser.getControl('Title').value = 'Saver'
     >>> browser.getControl('Short Name').value = 'saver'
     >>> browser.getControl('Save Data').selected = True
     >>> browser.getControl('Add').click()
+    >>> browser.open('http://nohost/plone/attachmentform/@@actions/')
     >>> 'http://nohost/plone/attachmentform/actions/saver' in browser.contents
+    True
+    >>> 'Field added successfully.' in browser.contents
     True
 
 Add a File field::
 
     >>> browser.getLink('Fields').click()
-    >>> browser.getLink('Add new field…').click()
+    >>> browser.getControl('Add new field…').click()
     >>> browser.getControl('Title').value = 'Attachment'
     >>> browser.getControl('Short Name').value = 'attachment'
     >>> browser.getControl('File Upload').selected = True
