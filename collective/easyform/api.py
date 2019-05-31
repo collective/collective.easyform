@@ -183,36 +183,36 @@ def format_addresses(addresses, names=[]):
     >>> from collective.easyform import api
 
     >>> api.format_addresses('sim@sala.bim')
-    >>> 'sim@sala.bim'
+    'sim@sala.bim'
 
     >>> api.format_addresses('sim@sala.bim', 'sim')
-    >>> 'sim <sim@sala.bim>'
+    'sim <sim@sala.bim>'
 
     >>> api.format_addresses('ähm@öhm.ühm', 'ähm')
-    >>> '\xc3\xa4hm <\xc3\xa4hm@\xc3\xb6hm.\xc3\xbchm>'
+    '\xc3\xa4hm <\xc3\xa4hm@\xc3\xb6hm.\xc3\xbchm>'
 
     >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus')
-    >>> 'sim@sala.bim, hokus@pokus.fidibus'
+    'sim@sala.bim, hokus@pokus.fidibus'
 
     >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim')
-    >>> 'sim <sim@sala.bim>, hokus@pokus.fidibus'
+    'sim <sim@sala.bim>, hokus@pokus.fidibus'
 
     >>> api.format_addresses('sim@sala.bim, hokus@pokus.fidibus', 'sim, hokus')
-    >>> 'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+    'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
 
     >>> api.format_addresses(['sim@sala.bim', 'hokus@pokus.fidibus'],
     ...                      ['sim', 'hokus'])
-    >>> 'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+    'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
 
     >>> api.format_addresses(('sim@sala.bim', 'hokus@pokus.fidibus'),
     ...                      ('sim', 'hokus'))
-    >>> 'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
+    'sim <sim@sala.bim>, hokus <hokus@pokus.fidibus>'
 
     >>> api.format_addresses([])
-    >>> ''
+    ''
 
     >>> api.format_addresses('')
-    >>> ''
+    ''
 
     """
 

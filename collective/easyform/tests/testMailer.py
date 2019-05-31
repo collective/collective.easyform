@@ -16,6 +16,33 @@ class TestFunctions(base.EasyFormTestCase):
 
     """ test ya_gpg.py """
 
+    def assertHeader(self, header, addresses, text=None):
+        if text is None:
+            text = self.messageText
+        wanted = '{0}: {1}'.format(header, addresses)
+        if wanted in text:
+            return
+        # Try to get a nicer test failure message.
+        lines = [line for line in text.splitlines() if '{0}:'.format(header) in line]
+        if not lines:
+            # give up
+            self.fail('"{0}:" not in message text.'.format(header))
+        for line in lines:
+            if wanted in line:
+                return
+        self.fail('{0} not in "{1}:" lines in message text. Found: {2}'.format(
+            wanted, header, lines,
+        ))
+
+    def assertFrom(self, addresses, text=None):
+        return self.assertHeader('From', addresses, text=text)
+
+    def assertSubject(self, addresses, text=None):
+        return self.assertHeader('Subject', addresses, text=text)
+
+    def assertTo(self, addresses, text=None):
+        return self.assertHeader('To', addresses, text=text)
+
     def dummy_send(self, mfrom, mto, messageText, immediate=False):
         self.mfrom = mfrom
         self.mto = mto
@@ -47,9 +74,9 @@ class TestFunctions(base.EasyFormTestCase):
             'messageText', mto='dummy@address.com', mfrom='dummy1@address.com')
         self.assertTrue(self.messageText.endswith('messageText'))
         self.assertEqual(self.mto, ['dummy@address.com'])
-        self.assertTrue(self.messageText.find('To: dummy@address.com') > 0)
+        self.assertTo('dummy@address.com')
         self.assertEqual(self.mfrom, 'dummy1@address.com')
-        self.assertTrue(self.messageText.find('From: dummy1@address.com') > 0)
+        self.assertFrom('dummy1@address.com')
 
     def test_Mailer(self):
         """ Test mailer with dummy_send """
@@ -61,9 +88,8 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(self.messageText.find('To: <mdummy@address.com>') > 0)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?test_subject?=') > 0)
+        self.assertTo('mdummy@address.com')
+        self.assertSubject('=?utf-8?q?test_subject?=')
         msg = email.message_from_string(self.messageText)
         self.assertTrue(
             msg.get_payload(decode=True).find('test comments') > 0)
@@ -85,9 +111,8 @@ class TestFunctions(base.EasyFormTestCase):
 
         self.assertTrue(self.messageText.find('Generator: Plone') > 0)
         self.assertTrue(self.messageText.find('Token: abc') > 0)
-        self.assertTrue(self.messageText.find('To: <mdummy@address.com>') > 0)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?test_subject?=') > 0)
+        self.assertTo('mdummy@address.com')
+        self.assertSubject('=?utf-8?q?test_subject?=')
         msg = email.message_from_string(self.messageText)
         self.assertTrue(
             msg.get_payload(decode=True).find('test comments') > 0)
@@ -123,16 +148,14 @@ class TestFunctions(base.EasyFormTestCase):
             topic='test subject', replyto='test@test.org', comments='test comments')
         self.messageText = ''
         mailer.onSuccess(request.form, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?test_subject?=') > 0)
+        self.assertSubject('=?utf-8?q?test_subject?=')
 
         # no substitution on field replacement (default situation)
         request = self.LoadRequestForm(
             topic='test ${subject}', replyto='test@test.org', comments='test comments')
         self.messageText = ''
         mailer.onSuccess(request.form, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?test_=24=7Bsubject=7D?=') > 0)
+        self.assertSubject('=?utf-8?q?test_=24=7Bsubject=7D?=')
 
         # we should get substitution in a basic override
         mailer.subject_field = ''
@@ -140,23 +163,20 @@ class TestFunctions(base.EasyFormTestCase):
             topic='test subject', replyto='test@test.org', comments='test comments')
         self.messageText = ''
         mailer.onSuccess(request.form, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?This_is_my_test_subject_now?=') > 0)
+        self.assertSubject('=?utf-8?q?This_is_my_test_subject_now?=')
 
         # we should get substitution in a basic override
         mailer.msg_subject = 'This is my ${untopic} now'
         self.messageText = ''
         mailer.onSuccess(request.form, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=') > 0)
+        self.assertSubject('=?utf-8?q?This_is_my_=3F=3F=3F_now?=')
 
         # we don't want substitution on user input
         request = self.LoadRequestForm(
             topic='test ${subject}', replyto='test@test.org', comments='test comments')
         self.messageText = ''
         mailer.onSuccess(request.form, request)
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=') > 0)
+        self.assertSubject('=?utf-8?q?This_is_my_=3F=3F=3F_now?=')
 
     def test_TemplateReplacement(self):
         """
@@ -229,10 +249,9 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?eggs_and_spam?=') > 0)
-        self.assertTrue(self.messageText.find('From: spam@eggs.com') > 0)
-        self.assertTrue(self.messageText.find('To: <eggs@spam.com>') > 0)
+        self.assertSubject('=?utf-8?q?eggs_and_spam?=')
+        self.assertFrom('spam@eggs.com')
+        self.assertTo('eggs@spam.com')
 
     def test_MailerOverridesWithFieldValues(self):
         mailer = get_actions(self.ff1)['mailer']
@@ -245,9 +264,8 @@ class TestFunctions(base.EasyFormTestCase):
         )
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(self.messageText.find(
-            'Subject: =?utf-8?q?eggs_and_spam?=') > 0)
-        self.assertTrue(self.messageText.find('To: <test@test.ts>') > 0)
+        self.assertSubject('=?utf-8?q?eggs_and_spam?=')
+        self.assertTo('test@test.ts')
 
     def testMultiRecipientOverrideByString(self):
         """ try multiple recipients in recipient override """
@@ -261,8 +279,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(self.messageText.find(
-            'To: <eggs@spam.com>, <spam@spam.com>') > 0)
+        self.assertTo('eggs@spam.com, spam@spam.com')
 
     def testMultiRecipientOverrideByTuple(self):
         """ try multiple recipients in recipient override """
@@ -276,8 +293,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(self.messageText.find(
-            'To: <eggs@spam.com>, <spam.spam.com>') > 0)
+        self.assertTo('eggs@spam.com, spam.spam.com')
 
     def testRecipientFromRequest(self):
         """ try recipient from designated field  """
@@ -293,16 +309,14 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(
-            self.messageText.find('To: <eggs@spamandeggs.com>') > 0)
+        self.assertTo('eggs@spamandeggs.com')
 
         request = self.LoadRequestForm(
             topic='test subject', replyto=['eggs@spam.com', 'spam@spam.com'])
 
         mailer.onSuccess(request.form, request)
 
-        self.assertTrue(self.messageText.find(
-            'To: <eggs@spam.com>, <spam@spam.com>') > 0)
+        self.assertTo('eggs@spam.com, spam@spam.com')
 
     def setExecCondition(self, value):
         actions = get_actions(self.ff1)
@@ -386,11 +400,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageText = ''
         mailer.onSuccess(request.form, request)
         # look for labels
-        self.assertTrue(
-            self.messageBody.find('Subject') > 0 and
-            self.messageBody.find('Your E-Mail Address') > 0 and
-            self.messageBody.find('Comments') > 0
-        )
+        self.assertTrue(self.messageBody.find('Subject') > 0)
+        self.assertTrue(self.messageBody.find('Your E-Mail Address') > 0)
+        self.assertTrue(self.messageBody.find('Comments') > 0)
 
         # now, turn off required for a field and leave it empty
         fields = get_fields(self.ff1)
@@ -400,11 +412,9 @@ class TestFunctions(base.EasyFormTestCase):
             topic='test subject', replyto='test@test.org',)
         self.messageText = ''
         mailer.onSuccess(request.form, request)
-        self.assertTrue(
-            self.messageBody.find('Subject') > 0 and
-            self.messageBody.find('Your E-Mail Address') > 0 and
-            self.messageBody.find('Comments') < 0
-        )
+        self.assertTrue(self.messageBody.find('Subject') > 0)
+        self.assertTrue(self.messageBody.find('Your E-Mail Address') > 0)
+        self.assertTrue(self.messageBody.find('Comments') < 0)
 
     def test_ccOverride(self):
         """ Test override for CC field """

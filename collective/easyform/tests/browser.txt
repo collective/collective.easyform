@@ -12,17 +12,22 @@ Add a new EasyForm::
     >>> browser.getLink('EasyForm').click()
     >>> browser.getControl('Title').value = 'testform'
     >>> browser.getControl('Save').click()
+    >>> browser.url
+    'http://nohost/plone/testform/...'
 
 We'll want to test the save data adapter later.
 Let's add one now::
 
     >>> browser.getLink('Actions').click()
-    >>> browser.getLink('Add new action…').click()
+    >>> browser.getControl('Add new action…').click()
     >>> browser.getControl('Title').value = 'saver'
     >>> browser.getControl('Short Name').value = 'saver'
     >>> browser.getControl('Save Data').selected = True
     >>> browser.getControl('Add').click()
+    >>> browser.open('http://nohost/plone/testform/@@actions/')
     >>> 'http://nohost/plone/testform/actions/saver' in browser.contents
+    True
+    >>> 'Field added successfully.' in browser.contents
     True
 
 Return to form and confirm that it renders properly::
@@ -78,7 +83,7 @@ base class)::
 Add a new fieldset::
 
     >>> browser.getLink('Fields').click()
-    >>> browser.getLink('Add new fieldset…').click()
+    >>> browser.getControl('Add new fieldset…').click()
     >>> browser.getControl('Title').value = 'New fieldset'
     >>> browser.getControl('Short Name').value = 'new_fieldset'
     >>> browser.getControl('Add').click()
@@ -282,7 +287,7 @@ We want to test security on the custom script adapter. Let's add one::
 
     >>> browser.open(self.portal_url + '/testform')
     >>> browser.getLink('Actions').click()
-    >>> browser.getLink('Add new action…').click()
+    >>> browser.getControl('Add new action…').click()
     >>> browser.getControl('Title').value = 'Test Script Adapter'
     >>> browser.getControl('Short Name').value = 'test_script_adapter'
     >>> browser.getControl('Custom Script').selected = True
