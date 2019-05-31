@@ -13,10 +13,6 @@ Introduction
     :target: http://badge.fury.io/py/collective.easyform
     :alt: Fury Python
     
-.. figure:: http://quintagroup.com/services/plone-development/products/easyform/easyform.png
-    :target: https://github.com/collective/collective.easyform
-    :alt: Logo
-
 Collective.easyform enables creation of custom forms using dexterity. This Plone package is similar to Products.PloneFormGen that is based on Archetypes. Dexterity is a new platform for content types in Plone and will be used instead of Archetypes in Plone 5. Easyform provides a Plone form builder through-the-web using fields, widgets, actions and validators.
 
 Similarly to PloneFormGen, Easyform is used to generate web forms that save or mail form input. Simple and user-friendly interface allows non-programmers to create custom forms. 
