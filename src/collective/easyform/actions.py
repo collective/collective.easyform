@@ -337,10 +337,10 @@ class Mailer(Action):
         if field is None:
             return ''
         if isinstance(field, (set, list, tuple)):
-            list_value = list([serialize(f) for f in field])
+            list_value = list([self.serialize(f) for f in field])
             return dumps(list_value)
         if isinstance(field, dict):
-            dict_value = {str(key): serialize(val) for key, val in field.items()}
+            dict_value = {str(key): self.serialize(val) for key, val in field.items()}
             return dumps(dict_value)
         if isinstance(field, RichTextValue):
             return field.raw
