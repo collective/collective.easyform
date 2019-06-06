@@ -27,6 +27,8 @@ from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 from zope.schema import ValidationError
 from zope.schema import getFieldsInOrder
+from zope.event import notify
+from z3c.form.events import DataExtractedEvent
 
 logger = getLogger('collective.easyform')
 PMF = MessageFactory('plone')
@@ -319,4 +321,5 @@ class EasyFormInlineValidationView(InlineValidationView):
 
     def __call__(self, fname=None, fset=None):
         self.context = EasyFormForm(self.context, self.request)
+        print fname, fset
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
