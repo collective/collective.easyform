@@ -4,6 +4,8 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+- Fix validation and inline validation for fields in fieldsets. Refs #172. [frevd]
+
 - Moved from dotted to named behaviors.
   [iham]
 
