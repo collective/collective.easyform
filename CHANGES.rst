@@ -33,6 +33,8 @@ New:
 
 Fixes:
 
+- Fix inline validation. Backport for 1.x from #59 . Possibly also closes #5 (running spinner). [tomgross, fredvd]
+
 - Fixed errors with ``header_injection`` implementation. [maurits]
 
 - Add missing ``header_injection`` implementation. Backport for 1.x from #152. [krissik, fredvd]

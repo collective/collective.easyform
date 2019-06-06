@@ -25,7 +25,6 @@ from zope.component import provideUtility
 def isValidEmail(value):
     """Check for the user email address"""
     portal = getUtility(ISiteRoot)
-
     reg_tool = getToolByName(portal, 'portal_registration')
     if not (value and reg_tool.isValidEmail(value)):
         raise EmailAddressInvalid

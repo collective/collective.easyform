@@ -13,6 +13,7 @@ from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from logging import getLogger
+from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
 from plone.z3cform import interfaces
 from plone.z3cform.layout import FormWrapper
@@ -313,3 +314,9 @@ class EasyFormFormEmbedded(EasyFormForm):
     EasyForm form embedded
     """
     template = ViewPageTemplateFile('easyform_form_embedded.pt')
+
+class EasyFormInlineValidationView(InlineValidationView):
+
+    def __call__(self, fname=None, fset=None):
+        self.context = EasyFormForm(self.context, self.request)
+        return super(EasyFormInlineValidationView, self).__call__(fname, fset)
