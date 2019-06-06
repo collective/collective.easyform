@@ -14,7 +14,9 @@ from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator as z3c_validator
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
+from z3c.form.interfaces import IGroup
 from zope.component import adapts
+from zope.component import adapter
 from zope.component import queryUtility
 from zope.interface import Interface
 from zope.interface import Invalid
@@ -26,11 +28,11 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
+@implementer(IValidator)
+@adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
 
-    """ z3c.form validator class for easyform fields """
-    implements(IValidator)
-    adapts(IEasyForm, Interface, IEasyFormForm, IField, Interface)
+    """ z3c.form validator class for easyform fields in the default fieldset"""
 
     def validate(self, value):
         """ Validate field by TValidator """
@@ -53,6 +55,15 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
                 raise Invalid(e)
             if cerr:
                 raise Invalid(cerr)
+
+
+@implementer(IValidator)
+@adapter(IEasyForm, Interface, IGroup, IField, Interface)
+class GroupFieldExtenderValidator(FieldExtenderValidator):
+
+    """ z3c.form validator class for easyform fields in fieldset groups """
+
+    pass
 
 
 class FieldExtenderDefault(object):

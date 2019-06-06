@@ -33,6 +33,8 @@ New:
 
 Fixes:
 
+- Fix validation and inline validation for fields in fieldsets. Refs #172. [frevd]
+
 - Fix inline validation. Backport for 1.x from #59 . Possibly also closes #5 (running spinner). [tomgross, fredvd]
 
 - Fixed errors with ``header_injection`` implementation. [maurits]
