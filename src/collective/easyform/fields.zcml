@@ -12,6 +12,10 @@
         factory=".fields.FieldExtenderDefault"
         name="default"
         />
+    <adapter
+        factory=".fields.GroupFieldExtenderDefault"
+        name="default"
+        />
     <utility
         name="collective.easyform.fields.Label"
         component=".fields.LabelFactory"
