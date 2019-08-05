@@ -12,8 +12,12 @@ from ZPublisher.BaseRequest import BaseRequest
 from collective.easyform import validators
 from collective.easyform.api import get_fields
 from collective.easyform.api import set_fields
+from collective.easyform.browser.view import EasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
+from os.path import dirname
+from os.path import join
+from plone.namedfile.file import NamedFile
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
@@ -100,6 +104,73 @@ class TestBaseValidators(base.EasyFormTestCase):
 
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
+
+
+class TestSingleFieldValidator(base.EasyFormTestCase):
+
+    """ test validator in form outside of fieldset
+
+    The test methods are reused in TestFieldsetValidator.
+    They use the same field, except that one has it in a fieldset.
+    """
+    schema_fixture = "single_field.xml"
+
+    def afterSetUp(self):
+        self.folder.invokeFactory("EasyForm", "ff1")
+        self.ff1 = getattr(self.folder, "ff1")
+        self.ff1.CSRFProtection = False  # no csrf protection
+        self.ff1.showAll = True
+        self.portal.invokeFactory("File", "easyform_default_fields.xml")
+
+        field_template = self.portal["easyform_default_fields.xml"]
+        with open(join(dirname(__file__), "fixtures", self.schema_fixture)) as f:
+            filecontent = NamedFile(f.read(), contentType="application/xml")
+        field_template.file = filecontent
+        classImplements(BaseRequest, IFormLayer)
+        validators.update_validators()
+
+    def LoadRequestForm(self, **kwargs):
+        request = self.layer["request"]
+        request.form.clear()
+        prefix = "form.widgets."
+        for key in kwargs.keys():
+            request.form[prefix + key] = kwargs[key]
+        return request
+
+    def test_get_default(self):
+        # With a GET, we should see the default value in the form.
+        request = self.LoadRequestForm()
+        request.method = "GET"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('Required input is missing.', form)
+        self.assertIn('value="foo@example.org"', form)
+
+    def test_required(self):
+        data = {"replyto": ""}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn('Required input is missing.', form)
+        self.assertNotIn('Invalid email address.', form)
+
+    def test_validator_in_fieldset(self):
+        data = {
+            "replyto": "bad email address",
+        }
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('Required input is missing.', form)
+        self.assertIn('Invalid email address.', form)
+
+
+class TestFieldsetValidator(TestSingleFieldValidator):
+
+    """ test validator in fieldset
+
+    This reuses the test methods from TestSingleFieldValidator.
+    """
+    schema_fixture = "fieldset_with_single_field.xml"
 
 
 class TestCustomValidators(base.EasyFormTestCase):
