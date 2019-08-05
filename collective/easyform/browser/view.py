@@ -321,5 +321,4 @@ class EasyFormInlineValidationView(InlineValidationView):
 
     def __call__(self, fname=None, fset=None):
         self.context = EasyFormForm(self.context, self.request)
-        print fname, fset
         return super(EasyFormInlineValidationView, self).__call__(fname, fset)
