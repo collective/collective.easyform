@@ -4,9 +4,13 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+NOTE: if you deploy 2.1.1+, the easyform extended validations start working again on fields
+in extra field sets (they only worked on the main/default fields). This could cause some 
+issues if those validators, or default values, were misconfigured in the first place. 
+
 - Fixed validation, inline validation, and defaults for fields in fieldsets.
   Refs issues `#172 <https://github.com/collective/collective.easyform/issues/172>`_
-  and ` #157 <https://github.com/collective/collective.easyform/issues/157>`_. [frevd, maurits]
+  and ` #157 <https://github.com/collective/collective.easyform/issues/157>`_. [fredvd, maurits]
 
 - Moved from dotted to named behaviors.
   [iham]
