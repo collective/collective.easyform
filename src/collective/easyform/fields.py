@@ -11,6 +11,7 @@ from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator as z3c_validator
+from z3c.form.interfaces import IGroup
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
 from zope.component import adapter
@@ -28,7 +29,7 @@ from zope.schema.interfaces import IField
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
 
-    """ z3c.form validator class for easyform fields """
+    """ z3c.form validator class for easyform fields in the default fieldset"""
 
     def validate(self, value):
         """ Validate field by TValidator """
@@ -53,11 +54,20 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
                 raise Invalid(cerr)
 
 
+@implementer(IValidator)
+@adapter(IEasyForm, Interface, IGroup, IField, Interface)
+class GroupFieldExtenderValidator(FieldExtenderValidator):
+
+    """ z3c.form validator class for easyform fields in fieldset groups """
+
+    pass
+
+
 @implementer(IValue)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderDefault(object):
 
-    """ z3c.form default class for easyform fields """
+    """ z3c.form default class for easyform fields in the default fieldset """
 
     def __init__(self, context, request, view, field, widget):
         self.context = context
@@ -72,6 +82,15 @@ class FieldExtenderDefault(object):
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, "TDefault", None)
         return get_expression(self.context, TDefault) if TDefault else fdefault
+
+
+@implementer(IValue)
+@adapter(IEasyForm, Interface, IGroup, IField, Interface)
+class GroupFieldExtenderDefault(FieldExtenderDefault):
+
+    """ z3c.form default class for easyform fields in fieldset groups """
+
+    pass
 
 
 @implementer(IFromUnicode, ILabel)

@@ -4,6 +4,10 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+- Fixed validation, inline validation, and defaults for fields in fieldsets.
+  Refs issues `#172 <https://github.com/collective/collective.easyform/issues/172>`_
+  and ` #157 <https://github.com/collective/collective.easyform/issues/157>`_. [frevd, maurits]
+
 - Moved from dotted to named behaviors.
   [iham]
 
