@@ -6,7 +6,14 @@
         factory=".fields.FieldExtenderValidator"
         />
     <adapter
+        factory=".fields.GroupFieldExtenderValidator"
+        />
+    <adapter
         factory=".fields.FieldExtenderDefault"
+        name="default"
+        />
+    <adapter
+        factory=".fields.GroupFieldExtenderDefault"
         name="default"
         />
     <utility
