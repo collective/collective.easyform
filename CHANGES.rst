@@ -15,6 +15,9 @@ issues if those validators, or default values, were misconfigured in the first p
 - Moved from dotted to named behaviors.
   [iham]
 
+- Avoid potential CannotGetPortalError on startup #164
+  [laulaz]
+
 
 2.1.0 (2019-04-25)
 ------------------

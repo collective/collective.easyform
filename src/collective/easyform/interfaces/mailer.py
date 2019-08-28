@@ -26,7 +26,11 @@ def default_mail_body():
 
         Acquire 'mail_body_default.pt' or return hard coded default
     """
-    portal = api.portal.get()
+    try:
+        portal = api.portal.get()
+    except api.exc.CannotGetPortalError:
+        return config.MAIL_BODY_DEFAULT
+
     mail_body_default = portal.restrictedTraverse(
         "easyform_mail_body_default.pt", default=None
     )
