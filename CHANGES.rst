@@ -4,9 +4,13 @@ Changelog
 1.0a4 (unreleased)
 ------------------
 
+NOTE: if you deploy 1.0.4+, the easyform extended validations start working again on fields
+in extra field sets (they only worked on the main/default fields). This could cause some
+issues if those validators, or default values, were misconfigured in the first place.
+
 New:
 
-- Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
+- Add 'easyform-thankspage' css class to the content-core div if the thankspage is
   displayed. Combined with the header_injection field you can style elements
   only for the thankspage, for example as a workaround to remove empty
   fieldsets (#154). [fredvd]
@@ -33,7 +37,9 @@ New:
 
 Fixes:
 
-- Fix validation and inline validation for fields in fieldsets. Refs #172. [frevd]
+- Fixed validation, inline validation, and defaults for fields in fieldsets.
+  Refs issues `#172 <https://github.com/collective/collective.easyform/issues/172>`_
+  and ` #157 <https://github.com/collective/collective.easyform/issues/157>`_. [frevd, maurits]
 
 - Fix inline validation. Backport for 1.x from #59 . Possibly also closes #5 (running spinner). [tomgross, fredvd]
 

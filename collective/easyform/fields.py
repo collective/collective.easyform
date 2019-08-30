@@ -66,11 +66,11 @@ class GroupFieldExtenderValidator(FieldExtenderValidator):
     pass
 
 
+@implementer(IValue)
+@adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderDefault(object):
 
-    """ z3c.form default class for easyform fields """
-    implements(IValue)
-    adapts(IEasyForm, Interface, IEasyFormForm, IField, Interface)
+    """ z3c.form default class for easyform fields in the default fieldset """
 
     def __init__(self, context, request, view, field, widget):
         self.context = context
@@ -85,6 +85,15 @@ class FieldExtenderDefault(object):
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, 'TDefault', None)
         return get_expression(self.context, TDefault) if TDefault else fdefault
+
+
+@implementer(IValue)
+@adapter(IEasyForm, Interface, IGroup, IField, Interface)
+class GroupFieldExtenderDefault(FieldExtenderDefault):
+
+    """ z3c.form default class for easyform fields in fieldset groups """
+
+    pass
 
 
 @implementer(IFromUnicode)

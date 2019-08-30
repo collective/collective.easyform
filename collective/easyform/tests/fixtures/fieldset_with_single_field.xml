@@ -1,0 +1,10 @@
+<model xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:indexer="http://namespaces.plone.org/supermodel/indexer" xmlns:lingua="http://namespaces.plone.org/supermodel/lingua" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:users="http://namespaces.plone.org/supermodel/users" xmlns="http://namespaces.plone.org/supermodel/schema">
+  <schema>
+    <fieldset name="fs1" label="Fieldset 1">
+      <field name="replyto" type="zope.schema.TextLine" easyform:TDefault="python:'foo@example.org'" easyform:serverSide="False" easyform:validators="isValidEmail">
+        <description/>
+        <title>Your E-Mail Address</title>
+      </field>
+    </fieldset>
+  </schema>
+</model>
