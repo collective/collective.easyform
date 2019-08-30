@@ -4,6 +4,10 @@ Changelog
 1.0a4 (unreleased)
 ------------------
 
+NOTE: if you deploy 1.0.4+, the easyform extended validations start working again on fields
+in extra field sets (they only worked on the main/default fields). This could cause some
+issues if those validators, or default values, were misconfigured in the first place.
+
 New:
 
 - Add 'easyform-thankspage' css class to the content-core div if the thankspage is
