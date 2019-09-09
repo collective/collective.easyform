@@ -82,11 +82,11 @@
         zcml:condition="installed collective.z3cform.norobots">
         <utility
             name="collective.easyform.fields.NorobotCaptcha"
-            component=".fields.NorobotFactory"
+            component="..fields.NorobotFactory"
             />
         <utility
             name="collective.easyform.fields.NorobotCaptcha"
-            component=".fields.NorobotCaptchaHandler"
+            component="..fields.NorobotCaptchaHandler"
             />
         <adapter
             for="
