@@ -23,6 +23,9 @@ issues if those validators, or default values, were misconfigured in the first p
 - Avoid potential CannotGetPortalError on startup #164
   [laulaz]
 
+- Add collective.z3cform.norobots integration #145
+  [1letter/gomez]
+
 
 2.1.0 (2019-04-25)
 ------------------

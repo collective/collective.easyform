@@ -40,6 +40,11 @@ class Fixture(PloneSandboxLayer):
             self.loadZCML(package=plone.formwidget.recaptcha)
         except ImportError:
             pass
+        try:
+            import collective.z3cform.norobots
+            self.loadZCML(package=collective.z3cform.norobots)
+        except ImportError:
+            pass
 
         # set default publisher encoding for Plone 5.1
         # this is set in zope.conf via plone.recipe.zope2instance but for

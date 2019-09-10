@@ -114,6 +114,43 @@ As last step you might want to not include the recaptcha field in the thanks pag
 To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
 Likewise for the mailing: Open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
 
+
+collective.z3cform.norobots support
+===================================
+
+Install ``collective.easyform`` with the  ``norobots`` extra:
+
+.. code-block:: shell
+
+    [buildout]
+
+    ...
+
+    eggs =
+        collective.easyform [norobots]
+
+
+And run buildout and install EasyForm as described above.
+
+Then go to the EasyFrom controlpanel (``/@@easyform-controlpanel``) and add the "NorobotCaptcha" field to "Allowed Fields".
+Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:
+
+.. code-block:: xml
+
+    <record name="easyform.allowedFields">
+      <value purge="False">
+        <element>collective.easyform.fields.NorobotCaptcha</element>
+      </value>
+    </record>
+
+Then add the NorobotCaptcha field to the forms where you want to use it.
+As field type use ``NorobotCaptcha`` and set ``require`` to false.
+
+As last step you might want to not include the norobotcaptcha field in the thanks page and mailer action.
+To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
+Likewise for the mailing: Open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
+
+
 Actions
 =======
 
