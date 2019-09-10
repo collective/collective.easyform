@@ -9,6 +9,7 @@ import re
 import six
 import transaction
 import unittest
+import os
 
 
 optionflags = (
@@ -47,6 +48,9 @@ def get_browser(layer, auth=True):
         browser.addHeader("Authorization", "Basic adm:secret")
     return browser
 
+def get_image_path():
+    dir_name = os.path.dirname(os.path.realpath(__file__))
+    return '{0}/PloneLogo.png'.format(dir_name)
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -56,7 +60,8 @@ def test_suite():
                 doctest.DocFileSuite(
                     f,
                     optionflags=optionflags,
-                    globs={"get_browser": get_browser},
+                    globs={"get_browser": get_browser,
+                           "get_image_path": get_image_path},
                     checker=Py23DocChecker(),
                 ),
                 layer=FUNCTIONAL_TESTING,
