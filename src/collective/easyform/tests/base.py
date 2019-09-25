@@ -58,6 +58,10 @@ class Fixture(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         # Install the collective.easyform product
         self.applyProfile(portal, "collective.easyform:default")
+        try:
+            self.applyProfile(portal, "plone.formwidget.recaptcha:default")
+        except KeyError:
+            pass
         setRoles(portal, TEST_USER_ID, ["Manager"])
         portal.manage_changeProperties(email_from_address="mdummy@address.com")
         portal.MailHost = mailhost = MailHostMock()

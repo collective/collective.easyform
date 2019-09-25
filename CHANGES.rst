@@ -26,6 +26,8 @@ issues if those validators, or default values, were misconfigured in the first p
 - Add collective.z3cform.norobots integration #145
   [1letter/gomez]
 
+- Put in tests to show recaptcha validation prevents submissions
+  [djay]
 
 2.1.0 (2019-04-25)
 ------------------
