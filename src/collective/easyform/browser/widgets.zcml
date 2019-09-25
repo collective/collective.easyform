@@ -93,4 +93,19 @@
              *"
         />
     </configure>
+    <configure
+        zcml:condition="installed collective.z3cform.norobots">
+        <adapter
+            factory="collective.z3cform.norobots.widget.NorobotsFieldWidget"
+            provides="z3c.form.interfaces.IFieldWidget"
+            for="collective.easyform.interfaces.INorobotCaptcha
+                *"
+            />
+        <z3c:widgetTemplate
+            layer="..interfaces.IEasyFormLayer"
+            mode="display"
+            template="empty.pt"
+            widget="collective.z3cform.norobots.widget.INorobotsWidget" />
+
+    </configure>
 </configure>

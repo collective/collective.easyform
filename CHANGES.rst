@@ -4,11 +4,31 @@ Changelog
 2.1.1 (unreleased)
 ------------------
 
+NOTE: if you deploy 2.1.1+, the easyform extended validations start working again on fields
+in extra field sets (they only worked on the main/default fields). This could cause some
+issues if those validators, or default values, were misconfigured in the first place.
+
+- Let ``filter_fields`` return fields in the correct order.
+  This fixes the order on the default mailer template.
+  Part of `issue #163 <https://github.com/collective/collective.easyform/issues/163>`_.
+  [maurits]
+
+- Fixed validation, inline validation, and defaults for fields in fieldsets.
+  Refs issues `#172 <https://github.com/collective/collective.easyform/issues/172>`_
+  and ` #157 <https://github.com/collective/collective.easyform/issues/157>`_. [fredvd, maurits]
+
 - Moved from dotted to named behaviors.
   [iham]
-
+  
+- Avoid potential CannotGetPortalError on startup #164
+  [laulaz]
+  
+- Add collective.z3cform.norobots integration #145
+  [1letter/gomez]
+  
 - Convert None value to empty string in form serialization
   [nngu6036]
+  
 
 2.1.0 (2019-04-25)
 ------------------
