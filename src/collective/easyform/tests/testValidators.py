@@ -368,7 +368,6 @@ class TestSingleRecaptchaValidator(base.EasyFormTestCase):
         proxy.public_key = u"foo"
         proxy.private_key = u"bar"
 
-
     def LoadRequestForm(self, **kwargs):
         request = self.layer["request"]
         request.form.clear()
