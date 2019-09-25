@@ -53,7 +53,7 @@ script:
 # Run code-analysis, except on Python 3.6, which mysteriously fails to find zc.buildout.
   - python --version 2> /dev/stdout | grep 3.6 || bin/code-analysis
   - bin/test --all $TEST_OPTIONS
-  - bin/createcoverage
+  - bin/createcoverage -t '--all $TEST_OPTIONS'
 after_success:
   - pip install -q coveralls
   - coveralls
