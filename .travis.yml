@@ -26,6 +26,7 @@ cache:
   - eggs
   - downloads
   - buildout-cache
+  - $HOME/buildout-cache
 before_install:
 # install chrome webdriver
   - mkdir webdriver;
