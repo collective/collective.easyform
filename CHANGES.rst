@@ -26,7 +26,7 @@ issues if those validators, or default values, were misconfigured in the first p
 - Add collective.z3cform.norobots integration #145
   [1letter/gomez]
   
-- Convert None value to empty string in form serialization
+- For CSV and XML attachments send an empty string if the value is None instead of the string "None"
   [nngu6036]
   
 
