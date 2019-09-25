@@ -19,12 +19,15 @@ issues if those validators, or default values, were misconfigured in the first p
 
 - Moved from dotted to named behaviors.
   [iham]
-
+  
 - Avoid potential CannotGetPortalError on startup #164
   [laulaz]
-
+  
 - Add collective.z3cform.norobots integration #145
   [1letter/gomez]
+
+- For CSV and XML attachments send an empty string if the value is None instead of the string "None"
+  [nngu6036]
 
 - Put in tests to show recaptcha validation prevents submissions
   [djay]

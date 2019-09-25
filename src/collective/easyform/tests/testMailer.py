@@ -512,6 +512,13 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             map=dict(fruit="apple"),
             choices=set(["A", "B"]),
+            empty_string='',
+            zero_value=0,
+            none_value=None,
+            empty_tuple=(),
+            empty_list=[],
+            empty_set=set(),
+            empty_map=dict()
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
@@ -535,6 +542,13 @@ class TestFunctions(base.EasyFormTestCase):
             b'<field name="tuple">["elemenet1", "element2"]</field>',
             b'<field name="list">["1", "2", "3", "4"]</field>',
             b'<field name="map">{"fruit": "apple"}</field>',
+            b'<field name="empty_string" />',
+            b'<field name="zero_value">0</field>',
+            b'<field name="none_value" />',
+            b'<field name="empty_tuple">[]</field>',
+            b'<field name="empty_list">[]</field>',
+            b'<field name="empty_set">[]</field>',
+            b'<field name="empty_map">{}</field>',
         )
 
         self.assertIn(b"<?xml version='1.0' encoding='utf-8'?>\n<form>", xml)
@@ -569,6 +583,13 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             map=dict(fruit="apple"),
             choices=set(["A", "B"]),
+            empty_string='',
+            zero_value=0,
+            none_value=None,
+            empty_tuple=(),
+            empty_list=[],
+            empty_set=set(),
+            empty_map=dict()
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
@@ -592,6 +613,13 @@ class TestFunctions(base.EasyFormTestCase):
             b'[""elemenet1"", ""element2""]',
             b'[""1"", ""2"", ""3"", ""4""]',
             b'{""fruit"": ""apple""}',
+            b"",
+            b"0",
+            b"",
+            b"[]",
+            b"[]",
+            b"[]",
+            b"{}",
         )
 
         # the order of the columns can change ... check each
