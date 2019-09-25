@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
+from plone.registry.interfaces import IRegistry
+
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
@@ -337,3 +340,52 @@ class TestSizeValidator(base.EasyFormTestCase):
             DummyFile(filename="foo"), allowed_types=("txt",)
         )
         self.assertEqual(translate(validation), u'File type "" is not allowed!')
+
+
+class TestSingleRecaptchaValidator(base.EasyFormTestCase):
+
+    """ Can't test captcha passes but we can test it fails
+    """
+    schema_fixture = "recaptcha.xml"
+
+    def afterSetUp(self):
+        self.folder.invokeFactory("EasyForm", "ff1")
+        self.ff1 = getattr(self.folder, "ff1")
+        self.ff1.CSRFProtection = False  # no csrf protection
+        self.ff1.showAll = True
+        field_template = api.content.create(
+            self.layer["portal"], "File", id="easyform_default_fields.xml"
+        )
+        with open(join(dirname(__file__), "fixtures", self.schema_fixture)) as f:
+            filecontent = NamedFile(f.read(), contentType="application/xml")
+        field_template.file = filecontent
+        classImplements(BaseRequest, IFormLayer)
+        validators.update_validators()
+
+        # Put some dummy values for recaptcha
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IReCaptchaSettings)
+        proxy.public_key = u"foo"
+        proxy.private_key = u"bar"
+
+    def LoadRequestForm(self, **kwargs):
+        request = self.layer["request"]
+        request.form.clear()
+        prefix = "form.widgets."
+        for key in kwargs.keys():
+            request.form[prefix + key] = kwargs[key]
+        return request
+
+    def test_no_answer(self):
+        data = {"verification": ""}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn('The code you entered was wrong, please enter the new one.', form)
+
+    def test_wrong(self):
+        data = {"verification": "123"}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn('The code you entered was wrong, please enter the new one.', form)
