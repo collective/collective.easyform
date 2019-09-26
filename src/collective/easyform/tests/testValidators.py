@@ -392,6 +392,7 @@ class TestSingleRecaptchaValidator(base.EasyFormTestCase):
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
         self.assertNotIn('Thanks for your input.', form)
 
+
 class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
     """ make sure it works inside a fieldset too
     """
