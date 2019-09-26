@@ -12,12 +12,12 @@ from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
 from z3c.form import validator as z3c_validator
-from z3c.form.interfaces import IGroup
+from z3c.form.interfaces import IGroup, IForm
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
-from zope.component import adapter
+from zope.component import adapter, queryMultiAdapter
 from zope.component import queryUtility
-from zope.interface import implementer
+from zope.interface import implementer, providedBy
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema import Field
@@ -26,15 +26,39 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
+@implementer(IForm)
+class GenericFormWrapper(object):
+    def __init__(self, view):
+        self.__view__ = view
+    def __getattr__(self, item):
+        return getattr(self.__view__, item)
+
+
+
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
-class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
-
+class FieldExtenderValidator(object):
     """ z3c.form validator class for easyform fields in the default fieldset"""
+
+    def __init__(self, context, request, view, field, widget):
+        self.context = context
+        self.request = request
+        self.view = view
+        self.field = field
+        self.widget = widget
+
 
     def validate(self, value):
         """ Validate field by TValidator """
-        super(FieldExtenderValidator, self).validate(value)
+
+        # First see if there is a another validator adapter for the field which isn't us
+        view = GenericFormWrapper(self.view)
+        assert providedBy(view)(IForm)
+        assert not providedBy(view)(IEasyFormForm)
+        validator = queryMultiAdapter((self.context, self.request, view, self.field, self.widget), IValidator)
+        if validator is not None:
+            validator.validate(value)
+
         efield = IFieldExtender(self.field)
         validators = getattr(efield, "validators", [])
         if validators:
