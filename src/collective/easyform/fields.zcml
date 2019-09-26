@@ -51,5 +51,15 @@
             provides="z3c.form.interfaces.IValidator"
             factory="plone.formwidget.recaptcha.ReCaptchaValidator"
             />
+        <!-- important as we need to override GroupFieldExtenderValidator above -->
+        <adapter
+            for="collective.easyform.interfaces.IEasyForm
+                 *
+                 z3c.form.interfaces.IGroup
+                 collective.easyform.interfaces.IReCaptcha
+                 *"
+            provides="z3c.form.interfaces.IValidator"
+            factory="plone.formwidget.recaptcha.ReCaptchaValidator"
+            />
     </configure>
 </configure>
