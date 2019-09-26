@@ -51,7 +51,8 @@
             provides="z3c.form.interfaces.IValidator"
             factory="plone.formwidget.recaptcha.ReCaptchaValidator"
             />
-        <!-- important as we need to override GroupFieldExtenderValidator above -->
+        <!-- important as we need to override GroupFieldExtenderValidator above
+             TODO: has to be better way. GroupFieldExtenderValidator should be calling the default validator adapter -->
         <adapter
             for="collective.easyform.interfaces.IEasyForm
                  *
