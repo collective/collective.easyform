@@ -106,6 +106,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
 
+
 class LoadFixtureBase(base.EasyFormTestCase):
     schema_fixture = "single_field.xml"
 
@@ -178,7 +179,6 @@ class TestFieldsetValidator(TestSingleFieldValidator):
 
 
 class TestCustomValidators(base.EasyFormTestCase):
-
     """ test our validators """
 
     def ttest_inExNumericRange(self):
@@ -378,19 +378,14 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
 
 
-class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
-    """ make sure it works inside a fieldset too
-    """
-
-    schema_fixture = "fieldset_recaptcha.xml"
-
-
 class DummyUpload(FileUpload):
     def __init__(self, size, filename):
         self.file = StringIO("x" * size)
-        self.filename = filename
-        self.headers = []
-        self.name = 'file1'
+        self.file.filename = filename
+        self.file.headers = []
+        self.file.name = 'file1'
+        self.file.file = self.file
+        FileUpload.__init__(self, self.file)
 
 
 class TestFieldsetFileValidator(LoadFixtureBase):
