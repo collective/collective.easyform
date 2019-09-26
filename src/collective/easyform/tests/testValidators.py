@@ -104,7 +104,6 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(len(errors), 1)
 
 
-
 class LoadFixtureBase(base.EasyFormTestCase):
 
     """ test validator in form outside of fieldset
