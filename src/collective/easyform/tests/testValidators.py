@@ -382,6 +382,7 @@ class TestSingleRecaptchaValidator(base.EasyFormTestCase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
+        self.assertNotIn('Thanks for your input.', form)
 
     def test_wrong(self):
         data = {"verification": "123"}
@@ -389,3 +390,10 @@ class TestSingleRecaptchaValidator(base.EasyFormTestCase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
+        self.assertNotIn('Thanks for your input.', form)
+
+class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
+
+    """ make sure it works inside a fieldset too
+    """
+    schema_fixture = "fieldset_recaptcha.xml"
