@@ -35,6 +35,7 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
     def validate(self, value):
         """ Validate field by TValidator """
         super(FieldExtenderValidator, self).validate(value)
+
         efield = IFieldExtender(self.field)
         validators = getattr(efield, "validators", [])
         if validators:

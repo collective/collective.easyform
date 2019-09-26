@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from StringIO import StringIO
+
+from ZPublisher.HTTPRequest import FileUpload
 from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
 from plone.registry.interfaces import IRegistry
 
@@ -103,14 +106,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
 
-
-class TestSingleFieldValidator(base.EasyFormTestCase):
-
-    """ test validator in form outside of fieldset
-
-    The test methods are reused in TestFieldsetValidator.
-    They use the same field, except that one has it in a fieldset.
-    """
+class LoadFixtureBase(base.EasyFormTestCase):
     schema_fixture = "single_field.xml"
 
     def afterSetUp(self):
@@ -134,6 +130,16 @@ class TestSingleFieldValidator(base.EasyFormTestCase):
         for key in kwargs.keys():
             request.form[prefix + key] = kwargs[key]
         return request
+
+
+class TestSingleFieldValidator(LoadFixtureBase):
+
+    """ test validator in form outside of fieldset
+
+    The test methods are reused in TestFieldsetValidator.
+    They use the same field, except that one has it in a fieldset.
+    """
+    schema_fixture = "single_field.xml"
 
     def test_get_default(self):
         # With a GET, we should see the default value in the form.
@@ -342,39 +348,20 @@ class TestSizeValidator(base.EasyFormTestCase):
         self.assertEqual(translate(validation), u'File type "" is not allowed!')
 
 
-class TestSingleRecaptchaValidator(base.EasyFormTestCase):
+class TestSingleRecaptchaValidator(LoadFixtureBase):
 
     """ Can't test captcha passes but we can test it fails
     """
     schema_fixture = "recaptcha.xml"
 
     def afterSetUp(self):
-        self.folder.invokeFactory("EasyForm", "ff1")
-        self.ff1 = getattr(self.folder, "ff1")
-        self.ff1.CSRFProtection = False  # no csrf protection
-        self.ff1.showAll = True
-        field_template = api.content.create(
-            self.layer["portal"], "File", id="easyform_default_fields.xml"
-        )
-        with open(join(dirname(__file__), "fixtures", self.schema_fixture)) as f:
-            filecontent = NamedFile(f.read(), contentType="application/xml")
-        field_template.file = filecontent
-        classImplements(BaseRequest, IFormLayer)
-        validators.update_validators()
+        super(TestSingleRecaptchaValidator, self).afterSetUp()
 
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IReCaptchaSettings)
         proxy.public_key = u"foo"
         proxy.private_key = u"bar"
-
-    def LoadRequestForm(self, **kwargs):
-        request = self.layer["request"]
-        request.form.clear()
-        prefix = "form.widgets."
-        for key in kwargs.keys():
-            request.form[prefix + key] = kwargs[key]
-        return request
 
     def test_no_answer(self):
         data = {"verification": ""}
@@ -389,3 +376,48 @@ class TestSingleRecaptchaValidator(base.EasyFormTestCase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
+
+
+class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
+    """ make sure it works inside a fieldset too
+    """
+
+    schema_fixture = "fieldset_recaptcha.xml"
+
+
+class DummyUpload(FileUpload):
+    def __init__(self, size, filename):
+        self.file = StringIO("x" * size)
+        self.filename = filename
+        self.headers = []
+        self.name = 'file1'
+
+
+class TestFieldsetFileValidator(LoadFixtureBase):
+    """ ensure file validators works
+    """
+
+    schema_fixture = "fieldset_file.xml"
+
+    def test_wrong_type(self):
+        data = {"file1": DummyUpload(20, "blah.txt")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('Thanks for your input.', form)
+        self.assertIn('File type "TXT" is not allowed!', form)
+
+    def test_right_type(self):
+        data = {"file1": DummyUpload(20, "blah.pdf")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn('Thanks for your input.', form)
+
+    def test_too_big(self):
+        data = {"file1": DummyUpload(2000, "blah.pdf")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('Thanks for your input.', form)
+        self.assertIn('File is bigger than allowed size of 300 bytes!', form)
