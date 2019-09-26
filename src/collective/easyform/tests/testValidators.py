@@ -183,7 +183,6 @@ class TestFieldsetValidator(TestSingleFieldValidator):
 
 
 class TestCustomValidators(base.EasyFormTestCase):
-
     """ test our validators """
 
     def ttest_inExNumericRange(self):
@@ -367,7 +366,6 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
         proxy = registry.forInterface(IReCaptchaSettings)
         proxy.public_key = u"foo"
         proxy.private_key = u"bar"
-
 
     def test_no_answer(self):
         data = {"verification": ""}

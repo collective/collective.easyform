@@ -11,7 +11,6 @@ from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
-from z3c.form import validator as z3c_validator
 from z3c.form.interfaces import IGroup, IForm
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
@@ -30,9 +29,9 @@ from zope.schema.interfaces import IField
 class GenericFormWrapper(object):
     def __init__(self, view):
         self.__view__ = view
+
     def __getattr__(self, item):
         return getattr(self.__view__, item)
-
 
 
 @implementer(IValidator)
@@ -46,7 +45,6 @@ class FieldExtenderValidator(object):
         self.view = view
         self.field = field
         self.widget = widget
-
 
     def validate(self, value):
         """ Validate field by TValidator """
