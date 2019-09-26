@@ -393,7 +393,7 @@ class TestSingleRecaptchaValidator(base.EasyFormTestCase):
         self.assertNotIn('Thanks for your input.', form)
 
 class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
-
     """ make sure it works inside a fieldset too
     """
+
     schema_fixture = "fieldset_recaptcha.xml"
