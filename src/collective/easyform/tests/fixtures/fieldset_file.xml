@@ -1,0 +1,12 @@
+<model xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:indexer="http://namespaces.plone.org/supermodel/indexer" xmlns:lingua="http://namespaces.plone.org/supermodel/lingua" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:users="http://namespaces.plone.org/supermodel/users" xmlns="http://namespaces.plone.org/supermodel/schema">
+  <schema>
+    <fieldset name="fs1" label="Fieldset 1">
+        <field name="file1" type="plone.namedfile.field.NamedFile" easyform:serverSide="False"
+               easyform:TValidator="python:portal.restrictedTraverse('validate_file')(value, size=300, allowed_types=('pdf', 'docx'))">
+            <description/>
+            <required>False</required>
+            <title>Upload</title>
+        </field>
+    </fieldset>
+  </schema>
+</model>
