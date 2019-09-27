@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+try:
+    from StringIO import StringIO  # for Python 2
+except ImportError:
+    from io import StringIO  # for Python 3
+from ZPublisher.HTTPRequest import FileUpload
 from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
 from plone.registry.interfaces import IRegistry
-
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
@@ -105,12 +109,12 @@ class TestBaseValidators(base.EasyFormTestCase):
 
 
 class LoadFixtureBase(base.EasyFormTestCase):
-
     """ test validator in form outside of fieldset
 
     The test methods are reused in TestFieldsetValidator.
     They use the same field, except that one has it in a fieldset.
     """
+
     schema_fixture = "single_field.xml"
 
     def afterSetUp(self):
@@ -388,3 +392,43 @@ class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
     """
 
     schema_fixture = "fieldset_recaptcha.xml"
+
+
+class DummyUpload(FileUpload):
+    def __init__(self, size, filename):
+        self.file = StringIO("x" * size)
+        self.file.filename = filename
+        self.file.headers = []
+        self.file.name = 'file1'
+        self.file.file = self.file
+        FileUpload.__init__(self, self.file)
+
+
+class TestFieldsetFileValidator(LoadFixtureBase):
+    """ ensure file validators works
+    """
+
+    schema_fixture = "fieldset_file.xml"
+
+    def test_wrong_type(self):
+        data = {"file1": DummyUpload(20, "blah.txt")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('Thanks for your input.', form)
+        self.assertIn('File type "TXT" is not allowed!', form)
+
+    def test_right_type(self):
+        data = {"file1": DummyUpload(20, "blah.pdf")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn('Thanks for your input.', form)
+
+    def test_too_big(self):
+        data = {"file1": DummyUpload(2000, "blah.pdf")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn('Thanks for your input.', form)
+        self.assertIn('File is bigger than allowed size of 300 bytes!', form)

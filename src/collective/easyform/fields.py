@@ -48,7 +48,6 @@ class FieldExtenderValidator(object):
 
     def validate(self, value):
         """ Validate field by TValidator """
-
         # First see if there is a another validator adapter for the field which isn't us
         view = GenericFormWrapper(self.view)
         assert providedBy(view)(IForm)
