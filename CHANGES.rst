@@ -32,6 +32,9 @@ issues if those validators, or default values, were misconfigured in the first p
 - Put in tests to show recaptcha validation prevents submissions
   [djay]
 
+- Fix UnicodeDecodeError while attaching an image to a mail #187
+  [krissik]
+
 2.1.0 (2019-04-25)
 ------------------
 

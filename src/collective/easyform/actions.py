@@ -464,14 +464,14 @@ class Mailer(Action):
             ctype = attachment[1]
             # encoding = attachment[2]
             content = attachment[3]
-            if not six.PY2 and isinstance(content, six.binary_type):
-                content = content.decode("utf-8")
             if ctype is None:
                 ctype = "application/octet-stream"
 
             maintype, subtype = ctype.split("/", 1)
 
             if maintype == "text":
+                if not six.PY2 and isinstance(content, six.binary_type):
+                    content = content.decode("utf-8")
                 msg = MIMEText(content, _subtype=subtype)
             elif maintype == "image":
                 msg = MIMEImage(content, _subtype=subtype)

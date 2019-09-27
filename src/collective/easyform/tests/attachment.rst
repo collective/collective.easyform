@@ -75,7 +75,7 @@ Submit the form with an image attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'image content'), 'image/gif', 'test.gif')
+    >>> browser.getControl(name='form.widgets.attachment').add_file(open(get_image_path(), 'rb'), 'image/png', 'test.png')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
@@ -84,8 +84,8 @@ Submit the form with an image attachment::
 Make sure the attachment was included in the email message::
 
 
-    >>> portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
-    b'image content'
+    >>> b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\xb4\x00\x00\x00/\x08\x06\x00\x00\x00Jl\xe0\xb2\x00\x00\x00\x06bKGD\x00\xff\x00\xff\x00\xff\xa0\xbd\xa7\x93\x00\x00\x10\xa8IDATx\x9c\xed\x9d{xT\xd5\xb5\xc0\x7f\xeb\x9c\t\t \xf8\xa0BQ\xd0\x86IxH}]\xad\xb6^\xad\x8f\xa2\xb4\x96\xaaU\xc1\x07>\x9a\x07\xc6\x8b\x8fj\xd5\xab\xb6\xda\xc6\xf7\xf5Q\xfba\xc5\x162\x93\x88\xd7\xf6r\xa3\xe2\x93\xab\xf7\x93[D[\xabT' in portal.MailHost.msg.get_payload()[1].get_payload(decode=True)
+    True
 
 Submit the form with an audio attachment::
 
@@ -163,7 +163,7 @@ Check saved data::
     >>> browser.getLink('Saver').click()
     >>> "5 input(s) saved" in browser.contents
     True
-    >>> ".widgets.attachment/@@download/test.gif" in browser.contents
+    >>> ".widgets.attachment/@@download/test.png" in browser.contents
     True
     >>> ".widgets.attachment/@@download/test.mp3" in browser.contents
     True
