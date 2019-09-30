@@ -108,7 +108,17 @@ class FieldExtenderDefault(object):
         fdefault = self.field.default
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, "TDefault", None)
-        return get_expression(self.context, TDefault) if TDefault else fdefault
+        if TDefault:
+            return get_expression(self.context, TDefault)
+
+        # see if there is another default adapter for this field instead
+        view = LessSpecificInterfaceWrapper(self.view, IForm)
+        adapter = queryMultiAdapter((self.context, self.request, view, self.field, self.widget), IValue, name='default')
+        if adapter is not None:
+            return adapter.get()
+        else:
+            # TODO: this should have already been done by z3c.form.widget.update() so shouldn't be needed
+            return self.field.default
 
 
 @implementer(IValue)
