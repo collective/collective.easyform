@@ -16,7 +16,7 @@ from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
 from zope.component import adapter, queryMultiAdapter
 from zope.component import queryUtility
-from zope.interface import implementer, providedBy
+from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema import Field
@@ -24,14 +24,18 @@ from zope.schema import TextLine
 from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
+def LessSpecificInterfaceWrapper(view, interface):
+    """ rewrap an adapter so it its class implements a different interface """
 
-@implementer(IForm)
-class GenericFormWrapper(object):
-    def __init__(self, view):
-        self.__view__ = view
+    @implementer(interface)
+    class Wrapper(object):
+        def __init__(self, view):
+            self.__view__ = view
 
-    def __getattr__(self, item):
-        return getattr(self.__view__, item)
+        def __getattr__(self, item):
+            return getattr(self.__view__, item)
+
+    return Wrapper(view)
 
 
 @implementer(IValidator)
@@ -48,10 +52,12 @@ class FieldExtenderValidator(object):
 
     def validate(self, value):
         """ Validate field by TValidator """
-        # First see if there is a another validator adapter for the field which isn't us
-        view = GenericFormWrapper(self.view)
-        assert providedBy(view)(IForm)
-        assert not providedBy(view)(IEasyFormForm)
+        view = LessSpecificInterfaceWrapper(self.view, IForm)
+        # view now doesn't implement IEasyFormForm so we can call another less specific validation adapter
+        # that might exist for this field. The above line prevents a loop.
+        # By default this will call SimpleFieldValidator.validator but allows for special fields
+        # custom validation to also be called
+
         validator = queryMultiAdapter((self.context, self.request, view, self.field, self.widget), IValidator)
         if validator is not None:
             validator.validate(value)
@@ -79,7 +85,6 @@ class FieldExtenderValidator(object):
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IGroup, IField, Interface)
 class GroupFieldExtenderValidator(FieldExtenderValidator):
-
     """ z3c.form validator class for easyform fields in fieldset groups """
 
     pass
