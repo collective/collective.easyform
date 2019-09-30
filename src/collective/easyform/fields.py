@@ -24,6 +24,7 @@ from zope.schema import TextLine
 from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
+
 def LessSpecificInterfaceWrapper(view, interface):
     """ rewrap an adapter so it its class implements a different interface """
 
@@ -105,7 +106,6 @@ class FieldExtenderDefault(object):
 
     def get(self):
         """ get default value of field from TDefault """
-        fdefault = self.field.default
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, "TDefault", None)
         if TDefault:
