@@ -16,7 +16,7 @@ from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
 from zope.component import adapter, queryMultiAdapter
 from zope.component import queryUtility
-from zope.interface import implementer
+from zope.interface import implementer, classProvides, providedBy
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema import Field
@@ -25,14 +25,19 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
-def nextAdapter(objects, provides, name=u''):
+def superAdapter(adapter, objects, name=u''):
     """ find the next most specific adapter """
 
     # HACK: We are hard coding adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
     #  one of the objects less specific. This allows us to find anotehr adapter other than our one. This allows us to
     #  find any custom adapters for any fields that we have overridden
-    # TODO: It would be better to to find an more automatic way to find the next most specific adapter
-    @implementer(IForm)
+    context, request, view, field, widget = objects
+    # TODO: it would be better if we didn't have hard code the view_interface
+    _, _, view_interface, _, _ = adapter.__class__.__component_adapts__
+    interfaces = list(providedBy(view).interfaces())
+    super_inferface = interfaces[interfaces.index(view_interface)+1]
+
+    @implementer(super_inferface)
     class Wrapper(object):
         def __init__(self, view):
             self.__view__ = view
@@ -40,9 +45,9 @@ def nextAdapter(objects, provides, name=u''):
         def __getattr__(self, item):
             return getattr(self.__view__, item)
 
-    context, request, view, field, widget = objects
     view = Wrapper(view)  # Make one class less specific
     objects = (context, request, view, field, widget)
+    provides = providedBy(adapter).declared[0]
 
     return queryMultiAdapter(objects, provides, name=name)
 
@@ -63,7 +68,7 @@ class FieldExtenderValidator(object):
         """ Validate field by TValidator """
         # By default this will call SimpleFieldValidator.validator but allows for a fields
         # custom validation adaptor to also be called such as recaptcha
-        validator = nextAdapter((self.context, self.request, self.view, self.field, self.widget), IValidator)
+        validator = superAdapter(self, (self.context, self.request, self.view, self.field, self.widget))
         if validator is not None:
             validator.validate(value)
 
@@ -116,7 +121,7 @@ class FieldExtenderDefault(object):
             return get_expression(self.context, TDefault)
 
         # see if there is another default adapter for this field instead
-        adapter = nextAdapter((self.context, self.request, self.view, self.field, self.widget), IValue, name='default')
+        adapter = superAdapter(self, (self.context, self.request, self.view, self.field, self.widget), name='default')
         if adapter is not None:
             return adapter.get()
         else:
