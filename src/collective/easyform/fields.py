@@ -25,10 +25,14 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
-def LessSpecificInterfaceWrapper(view, interface):
-    """ rewrap an adapter so it its class implements a different interface """
+def nextAdapter(objects, provides, name=u''):
+    """ find the next most specific adapter """
 
-    @implementer(interface)
+    # HACK: We are hard coding adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
+    #  one of the objects less specific. This allows us to find anotehr adapter other than our one. This allows us to
+    #  find any custom adapters for any fields that we have overridden
+    # TODO: It would be better to to find an more automatic way to find the next most specific adapter
+    @implementer(IForm)
     class Wrapper(object):
         def __init__(self, view):
             self.__view__ = view
@@ -36,7 +40,11 @@ def LessSpecificInterfaceWrapper(view, interface):
         def __getattr__(self, item):
             return getattr(self.__view__, item)
 
-    return Wrapper(view)
+    context, request, view, field, widget = objects
+    view = Wrapper(view)  # Make one class less specific
+    objects = (context, request, view, field, widget)
+
+    return queryMultiAdapter(objects, provides, name=name)
 
 
 @implementer(IValidator)
@@ -53,13 +61,9 @@ class FieldExtenderValidator(object):
 
     def validate(self, value):
         """ Validate field by TValidator """
-        view = LessSpecificInterfaceWrapper(self.view, IForm)
-        # view now doesn't implement IEasyFormForm so we can call another less specific validation adapter
-        # that might exist for this field. The above line prevents a loop.
-        # By default this will call SimpleFieldValidator.validator but allows for special fields
-        # custom validation to also be called
-
-        validator = queryMultiAdapter((self.context, self.request, view, self.field, self.widget), IValidator)
+        # By default this will call SimpleFieldValidator.validator but allows for a fields
+        # custom validation adaptor to also be called such as recaptcha
+        validator = nextAdapter((self.context, self.request, self.view, self.field, self.widget), IValidator)
         if validator is not None:
             validator.validate(value)
 
@@ -112,8 +116,7 @@ class FieldExtenderDefault(object):
             return get_expression(self.context, TDefault)
 
         # see if there is another default adapter for this field instead
-        view = LessSpecificInterfaceWrapper(self.view, IForm)
-        adapter = queryMultiAdapter((self.context, self.request, view, self.field, self.widget), IValue, name='default')
+        adapter = nextAdapter((self.context, self.request, self.view, self.field, self.widget), IValue, name='default')
         if adapter is not None:
             return adapter.get()
         else:
