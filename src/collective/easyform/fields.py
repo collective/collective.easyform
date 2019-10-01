@@ -11,12 +11,12 @@ from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
-from z3c.form.interfaces import IGroup, IForm
+from z3c.form.interfaces import IGroup
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
 from zope.component import adapter, queryMultiAdapter
 from zope.component import queryUtility
-from zope.interface import implementer, classProvides, providedBy
+from zope.interface import implementer, providedBy
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema import Field
@@ -25,31 +25,40 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
-def superAdapter(adapter, objects, name=u''):
+def superAdapter(specific_interface, adapter, objects, name=u''):
     """ find the next most specific adapter """
 
-    # HACK: We are hard coding adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
+    #  We are adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
     #  one of the objects less specific. This allows us to find anotehr adapter other than our one. This allows us to
     #  find any custom adapters for any fields that we have overridden
-    context, request, view, field, widget = objects
-    # TODO: it would be better if we didn't have hard code the view_interface
-    _, _, view_interface, _, _ = adapter.__class__.__component_adapts__
-    interfaces = list(providedBy(view).interfaces())
-    super_inferface = interfaces[interfaces.index(view_interface)+1]
+    new_obj = []
+    found = False
+    for obj in objects:
+        interfaces = list(providedBy(obj).interfaces())
+        try:
+            index = interfaces.index(specific_interface)
+            found = True
+        except ValueError:
+            pass
+        else:
+            super_inferface = interfaces[index + 1]
 
-    @implementer(super_inferface)
-    class Wrapper(object):
-        def __init__(self, view):
-            self.__view__ = view
+            @implementer(super_inferface)
+            class Wrapper(object):
+                def __init__(self, view):
+                    self.__view__ = view
 
-        def __getattr__(self, item):
-            return getattr(self.__view__, item)
+                def __getattr__(self, item):
+                    return getattr(self.__view__, item)
 
-    view = Wrapper(view)  # Make one class less specific
-    objects = (context, request, view, field, widget)
+            obj = Wrapper(obj)  # Make one class less specific
+        new_obj.append(obj)
+    if not found:
+        return None
+
     provides = providedBy(adapter).declared[0]
 
-    return queryMultiAdapter(objects, provides, name=name)
+    return queryMultiAdapter(new_obj, provides, name=name)
 
 
 @implementer(IValidator)
@@ -68,7 +77,8 @@ class FieldExtenderValidator(object):
         """ Validate field by TValidator """
         # By default this will call SimpleFieldValidator.validator but allows for a fields
         # custom validation adaptor to also be called such as recaptcha
-        validator = superAdapter(self, (self.context, self.request, self.view, self.field, self.widget))
+        _, _, view_interface, _, _ = self.__class__.__component_adapts__
+        validator = superAdapter(view_interface, self, (self.context, self.request, self.view, self.field, self.widget))
         if validator is not None:
             validator.validate(value)
 
@@ -121,7 +131,8 @@ class FieldExtenderDefault(object):
             return get_expression(self.context, TDefault)
 
         # see if there is another default adapter for this field instead
-        adapter = superAdapter(self, (self.context, self.request, self.view, self.field, self.widget), name='default')
+        _, _, view_interface, _, _ = self.__class__.__component_adapts__
+        adapter = superAdapter(view_interface, self, (self.context, self.request, self.view, self.field, self.widget), name='default')
         if adapter is not None:
             return adapter.get()
         else:
