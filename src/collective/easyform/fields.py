@@ -11,13 +11,12 @@ from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
 from plone.supermodel.exportimport import BaseHandler
-from z3c.form import validator as z3c_validator
 from z3c.form.interfaces import IGroup
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
-from zope.component import adapter
+from zope.component import adapter, queryMultiAdapter
 from zope.component import queryUtility
-from zope.interface import implementer
+from zope.interface import implementer, providedBy
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.schema import Field
@@ -26,15 +25,62 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
+def superAdapter(specific_interface, adapter, objects, name=u''):
+    """ find the next most specific adapter """
+
+    #  We are adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
+    #  one of the objects less specific. This allows us to find anotehr adapter other than our one. This allows us to
+    #  find any custom adapters for any fields that we have overridden
+    new_obj = []
+    found = False
+    for obj in objects:
+        interfaces = list(providedBy(obj).interfaces())
+        try:
+            index = interfaces.index(specific_interface)
+            found = True
+        except ValueError:
+            pass
+        else:
+            super_inferface = interfaces[index + 1]
+
+            @implementer(super_inferface)
+            class Wrapper(object):
+                def __init__(self, view):
+                    self.__view__ = view
+
+                def __getattr__(self, item):
+                    return getattr(self.__view__, item)
+
+            obj = Wrapper(obj)  # Make one class less specific
+        new_obj.append(obj)
+    if not found:
+        return None
+
+    provides = providedBy(adapter).declared[0]
+
+    return queryMultiAdapter(new_obj, provides, name=name)
+
+
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
-class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
-
+class FieldExtenderValidator(object):
     """ z3c.form validator class for easyform fields in the default fieldset"""
+
+    def __init__(self, context, request, view, field, widget):
+        self.context = context
+        self.request = request
+        self.view = view
+        self.field = field
+        self.widget = widget
 
     def validate(self, value):
         """ Validate field by TValidator """
-        super(FieldExtenderValidator, self).validate(value)
+        # By default this will call SimpleFieldValidator.validator but allows for a fields
+        # custom validation adaptor to also be called such as recaptcha
+        _, _, view_interface, _, _ = self.__class__.__component_adapts__
+        validator = superAdapter(view_interface, self, (self.context, self.request, self.view, self.field, self.widget))
+        if validator is not None:
+            validator.validate(value)
 
         efield = IFieldExtender(self.field)
         validators = getattr(efield, "validators", [])
@@ -59,7 +105,6 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IGroup, IField, Interface)
 class GroupFieldExtenderValidator(FieldExtenderValidator):
-
     """ z3c.form validator class for easyform fields in fieldset groups """
 
     pass
@@ -80,10 +125,19 @@ class FieldExtenderDefault(object):
 
     def get(self):
         """ get default value of field from TDefault """
-        fdefault = self.field.default
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, "TDefault", None)
-        return get_expression(self.context, TDefault) if TDefault else fdefault
+        if TDefault:
+            return get_expression(self.context, TDefault)
+
+        # see if there is another default adapter for this field instead
+        _, _, view_interface, _, _ = self.__class__.__component_adapts__
+        adapter = superAdapter(view_interface, self, (self.context, self.request, self.view, self.field, self.widget), name='default')
+        if adapter is not None:
+            return adapter.get()
+        else:
+            # TODO: this should have already been done by z3c.form.widget.update() so shouldn't be needed
+            return self.field.default
 
 
 @implementer(IValue)

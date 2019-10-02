@@ -109,6 +109,12 @@ class TestBaseValidators(base.EasyFormTestCase):
 
 
 class LoadFixtureBase(base.EasyFormTestCase):
+    """ test validator in form outside of fieldset
+
+    The test methods are reused in TestFieldsetValidator.
+    They use the same field, except that one has it in a fieldset.
+    """
+
     schema_fixture = "single_field.xml"
 
     def afterSetUp(self):
@@ -370,6 +376,7 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
+        self.assertNotIn('Thanks for your input.', form)
 
     def test_wrong(self):
         data = {"verification": "123"}
@@ -377,6 +384,14 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn('The code you entered was wrong, please enter the new one.', form)
+        self.assertNotIn('Thanks for your input.', form)
+
+
+class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
+    """ make sure it works inside a fieldset too
+    """
+
+    schema_fixture = "fieldset_recaptcha.xml"
 
 
 class DummyUpload(FileUpload):
