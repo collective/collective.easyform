@@ -43,7 +43,7 @@ Run buildout:
 
     bin/buildout
 
-The last step is to activate ``EasyForm`` in the Control Panel.
+The last step is to activate ``EasyForm`` in the Add-ons control panel.
 
 Usage
 =====
@@ -94,9 +94,11 @@ Install ``collective.easyform`` with the  ``recaptcha`` extra:
         collective.easyform [recaptcha]
 
 
-And run buildout and install EasyForm as described above.
+Run buildout. In the Add-ons control panel, activate both EasyForm and the ReCaptcha widget.
 
-Then go to the EasyFrom controlpanel (``/@@easyform-controlpanel``) and add the "ReCaptcha" field to "Allowed Fields".
+In the ReCaptch control panel, set the public key and private key values you obtained from https://developers.google.com/recaptcha/
+
+In the EasyFrom control panel (``/@@easyform-controlpanel``), add the "ReCaptcha" field to "Allowed Fields".
 Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:
 
 .. code-block:: xml
@@ -107,12 +109,12 @@ Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic
       </value>
     </record>
 
-Then add the ReCaptcha field to the forms where you want to use it.
-As field type use ``ReCaptcha`` and set ``require`` to false.
+Add the ReCaptcha field to the forms where you want to use it.
+Use the field type ``ReCaptcha`` and leave ``require`` to false.
 
-As last step you might want to not include the recaptcha field in the thanks page and mailer action.
+As a last step you might want to avoid including the recaptcha field in the thank you page and in the mailer action.
 To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
-Likewise for the mailing: Open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
+Likewise for the mailer: open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
 
 
 collective.z3cform.norobots support

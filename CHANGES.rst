@@ -35,6 +35,9 @@ issues if those validators, or default values, were misconfigured in the first p
 - Fix UnicodeDecodeError while attaching an image to a mail #187
   [krissik]
 
+- update instructions for recaptcha functionality
+  [tkimnguyen]
+
 2.1.0 (2019-04-25)
 ------------------
 
