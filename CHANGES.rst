@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.1 (unreleased)
+2.1.1 (2019-11-18)
 ------------------
 
 NOTE: if you deploy 2.1.1+, the easyform extended validations start working again on fields
