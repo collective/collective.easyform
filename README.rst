@@ -74,7 +74,7 @@ Usage
 
 Click on the picture below for a short introduction video:
 
-.. image:: http://quintagroup.com/services/plone-development/products/easyform/easyform-youtube.png
+.. image:: docs/images/easyform-youtube.png
     :target: https://www.youtube.com/watch?v=DMCYnYE9RKU
     :alt: EasyForm instructional video
 
@@ -96,7 +96,7 @@ Install ``collective.easyform`` with the  ``recaptcha`` extra:
 
 Run buildout. In the Add-ons control panel, activate both EasyForm and the ReCaptcha widget.
 
-In the ReCaptcha control panel, set the public key and private key values you obtained from https://developers.google.com/recaptcha/
+In the ReCaptcha control panel, set the public key and private key values you obtained from https://developers.google.com/recaptcha/ (you can use reCAPTCHA V2).
 
 In the EasyFrom control panel (``/@@easyform-controlpanel``), add the "ReCaptcha" field to "Allowed Fields".
 Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:

@@ -4,7 +4,11 @@ Changelog
 2.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix broken image in README (partly addresses #197)
+  [tkimguyen]
+
+- Mention reCAPTCHA V2 when obtaining public/private key pair
+  [tkimnguyen]
 
 
 2.1.1 (2019-11-18)
