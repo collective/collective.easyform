@@ -53,19 +53,19 @@ Usage
 - Add fields or fieldsets to create a unique form that will meet your particular requirements.
   There are enough basic field types to satisfy any demands:
 
-  - File Upload,
-  - Text line (String),
-  - Integer,
-  - Yes/No,
-  - Date, Date/Time,
-  - Floating-point number,
-  - Choice,
-  - Rich Text,
-  - Image,
-  - Multiple Choice,
-  - Text,
-  - Password,
-  - ReСaptcha.
+  - File Upload
+  - Text line (String)
+  - Integer
+  - Yes/No
+  - Date, Date/Time
+  - Floating-point number
+  - Choice
+  - Rich Text
+  - Image
+  - Multiple Choice
+  - Text
+  - Password
+  - ReСaptcha
 
 - Continue to customize form by setting the order of fields,
   defining required and hidden ones,
@@ -110,11 +110,11 @@ Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic
     </record>
 
 Add the ReCaptcha field to the forms where you want to use it.
-Use the field type ``ReCaptcha`` and leave ``require`` to false.
+Use the field type ``ReCaptcha`` and leave ``require`` unchecked.
 
 As a last step you might want to avoid including the recaptcha field in the thank you page and in the mailer action.
 To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
-Likewise for the mailer: open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
+Likewise for the mailer: open the form actions via the Actions toolbar menu and edit the mailer settings accordingly.
 
 
 collective.z3cform.norobots support
@@ -132,9 +132,9 @@ Install ``collective.easyform`` with the  ``norobots`` extra:
         collective.easyform [norobots]
 
 
-And run buildout and install EasyForm as described above.
+Run buildout. In the Add-ons control panel, install EasyForm.
 
-Then go to the EasyFrom controlpanel (``/@@easyform-controlpanel``) and add the "NorobotCaptcha" field to "Allowed Fields".
+In the EasyFrom control panel (``/@@easyform-controlpanel``), add the "NorobotCaptcha" field to "Allowed Fields".
 Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:
 
 .. code-block:: xml
@@ -145,12 +145,12 @@ Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic
       </value>
     </record>
 
-Then add the NorobotCaptcha field to the forms where you want to use it.
-As field type use ``NorobotCaptcha`` and set ``require`` to false.
+Add the NorobotCaptcha field to the forms where you want to use it.
+Use the field type ``NorobotCaptcha`` and leave ``require`` unchecked.
 
-As last step you might want to not include the norobotcaptcha field in the thanks page and mailer action.
+As a last step you might want to avoid including the norobotcaptcha field in the thanks page and the mailer action.
 To do that, edit the form, go to the "Thanks page" settings, disable "Show all fields" and then include only those you want.
-Likewise for the mailing: Open the form actions via the actions toolbar menu and edit the mailer settings accordingly.
+Likewise for the mailer: open the form actions via the Actions toolbar menu and edit the mailer settings accordingly.
 
 
 Actions
