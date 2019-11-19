@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.2 (unreleased)
+2.1.2 (2019-11-18)
 ------------------
 
 - Fix broken image in README (partly addresses #197)
