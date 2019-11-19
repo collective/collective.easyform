@@ -60,6 +60,9 @@ setup(
         'norobots': [
             'collective.z3cform.norobots'
         ],
+        'ploneformgen': [
+            'Products.PloneFormGen',
+        ],
         'test': [
             'plone.app.testing[robot]',
             'plone.app.robotframework',

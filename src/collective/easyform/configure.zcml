@@ -19,6 +19,7 @@
   <include file="upgrades.zcml" />
 
   <include package=".browser" />
+  <include package=".migration" /> 
 
   <genericsetup:registerProfile
       name="default"
