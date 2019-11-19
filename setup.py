@@ -55,6 +55,7 @@ setup(
     extras_require={
         "recaptcha": ["plone.formwidget.recaptcha"],
         "norobots": ["collective.z3cform.norobots"],
+        "ploneformgen": ["Products.PloneFormGen",],
         "test": [
             "plone.app.testing[robot]",
             "plone.app.robotframework",

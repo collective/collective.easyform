@@ -4,6 +4,9 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
+- Implement PloneFormGen migration.
+  [buchi]
+
 - Fixed errors with ``header_injection`` implementation.
   [maurits, thet]
 
