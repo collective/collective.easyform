@@ -4,7 +4,8 @@ Changelog
 2.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Brazilian Portuguese translation `#200 <https://github.com/collective/collective.easyform/issues/200>`_
+  [ericof]
 
 
 2.1.2 (2019-11-18)
@@ -35,10 +36,10 @@ issues if those validators, or default values, were misconfigured in the first p
 
 - Moved from dotted to named behaviors.
   [iham]
-  
+
 - Avoid potential CannotGetPortalError on startup #164
   [laulaz]
-  
+
 - Add collective.z3cform.norobots integration #145
   [1letter/gomez]
 
