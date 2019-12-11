@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.3 (unreleased)
+2.1.3 (2019-12-11)
 ------------------
 
 - Brazilian Portuguese translation `#200 <https://github.com/collective/collective.easyform/issues/200>`_
