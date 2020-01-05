@@ -176,27 +176,27 @@ msgstr "Ponastavi"
 #. Default: "Submit"
 #: collective/easyform/interfaces/easyform.py:25
 msgid "default_submitLabel"
-msgstr ""
+msgstr "Pošlji"
 
 #. Default: "Thanks for your input."
 #: collective/easyform/interfaces/easyform.py:40
 msgid "default_thanksdescription"
-msgstr ""
+msgstr "Hvala za vaš vnos."
 
 #. Default: "Thank You"
 #: collective/easyform/interfaces/easyform.py:35
 msgid "default_thankstitle"
-msgstr ""
+msgstr "Hvala"
 
 #. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
 #: collective/easyform/interfaces/fields.py:130
 msgid "description_server_side_text"
-msgstr ""
+msgstr "To polje označite kot vrednost, ki jo je treba vstaviti v obrazec zahteve za uporabo akcijskih adapterjev in ga stranka ne more spremeniti ali biti izpostavljena."
 
 #. Default: "${name} Header"
 #: collective/easyform/interfaces/mailer.py:353 collective/easyform/interfaces/savedata.py:22
 msgid "extra_header"
-msgstr ""
+msgstr "${name} glava"
 
 #. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter (if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded. The most common use of this field is to call a python scriptto clean up form input or to script an alternative action. Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
 #: collective/easyform/interfaces/easyform.py:271
@@ -221,17 +221,17 @@ msgstr ""
 #. Default: "Check this to employ Cross-Site Request Forgery protection. Note that only HTTP Post actions will be allowed."
 #: collective/easyform/interfaces/easyform.py:136
 msgid "help_csrf"
-msgstr ""
+msgstr "Označite to, če želite uporabiti zaščito pred ponarejanjem prek spletnih strani. Upoštevajte, da bodo dovoljena samo dejanja HTTP post."
 
 #. Default: "This field allows you to change default fieldset label."
 #: collective/easyform/interfaces/easyform.py:121
 msgid "help_default_fieldset_label_text"
-msgstr ""
+msgstr "To polje vam omogoča, da spremenite privzeto oznako nabora polja."
 
 #. Default: "The text will be displayed after the form fields."
 #: collective/easyform/interfaces/easyform.py:170
 msgid "help_epilogue_text"
-msgstr ""
+msgstr "Besedilo bo prikazano za polji obrazca."
 
 #. Default: "A TALES expression that will be evaluated to determine whether or not to execute this action. Leave empty if unneeded, and the action will be executed. Your expression should evaluate as a boolean; return True if you wish the action to execute. PLEASE NOTE: errors in the evaluation of this expression will  cause an error on form display."
 #: collective/easyform/interfaces/actions.py:101
@@ -503,7 +503,7 @@ msgstr ""
 
 #: collective/easyform/browser/exportimport.py:51
 msgid "import"
-msgstr ""
+msgstr "uvoz"
 
 #. Default: "After Validation Script"
 #: collective/easyform/interfaces/easyform.py:268
@@ -518,17 +518,17 @@ msgstr ""
 #. Default: "BCC Expression"
 #: collective/easyform/interfaces/mailer.py:452
 msgid "label_bcc_override_text"
-msgstr ""
+msgstr "BCC izraz"
 
 #. Default: "CC Expression"
 #: collective/easyform/interfaces/mailer.py:432
 msgid "label_cc_override_text"
-msgstr ""
+msgstr "CC izraz"
 
 #. Default: "CSRF Protection"
 #: collective/easyform/interfaces/easyform.py:135
 msgid "label_csrf"
-msgstr ""
+msgstr "CSRF zaščita"
 
 #. Default: "Custom Script"
 #: collective/easyform/actions.py:791
@@ -608,7 +608,7 @@ msgstr ""
 #. Default: "Mail Format"
 #: collective/easyform/interfaces/mailer.py:311
 msgid "label_formmailer_body_type"
-msgstr ""
+msgstr "Format pošte"
 
 #. Default: "CC Recipients"
 #: collective/easyform/interfaces/mailer.py:93
@@ -633,7 +633,7 @@ msgstr ""
 #. Default: "Subject"
 #: collective/easyform/interfaces/mailer.py:148
 msgid "label_formmailer_subject"
-msgstr ""
+msgstr "Naslov"
 
 #. Default: "Extract Subject From"
 #: collective/easyform/interfaces/mailer.py:164
@@ -653,7 +653,7 @@ msgstr ""
 #. Default: "Hidden"
 #: collective/easyform/interfaces/fields.py:66
 msgid "label_hidden"
-msgstr ""
+msgstr "Skrito"
 
 #. Default: "Include Empties"
 #: collective/easyform/interfaces/easyform.py:371
@@ -663,7 +663,7 @@ msgstr ""
 #. Default: "Label"
 #: collective/easyform/fields.py:105
 msgid "label_label_field"
-msgstr ""
+msgstr "Oznaka"
 
 #. Default: "Include Empties"
 #: collective/easyform/interfaces/mailer.py:252
@@ -678,7 +678,7 @@ msgstr ""
 #. Default: "Mailer"
 #: collective/easyform/actions.py:786
 msgid "label_mailer_action"
-msgstr ""
+msgstr "Mailer"
 
 #. Default: "Show Responses"
 #: collective/easyform/interfaces/mailer.py:239
@@ -688,7 +688,7 @@ msgstr ""
 #. Default: "Form method"
 #: collective/easyform/interfaces/easyform.py:104
 msgid "label_method"
-msgstr ""
+msgstr "Metoda obrazca"
 
 #. Default: "Form Prologue"
 #: collective/easyform/interfaces/easyform.py:161
@@ -698,7 +698,7 @@ msgstr ""
 #. Default: "ReCaptcha"
 #: collective/easyform/fields.py:122
 msgid "label_recaptcha_field"
-msgstr ""
+msgstr "ReCaptcha"
 
 #. Default: "Recipient Expression"
 #: collective/easyform/interfaces/mailer.py:411
@@ -848,7 +848,7 @@ msgstr ""
 #. Default: "HTTP Headers"
 #: collective/easyform/interfaces/mailer.py:328
 msgid "label_xinfo_headers_text"
-msgstr ""
+msgstr "HTTP glave"
 
 #: collective/easyform/browser/view.py:390
 msgid "msg_file_not_allowed"
@@ -861,14 +861,14 @@ msgstr ""
 #. Default: "Comma-Separated Values"
 #: collective/easyform/vocabularies.py:78
 msgid "vocabulary_csv_text"
-msgstr ""
+msgstr "Vrednosti ločene z vejico"
 
 #. Default: "Posting Date/Time"
 #: collective/easyform/vocabularies.py:66
 msgid "vocabulary_postingdt_text"
-msgstr ""
+msgstr "Datum in čas"
 
 #. Default: "Tab-Separated Values"
 #: collective/easyform/vocabularies.py:77
 msgid "vocabulary_tsv_text"
-msgstr ""
+msgstr "Vrednosti ločene z tabulatorjem"
