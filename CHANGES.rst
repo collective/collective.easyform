@@ -4,8 +4,10 @@ Changelog
 2.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
+  displayed. Combined with the header_injection field you can style elements
+  only for the thankspage, for example as a workaround to remove empty
+  fieldsets (#154). [fredvd]
 
 2.1.3 (2019-12-11)
 ------------------
@@ -30,11 +32,6 @@ Changelog
 NOTE: if you deploy 2.1.1+, the easyform extended validations start working again on fields
 in extra field sets (they only worked on the main/default fields). This could cause some
 issues if those validators, or default values, were misconfigured in the first place.
-
-- Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
-  displayed. Combined with the header_injection field you can style elements
-  only for the thankspage, for example as a workaround to remove empty
-  fieldsets (#154). [fredvd]
 
 - Let ``filter_fields`` return fields in the correct order.
   This fixes the order on the default mailer template.
