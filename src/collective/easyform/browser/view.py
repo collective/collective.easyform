@@ -338,6 +338,11 @@ class EasyFormFormWrapper(FormWrapper):
         header_injection = self.form_instance.header_injection()
         return header_injection
 
+    def css_class(self):
+        css_class = None
+        if self.form_instance.thanksPage:
+            css_class = u"easyform-thankspage"
+        return css_class
 
 EasyFormView = EasyFormFormWrapper
 

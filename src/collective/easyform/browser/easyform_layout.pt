@@ -15,7 +15,8 @@
          </metal:headerinjection-slot>
         <metal:main-macro define-macro="main">
             <h1 class="documentFirstHeading" tal:content="view/label">Title</h1>
-            <div id="content-core" tal:content="structure view/contents" />
+            <div id="content-core" tal:attributes="class view/css_class"
+            tal:content="structure view/contents" />
         </metal:main-macro>
     </metal:main>
 
