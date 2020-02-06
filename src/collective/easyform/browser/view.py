@@ -344,6 +344,7 @@ class EasyFormFormWrapper(FormWrapper):
             css_class = u"easyform-thankspage"
         return css_class
 
+
 EasyFormView = EasyFormFormWrapper
 
 

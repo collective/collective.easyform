@@ -152,8 +152,8 @@ class SavedDataForm(crud.CrudForm):
 class SavedDataFormWrapper(layout.FormWrapper):
     def __call__(self):
         if self.request.get('form.buttons.download') == 'Download':
-                self.context.field.download(self.request.response)
-                return u''
+            self.context.field.download(self.request.response)
+            return u''
         else:
             return super(SavedDataFormWrapper, self).__call__()
 
