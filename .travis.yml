@@ -20,6 +20,10 @@ matrix:
       env: PLONE_VERSION=5.2.x
       dist: xenial
       sudo: true
+env:
+  global:
+    - travis_apt_get_options="-yq --no-install-suggests --no-install-recommends $travis_apt_get_options --allow-unauthenticated"
+
 cache:
   pip: true
   directories:
@@ -42,6 +46,8 @@ before_install:
   - echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/.buildout/default.cfg
   - pip install zc.buildout
   - cp tests-$PLONE_VERSION.cfg buildout.cfg
+# force this
+  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends $(travis_apt_get_options) install google-chrome-stable
 install:
   - buildout -N annotate
   - buildout -N

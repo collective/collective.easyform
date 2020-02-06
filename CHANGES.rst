@@ -14,6 +14,9 @@ Changelog
   data download file (#175)
   [mamico, tkimnguyen]
 
+- attempt to fix Travis install of google-chrome-stable
+  [tkimnguyen]
+
 2.1.3 (2019-12-11)
 ------------------
 
