@@ -141,7 +141,7 @@ class SavedDataForm(crud.CrudForm):
 
     @button.buttonAndHandler(PMF(u"Download"), name="download")
     def handleDownload(self, action):
-        self.field.download(self.request.response)
+        pass
 
     @button.buttonAndHandler(_(u"Clear all"), name="clearall")
     def handleClearAll(self, action):
@@ -150,7 +150,12 @@ class SavedDataForm(crud.CrudForm):
 
 @implementer(ISavedDataFormWrapper)
 class SavedDataFormWrapper(layout.FormWrapper):
-    pass
+    def __call__(self):
+        if self.request.get('form.buttons.download') == 'Download':
+                self.context.field.download(self.request.response)
+                return u''
+        else:
+            return super(SavedDataFormWrapper, self).__call__()
 
 
 ActionSavedDataView = layout.wrap_form(

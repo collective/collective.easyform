@@ -7,7 +7,11 @@ Changelog
 - Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
   displayed. Combined with the header_injection field you can style elements
   only for the thankspage, for example as a workaround to remove empty
-  fieldsets (#154). [fredvd]
+  fieldsets (#154).
+  [fredvd]
+
+- do not append the re-rendered download form when generating the data download file
+  [mamico, tkimnguyen]
 
 2.1.3 (2019-12-11)
 ------------------
