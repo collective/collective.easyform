@@ -10,7 +10,8 @@ Changelog
   fieldsets (#154).
   [fredvd]
 
-- do not append the re-rendered download form when generating the data download file
+- do not append the re-rendered download form when generating the
+  data download file (#175)
   [mamico, tkimnguyen]
 
 2.1.3 (2019-12-11)
