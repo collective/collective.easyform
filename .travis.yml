@@ -43,13 +43,13 @@ before_install:
   - echo "eggs-directory = $HOME/buildout-cache/eggs" >> $HOME/.buildout/default.cfg
   - pip install zc.buildout
   - cp tests-$PLONE_VERSION.cfg buildout.cfg
-# force this
-  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends $(travis_apt_get_options) --allow-unauthenticated install google-chrome-stable
 install:
   - buildout -N annotate
   - buildout -N
   - pip install zest.pocompile
   - pocompile src
+  # force this
+  - sudo -E apt-get -yq --no-install-suggests --no-install-recommends $(travis_apt_get_options) --allow-unauthenticated install google-chrome-stable
 before_script:
   - 'export DISPLAY=:99.0'
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
