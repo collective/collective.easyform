@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.4 (unreleased)
+2.1.4 (2020-02-06)
 ------------------
 
 - Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
