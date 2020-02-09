@@ -4,7 +4,8 @@ Changelog
 2.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Remove hardcoded download button label check (#175)
+  [davide-targa]
 
 
 2.1.4 (2020-02-06)
