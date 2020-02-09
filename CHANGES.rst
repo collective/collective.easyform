@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.5 (unreleased)
+2.1.5 (2020-02-09)
 ------------------
 
 - Remove hardcoded download button label check (#175)
