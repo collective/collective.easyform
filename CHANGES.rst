@@ -4,8 +4,8 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Format code according to Plone standards: black, isort, zpretty.
+  [thet]
 
 2.1.5 (2020-02-09)
 ------------------

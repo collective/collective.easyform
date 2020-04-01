@@ -335,7 +335,7 @@ class Mailer(Action):
         """Serializa field to save to XML.
         """
         if field is None:
-            return ''
+            return ""
         if isinstance(field, (set, list, tuple)):
             list_value = list([self.serialize(f) for f in field])
             return dumps(list_value)

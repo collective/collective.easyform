@@ -42,6 +42,7 @@ class Fixture(PloneSandboxLayer):
             pass
         try:
             import collective.z3cform.norobots
+
             self.loadZCML(package=collective.z3cform.norobots)
         except ImportError:
             pass

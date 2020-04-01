@@ -19,8 +19,8 @@ from .fields import IFieldExtender  # noqa
 from .fields import IFieldValidator  # noqa
 from .fields import ILabel  # noqa
 from .fields import ILabelWidget  # noqa
-from .fields import IReCaptcha  # noqa
 from .fields import INorobotCaptcha  # noqa
+from .fields import IReCaptcha  # noqa
 from .fields import IRichLabel  # noqa
 from .fields import IRichLabelWidget  # noqa
 from .layer import IEasyFormLayer  # noqa
