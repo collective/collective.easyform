@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="collective.easyform"
     >
   <adapter factory=".fields.FieldExtenderValidator" />
   <adapter factory=".fields.GroupFieldExtenderValidator" />

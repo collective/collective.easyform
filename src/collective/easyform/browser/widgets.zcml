@@ -3,7 +3,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:z3c="http://namespaces.zope.org/z3c"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="collective.easyform"
     >
   <adapter
       for="collective.easyform.interfaces.IAction

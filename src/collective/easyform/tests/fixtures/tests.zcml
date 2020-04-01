@@ -1,6 +1,6 @@
 <configure
+    xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:zope="http://namespaces.zope.org/zope"
     >
 
   <browser:page

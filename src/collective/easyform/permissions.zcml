@@ -1,7 +1,4 @@
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    i18n_domain="collective.easyform"
-    >
+<configure xmlns="http://namespaces.zope.org/zope">
   <permission
       id="collective.easyform.AddContent"
       title="collective.easyform: Add Content"
