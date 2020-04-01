@@ -1,66 +1,67 @@
 <?xml version="1.0"?>
 <registry>
-  <records
-      interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
-      prefix="easyform" />
-    <record
-      name="easyform.allowedFields"
-      interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
-      field="allowedFields">
-      <field type="plone.registry.field.List">
-        <default/>
-        <description
-          xmlns:ns0="http://xml.zope.org/namespaces/i18n"
-          ns0:domain="collective.easyform"
-          ns0:translate="">This Fields are available for your forms.</description>
-        <title
-          xmlns:ns0="http://xml.zope.org/namespaces/i18n"
-          ns0:domain="collective.easyform"
-          ns0:translate="">Allowed Fields</title>
-        <value_type type="plone.registry.field.Choice">
-          <description
-            xmlns:ns0="http://xml.zope.org/namespaces/i18n"
-            ns0:domain="collective.easyform"
-            ns0:translate="help_registry_items">Select the registry items you desire to modify</description>
-          <required>False</required>
-          <vocabulary>easyform.SchemaEditorFields</vocabulary>
-        </value_type>
-      </field>
-      <value>
-        <element>collective.easyform.fields.Label</element>
-        <element>collective.easyform.fields.RichLabel</element>
-        <element>plone.app.textfield.RichText</element>
-        <element>plone.namedfile.field.NamedBlobFile</element>
-        <element>plone.namedfile.field.NamedBlobImage</element>
-        <element>plone.schema.email.Email</element>
-        <element>z3c.relationfield.schema.RelationChoice</element>
-        <element>z3c.relationfield.schema.RelationList</element>
-        <element>zope.schema._bootstrapfields.Bool</element>
-        <element>zope.schema._bootstrapfields.Int</element>
-        <element>zope.schema._bootstrapfields.Password</element>
-        <element>zope.schema._bootstrapfields.Text</element>
-        <element>zope.schema._bootstrapfields.TextLine</element>
-        <element>zope.schema._field.Choice</element>
-        <element>zope.schema._field.Date</element>
-        <element>zope.schema._field.Datetime</element>
-        <element>zope.schema._field.Float</element>
-        <element>zope.schema._field.Set</element>
-        <element>zope.schema._field.URI</element>
-      </value>
-    </record>
+  <records interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
+           prefix="easyform"
+  />
+  <record field="allowedFields"
+          interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
+          name="easyform.allowedFields"
+  >
+    <field type="plone.registry.field.List">
+      <default />
+      <description xmlns:ns0="http://xml.zope.org/namespaces/i18n"
+                   ns0:domain="collective.easyform"
+                   ns0:translate=""
+      >This Fields are available for your forms.</description>
+      <title xmlns:ns0="http://xml.zope.org/namespaces/i18n"
+             ns0:domain="collective.easyform"
+             ns0:translate=""
+      >Allowed Fields</title>
+      <value_type type="plone.registry.field.Choice">
+        <description xmlns:ns0="http://xml.zope.org/namespaces/i18n"
+                     ns0:domain="collective.easyform"
+                     ns0:translate="help_registry_items"
+        >Select the registry items you desire to modify</description>
+        <required>False</required>
+        <vocabulary>easyform.SchemaEditorFields</vocabulary>
+      </value_type>
+    </field>
+    <value>
+      <element>collective.easyform.fields.Label</element>
+      <element>collective.easyform.fields.RichLabel</element>
+      <element>plone.app.textfield.RichText</element>
+      <element>plone.namedfile.field.NamedBlobFile</element>
+      <element>plone.namedfile.field.NamedBlobImage</element>
+      <element>plone.schema.email.Email</element>
+      <element>z3c.relationfield.schema.RelationChoice</element>
+      <element>z3c.relationfield.schema.RelationList</element>
+      <element>zope.schema._bootstrapfields.Bool</element>
+      <element>zope.schema._bootstrapfields.Int</element>
+      <element>zope.schema._bootstrapfields.Password</element>
+      <element>zope.schema._bootstrapfields.Text</element>
+      <element>zope.schema._bootstrapfields.TextLine</element>
+      <element>zope.schema._field.Choice</element>
+      <element>zope.schema._field.Date</element>
+      <element>zope.schema._field.Datetime</element>
+      <element>zope.schema._field.Float</element>
+      <element>zope.schema._field.Set</element>
+      <element>zope.schema._field.URI</element>
+    </value>
+  </record>
   <record name="plone.displayed_types">
     <value purge="False">
-        <element>EasyForm</element>
+      <element>EasyForm</element>
     </value>
   </record>
   <record name="plone.default_page_types">
     <value purge="False">
-        <element>EasyForm</element>
+      <element>EasyForm</element>
     </value>
   </record>
 
-  <records prefix="plone.bundles/easyform" 
-           interface="Products.CMFPlone.interfaces.IBundleRegistry">
+  <records interface="Products.CMFPlone.interfaces.IBundleRegistry"
+           prefix="plone.bundles/easyform"
+  >
     <value key="enabled">True</value>
     <value key="compile">False</value>
     <value key="csscompilation">++resource++easyform.css</value>

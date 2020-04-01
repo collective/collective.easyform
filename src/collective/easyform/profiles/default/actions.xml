@@ -1,75 +1,104 @@
 <?xml version="1.0"?>
-<object name="portal_actions" meta_type="Plone Actions Tool"
-   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
- <object name="object_buttons" meta_type="CMF Action Category">
-  <object name="export" meta_type="CMF Action" i18n:domain="collective.easyform">
-   <property name="title" i18n:translate="">Export</property>
-   <property name="description" i18n:translate=""></property>
-   <property
-      name="url_expr">python:object_url + '/@@export-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@export-easyform'</property>
-   <property name="icon_expr"></property>
-   <property
-      name="available_expr">python:object.portal_type == 'EasyForm'</property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-   </property>
-   <property name="visible">True</property>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        meta_type="Plone Actions Tool"
+        name="portal_actions"
+>
+  <object meta_type="CMF Action Category"
+          name="object_buttons"
+  >
+    <object meta_type="CMF Action"
+            name="export"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Export</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:object_url + '/@@export-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@export-easyform'</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="import"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Import</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:object_url + '/@@import-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@import-easyform'</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="saveddata"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Saved data</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:object_url + '/@@saveddata' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@saveddata'</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="Fields"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Define form fields</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <!-- For some reason Zope is considering Fields & Actions views as canonical objects -->
+      <!-- The condition below works around this by building 1) an absolute url for the form -->
+      <!-- Or 2) a relative one when user is not at canonical view -->
+      <property name="url_expr">python:object_url + '/fields' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './fields'</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="Actions"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Define form actions</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <!-- For some reason Zope is considering Fields & Actions views as canonical objects -->
+      <property name="url_expr">python:object_url + '/actions' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './actions'</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
   </object>
-  <object name="import" meta_type="CMF Action" i18n:domain="collective.easyform">
-   <property name="title" i18n:translate="">Import</property>
-   <property name="description" i18n:translate=""></property>
-   <property
-      name="url_expr">python:object_url + '/@@import-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@import-easyform'</property>
-   <property name="icon_expr"></property>
-   <property
-      name="available_expr">python:object.portal_type == 'EasyForm'</property>
-   <property name="permissions">
-    <element value="Manage portal"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-  <object name="saveddata" meta_type="CMF Action" i18n:domain="collective.easyform">
-   <property name="title" i18n:translate="">Saved data</property>
-   <property name="description" i18n:translate=""></property>
-   <property
-      name="url_expr">python:object_url + '/@@saveddata' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@saveddata'</property>
-   <property name="icon_expr"></property>
-   <property
-      name="available_expr">python:object.portal_type == 'EasyForm'</property>
-   <property name="permissions">
-    <element value="Modify portal content"/>
-   </property>
-   <property name="visible">True</property>
-  </object>
-  <object name="Fields" meta_type="CMF Action" i18n:domain="collective.easyform">
-    <property name="title" i18n:translate="">Define form fields</property>
-    <property name="description" i18n:translate=""></property>
-    <!-- For some reason Zope is considering Fields & Actions views as canonical objects -->
-    <!-- The condition below works around this by building 1) an absolute url for the form -->
-    <!-- Or 2) a relative one when user is not at canonical view -->
-    <property
-      name="url_expr">python:object_url + '/fields' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './fields'</property>
-    <property name="icon_expr"></property>
-    <property
-      name="available_expr">python:object.portal_type == 'EasyForm'</property>
-    <property name="permissions">
-      <element value="Modify portal content"/>
-    </property>
-    <property name="visible">True</property>
-  </object>
-  <object name="Actions" meta_type="CMF Action" i18n:domain="collective.easyform">
-    <property name="title" i18n:translate="">Define form actions</property>
-    <property name="description" i18n:translate=""></property>
-    <!-- For some reason Zope is considering Fields & Actions views as canonical objects -->
-    <property
-      name="url_expr">python:object_url + '/actions' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './actions'</property>
-    <property name="icon_expr"></property>
-    <property
-      name="available_expr">python:object.portal_type == 'EasyForm'</property>
-    <property name="permissions">
-      <element value="Modify portal content"/>
-    </property>
-    <property name="visible">True</property>
-  </object>
- </object>
 </object>
