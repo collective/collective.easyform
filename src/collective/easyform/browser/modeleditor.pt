@@ -1,46 +1,73 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      xmlns:metal="http://xml.zope.org/namespaces/metal"
+<html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-    lang="en"
-    metal:use-macro="context/main_template/macros/master"
-    i18n:domain="plone">
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      xml:lang="en"
+      i18n:domain="plone"
+>
 
-<body>
-  <metal:main fill-slot="content">
-    <tal:main-macro metal:define-macro="content">
+  <body>
+    <metal:main fill-slot="content">
+      <tal:main-macro metal:define-macro="content">
         <div id="content">
-            <style type="text/css"
-                tal:content="string:@import url(${portal_url}/++resource++plone.app.dexterity.modeleditor.css);"
-                />
-            <div id="page-intro">
-                <h1 class="documentFirstHeading"
-                    tal:content="view/title">Edit field model for name</h1>
-                <a href=""
-                    class="link-parent"
-                    tal:attributes="href string:${context/absolute_url}"
-                    i18n:translate="label_back_to_schemaeditor">
+          <style type="text/css"
+                 tal:content="string:@import url(${portal_url}/++resource++plone.app.dexterity.modeleditor.css);"
+          ></style>
+          <div id="page-intro">
+            <h1 class="documentFirstHeading"
+                tal:content="view/title"
+            >Edit field model for name</h1>
+            <a class="link-parent"
+               href=""
+               tal:attributes="
+                 href string:${context/absolute_url};
+               "
+               i18n:translate="label_back_to_schemaeditor"
+            >
                         Back to the schema editor
-                </a>
-            </div>
-            <div id="rules-editor">
-                <div class="portalMessage info" role="status">
-                  <span id="messagespan" style="display:none">
+            </a>
+          </div>
+          <div id="rules-editor">
+            <div class="portalMessage info"
+                 role="status"
+            >
+              <span id="messagespan"
+                    style="display:none"
+              >
                     &nbsp;
-                  </span>&nbsp;
-                </div>
-                <form id="saveform"
-                    tal:attributes="action string:${context/absolute_url}/@@model-edit-save"
-                    tal:define="authenticator context/@@authenticator/authenticator | nothing">
-                    <input tal:replace="structure authenticator" />
-                    <input type="hidden" id="savesource" name="source" value="" />
-                    <div class="formControls">
-                        <input class="context" type="submit" name="form.button.save" i18n:attributes="value" value="Save" disabled="disabled" />
-                    </div>
-                </form>
-                <div id="modelEditor" tal:content="view/modelSource" />
+              </span>&nbsp;
             </div>
-            <script type="text/javascript">
+            <form id="saveform"
+                  tal:define="
+                    authenticator context/@@authenticator/authenticator | nothing;
+                  "
+                  tal:attributes="
+                    action string:${context/absolute_url}/@@model-edit-save;
+                  "
+            >
+              <input tal:replace="structure authenticator" />
+              <input id="savesource"
+                     name="source"
+                     type="hidden"
+                     value=""
+              />
+              <div class="formControls">
+                <input class="context"
+                       disabled="disabled"
+                       name="form.button.save"
+                       type="submit"
+                       value="Save"
+                       i18n:attributes="value"
+                />
+              </div>
+            </form>
+            <div id="modelEditor"
+                 tal:content="view/modelSource"
+            ></div>
+          </div>
+          <script type="text/javascript">
                 // start with an editor that fits the viewport with room
                 // to show the save button.
                 jQuery(function ($) {
@@ -54,19 +81,23 @@
                     });
                     setEditorSize();
                 });
-            </script>
-            <script src="++plone++static/components/ace-builds/src/ace.js"
-                type="text/javascript"
-                charset="utf-8"
-                tal:attributes="src string:${portal_url}/++plone++static/components/ace-builds/src/ace.js"
-                ></script>
-            <script src="++resource++plone.schemaeditor/modeleditor.js"
-                type="text/javascript"
-                charset="utf-8"
-                tal:attributes="src string:${portal_url}/++resource++plone.app.dexterity.modeleditor.js"
-                ></script>
+          </script>
+          <script charset="utf-8"
+                  src="++plone++static/components/ace-builds/src/ace.js"
+                  type="text/javascript"
+                  tal:attributes="
+                    src string:${portal_url}/++plone++static/components/ace-builds/src/ace.js;
+                  "
+          ></script>
+          <script charset="utf-8"
+                  src="++resource++plone.schemaeditor/modeleditor.js"
+                  type="text/javascript"
+                  tal:attributes="
+                    src string:${portal_url}/++resource++plone.app.dexterity.modeleditor.js;
+                  "
+          ></script>
         </div>
-    </tal:main-macro>
-  </metal:main>
-</body>
+      </tal:main-macro>
+    </metal:main>
+  </body>
 </html>
