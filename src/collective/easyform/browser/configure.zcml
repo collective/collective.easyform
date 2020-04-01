@@ -1,82 +1,87 @@
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
-           xmlns:zcml="http://namespaces.zope.org/zcml"
-           i18n_domain="collective.easyform">
-    <include package="Products.CMFCore" file="permissions.zcml" />
-    <include file="fields.zcml" />
-    <include file="actions.zcml" />
-    <include file="widgets.zcml" />
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.easyform"
+    >
+  <include
+      package="Products.CMFCore"
+      file="permissions.zcml"
+      />
+  <include file="fields.zcml" />
+  <include file="actions.zcml" />
+  <include file="widgets.zcml" />
+  <browser:page
+      name="view"
+      for="collective.easyform.interfaces.IEasyForm"
+      permission="zope2.View"
+      class=".view.EasyFormView"
+      />
+  <browser:page
+      name="embedded"
+      for="collective.easyform.interfaces.IEasyForm"
+      permission="zope2.View"
+      class=".view.EasyFormFormEmbedded"
+      layer="..interfaces.IEasyFormLayer"
+      />
+  <browser:page
+      name="easyform-controlpanel"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      permission="cmf.ManagePortal"
+      class=".controlpanel.EasyFormControlPanelView"
+      layer="..interfaces.IEasyFormLayer"
+      />
+  <configure zcml:condition="installed plone.dexterity.exportimport">
     <browser:page
+        name="export-easyform"
         for="collective.easyform.interfaces.IEasyForm"
-        name="view"
-        class=".view.EasyFormView"
-        permission="zope2.View"
-        />
-    <browser:page
-        name="embedded"
-        for="collective.easyform.interfaces.IEasyForm"
-        layer="..interfaces.IEasyFormLayer"
-        class=".view.EasyFormFormEmbedded"
-        permission="zope2.View"
-        />
-    <browser:page
-        name="easyform-controlpanel"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        layer="..interfaces.IEasyFormLayer"
         permission="cmf.ManagePortal"
-        class=".controlpanel.EasyFormControlPanelView"
-        />
-    <configure zcml:condition="installed plone.dexterity.exportimport">
-        <browser:page
-            for="collective.easyform.interfaces.IEasyForm"
-            layer="..interfaces.IEasyFormLayer"
-            name="export-easyform"
-            class=".exportimport.EasyFormExportView"
-            permission="cmf.ManagePortal"
-            />
-        <browser:page
-            for="collective.easyform.interfaces.IEasyForm"
-            layer="..interfaces.IEasyFormLayer"
-            name="import-easyform"
-            class=".exportimport.EasyFormImportView"
-            permission="cmf.ManagePortal"
-            />
-    </configure>
-    <browser:resource
-        name="easyform.css"
-        file="easyform.css"
+        class=".exportimport.EasyFormExportView"
+        layer="..interfaces.IEasyFormLayer"
         />
     <browser:page
+        name="import-easyform"
         for="collective.easyform.interfaces.IEasyForm"
+        permission="cmf.ManagePortal"
+        class=".exportimport.EasyFormImportView"
         layer="..interfaces.IEasyFormLayer"
-        name="z3cform_validate_field"
-        class=".view.EasyFormInlineValidationView"
-        permission="zope2.View"
         />
-    <browser:page
-        for="collective.easyform.interfaces.IEasyForm"
-        layer="..interfaces.IEasyFormLayer"
-        name="get_save_data_adapters"
-        class=".view.GetSaveDataAdaptersView"
-        permission="zope2.View"
-        />
+  </configure>
+  <browser:resource
+      name="easyform.css"
+      file="easyform.css"
+      />
+  <browser:page
+      name="z3cform_validate_field"
+      for="collective.easyform.interfaces.IEasyForm"
+      permission="zope2.View"
+      class=".view.EasyFormInlineValidationView"
+      layer="..interfaces.IEasyFormLayer"
+      />
+  <browser:page
+      name="get_save_data_adapters"
+      for="collective.easyform.interfaces.IEasyForm"
+      permission="zope2.View"
+      class=".view.GetSaveDataAdaptersView"
+      layer="..interfaces.IEasyFormLayer"
+      />
 
-    <!-- BBB -->
-    <browser:page
-        for="*"
-        layer="..interfaces.IEasyFormLayer"
-        name="validate_file_size"
-        class=".view.ValidateFileSize"
-        permission="zope2.View"
-        />
+  <!-- BBB -->
+  <browser:page
+      name="validate_file_size"
+      for="*"
+      permission="zope2.View"
+      class=".view.ValidateFileSize"
+      layer="..interfaces.IEasyFormLayer"
+      />
 
-    <browser:page
-        for="*"
-        layer="..interfaces.IEasyFormLayer"
-        name="validate_file"
-        class=".view.ValidateFileSize"
-        permission="zope2.View"
-        />
+  <browser:page
+      name="validate_file"
+      for="*"
+      permission="zope2.View"
+      class=".view.ValidateFileSize"
+      layer="..interfaces.IEasyFormLayer"
+      />
 
 
 </configure>

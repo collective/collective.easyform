@@ -1,58 +1,58 @@
 <configure xmlns="http://namespaces.zope.org/zope">
 
-    <utility
-        component=".vocabularies.CustomActionsVocabularyFactory"
-        name="easyform.CustomActions"
-        />
+  <utility
+      name="easyform.CustomActions"
+      component=".vocabularies.CustomActionsVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.MimeListVocabularyFactory"
-        name="easyform.MimeList"
-        />
+  <utility
+      name="easyform.MimeList"
+      component=".vocabularies.MimeListVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.FormMethodsVocabularyFactory"
-        name="easyform.FormMethods"
-        />
+  <utility
+      name="easyform.FormMethods"
+      component=".vocabularies.FormMethodsVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.XinfoHeadersVocabularyFactory"
-        name="easyform.XinfoHeaders"
-        />
+  <utility
+      name="easyform.XinfoHeaders"
+      component=".vocabularies.XinfoHeadersVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.ProxyRoleChoicesVocabularyFactory"
-        name="easyform.ProxyRoleChoices"
-        />
+  <utility
+      name="easyform.ProxyRoleChoices"
+      component=".vocabularies.ProxyRoleChoicesVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.ExtraDataDLVocabularyFactory"
-        name="easyform.ExtraDataDL"
-        />
+  <utility
+      name="easyform.ExtraDataDL"
+      component=".vocabularies.ExtraDataDLVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.FormatDLVocabularyFactory"
-        name="easyform.FormatDL"
-        />
+  <utility
+      name="easyform.FormatDL"
+      component=".vocabularies.FormatDLVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.FieldsVocabularyFactory"
-        name="easyform.Fields"
-        />
+  <utility
+      name="easyform.Fields"
+      component=".vocabularies.FieldsVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.EasyFormActionsVocabularyFactory"
-        name="EasyFormActions"
-        />
+  <utility
+      name="EasyFormActions"
+      component=".vocabularies.EasyFormActionsVocabularyFactory"
+      />
 
-    <utility
-        component=".vocabularies.ValidatorsVocabularyFactory"
-        name="easyform.Validators"
-        />
+  <utility
+      name="easyform.Validators"
+      component=".vocabularies.ValidatorsVocabularyFactory"
+      />
 
-    <utility
-      component=".vocabularies.SchemaEditorFieldsVocabularyFactory"
+  <utility
       name="easyform.SchemaEditorFields"
+      component=".vocabularies.SchemaEditorFieldsVocabularyFactory"
       />
 
 </configure>

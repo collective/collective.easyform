@@ -1,56 +1,77 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    i18n_domain="collective.easyform">
-    <permission id="collective.easyform.AddContent"
-                title="collective.easyform: Add Content">
-        <role name="Manager"/>
-        <role name="Owner"/>
-        <role name="Contributor"/>
-        <role name="Site Administrator"/>
-    </permission>
-    <permission id="collective.easyform.AddMailers"
-                title="collective.easyform: Add Mailers">
-        <role name="Manager"/>
-        <role name="Owner"/>
-        <role name="Site Administrator"/>
-    </permission>
-    <permission id="collective.easyform.AddDataSavers"
-                title="collective.easyform: Add Data Savers">
-        <role name="Manager"/>
-        <role name="Owner"/>
-        <role name="Site Administrator"/>
-    </permission>
-    <permission id="collective.easyform.AddCustomScripts"
-                title="collective.easyform: Add Custom Scripts">
-        <role name="Manager"/>
-    </permission>
-    <permission id="collective.easyform.EditTALESFields"
-                title="collective.easyform: Edit TALES Fields">
-        <role name="Manager"/>
-    </permission>
-    <permission id="collective.easyform.EditPythonFields"
-                title="collective.easyform: Edit Python Fields">
-        <role name="Manager"/>
-    </permission>
-    <permission id="collective.easyform.EditAdvancedFields"
-                title="collective.easyform: Edit Advanced Fields">
-        <role name="Manager"/>
-        <role name="Site Administrator"/>
-    </permission>
-    <permission id="collective.easyform.EditMailAddresses"
-                title="collective.easyform: Edit Mail Addresses">
-        <role name="Manager"/>
-        <role name="Owner"/>
-        <role name="Site Administrator"/>
-    </permission>
-    <permission id="collective.easyform.EditEncryptionSpecs"
-                title="collective.easyform: Edit Encryption Specs">
-        <role name="Manager"/>
-    </permission>
-    <permission id="collective.easyform.DownloadSavedInput"
-                title="collective.easyform: Download Saved Input">
-        <role name="Manager"/>
-        <role name="Owner"/>
-        <role name="Site Administrator"/>
-    </permission>
+    i18n_domain="collective.easyform"
+    >
+  <permission
+      id="collective.easyform.AddContent"
+      title="collective.easyform: Add Content"
+      >
+    <role name="Manager" />
+    <role name="Owner" />
+    <role name="Contributor" />
+    <role name="Site Administrator" />
+  </permission>
+  <permission
+      id="collective.easyform.AddMailers"
+      title="collective.easyform: Add Mailers"
+      >
+    <role name="Manager" />
+    <role name="Owner" />
+    <role name="Site Administrator" />
+  </permission>
+  <permission
+      id="collective.easyform.AddDataSavers"
+      title="collective.easyform: Add Data Savers"
+      >
+    <role name="Manager" />
+    <role name="Owner" />
+    <role name="Site Administrator" />
+  </permission>
+  <permission
+      id="collective.easyform.AddCustomScripts"
+      title="collective.easyform: Add Custom Scripts"
+      >
+    <role name="Manager" />
+  </permission>
+  <permission
+      id="collective.easyform.EditTALESFields"
+      title="collective.easyform: Edit TALES Fields"
+      >
+    <role name="Manager" />
+  </permission>
+  <permission
+      id="collective.easyform.EditPythonFields"
+      title="collective.easyform: Edit Python Fields"
+      >
+    <role name="Manager" />
+  </permission>
+  <permission
+      id="collective.easyform.EditAdvancedFields"
+      title="collective.easyform: Edit Advanced Fields"
+      >
+    <role name="Manager" />
+    <role name="Site Administrator" />
+  </permission>
+  <permission
+      id="collective.easyform.EditMailAddresses"
+      title="collective.easyform: Edit Mail Addresses"
+      >
+    <role name="Manager" />
+    <role name="Owner" />
+    <role name="Site Administrator" />
+  </permission>
+  <permission
+      id="collective.easyform.EditEncryptionSpecs"
+      title="collective.easyform: Edit Encryption Specs"
+      >
+    <role name="Manager" />
+  </permission>
+  <permission
+      id="collective.easyform.DownloadSavedInput"
+      title="collective.easyform: Download Saved Input"
+      >
+    <role name="Manager" />
+    <role name="Owner" />
+    <role name="Site Administrator" />
+  </permission>
 </configure>
