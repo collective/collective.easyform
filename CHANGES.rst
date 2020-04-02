@@ -4,8 +4,12 @@ Changelog
 2.1.6 (unreleased)
 ------------------
 
+- Fixed errors with ``header_injection`` implementation.
+  [maurits, thet]
+
 - Format code according to Plone standards: black, isort, zpretty.
   [thet]
+
 
 2.1.5 (2020-02-09)
 ------------------
@@ -17,7 +21,7 @@ Changelog
 2.1.4 (2020-02-06)
 ------------------
 
-- Add 'easyform-thankspage' css class to the content-core div if the thankspage is 
+- Add 'easyform-thankspage' css class to the content-core div if the thankspage is
   displayed. Combined with the header_injection field you can style elements
   only for the thankspage, for example as a workaround to remove empty
   fieldsets (#154).

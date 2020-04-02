@@ -13,8 +13,10 @@
   </metal:javascript_head>
 
   <metal:main fill-slot="main">
-    <metal:headerinjection-slot define-slot="headerinjection">
-    </metal:headerinjection-slot>
+    <metal:headerinjection define-macro="headerinjection">
+      <metal:headerinjection-slot define-slot="headerinjection">
+      </metal:headerinjection-slot>
+    </metal:headerinjection>
     <metal:main-macro define-macro="main">
       <h1 class="documentFirstHeading"
           tal:content="view/label"

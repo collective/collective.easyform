@@ -7,7 +7,7 @@ Test Teardown  Close all browsers
 
 *** Test Cases ***
 
-Add headerinjecation as Manager
+Add headerinjection as Manager
 
     Given a logged-in manager
     And a easyform  EasyForm
