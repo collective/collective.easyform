@@ -1,37 +1,61 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag=""
       i18n:domain="collective.easyform"
-      tal:omit-tag="">
+>
 
-    <p  class="discreet"
-        tal:define="description view/description | nothing"
-        tal:condition="description"
-        tal:content="structure description">
+  <p class="discreet"
+     tal:define="
+       description view/description | nothing;
+     "
+     tal:condition="description"
+     tal:content="structure description"
+  >
         Description
-    </p>
+  </p>
 
-      <div id="formPrologue"
-           tal:define="prologue view/thanksPrologue|nothing"
-           tal:condition="prologue"
-           tal:content="structure prologue" />
+  <div id="formPrologue"
+       tal:define="
+         prologue view/thanksPrologue|nothing;
+       "
+       tal:condition="prologue"
+       tal:content="structure prologue"
+  ></div>
 
-      <div tal:repeat="w view/widgets/values" class="field">
-          <label class="horizontal" tal:attributes="for string:form-widgets-${w/__name__}" tal:content="w/field/title"></label>
-          <div></div>
-          <span tal:replace="structure w/render"></span>
-      </div>
+  <div class="field"
+       tal:repeat="w view/widgets/values"
+  >
+    <label class="horizontal"
+           tal:content="w/field/title"
+           tal:attributes="
+             for string:form-widgets-${w/__name__};
+           "
+    ></label>
+    <div></div>
+    <span tal:replace="structure w/render"></span>
+  </div>
 
-      <tal:loop repeat="group view/groups">
-      <div tal:repeat="w group/widgets/values" class="field">
-          <label class="horizontal" tal:attributes="for string:form-widgets-${w/__name__}" tal:content="w/field/title"></label>
-          <div></div>
-          <span tal:replace="structure w/render"></span>
-      </div>
-     </tal:loop>
+  <tal:loop repeat="group view/groups">
+    <div class="field"
+         tal:repeat="w group/widgets/values"
+    >
+      <label class="horizontal"
+             tal:content="w/field/title"
+             tal:attributes="
+               for string:form-widgets-${w/__name__};
+             "
+      ></label>
+      <div></div>
+      <span tal:replace="structure w/render"></span>
+    </div>
+  </tal:loop>
 
-      <div id="formEpilogue"
-           tal:define="epilogue view/thanksEpilogue|nothing"
-           tal:condition="epilogue"
-           tal:content="structure epilogue" />
+  <div id="formEpilogue"
+       tal:define="
+         epilogue view/thanksEpilogue|nothing;
+       "
+       tal:condition="epilogue"
+       tal:content="structure epilogue"
+  ></div>
 
 </html>

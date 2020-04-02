@@ -62,19 +62,24 @@ class TestFunctions(base.EasyFormTestCase):
         # Test the types of answers.
         from collections import OrderedDict as BaseDict
         from collective.easyform.api import OrderedDict
-        self.assertIsInstance(filter_fields(self.ff1, self.dummy_form.schema, {}), OrderedDict)
-        self.assertIsInstance(filter_fields(self.ff1, self.dummy_form.schema, {}), BaseDict)
+
+        self.assertIsInstance(
+            filter_fields(self.ff1, self.dummy_form.schema, {}), OrderedDict
+        )
+        self.assertIsInstance(
+            filter_fields(self.ff1, self.dummy_form.schema, {}), BaseDict
+        )
         self.assertIsInstance(filter_fields(self.ff1, self.dummy_form.schema, {}), dict)
-        self.assertIsInstance(filter_fields(self.ff1, self.dummy_form.schema, {}, omit=True), list)
+        self.assertIsInstance(
+            filter_fields(self.ff1, self.dummy_form.schema, {}, omit=True), list
+        )
 
         # Empty data
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, {}).keys()),
-            [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, {}).keys()), [],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, {}, omit=True)),
-            [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, {}, omit=True)), [],
         )
 
         # All data empty
@@ -88,13 +93,11 @@ class TestFunctions(base.EasyFormTestCase):
             ["", "", ""],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
-            [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)), [],
         )
         self.ff1.includeEmpties = False
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data).keys()),
-            [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data).keys()), [],
         )
         self.assertEqual(
             list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
@@ -112,8 +115,7 @@ class TestFunctions(base.EasyFormTestCase):
             ["me@example.org", "Test", "Ni"],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
-            [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)), [],
         )
 
         # Show only specific fields, not active when showAll=True.
@@ -123,8 +125,7 @@ class TestFunctions(base.EasyFormTestCase):
             ["replyto", "topic", "comments"],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
-            [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)), [],
         )
 
         # Only show specific fields.

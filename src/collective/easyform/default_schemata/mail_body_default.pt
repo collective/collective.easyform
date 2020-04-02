@@ -1,15 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal">
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+>
   <head><title></title></head>
   <body>
-    <p tal:content="structure body_pre | nothing" />
+    <p tal:content="structure body_pre | nothing"></p>
     <dl>
-        <tal:block repeat="field data | nothing">
-            <dt tal:content="python:fields[field]" />
-            <dd tal:content="structure python:widgets[field]" />
-        </tal:block>
+      <tal:block repeat="field data | nothing">
+        <dt tal:content="python:fields[field]"></dt>
+        <dd tal:content="structure python:widgets[field]"></dd>
+      </tal:block>
     </dl>
-    <p tal:content="structure body_post | nothing" />
-    <p tal:content="structure body_footer | nothing" />
+    <p tal:content="structure body_post | nothing"></p>
+    <p tal:content="structure body_footer | nothing"></p>
   </body>
 </html>

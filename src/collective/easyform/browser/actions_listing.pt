@@ -1,15 +1,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag=""
       i18n:domain="plone.schemaeditor"
-      tal:omit-tag="">
+>
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:description-slot metal:fill-slot="description">
       <div class="extraActions">
-        <a id="add-field" class="pat-modal pat-plone-modal"
-           tal:attributes="href string:${context/absolute_url}/@@add-action"
-           href="@@add-action">
-            <button style="float: right; display: block;"
-                    i18n:translate="add_new_action_hellip">Add new action…</button>
+        <a class="pat-modal pat-plone-modal"
+           id="add-field"
+           href="@@add-action"
+           tal:attributes="
+             href string:${context/absolute_url}/@@add-action;
+           "
+        >
+          <button style="float: right; display: block;"
+                  i18n:translate="add_new_action_hellip"
+          >Add new action&hellip;</button>
         </a>
 
       </div>
@@ -18,63 +24,100 @@
     <metal:top-slot metal:fill-slot="formtop">
       <input tal:replace="structure context/@@authenticator/authenticator" />
       <script type="text/javascript"
-              tal:attributes="src context/++resource++schemaeditor.js"></script>
+              tal:attributes="
+                src context/++resource++schemaeditor.js;
+              "
+      ></script>
     </metal:top-slot>
 
     <metal:fields-slot metal:fill-slot="fields">
 
       <tal:block tal:repeat="group python:[view] + list(view.groups)">
-        <fieldset tal:define="fieldset_name repeat/group/index"
-                  tal:attributes="id string:fieldset-${fieldset_name};
-                                  class string:kssattr-fieldset-${fieldset_name}">
+        <fieldset tal:define="
+                    fieldset_name repeat/group/index;
+                  "
+                  tal:attributes="
+                    id string:fieldset-${fieldset_name};
+                    class string:kssattr-fieldset-${fieldset_name};
+                  "
+        >
 
-          <legend tal:define="group_name python:group.label or view.default_fieldset_label"
-                  tal:content="group_name">Fieldset name</legend>
+          <legend tal:define="
+                    group_name python:group.label or view.default_fieldset_label;
+                  "
+                  tal:content="group_name"
+          >Fieldset name</legend>
 
-          <tal:block tal:define="errors group/widgets/errors"
+          <tal:block tal:define="
+                       errors group/widgets/errors;
+                     "
                      tal:condition="errors"
-                     tal:repeat="error errors">
-              <div class="field error"
-                  tal:condition="not:nocall:error/widget"
-                  tal:content="structure error/render"
-                  />
+                     tal:repeat="error errors"
+          >
+            <div class="field error"
+                 tal:condition="not:nocall:error/widget"
+                 tal:content="structure error/render"
+            ></div>
           </tal:block>
 
           <tal:widgets repeat="widget group/widgets/values">
 
-            <div tal:condition="widget/disabled|nothing" class="fieldPreview fieldFromBehavior">
+            <div class="fieldPreview fieldFromBehavior"
+                 tal:condition="widget/disabled|nothing"
+            >
               <div class="fieldLabel">
-                  <tal:block i18n:translate="">From the
-                    <tal:block i18n:name="behavior_name" tal:replace="python:widget.__name__.split('.')[0]"/> behavior:</tal:block>
-                  <strong tal:content="widget/field/__name__" /> &ndash;
-                  <tal:block tal:content="python:view.field_type(widget.field)"/>
+                <tal:block i18n:translate="">From the
+                  <tal:block tal:replace="python:widget.__name__.split('.')[0]"
+                             i18n:name="behavior_name"
+                  />
+                  behavior:
+                </tal:block>
+                <strong tal:content="widget/field/__name__"></strong>
+                 &ndash;
+                <tal:block tal:content="python:view.field_type(widget.field)" />
               </div>
               <tal:field tal:replace="structure widget/@@ploneform-render-widget" />
               <div class="disabled-field-overlay"></div>
             </div>
 
-            <div tal:condition="not:widget/disabled|nothing"
-                 class="fieldPreview orderable" tal:attributes="data-field_id widget/field/__name__">
+            <div class="fieldPreview orderable"
+                 tal:condition="not:widget/disabled|nothing"
+                 tal:attributes="
+                   data-field_id widget/field/__name__;
+                 "
+            >
 
               <div class="fieldLabel">
-                  <strong tal:content="widget/field/__name__" /> &ndash;
-                  <tal:block tal:content="python:view.field_type(widget.field)"/>
+                <strong tal:content="widget/field/__name__"></strong>
+                 &ndash;
+                <tal:block tal:content="python:view.field_type(widget.field)" />
               </div>
 
               <div class="fieldControls"
-                   i18n:domain="plone.schemaeditor">
-                  <a class="fieldSettings pat-modal pat-plone-modal"
-                     tal:define="edit_url python:view.edit_url(widget.field)"
-                     tal:condition="edit_url"
-                     i18n:translate=""
-                     tal:attributes="href edit_url">Settings&hellip;</a>
-                  <a class="schemaeditor-delete-field"
-                     i18n:attributes="title"
-                     title="Delete field"
-                     style="margin-left: 1em; font-size: 150%; border: none"
-                     tal:define="delete_url python:view.delete_url(widget.field)"
-                     tal:condition="delete_url"
-                     tal:attributes="href delete_url">&times;</a>
+                   i18n:domain="plone.schemaeditor"
+              >
+                <a class="fieldSettings pat-modal pat-plone-modal"
+                   tal:define="
+                     edit_url python:view.edit_url(widget.field);
+                   "
+                   tal:condition="edit_url"
+                   tal:attributes="
+                     href edit_url;
+                   "
+                   i18n:translate=""
+                >Settings&hellip;</a>
+                <a class="schemaeditor-delete-field"
+                   style="margin-left: 1em; font-size: 150%; border: none"
+                   title="Delete field"
+                   tal:define="
+                     delete_url python:view.delete_url(widget.field);
+                   "
+                   tal:condition="delete_url"
+                   tal:attributes="
+                     href delete_url;
+                   "
+                   i18n:attributes="title"
+                >&times;</a>
               </div>
 
               <div style="width: 80%">

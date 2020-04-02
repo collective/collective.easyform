@@ -1,30 +1,42 @@
-<div
-   metal:define-macro="widget-wrapper"
-   i18n:domain="plone"
-   tal:define="widget nocall:context;
-               hidden python:widget.mode == 'hidden';
-               error widget/error;
-               error_class python:error and ' error' or '';
-               fieldname_class string:kssattr-fieldname-${widget/name};"
-   tal:attributes="class string:field z3cformInlineValidation ${fieldname_class}${error_class};
-                   data-fieldname widget/name;
-                   id string:formfield-${widget/id};">
+<div metal:define-macro="widget-wrapper"
+     tal:define="
+       widget nocall:context;
+       hidden python:widget.mode == 'hidden';
+       error widget/error;
+       error_class python:error and ' error' or '';
+       fieldname_class string:kssattr-fieldname-${widget/name};
+     "
+     tal:attributes="
+       class string:field z3cformInlineValidation ${fieldname_class}${error_class};
+       data-fieldname widget/name;
+       id string:formfield-${widget/id};
+     "
+     i18n:domain="plone"
+>
 
-    <label for="" class="horizontal"
-        tal:attributes="for widget/id"
-        tal:condition="not:hidden">
-        <span tal:replace="structure widget/field/rich_label/output|widget/label">label</span>
+  <label class="horizontal"
+         for=""
+         tal:condition="not:hidden"
+         tal:attributes="
+           for widget/id;
+         "
+  >
+    <span tal:replace="structure widget/field/rich_label/output|widget/label">label</span>
 
-        <span class="required horizontal" title="Required"
-              tal:condition="python:widget.required and widget.mode == 'input'"
-              i18n:attributes="title title_required;">&nbsp;</span>
+    <span class="required horizontal"
+          title="Required"
+          tal:condition="python:widget.required and widget.mode == 'input'"
+          i18n:attributes="title title_required;"
+    >&nbsp;</span>
 
-        <span class="formHelp"
-            tal:define="description widget/field/description"
-            i18n:translate=""
-            tal:content="structure description"
-            tal:condition="python:description and not hidden"
-            >field description
-        </span>
-    </label>
+    <span class="formHelp"
+          tal:define="
+            description widget/field/description;
+          "
+          tal:condition="python:description and not hidden"
+          tal:content="structure description"
+          i18n:translate=""
+    >field description
+    </span>
+  </label>
 </div>

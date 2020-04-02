@@ -5,8 +5,8 @@ from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ILabel
-from collective.easyform.interfaces import IReCaptcha
 from collective.easyform.interfaces import INorobotCaptcha
+from collective.easyform.interfaces import IReCaptcha
 from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
@@ -14,18 +14,20 @@ from plone.supermodel.exportimport import BaseHandler
 from z3c.form.interfaces import IGroup
 from z3c.form.interfaces import IValidator
 from z3c.form.interfaces import IValue
-from zope.component import adapter, queryMultiAdapter
+from zope.component import adapter
+from zope.component import queryMultiAdapter
 from zope.component import queryUtility
-from zope.interface import implementer, providedBy
+from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
+from zope.interface import providedBy
 from zope.schema import Field
 from zope.schema import TextLine
 from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
-def superAdapter(specific_interface, adapter, objects, name=u''):
+def superAdapter(specific_interface, adapter, objects, name=u""):
     """ find the next most specific adapter """
 
     #  We are adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
@@ -78,7 +80,11 @@ class FieldExtenderValidator(object):
         # By default this will call SimpleFieldValidator.validator but allows for a fields
         # custom validation adaptor to also be called such as recaptcha
         _, _, view_interface, _, _ = self.__class__.__component_adapts__
-        validator = superAdapter(view_interface, self, (self.context, self.request, self.view, self.field, self.widget))
+        validator = superAdapter(
+            view_interface,
+            self,
+            (self.context, self.request, self.view, self.field, self.widget),
+        )
         if validator is not None:
             validator.validate(value)
 
@@ -132,7 +138,12 @@ class FieldExtenderDefault(object):
 
         # see if there is another default adapter for this field instead
         _, _, view_interface, _, _ = self.__class__.__component_adapts__
-        adapter = superAdapter(view_interface, self, (self.context, self.request, self.view, self.field, self.widget), name='default')
+        adapter = superAdapter(
+            view_interface,
+            self,
+            (self.context, self.request, self.view, self.field, self.widget),
+            name="default",
+        )
         if adapter is not None:
             return adapter.get()
         else:
@@ -207,7 +218,6 @@ class NorobotCaptcha(TextLine):
 
 
 NorobotFactory = FieldFactory(
-    NorobotCaptcha,
-    _(u'label_norobot_field', default=u'NorobotCaptcha')
+    NorobotCaptcha, _(u"label_norobot_field", default=u"NorobotCaptcha")
 )
 NorobotCaptchaHandler = BaseHandler(NorobotCaptcha)

@@ -1,9 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:five="http://namespaces.zope.org/five"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="collective.easyform">
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    >
 
   <include package="plone.app.dexterity" />
 
@@ -23,30 +22,30 @@
   <genericsetup:registerProfile
       name="default"
       title="EasyForm"
-      directory="profiles/default"
       description="Installs the collective.easyform package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
       />
 
   <genericsetup:registerProfile
       name="uninstall"
       title="EasyForm (uninstall)"
-      directory="profiles/uninstall"
       description="UnInstall the collective.easyform package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/uninstall"
       />
 
   <genericsetup:registerProfile
-        name="testing"
-        title="EasyForm testing"
-        description="Used for testing only"
-        directory="profiles/testing"
-        for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+      name="testing"
+      title="EasyForm testing"
+      description="Used for testing only"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      directory="profiles/testing"
+      />
 
   <utility
-      factory=".setuphandlers.HiddenProfiles"
       name="collective.easyform-hiddenprofiles"
+      factory=".setuphandlers.HiddenProfiles"
       />
 </configure>

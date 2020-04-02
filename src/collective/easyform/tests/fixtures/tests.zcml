@@ -1,12 +1,13 @@
 <configure
-    xmlns:zope="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    >
 
-    <browser:page
-        name="form-wrapper"
-        for="*"
-        template="wrapper_template.pt"
-        permission="zope2.View"
-        />
+  <browser:page
+      name="form-wrapper"
+      for="*"
+      permission="zope2.View"
+      template="wrapper_template.pt"
+      />
 
 </configure>

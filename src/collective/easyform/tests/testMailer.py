@@ -512,13 +512,13 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             map=dict(fruit="apple"),
             choices=set(["A", "B"]),
-            empty_string='',
+            empty_string="",
             zero_value=0,
             none_value=None,
             empty_tuple=(),
             empty_list=[],
             empty_set=set(),
-            empty_map=dict()
+            empty_map=dict(),
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
@@ -583,13 +583,13 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             map=dict(fruit="apple"),
             choices=set(["A", "B"]),
-            empty_string='',
+            empty_string="",
             zero_value=0,
             none_value=None,
             empty_tuple=(),
             empty_list=[],
             empty_set=set(),
-            empty_map=dict()
+            empty_map=dict(),
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)

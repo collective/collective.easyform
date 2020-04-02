@@ -9,11 +9,16 @@ from plone.app.testing import IntegrationTesting
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
-from plone.testing.z2 import ZSERVER_FIXTURE
 from Products.MailHost.interfaces import IMailHost
 from Products.MailHost.MailHost import MailHost
 from unittest import TestCase
 from zope.component import getSiteManager
+
+
+try:
+    from plone.testing.zope import WSGI_SERVER_FIXTURE
+except ImportError:
+    from plone.testing.z2 import ZSERVER_FIXTURE as WSGI_SERVER_FIXTURE
 
 
 class MailHostMock(MailHost):
@@ -42,6 +47,7 @@ class Fixture(PloneSandboxLayer):
             pass
         try:
             import collective.z3cform.norobots
+
             self.loadZCML(package=collective.z3cform.norobots)
         except ImportError:
             pass
@@ -78,7 +84,7 @@ FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(FIXTURE,), name="collective.easyform:Functional"
 )
 ACCEPTANCE_TESTING = FunctionalTesting(
-    bases=(FIXTURE, REMOTE_LIBRARY_BUNDLE_FIXTURE, ZSERVER_FIXTURE),
+    bases=(FIXTURE, REMOTE_LIBRARY_BUNDLE_FIXTURE, WSGI_SERVER_FIXTURE),
     name="collective.easyform:Acceptance",
 )
 

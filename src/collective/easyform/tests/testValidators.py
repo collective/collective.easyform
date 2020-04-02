@@ -3,9 +3,6 @@ try:
     from StringIO import StringIO  # for Python 2
 except ImportError:
     from io import StringIO  # for Python 3
-from ZPublisher.HTTPRequest import FileUpload
-from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
-from plone.registry.interfaces import IRegistry
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
@@ -16,8 +13,10 @@ from collective.easyform.tests import base
 from os.path import dirname
 from os.path import join
 from plone import api
+from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
 from plone.namedfile.file import NamedFile
 from plone.namedfile.interfaces import INamed
+from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
@@ -26,6 +25,7 @@ from zope.component.interfaces import ComponentLookupError
 from zope.i18n import translate
 from zope.interface import classImplements
 from ZPublisher.BaseRequest import BaseRequest
+from ZPublisher.HTTPRequest import FileUpload
 
 
 IFieldValidator = validators.IFieldValidator
@@ -147,6 +147,7 @@ class TestSingleFieldValidator(LoadFixtureBase):
     The test methods are reused in TestFieldsetValidator.
     They use the same field, except that one has it in a fieldset.
     """
+
     schema_fixture = "single_field.xml"
 
     def test_get_default(self):
@@ -154,7 +155,7 @@ class TestSingleFieldValidator(LoadFixtureBase):
         request = self.LoadRequestForm()
         request.method = "GET"
         form = EasyFormForm(self.ff1, request)()
-        self.assertNotIn('Required input is missing.', form)
+        self.assertNotIn("Required input is missing.", form)
         self.assertIn('value="foo@example.org"', form)
 
     def test_required(self):
@@ -162,8 +163,8 @@ class TestSingleFieldValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn('Required input is missing.', form)
-        self.assertNotIn('Invalid email address.', form)
+        self.assertIn("Required input is missing.", form)
+        self.assertNotIn("Invalid email address.", form)
 
     def test_validator_in_fieldset(self):
         data = {
@@ -172,8 +173,8 @@ class TestSingleFieldValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertNotIn('Required input is missing.', form)
-        self.assertIn('Invalid email address.', form)
+        self.assertNotIn("Required input is missing.", form)
+        self.assertIn("Invalid email address.", form)
 
 
 class TestFieldsetValidator(TestSingleFieldValidator):
@@ -182,6 +183,7 @@ class TestFieldsetValidator(TestSingleFieldValidator):
 
     This reuses the test methods from TestSingleFieldValidator.
     """
+
     schema_fixture = "fieldset_with_single_field.xml"
 
 
@@ -359,6 +361,7 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
 
     """ Can't test captcha passes but we can test it fails
     """
+
     schema_fixture = "recaptcha.xml"
 
     def afterSetUp(self):
@@ -375,16 +378,16 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn('The code you entered was wrong, please enter the new one.', form)
-        self.assertNotIn('Thanks for your input.', form)
+        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
 
     def test_wrong(self):
         data = {"verification": "123"}
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn('The code you entered was wrong, please enter the new one.', form)
-        self.assertNotIn('Thanks for your input.', form)
+        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
 
 
 class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
@@ -399,7 +402,7 @@ class DummyUpload(FileUpload):
         self.file = StringIO("x" * size)
         self.file.filename = filename
         self.file.headers = []
-        self.file.name = 'file1'
+        self.file.name = "file1"
         self.file.file = self.file
         FileUpload.__init__(self, self.file)
 
@@ -415,7 +418,7 @@ class TestFieldsetFileValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertNotIn('Thanks for your input.', form)
+        self.assertNotIn("Thanks for your input.", form)
         self.assertIn('File type "TXT" is not allowed!', form)
 
     def test_right_type(self):
@@ -423,12 +426,12 @@ class TestFieldsetFileValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn('Thanks for your input.', form)
+        self.assertIn("Thanks for your input.", form)
 
     def test_too_big(self):
         data = {"file1": DummyUpload(2000, "blah.pdf")}
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertNotIn('Thanks for your input.', form)
-        self.assertIn('File is bigger than allowed size of 300 bytes!', form)
+        self.assertNotIn("Thanks for your input.", form)
+        self.assertIn("File is bigger than allowed size of 300 bytes!", form)

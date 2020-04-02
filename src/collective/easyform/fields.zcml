@@ -1,55 +1,50 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="collective.easyform">
-    <adapter
-        factory=".fields.FieldExtenderValidator"
-        />
-    <adapter
-        factory=".fields.GroupFieldExtenderValidator"
-        />
-    <adapter
-        factory=".fields.FieldExtenderDefault"
-        name="default"
-        />
-    <adapter
-        factory=".fields.GroupFieldExtenderDefault"
-        name="default"
+    >
+  <adapter factory=".fields.FieldExtenderValidator" />
+  <adapter factory=".fields.GroupFieldExtenderValidator" />
+  <adapter
+      name="default"
+      factory=".fields.FieldExtenderDefault"
+      />
+  <adapter
+      name="default"
+      factory=".fields.GroupFieldExtenderDefault"
+      />
+  <utility
+      name="collective.easyform.fields.Label"
+      component=".fields.LabelFactory"
+      />
+  <utility
+      name="collective.easyform.fields.Label"
+      component=".fields.LabelHandler"
+      />
+  <utility
+      name="collective.easyform.fields.RichLabel"
+      component=".fields.RichLabelFactory"
+      />
+  <utility
+      name="collective.easyform.fields.RichLabel"
+      component=".fields.RichLabelHandler"
+      />
+  <configure zcml:condition="installed plone.formwidget.recaptcha">
+    <utility
+        name="collective.easyform.fields.ReCaptcha"
+        component=".fields.ReCaptchaFactory"
         />
     <utility
-        name="collective.easyform.fields.Label"
-        component=".fields.LabelFactory"
+        name="collective.easyform.fields.ReCaptcha"
+        component=".fields.ReCaptchaHandler"
         />
-    <utility
-        name="collective.easyform.fields.Label"
-        component=".fields.LabelHandler"
+    <adapter
+        provides="z3c.form.interfaces.IValidator"
+        for="collective.easyform.interfaces.IEasyForm
+             *
+             *
+             collective.easyform.interfaces.IReCaptcha
+             *"
+        factory="plone.formwidget.recaptcha.ReCaptchaValidator"
         />
-    <utility
-        name="collective.easyform.fields.RichLabel"
-        component=".fields.RichLabelFactory"
-        />
-    <utility
-        name="collective.easyform.fields.RichLabel"
-        component=".fields.RichLabelHandler"
-        />
-    <configure
-        zcml:condition="installed plone.formwidget.recaptcha">
-        <utility
-            name="collective.easyform.fields.ReCaptcha"
-            component=".fields.ReCaptchaFactory"
-            />
-        <utility
-            name="collective.easyform.fields.ReCaptcha"
-            component=".fields.ReCaptchaHandler"
-            />
-        <adapter
-            for="collective.easyform.interfaces.IEasyForm
-                 *
-                 *
-                 collective.easyform.interfaces.IReCaptcha
-                 *"
-            provides="z3c.form.interfaces.IValidator"
-            factory="plone.formwidget.recaptcha.ReCaptchaValidator"
-            />
-    </configure>
+  </configure>
 </configure>
