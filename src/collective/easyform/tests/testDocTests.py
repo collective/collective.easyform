@@ -2,7 +2,12 @@
 from collective.easyform.tests.base import FUNCTIONAL_TESTING
 from plone import api
 from plone.testing import layered
-from plone.testing.z2 import Browser
+
+try:
+    from plone.testing.zope import Browser
+except ImportError:
+    from plone.testing.z2 import Browser
+
 
 import doctest
 import os

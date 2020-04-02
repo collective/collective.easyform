@@ -3,8 +3,13 @@ from collective.easyform.tests import base
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.registry.interfaces import IRegistry
-from plone.testing.z2 import Browser
 from zope.component import getUtility
+
+
+try:
+    from plone.testing.zope import Browser
+except ImportError:
+    from plone.testing.z2 import Browser
 
 
 class AllowedFieldsControlPanelFuncionalTest(base.EasyFormTestCase):
