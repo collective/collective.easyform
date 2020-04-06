@@ -50,9 +50,10 @@ Test for 'Subject' in the mail body::
     False
 
 Specifically list the field as one that should be included in the thank
-you page, and then it should show up in mail and thanks page::
+you page, and then it should show up in mail and thanks page.
 
 TODO: Since getform('xy').mech_form isn't available anymore we have to move this to a robottest
+::
 
 #    >>> browser.open(portal_url + '/testform/edit')
 #    >>> browser.getControl('Show All Fields').selected = False

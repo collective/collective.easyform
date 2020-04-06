@@ -25,12 +25,12 @@ optionflags = (
 )
 
 testfiles = (
-    "browser.rst",
-    "attachment.rst",
-    "ssl.txt",
-    "serverside_field.txt",
     "../api.py",
-    "../README.txt",
+    "attachment.rst",
+    "basic.rst",
+    "browser.rst",
+    "serverside_field.rst",
+    "ssl.rst",
 )
 
 

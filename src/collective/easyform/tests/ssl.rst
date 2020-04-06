@@ -42,6 +42,7 @@ well (so the user sees a security icon in their browser.) ::
 
 Log out and go back to the form.
 We should be redirected to https://
+::
 
     >>> anon_browser = get_browser(layer, auth=False)
     >>> anon_browser.open(portal_url + '/testform')
