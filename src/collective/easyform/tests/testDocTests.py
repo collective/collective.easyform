@@ -3,18 +3,18 @@ from collective.easyform.tests.base import FUNCTIONAL_TESTING
 from plone import api
 from plone.testing import layered
 
-try:
-    from plone.testing.zope import Browser
-except ImportError:
-    from plone.testing.z2 import Browser
-
-
 import doctest
 import os
 import re
 import six
 import transaction
 import unittest
+
+
+try:
+    from plone.testing.zope import Browser
+except ImportError:
+    from plone.testing.z2 import Browser
 
 
 optionflags = (
@@ -25,12 +25,12 @@ optionflags = (
 )
 
 testfiles = (
-    "browser.rst",
-    "attachment.rst",
-    "ssl.txt",
-    "serverside_field.txt",
     "../api.py",
-    "../README.txt",
+    "attachment.rst",
+    "basic.rst",
+    "browser.rst",
+    "serverside_field.rst",
+    "ssl.rst",
 )
 
 

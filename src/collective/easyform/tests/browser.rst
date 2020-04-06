@@ -1,6 +1,7 @@
 Integration tests
 =================
 
+::
     >>> browser = get_browser(layer)
 
 Standalone form
@@ -99,7 +100,7 @@ Submit the form::
     >>> 'Thanks for your input.' in browser.contents
     True
 
-The check to traverse to /news after submission has moved to non-doctest because of a weird traceback in py3:
+The check to traverse to /news after submission has moved to non-doctest because of a weird traceback in py3::
 
     Error in test [...]/collective.easyform/src/collective/easyform/tests/browser.rst
     doctest.UnexpectedException: <DocTest browser.rst from [...]/collective.easyform/src/collective/easyform/tests/browser.rst:0 (95 examples)>
@@ -151,13 +152,13 @@ That should also be true for fields::
     ...
     zExceptions.NotFound: ...
 
-Attempts to set mailer body TTW should fail
+Attempts to set mailer body TTW should fail::
     >>> browser.open(portal_url + '/testform/mailer/setBody_pt?value=stuff')
     Traceback (most recent call last):
     ...
     zExceptions.NotFound: ...
 
-Attempts to read mailer body TTW should fail
+Attempts to read mailer body TTW should fail::
     >>> browser.open(portal_url + '/testform/mailer/body_pt')
     Traceback (most recent call last):
     ...
