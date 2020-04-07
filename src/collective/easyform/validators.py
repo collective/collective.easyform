@@ -14,6 +14,8 @@ BAD_SIGNS = frozenset(["<a ", "www.", "http:", ".com", "https:"])
 
 
 def isValidEmail(value):
+    if value is None:
+        return
     """Check for the user email address"""
     reg_tool = api.portal.get_tool("portal_registration")
     if not (value and reg_tool.isValidEmail(value)):
@@ -21,6 +23,9 @@ def isValidEmail(value):
 
 
 def isCommaSeparatedEmails(value):
+    if value is None:
+        # Let the system for required take care of None values
+        return
     """Check for one or more E-Mail Addresses separated by commas"""
     reg_tool = api.portal.get_tool("portal_registration")
     for v in value.split(","):
@@ -59,6 +64,9 @@ def update_validators():
 
         def method(name):
             def validate(value):
+                if value is None:
+                    # Let the system for required take care of None values
+                    return
                 if six.PY2 and isinstance(value, six.text_type):
                     value = value.encode("utf-8")
                 res = validation(name, value)
