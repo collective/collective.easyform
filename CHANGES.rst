@@ -5,7 +5,7 @@ Changelog
 ------------------
 
 - Implement PloneFormGen migration.
-  [buchi]
+  [buchi, laulaz]
 
 - Fixed errors with ``header_injection`` implementation.
   [maurits, thet]

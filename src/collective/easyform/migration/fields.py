@@ -2,6 +2,8 @@
 from collections import namedtuple
 from lxml import etree
 from Products.PloneFormGen.content.fieldsBase import BaseFormField
+from Products.PloneFormGen.content.fields import FGFieldsetStart, FGFieldsetEnd
+from Products.PloneFormGen.interfaces import IPloneFormGenFieldset
 import logging
 import six
 
@@ -187,19 +189,38 @@ PROPERTIES_MAPPING = {
 }
 
 
+def pfg_fields_properties(obj):
+    id_ = obj.getId()
+    props = {}
+    props['_portal_type'] = obj.portal_type
+    for field in obj.Schema().fields():
+        name = field.getName()
+        accessor = field.getEditAccessor(obj)
+        props[name] = accessor()
+    return (id_, props)
+
+
 def pfg_fields(context):
     fields = []
     for obj in context.objectValues():
+        if IPloneFormGenFieldset.providedBy(obj):
+            # handle FieldsetFolder folderish type
+            parent = obj.aq_parent
+            obj_id = obj.getId()
+            # append a FieldsetStart field with title and description
+            start = FGFieldsetStart(obj_id).__of__(parent)
+            start.setTitle(obj.Title())
+            start.setDescription(obj.Description())
+            fields.append(pfg_fields_properties(start))
+            # add all the fieldset contained fields
+            fields.extend(pfg_fields(obj))
+            # finish by appending a marker FieldsetEnd field
+            end = FGFieldsetEnd(obj_id).__of__(parent)
+            fields.append(pfg_fields_properties(end))
+            continue
         if not isinstance(obj, BaseFormField):
             continue
-        id_ = obj.getId()
-        props = {}
-        props['_portal_type'] = obj.portal_type
-        for field in obj.Schema().fields():
-            name = field.getName()
-            accessor = field.getEditAccessor(obj)
-            props[name] = accessor()
-        fields.append((id_, props))
+        fields.append(pfg_fields_properties(obj))
     return fields
 
 
