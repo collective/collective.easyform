@@ -10,6 +10,9 @@ Changelog
 - Format code according to Plone standards: black, isort, zpretty.
   [thet]
 
+- Fix Validators for value None: return valid and let required handle it
+  [Nimo-19]
+
 
 2.1.5 (2020-02-09)
 ------------------
