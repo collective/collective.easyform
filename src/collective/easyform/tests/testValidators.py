@@ -84,6 +84,41 @@ class TestBaseValidators(base.EasyFormTestCase):
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
 
+    # Test value None and not required
+    def test_basevalidator3(self):
+
+        request = self.layer["request"]
+        request.form["form.widgets.replyto"] = None
+
+        fields = get_schema(self.ff1)
+
+        fields["replyto"].required = False
+        IFieldExtender(fields["replyto"]).validators = ["isEmail"]
+        set_fields(self.ff1, fields)
+        view = self.ff1.restrictedTraverse("view")
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(errors, ())
+
+    # Test value None and required
+    def test_basevalidator4(self):
+
+        request = self.layer["request"]
+        request.form["form.widgets.replyto"] = None
+
+        fields = get_schema(self.ff1)
+
+        IFieldExtender(fields["replyto"]).validators = ["isEmail"]
+        set_fields(self.ff1, fields)
+        view = self.ff1.restrictedTraverse("view")
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 1)
+
     def test_talvalidator(self):
         fields = get_schema(self.ff1)
         IFieldExtender(fields["comments"]).TValidator = "python: value == 'comments'"
@@ -255,12 +290,14 @@ class TestCustomValidators(base.EasyFormTestCase):
         v = getUtility(IFieldValidator, name="isValidEmail")
         self.assertEqual(v("hi@there.com"), None)
         self.assertEqual(v("one@u.washington.edu"), None)
+        self.assertEqual(v(None), None)
         self.assertRaises(EmailAddressInvalid, v, "@there.com")
 
     def test_isCommaSeparatedEmails(self):
         v = getUtility(IFieldValidator, name="isCommaSeparatedEmails")
         self.assertEqual(v("hi@there.com,another@two.com"), None)
         self.assertEqual(v("one@u.washington.edu,  two@u.washington.edu"), None)
+        self.assertEqual(v(None), None)
         self.assertNotEqual(v("abc@plone.org; xyz@plone.org"), None)
 
 
