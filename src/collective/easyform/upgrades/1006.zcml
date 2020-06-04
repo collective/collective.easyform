@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1006"
+      profile="collective.easyform:default"
+      source="1005"
+      >
+    <gs:upgradeDepends
+        title="Import rolemap"
+        import_profile="collective.easyform:default"
+        import_steps="rolemap"
+        run_deps="false"
+        />
+  </gs:upgradeSteps>
+
+</configure>
