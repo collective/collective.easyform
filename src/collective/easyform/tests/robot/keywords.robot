@@ -64,4 +64,4 @@ Click Edit
     Click Link  css=#edit-zone #contentview-edit a
 
 Click Overrides
-    Click Link  css=#autotoc-item-autotoc-1
+    Click Link  css=#autotoc-item-autotoc-3

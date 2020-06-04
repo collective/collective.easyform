@@ -80,6 +80,122 @@ class IEasyForm(Schema):
     actions_model = zope.schema.Text(
         title=_(u"Actions Model"), defaultFactory=default_actions
     )
+
+    # DEFAULT
+    formPrologue = RichText(
+        title=_(u"label_prologue_text", default=u"Form Prologue"),
+        description=_(
+            u"help_prologue_text",
+            default=u"This text will be displayed above the form fields.",
+        ),
+        required=False,
+    )
+    formEpilogue = RichText(
+        title=_(u"label_epilogue_text", default=u"Form Epilogue"),
+        description=_(
+            u"help_epilogue_text",
+            default=u"The text will be displayed after the form fields.",
+        ),
+        required=False,
+    )
+
+    # THANKYOU
+    fieldset(
+        u"thankyou",
+        label=_("Thanks Page"),
+        fields=[
+            "thankstitle",
+            "thanksdescription",
+            "showAll",
+            "showFields",
+            "includeEmpties",
+            "thanksPrologue",
+            "thanksEpilogue",
+        ],
+        order=10,
+    )
+    thankstitle = zope.schema.TextLine(
+        title=_(u"label_thankstitle", default=u"Thanks title"),
+        defaultFactory=default_thankstitle,
+        required=True,
+    )
+    thanksdescription = zope.schema.Text(
+        title=_(u"label_thanksdescription", default=u"Thanks summary"),
+        description=_(u"help_thanksdescription", default=u"Used in thanks page."),
+        defaultFactory=default_thanksdescription,
+        required=False,
+        missing_value=u"",
+    )
+    showAll = zope.schema.Bool(
+        title=_(u"label_showallfields_text", default=u"Show All Fields"),
+        description=_(
+            u"help_showallfields_text",
+            default=u""
+            u"Check this to display input for all fields "
+            u"(except label and file fields). If you check "
+            u"this, the choices in the pick box below "
+            u"will be ignored.",
+        ),
+        default=True,
+        required=False,
+    )
+    showFields = zope.schema.List(
+        title=_(u"label_showfields_text", default=u"Show Responses"),
+        description=_(
+            u"help_showfields_text",
+            default=u"Pick the fields whose inputs you'd like to display on "
+            u"the success page.",
+        ),
+        unique=True,
+        required=False,
+        value_type=zope.schema.Choice(vocabulary="easyform.Fields"),  # noqa
+    )
+    includeEmpties = zope.schema.Bool(
+        title=_(u"label_includeEmpties_text", default=u"Include Empties"),
+        description=_(
+            u"help_includeEmpties_text",
+            default=u""
+            u"Check this to display field titles "
+            u"for fields that received no input. Uncheck "
+            u"to leave fields with no input off the list.",
+        ),
+        default=True,
+        required=False,
+    )
+    thanksPrologue = RichText(
+        title=_(u"label_thanksprologue_text", default=u"Thanks Prologue"),
+        description=_(
+            u"help_thanksprologue_text",
+            default=u"This text will be displayed above the selected field " u"inputs.",
+        ),
+        required=False,
+    )
+    thanksEpilogue = RichText(
+        title=_(u"label_thanksepilogue_text", default=u"Thanks Epilogue"),
+        description=_(
+            u"help_thanksepilogue_text",
+            default=u"The text will be displayed after the field inputs.",
+        ),
+        required=False,
+    )
+
+    # ADVANCED
+    fieldset(
+        u"advanced",
+        label=_("Advanced"),
+        fields=[
+            "submitLabel",
+            "useCancelButton",
+            "resetLabel",
+            "form_tabbing",
+            "default_fieldset_label",
+            "method",
+            "unload_protection",
+            "CSRFProtection",
+            "forceSSL",
+        ],
+        order=20,
+    )
     submitLabel = zope.schema.TextLine(
         title=_(u"label_submitlabel_text", default=u"Submit Button Label"),
         description=_(u"help_submitlabel_text", default=u""),
@@ -98,13 +214,6 @@ class IEasyForm(Schema):
         defaultFactory=default_resetLabel,
         required=False,
     )
-    method = zope.schema.Choice(
-        title=_(u"label_method", default=u"Form method"),
-        description=_(u"help_method", default=u""),
-        default=u"post",
-        required=False,
-        vocabulary="easyform.FormMethods",
-    )
     form_tabbing = zope.schema.Bool(
         title=_(u"label_form_tabbing", default=u"Turn fieldsets to tabs"),
         description=_(u"help_form_tabbing", default=u""),
@@ -122,6 +231,13 @@ class IEasyForm(Schema):
         ),
         required=False,
         default=u"",
+    )
+    method = zope.schema.Choice(
+        title=_(u"label_method", default=u"Form method"),
+        description=_(u"help_method", default=u""),
+        default=u"post",
+        required=False,
+        vocabulary="easyform.FormMethods",
     )
     unload_protection = zope.schema.Bool(
         title=_(u"label_unload_protection", default=u"Unload protection"),
@@ -155,22 +271,8 @@ class IEasyForm(Schema):
         default=False,
         required=False,
     )
-    formPrologue = RichText(
-        title=_(u"label_prologue_text", default=u"Form Prologue"),
-        description=_(
-            u"help_prologue_text",
-            default=u"This text will be displayed above the form fields.",
-        ),
-        required=False,
-    )
-    formEpilogue = RichText(
-        title=_(u"label_epilogue_text", default=u"Form Epilogue"),
-        description=_(
-            u"help_epilogue_text",
-            default=u"The text will be displayed after the form fields.",
-        ),
-        required=False,
-    )
+
+    # OVERRIDES
     fieldset(
         u"overrides",
         label=_("Overrides"),
@@ -183,6 +285,7 @@ class IEasyForm(Schema):
             "headerInjection",
             "submitLabelOverride",
         ],
+        order=30,
     )
     directives.write_permission(thanksPageOverrideAction=config.EDIT_TALES_PERMISSION)
     thanksPageOverrideAction = zope.schema.Choice(
@@ -315,83 +418,6 @@ class IEasyForm(Schema):
         constraint=isTALES,
         required=False,
         default=u"",
-    )
-    fieldset(
-        u"thankyou",
-        label=_("Thanks Page"),
-        fields=[
-            "thankstitle",
-            "thanksdescription",
-            "showAll",
-            "showFields",
-            "includeEmpties",
-            "thanksPrologue",
-            "thanksEpilogue",
-        ],
-    )
-    thankstitle = zope.schema.TextLine(
-        title=_(u"label_thankstitle", default=u"Thanks title"),
-        defaultFactory=default_thankstitle,
-        required=True,
-    )
-    thanksdescription = zope.schema.Text(
-        title=_(u"label_thanksdescription", default=u"Thanks summary"),
-        description=_(u"help_thanksdescription", default=u"Used in thanks page."),
-        defaultFactory=default_thanksdescription,
-        required=False,
-        missing_value=u"",
-    )
-    showAll = zope.schema.Bool(
-        title=_(u"label_showallfields_text", default=u"Show All Fields"),
-        description=_(
-            u"help_showallfields_text",
-            default=u""
-            u"Check this to display input for all fields "
-            u"(except label and file fields). If you check "
-            u"this, the choices in the pick box below "
-            u"will be ignored.",
-        ),
-        default=True,
-        required=False,
-    )
-    showFields = zope.schema.List(
-        title=_(u"label_showfields_text", default=u"Show Responses"),
-        description=_(
-            u"help_showfields_text",
-            default=u"Pick the fields whose inputs you'd like to display on "
-            u"the success page.",
-        ),
-        unique=True,
-        required=False,
-        value_type=zope.schema.Choice(vocabulary="easyform.Fields"),  # noqa
-    )
-    includeEmpties = zope.schema.Bool(
-        title=_(u"label_includeEmpties_text", default=u"Include Empties"),
-        description=_(
-            u"help_includeEmpties_text",
-            default=u""
-            u"Check this to display field titles "
-            u"for fields that received no input. Uncheck "
-            u"to leave fields with no input off the list.",
-        ),
-        default=True,
-        required=False,
-    )
-    thanksPrologue = RichText(
-        title=_(u"label_thanksprologue_text", default=u"Thanks Prologue"),
-        description=_(
-            u"help_thanksprologue_text",
-            default=u"This text will be displayed above the selected field " u"inputs.",
-        ),
-        required=False,
-    )
-    thanksEpilogue = RichText(
-        title=_(u"label_thanksepilogue_text", default=u"Thanks Epilogue"),
-        description=_(
-            u"help_thanksepilogue_text",
-            default=u"The text will be displayed after the field inputs.",
-        ),
-        required=False,
     )
 
 
