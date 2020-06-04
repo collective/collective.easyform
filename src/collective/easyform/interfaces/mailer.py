@@ -7,7 +7,7 @@ from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schema import Email
-from plone.supermodel.model import fieldset
+from plone.supermodel.directives import fieldset
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
