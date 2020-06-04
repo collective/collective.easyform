@@ -5,7 +5,7 @@ from collective.easyform import easyformMessageFactory as _  # NOQA
 from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
-from plone.supermodel.model import fieldset
+from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
 from Products.CMFPlone.utils import safe_unicode
 from zope.i18n import translate

@@ -7,7 +7,7 @@ from plone.autoform import directives
 from plone.schemaeditor.interfaces import IFieldContext
 from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
-from plone.supermodel.model import fieldset
+from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
 from z3c.form.interfaces import IFieldWidget
 from zope.component import getGlobalSiteManager

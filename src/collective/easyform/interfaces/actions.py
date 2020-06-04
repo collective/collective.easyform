@@ -7,7 +7,7 @@ from plone.schemaeditor.interfaces import ID_RE
 from plone.schemaeditor.interfaces import IFieldContext
 from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
-from plone.supermodel.model import fieldset
+from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
 from zope.interface import Interface
 
