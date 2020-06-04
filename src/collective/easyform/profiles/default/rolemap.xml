@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<rolemap>
+  <permissions>
+    <permission acquire="True"
+                name="collective.easyform: Add Content"
+    >
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Add Mailers"
+    >
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Add Data Savers"
+    >
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Add Custom Scripts"
+    >
+      <role name="Manager" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit TALES Fields"
+    >
+      <role name="Manager" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit Python Fields"
+    >
+      <role name="Manager" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit Advanced Fields"
+    >
+      <role name="Manager" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit Mail Addresses"
+    >
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit Encryption Specs"
+    >
+      <role name="Manager" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Download Saved Input"
+    >
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+  </permissions>
+</rolemap>
