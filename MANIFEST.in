@@ -12,3 +12,6 @@ graft src/collective
 include *.cfg
 include *.rst
 include *.txt
+include pyproject.toml
+recursive-exclude news *
+exclude news
