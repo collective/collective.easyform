@@ -74,7 +74,7 @@ class IMailer(IAction):
         label=_("Addressing"),
         fields=["to_field", "cc_recipients", "bcc_recipients", "replyto_field"],
     )
-    directives.write_permission(to_field=config.EDIT_ADVANCED_PERMISSION)
+    directives.write_permission(to_field=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(to_field=MODIFY_PORTAL_CONTENT)
     to_field = zope.schema.Choice(
         title=_(u"label_formmailer_to_extract", default=u"Extract Recipient From"),
