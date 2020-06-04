@@ -244,8 +244,8 @@ class EasyFormActionsListingPage(SchemaListingPage):
 
 
 class ActionAddForm(FieldAddForm):
-
-    fields = field.Fields(INewAction)
+    schema = INewAction
+    fields = field.Fields()  # let fields be updated by AutoExtensibleForm.updateFields
     label = _("Add new action")
 
 

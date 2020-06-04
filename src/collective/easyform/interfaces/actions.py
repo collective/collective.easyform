@@ -9,7 +9,6 @@ from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
 from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
-from zope.interface import Interface
 
 import z3c.form.interfaces
 import zope.interface
@@ -37,7 +36,7 @@ def isValidFieldName(value):
     return True
 
 
-class INewAction(Interface):
+class INewAction(Schema):
 
     title = zope.schema.TextLine(title=__(u"Title"), required=True)
 
