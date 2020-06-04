@@ -1,0 +1,2 @@
+Hide the "description" field from form actions, as it is not used anywhere.
+Customizations which try to omit or use the description field might need adaptions.

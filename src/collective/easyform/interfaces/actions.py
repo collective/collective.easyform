@@ -47,18 +47,12 @@ class INewAction(Schema):
         constraint=isValidFieldName,
     )
 
-    description = zope.schema.Text(
-        title=__(u"Help Text"),
-        description=__(u"Shows up in the form as help text for the field."),
-        required=False,
-    )
-
     factory = zope.schema.Choice(
         title=_(u"Action type"), vocabulary="EasyFormActions", required=True
     )
 
     @zope.interface.invariant
-    def checkTitleAndDescriptionTypes(data):  # NOQA
+    def checkTitleTypes(data):
         if data.__name__ is not None and data.factory is not None:
             if (
                 data.__name__ == "title"
@@ -66,13 +60,6 @@ class INewAction(Schema):
             ):
                 raise zope.interface.Invalid(
                     __(u"The 'title' field must be a Text line (string) " u"field.")
-                )
-            if (
-                data.__name__ == "description"
-                and data.factory.fieldcls is not zope.schema.Text
-            ):
-                raise zope.interface.Invalid(
-                    __(u"The 'description' field must be a Text field.")
                 )
 
 
@@ -117,7 +104,9 @@ class IActionEditForm(z3c.form.interfaces.IEditForm):
 
 
 class IAction(Schema, zope.schema.interfaces.IField):
-    directives.omitted("required", "order", "default", "missing_value", "readonly")
+    directives.omitted(
+        "description", "required", "order", "default", "missing_value", "readonly"
+    )
     #     required = zope.schema.Bool(
     #         title=_('Enabled'),
     #        description=_('Tells whether a action is enabled.'),
