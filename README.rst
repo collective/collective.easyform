@@ -22,6 +22,7 @@ EasyForm provides a Plone form builder through-the-web using fields, widgets, ac
 Form input can be saved or emailed.
 A simple and user-friendly interface allows non-programmers to create custom forms.
 
+
 Installation
 ============
 
@@ -44,6 +45,15 @@ Run buildout:
     bin/buildout
 
 The last step is to activate ``EasyForm`` in the Add-ons control panel.
+
+
+Migration from PloneFormGen
+===========================
+
+With PloneFormGen installed, open the following url:
+
+``@@migrate-ploneformgen``
+
 
 Usage
 =====
@@ -167,6 +177,7 @@ The mailer stores a HTML template for sending the results of the form. You can o
 of this package is taken. If you plan to override start with the the `mail_body_default.pt` file and make sure
 it is a valid pagetemplate.
 
+
 Related Addons
 ==============
 
@@ -190,6 +201,7 @@ Maintainer of ``collective.easyform`` is the Plone Collective community.
 We appreciate any contribution !
 
 For new release, please contact one of the owners or maintainers mentioned at the `Python Package Index page <https://pypi.python.org/pypi/collective.easyform>`_.
+
 
 Contribute
 ==========
