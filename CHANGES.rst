@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.1.6 (unreleased)
+2.2.0 (2020-06-04)
 ------------------
 
 - Implement PloneFormGen migration.
