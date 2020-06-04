@@ -94,7 +94,8 @@ class ActionFactory(object):
 
 @implementer(IAction)
 class Action(Bool):
-    """ Base action class """
+    """Base action class.
+    """
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -103,7 +104,7 @@ class Action(Bool):
 
 
 class DummyFormView(WidgetsView):
-    """ A dummy form to get the widgets rendered for the mailer action
+    """A dummy form to get the widgets rendered for the mailer action.
     """
 
     mode = DISPLAY_MODE
@@ -121,7 +122,8 @@ class Mailer(Action):
         super(Mailer, self).__init__(**kw)
 
     def get_portal_email_address(self, context):
-        """Return the email address defined in the Plone site."""
+        """Return the email address defined in the Plone site.
+        """
         return api.portal.get_registry_record("plone.email_from_address")
 
     def secure_header_line(self, line):
@@ -182,7 +184,7 @@ class Mailer(Action):
         return template.pt_render(extra_context=extra)
 
     def get_owner_info(self, context):
-        """Return owner info
+        """Return owner info.
         """
         pms = getToolByName(context, "portal_membership")
         ownerinfo = context.getOwner()
@@ -204,8 +206,7 @@ class Mailer(Action):
         return (fullname, toemail)
 
     def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
-        """
-        Return addresses
+        """Return addresses.
         """
         # get Reply-To
         reply_addr = None
@@ -247,7 +248,7 @@ class Mailer(Action):
         return (to, from_addr, reply_addr)
 
     def get_subject(self, fields, request, context):
-        """Return subject
+        """Return subject.
         """
         # get subject header
         nosubject = u"(no subject)"  # TODO: translate
@@ -282,7 +283,7 @@ class Mailer(Action):
     def get_header_info(
         self, fields, request, context, from_addr=None, to_addr=None, subject=None
     ):
-        """Return header info
+        """Return header info.
 
         header info is a dictionary
 
@@ -494,8 +495,7 @@ class Mailer(Action):
         return outer.as_string()
 
     def onSuccess(self, fields, request):
-        """
-        e-mails data.
+        """e-mails data.
         """
         context = get_context(self)
         mailtext = self.get_mail_text(fields, request, context)
@@ -606,20 +606,20 @@ class SaveData(Action):
         self._storage.clear()
 
     def getSavedFormInput(self):
-        """ returns saved input as an iterable;
-            each row is a sequence of fields.
+        """Returns saved input as an iterable;
+        each row is a sequence of fields.
         """
 
         return list(self._storage.values())
 
     def getSavedFormInputItems(self):
-        """ returns saved input as an iterable;
-            each row is an (id, sequence of fields) tuple
+        """Returns saved input as an iterable;
+        each row is an (id, sequence of fields) tuple
         """
         return list(self._storage.items())
 
     def getSavedFormInputForEdit(self, header=False, delimiter=","):
-        """ returns saved as CSV text """
+        """Returns saved as CSV text"""
         sbuf = StringIO()
         writer = csvwriter(sbuf, delimiter=delimiter)
         names = self.getColumnNames()
@@ -748,8 +748,7 @@ class SaveData(Action):
         storage[id] = value
 
     def onSuccess(self, fields, request):
-        """
-        saves data.
+        """Saves data.
         """
         # if LP_SAVE_TO_CANONICAL and not loopstop:
         # LinguaPlone functionality:

@@ -55,8 +55,7 @@ except ImportError:
 
 @implementer(IEasyFormForm)
 class EasyFormForm(AutoExtensibleForm, form.Form):
-    """
-    EasyForm form
+    """EasyForm form.
     """
 
     form_template = ViewPageTemplateFile("easyform_form.pt")
@@ -80,7 +79,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         )
 
     def action(self):
-        """ Redefine <form action=''> attribute.
+        """Redefine <form action=''> attribute.
         """
         action = getattr(self.context, "formActionOverride")
         if action:
@@ -270,12 +269,12 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.actions["reset"].title = self.context.resetLabel
 
     def formMaybeForceSSL(self):
-        """ Redirect to an https:// URL if the 'force SSL' option is on.
+        """Redirect to an https:// URL if the 'force SSL' option is on.
 
-            However, don't do so for those with rights to edit the form,
-            to avoid making the form uneditable if SSL isn't configured
-            properly.  These users will still get an SSL-ified form
-            action for when the form is submitted.
+        However, don't do so for those with rights to edit the form,
+        to avoid making the form uneditable if SSL isn't configured
+        properly.  These users will still get an SSL-ified form
+        action for when the form is submitted.
         """
         sm = getSecurityManager()
         if self.context.forceSSL and not sm.checkPermission(
@@ -287,7 +286,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 self.request.response.redirect(secure_url, status="movedtemporarily")
 
     def update(self):
-        """ Update form - see interfaces.IForm """
+        """Update form - see interfaces.IForm
+        """
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
         self.template = self.form_template
@@ -351,9 +351,7 @@ EasyFormView = EasyFormFormWrapper
 
 
 class EasyFormFormEmbedded(EasyFormForm):
-
-    """
-    EasyForm form embedded
+    """EasyForm form embedded.
     """
 
     form_template = ViewPageTemplateFile("easyform_form_embedded.pt")
@@ -367,7 +365,8 @@ class EasyFormInlineValidationView(InlineValidationView):
 
 class GetSaveDataAdaptersView(BrowserView):
     def __call__(self, *args, **kwargs):
-        """return all contained save data adapters"""
+        """Return all contained save data adapters.
+        """
         view = EasyFormForm(self.context, self.request)
         form = view.context
         adapters = []

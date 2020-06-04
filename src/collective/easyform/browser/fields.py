@@ -43,8 +43,7 @@ except ImportError:  # pragma: no cover
 
 @implementer(IEasyFormFieldContext)
 class EasyFormFieldContext(FieldContext):
-
-    """ wrapper for published zope 3 schema fields
+    """Wrapper for published zope 3 schema fields.
     """
 
 
@@ -58,7 +57,7 @@ class EasyFormFieldsView(SchemaContext):
         super(EasyFormFieldsView, self).__init__(self.schema, request, name="fields")
 
     def publishTraverse(self, request, name):
-        """ Look up the field whose name matches the next URL path element,
+        """Look up the field whose name matches the next URL path element,
         and wrap it.
         """
         try:
@@ -67,7 +66,7 @@ class EasyFormFieldsView(SchemaContext):
             return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
     def browserDefault(self, request):
-        """ If not traversing through the schema to a field, show the
+        """If not traversing through the schema to a field, show the
         SchemaListingPage.
         """
         return self, ("@@listing",)
@@ -100,12 +99,11 @@ if HAVE_RESOURCE_EDITOR:
 
 
 class EasyFormFieldsListingPage(SchemaListingPage):
+    """Form wrapper so we can get a form with layout.
 
-    """ Form wrapper so we can get a form with layout.
-
-        We define an explicit subclass rather than using the wrap_form method
-        from plone.z3cform.layout so that we can inject the schema name into
-        the form label.
+    We define an explicit subclass rather than using the wrap_form method
+    from plone.z3cform.layout so that we can inject the schema name into
+    the form label.
     """
 
     form = FieldsSchemaListing
@@ -127,8 +125,8 @@ class EditView(EditView):
 
 
 class ModelEditorView(BrowserView):
-
-    """ editor view """
+    """Editor view.
+    """
 
     title = _(u"Edit XML Fields Model")
 
@@ -137,8 +135,8 @@ class ModelEditorView(BrowserView):
 
 
 class AjaxSaveHandler(BrowserView):
-
-    """ handle AJAX save posts """
+    """Handle AJAX save posts.
+    """
 
     def authorized(self):
         authenticator = queryMultiAdapter(

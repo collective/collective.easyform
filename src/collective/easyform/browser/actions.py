@@ -165,11 +165,11 @@ ActionSavedDataView = layout.wrap_form(
 
 @implementer(IEasyFormActionContext)
 class EasyFormActionContext(FieldContext):
-    """ wrapper for published zope 3 schema fields
+    """Wrapper for published zope 3 schema fields.
     """
 
     def publishTraverse(self, request, name):
-        """ It's not valid to traverse to anything below a field context.
+        """It's not valid to traverse to anything below a field context.
         """
         # hack to make inline validation work
         # (plone.app.z3cform doesn't know the form is the default view)
@@ -189,7 +189,7 @@ class EasyFormActionsView(SchemaContext):
         super(EasyFormActionsView, self).__init__(self.schema, request, name="actions")
 
     def publishTraverse(self, request, name):
-        """ Look up the field whose name matches the next URL path element,
+        """Look up the field whose name matches the next URL path element,
         and wrap it.
         """
         try:
@@ -198,7 +198,7 @@ class EasyFormActionsView(SchemaContext):
             return DefaultPublishTraverse(self, request).publishTraverse(request, name)
 
     def browserDefault(self, request):
-        """ If not traversing through the schema to a field, show the
+        """If not traversing through the schema to a field, show the
         SchemaListingPage.
         """
         return self, ("@@listing",)
@@ -232,12 +232,11 @@ class EasyFormActionsListing(SchemaListing):
 
 
 class EasyFormActionsListingPage(SchemaListingPage):
+    """Form wrapper so we can get a form with layout.
 
-    """ Form wrapper so we can get a form with layout.
-
-        We define an explicit subclass rather than using the wrap_form method
-        from plone.z3cform.layout so that we can inject the schema name into
-        the form label.
+    We define an explicit subclass rather than using the wrap_form method
+    from plone.z3cform.layout so that we can inject the schema name into
+    the form label.
     """
 
     form = EasyFormActionsListing
@@ -322,8 +321,8 @@ EasyFormActionsListing.handlers.addHandler(but, handler)
 
 
 class ModelEditorView(BrowserView):
-
-    """ editor view """
+    """Editor view
+    """
 
     title = _(u"Edit XML Actions Model")
 
@@ -332,8 +331,8 @@ class ModelEditorView(BrowserView):
 
 
 class AjaxSaveHandler(AjaxSaveHandler):
-
-    """ handle AJAX save posts """
+    """Handle AJAX save posts
+    """
 
     def save(self, source):
         self.context.aq_parent.actions_model = source

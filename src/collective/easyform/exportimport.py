@@ -58,7 +58,6 @@ class FieldExtender(object):
 
 @implementer(IFieldMetadataHandler)
 class EasyFormFieldMetadataHandler(object):
-
     """Support the easyform: namespace in model definitions.
     """
 
@@ -131,7 +130,6 @@ class ActionExtender(object):
 
 @implementer(IFieldMetadataHandler)
 class EasyFormActionMetadataHandler(object):
-
     """Support the easyform: namespace in model definitions.
     """
 

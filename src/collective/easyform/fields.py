@@ -28,7 +28,8 @@ from zope.schema.interfaces import IField
 
 
 def superAdapter(specific_interface, adapter, objects, name=u""):
-    """ find the next most specific adapter """
+    """Find the next most specific adapter.
+    """
 
     #  We are adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
     #  one of the objects less specific. This allows us to find anotehr adapter other than our one. This allows us to
@@ -66,7 +67,8 @@ def superAdapter(specific_interface, adapter, objects, name=u""):
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderValidator(object):
-    """ z3c.form validator class for easyform fields in the default fieldset"""
+    """z3c.form validator class for easyform fields in the default fieldset
+    """
 
     def __init__(self, context, request, view, field, widget):
         self.context = context
@@ -76,7 +78,8 @@ class FieldExtenderValidator(object):
         self.widget = widget
 
     def validate(self, value):
-        """ Validate field by TValidator """
+        """Validate field by TValidator
+        """
         # By default this will call SimpleFieldValidator.validator but allows for a fields
         # custom validation adaptor to also be called such as recaptcha
         _, _, view_interface, _, _ = self.__class__.__component_adapts__
@@ -111,7 +114,8 @@ class FieldExtenderValidator(object):
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IGroup, IField, Interface)
 class GroupFieldExtenderValidator(FieldExtenderValidator):
-    """ z3c.form validator class for easyform fields in fieldset groups """
+    """z3c.form validator class for easyform fields in fieldset groups
+    """
 
     pass
 
@@ -119,8 +123,8 @@ class GroupFieldExtenderValidator(FieldExtenderValidator):
 @implementer(IValue)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
 class FieldExtenderDefault(object):
-
-    """ z3c.form default class for easyform fields in the default fieldset """
+    """z3c.form default class for easyform fields in the default fieldset
+    """
 
     def __init__(self, context, request, view, field, widget):
         self.context = context
@@ -130,7 +134,8 @@ class FieldExtenderDefault(object):
         self.widget = widget
 
     def get(self):
-        """ get default value of field from TDefault """
+        """Get default value of field from TDefault
+        """
         efield = IFieldExtender(self.field)
         TDefault = getattr(efield, "TDefault", None)
         if TDefault:
@@ -154,15 +159,14 @@ class FieldExtenderDefault(object):
 @implementer(IValue)
 @adapter(IEasyForm, Interface, IGroup, IField, Interface)
 class GroupFieldExtenderDefault(FieldExtenderDefault):
-
-    """ z3c.form default class for easyform fields in fieldset groups """
+    """z3c.form default class for easyform fields in fieldset groups
+    """
 
     pass
 
 
 @implementer(IFromUnicode, ILabel)
 class Label(Field):
-
     """A Label field
     """
 
@@ -177,7 +181,6 @@ class Label(Field):
 
 @implementer(IRichLabel)
 class RichLabel(Label):
-
     """A Rich Label field
     """
 
@@ -199,7 +202,6 @@ RichLabelHandler = BaseHandler(RichLabel)
 
 @implementer(IReCaptcha)
 class ReCaptcha(TextLine):
-
     """A ReCaptcha field
     """
 
@@ -212,7 +214,6 @@ ReCaptchaHandler = BaseHandler(ReCaptcha)
 
 @implementer(INorobotCaptcha)
 class NorobotCaptcha(TextLine):
-
     """A NorobotCaptcha field
     """
 

@@ -17,8 +17,7 @@ from zope.component import getMultiAdapter
 
 
 class EasyFormExportView(BrowserView):
-
-    """See ..interfaces.exportimport.IEasyFormExportView
+    """See ..interfaces.exportimport.IEasyFormExportView.
     """
 
     def __call__(self):
@@ -40,8 +39,7 @@ class EasyFormExportView(BrowserView):
 
 
 class EasyFormImportForm(form.Form):
-
-    """The form class for importing of exported easyforms
+    """The form class for importing of exported easyforms.
     """
 
     fields = field.Fields(IEasyFormImportFormSchema)

@@ -12,8 +12,7 @@ MODIFY_PORTAL_CONTENT = "cmf.ModifyPortalContent"
 
 
 class ICustomScript(IAction):
-
-    """Executes a Python script for form data"""
+    """Executes a Python script for form data."""
 
     directives.read_permission(ProxyRole=MODIFY_PORTAL_CONTENT)
     directives.write_permission(ProxyRole=config.EDIT_PYTHON_PERMISSION)

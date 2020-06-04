@@ -150,51 +150,38 @@ class IFieldExtender(Schema):
 
 
 class IEasyFormFieldsContext(ISchemaContext):
-
-    """
-    EasyForm schema view interface
-    """
+    """EasyForm schema view interface."""
 
 
 class IEasyFormFieldContext(IFieldContext):
-
-    """
-    EasyForm field content marker
-    """
+    """EasyForm field content marker."""
 
 
 class ILabel(zope.schema.interfaces.IField):
-
     """Label Field."""
 
 
 class IRichLabel(ILabel):
-
     """Rich Label Field."""
 
     rich_label = RichText(title=_(u"Rich Label"), default=u"", missing_value=u"")
 
 
 class ILabelWidget(z3c.form.interfaces.IWidget):
-
     """Label Widget."""
 
 
 class IRichLabelWidget(ILabelWidget):
-
     """Rich Label Field Widget."""
 
 
 class IReCaptcha(zope.schema.interfaces.ITextLine):
-
     """ReCaptcha Field."""
 
 
 class INorobotCaptcha(zope.schema.interfaces.ITextLine):
-
     """Norobot Field."""
 
 
 class IFieldValidator(Interface):
-
-    """Base marker for field validators"""
+    """Base marker for field validators."""

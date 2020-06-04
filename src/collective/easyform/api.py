@@ -27,8 +27,7 @@ dollarRE = compile(r"\$\{(.+?)\}")
 
 
 class OrderedDict(BaseDict):
-    """
-    A wrapper around dictionary objects that provides an ordering for
+    """A wrapper around dictionary objects that provides an ordering for
     keys() and items().
     """
 
@@ -45,8 +44,7 @@ InitializeClass(OrderedDict)
 
 
 class DollarVarReplacer(object):
-    """
-    Initialize with a dictionary, then self.sub returns a string
+    """Initialize with a dictionary, then self.sub returns a string
     with all ${key} substrings replaced with values looked
     up from the dictionary.
 
@@ -90,7 +88,7 @@ class DollarVarReplacer(object):
 
 
 def get_expression(context, expression_string, **kwargs):
-    """ Get TALES expression
+    """Get TALES expression
 
     :param context: [required] TALES expression context
     :param string expression_string: [required] TALES expression string
@@ -108,7 +106,7 @@ def get_expression(context, expression_string, **kwargs):
 
 
 def get_context(field):
-    """ Get context of field
+    """Get context of field
 
     :param field: [required] easyform field
     :returns: easyform
@@ -174,8 +172,7 @@ def set_actions(context, schema):
 
 
 def format_addresses(addresses, names=None):
-    """
-    Format destination (To) input.
+    """Format destination (To) input.
     Input may be a string or sequence of strings;
     returns a well-formatted address string.
 

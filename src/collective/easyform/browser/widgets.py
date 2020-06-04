@@ -17,8 +17,8 @@ from zope.schema.interfaces import IField
 
 @implementer_only(ILabelWidget)
 class LabelWidget(widget.HTMLFormElement, Widget):
-
-    """Textarea widget implementation."""
+    """Textarea widget implementation.
+    """
 
     klass = u"label-widget"
     css = u"label"
@@ -32,14 +32,15 @@ class LabelWidget(widget.HTMLFormElement, Widget):
 @adapter(IField, interfaces.IFormLayer)
 @implementer(interfaces.IFieldWidget)
 def LabelFieldWidget(field, request):
-    """IFieldWidget factory for TextWidget."""
+    """IFieldWidget factory for TextWidget.
+    """
     return FieldWidget(field, LabelWidget(request))
 
 
 @implementer_only(IRichLabelWidget)
 class RichLabelWidget(widget.HTMLFormElement, Widget):
-
-    """Textarea widget implementation."""
+    """Textarea widget implementation.
+    """
 
     klass = u"rich-label-widget"
     css = u"richlabel"
@@ -53,7 +54,8 @@ class RichLabelWidget(widget.HTMLFormElement, Widget):
 @adapter(IField, interfaces.IFormLayer)
 @implementer(interfaces.IFieldWidget)
 def RichLabelFieldWidget(field, request):
-    """IFieldWidget factory for TextWidget."""
+    """IFieldWidget factory for TextWidget.
+    """
     return FieldWidget(field, RichLabelWidget(request))
 
 

@@ -78,18 +78,13 @@ class INewAction(Interface):
 
 
 class IActionFactory(zope.schema.interfaces.IField):
-
-    """ A component that instantiates a action when called.
-    """
+    """A component that instantiates a action when called."""
 
     title = zope.schema.TextLine(title=__(u"Title"))
 
 
 class IEasyFormActionsContext(ISchemaContext):
-
-    """
-    EasyForm actions view interface
-    """
+    """EasyForm actions view interface."""
 
 
 class IActionExtender(Schema):
@@ -115,16 +110,11 @@ class IActionExtender(Schema):
 
 
 class IEasyFormActionContext(IFieldContext):
-
-    """
-    EasyForm action content marker
-    """
+    """EasyForm action content marker."""
 
 
 class IActionEditForm(z3c.form.interfaces.IEditForm):
-
-    """ Marker interface for action edit forms
-    """
+    """Marker interface for action edit forms."""
 
 
 class IAction(Schema, zope.schema.interfaces.IField):

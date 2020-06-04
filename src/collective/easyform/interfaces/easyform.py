@@ -42,9 +42,8 @@ def default_thanksdescription(context):
 
 @zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_actions(context):
-    """ Default mail body for mailer action
-
-        Acquire 'mail_body_default.pt' or return hard coded default
+    """Default mail body for mailer action.
+    Acquire 'mail_body_default.pt' or return hard coded default
     """
     portal = api.portal.get()
     default_actions = portal.restrictedTraverse(
@@ -58,9 +57,8 @@ def default_actions(context):
 
 @zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_fields(context):
-    """ Default form fields
-
-        Acquire 'easyform_default_fields.xml' or return hard coded default
+    """ Default form fields.
+    Acquire 'easyform_default_fields.xml' or return hard coded default
     """
     portal = api.portal.get()
     default_fields = portal.restrictedTraverse(
@@ -73,7 +71,7 @@ def default_fields(context):
 
 
 class IEasyForm(Schema):
-    """Forms for Plone"""
+    """Forms for Plone."""
 
     directives.omitted("fields_model", "actions_model")
     fields_model = zope.schema.Text(
@@ -398,12 +396,10 @@ class IEasyForm(Schema):
 
 
 class IEasyFormImportFormSchema(Interface):
-
-    """Schema for easyform import form.
-    """
+    """Schema for easyform import form."""
 
     upload = zope.schema.Bytes(title=PMF(u"Upload"), required=True)
 
 
 class IEasyFormThanksPage(Interface):
-    """ Marker interface for thanks page """
+    """Marker interface for thanks page."""
