@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1005"
+      profile="collective.easyform:default"
+      source="1004"
+      >
+    <gs:upgradeDepends
+        title="Reload profile to register bundle"
+        description=""
+        import_profile="collective.easyform:default"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+  </gs:upgradeSteps>
+
+</configure>

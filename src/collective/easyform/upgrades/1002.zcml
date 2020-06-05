@@ -1,0 +1,20 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1002"
+      profile="collective.easyform:default"
+      source="1001"
+      >
+    <gs:upgradeDepends
+        title="Remove ProtectedEmail and ProtectedTextLine as addable fields"
+        description="https://github.com/collective/collective.easyform/issues/94"
+        import_profile="collective.easyform:default"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+  </gs:upgradeSteps>
+
+</configure>
