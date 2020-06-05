@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1004"
+      profile="collective.easyform:default"
+      source="1003"
+      >
+    <gs:upgradeDepends
+        title="Changed permission of saveddata action"
+        import_profile="collective.easyform:default"
+        import_steps="actions"
+        run_deps="false"
+        />
+  </gs:upgradeSteps>
+
+</configure>

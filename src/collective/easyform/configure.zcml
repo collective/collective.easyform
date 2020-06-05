@@ -16,9 +16,9 @@
   <include file="subscribers.zcml" />
   <include file="validators.zcml" />
   <include file="vocabularies.zcml" />
-  <include file="upgrades.zcml" />
 
   <include package=".browser" />
+  <include package=".upgrades" />
   <include zcml:condition="installed Products.PloneFormGen" package=".migration" /> 
 
   <genericsetup:registerProfile

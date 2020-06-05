@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1003"
+      profile="collective.easyform:default"
+      source="1002"
+      >
+    <gs:upgradeDepends
+        title="Add Browserlayer"
+        import_profile="collective.easyform:default"
+        import_steps="browserlayer"
+        run_deps="false"
+        />
+  </gs:upgradeSteps>
+
+</configure>
