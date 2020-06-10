@@ -39,9 +39,16 @@
       <role name="Manager" />
     </permission>
     <permission acquire="True"
+                name="collective.easyform: Edit Technical Fields"
+    >
+      <role name="Manager" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
                 name="collective.easyform: Edit Advanced Fields"
     >
       <role name="Manager" />
+      <role name="Owner" />
       <role name="Site Administrator" />
     </permission>
     <permission acquire="True"

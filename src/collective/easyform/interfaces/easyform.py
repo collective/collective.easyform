@@ -196,30 +196,35 @@ class IEasyForm(Schema):
         ],
         order=20,
     )
+    directives.write_permission(submitLabel=config.EDIT_ADVANCED_PERMISSION)
     submitLabel = zope.schema.TextLine(
         title=_(u"label_submitlabel_text", default=u"Submit Button Label"),
         description=_(u"help_submitlabel_text", default=u""),
         defaultFactory=default_submitLabel,
         required=False,
     )
+    directives.write_permission(useCancelButton=config.EDIT_ADVANCED_PERMISSION)
     useCancelButton = zope.schema.Bool(
         title=_(u"label_showcancel_text", default=u"Show Reset Button"),
         description=_(u"help_showcancel_text", default=u""),
         default=False,
         required=False,
     )
+    directives.write_permission(resetLabel=config.EDIT_ADVANCED_PERMISSION)
     resetLabel = zope.schema.TextLine(
         title=_(u"label_reset_button", default=u"Reset Button Label"),
         description=_(u"help_reset_button", default=u""),
         defaultFactory=default_resetLabel,
         required=False,
     )
+    directives.write_permission(form_tabbing=config.EDIT_ADVANCED_PERMISSION)
     form_tabbing = zope.schema.Bool(
         title=_(u"label_form_tabbing", default=u"Turn fieldsets to tabs"),
         description=_(u"help_form_tabbing", default=u""),
         default=True,
         required=False,
     )
+    directives.write_permission(default_fieldset_label=config.EDIT_ADVANCED_PERMISSION)
     default_fieldset_label = zope.schema.TextLine(
         title=_(
             u"label_default_fieldset_label_text",
@@ -232,6 +237,7 @@ class IEasyForm(Schema):
         required=False,
         default=u"",
     )
+    directives.write_permission(method=config.EDIT_TECHNICAL_PERMISSION)
     method = zope.schema.Choice(
         title=_(u"label_method", default=u"Form method"),
         description=_(u"help_method", default=u""),
@@ -239,12 +245,14 @@ class IEasyForm(Schema):
         required=False,
         vocabulary="easyform.FormMethods",
     )
+    directives.write_permission(unload_protection=config.EDIT_TECHNICAL_PERMISSION)
     unload_protection = zope.schema.Bool(
         title=_(u"label_unload_protection", default=u"Unload protection"),
         description=_(u"help_unload_protection", default=u""),
         default=True,
         required=False,
     )
+    directives.write_permission(CSRFProtection=config.EDIT_TECHNICAL_PERMISSION)
     CSRFProtection = zope.schema.Bool(
         title=_(u"label_csrf", default=u"CSRF Protection"),
         description=_(
@@ -256,7 +264,7 @@ class IEasyForm(Schema):
         default=True,
         required=False,
     )
-    directives.write_permission(forceSSL=config.EDIT_ADVANCED_PERMISSION)
+    directives.write_permission(forceSSL=config.EDIT_TECHNICAL_PERMISSION)
     forceSSL = zope.schema.Bool(
         title=_(u"label_force_ssl", default=u"Force SSL connection"),
         description=_(

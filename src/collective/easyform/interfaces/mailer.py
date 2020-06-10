@@ -116,7 +116,7 @@ class IMailer(IAction):
         required=False,
     )
 
-    directives.write_permission(replyto_field=config.EDIT_ADVANCED_PERMISSION)
+    directives.write_permission(replyto_field=config.EDIT_TECHNICAL_PERMISSION)
     directives.read_permission(replyto_field=MODIFY_PORTAL_CONTENT)
     replyto_field = zope.schema.Choice(
         title=_(u"label_formmailer_replyto_extract", default=u"Extract Reply-To From"),
@@ -325,7 +325,7 @@ class IMailer(IAction):
         u"headers", label=_("Headers"), fields=["xinfo_headers", "additional_headers"]
     )
     directives.widget(xinfo_headers=CheckBoxFieldWidget)
-    directives.write_permission(xinfo_headers=config.EDIT_ADVANCED_PERMISSION)
+    directives.write_permission(xinfo_headers=config.EDIT_TECHNICAL_PERMISSION)
     directives.read_permission(xinfo_headers=MODIFY_PORTAL_CONTENT)
     xinfo_headers = zope.schema.List(
         title=_(u"label_xinfo_headers_text", default=u"HTTP Headers"),
@@ -341,7 +341,7 @@ class IMailer(IAction):
         missing_value=[u"HTTP_X_FORWARDED_FOR", u"REMOTE_ADDR", u"PATH_INFO"],
         value_type=zope.schema.Choice(vocabulary="easyform.XinfoHeaders"),
     )
-    directives.write_permission(additional_headers=config.EDIT_ADVANCED_PERMISSION)
+    directives.write_permission(additional_headers=config.EDIT_TECHNICAL_PERMISSION)
     directives.read_permission(additional_headers=MODIFY_PORTAL_CONTENT)
     additional_headers = zope.schema.List(
         title=_(u"label_formmailer_additional_headers", default=u"Additional Headers"),
