@@ -55,11 +55,28 @@ class IEasyFormFieldsEditorExtender(IFieldEditorExtender):
 
 
 class IFieldExtender(Schema):
+    fieldset(
+        u"advanced",
+        label=_("Advanced"),
+        fields=["field_widget", "validators", "THidden"],
+    )
+    directives.write_permission(field_widget=config.EDIT_ADVANCED_PERMISSION)
     field_widget = zope.schema.Choice(
         title=_(u"label_field_widget", default=u"Field Widget"),
         description=_(u"help_field_widget", default=u""),
         required=False,
         source=widgetsFactory,
+    )
+    directives.write_permission(validators=config.EDIT_ADVANCED_PERMISSION)
+    validators = zope.schema.List(
+        title=_("Validators"),
+        description=_(
+            u"help_userfield_validators",
+            default=u"Select the validators to use on this field",
+        ),
+        unique=True,
+        required=False,
+        value_type=zope.schema.Choice(vocabulary="easyform.Validators"),
     )
     directives.write_permission(THidden=config.EDIT_TALES_PERMISSION)
     THidden = zope.schema.Bool(
@@ -136,16 +153,6 @@ class IFieldExtender(Schema):
         ),
         default=False,
         required=False,
-    )
-    validators = zope.schema.List(
-        title=_("Validators"),
-        description=_(
-            u"help_userfield_validators",
-            default=u"Select the validators to use on this field",
-        ),
-        unique=True,
-        required=False,
-        value_type=zope.schema.Choice(vocabulary="easyform.Validators"),
     )
 
 

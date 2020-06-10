@@ -9,6 +9,7 @@ this_path = os.path.dirname(__file__)
 
 EDIT_TALES_PERMISSION = "collective.easyform.EditTALESFields"
 EDIT_PYTHON_PERMISSION = "collective.easyform.EditPythonFields"
+EDIT_TECHNICAL_PERMISSION = "collective.easyform.EditTechnicalFields"
 EDIT_ADVANCED_PERMISSION = "collective.easyform.EditAdvancedFields"
 EDIT_ADDRESSING_PERMISSION = "collective.easyform.EditMailAddresses"
 USE_ENCRYPTION_PERMISSION = "collective.easyform.EditEncryptionSpecs"

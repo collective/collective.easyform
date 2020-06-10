@@ -1,0 +1,20 @@
+Change semantics for the "advanced" permission and introduce new "technical" permission.
+To better support use cases for "power users" while not overloading them with complex fields where a technical understanding is necessary the permissions are changed as follows:
+
+"Edit Advanced Fields":
+- IEasyForm.submitLabel
+- IEasyForm.useCancelButton
+- IEasyForm.resetLabel
+- IEasyForm.form_tabbing
+- IEasyForm.default_fieldset_label
+- IFieldExtender.field_widget
+- IFieldExtender.validators
+
+"Edit Technical Fields":
+- IEasyForm.method
+- IEasyForm.unload_protection
+- IEasyForm.CSRFProtection
+- IEasyForm.forceSSL
+- IMailer.replyto_field
+- IMailer.xinfo_headers
+- IMailer.additional_headers
