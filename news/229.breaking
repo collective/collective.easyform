@@ -2,9 +2,6 @@ Change semantics for the "advanced" permission and introduce new "technical" per
 To better support use cases for "power users" while not overloading them with complex fields where a technical understanding is necessary the permissions are changed as follows:
 
 "Edit Advanced Fields":
-- IEasyForm.submitLabel
-- IEasyForm.useCancelButton
-- IEasyForm.resetLabel
 - IEasyForm.form_tabbing
 - IEasyForm.default_fieldset_label
 - IFieldExtender.field_widget
