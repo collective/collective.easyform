@@ -196,21 +196,18 @@ class IEasyForm(Schema):
         ],
         order=20,
     )
-    directives.write_permission(submitLabel=config.EDIT_ADVANCED_PERMISSION)
     submitLabel = zope.schema.TextLine(
         title=_(u"label_submitlabel_text", default=u"Submit Button Label"),
         description=_(u"help_submitlabel_text", default=u""),
         defaultFactory=default_submitLabel,
         required=False,
     )
-    directives.write_permission(useCancelButton=config.EDIT_ADVANCED_PERMISSION)
     useCancelButton = zope.schema.Bool(
         title=_(u"label_showcancel_text", default=u"Show Reset Button"),
         description=_(u"help_showcancel_text", default=u""),
         default=False,
         required=False,
     )
-    directives.write_permission(resetLabel=config.EDIT_ADVANCED_PERMISSION)
     resetLabel = zope.schema.TextLine(
         title=_(u"label_reset_button", default=u"Reset Button Label"),
         description=_(u"help_reset_button", default=u""),
