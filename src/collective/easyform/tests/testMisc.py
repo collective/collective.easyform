@@ -21,6 +21,13 @@ class TestMisc(base.EasyFormTestCase):
         d["c"] = 3
         self.assertEqual(d.reverse(), [("c", 3), ("b", 2), ("a", 1)])
 
+    def test_default_values_translated(self):
+        self.layer["request"]["LANGUAGE"] = "de"
+        self.folder.invokeFactory("EasyForm", "ff1")
+        # Check if the submitLabel is translated at all.
+        # If you ever change the german translation of the submit label, change it here also
+        self.assertEqual(self.folder.ff1.submitLabel, "Absenden")
+
 
 class TestAjaxSaveHandler(base.EasyFormTestCase):
     def test_ajax_save_handler_call_unathorized(self):

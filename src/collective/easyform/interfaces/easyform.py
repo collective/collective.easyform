@@ -22,22 +22,34 @@ PMF = zope.i18nmessageid.MessageFactory("plone")
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_submitLabel(context):
-    return translate(_(u"default_submitLabel", u"Submit"))
+    return translate(
+        _(u"default_submitLabel", u"Submit"),
+        target_language=api.portal.get_current_language(),
+    )
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_resetLabel(context):
-    return translate(_(u"default_resetLabel", u"Reset"))
+    return translate(
+        _(u"default_resetLabel", u"Reset"),
+        target_language=api.portal.get_current_language(),
+    )
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_thankstitle(context):
-    return translate(_(u"default_thankstitle", u"Thank You"))
+    return translate(
+        _(u"default_thankstitle", u"Thank You"),
+        target_language=api.portal.get_current_language(),
+    )
 
 
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_thanksdescription(context):
-    return translate(_(u"default_thanksdescription", u"Thanks for your input."))
+    return translate(
+        _(u"default_thanksdescription", u"Thanks for your input."),
+        target_language=api.portal.get_current_language(),
+    )
 
 
 @zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
