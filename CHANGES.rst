@@ -9,6 +9,50 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.0.dev0 (unrelased)
+----------------------
+
+Breaking changes:
+
+
+- Hide the "description" field from form actions, as it is not used anywhere.
+  Customizations which try to omit or use the description field might need adaptions. (#226)
+- Change semantics for the "advanced" permission and introduce new "technical" permission.
+  To better support use cases for "power users" while not overloading them with complex fields where a technical understanding is necessary the permissions are changed as follows:
+
+  "Edit Advanced Fields":
+  - IEasyForm.form_tabbing
+  - IEasyForm.default_fieldset_label
+  - IFieldExtender.field_widget
+  - IFieldExtender.validators
+
+  "Edit Technical Fields":
+  - IEasyForm.method
+  - IEasyForm.unload_protection
+  - IEasyForm.CSRFProtection
+  - IEasyForm.forceSSL
+  - IMailer.replyto_field
+  - IMailer.xinfo_headers
+  - IMailer.additional_headers (#229)
+
+
+New features:
+
+
+- Use profile to configure roles instead of ZCML for easier customization. (#224)
+- Simplify the editing UI: Introduce a new "Advanced" tab when creating a form for not so frequent used settings.
+  Change permissions to allow editors to define the recipient from form field values in addition to a fixed recipient. (#227)
+- Make the fields editor look nicer. (#228)
+
+
+Bug fixes:
+
+
+- Fix deprecated ``fieldset`` import in interfaces. (#222)
+- Rewrite upgrades bobtemplates.plone style to get a better overview. (#223)
+- Make Actions better compatible with plone.supermodel/autoform directives. (#225)
+- Fix translation of default values for the easyform content type fields in the current active language. (#231)
+
 
 2.2.0 (2020-06-04)
 ------------------
