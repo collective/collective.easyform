@@ -9,8 +9,8 @@ Changelog
 
 .. towncrier release notes start
 
-3.0.0.dev0 (unrelased)
-----------------------
+3.0.0 (2020-07-28)
+------------------
 
 Breaking changes:
 
