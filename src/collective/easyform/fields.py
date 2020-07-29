@@ -59,9 +59,11 @@ def superAdapter(specific_interface, adapter, objects, name=u""):
     if not found:
         return None
 
-    provides = providedBy(adapter).declared[0]
+    provided_by_declared = providedBy(adapter).declared
+    if not provided_by_declared:
+        return None
 
-    return queryMultiAdapter(new_obj, provides, name=name)
+    return queryMultiAdapter(new_obj, provided_by_declared[0], name=name)
 
 
 @implementer(IValidator)

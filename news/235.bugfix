@@ -1,0 +1,2 @@
+Fixes #235: ``Module collective.easyform.fields, line 63, in superAdapter IndexError: tuple index out of range``.
+[jensens]
