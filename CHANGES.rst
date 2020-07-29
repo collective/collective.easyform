@@ -9,6 +9,16 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.1 (2020-07-29)
+------------------
+
+Bug fixes:
+
+
+- Fixes #235: ``Module collective.easyform.fields, line 63, in superAdapter IndexError: tuple index out of range``.
+  [jensens] (#235)
+
+
 3.0.1 (unreleased)
 ------------------
 
