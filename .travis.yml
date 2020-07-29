@@ -4,7 +4,7 @@ addons:
   apt:
     sources:
       - google-chrome
-matrix:
+jobs:
   include:
     - python: "2.7"
       env: PLONE_VERSION=5.0.x
@@ -18,6 +18,12 @@ matrix:
       env: PLONE_VERSION=5.2.x
       dist: xenial
       sudo: true
+    - python: "3.8"
+      env: PLONE_VERSION=5.2.x
+      dist: bionic
+      sudo: true
+  allow_failures:
+    - python: "3.8"
 
 cache:
   pip: true
@@ -54,11 +60,9 @@ before_script:
   - sleep 3
 script:
 # Run code-analysis, except on Python 3.6, which mysteriously fails to find zc.buildout.
-  - python --version 2> /dev/stdout | grep 3.6 || bin/code-analysis
+  - python --version 2> /dev/stdout | grep '2.7\|3.6' || bin/code-analysis
   - bin/test --all $TEST_OPTIONS
 after_success:
   - bin/createcoverage -t '--all $TEST_OPTIONS'
   - pip install -q coveralls
   - coveralls
-notifications:
-  irc: irc.freenode.org#plone-testing
