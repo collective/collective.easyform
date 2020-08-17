@@ -93,6 +93,10 @@ class SavedDataForm(crud.CrudForm):
     addform_factory = crud.NullForm
 
     @property
+    def form_title(self):
+        return aq_aprent(self).Title()
+
+    @property
     def field(self):
         return self.context.field
 

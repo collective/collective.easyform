@@ -4,7 +4,9 @@ from collective.easyform.migration.actions import actions_model
 from collective.easyform.migration.data import migrate_saved_data
 from collective.easyform.migration.fields import fields_model
 from plone import api
-from plone.app.contenttypes.migration.field_migrators import migrate_richtextfield  # noqa
+from plone.app.contenttypes.migration.field_migrators import (
+    migrate_richtextfield,  # noqa
+)
 from plone.app.contenttypes.migration.field_migrators import migrate_simplefield  # noqa
 from plone.app.contenttypes.migration.migration import ATCTContentMigrator
 from plone.app.contenttypes.migration.migration import migrate
@@ -16,6 +18,7 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from zope import schema
 from zope.interface import alsoProvides
+
 import logging
 import transaction
 

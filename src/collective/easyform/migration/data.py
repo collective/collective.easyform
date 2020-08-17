@@ -12,6 +12,7 @@ from zope.schema.interfaces import ISet
 
 import logging
 
+
 logger = logging.getLogger('collective.easyform.migration')
 
 

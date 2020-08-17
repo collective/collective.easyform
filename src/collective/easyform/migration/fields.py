@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 from lxml import etree
+from Products.PloneFormGen.content.fields import FGFieldsetEnd
+from Products.PloneFormGen.content.fields import FGFieldsetStart
 from Products.PloneFormGen.content.fieldsBase import BaseFormField
-from Products.PloneFormGen.content.fields import FGFieldsetStart, FGFieldsetEnd
 from Products.PloneFormGen.interfaces import IPloneFormGenFieldset
+
 import logging
 import six
+
 
 logger = logging.getLogger('collective.easyform.migration')
 

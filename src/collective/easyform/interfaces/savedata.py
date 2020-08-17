@@ -88,20 +88,6 @@ class ISaveData(IAction):
             default=u"Do you wish to have column names on the first line of "
             u"downloaded input?",
         ),
+        default=True,
         required=False,
     )
-
-
-#     ExLinesField('SavedFormInput',
-#     edit_accessor='getSavedFormInputForEdit',
-#     mutator='setSavedFormInput',
-#     searchable=0,
-#     required=0,
-#     primary=1,
-#    schemata='saved data',
-#     directives.read_permission=DOWNLOAD_SAVED_PERMISSION,
-#     widget=TextAreaWidget(
-#        label=_(u'label_savedatainput_text', default=u'Saved Form Input'),
-#         description=_(u'help_savedatainput_text'),
-#        ),
-#    ),

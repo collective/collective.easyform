@@ -7,12 +7,12 @@ from collective.easyform.api import filter_fields
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
+from collective.easyform.interfaces import FORM_ERRORS_MARKER
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ISaveData
-from collective.easyform.interfaces import FORM_ERRORS_MARKER
 from logging import getLogger
 from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
