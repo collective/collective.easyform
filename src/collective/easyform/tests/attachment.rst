@@ -159,7 +159,6 @@ Check saved data::
     >>> browser.getLink('Saved data').click()
     >>> 'http://nohost/plone/attachmentform/actions/saver/@@data' in browser.contents
     True
-    >>> browser.getLink('Saver').click()
     >>> "5 input(s) saved" in browser.contents
     True
     >>> ".widgets.attachment/@@download/test.png" in browser.contents

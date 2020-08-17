@@ -33,7 +33,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
-from zExceptions import Redirect
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import adapter
 from zope.component import getAdapters
@@ -85,7 +84,7 @@ class SavedDataView(BrowserView):
                 self.context.absolute_url(),
                 items[0][0],
             )
-            raise Redirect(url)
+            self.request.response.redirect(url)
         return items
 
 
