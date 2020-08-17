@@ -19,12 +19,6 @@ Bug fixes:
   [jensens] (#235)
 
 
-3.0.1 (unreleased)
-------------------
-
-- Nothing changed yet.
-
-
 3.0.0 (2020-07-28)
 ------------------
 
