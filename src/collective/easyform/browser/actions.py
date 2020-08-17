@@ -33,6 +33,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import field
 from z3c.form import form
+from zExceptions import Redirect
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import adapter
 from zope.component import getAdapters
@@ -74,11 +75,18 @@ class SavedDataTraversal(WrapperWidgetTraversal):
 
 class SavedDataView(BrowserView):
     def items(self):
-        return [
+        items = [
             (name, action.__doc__)
             for name, action in getFieldsInOrder(get_actions(self.context))
             if ISaveData.providedBy(action)
         ]
+        if len(items) == 1:
+            url = "{0}/actions/{1}/@@data".format(
+                self.context.absolute_url(),
+                items[0][0],
+            )
+            raise Redirect(url)
+        return items
 
 
 class DataWrapper(dict):
@@ -94,7 +102,7 @@ class SavedDataForm(crud.CrudForm):
 
     @property
     def form_title(self):
-        return aq_aprent(self).Title()
+        return aq_parent(self).Title()
 
     @property
     def field(self):

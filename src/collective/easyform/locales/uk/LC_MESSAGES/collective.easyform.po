@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.easyform\n"
-"POT-Creation-Date: 2020-06-05 09:59+0000\n"
+"POT-Creation-Date: 2020-08-17 15:32+0000\n"
 "PO-Revision-Date: 2015-10-13 11:16+0200\n"
 "Last-Translator: Zoriana Zaiats <sorenabell@quintagroup.com>\n"
 "Language-Team: Ukrainian <support@quintagroup.com>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Language: uk\n"
 "X-Generator: Poedit 1.7.6\n"
 
-#: collective/easyform/browser/actions.py:108
+#: collective/easyform/browser/actions.py:120
 msgid "${items} input(s) saved"
 msgstr "${items} елементів збережено."
 
@@ -25,11 +25,11 @@ msgstr "${items} елементів збережено."
 msgid "Action type"
 msgstr "Тип дії"
 
-#: collective/easyform/interfaces/easyform.py:81
+#: collective/easyform/interfaces/easyform.py:93
 msgid "Actions Model"
 msgstr "Модель дій"
 
-#: collective/easyform/browser/actions.py:249
+#: collective/easyform/browser/actions.py:261
 msgid "Add new action"
 msgstr "Додати нову дію"
 
@@ -37,7 +37,8 @@ msgstr "Додати нову дію"
 msgid "Addressing"
 msgstr "Адреси"
 
-#: collective/easyform/interfaces/easyform.py:185
+#: collective/easyform/interfaces/easyform.py:197
+#: collective/easyform/interfaces/fields.py:60
 msgid "Advanced"
 msgstr ""
 
@@ -46,7 +47,11 @@ msgstr ""
 msgid "Allowed Fields"
 msgstr ""
 
-#: collective/easyform/browser/actions.py:146
+#: collective/easyform/browser/saveddata.pt:7
+msgid "Choose an adapter."
+msgstr ""
+
+#: collective/easyform/browser/actions.py:158
 msgid "Clear all"
 msgstr "Очистити все"
 
@@ -62,11 +67,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr "EasyForm"
 
-#: collective/easyform/browser/actions.py:312
+#: collective/easyform/browser/actions.py:324
 msgid "Edit Action '${fieldname}'"
 msgstr "Редагувати дію '${fieldname}'"
 
-#: collective/easyform/browser/actions.py:317
+#: collective/easyform/browser/actions.py:329
 msgid "Edit XML Actions Model"
 msgstr "Редагувати XML модель дій"
 
@@ -78,7 +83,7 @@ msgstr "Редагувати XML модель полів"
 msgid "Export"
 msgstr "Експортувати"
 
-#: collective/easyform/interfaces/easyform.py:78
+#: collective/easyform/interfaces/easyform.py:90
 msgid "Fields Model"
 msgstr "Модель полів"
 
@@ -98,6 +103,10 @@ msgstr "Імпорт"
 msgid "Links are not allowed."
 msgstr "Лінки заборонені."
 
+#: collective/easyform/browser/saveddata.pt:6
+msgid "List of Save Data Adapters"
+msgstr ""
+
 #: collective/easyform/validators.py:35
 msgid "Must be a valid list of email addresses (separated by commas)."
 msgstr "Повинен бути список дійсних електронних адрес (розділений комами)."
@@ -110,9 +119,13 @@ msgstr "Має бути вибрано."
 msgid "Must be unchecked."
 msgstr "Не має бути вибрано."
 
+#: collective/easyform/browser/saveddata.pt:25
+msgid "No adapters available."
+msgstr ""
+
 #: collective/easyform/interfaces/actions.py:77
-#: collective/easyform/interfaces/easyform.py:278
-#: collective/easyform/interfaces/fields.py:73
+#: collective/easyform/interfaces/easyform.py:295
+#: collective/easyform/interfaces/fields.py:90
 msgid "Overrides"
 msgstr "Перевизначення"
 
@@ -124,11 +137,11 @@ msgstr "Дата/час заповнення"
 msgid "Redirect to"
 msgstr "Перенаправити до"
 
-#: collective/easyform/browser/view.py:208
+#: collective/easyform/browser/view.py:211
 msgid "Reset"
 msgstr "Відновити"
 
-#: collective/easyform/interfaces/fields.py:167
+#: collective/easyform/interfaces/fields.py:174
 msgid "Rich Label"
 msgstr "Розширений напис"
 
@@ -136,7 +149,7 @@ msgstr "Розширений напис"
 msgid "Saved data"
 msgstr "Збережені дані"
 
-#: collective/easyform/interfaces/easyform.py:105
+#: collective/easyform/interfaces/easyform.py:117
 msgid "Thanks Page"
 msgstr "Сторінка подяки"
 
@@ -149,32 +162,32 @@ msgstr ""
 msgid "Traverse to"
 msgstr "Траверсити до"
 
-#: collective/easyform/interfaces/fields.py:141
+#: collective/easyform/interfaces/fields.py:72
 msgid "Validators"
 msgstr "Валідатори"
 
 #. Default: "Reset"
-#: collective/easyform/interfaces/easyform.py:30
+#: collective/easyform/interfaces/easyform.py:34
 msgid "default_resetLabel"
 msgstr ""
 
 #. Default: "Submit"
-#: collective/easyform/interfaces/easyform.py:25
+#: collective/easyform/interfaces/easyform.py:26
 msgid "default_submitLabel"
 msgstr ""
 
 #. Default: "Thanks for your input."
-#: collective/easyform/interfaces/easyform.py:40
+#: collective/easyform/interfaces/easyform.py:50
 msgid "default_thanksdescription"
 msgstr ""
 
 #. Default: "Thank You"
-#: collective/easyform/interfaces/easyform.py:35
+#: collective/easyform/interfaces/easyform.py:42
 msgid "default_thankstitle"
 msgstr ""
 
 #. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
-#: collective/easyform/interfaces/fields.py:130
+#: collective/easyform/interfaces/fields.py:147
 msgid "description_server_side_text"
 msgstr "Позначити це поле як значення, що буде вставлене у форму запиту, що використовуватиметься адаптерами дії, і не буде модифікуватись чи надаватись клієнту."
 
@@ -185,13 +198,13 @@ msgid "extra_header"
 msgstr "${name} Заголовок"
 
 #. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter (if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded. The most common use of this field is to call a python scriptto clean up form input or to script an alternative action. Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
-#: collective/easyform/interfaces/easyform.py:372
+#: collective/easyform/interfaces/easyform.py:389
 #, fuzzy
 msgid "help_AfterValidationOverride_text"
 msgstr "TALES вираз, який буде викликано після успішної перевірки форми, але до виклику адаптера дії (якщо такий є), чи відображення сторінки подяки. Вміст форми буде у словнику request.form. Заповнювати поле не обов'язково. Найпоширеніше використання цього поля - для виклику python скрипта, що видаляє дані, введені в форму, або для додання альтернативної дії. Будь-яке значення, що поверне цей вираз, буде проігнороване. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "A TALES expression that will be called when the form is displayed. Leave empty if unneeded. The most common use of this field is to call a python script that sets defaults for multiple fields by pre-populating request.form. Any value returned by the expression is ignored. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/easyform.py:352
+#: collective/easyform/interfaces/easyform.py:369
 msgid "help_OnDisplayOverride_text"
 msgstr "TALES вираз, який буде викликано при відображенні форми. Заповнювати поле не обов'язково. Найпоширеніше використання цього поля - це виклик python скрипта, що встановлює значення за замовчуванням для багатьох полів у request.form. Будь-яке значення, що поверне цей вираз, буде проігнороване. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
@@ -206,17 +219,17 @@ msgid "help_cc_override_text"
 msgstr "TALES вираз, що буде обчислюватися для перевизначення будь-якого значення, введеного в список копій (СС). Не вводьте неперевірені дані із запиту. Заповнювати поле не обов'язково. Ваш вираз повинен обчислюватись як послідовність рядків. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "Check this to employ Cross-Site Request Forgery protection. Note that only HTTP Post actions will be allowed."
-#: collective/easyform/interfaces/easyform.py:250
+#: collective/easyform/interfaces/easyform.py:267
 msgid "help_csrf"
 msgstr "Позначте, щоб застосувати захист від підробки міжсайтових запитів (Cross-Site Request Forgery protection). Пам'ятайте, що лише дії HTTP Post будуть дозволені."
 
 #. Default: "This field allows you to change default fieldset label."
-#: collective/easyform/interfaces/easyform.py:228
+#: collective/easyform/interfaces/easyform.py:242
 msgid "help_default_fieldset_label_text"
 msgstr "Це поле дозволяє змінити заголовок набору полів за замовчуванням."
 
 #. Default: "The text will be displayed after the form fields."
-#: collective/easyform/interfaces/easyform.py:95
+#: collective/easyform/interfaces/easyform.py:107
 msgid "help_epilogue_text"
 msgstr "Текст буде розміщено після полів форми."
 
@@ -226,21 +239,21 @@ msgstr "Текст буде розміщено після полів форми.
 msgid "help_execcondition_text"
 msgstr "TALES вираз, що буде обчислюватися, щоб визначити - виконувати, чи не виконувати цю дію. Заповнювати поле не обов'язково. Якщо ви залишите поле пустим, дія буде виконуватись. Ваш вираз повинен обчислюватись як логічна змінна: повертає True, якщо ви хочете, щоб дія виконувалась. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
-#: collective/easyform/interfaces/fields.py:60
+#: collective/easyform/interfaces/fields.py:66
 msgid "help_field_widget"
 msgstr ""
 
 #. Default: "Check this to make the form redirect to an SSL-enabled version of itself (https://) if accessed via a non-SSL URL (http://).  In order to function properly, this requires a web server that has been configured to handle the HTTPS protocol on port 443 and forward it to Zope."
-#: collective/easyform/interfaces/easyform.py:262
+#: collective/easyform/interfaces/easyform.py:279
 msgid "help_force_ssl"
 msgstr "Позначте, щоб форма переходила на свою безпечну версію з SSL протоколом (https://), якщо використовується звичайний URL (http://) без SSL протоколу. Для правильного функціонування, потрібен веб сервер, налаштований для обробки протоколу HTTPS на порті 443 і його перенаправлення на Zope."
 
-#: collective/easyform/interfaces/easyform.py:219
+#: collective/easyform/interfaces/easyform.py:232
 msgid "help_form_tabbing"
 msgstr ""
 
 #. Default: "Use this field to override the form action attribute. Specify a URL to which the form will post. This will bypass form validation, success action adapter and thanks page."
-#: collective/easyform/interfaces/easyform.py:338
+#: collective/easyform/interfaces/easyform.py:355
 msgid "help_formactionoverride_text"
 msgstr "Використовуйте це поле, щоб перевизначити властивість дії форми. Вкажіть URL-адресу, куди буде розміщена форма. Це обійде перевірку форми, адаптер успішної дії та сторінку подяки."
 
@@ -317,17 +330,17 @@ msgid "help_formmailer_to_extract"
 msgstr "Виберіть поле форми, з якого буде взята інформація для заголовка \"Кому\". Якщо ви виберете будь-що інше крім \"Жоден\", це перекриє налаштування \"Адреса електронної пошти отримувача\" вище. Будьте обережними з введенням цієї інформації."
 
 #. Default: "This override field allows you to insert content into the xhtml head. The typical use is to add custom CSS or JavaScript. Specify a TALES expression returning a string. The string will be inserted with no interpretation. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/easyform.py:392
+#: collective/easyform/interfaces/easyform.py:409
 msgid "help_headerInjection_text"
 msgstr "Це поле перевизначення дозволяє вставити вміст в xhtml-заголовок. Переважно поле використовується для додавання користувацького CSS або JavaScript коду. Вкажіть TALES вираз, що повертає рядок. Рядок буде вставлено ​​без перетворень. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "Field is hidden"
-#: collective/easyform/interfaces/fields.py:67
+#: collective/easyform/interfaces/fields.py:84
 msgid "help_hidden"
 msgstr ""
 
 #. Default: "Check this to display field titles for fields that received no input. Uncheck to leave fields with no input off the list."
-#: collective/easyform/interfaces/easyform.py:155
+#: collective/easyform/interfaces/easyform.py:167
 msgid "help_includeEmpties_text"
 msgstr "Позначте для відображення назв незаповнених полів. Не позначайте і порожні поля не відображатимуться у списку."
 
@@ -346,12 +359,12 @@ msgstr "Позначте, щоб вибрати вхідні дані для в�
 msgid "help_mailfields_text"
 msgstr "Виберіть поля, дані з яких будуть включені в електронний лист."
 
-#: collective/easyform/interfaces/easyform.py:237
+#: collective/easyform/interfaces/easyform.py:252
 msgid "help_method"
 msgstr ""
 
 #. Default: "This text will be displayed above the form fields."
-#: collective/easyform/interfaces/easyform.py:87
+#: collective/easyform/interfaces/easyform.py:99
 msgid "help_prologue_text"
 msgstr "Цей текст буде відображатись над полями форми."
 
@@ -367,7 +380,7 @@ msgstr "TALES вираз, що буде обчислюватися для пер
 msgid "help_registry_items"
 msgstr ""
 
-#: collective/easyform/interfaces/easyform.py:213
+#: collective/easyform/interfaces/easyform.py:225
 msgid "help_reset_button"
 msgstr ""
 
@@ -407,16 +420,16 @@ msgid "help_sender_override_text"
 msgstr "TALES вираз, що буде обчислюватися для перевизначення заголовка \"Від кого\". Заповнювати поле не обов'язково. Ваш вираз повинен обчислюватись як рядок. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "Check this to display input for all fields (except label and file fields). If you check this, the choices in the pick box below will be ignored."
-#: collective/easyform/interfaces/easyform.py:131
+#: collective/easyform/interfaces/easyform.py:143
 msgid "help_showallfields_text"
 msgstr "Позначте, щоб відображати вхідні дані для всіх полів (крім заголовків/написів і файлових типів вмісту). При виборі цього пункту, всі нижче перечислені пункти будуть проігноровані."
 
-#: collective/easyform/interfaces/easyform.py:207
+#: collective/easyform/interfaces/easyform.py:219
 msgid "help_showcancel_text"
 msgstr ""
 
 #. Default: "Pick the fields whose inputs you'd like to display on the success page."
-#: collective/easyform/interfaces/easyform.py:144
+#: collective/easyform/interfaces/easyform.py:156
 msgid "help_showfields_text"
 msgstr "Виберіть поля, дані з яких будуть відображатись на сторінці, що повідомлятиме про успішне заповнення форми."
 
@@ -425,57 +438,57 @@ msgstr "Виберіть поля, дані з яких будуть відоб�
 msgid "help_subject_override_text"
 msgstr "TALES вираз, що буде обчислюватися для перевизначення будь-якого значення, введеного в поле заголовка електронного листа. Заповнювати поле не обов'язково. Ваш вираз повинен обчислюватись як рядок. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
-#: collective/easyform/interfaces/easyform.py:201
+#: collective/easyform/interfaces/easyform.py:213
 msgid "help_submitlabel_text"
 msgstr ""
 
 #. Default: "This override field allows you to change submit button label. The typical use is to set label with request parameters. Specify a TALES expression returning a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/easyform.py:410
+#: collective/easyform/interfaces/easyform.py:427
 msgid "help_submitlabeloverride_text"
 msgstr "Це поле перевизначення дозволяє змінити напис кнопки Надіслати. Переважно поле використовується для встановлення напису з параметрами запиту. Вкажіть TALES вираз, що повертає рядок. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "A TALES expression that will be evaluated when the formis displayed to get the field default value. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:79
+#: collective/easyform/interfaces/fields.py:96
 #, fuzzy
 msgid "help_tdefault_text"
 msgstr "TALES вираз, що буде обчислюватися, коли відображатиметься форма, щоб отримати значення поля за замовчуванням. Заповнювати поле не обов'язково. Ваш вираз повинен обчислюватись як рядок. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "A TALES expression that will be evaluated when the form is displayed to determine whether or not the field is enabled. Your expression should evaluate as True if the field should be included in the form, False if it should be omitted. Leave this expression field empty if unneeded: the field will be included. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:94
+#: collective/easyform/interfaces/fields.py:111
 msgid "help_tenabled_text"
 msgstr "TALES вираз, що буде обчислюватися коли відображатиметься форма, щоб визначити, чи включене поле. Ваш вираз повинен обчислюватись як True, якщо поле повинне бути включене в форму, False - якщо його треба пропустити. Заповнювати поле не обов'язково. Якщо залишити поле для виразу пустим, поле буде включене. ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
 #. Default: "Used in thanks page."
-#: collective/easyform/interfaces/easyform.py:124
+#: collective/easyform/interfaces/easyform.py:136
 msgid "help_thanksdescription"
 msgstr "Використовується на сторінці подяки."
 
 #. Default: "The text will be displayed after the field inputs."
-#: collective/easyform/interfaces/easyform.py:175
+#: collective/easyform/interfaces/easyform.py:187
 msgid "help_thanksepilogue_text"
 msgstr "Текст буде відображатись після інформації, вказаної в полі."
 
 #. Default: "Use this field in place of a thanks-page designation to determine final action after calling your action adapter (if you have one). You would usually use this for a custom success template or script. Leave empty if unneeded. Otherwise, specify as you would a CMFFormController action type and argument, complete with type of action to execute (e.g., \"redirect_to\" or \"traverse_to\") and a TALES expression. For example, \"Redirect to\" and \"string:thanks-page\" would redirect to \"thanks-page\"."
-#: collective/easyform/interfaces/easyform.py:317
+#: collective/easyform/interfaces/easyform.py:334
 msgid "help_thankspageoverride_text"
 msgstr "Використовуйте це поле замість призначення сторінки подяки, щоб визначити фінальну дію після виклику адаптера дії (якщо такий є). Переважно використовується для користувацького шаблону чи скрипту. Заповнювати поле не обов'язково. Вкажіть тип дії CMFFormController та аргумент, і доповніть типом дії для виконання (наприклад, \"redirect_to\" або \"traverse_to\") та TALES виразом. Наприклад, \"Redirect to\" і \"string:thanks-page\" переадресує на \"thanks-page\"."
 
 #. Default: "Use this field in place of a thanks-page designation to determine final action after calling your action adapter (if you have one). You would usually use this for a custom success template or script. Leave empty if unneeded. Otherwise, specify as you would a CMFFormController action type and argument, complete with type of action to execute (e.g., \"redirect_to\" or \"traverse_to\") and a TALES expression. For example, \"Redirect to\" and \"string:thanks-page\" would redirect to \"thanks-page\"."
-#: collective/easyform/interfaces/easyform.py:296
+#: collective/easyform/interfaces/easyform.py:313
 msgid "help_thankspageoverrideaction_text"
 msgstr "Використовуйте це поле замість призначення сторінки подяки, щоб визначити фінальну дію після виклику адаптера дії (якщо такий є). Переважно використовується для користувацького шаблону чи скрипту. Заповнювати поле не обов'язково. Вкажіть тип дії CMFFormController та аргумент, і доповніть типом дії для виконання (наприклад, \"redirect_to\" або \"traverse_to\") та TALES виразом. Наприклад, \"Redirect to\" і \"string:thanks-page\" переадресує на \"thanks-page\"."
 
 #. Default: "This text will be displayed above the selected field inputs."
-#: collective/easyform/interfaces/easyform.py:167
+#: collective/easyform/interfaces/easyform.py:179
 msgid "help_thanksprologue_text"
 msgstr "Текст буде відображатись над вибраними полями."
 
 #. Default: "A TALES expression that will be evaluated when the form is validated. Validate against 'value', which will contain the field input. Return False if valid; if not valid return a string error message. E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" will require \"eggs\" for input. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:112
+#: collective/easyform/interfaces/fields.py:129
 msgid "help_tvalidator_text"
 msgstr "TALES вираз, що буде обчислюватися після перевірки форми. Перевіряється ’значення’, яке буде містити дані введені в поле. Вернути False, якщо дані вірні, якщо не вірні, то вернути повідомлення про помилку. Наприклад, \"python: test(value=='eggs', False, 'input must be eggs')\" вимагатиме вводити \"eggs\". ПРИМІТКА: помилка в обчисленні цього виразу призведе до помилки при виведенні форми."
 
-#: collective/easyform/interfaces/easyform.py:244
+#: collective/easyform/interfaces/easyform.py:260
 msgid "help_unload_protection"
 msgstr ""
 
@@ -485,7 +498,7 @@ msgid "help_usecolumnnames_text"
 msgstr "Чи відображати назви колонок в першому рядку завантажених даних?"
 
 #. Default: "Select the validators to use on this field"
-#: collective/easyform/interfaces/fields.py:142
+#: collective/easyform/interfaces/fields.py:73
 msgid "help_userfield_validators"
 msgstr "Виберіть валідатори для цього поля."
 
@@ -499,12 +512,12 @@ msgid "import"
 msgstr "Імпорт"
 
 #. Default: "After Validation Script"
-#: collective/easyform/interfaces/easyform.py:369
+#: collective/easyform/interfaces/easyform.py:386
 msgid "label_AfterValidationOverride_text"
 msgstr "Скрипт після перевірки"
 
 #. Default: "Form Setup Script"
-#: collective/easyform/interfaces/easyform.py:351
+#: collective/easyform/interfaces/easyform.py:368
 msgid "label_OnDisplayOverride_text"
 msgstr "Скрипт для налаштування форми"
 
@@ -519,7 +532,7 @@ msgid "label_cc_override_text"
 msgstr "Вираз для копії"
 
 #. Default: "CSRF Protection"
-#: collective/easyform/interfaces/easyform.py:249
+#: collective/easyform/interfaces/easyform.py:266
 msgid "label_csrf"
 msgstr "Захист від CSRF атак"
 
@@ -529,7 +542,7 @@ msgid "label_customscript_action"
 msgstr ""
 
 #. Default: "Custom Default Fieldset Label"
-#: collective/easyform/interfaces/easyform.py:224
+#: collective/easyform/interfaces/easyform.py:238
 msgid "label_default_fieldset_label_text"
 msgstr "Користувацький заголовок стандартного набору полів"
 
@@ -539,7 +552,7 @@ msgid "label_downloadformat_text"
 msgstr "Формат завантаження"
 
 #. Default: "Form Epilogue"
-#: collective/easyform/interfaces/easyform.py:94
+#: collective/easyform/interfaces/easyform.py:106
 msgid "label_epilogue_text"
 msgstr "Епілог форми"
 
@@ -549,22 +562,22 @@ msgid "label_execcondition_text"
 msgstr "Умова для виконання"
 
 #. Default: "Field Widget"
-#: collective/easyform/interfaces/fields.py:59
+#: collective/easyform/interfaces/fields.py:65
 msgid "label_field_widget"
 msgstr "Віджет поля"
 
 #. Default: "Force SSL connection"
-#: collective/easyform/interfaces/easyform.py:261
+#: collective/easyform/interfaces/easyform.py:278
 msgid "label_force_ssl"
 msgstr "Форсувати SSL з’єднання"
 
 #. Default: "Turn fieldsets to tabs"
-#: collective/easyform/interfaces/easyform.py:218
+#: collective/easyform/interfaces/easyform.py:231
 msgid "label_form_tabbing"
 msgstr "Перетворити набори полів на таби"
 
 #. Default: "Custom Form Action"
-#: collective/easyform/interfaces/easyform.py:337
+#: collective/easyform/interfaces/easyform.py:354
 msgid "label_formactionoverride_text"
 msgstr "Користувацька дія для форми"
 
@@ -639,22 +652,22 @@ msgid "label_formmailer_to_extract"
 msgstr "Взяти Отримувача з"
 
 #. Default: "Header Injection"
-#: collective/easyform/interfaces/easyform.py:391
+#: collective/easyform/interfaces/easyform.py:408
 msgid "label_headerInjection_text"
 msgstr "Вставка заголовку"
 
 #. Default: "Hidden"
-#: collective/easyform/interfaces/fields.py:66
+#: collective/easyform/interfaces/fields.py:83
 msgid "label_hidden"
 msgstr ""
 
 #. Default: "Include Empties"
-#: collective/easyform/interfaces/easyform.py:154
+#: collective/easyform/interfaces/easyform.py:166
 msgid "label_includeEmpties_text"
 msgstr "Включати пусті поля"
 
 #. Default: "Label"
-#: collective/easyform/fields.py:194
+#: collective/easyform/fields.py:196
 msgid "label_label_field"
 msgstr "Напис"
 
@@ -679,22 +692,22 @@ msgid "label_mailfields_text"
 msgstr "Показати відповіді"
 
 #. Default: "Form method"
-#: collective/easyform/interfaces/easyform.py:236
+#: collective/easyform/interfaces/easyform.py:251
 msgid "label_method"
 msgstr "Метод форми"
 
 #. Default: "NorobotCaptcha"
-#: collective/easyform/fields.py:222
+#: collective/easyform/fields.py:224
 msgid "label_norobot_field"
 msgstr ""
 
 #. Default: "Form Prologue"
-#: collective/easyform/interfaces/easyform.py:86
+#: collective/easyform/interfaces/easyform.py:98
 msgid "label_prologue_text"
 msgstr "Пролог форми"
 
 #. Default: "ReCaptcha"
-#: collective/easyform/fields.py:210
+#: collective/easyform/fields.py:212
 msgid "label_recaptcha_field"
 msgstr "ReCaptcha"
 
@@ -704,12 +717,12 @@ msgid "label_recipient_override_text"
 msgstr "Вираз для Отримувача"
 
 #. Default: "Reset Button Label"
-#: collective/easyform/interfaces/easyform.py:212
+#: collective/easyform/interfaces/easyform.py:224
 msgid "label_reset_button"
 msgstr "Напис кнопки скидання"
 
 #. Default: "Rich Label"
-#: collective/easyform/fields.py:196
+#: collective/easyform/fields.py:198
 msgid "label_richlabel_field"
 msgstr "Розширений напис"
 
@@ -754,22 +767,22 @@ msgid "label_sender_override_text"
 msgstr "Вираз для Відправника"
 
 #. Default: "Server-Side Variable"
-#: collective/easyform/interfaces/fields.py:129
+#: collective/easyform/interfaces/fields.py:146
 msgid "label_server_side_text"
 msgstr "Змінна для серверної сторони"
 
 #. Default: "Show All Fields"
-#: collective/easyform/interfaces/easyform.py:130
+#: collective/easyform/interfaces/easyform.py:142
 msgid "label_showallfields_text"
 msgstr "Показувати всі поля"
 
 #. Default: "Show Reset Button"
-#: collective/easyform/interfaces/easyform.py:206
+#: collective/easyform/interfaces/easyform.py:218
 msgid "label_showcancel_text"
 msgstr "Показувати кнопку скидання"
 
 #. Default: "Show Responses"
-#: collective/easyform/interfaces/easyform.py:143
+#: collective/easyform/interfaces/easyform.py:155
 msgid "label_showfields_text"
 msgstr "Показувати відповіді"
 
@@ -779,62 +792,62 @@ msgid "label_subject_override_text"
 msgstr "Вираз для Теми"
 
 #. Default: "Submit Button Label"
-#: collective/easyform/interfaces/easyform.py:200
+#: collective/easyform/interfaces/easyform.py:212
 msgid "label_submitlabel_text"
 msgstr "Напис кнопки Надіслати"
 
 #. Default: "Custom Submit Button Label"
-#: collective/easyform/interfaces/easyform.py:407
+#: collective/easyform/interfaces/easyform.py:424
 msgid "label_submitlabeloverride_text"
 msgstr "Користувацький напис кнопки Надіслати"
 
 #. Default: "Default Expression"
-#: collective/easyform/interfaces/fields.py:78
+#: collective/easyform/interfaces/fields.py:95
 msgid "label_tdefault_text"
 msgstr "Вираз за замовчуванням"
 
 #. Default: "Enabling Expression"
-#: collective/easyform/interfaces/fields.py:93
+#: collective/easyform/interfaces/fields.py:110
 msgid "label_tenabled_text"
 msgstr ""
 
 #. Default: "Thanks summary"
-#: collective/easyform/interfaces/easyform.py:123
+#: collective/easyform/interfaces/easyform.py:135
 msgid "label_thanksdescription"
 msgstr "Короткий опис сторінки подяки"
 
 #. Default: "Thanks Epilogue"
-#: collective/easyform/interfaces/easyform.py:174
+#: collective/easyform/interfaces/easyform.py:186
 msgid "label_thanksepilogue_text"
 msgstr "Епілог сторінки подяки"
 
 #. Default: "Custom Success Action"
-#: collective/easyform/interfaces/easyform.py:316
+#: collective/easyform/interfaces/easyform.py:333
 msgid "label_thankspageoverride_text"
 msgstr ""
 
 #. Default: "Custom Success Action Type"
-#: collective/easyform/interfaces/easyform.py:292
+#: collective/easyform/interfaces/easyform.py:309
 msgid "label_thankspageoverrideaction_text"
 msgstr ""
 
 #. Default: "Thanks Prologue"
-#: collective/easyform/interfaces/easyform.py:166
+#: collective/easyform/interfaces/easyform.py:178
 msgid "label_thanksprologue_text"
 msgstr "Пролог сторінки подяки"
 
 #. Default: "Thanks title"
-#: collective/easyform/interfaces/easyform.py:118
+#: collective/easyform/interfaces/easyform.py:130
 msgid "label_thankstitle"
 msgstr "Назва сторінки подяки"
 
 #. Default: "Custom Validator"
-#: collective/easyform/interfaces/fields.py:111
+#: collective/easyform/interfaces/fields.py:128
 msgid "label_tvalidator_text"
 msgstr "Додатковий валідатор"
 
 #. Default: "Unload protection"
-#: collective/easyform/interfaces/easyform.py:243
+#: collective/easyform/interfaces/easyform.py:259
 msgid "label_unload_protection"
 msgstr ""
 
@@ -848,11 +861,11 @@ msgstr "Включати назви колонок"
 msgid "label_xinfo_headers_text"
 msgstr "HTTP Заголовки"
 
-#: collective/easyform/browser/view.py:397
+#: collective/easyform/browser/view.py:405
 msgid "msg_file_not_allowed"
 msgstr ""
 
-#: collective/easyform/browser/view.py:388
+#: collective/easyform/browser/view.py:396
 msgid "msg_file_too_big"
 msgstr ""
 

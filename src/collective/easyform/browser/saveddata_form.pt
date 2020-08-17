@@ -6,6 +6,10 @@
       i18n:domain="plone.z3cform"
 >
 
+  <h1 i18n:translate="">Saved Data</h1>
+
+  <p i18n:translate="saveddata_form_description">The saved data of <strong i18n:name="formname" tal:content="view/form_title">form name</strong> stored in the adapter <strong i18n:name="adapter" tal:content="view/name"></strong></p>
+
   <div class="portalMessage"
        role="status"
        tal:condition="view/status"
