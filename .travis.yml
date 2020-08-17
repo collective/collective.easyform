@@ -22,8 +22,6 @@ jobs:
       env: PLONE_VERSION=5.2.x
       dist: bionic
       sudo: true
-  allow_failures:
-    - python: "3.8"
 
 cache:
   pip: true
