@@ -105,8 +105,12 @@ It replaces the generic form error message::
     >>> browser.getControl('Submit').click()
     >>> browser.url
     'http://nohost/plone/testform'
+    >>> 'Thanks for your input.' in browser.contents
+    False
     >>> 'There were some errors.' in browser.contents
     False
+    >>> 'form error' in browser.contents
+    True
 
 The generic form error message can be combined with field errors
 by returning a dictionary with several entries in the onSuccess
