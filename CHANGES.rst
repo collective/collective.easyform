@@ -9,6 +9,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.2 (2020-08-17)
+------------------
+
+Bug fixes:
+
+
+- Better saved data handling (ux forms, redirect to only adapter). [jensens (#1)
+- More German translations [jensens] (#2)
+- Fixes #217: Stop loosing action errors in form update. [wobsta] (#238)
+- Fixes #182: actions urls when on action or field traverser. [jensens] (#239)
+
+
 3.0.1 (2020-07-29)
 ------------------
 
