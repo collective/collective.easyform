@@ -75,7 +75,7 @@ Submit the form::
 Repeat the test but move the script in front of the mailer. No email
 is sent anymore (note the missing "sent mail" at the end)::
 
-    >>> browser.post(portal_url + '/testform/actions/custom/@@order', data={'pos': '0', 'fieldset_index': '0'})
+    >>> browser.post(portal_url + '/testform/actions/custom/@@order', 'pos=0&fieldset_index=0')
     >>> browser.open(portal_url + '/testform/actions/mailer')
     >>> browser.getControl(name='form.widgets.recipient_email').value = 'mdummy@address.com'
     >>> browser.getControl('Save').click()
