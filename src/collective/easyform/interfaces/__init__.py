@@ -31,6 +31,9 @@ from .savedata import ISavedDataFormWrapper  # noqa
 from zope.interface import Interface
 
 
+FORM_ERRORS_MARKER = 'FORM_ERRORS_MARKER'
+
+
 class IEasyFormView(Interface):
 
     """

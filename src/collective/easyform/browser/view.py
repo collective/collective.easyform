@@ -12,6 +12,7 @@ from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ISaveData
+from collective.easyform.interfaces import FORM_ERRORS_MARKER
 from logging import getLogger
 from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
@@ -152,6 +153,8 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def setErrorsMessage(self, errors):
         for field in errors:
             if field not in self.widgets:
+                if field == FORM_ERRORS_MARKER:
+                    self.formErrorsMessage = errors[field]
                 continue
             error = ValidationError()
             error.doc = lambda: errors[field]
@@ -293,6 +296,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.template = self.form_template
         if self.request.method != "POST" or self.context.thanksPageOverride:
             # go with all but default thank you page rendering
+            return
+        # If an adapter has already set errors, don't re-run extraction and
+        # validation, just bail out:
+        # (we copy the logic from plone.app.z3cform at templates/macros.pt)
+        if self.widgets.errors or self.status == getattr(self, 'formErrorsMessage', None):
             return
         data, errors = self.extractData()
         if errors:

@@ -31,6 +31,7 @@ testfiles = (
     "browser.rst",
     "serverside_field.rst",
     "ssl.rst",
+    "action_errors.rst",
 )
 
 
