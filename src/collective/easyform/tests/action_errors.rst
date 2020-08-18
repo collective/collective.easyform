@@ -87,7 +87,7 @@ is sent anymore (note the missing "sent mail" at the end)::
 
 Finally, we can also generate an error not attached to a field
 (when creating own action adapters, FORM_ERROR_MARKER is available
-as a constant at collective.easyform.interfaces)::
+as a constant at collective.easyform.config)::
 
     >>> browser.open(portal_url + '/testform/actions/custom')
     >>> browser.getControl('Script body').value = 'return {"FORM_ERROR_MARKER": "form error"}'

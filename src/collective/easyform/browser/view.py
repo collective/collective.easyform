@@ -7,7 +7,7 @@ from collective.easyform.api import filter_fields
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
-from collective.easyform.interfaces import FORM_ERROR_MARKER
+from collective.easyform.config import FORM_ERROR_MARKER
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage

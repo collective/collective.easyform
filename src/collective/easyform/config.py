@@ -36,6 +36,9 @@ with open(
     MAIL_BODY_DEFAULT = safe_unicode(fp.read())
 
 
+FORM_ERROR_MARKER = 'FORM_ERROR_MARKER'
+
+
 DEFAULT_SCRIPT = u"""
 ## Python Script
 ##bind container=container
