@@ -90,7 +90,7 @@ Finally, we can also generate an error not attached to a field
 as a constant at collective.easyform.config)::
 
     >>> browser.open(portal_url + '/testform/actions/custom')
-    >>> browser.getControl('Script body').value = 'return {context.FORM_ERROR_MARKER: "form error"}'
+    >>> browser.getControl('Script body').value = 'return {request.FORM_ERROR_MARKER: "form error"}'
     >>> browser.getControl('Save').click()
 
 It replaces the generic form error message::

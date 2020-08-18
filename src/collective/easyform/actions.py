@@ -514,13 +514,6 @@ class CustomScript(Action):
         super(CustomScript, self).__init__(**kw)
 
     def getScript(self, context):
-        # for the convenience of scripters operating
-        # in a restricted python environment,
-        # let's store a reference to FORM_ERROR_MARKER
-        # on the object, so it'll be available
-        # as an attribute of context.
-        context.FORM_ERROR_MARKER = FORM_ERROR_MARKER
-
         # Generate Python script object
 
         body = self.ScriptBody
@@ -581,6 +574,14 @@ class CustomScript(Action):
 
         script = self.getScript(form)
         self.checkWarningsAndErrors(script)
+
+        # for the convenience of scripters operating
+        # in a restricted python environment,
+        # let's store a reference to FORM_ERROR_MARKER
+        # on the object, so it'll be available
+        # as an attribute of req.
+        req.FORM_ERROR_MARKER = FORM_ERROR_MARKER
+
         response = script(result, form, req)
         return response
 
