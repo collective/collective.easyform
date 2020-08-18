@@ -13,6 +13,7 @@ from collective.easyform.api import get_schema
 from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
 from collective.easyform.api import OrderedDict
+from collective.easyform.config import FORM_ERROR_MARKER
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -513,6 +514,13 @@ class CustomScript(Action):
         super(CustomScript, self).__init__(**kw)
 
     def getScript(self, context):
+        # for the convenience of scripters operating
+        # in a restricted python environment,
+        # let's store a reference to FORM_ERROR_MARKER
+        # on the object, so it'll be available
+        # as an attribute of context.
+        context.FORM_ERROR_MARKER = FORM_ERROR_MARKER
+
         # Generate Python script object
 
         body = self.ScriptBody
