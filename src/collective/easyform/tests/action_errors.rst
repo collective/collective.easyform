@@ -86,11 +86,11 @@ is sent anymore (note the missing "sent mail" at the end)::
     >>> browser.getControl('Submit').click()
 
 Finally, we can also generate an error not attached to a field
-(when creating own action adapters, FORM_ERRORS_MARKER is available
-as a constant at collective.easyform.interfaces)::
+(when creating own action adapters, FORM_ERROR_MARKER is available
+as a constant at collective.easyform.config)::
 
     >>> browser.open(portal_url + '/testform/actions/custom')
-    >>> browser.getControl('Script body').value = 'return {"FORM_ERRORS_MARKER": "form error"}'
+    >>> browser.getControl('Script body').value = 'return {request.FORM_ERROR_MARKER: "form error"}'
     >>> browser.getControl('Save').click()
 
 It replaces the generic form error message::
