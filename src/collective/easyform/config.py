@@ -59,7 +59,7 @@ DEFAULT_SCRIPT = u"""
 # as an error and will stop processing of actions
 # and return the user to the form. Error dictionaries
 # should be of the form {'field_id':'Error message'}
-# or {context.FORM_ERROR_MARKER:'Form error message'}
+# or {request.FORM_ERROR_MARKER:'Form error message'}
 
 
 assert False, "Please complete your script"
