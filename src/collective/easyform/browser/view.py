@@ -490,7 +490,6 @@ class IsSubEasyForm(GetEasyFormURL):
         return True
 
 
-
 class FolderContentsView(BrowserView):
     """folder_contents view for EasyForm.
 
