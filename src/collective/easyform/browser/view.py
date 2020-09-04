@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
+from Acquisition import aq_base
+from Acquisition import aq_chain
+from Acquisition import aq_parent
 from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
@@ -414,6 +417,57 @@ class ValidateFile(BrowserView):
                 default=u'File type "${ftype}" is not allowed!',
             )
         return False
+
+
+class GetEasyFormURL(BrowserView):
+    """Helper view for calculating the right url in actions.xml.
+
+    A url like /fields or /actions needs to be called an the easyform object.
+    Danger is that you get a url like easyform/fields/fields.
+    This is because /fields and /actions may look like browser views,
+    but to Plone they look like content items.
+    This messes up some logic in plone_context_state.
+
+    Usage in a url_expr:
+
+      python:context.restrictedTraverse('@@get-easyform-url')('fields')
+
+    That will give the correct url:
+
+      easyform-object-url/fields
+
+    """
+
+    def __call__(self, name=""):
+        # First get the real easyform, if we can find it.
+        form = self.get_form()
+        if form is None:
+            # We did not find the form.  View is called on the wrong item.
+            # Give back a relative link anyway.
+            base = "."
+            if not name.startswith("/"):
+                name = "/" + name
+            return base + name
+        base = form.absolute_url()
+        if not name:
+            # Do not add a needless slash at the end.
+            return base
+        if not name.startswith("/"):
+            name = "/" + name
+        return base + name
+
+    def get_form(self):
+        for item in aq_chain(self.context):
+            # Note that the fields/actions contexts also have
+            # portal_type EasyForm, but this is due to acquisition.
+            base = aq_base(item)
+            if not hasattr(base, "portal_type"):
+                continue
+            if base.portal_type == "EasyForm":
+                return item
+            if base.portal_type == "Plone Site":
+                # We have gone too far already.
+                return
 
 
 # BBB
