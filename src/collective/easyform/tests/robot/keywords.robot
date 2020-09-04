@@ -51,12 +51,12 @@ Wait overlay is closed
     Wait until keyword succeeds  60  1  Page should not contain element  css=div.overlay
 
 Clicked Fields
-    Click Link  css=#plone-contentmenu-actions a
+    Click Link  css=#plone-contentmenu-actions > a
     Element should be visible  css=#plone-contentmenu-actions ul
     Click Link  css=#plone-contentmenu-actions ul a#plone-contentmenu-actions-Fields
 
 Clicked Actions
-    Click Link  css=#plone-contentmenu-actions a
+    Click Link  css=#plone-contentmenu-actions > a
     Element should be visible  css=#plone-contentmenu-actions ul
     Click Link  css=#plone-contentmenu-actions ul a#plone-contentmenu-actions-Actions
 
