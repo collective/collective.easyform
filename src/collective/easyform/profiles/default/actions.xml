@@ -4,6 +4,29 @@
         name="portal_actions"
 >
   <object meta_type="CMF Action Category"
+          name="object"
+  >
+    <object meta_type="CMF Action"
+            name="easyform-view"
+            insert-after="folderContents"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >View</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm' and object.restrictedTraverse('@@is-sub-easyform')()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+  <object meta_type="CMF Action Category"
           name="object_buttons"
   >
     <object meta_type="CMF Action"

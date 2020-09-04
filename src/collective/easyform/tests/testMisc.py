@@ -77,6 +77,39 @@ class TestGetEasyFormURL(base.EasyFormTestCase):
         self.check_urls_non_form(view)
 
 
+class TestIsSubEasyForm(base.EasyFormTestCase):
+    """ test IsSubEasyForm stuff """
+
+    def afterSetUp(self):
+        self.folder.invokeFactory("EasyForm", "ff1")
+        self.form = self.folder.ff1
+        self.form_url = self.form.absolute_url()
+
+    def get_view(self, context):
+        request = self.layer["request"]
+        return getMultiAdapter((context, request), name="is-sub-easyform")
+
+    def test_is_sub_easyform_form(self):
+        view = self.get_view(self.form)
+        self.assertFalse(view())
+
+    def test_is_sub_easyform_fields(self):
+        view = self.get_view(self.form.restrictedTraverse("fields"))
+        self.assertTrue(view())
+
+    def test_is_sub_easyform_actions(self):
+        view = self.get_view(self.form.restrictedTraverse("actions"))
+        self.assertTrue(view())
+
+    def test_is_sub_easyform_folder(self):
+        view = self.get_view(self.folder)
+        self.assertFalse(view())
+
+    def test_is_sub_easyform_root(self):
+        view = self.get_view(self.portal)
+        self.assertFalse(view())
+
+
 class TestAjaxSaveHandler(base.EasyFormTestCase):
     def test_ajax_save_handler_call_unathorized(self):
         self.folder.invokeFactory("EasyForm", "ff1")

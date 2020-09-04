@@ -470,6 +470,27 @@ class GetEasyFormURL(BrowserView):
                 return
 
 
+class IsSubEasyForm(GetEasyFormURL):
+    """Is this a sub object of an easyform?
+
+    For use in actions.xml.
+
+    If this is a sub object of easyform,
+    then if has portal_type EasyForm,
+    but only due to acquisition.
+    """
+
+    def __call__(self):
+        if self.context.portal_type != "EasyForm":
+            # The wrong portal_type.
+            return False
+        if hasattr(aq_base(self.context), "portal_type"):
+            # An actual EasyForm
+            return False
+        return True
+
+
+
 class FolderContentsView(BrowserView):
     """folder_contents view for EasyForm.
 

@@ -38,6 +38,13 @@
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
+      name="is-sub-easyform"
+      for="*"
+      permission="zope2.View"
+      class=".view.IsSubEasyForm"
+      layer="..interfaces.IEasyFormLayer"
+      />
+  <browser:page
       name="folder_contents"
       for="collective.easyform.interfaces.IEasyForm"
       permission="zope2.View"
