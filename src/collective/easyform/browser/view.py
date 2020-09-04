@@ -470,5 +470,19 @@ class GetEasyFormURL(BrowserView):
                 return
 
 
+class FolderContentsView(BrowserView):
+    """folder_contents view for EasyForm.
+
+    When you are at url easyform/fields the Contents link in the toolbar
+    points to easyform/folder_contents, which does not exist.
+    So let's redirect to the parent.
+    """
+
+    def __call__(self):
+        url = aq_parent(self.context).absolute_url() + "/folder_contents"
+        self.request.response.redirect(url)
+        return url
+
+
 # BBB
 ValidateFileSize = ValidateFile

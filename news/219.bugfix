@@ -1,4 +1,5 @@
 Make sure action urls are always relative to the easyform object.
+And redirect `folder/easyform/folder_contents` to `folder/folder_contents`.
 See `issue 219 <https://github.com/collective/collective.easyform/issues/219>`_
 and `PR 239 <https://github.com/collective/collective.easyform/pull/239>`_.
 [maurits]
