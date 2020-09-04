@@ -158,7 +158,11 @@ def set_fields(context, schema):
     snew_schema = serializeSchema(schema)
     # store the current schema
     context.fields_model = snew_schema
+    # Plain reindexObject() will call notifyModified and then reindex all.
+    # We know nothing has changed that needs indexing,
+    # except that we must update the modified date, and reindex its index.
     context.notifyModified()
+    context.reindexObject(idxs=["modified"])
 
 
 def set_actions(context, schema):
@@ -169,6 +173,7 @@ def set_actions(context, schema):
     # store the current schema
     context.actions_model = snew_schema
     context.notifyModified()
+    context.reindexObject(idxs=["modified"])
 
 
 def format_addresses(addresses, names=None):

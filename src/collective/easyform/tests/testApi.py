@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Integeration tests specific to the mailer
+# Integration tests specific to the api
 #
 
 from collective.easyform.actions import DummyFormView
@@ -8,10 +8,11 @@ from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
 from collective.easyform.api import get_schema
 from collective.easyform.tests import base
+from plone import api
 
 
 class TestFunctions(base.EasyFormTestCase):
-    """ Test mailer action """
+    """ Test api """
 
     def afterSetUp(self):
         super(TestFunctions, self).afterSetUp()
@@ -21,6 +22,69 @@ class TestFunctions(base.EasyFormTestCase):
         self.dummy_form.schema = get_schema(self.ff1)
         self.dummy_form.prefix = "form"
         self.dummy_form._update()
+
+    def test_set_fields_updates_modified(self):
+        # https://github.com/collective/collective.easyform/issues/8
+        # Calling set_fields should update the modification date,
+        # also in the catalog.
+        from collective.easyform.api import set_fields
+
+        # Gather the original data.
+        catalog = api.portal.get_tool("portal_catalog")
+        path = "/".join(self.ff1.getPhysicalPath())
+        orig_modified = self.ff1.modified()
+        brain = catalog.unrestrictedSearchResults(path=path)[0]
+        orig_counter = catalog.getCounter()
+        self.assertEqual(brain.modified, orig_modified)
+
+        # Set the fields.
+        fields = get_schema(self.ff1)
+        set_fields(self.ff1, fields)
+
+        # The modification date on the form should have been updated.
+        new_modified = self.ff1.modified()
+        self.assertGreater(new_modified, orig_modified)
+
+        # The catalog brain should have the new date
+        brain = catalog.unrestrictedSearchResults(path=path)[0]
+        self.assertEqual(brain.modified, new_modified)
+        self.assertGreater(self.ff1.modified(), orig_modified)
+
+        # The catalog counter should have been increased.
+        # This helps invalidate caches because the catalogCounter ETag changes.
+        self.assertEqual(catalog.getCounter(), orig_counter + 1)
+
+    def test_set_actions_updates_modified(self):
+        # https://github.com/collective/collective.easyform/issues/8
+        # Calling set_actions should update the modification date,
+        # also in the catalog.
+        from collective.easyform.api import get_actions
+        from collective.easyform.api import set_actions
+
+        # Gather the original data.
+        catalog = api.portal.get_tool("portal_catalog")
+        path = "/".join(self.ff1.getPhysicalPath())
+        orig_modified = self.ff1.modified()
+        brain = catalog.unrestrictedSearchResults(path=path)[0]
+        orig_counter = catalog.getCounter()
+        self.assertEqual(brain.modified, orig_modified)
+
+        # Set the actions.
+        actions = get_actions(self.ff1)
+        set_actions(self.ff1, actions)
+
+        # The modification date on the form should have been updated.
+        new_modified = self.ff1.modified()
+        self.assertGreater(new_modified, orig_modified)
+
+        # The catalog brain should have the new date
+        brain = catalog.unrestrictedSearchResults(path=path)[0]
+        self.assertEqual(brain.modified, new_modified)
+        self.assertGreater(self.ff1.modified(), orig_modified)
+
+        # The catalog counter should have been increased.
+        # This helps invalidate caches because the catalogCounter ETag changes.
+        self.assertEqual(catalog.getCounter(), orig_counter + 1)
 
     def test_selective_widgets(self):
         """ Test selective inclusion of widgets for mail and thank you page.
