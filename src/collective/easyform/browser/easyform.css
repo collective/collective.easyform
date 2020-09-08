@@ -59,3 +59,7 @@
     content: '\e028';
     top: 2px;
 }
+
+.icon-easyform-view.toolbar-menu-icon::before {
+    content: '\e807';
+}

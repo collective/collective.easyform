@@ -4,6 +4,29 @@
         name="portal_actions"
 >
   <object meta_type="CMF Action Category"
+          name="object"
+  >
+    <object meta_type="CMF Action"
+            name="easyform-view"
+            insert-after="folderContents"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >View</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm' and object.restrictedTraverse('@@is-sub-easyform')()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+  <object meta_type="CMF Action Category"
           name="object_buttons"
   >
     <object meta_type="CMF Action"
@@ -16,7 +39,7 @@
       <property name="description"
                 i18n:translate=""
       />
-      <property name="url_expr">python:object_url + '/@@export-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else './@@export-easyform'</property>
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@export-easyform')</property>
       <property name="icon_expr" />
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
@@ -34,7 +57,7 @@
       <property name="description"
                 i18n:translate=""
       />
-      <property name="url_expr">python:object_url + '/@@import-easyform' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else '../@@import-easyform'</property>
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@import-easyform')</property>
       <property name="icon_expr" />
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
@@ -52,7 +75,7 @@
       <property name="description"
                 i18n:translate=""
       />
-      <property name="url_expr">python:object_url + '/@@saveddata' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else '../@@saveddata'</property>
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@saveddata')</property>
       <property name="icon_expr" />
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
@@ -70,10 +93,7 @@
       <property name="description"
                 i18n:translate=""
       />
-      <!-- For some reason Zope is considering Fields & Actions views as canonical objects -->
-      <!-- The condition below works around this by building 1) an absolute url for the form -->
-      <!-- Or 2) a relative one when user is not at canonical view -->
-      <property name="url_expr">python:object_url + '/fields' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else '../fields'</property>
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('fields')</property>
       <property name="icon_expr" />
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
@@ -91,8 +111,7 @@
       <property name="description"
                 i18n:translate=""
       />
-      <!-- For some reason Zope is considering Fields & Actions views as canonical objects -->
-      <property name="url_expr">python:object_url + '/actions' if context.restrictedTraverse('@@plone_interface_info').provides('collective.easyform.interfaces.IEasyForm') else '../actions'</property>
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('actions')</property>
       <property name="icon_expr" />
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">

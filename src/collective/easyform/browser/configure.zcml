@@ -30,6 +30,26 @@
       class=".controlpanel.EasyFormControlPanelView"
       layer="..interfaces.IEasyFormLayer"
       />
+  <browser:page
+      name="get-easyform-url"
+      for="*"
+      permission="zope2.View"
+      class=".view.GetEasyFormURL"
+      layer="..interfaces.IEasyFormLayer"
+      />
+  <browser:page
+      name="is-sub-easyform"
+      for="*"
+      permission="zope2.View"
+      class=".view.IsSubEasyForm"
+      layer="..interfaces.IEasyFormLayer"
+      />
+  <browser:page
+      name="folder_contents"
+      for="collective.easyform.interfaces.IEasyForm"
+      permission="zope2.View"
+      class=".view.FolderContentsView"
+      />
   <configure zcml:condition="installed plone.dexterity.exportimport">
     <browser:page
         name="export-easyform"
