@@ -66,7 +66,7 @@
     <value key="compile">False</value>
     <value key="csscompilation">++resource++easyform.css</value>
     <value key="depends">plone</value>
-    <value key="last_compilation">2019-04-24 15:10:00</value>
+    <value key="last_compilation">2020-09-08 17:52:00</value>
     <value key="resources">
     </value>
     <value key="merge_with">default</value>

@@ -3,15 +3,21 @@
     xmlns:gs="http://namespaces.zope.org/genericsetup"
     >
 
+  <gs:registerProfile
+      name="1007"
+      title="Upgrade to 1007"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="../profiles/1007"
+      />
+
   <gs:upgradeSteps
       destination="1007"
       profile="collective.easyform:default"
       source="1006"
       >
     <gs:upgradeDepends
-        title="Import actions"
-        import_steps="actions"
-        run_deps="false"
+        title="Update actions, update bundle timestamp, combine bundles"
+        import_profile="collective.easyform.upgrades:1007"
         />
   </gs:upgradeSteps>
 

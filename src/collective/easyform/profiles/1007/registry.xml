@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<registry>
+
+  <records interface="Products.CMFPlone.interfaces.IBundleRegistry"
+           prefix="plone.bundles/easyform"
+  >
+    <value key="last_compilation">2020-09-08 17:52:00</value>
+  </records>
+
+</registry>

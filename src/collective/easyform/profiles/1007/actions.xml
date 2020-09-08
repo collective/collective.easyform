@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        meta_type="Plone Actions Tool"
+        name="portal_actions"
+>
+  <object meta_type="CMF Action Category"
+          name="object"
+  >
+    <object meta_type="CMF Action"
+            name="easyform-view"
+            insert-after="folderContents"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >View</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm' and object.restrictedTraverse('@@is-sub-easyform')()</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+  <object meta_type="CMF Action Category"
+          name="object_buttons"
+  >
+    <object meta_type="CMF Action"
+            name="export"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Export</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@export-easyform')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="import"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Import</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@import-easyform')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Manage portal" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="saveddata"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Saved data</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@saveddata')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="Fields"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Define form fields</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('fields')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="Actions"
+            i18n:domain="collective.easyform"
+    >
+      <property name="title"
+                i18n:translate=""
+      >Define form actions</property>
+      <property name="description"
+                i18n:translate=""
+      />
+      <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('actions')</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
+      <property name="permissions">
+        <element value="Modify portal content" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+  </object>
+</object>
