@@ -13,6 +13,10 @@
         import_steps="actions"
         run_deps="false"
         />
+    <gs:upgradeStep
+        title="Update last_compilation of bundle"
+        handler=".update_last_compilation"
+        />
   </gs:upgradeSteps>
 
 </configure>
