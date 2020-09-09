@@ -147,3 +147,13 @@ class TestInstallation(base.EasyFormTestCase):
         self.assertEqual(
             self.types.EasyForm.getAvailableViewMethods(self.types), ("view",)
         )
+
+    def test_upgrades(self):
+        portal_setup = self.portal.portal_setup
+        profile_id = "profile-collective.easyform:default"
+        self.assertFalse(portal_setup.hasPendingUpgrades())
+        portal_setup.setLastVersionForProfile(profile_id, "1000")
+        self.assertTrue(portal_setup.hasPendingUpgrades())
+        # Biggest test is: do the upgrades run without error?
+        portal_setup.upgradeProfile(profile_id)
+        self.assertFalse(portal_setup.hasPendingUpgrades())
