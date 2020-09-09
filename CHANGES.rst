@@ -9,6 +9,23 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.3 (2020-09-09)
+------------------
+
+Bug fixes:
+
+
+- Make sure the catalog is updated after setting fields or actions.
+  Fixes `issue 8 <https://github.com/collective/collective.easyform/issues/8>`_.
+  [maurits] (#8)
+- Make sure action urls are always relative to the easyform object.
+  And redirect `folder/easyform/folder_contents` to `folder/folder_contents`.
+  And show a View link in the toolbar when you are in a sub item of a form.
+  See `issue 219 <https://github.com/collective/collective.easyform/issues/219>`_
+  and `PR 239 <https://github.com/collective/collective.easyform/pull/239>`_.
+  [maurits] (#219)
+
+
 3.0.2 (2020-08-17)
 ------------------
 
