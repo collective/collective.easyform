@@ -32,6 +32,8 @@ setup(
     keywords="form plone ttw builder email",
     author="Roman Kozlovskyi",
     author_email="krzroman@gmail.com",
+    maintainer="Plone Release Team",
+    maintainer_email="releaseteam@plone.org",
     url="https://github.com/collective/collective.easyform",
     license="GPLv2",
     packages=find_packages("src", exclude=["ez_setup"]),
