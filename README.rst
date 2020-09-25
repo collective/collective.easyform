@@ -221,4 +221,4 @@ Compatibility
 
 - 1.x targets Plone 4.x
 - 2.x targets Plone 5.x onwards
-
+- 3.0.4 and later targets Plone 5 + 6
