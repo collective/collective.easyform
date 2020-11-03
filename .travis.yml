@@ -22,6 +22,10 @@ jobs:
       env: PLONE_VERSION=5.2.x
       dist: bionic
       sudo: true
+    - python: "3.8"
+      env: PLONE_VERSION=5.2.3-pending
+      dist: bionic
+      sudo: true
 
 cache:
   pip: true
