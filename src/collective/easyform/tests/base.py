@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-from email import message_from_string
 from plone import api
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
@@ -21,12 +20,22 @@ try:
 except ImportError:
     from plone.testing.z2 import ZSERVER_FIXTURE as WSGI_SERVER_FIXTURE
 
+try:
+    # Python 3
+    from email import message_from_bytes
+except ImportError:
+    # Python 2
+    from email import message_from_string as message_from_bytes
+
 
 class MailHostMock(MailHost):
     def _send(self, mfrom, mto, messageText, immediate=False):
         print("<sent mail from {0} to {1}>".format(mfrom, mto))  # noqa: T003
+        if hasattr(messageText, "encode"):
+            # It is text instead of bytes.
+            messageText = messageText.encode("utf-8")
         self.msgtext = messageText
-        self.msg = message_from_string(messageText.lstrip())
+        self.msg = message_from_bytes(messageText.lstrip())
 
 
 class Fixture(PloneSandboxLayer):

@@ -29,11 +29,24 @@ from zope.schema.interfaces import IField
 
 def superAdapter(specific_interface, adapter, objects, name=u""):
     """Find the next most specific adapter.
-    """
 
-    #  We are adjusting view object class to provide IForm rather than IEasyFormForm or IGroup to make
-    #  one of the objects less specific. This allows us to find anotehr adapter other than our one. This allows us to
-    #  find any custom adapters for any fields that we have overridden
+    This is called by a FieldExtenderValidator or FieldExtenderDefault instance.
+    This is passed in with the 'adapter' parameter.
+    This adapter itself is not a real validator or default factory,
+    but is used to find other real validators or default factories.
+
+    This may sound strange, but it solves a problem.
+    Problem is that validators and default were not always found for fields in field sets.
+    For example, a captcha field in the main form would get validated by its proper validator,
+    but when in a field set, only a basic validator would be found.
+
+    We are adjusting the view object class to provide IForm rather than
+    IEasyFormForm or IGroup to make one of the objects less specific.
+    Same for the default factory.
+    This allows us to find another adapter other than the current one.
+    This allows us to find any custom adapters for any fields that we have overridden
+
+    """
     new_obj = []
     found = False
     for obj in objects:
@@ -59,11 +72,18 @@ def superAdapter(specific_interface, adapter, objects, name=u""):
     if not found:
         return None
 
-    provided_by_declared = providedBy(adapter).declared
-    if not provided_by_declared:
-        return None
+    provided_by = providedBy(adapter)
+    # With zope.interface 5.0.2, the info we seek is in 'declared'.
+    # With 5.1.0+, it can also be in the 'interfaces()' iterator,
+    # especially for groups (field sets).
+    # But it looks like interfaces() works always.
+    # adapter_interfaces = provided_by.declared
+    # if not adapter_interfaces:
+    adapter_interfaces = list(provided_by.interfaces())
+    if not adapter_interfaces:
+        return
 
-    return queryMultiAdapter(new_obj, provided_by_declared[0], name=name)
+    return queryMultiAdapter(new_obj, adapter_interfaces[0], name=name)
 
 
 @implementer(IValidator)

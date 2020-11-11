@@ -44,9 +44,9 @@ thank you page::
 
 Test for 'Subject' in the mail body::
 
-    >>> msgtext = portal.MailHost.msgtext[portal.MailHost.msgtext.index('\n\n'):]
-    >>> body = '\n\n'.join(portal.MailHost.msgtext.split('\n\n')[1:])
-    >>> 'Subject' in body
+    >>> msgtext = portal.MailHost.msgtext[portal.MailHost.msgtext.index(b'\n\n'):]
+    >>> body = b'\n\n'.join(portal.MailHost.msgtext.split(b'\n\n')[1:])
+    >>> b'Subject' in body
     False
 
 Specifically list the field as one that should be included in the thank
