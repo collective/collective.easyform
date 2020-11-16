@@ -37,6 +37,9 @@ New:
 
 Fixes:
 
+- For increased security, in the modeleditor do not resolve entities, and remove processing instructions.
+  [maurits]
+
 - Fixed validation, inline validation, and defaults for fields in fieldsets.
   Refs issues `#172 <https://github.com/collective/collective.easyform/issues/172>`_
   and ` #157 <https://github.com/collective/collective.easyform/issues/157>`_. [frevd, maurits]
