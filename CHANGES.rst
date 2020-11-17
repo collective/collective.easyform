@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0a4 (unreleased)
+1.0a4 (2020-11-17)
 ------------------
 
 NOTE: if you deploy 1.0.4+, the easyform extended validations start working again on fields
