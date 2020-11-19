@@ -629,7 +629,7 @@ msgstr "追加のヘッダ"
 #. Default: "BCC Recipients"
 #: collective/easyform/interfaces/mailer.py:109
 msgid "label_formmailer_bcc_recipients"
-msgstr "BCC受信者”
+msgstr "BCC受信者"
 
 #actions を編集⇒MailerのSettings⇒メッセージタブ
 #. Default: "Body (signature)"
