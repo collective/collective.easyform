@@ -2,6 +2,7 @@
 # SOME DESCRIPTIVE TITLE.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # Chiaki Ishida <chiak@mbk.nifty.com> 2020
+# Satsuki Ori <satsuki.ori03@gmail.com> 2020
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
