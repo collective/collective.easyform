@@ -243,17 +243,17 @@ msgstr "追加ヘッダ"
 #. Default: "A TALES expression that will be called after the form issuccessfully validated, but before calling an action adapter (if any) or displaying a thanks page.Form input will be in the request.form dictionary.Leave empty if unneeded. The most common use of this field is to call a python scriptto clean up form input or to script an alternative action. Any value returned by the expression is ignored.PLEASE NOTE: errors in the evaluation of this expression willcause an error on form display."
 #: collective/easyform/interfaces/easyform.py:389
 msgid "help_AfterValidationOverride_text"
-msgstr "フォームが正常に検証された後、アクションアダプター（存在する場合）を呼び出す前、またはThanksページを表示する前に呼び出されるTALES式です。フォーム入力はrequest.form辞書にあります。
-不要な場合は空欄にしてください。このフィールドの最も一般的な使用法は、Pythonスクリプトを呼び出してフォーム入力をクリーンアップするか、代替アクションをスクリプト化することです。
-式によって返される値はすべて無視されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます。  "
+msgstr "フォームが正常に検証された後、アクションアダプター（存在する場合）を呼び出す前、またはThanksページを表示する前に呼び出されるTALES式です。フォーム入力はrequest.form辞書にあります。"
+msgstr "不要な場合は空欄にしてください。このフィールドの最も一般的な使用法は、Pythonスクリプトを呼び出してフォーム入力をクリーンアップするか、代替アクションをスクリプト化することです。"
+msgstr "式によって返される値はすべて無視されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます。"
 
 #開発者に問い合わせ後、日本語訳再検討（Formgenの日本語訳）⑦
 #フォームを表示する時に呼び出されるTALES式を指定します。不要な場合は空欄とします。このフィールドはフォームに予めデフォルトとなる複数選択のフィールドセットのPythonスクリプトを呼び出すために一般的に使われます。この式のいかなる値も無視されます。【註記】この式の値にあるエラーはフォーム表示のエラーとして表示されます。
 #. Default: "A TALES expression that will be called when the form is displayed. Leave empty if unneeded. The most common use of this field is to call a python script that sets defaults for multiple fields by pre-populating request.form. Any value returned by the expression is ignored. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
 #: collective/easyform/interfaces/easyform.py:369
 msgid "help_OnDisplayOverride_text"
-msgstr "フォームが表示されたときに呼び出されるTALES式です。不要な場合は空欄にしてください。このフィールドの最も一般的な使用法は、request.formを事前入力することにより、複数のフィールドのデフォルトを設定するPythonスクリプトを呼び出すことです。
-式によって返される値はすべて無視されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます。"
+msgstr "フォームが表示されたときに呼び出されるTALES式です。不要な場合は空欄にしてください。このフィールドの最も一般的な使用法は、request.formを事前入力することにより、複数のフィールドのデフォルトを設定するPythonスクリプトを呼び出すことです。"
+msgstr "式によって返される値はすべて無視されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます。"
 
 #開発者に問い合わせ後、日本語訳再検討（Formgenの日本語訳）
 #actions を編集→MailerのSettings→Overridesタブ
@@ -293,8 +293,8 @@ msgstr "このテキストは、入力フィールドの後に表示されます
 #. Default: "A TALES expression that will be evaluated to determine whether or not to execute this action. Leave empty if unneeded, and the action will be executed. Your expression should evaluate as a boolean; return True if you wish the action to execute. PLEASE NOTE: errors in the evaluation of this expression will  cause an error on form display."
 #: collective/easyform/interfaces/actions.py:82
 msgid "help_execcondition_text"
-msgstr "このアクションを実行するかどうかを決定するために評価されるTALES式です。不要な場合は空欄にしておくと、アクションが実行されます。
-式はブール値として評価されます。アクションを実行する場合はTrueを返してください。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます。"
+msgstr "このアクションを実行するかどうかを決定するために評価されるTALES式です。不要な場合は空欄にしておくと、アクションが実行されます。"
+msgstr "式はブール値として評価されます。アクションを実行する場合はTrueを返してください。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます。"
 
 #英語原文なし
 #: collective/easyform/interfaces/fields.py:66
@@ -353,7 +353,7 @@ msgstr "メール本文に表示されるフィールドの前に付加される
 #. Default: "This is a Zope Page Template used for rendering of the mail-body. You don't need to modify it, but if you know TAL (Zope's Template Attribute Language) have the full power to customize your outgoing mails."
 #: collective/easyform/interfaces/mailer.py:300
 msgid "help_formmailer_body_pt"
-msgstr "メール本文の表示用のZopeページテンプレートです。変更する必要はありませんが、TAL（ Zopeの Template Attribute Language ）を知っている場合は、送信メールを完全にカスタマイズできます。 
+msgstr "メール本文の表示用のZopeページテンプレートです。変更する必要はありませんが、TAL（ Zopeの Template Attribute Language ）を知っている場合は、送信メールを完全にカスタマイズできます。"
 
 #Define form actions→actionsを編集→mailer→settings→Edit Action 'mailer'→テンプレート内Mail Format説明
 #. Default: "Set the mime-type of the mail-body. Change this setting only if you know exactly what you are doing. Leave it blank for default behaviour."
@@ -414,13 +414,13 @@ msgstr "xhtmlヘッドにコンテンツを挿入するためのオーバーラ�
 #Define form fields→fieldsを編集→フィールド〇〇を編集→Advanced内「Hidden」
 #. Default: "Field is hidden"
 #: collective/easyform/interfaces/fields.py:84
-msgid "help_hidden“
+msgid "help_hidden"
 msgstr "チェックを入れるとフィールドが非表示になります。"
 
 #EasyForm を編集→「Thanks Page」内include Empties説明
 #. Default: "Check this to display field titles for fields that received no input. Uncheck to leave fields with no input off the list."
 #: collective/easyform/interfaces/easyform.py:167
-msgid "help_includeEmpties_text“
+msgid "help_includeEmpties_text"
 msgstr "空欄で送信された項目のタイトルを表示する際は、ここにチェックを入れてください。空欄の項目を表示しない場合は、チェックを外してください。"
 
 #Define form actions→actionsを編集→mailer→settings→Edit Action 'mailer'→メッセージ内Include All Fields説明
