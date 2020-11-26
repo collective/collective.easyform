@@ -299,6 +299,7 @@ msgstr "式はブール値として評価されます。アクションを実行
 #英語原文なし
 #: collective/easyform/interfaces/fields.py:66
 msgid "help_field_widget"
+msgstr ""
 
 #EasyForm を編集→「Advanced」内Force SSL connection説明
 #. Default: "Check this to make the form redirect to an SSL-enabled version of itself (https://) if accessed via a non-SSL URL (http://).  In order to function properly, this requires a web server that has been configured to handle the HTTPS protocol on port 443 and forward it to Zope."
@@ -438,6 +439,7 @@ msgstr "Eメールに含めたい入力データのフィールドを選択し�
 #英語原文なし
 #: collective/easyform/interfaces/easyform.py:252
 msgid "help_method"
+msgstr ""
 
 #EasyForm を編集→「基本」内Form Prologue説明
 #. Default: "This text will be displayed above the form fields."
@@ -464,6 +466,7 @@ msgstr ""
 #英語原文なし
 #: collective/easyform/interfaces/easyform.py:225
 msgid "help_reset_button"
+msgstr ""
 
 #Define form actions→actionsを編集→Saved Data→settings→Default内Send Extra Data説明
 #. Default: "Pick any extra data you'd like saved with the form input."
