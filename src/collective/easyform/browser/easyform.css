@@ -50,10 +50,6 @@
     border-top: none;
 }
 
-#content #form legend {
-    display: none;
-}
-
 .contenttype-easyform.contenttype-easyform::before {
     font-family: 'Glyphicons Halflings';
     content: '\e028';

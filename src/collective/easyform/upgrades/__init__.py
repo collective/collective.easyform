@@ -18,7 +18,7 @@ def update_last_compilation(context):
     records = registry.forInterface(IBundleRegistry, prefix="plone.bundles/easyform")
     # Technically we only need year, month and day.
     # But keep this in sync with registry.xml.
-    records.last_compilation = datetime(2020, 9, 8, 17, 52, 0)
+    records.last_compilation = datetime(2020, 12, 9, 14, 2, 0)
     logger.info("Updated the last_compilation date of the easyform bundle.")
 
     # Run the combine-bundles import step or its handler.
