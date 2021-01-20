@@ -5,7 +5,13 @@
       i18n:domain="plone.schemaeditor"
 >
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
-    <metal:description-slot metal:fill-slot="description">
+    <metal:top-slot metal:fill-slot="formtop">
+      <input tal:replace="structure context/@@authenticator/authenticator" />
+      <script type="text/javascript"
+              tal:attributes="
+                src context/++resource++schemaeditor.js;
+              "
+      ></script>
       <div class="extraActions">
         <a class="pat-modal pat-plone-modal"
            id="add-field"
@@ -32,15 +38,6 @@
           >Add new fieldset&hellip;</button>
         </a>
       </div>
-    </metal:description-slot>
-
-    <metal:top-slot metal:fill-slot="formtop">
-      <input tal:replace="structure context/@@authenticator/authenticator" />
-      <script type="text/javascript"
-              tal:attributes="
-                src context/++resource++schemaeditor.js;
-              "
-      ></script>
     </metal:top-slot>
 
     <metal:fields-slot metal:fill-slot="fields">
