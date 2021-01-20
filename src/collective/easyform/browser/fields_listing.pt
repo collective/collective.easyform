@@ -12,31 +12,23 @@
                 src context/++resource++schemaeditor.js;
               "
       ></script>
-      <div class="extraActions">
-        <a class="pat-modal pat-plone-modal"
+      <div class="extraActions text-end">
+        <a class="pat-modal pat-plone-modal btn btn-secondary"
            id="add-field"
            href="@@add-field"
            tal:attributes="
              href string:${context/absolute_url}/@@add-field;
            "
-        >
-          <button style="float: right; display: block;"
-                  i18n:translate="add_new_field_hellip"
-          >Add new field&hellip;</button>
-        </a>
+        >Add new field&hellip;</a>
 
-        <a class="pat-modal pat-plone-modal"
+        <a class="pat-modal pat-plone-modal btn btn-secondary"
            id="add-fieldset"
            href="@@add-fieldset"
            tal:condition="context/enableFieldsets|python:True"
            tal:attributes="
              href string:${context/absolute_url}/@@add-fieldset;
            "
-        >
-          <button style="float: right; display: block;"
-                  i18n:translate="add_fieldset_hellip"
-          >Add new fieldset&hellip;</button>
-        </a>
+        >Add new fieldset&hellip;</a>
       </div>
     </metal:top-slot>
 
