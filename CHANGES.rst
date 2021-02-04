@@ -18,6 +18,9 @@ Bug fixes:
 - For increased security, in the modeleditor do not resolve entities, and remove processing instructions.
   [maurits] (#3209)
 
+- Add missing "context" parameter to translate method for labels (context aware default value).
+  [mathias.leimgruber]
+
 
 2.2.0 (2020-06-04)
 ------------------
