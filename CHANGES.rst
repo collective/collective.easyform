@@ -9,6 +9,19 @@ Changelog
 
 .. towncrier release notes start
 
+3.0.5 (2020-11-17)
+------------------
+
+Bug fixes:
+
+
+- Fix validators in field sets with zope.interface 5.1+.
+  This fixes `issue 252 <https://github.com/collective/collective.easyform/issues/252>`_.
+  [maurits] (#252)
+- For increased security, in the modeleditor do not resolve entities, and remove processing instructions.
+  [maurits] (#3209)
+
+
 3.0.4 (2020-09-26)
 ------------------
 
