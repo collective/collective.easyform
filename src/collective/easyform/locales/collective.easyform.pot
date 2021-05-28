@@ -42,6 +42,14 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
+#: collective/easyform/browser/controlpanel.py
+msgid "CSV delimiter"
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py
+msgid "Set the default delimiter for CSV download."
+msgstr ""
+
 #: collective/easyform/browser/controlpanel.py:28
 #: collective/easyform/profiles/default/registry.xml
 msgid "Allowed Fields"

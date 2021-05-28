@@ -231,7 +231,7 @@ class TestFunctions(base.EasyFormTestCase):
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
-        saver.download(request.response)
+        saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
         self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
@@ -283,7 +283,7 @@ class TestFunctions(base.EasyFormTestCase):
 
         self.assertEqual(saver.itemsSaved(), 1)
         saver.UseColumnNames = True
-        saver.download(request.response)
+        saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
         self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
@@ -309,7 +309,7 @@ class TestFunctions(base.EasyFormTestCase):
         saver.onSuccess(request.form, request)
 
         self.assertEqual(saver.itemsSaved(), 1)
-        saver.download(request.response)
+        saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
         self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)

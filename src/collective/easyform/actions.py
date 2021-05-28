@@ -690,7 +690,7 @@ class SaveData(Action):
                 names.append(IExtraData[f].title)
         return names
 
-    def download_csv(self, response):
+    def download_csv(self, response, delimiter):
         # """Download the saved data as csv
         # """
         response.setHeader(
@@ -699,7 +699,7 @@ class SaveData(Action):
         )
         response.setHeader("Content-Type", "text/comma-separated-values")
         value = self.getSavedFormInputForEdit(
-            getattr(self, "UseColumnNames", False), delimiter=","
+            getattr(self, "UseColumnNames", False), delimiter=delimiter
         )
         if isinstance(value, six.text_type):
             value = value.encode("utf-8")
@@ -720,7 +720,7 @@ class SaveData(Action):
             value = value.encode("utf-8")
         response.write(value)
 
-    def download(self, response):
+    def download(self, response, delimiter=""):
         # """Download the saved data
         # """
         format = getattr(self, "DownloadFormat", "tsv")
@@ -728,7 +728,7 @@ class SaveData(Action):
             return self.download_tsv(response)
         else:
             assert format == "csv", "Unknown download format"
-            return self.download_csv(response)
+            return self.download_csv(response, delimiter)
 
     def itemsSaved(self):
         return len(self._storage)
