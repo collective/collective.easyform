@@ -25,7 +25,7 @@ except ImportError:
     from plone.testing.z2 import Browser
 
 try:
-    from zope.testbrowser.browser import webtest
+    from zope.testbrowser.browser import webtest  # NOQA: F401
     ZOPE_TESTBROWSER_VERSION = '>5'
 except ImportError:
     ZOPE_TESTBROWSER_VERSION = '<5'
@@ -661,4 +661,3 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
             input = self.browser.getControl('CSV delimiter')
             self.assertTrue(input._elem.has_attr('maxlength'))
             self.assertEqual(input._elem.get('maxlength'), u'1')
-
