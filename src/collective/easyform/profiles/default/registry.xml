@@ -79,7 +79,7 @@
     <description>Set the delimiter to use when saving data</description>
     <required>False</required>
   </field>
-  <value>;</value>
+  <value>,</value>
   </record> -->
   <record field="csv_delimiter"
           interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"

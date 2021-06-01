@@ -37,6 +37,9 @@ class ControlPanelTestCase(base.EasyFormTestCase):
         self.assertTrue("easyform Settings" in self.browser.contents)
         self.assertTrue("migrate all the forms to dexterity" in self.browser.contents)
         self.assertTrue("Allowed Fields" in self.browser.contents)
+        self.assertTrue("CSV delimiter" in self.browser.contents)
+        input = self.browser.getControl(label="CSV delimiter")
+        self.assertEqual(input.value, ",")
 
     def test_easyform_control_panel_sidebar(self):
         self.browser.open(self.portal_url + "/@@easyform-controlpanel")
@@ -52,6 +55,7 @@ class ControlPanelTestCase(base.EasyFormTestCase):
         self.assertEqual(
             link.url, "http://nohost/plone/@@overview-controlpanel"
         )
+
 
 class ControlPanelFunctionalTestCase(base.EasyFormFunctionalTestCase):
     """Test that changes in the easyform control panel are actually
@@ -76,5 +80,52 @@ class ControlPanelFunctionalTestCase(base.EasyFormFunctionalTestCase):
             registry.records["easyform.allowedFields"].value,
         )
 
+    def test_easyform_control_panel_CSV_delimiter_saved(self):
+        registry = getUtility(IRegistry)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = ";"
+        self.browser.getControl("Save").click()
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ";",
+        )
 
+    def test_easyform_control_panel_CSV_delimiter_limited_to_one_char(self):
+        registry = getUtility(IRegistry)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = "comma"
+        self.browser.getControl("Save").click()
+        self.assertTrue("Value is too long" in self.browser.contents)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+
+    def test_easyform_control_panel_CSV_delimiter_required(self):
+        registry = getUtility(IRegistry)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = ""
+        self.browser.getControl("Save").click()
+        self.assertTrue("Required input is missing." in self.browser.contents)
+        input = self.browser.getControl(label="CSV delimiter")
+        self.assertEqual(input.value, "")
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
 # EOF
