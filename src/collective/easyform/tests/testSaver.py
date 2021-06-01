@@ -8,14 +8,21 @@ from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from plone import api
+from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import SITE_OWNER_PASSWORD
 from six import BytesIO
 from six.moves import zip
+from transaction import commit
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 
 import plone.protect
 import sys
 
+try:
+    from plone.testing.zope import Browser
+except ImportError:
+    from plone.testing.z2 import Browser
 
 def FakeRequest(method="GET", add_auth=False, **kwargs):
     environ = {}
@@ -33,12 +40,12 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
     return request
 
 
-class TestFunctions(base.EasyFormTestCase):
+class SaveDataTestCase(base.EasyFormTestCase):
 
     """ test save data adapter """
 
-    def afterSetUp(self):
-        base.EasyFormTestCase.afterSetUp(self)
+    def setUp(self):
+        base.EasyFormTestCase.setUp(self)
         self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = getattr(self.folder, "ff1")
 
@@ -553,3 +560,85 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(len(results), 1)
         saver = results[0]
         self.assertTrue(ISaveData.providedBy(saver))
+
+
+class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
+
+    def setUp(self):
+        base.EasyFormFunctionalTestCase.setUp(self)
+        self.portal = self.layer["portal"]
+        self.portal_url = self.layer["portal"].absolute_url()
+        self.browser = Browser(self.layer["app"])
+        self.browser.handleErrors = False
+        self.browser.addHeader(
+            "Authorization", "Basic " + SITE_OWNER_NAME + ":" + SITE_OWNER_PASSWORD
+        )
+        self.createSaver()
+
+    def createSaver(self):
+        """ Creates FormCustomScript object """
+        # 1. Create custom script adapter in the form folder
+        self.portal.REQUEST["form.widgets.title"] = u"Saver"
+        self.portal.REQUEST["form.widgets.__name__"] = u"saver"
+        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.factory"] = ["Save Data"]
+        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        view = self.ff1.restrictedTraverse("actions/@@add-action")
+        view.update()
+        commit()
+        form = view.form_instance
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 0)
+
+        # 2. Check that creation succeeded
+        actions = get_actions(self.ff1)
+        self.assertTrue("saver" in actions)
+
+    def test_download_saveddata_suggests_csv_delimiter_default_registry_value(self):
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        self.assertTrue("Saved Data" in self.browser.contents)
+        input = self.browser.getControl('CSV delimiter')
+        self.assertTrue(input._elem.has_attr('maxlength'))
+        self.assertEqual(input._elem.get('maxlength'), u'1')
+        self.assertEqual(input.value, ',')
+
+    def test_download_saveddata_suggests_csv_delimiter_updated_registry_value(self):
+        # 1. set custom CSV delimiter in registry
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = ";"
+        self.browser.getControl("Save").click()
+        # 2. tests that custom value is used
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        input = self.browser.getControl('CSV delimiter')
+        self.assertEqual(input.value, ';')
+
+    def test_download_saveddata_csv_delimiter_required(self):
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        self.assertTrue("Saved Data" in self.browser.contents)
+        input = self.browser.getControl('CSV delimiter')
+        input.value = ''
+        self.browser.getControl(name='form.buttons.download').click()
+        self.assertEqual(
+            self.browser.url,
+            "http://nohost/plone/test-folder/ff1/@@actions/saver/@@data"
+        )
+        self.assertTrue("CSV delimiter is required." in self.browser.contents)
+
+    def test_download_saveddata_csv_delimiter_from_form(self):
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.browser.getControl(name='form.buttons.download').click()
+        self.assertEqual(
+            self.browser.contents,
+            'Your E-Mail Address,Subject,Comments\r\n'
+        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        self.assertTrue("Saved Data" in self.browser.contents)
+        input = self.browser.getControl('CSV delimiter')
+        input.value = ';'
+        self.browser.getControl(name='form.buttons.download').click()
+        self.assertEqual(
+            self.browser.contents,
+            'Your E-Mail Address;Subject;Comments\r\n'
+        )
