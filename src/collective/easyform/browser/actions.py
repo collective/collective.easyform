@@ -17,6 +17,7 @@ from collective.easyform.interfaces import ISaveData
 from collective.easyform.interfaces import ISavedDataFormWrapper
 from plone.autoform.form import AutoExtensibleForm
 from plone.memoize.instance import memoize
+from plone.registry.interfaces import IRegistry
 from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.add_field import FieldAddForm
 from plone.schemaeditor.browser.schema.listing import SchemaListing
@@ -37,6 +38,7 @@ from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import adapter
 from zope.component import getAdapters
 from zope.component import queryUtility
+from zope.component import getUtility
 from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zope.interface import alsoProvides
@@ -98,6 +100,23 @@ class DataWrapper(dict):
 class SavedDataForm(crud.CrudForm):
     template = ViewPageTemplateFile("saveddata_form.pt")
     addform_factory = crud.NullForm
+
+    @property
+    def delimiter_missing(self):
+        return hasattr(self, '_delimiter_missing') and self._delimiter_missing
+
+    @property
+    def is_csv(self):
+        return self.context.field.DownloadFormat == 'csv'
+
+    @property
+    def csv_delimiter(self):
+        if 'csv_delimiter' in self.request.form:
+            return self.request.csv_delimiter
+        else:
+            registry = getUtility(IRegistry)
+            delimiter = registry.get("easyform.csv_delimiter").encode("utf-8")
+            return delimiter
 
     @property
     def form_title(self):
@@ -163,7 +182,16 @@ class SavedDataForm(crud.CrudForm):
 class SavedDataFormWrapper(layout.FormWrapper):
     def __call__(self):
         if hasattr(self.request, "form.buttons.download"):
-            self.context.field.download(self.request.response)
+            if 'csv_delimiter' in self.request.form:
+                delimiter = self.request.csv_delimiter
+                if len(delimiter) == 0:
+                    self.form_instance._delimiter_missing = True
+                    return super(SavedDataFormWrapper, self).__call__()
+                else:
+                    delimiter = delimiter[0]
+                self.context.field.download(self.request.response, delimiter=delimiter)
+            else:
+                self.context.field.download(self.request.response)
             return u""
         else:
             return super(SavedDataFormWrapper, self).__call__()

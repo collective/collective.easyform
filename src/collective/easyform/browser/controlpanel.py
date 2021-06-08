@@ -38,6 +38,14 @@ class IEasyFormControlPanel(Interface):
         default=[],
     )
 
+    csv_delimiter = schema.TextLine(
+        title=_(u"CSV delimiter"),
+        max_length=1,
+        description=_(u"Set the default delimiter for CSV download."),
+        required=True,
+        default=u",",
+    )
+
 
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel

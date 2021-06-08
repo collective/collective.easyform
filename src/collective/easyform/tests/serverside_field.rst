@@ -44,8 +44,9 @@ thank you page::
 
 Test for 'Subject' in the mail body::
 
-    >>> msgtext = portal.MailHost.msgtext[portal.MailHost.msgtext.index(b'\n\n'):]
-    >>> body = b'\n\n'.join(portal.MailHost.msgtext.split(b'\n\n')[1:])
+    >>> TWOLINESEP = LINESEP + LINESEP
+    >>> msgtext = portal.MailHost.msgtext[portal.MailHost.msgtext.index(TWOLINESEP):]
+    >>> body = TWOLINESEP.join(portal.MailHost.msgtext.split(TWOLINESEP)[1:])
     >>> b'Subject' in body
     False
 
@@ -72,7 +73,7 @@ TODO: Since getform('xy').mech_form isn't available anymore we have to move this
 #    <sent mail from ...to ['mdummy@address.com']>
 
 #    >>> portal = layer['portal']
-#    >>> body = '\n\n'.join(portal.MailHost.msgtext.split('\n\n')[1:])
+#    >>> body = TWOLINESEP.join(portal.MailHost.msgtext.split(TWOLINESEP)[1:])
 #    >>> 'Subject' in body
 #    True
 

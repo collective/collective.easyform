@@ -73,4 +73,16 @@
     <value key="merge_with">default</value>
   </records>
 
+  <!-- <record name="easyforms.csv_delimiter">
+  <field type="plone.registry.field.TextLine">
+    <title>CSV delimiter</title>
+    <description>Set the delimiter to use when saving data</description>
+    <required>False</required>
+  </field>
+  <value>,</value>
+  </record> -->
+  <record field="csv_delimiter"
+          interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
+          name="easyform.csv_delimiter"></record>
+
 </registry>

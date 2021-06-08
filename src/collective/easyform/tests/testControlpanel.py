@@ -12,41 +12,65 @@ except ImportError:
     from plone.testing.z2 import Browser
 
 
-class AllowedFieldsControlPanelFuncionalTest(base.EasyFormTestCase):
+class ControlPanelTestCase(base.EasyFormTestCase):
     """Test that changes in the easyform control panel are actually
     stored in the registry.
     """
 
-    def setUpPloneSite(self):
-        pass
-
     def setUp(self):
-        self.app = self.layer["app"]
-        self.portal = self.layer["portal"]
-        self.portal_url = self.portal.absolute_url()
-        self.browser = Browser(self.app)
+        self.portal_url = self.layer["portal"].absolute_url()
+        self.browser = Browser(self.layer["app"])
         self.browser.handleErrors = False
         self.browser.addHeader(
             "Authorization", "Basic " + SITE_OWNER_NAME + ":" + SITE_OWNER_PASSWORD
         )
 
-    def test_easyform_control_panel_link(self):
+    def test_easyform_control_panel_link_to_overview(self):
         self.browser.open(self.portal_url + "/@@overview-controlpanel")
-        self.browser.getLink("easyform").click()
-        self.assertTrue("easyform Settings" in self.browser.contents)
-
-    def test_easyform_control_panel_backlink(self):
-        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
-        self.assertTrue("General" in self.browser.contents)
-
-    def test_easyform_control_panel_sidebar(self):
-        self.browser.open(self.portal_url + "/@@navigation-controlpanel")
-        self.browser.getLink("Site Setup").click()
+        link = self.browser.getLink("easyform")
         self.assertEqual(
-            self.browser.url, "http://nohost/plone/@@overview-controlpanel"
+            link.url, "http://nohost/plone/@@easyform-controlpanel"
         )
 
-    def test_easyform_control_panel_checkbox(self):
+    def test_easyform_control_panel_contents(self):
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        self.assertTrue("easyform Settings" in self.browser.contents)
+        self.assertTrue("migrate all the forms to dexterity" in self.browser.contents)
+        self.assertTrue("Allowed Fields" in self.browser.contents)
+        self.assertTrue("CSV delimiter" in self.browser.contents)
+        input = self.browser.getControl(label="CSV delimiter")
+        self.assertEqual(input.value, ",")
+
+    def test_easyform_control_panel_sidebar(self):
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        self.assertTrue("General" in self.browser.contents)
+        link = self.browser.getLink("Add-ons")
+        self.assertEqual(
+            link.url, "http://nohost/plone/prefs_install_products_form"
+        )
+
+    def test_easyform_control_panel_backlink(self):
+        self.browser.open(self.portal_url + "/@@navigation-controlpanel")
+        link = self.browser.getLink(id="setup-link")
+        self.assertEqual(
+            link.url, "http://nohost/plone/@@overview-controlpanel"
+        )
+
+
+class ControlPanelFunctionalTestCase(base.EasyFormFunctionalTestCase):
+    """Test that changes in the easyform control panel are actually
+    stored in the registry.
+    """
+
+    def setUp(self):
+        self.portal_url = self.layer["portal"].absolute_url()
+        self.browser = Browser(self.layer["app"])
+        self.browser.handleErrors = False
+        self.browser.addHeader(
+            "Authorization", "Basic " + SITE_OWNER_NAME + ":" + SITE_OWNER_PASSWORD
+        )
+
+    def test_easyform_control_panel_allowed_fields_saved(self):
         self.browser.open(self.portal_url + "/@@easyform-controlpanel")
         self.browser.getControl("Rich Text").selected = False
         self.browser.getControl("Save").click()
@@ -56,5 +80,52 @@ class AllowedFieldsControlPanelFuncionalTest(base.EasyFormTestCase):
             registry.records["easyform.allowedFields"].value,
         )
 
+    def test_easyform_control_panel_CSV_delimiter_saved(self):
+        registry = getUtility(IRegistry)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = ";"
+        self.browser.getControl("Save").click()
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ";",
+        )
 
+    def test_easyform_control_panel_CSV_delimiter_limited_to_one_char(self):
+        registry = getUtility(IRegistry)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = "comma"
+        self.browser.getControl("Save").click()
+        self.assertTrue("Value is too long" in self.browser.contents)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+
+    def test_easyform_control_panel_CSV_delimiter_required(self):
+        registry = getUtility(IRegistry)
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
+        self.browser.open(self.portal_url + "/@@easyform-controlpanel")
+        input = self.browser.getControl(label="CSV delimiter")
+        input.value = ""
+        self.browser.getControl("Save").click()
+        self.assertTrue("Required input is missing." in self.browser.contents)
+        input = self.browser.getControl(label="CSV delimiter")
+        self.assertEqual(input.value, "")
+        self.assertEqual(
+            registry.records["easyform.csv_delimiter"].value,
+            ",",
+        )
 # EOF

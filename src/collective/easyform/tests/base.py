@@ -117,3 +117,11 @@ class EasyFormTestCase(TestCase):
 class EasyFormFunctionalTestCase(TestCase):
 
     layer = FUNCTIONAL_TESTING
+
+    def setUp(self):
+        self.app = self.layer["app"]
+        self.portal = self.layer["portal"]
+        self.portal.invokeFactory("Folder", "test-folder")
+        self.folder = self.portal["test-folder"]
+        self.folder.invokeFactory("EasyForm", "ff1")
+        self.ff1 = getattr(self.folder, "ff1")
