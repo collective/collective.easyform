@@ -91,7 +91,7 @@ five.localsitemanager==2.0.5
 flake8==2.4.1
 i18ndude==3.4.0
 initgroups==2.13.0
-lxml==2.3.6
+lxml==4.6.3
 mailinglogger==3.7.0
 mccabe==0.3
 mechanize==0.2.5
