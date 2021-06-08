@@ -11,7 +11,7 @@ Missing==2.13.1
 MultiMapping==2.13.0
 Persistence==2.13.2
 Pillow==2.7.0
-Plone==4.3.5
+Plone==5.2.3
 Products.ATContentTypes==2.1.15
 Products.ATReferenceBrowserWidget==3.0
 Products.Archetypes==1.9.10
