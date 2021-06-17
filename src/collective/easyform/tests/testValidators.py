@@ -142,6 +142,27 @@ class TestBaseValidators(base.EasyFormTestCase):
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
 
+    def test_validator_translation(self):
+        request = self.layer["request"]
+        request["LANGUAGE"] = "de"
+        request.LANGUAGE_TOOL.LANGUAGE = "de"
+
+        fields = get_schema(self.ff1)
+        IFieldExtender(fields["comments"]).validators = ["isInternationalPhoneNumber"]
+        set_fields(self.ff1, fields)
+
+        view = self.ff1.restrictedTraverse("view")
+        form = view.form_instance
+        form.update()
+
+        data, errors = form.extractData()
+        self.assertEqual(len(errors), 1)
+
+        expected_error_message = (
+            u"Validierung fehlgeschlagen (isInternationalPhoneNumber): "
+            u"'testcomments' Ist keine g\xfcltige internationale Telefonnummer")
+        self.assertEqual(errors[0].createMessage(), expected_error_message)
+
 
 class LoadFixtureBase(base.EasyFormTestCase):
     """ test validator in form outside of fieldset

@@ -13,7 +13,7 @@ import six
 BAD_SIGNS = frozenset(["<a ", "www.", "http:", ".com", "https:"])
 
 
-def isValidEmail(value):
+def isValidEmail(value, **kwargs):
     """Check for the user email address.
     """
     if value is None:
@@ -23,7 +23,7 @@ def isValidEmail(value):
         raise EmailAddressInvalid
 
 
-def isCommaSeparatedEmails(value):
+def isCommaSeparatedEmails(value, **kwargs):
     """Check for one or more E-Mail Addresses separated by commas.
     """
     if value is None:
@@ -37,7 +37,7 @@ def isCommaSeparatedEmails(value):
             )
 
 
-def isChecked(value):
+def isChecked(value, **kwargs):
     if not (
         (isinstance(value, bool) and value)
         or (isinstance(value, six.string_types) and value == "1")
@@ -45,12 +45,12 @@ def isChecked(value):
         return _(u"Must be checked.")
 
 
-def isUnchecked(value):
+def isUnchecked(value, **kwargs):
     if not isChecked(value):
         return _(u"Must be unchecked.")
 
 
-def isNotLinkSpam(value):
+def isNotLinkSpam(value, **kwargs):
     if not value:
         return  # No value can't be SPAM
     # validation is optional and configured on the field
@@ -65,13 +65,13 @@ def update_validators():
     if validation and baseValidators:
 
         def method(name):
-            def validate(value):
+            def validate(value, **kwargs):
                 if value is None:
                     # Let the system for required take care of None values
                     return
                 if six.PY2 and isinstance(value, six.text_type):
                     value = value.encode("utf-8")
-                res = validation(name, value)
+                res = validation(name, value, **kwargs)
                 if res != 1:
                     return res
 
