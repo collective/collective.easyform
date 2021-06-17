@@ -98,7 +98,7 @@ class FieldExtenderValidator(object):
                 vmethod = queryUtility(IFieldValidator, name=validator)
                 if not vmethod:
                     continue
-                res = vmethod(value)
+                res = vmethod(value, REQUEST=self.request)
                 if res:
                     raise Invalid(res)
         TValidator = getattr(efield, "TValidator", None)

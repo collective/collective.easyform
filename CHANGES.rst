@@ -9,10 +9,18 @@ Changelog
 
 .. towncrier release notes start
 
-2.2.1 (2020-11-17)
+2.2.2 (unreleased)
 ------------------
 
 Bug fixes:
+
+
+- Fix translations of validation errors.
+  [mathias.leimgruber] (#282)
+
+
+2.2.1 (2020-11-17)
+------------------
 
 
 - For increased security, in the modeleditor do not resolve entities, and remove processing instructions.
