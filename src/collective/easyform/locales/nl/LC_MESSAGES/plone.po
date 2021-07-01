@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: plone 5-buildout\n"
+"POT-Creation-Date: 2014-06-06 20:13+0000\n"
+"PO-Revision-Date: 2021-06-02 16:12+0200\n"
+"Last-Translator: Thibaut Born <thibaut.born@kuleuven.be>\n"
+"Language-Team: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: plone\n"
+"Language: nl\n"
+
+#: collective/easyform/profiles/default/types/EasyForm.xml
+msgid "Actions"
+msgstr "Acties"
+
+#: collective/easyform/profiles/default/types/EasyForm.xml
+msgid "Fields"
+msgstr "Velden"
