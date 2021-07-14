@@ -9,6 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
+3.1.0 (unreleased)
+------------------
+
+New features: 
+
+- Download XLSX version of saved data.
+  [mathias.leimgruber] (#285)
+
+
 3.0.5 (2020-11-17)
 ------------------
 
