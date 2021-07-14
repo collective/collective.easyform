@@ -163,6 +163,24 @@ To do that, edit the form, go to the "Thanks page" settings, disable "Show all f
 Likewise for the mailer: open the form actions via the Actions toolbar menu and edit the mailer settings accordingly.
 
 
+Download XLSX from savedata adapter support
+===========================================
+
+Install ``collective.easyform`` with the  ``downloadxlsx`` extra:
+
+.. code-block:: shell
+
+    [buildout]
+
+    ...
+
+    eggs =
+        collective.easyform [downloadxlsx]
+
+
+This gives you the option to download the saved data as XLSX using openpyxl to generate the XLSX file.
+
+
 Actions
 =======
 
