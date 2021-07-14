@@ -12,6 +12,11 @@ Changelog
 2.2.1 (2020-11-17)
 ------------------
 
+New features: 
+
+- Download XLSX version of saved data.
+  [mathias.leimgruber]
+
 Bug fixes:
 
 

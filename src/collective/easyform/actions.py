@@ -4,6 +4,7 @@ from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
+from collective.easyform.api import OrderedDict
 from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
 from collective.easyform.api import format_addresses
@@ -12,7 +13,7 @@ from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.api import is_file_data
 from collective.easyform.api import lnbr
-from collective.easyform.api import OrderedDict
+from collective.easyform.config import HAS_XLSX_SUPPORT
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
@@ -618,35 +619,61 @@ class SaveData(Action):
         """
         return list(self._storage.items())
 
+    def get_header_row(self):
+        titles = self.getColumnTitles()
+        encoded_titles = []
+        for t in titles:
+            if six.PY2 and isinstance(t, six.text_type):
+                t = t.encode("utf-8")
+            encoded_titles.append(t)
+        return encoded_titles
+
+    def get_row_data(self, row):
+        names = self.getColumnNames()
+
+        def get_data(row, i):
+            data = row.get(i, "")
+            if is_file_data(data):
+                data = data.filename
+            if six.PY2 and isinstance(data, six.text_type):
+                return data.encode("utf-8")
+            return data
+
+        return [get_data(row, i) for i in names]
+
     def getSavedFormInputForEdit(self, header=False, delimiter=","):
         """Returns saved as CSV text"""
         sbuf = StringIO()
         writer = csvwriter(sbuf, delimiter=delimiter)
-        names = self.getColumnNames()
-        titles = self.getColumnTitles()
 
         if header:
-            encoded_titles = []
-            for t in titles:
-                if six.PY2 and isinstance(t, six.text_type):
-                    t = t.encode("utf-8")
-                encoded_titles.append(t)
-            writer.writerow(encoded_titles)
+            writer.writerow(self.get_header_row())
+
         for row in self.getSavedFormInput():
+            writer.writerow(self.get_row_data(row))
 
-            def get_data(row, i):
-                data = row.get(i, "")
-                if is_file_data(data):
-                    data = data.filename
-                if six.PY2 and isinstance(data, six.text_type):
-                    return data.encode("utf-8")
-                return data
-
-            row_data = [get_data(row, i) for i in names]
-            writer.writerow(row_data)
         res = sbuf.getvalue()
         sbuf.close()
         return res
+
+    def get_saved_form_input_as_xlsx(self, header=False):
+        assert HAS_XLSX_SUPPORT, "XLSX export not suppored, please enable 'downloadxlsx' extra"
+
+        from openpyxl import Workbook
+
+        wb = Workbook()
+        ws = wb.active        
+
+        if header:
+            ws.append(self.get_header_row())
+
+        for row in self.getSavedFormInput():
+            ws.append(self.get_row_data(row))
+
+        output = StringIO()
+        wb.save(output)
+        result = output.getvalue()
+        return result
 
     def getColumnNames(self):
         # """Returns a list of column names"""
@@ -711,12 +738,29 @@ class SaveData(Action):
             value = value.encode("utf-8")
         response.write(value)
 
+    def download_xlsx(self, response):
+        # """Download the saved data as tsv
+        # """
+        response.setHeader(
+            "Content-Disposition",
+            'attachment; filename="{0}.xlsx"'.format(self.__name__),
+        )
+
+        response.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        value = self.get_saved_form_input_as_xlsx(
+            getattr(self, "UseColumnNames", False)
+        )
+
+        response.write(value)
+
     def download(self, response):
         # """Download the saved data
         # """
         format = getattr(self, "DownloadFormat", "tsv")
         if format == "tsv":
             return self.download_tsv(response)
+        elif format == "xlsx":
+            return self.download_xlsx(response)
         else:
             assert format == "csv", "Unknown download format"
             return self.download_csv(response)
