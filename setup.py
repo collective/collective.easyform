@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "2.2.2"
+version = "2.3.0"
 
 setup(
     name="collective.easyform",
@@ -53,6 +53,7 @@ setup(
         # -*- Extra requirements: -*-
     ],
     extras_require={
+        "downloadxlsx": ["openpyxl"],
         "recaptcha": ["plone.formwidget.recaptcha"],
         "norobots": ["collective.z3cform.norobots"],
         "ploneformgen": ["Products.PloneFormGen",],

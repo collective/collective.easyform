@@ -9,8 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
-2.2.2 (unreleased)
+2.3.0 (unreleased)
 ------------------
+
+New features: 
+
+
+- Download XLSX version of saved data.
+  [mathias.leimgruber] (#283)
+
 
 Bug fixes:
 
