@@ -14,6 +14,8 @@ Changelog
 
 Bug fixes:
 
+- Fix translations of validation errors.
+  [mathias.leimgruber]
 
 - For increased security, in the modeleditor do not resolve entities, and remove processing instructions.
   [maurits] (#3209)
