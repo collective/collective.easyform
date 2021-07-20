@@ -17,6 +17,7 @@ from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel import loadString
 from plone.supermodel.parser import SupermodelParseError
+from Products.CMFPlone.utils import safe_bytes
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
@@ -158,6 +159,7 @@ class AjaxSaveHandler(BrowserView):
             parser = etree.XMLParser(resolve_entities=False, remove_pis=True)
             # Is it valid XML?
             try:
+                source = safe_bytes(source)
                 root = etree.fromstring(source, parser=parser)
             except etree.XMLSyntaxError as e:
                 return dumps(
