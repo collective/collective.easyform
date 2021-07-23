@@ -58,6 +58,7 @@ setup(
         # -*- Extra requirements: -*-
     ],
     extras_require={
+        "downloadxlsx": ["openpyxl"],
         "recaptcha": ["plone.formwidget.recaptcha"],
         "norobots": ["collective.z3cform.norobots"],
         "ploneformgen": ["Products.PloneFormGen",],

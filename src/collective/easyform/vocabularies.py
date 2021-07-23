@@ -2,6 +2,7 @@
 from collective.easyform import easyformMessageFactory as _  # NOQA
 from collective.easyform.api import get_context
 from collective.easyform.api import get_schema
+from collective.easyform.config import HAS_XLSX_SUPPORT
 from plone.schemaeditor.interfaces import IFieldFactory
 from zope.component import getUtilitiesFor
 from zope.globalrequest import getRequest
@@ -11,6 +12,7 @@ from zope.interface import provider
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary
+
 
 import operator
 
@@ -77,6 +79,11 @@ def FormatDLVocabularyFactory(context):
         (_(u"vocabulary_tsv_text", default=u"Tab-Separated Values"), u"tsv"),
         (_(u"vocabulary_csv_text", default=u"Comma-Separated Values"), u"csv"),
     ]
+
+    if HAS_XLSX_SUPPORT:
+        items.append(
+            (_(u"vocabulary_xlsx_text", default=u"XLSX"), u"xlsx"),
+        )
     return _make_vocabulary(items)
 
 

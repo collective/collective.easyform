@@ -12,6 +12,11 @@ Changelog
 3.0.5 (2020-11-17)
 ------------------
 
+New features: 
+
+- Download XLSX version of saved data.
+  [mathias.leimgruber]
+
 Bug fixes:
 
 - Fix translations of validation errors.
