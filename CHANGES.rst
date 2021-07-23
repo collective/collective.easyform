@@ -14,6 +14,8 @@ Changelog
 
 Bug fixes:
 
+- Fix translations of validation errors.
+  [mathias.leimgruber]
 
 - Fix validators in field sets with zope.interface 5.1+.
   This fixes `issue 252 <https://github.com/collective/collective.easyform/issues/252>`_.
