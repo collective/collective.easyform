@@ -2,9 +2,17 @@
 from Products.CMFPlone.utils import safe_unicode
 
 import os
+import pkg_resources
 
 
 this_path = os.path.dirname(__file__)
+
+
+try:
+    pkg_resources.get_distribution('openpyxl')
+    HAS_XLSX_SUPPORT = True
+except pkg_resources.DistributionNotFound:
+    HAS_XLSX_SUPPORT = False
 
 
 EDIT_TALES_PERMISSION = "collective.easyform.EditTALESFields"

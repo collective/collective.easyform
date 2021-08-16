@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-08-17 15:32+0000\n"
+"POT-Creation-Date: 2021-07-23 14:55+0000\n"
 "PO-Revision-Date: 2018-11-09 09:59+0100\n"
 "Last-Translator: Mikel Larreategi <mlarreategi@codesyntax.com>\n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "Language: es\n"
 "X-Generator: Poedit 2.0.6\n"
 
-#: collective/easyform/browser/actions.py:120
+#: collective/easyform/browser/actions.py:138
 msgid "${items} input(s) saved"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr "Tipo de Acción"
 msgid "Actions Model"
 msgstr "Modelo de Acción"
 
-#: collective/easyform/browser/actions.py:261
+#: collective/easyform/browser/actions.py:288
 msgid "Add new action"
 msgstr "Añadir nueva acción"
 
@@ -49,11 +49,20 @@ msgstr ""
 msgid "Allowed Fields"
 msgstr "Campos permitidos"
 
+#: collective/easyform/browser/controlpanel.py:42
+#: collective/easyform/browser/saveddata_form.pt:34
+msgid "CSV delimiter"
+msgstr ""
+
+#: collective/easyform/browser/saveddata_form.pt:37
+msgid "CSV delimiter is required."
+msgstr ""
+
 #: collective/easyform/browser/saveddata.pt:7
 msgid "Choose an adapter."
 msgstr ""
 
-#: collective/easyform/browser/actions.py:158
+#: collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Limpiar"
 
@@ -69,11 +78,11 @@ msgstr "Configurar campos"
 msgid "EasyForm"
 msgstr "EasyForm"
 
-#: collective/easyform/browser/actions.py:324
+#: collective/easyform/browser/actions.py:351
 msgid "Edit Action '${fieldname}'"
 msgstr "Editar acción '${fieldname}'"
 
-#: collective/easyform/browser/actions.py:329
+#: collective/easyform/browser/actions.py:356
 msgid "Edit XML Actions Model"
 msgstr "Editar XML de Modelo de Acción"
 
@@ -135,11 +144,11 @@ msgstr "Personalización"
 msgid "Posting Date/Time"
 msgstr "Día y hora del envío"
 
-#: collective/easyform/vocabularies.py:29
+#: collective/easyform/vocabularies.py:31
 msgid "Redirect to"
 msgstr "Redirigir a"
 
-#: collective/easyform/browser/view.py:211
+#: collective/easyform/browser/view.py:214
 msgid "Reset"
 msgstr "Limpiar"
 
@@ -151,6 +160,10 @@ msgstr "Etiqueta de texto enriquecido"
 msgid "Saved data"
 msgstr "Datos almacenados"
 
+#: collective/easyform/browser/controlpanel.py:44
+msgid "Set the default delimiter for CSV download."
+msgstr ""
+
 #: collective/easyform/interfaces/easyform.py:117
 msgid "Thanks Page"
 msgstr "Página de agradecimiento"
@@ -160,13 +173,17 @@ msgstr "Página de agradecimiento"
 msgid "This Fields are available for your forms."
 msgstr "Estos campos están disponibles para tus formularios"
 
-#: collective/easyform/vocabularies.py:29
+#: collective/easyform/vocabularies.py:31
 msgid "Traverse to"
 msgstr "Ir a"
 
 #: collective/easyform/interfaces/fields.py:72
 msgid "Validators"
 msgstr "Validadores"
+
+#: collective/easyform/profiles/default/actions.xml
+msgid "View"
+msgstr ""
 
 #. Default: "Reset"
 #: collective/easyform/interfaces/easyform.py:34
@@ -533,7 +550,7 @@ msgid "label_csrf"
 msgstr "Protección CSRF"
 
 #. Default: "Custom Script"
-#: collective/easyform/actions.py:792
+#: collective/easyform/actions.py:846
 msgid "label_customscript_action"
 msgstr ""
 
@@ -663,7 +680,7 @@ msgid "label_includeEmpties_text"
 msgstr "Incluir valores vacíos"
 
 #. Default: "Label"
-#: collective/easyform/fields.py:196
+#: collective/easyform/fields.py:216
 msgid "label_label_field"
 msgstr "Etiqueta"
 
@@ -678,7 +695,7 @@ msgid "label_mailallfields_text"
 msgstr "Incluir todos los campos"
 
 #. Default: "Mailer"
-#: collective/easyform/actions.py:787
+#: collective/easyform/actions.py:841
 msgid "label_mailer_action"
 msgstr ""
 
@@ -693,7 +710,7 @@ msgid "label_method"
 msgstr "Método del formulario"
 
 #. Default: "NorobotCaptcha"
-#: collective/easyform/fields.py:224
+#: collective/easyform/fields.py:244
 msgid "label_norobot_field"
 msgstr ""
 
@@ -703,7 +720,7 @@ msgid "label_prologue_text"
 msgstr "Prólogo del formulario"
 
 #. Default: "ReCaptcha"
-#: collective/easyform/fields.py:212
+#: collective/easyform/fields.py:232
 msgid "label_recaptcha_field"
 msgstr "ReCaptcha"
 
@@ -718,12 +735,12 @@ msgid "label_reset_button"
 msgstr "Etiqueta del botón reset"
 
 #. Default: "Rich Label"
-#: collective/easyform/fields.py:198
+#: collective/easyform/fields.py:218
 msgid "label_richlabel_field"
 msgstr "Etiqueta de texto enriquecido"
 
 #. Default: "Save Data"
-#: collective/easyform/actions.py:797
+#: collective/easyform/actions.py:851
 msgid "label_savedata_action"
 msgstr ""
 
@@ -857,25 +874,30 @@ msgstr "Incluir nombres de columnas"
 msgid "label_xinfo_headers_text"
 msgstr "Cabeceras HTTP"
 
-#: collective/easyform/browser/view.py:405
+#: collective/easyform/browser/view.py:408
 msgid "msg_file_not_allowed"
 msgstr "Archivo no permitido"
 
-#: collective/easyform/browser/view.py:396
+#: collective/easyform/browser/view.py:399
 msgid "msg_file_too_big"
 msgstr "Archivo demasiado grande"
 
 #. Default: "Comma-Separated Values"
-#: collective/easyform/vocabularies.py:78
+#: collective/easyform/vocabularies.py:80
 msgid "vocabulary_csv_text"
 msgstr "Archivo CSV (separado por comas)"
 
 #. Default: "Posting Date/Time"
-#: collective/easyform/vocabularies.py:66
+#: collective/easyform/vocabularies.py:68
 msgid "vocabulary_postingdt_text"
 msgstr "Día/Hora del envío"
 
 #. Default: "Tab-Separated Values"
-#: collective/easyform/vocabularies.py:77
+#: collective/easyform/vocabularies.py:79
 msgid "vocabulary_tsv_text"
 msgstr "Archivo TSV (separado por tabulaciones)"
+
+#. Default: "XLSX"
+#: collective/easyform/vocabularies.py:85
+msgid "vocabulary_xlsx_text"
+msgstr ""
