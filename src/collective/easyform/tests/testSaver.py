@@ -12,6 +12,7 @@ from six import BytesIO
 from six.moves import zip
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
+from openpyxl import load_workbook
 
 import plone.protect
 import sys
@@ -262,6 +263,47 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue("Content-Type: text/tab-separated-values" in res)
         self.assertTrue('Content-Disposition: attachment; filename="saver.tsv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
+
+    def testSaverDownloadXLSX(self):
+        """ test save data """
+
+        self.createSaver()
+
+        self.assertTrue("saver" in get_actions(self.ff1))
+        saver = get_actions(self.ff1)["saver"]
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        request = FakeRequest(
+            add_auth=True,
+            method="POST",
+            topic="test subject",
+            replyto="test@test.org",
+            comments="test comments",
+        )
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+        saver.DownloadFormat = "xlsx"
+        saver.download(request.response)
+        res = request.response.stdout
+        self.assertEqual(
+            request.response.headers['content-type'],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+        self.assertEqual(
+            request.response.headers['content-disposition'],
+            'attachment; filename="saver.xlsx"'
+        )
+
+        wb = load_workbook(res)
+        wb.active
+        ws = wb.active
+        rows = list(ws.rows)
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0][0].value, 'test@test.org')
+        self.assertEqual(rows[0][1].value, 'test subject')
+        self.assertEqual(rows[0][2].value, 'test comments')
 
     def testSaverDownloadWithTitles(self):
         """ test save data """
