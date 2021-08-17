@@ -2,6 +2,7 @@
 from .validators import isTALES
 from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
+from collective.easyform.config import HAS_XLSX_SUPPORT
 from collective.easyform.interfaces import IAction
 from plone import api
 from plone.app.textfield import RichText
@@ -11,6 +12,8 @@ from plone.supermodel.directives import fieldset
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
+from plone.autoform.interfaces import OMITTED_KEY
+
 
 import zope.i18nmessageid
 import zope.interface
@@ -144,6 +147,7 @@ class IMailer(IAction):
             "includeEmpties",
             "sendCSV",
             "sendXML",
+            "sendXLSX",
         ],
     )
     directives.read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
@@ -277,6 +281,21 @@ class IMailer(IAction):
         default=False,
         required=False,
     )
+
+    directives.read_permission(sendXLSX=MODIFY_PORTAL_CONTENT)
+    sendXLSX = zope.schema.Bool(
+        title=_(u"label_sendXLSX_text", default=u"Send XLSX data attachment"),
+        description=_(
+            u"help_sendXLSX_text",
+            default=u""
+            u"Check this to send a XLSX file "
+            u"attachment containing the values "
+            u"filled out in the form.",
+        ),
+        default=False,
+        required=False,
+    )
+
 
     directives.read_permission(sendXML=MODIFY_PORTAL_CONTENT)
     sendXML = zope.schema.Bool(
@@ -469,3 +488,11 @@ class IMailer(IAction):
         missing_value=u"",
         constraint=isTALES,
     )
+
+
+# extend list of omitted fields if XLSX extra is not available
+if not HAS_XLSX_SUPPORT:
+    omitted_fields = IMailer.queryTaggedValue(OMITTED_KEY, [])[:]
+    omitted_fields.append((zope.interface.Interface, 'sendXLSX', 'true'))
+    IMailer.setTaggedValue(OMITTED_KEY, omitted_fields)
+
