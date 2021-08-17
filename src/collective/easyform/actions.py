@@ -368,7 +368,8 @@ class Mailer(Action):
 
         # if requested, generate CSV attachment of form values
         sendCSV = getattr(self, "sendCSV", None)
-        if sendCSV:
+        sendXLSX = getattr(self, "sendXLSX", None)
+        if sendCSV or sendXLSX:
             csvdata = ()
         sendXML = getattr(self, "sendXML", None)
         if sendXML:
@@ -377,7 +378,7 @@ class Mailer(Action):
         for fname in fields:
             field = fields[fname]
 
-            if sendCSV:
+            if sendCSV or sendXLSX:
                 if not is_file_data(field) and (
                     getattr(self, "showAll", True) or fname in showFields
                 ):
@@ -413,6 +414,28 @@ class Mailer(Action):
             filename = "formdata_{0}.csv".format(now)
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
             attachments.append((filename, "application/csv", "utf-8", csv))
+
+        if sendXLSX:
+            from openpyxl import Workbook
+
+            wb = Workbook()
+            ws = wb.active
+            ws.append(csvdata)
+
+            output = StringIO()
+            wb.save(output)
+            xlsx = output.getvalue()
+
+            now = DateTime().ISO().replace(" ", "-").replace(":", "")
+            filename = "formdata_{0}.xlsx".format(now)
+            attachments.append(
+                (
+                    filename,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "utf-8",
+                    xlsx
+                )
+            )
 
         if sendXML:
             # use ET.write to get a proper XML Header line
