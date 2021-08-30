@@ -4,7 +4,6 @@ from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
-from collective.easyform.api import OrderedDict
 from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
 from collective.easyform.api import format_addresses
@@ -26,8 +25,8 @@ from copy import deepcopy
 from csv import writer as csvwriter
 from datetime import date
 from datetime import datetime
-from datetime import timedelta
 from DateTime import DateTime
+from datetime import timedelta
 from decimal import Decimal
 from email import encoders
 from email.header import Header
@@ -42,6 +41,7 @@ from logging import getLogger
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
+from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
@@ -52,13 +52,13 @@ from six import StringIO
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
+from zope.component import getUtility
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
-
 import six
 
 
@@ -677,6 +677,11 @@ class SaveData(Action):
     def getSavedFormInputForEdit(self, header=False, delimiter=","):
         """Returns saved as CSV text"""
         sbuf = StringIO()
+
+        if len(delimiter) == 0:
+            registry = getUtility(IRegistry)
+            delimiter = registry.get("easyform.csv_delimiter").encode("utf-8")
+
         writer = csvwriter(sbuf, delimiter=delimiter)
 
         if header:
