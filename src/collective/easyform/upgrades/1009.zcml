@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1009"
+      profile="collective.easyform:default"
+      source="1008"
+      >
+    <gs:upgradeStep
+        title="Update last_compilation of bundle"
+        handler=".update_last_compilation_1009"
+        />
+  </gs:upgradeSteps>
+
+</configure>
