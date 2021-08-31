@@ -21,6 +21,8 @@ New features:
 
 Bug fixes:
 
+- Fix recaptcha support: include it's zcml when installed.
+  [jensens] 
 
 - Fix translations of validation errors.
   [mathias.leimgruber] (#284)
