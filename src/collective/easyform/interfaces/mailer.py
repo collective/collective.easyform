@@ -22,7 +22,7 @@ MODIFY_PORTAL_CONTENT = "cmf.ModifyPortalContent"
 
 
 def default_mail_body():
-    """ Default mail body for mailer action.
+    """Default mail body for mailer action.
     Acquire 'mail_body_default.pt' or return hard coded default
     """
     try:

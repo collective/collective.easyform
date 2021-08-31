@@ -18,7 +18,7 @@ except ImportError:
 
 
 def getAddPermission(product, name):
-    """ find the add permission for a meta_type """
+    """find the add permission for a meta_type"""
 
     name = "{0}: {1}".format(product, name)
     for mt in Products.meta_types:
@@ -67,7 +67,7 @@ class TestInstallation(base.EasyFormTestCase):
         )
 
     def ttestAddPermissions(self):
-        """ Test to make sure add permissions are as intended """
+        """Test to make sure add permissions are as intended"""
 
         ADD_CONTENT_PERMISSION = "EasyForm: Add Content"
         CSA_ADD_CONTENT_PERMISSION = "EasyForm: Add Custom Scripts"

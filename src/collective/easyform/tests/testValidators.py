@@ -39,7 +39,7 @@ FORM_DATA = {
 
 class TestBaseValidators(base.EasyFormTestCase):
 
-    """ test base validators """
+    """test base validators"""
 
     def afterSetUp(self):
         self.folder.invokeFactory("EasyForm", "ff1")
@@ -160,12 +160,13 @@ class TestBaseValidators(base.EasyFormTestCase):
 
         expected_error_message = (
             u"Validierung fehlgeschlagen (isInternationalPhoneNumber): "
-            u"'testcomments' Ist keine g\xfcltige internationale Telefonnummer")
+            u"'testcomments' Ist keine g\xfcltige internationale Telefonnummer"
+        )
         self.assertEqual(errors[0].createMessage(), expected_error_message)
 
 
 class LoadFixtureBase(base.EasyFormTestCase):
-    """ test validator in form outside of fieldset
+    """test validator in form outside of fieldset
 
     The test methods are reused in TestFieldsetValidator.
     They use the same field, except that one has it in a fieldset.
@@ -198,7 +199,7 @@ class LoadFixtureBase(base.EasyFormTestCase):
 
 class TestSingleFieldValidator(LoadFixtureBase):
 
-    """ test validator in form outside of fieldset
+    """test validator in form outside of fieldset
 
     The test methods are reused in TestFieldsetValidator.
     They use the same field, except that one has it in a fieldset.
@@ -235,7 +236,7 @@ class TestSingleFieldValidator(LoadFixtureBase):
 
 class TestFieldsetValidator(TestSingleFieldValidator):
 
-    """ test validator in fieldset
+    """test validator in fieldset
 
     This reuses the test methods from TestSingleFieldValidator.
     """
@@ -244,7 +245,7 @@ class TestFieldsetValidator(TestSingleFieldValidator):
 
 
 class TestCustomValidators(base.EasyFormTestCase):
-    """ test our validators """
+    """test our validators"""
 
     def ttest_inExNumericRange(self):
         v = validation.validatorFor("inExNumericRange")
@@ -323,11 +324,10 @@ class TestCustomValidators(base.EasyFormTestCase):
 
 
 class TestCustomValidatorMessages(base.EasyFormTestCase):
-    """ Test friendlier validation framework """
+    """Test friendlier validation framework"""
 
     def test_stringValidators(self):
-        """ Test string validation
-        """
+        """Test string validation"""
         validators.update_validators()
 
         def validator(n):
@@ -417,8 +417,7 @@ class TestSizeValidator(base.EasyFormTestCase):
 
 class TestSingleRecaptchaValidator(LoadFixtureBase):
 
-    """ Can't test captcha passes but we can test it fails
-    """
+    """Can't test captcha passes but we can test it fails"""
 
     schema_fixture = "recaptcha.xml"
 
@@ -449,8 +448,7 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
 
 
 class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
-    """ make sure it works inside a fieldset too
-    """
+    """make sure it works inside a fieldset too"""
 
     schema_fixture = "fieldset_recaptcha.xml"
 
@@ -466,8 +464,7 @@ class DummyUpload(FileUpload):
 
 
 class TestFieldsetFileValidator(LoadFixtureBase):
-    """ ensure file validators works
-    """
+    """ensure file validators works"""
 
     schema_fixture = "fieldset_file.xml"
 

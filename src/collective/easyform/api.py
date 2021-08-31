@@ -262,14 +262,12 @@ def dollar_replacer(s, data):
 
 
 def lnbr(text):
-    """Converts line breaks to html breaks
-    """
+    """Converts line breaks to html breaks"""
     return "<br/>".join(text.strip().splitlines()) if text else text
 
 
 def is_file_data(field):
-    """Return True, if field is a file field.
-    """
+    """Return True, if field is a file field."""
     ifaces = (INamedFile, INamedBlobFile)
     for i in ifaces:
         if i.providedBy(field):

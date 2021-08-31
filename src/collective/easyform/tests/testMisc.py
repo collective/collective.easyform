@@ -13,7 +13,7 @@ from zope.component import getMultiAdapter
 
 
 class TestMisc(base.EasyFormTestCase):
-    """ test miscellaneous stuff """
+    """test miscellaneous stuff"""
 
     def test_ordereddict_reverse(self):
         d = OrderedDict()
@@ -31,7 +31,7 @@ class TestMisc(base.EasyFormTestCase):
 
 
 class TestGetEasyFormURL(base.EasyFormTestCase):
-    """ test GetEasyFormURL stuff """
+    """test GetEasyFormURL stuff"""
 
     def afterSetUp(self):
         self.folder.invokeFactory("EasyForm", "ff1")
@@ -78,7 +78,7 @@ class TestGetEasyFormURL(base.EasyFormTestCase):
 
 
 class TestIsSubEasyForm(base.EasyFormTestCase):
-    """ test IsSubEasyForm stuff """
+    """test IsSubEasyForm stuff"""
 
     def afterSetUp(self):
         self.folder.invokeFactory("EasyForm", "ff1")

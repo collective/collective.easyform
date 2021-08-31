@@ -18,10 +18,11 @@ except ImportError:
 
 try:
     from email import message_from_bytes  # NOQA: F401
-    LINESEP = b'\r\n'
+
+    LINESEP = b"\r\n"
 except ImportError:
     # Python 2
-    LINESEP = b'\n'
+    LINESEP = b"\n"
 
 optionflags = (
     doctest.REPORT_ONLY_FIRST_FAILURE

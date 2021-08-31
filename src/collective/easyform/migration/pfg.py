@@ -4,8 +4,8 @@ from collective.easyform.migration.actions import actions_model
 from collective.easyform.migration.data import migrate_saved_data
 from collective.easyform.migration.fields import fields_model
 from plone import api
-from plone.app.contenttypes.migration.field_migrators import (
-    migrate_richtextfield,  # noqa
+from plone.app.contenttypes.migration.field_migrators import (  # noqa
+    migrate_richtextfield,
 )
 from plone.app.contenttypes.migration.field_migrators import migrate_simplefield  # noqa
 from plone.app.contenttypes.migration.migration import ATCTContentMigrator
@@ -23,32 +23,34 @@ import logging
 import transaction
 
 
-logger = logging.getLogger('collective.easyform.migration')
+logger = logging.getLogger("collective.easyform.migration")
 
-Field = namedtuple('Type', ['name', 'handler'])
+Field = namedtuple("Type", ["name", "handler"])
 
 FIELD_MAPPING = {
-    'submitLabel': Field('submitLabel', migrate_simplefield),
-    'resetLabel': Field('resetLabel', migrate_simplefield),
-    'useCancelButton': Field('useCancelButton', migrate_simplefield),
-    'forceSSL': Field('forceSSL', migrate_simplefield),
-    'formPrologue': Field('formPrologue', migrate_richtextfield),
-    'formEpilogue': Field('formEpilogue', migrate_richtextfield),
-    'thanksPageOverride': Field('thanksPageOverride', migrate_simplefield),
-    'formActionOverride': Field('formActionOverride', migrate_simplefield),
-    'onDisplayOverride': Field('onDisplayOverride', migrate_simplefield),
-    'afterValidationOverride': Field('afterValidationOverride', migrate_simplefield),  # noqa
-    'headerInjection': Field('headerInjection', migrate_simplefield),
-    'checkAuthenticator': Field('CSRFProtection', migrate_simplefield),
+    "submitLabel": Field("submitLabel", migrate_simplefield),
+    "resetLabel": Field("resetLabel", migrate_simplefield),
+    "useCancelButton": Field("useCancelButton", migrate_simplefield),
+    "forceSSL": Field("forceSSL", migrate_simplefield),
+    "formPrologue": Field("formPrologue", migrate_richtextfield),
+    "formEpilogue": Field("formEpilogue", migrate_richtextfield),
+    "thanksPageOverride": Field("thanksPageOverride", migrate_simplefield),
+    "formActionOverride": Field("formActionOverride", migrate_simplefield),
+    "onDisplayOverride": Field("onDisplayOverride", migrate_simplefield),
+    "afterValidationOverride": Field(
+        "afterValidationOverride", migrate_simplefield
+    ),  # noqa
+    "headerInjection": Field("headerInjection", migrate_simplefield),
+    "checkAuthenticator": Field("CSRFProtection", migrate_simplefield),
 }
 
 
 class PloneFormGenMigrator(ATCTContentMigrator):
     """Migrator for PFG to easyform"""
 
-    src_portal_type = 'FormFolder'
-    src_meta_type = 'FormFolder'
-    dst_portal_type = 'EasyForm'
+    src_portal_type = "FormFolder"
+    src_meta_type = "FormFolder"
+    dst_portal_type = "EasyForm"
     dst_meta_type = None  # not used
 
     def migrate_ploneformgen(self):
@@ -61,25 +63,23 @@ class PloneFormGenMigrator(ATCTContentMigrator):
 
     def migrate(self, unittest=0):
         super(PloneFormGenMigrator, self).migrate()
-        logger.info(
-            'Migrated FormFolder %s',
-            '/'.join(self.new.getPhysicalPath()))
+        logger.info("Migrated FormFolder %s", "/".join(self.new.getPhysicalPath()))
 
 
 class IMigratePloneFormGenFormSchema(model.Schema):
     dry_run = schema.Bool(
-        title=u'Dry run',
+        title=u"Dry run",
         required=True,
         default=False,
     )
 
 
 class MigratePloneFormGenForm(AutoExtensibleForm, Form):
-    label = u'Migrate PloneFormGen Forms'
+    label = u"Migrate PloneFormGen Forms"
     ignoreContext = True
     schema = IMigratePloneFormGenFormSchema
 
-    @buttonAndHandler(u'Migrate')
+    @buttonAndHandler(u"Migrate")
     def handle_migrate(self, action):
         data, errors = self.extractData()
         if len(errors) > 0:
@@ -88,8 +88,7 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
         self.log = StringIO()
         handler = logging.StreamHandler(self.log)
         logger.addHandler(handler)
-        formatter = logging.Formatter(
-            '%(asctime)s %(levelname)s %(name)s %(message)s')
+        formatter = logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s")
         handler.setFormatter(formatter)
 
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -97,13 +96,13 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
         migrate(portal, PloneFormGenMigrator)
 
         self.migration_done = True
-        if data.get('dry_run', False):
+        if data.get("dry_run", False):
             transaction.abort()
-            logger.info(u'PloneFormGen migration finished (dry run)')
+            logger.info(u"PloneFormGen migration finished (dry run)")
         else:
-            logger.info(u'PloneFormGen migration finished')
+            logger.info(u"PloneFormGen migration finished")
 
     def render(self):
-        if getattr(self, 'migration_done', False):
+        if getattr(self, "migration_done", False):
             return self.log.getvalue()
         return super(MigratePloneFormGenForm, self).render()

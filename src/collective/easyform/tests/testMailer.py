@@ -18,18 +18,21 @@ from Products.CMFPlone.utils import safe_unicode
 
 import datetime
 
+
 try:
     # Python 3
     from email import message_from_bytes
-    LINESEP = b'\r\n'
+
+    LINESEP = b"\r\n"
 except ImportError:
     # Python 2
     from email import message_from_string as message_from_bytes
-    LINESEP = b'\n'
+
+    LINESEP = b"\n"
 
 
 class TestFunctions(base.EasyFormTestCase):
-    """ Test mailer action """
+    """Test mailer action"""
 
     def dummy_send(self, mfrom, mto, messageText, immediate=False):
         self.mfrom = mfrom
@@ -61,7 +64,7 @@ class TestFunctions(base.EasyFormTestCase):
         return request
 
     def test_DummyMailer(self):
-        """ sanity check; make sure dummy mailer works as expected """
+        """sanity check; make sure dummy mailer works as expected"""
 
         self.mailhost.send(
             "messageText", mto="dummy@address.com", mfrom="dummy1@address.com"
@@ -73,7 +76,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"From: dummy1@address.com", self.messageText)
 
     def test_Mailer_Basic(self):
-        """ Test mailer with dummy_send """
+        """Test mailer with dummy_send"""
 
         mailer = get_actions(self.ff1)["mailer"]
 
@@ -88,7 +91,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn("test comments", msg.get_payload(decode=False))
 
     def test_MailerAdditionalHeaders(self):
-        """ Test mailer with dummy_send """
+        """Test mailer with dummy_send"""
 
         mailer = get_actions(self.ff1)["mailer"]
 
@@ -107,7 +110,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn("test comments", msg.get_payload(decode=False))
 
     def test_MailerLongSubject(self):
-        """ Test mailer with subject line > 76 chars (Tracker # 84) """
+        """Test mailer with subject line > 76 chars (Tracker # 84)"""
 
         long_subject = (
             "Now is the time for all good persons to come to"
@@ -166,13 +169,17 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.msg_subject = "This is my ${untopic} now"
         self.messageText = b""
         mailer.onSuccess(data, request)
-        self.assertIn(b"Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=", self.messageText)
+        self.assertIn(
+            b"Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=", self.messageText
+        )
 
         # we don't want substitution on user input
         request = self.LoadRequestForm(**data2)
         self.messageText = b""
         mailer.onSuccess(data2, request)
-        self.assertIn(b"Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=", self.messageText)
+        self.assertIn(
+            b"Subject: =?utf-8?q?This_is_my_=3F=3F=3F_now?=", self.messageText
+        )
 
     def test_TemplateReplacement(self):
         """
@@ -199,7 +206,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"Eat my footer, test subject.", self.messageBody)
 
     def test_UTF8Subject(self):
-        """ Test mailer with uft-8 encoded subject line """
+        """Test mailer with uft-8 encoded subject line"""
 
         utf8_subject = u"Effacer les entrées sauvegardées"
         data = {"topic": utf8_subject}
@@ -216,7 +223,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(safe_unicode(decoded_header), utf8_subject)
 
     def test_UnicodeSubject(self):
-        """ Test mailer with Unicode encoded subject line """
+        """Test mailer with Unicode encoded subject line"""
         utf8_subject = u"Effacer les entrées sauvegardées"
         unicode_subject = utf8_subject
         data = {"topic": unicode_subject}
@@ -232,7 +239,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(safe_unicode(decoded_header), utf8_subject)
 
     def test_Utf8ListSubject(self):
-        """ Test mailer with Unicode encoded subject line """
+        """Test mailer with Unicode encoded subject line"""
         utf8_subject_list = [u"Effacer les entrées", u"sauvegardées"]
         data = {"topic": utf8_subject_list}
         mailer = get_actions(self.ff1)["mailer"]
@@ -246,7 +253,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(safe_unicode(decoded_header), ", ".join(utf8_subject_list))
 
     def test_MailerOverrides(self):
-        """ Test mailer override functions """
+        """Test mailer override functions"""
 
         mailer = get_actions(self.ff1)["mailer"]
         mailer.subjectOverride = "python: '{0} and {1}'.format('eggs', 'spam')"
@@ -272,7 +279,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"To: test@test.ts", self.messageText)
 
     def testMultiRecipientOverrideByString(self):
-        """ try multiple recipients in recipient override """
+        """try multiple recipients in recipient override"""
 
         mailer = get_actions(self.ff1)["mailer"]
         mailer.recipientOverride = "string: eggs@spam.com, spam@spam.com"
@@ -284,7 +291,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"To: eggs@spam.com, spam@spam.com", self.messageText)
 
     def testMultiRecipientOverrideByTuple(self):
-        """ try multiple recipients in recipient override """
+        """try multiple recipients in recipient override"""
 
         mailer = get_actions(self.ff1)["mailer"]
         mailer.recipientOverride = "python: ('eggs@spam.com', 'spam.spam.com')"
@@ -296,7 +303,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"To: eggs@spam.com, spam.spam.com", self.messageText)
 
     def testRecipientFromRequest(self):
-        """ try recipient from designated field  """
+        """try recipient from designated field"""
 
         mailer = get_actions(self.ff1)["mailer"]
         mailer.to_field = "replyto"
@@ -324,7 +331,7 @@ class TestFunctions(base.EasyFormTestCase):
         set_actions(self.ff1, actions)
 
     def test_ExecConditions(self):
-        """ Test mailer with various exec conditions """
+        """Test mailer with various exec conditions"""
 
         # if an action adapter's execCondition is filled in and evaluates
         # false, the action adapter should not fire.
@@ -359,7 +366,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertTrue(len(self.messageText) > 0)
 
     def test_selectiveFieldMailing(self):
-        """ Test selective inclusion of fields in the mailing """
+        """Test selective inclusion of fields in the mailing"""
 
         mailer = get_actions(self.ff1)["mailer"]
         fields = dict(
@@ -417,7 +424,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertNotIn(b"Comments", self.messageBody)
 
     def test_ccOverride(self):
-        """ Test override for CC field """
+        """Test override for CC field"""
 
         mailer = get_actions(self.ff1)["mailer"]
         fields = dict(
@@ -444,7 +451,7 @@ class TestFunctions(base.EasyFormTestCase):
         )
 
     def test_bccOverride(self):
-        """ Test override for BCC field """
+        """Test override for BCC field"""
         mailer = get_actions(self.ff1)["mailer"]
         fields = dict(
             topic="test subject", replyto="test@test.org", comments="test comments"
@@ -488,7 +495,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertRaises(ValueError, mailer.onSuccess, fields, request)
 
     def test_custom_email_template(self):
-        """ Test mailer with custom template """
+        """Test mailer with custom template"""
         default_fields = api.content.create(
             self.portal, "File", id="easyform_mail_body_default.pt"
         )
@@ -499,7 +506,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"Custom e-mail template!", self.messageText)
 
     def test_MailerXMLAttachments(self):
-        """ Test mailer with dummy_send """
+        """Test mailer with dummy_send"""
         mailer = get_actions(self.ff1)["mailer"]
         mailer.sendXML = True
         mailer.sendCSV = False
@@ -570,7 +577,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b'"B"', xml)
 
     def test_MailerCSVAttachments(self):
-        """ Test mailer with dummy_send """
+        """Test mailer with dummy_send"""
         mailer = get_actions(self.ff1)["mailer"]
         mailer.sendXML = False
         mailer.sendCSV = True

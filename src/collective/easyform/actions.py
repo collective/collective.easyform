@@ -4,7 +4,6 @@ from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
-from collective.easyform.api import OrderedDict
 from collective.easyform.api import filter_fields
 from collective.easyform.api import filter_widgets
 from collective.easyform.api import format_addresses
@@ -78,7 +77,7 @@ class ActionFactory(object):
         self.kw = kw
 
     def available(self, context):
-        """ field is addable in the current context """
+        """field is addable in the current context"""
         securityManager = getSecurityManager()
         permission = queryUtility(IPermission, name=self.permission)
         if permission is None:
@@ -86,7 +85,7 @@ class ActionFactory(object):
         return bool(securityManager.checkPermission(permission.title, context))
 
     def editable(self, field):
-        """ test whether a given instance of a field is editable """
+        """test whether a given instance of a field is editable"""
         return True
 
     def __call__(self, *args, **kw):
@@ -97,8 +96,7 @@ class ActionFactory(object):
 
 @implementer(IAction)
 class Action(Bool):
-    """Base action class.
-    """
+    """Base action class."""
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -107,8 +105,7 @@ class Action(Bool):
 
 
 class DummyFormView(WidgetsView):
-    """A dummy form to get the widgets rendered for the mailer action.
-    """
+    """A dummy form to get the widgets rendered for the mailer action."""
 
     mode = DISPLAY_MODE
     ignoreContext = True
@@ -125,8 +122,7 @@ class Mailer(Action):
         super(Mailer, self).__init__(**kw)
 
     def get_portal_email_address(self, context):
-        """Return the email address defined in the Plone site.
-        """
+        """Return the email address defined in the Plone site."""
         return api.portal.get_registry_record("plone.email_from_address")
 
     def secure_header_line(self, line):
@@ -141,8 +137,7 @@ class Mailer(Action):
         return line
 
     def get_mail_body(self, unsorted_data, request, context):
-        """Returns the mail-body with footer.
-        """
+        """Returns the mail-body with footer."""
         schema = get_schema(context)
 
         form = DummyFormView(context, request)
@@ -187,8 +182,7 @@ class Mailer(Action):
         return template.pt_render(extra_context=extra)
 
     def get_owner_info(self, context):
-        """Return owner info.
-        """
+        """Return owner info."""
         pms = getToolByName(context, "portal_membership")
         ownerinfo = context.getOwner()
         ownerid = fullname = ownerinfo.getId()
@@ -209,8 +203,7 @@ class Mailer(Action):
         return (fullname, toemail)
 
     def get_addresses(self, fields, request, context, from_addr=None, to_addr=None):
-        """Return addresses.
-        """
+        """Return addresses."""
         # get Reply-To
         reply_addr = None
         if hasattr(self, "replyto_field"):
@@ -251,8 +244,7 @@ class Mailer(Action):
         return (to, from_addr, reply_addr)
 
     def get_subject(self, fields, request, context):
-        """Return subject.
-        """
+        """Return subject."""
         # get subject header
         nosubject = u"(no subject)"  # TODO: translate
         subject = None
@@ -336,8 +328,7 @@ class Mailer(Action):
         return headerinfo
 
     def serialize(self, field):
-        """Serializa field to save to XML.
-        """
+        """Serializa field to save to XML."""
         if field is None:
             return ""
         if isinstance(field, (set, list, tuple)):
@@ -361,8 +352,7 @@ class Mailer(Action):
         return safe_unicode(repr(field))
 
     def get_attachments(self, fields, request):
-        """Return all attachments uploaded in form.
-        """
+        """Return all attachments uploaded in form."""
 
         attachments = []
 
@@ -428,8 +418,7 @@ class Mailer(Action):
         return attachments
 
     def get_mail_text(self, fields, request, context):
-        """Get header and body of e-mail as text (string)
-        """
+        """Get header and body of e-mail as text (string)"""
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
         if six.PY2 and isinstance(body, six.text_type):
@@ -498,8 +487,7 @@ class Mailer(Action):
         return outer.as_string()
 
     def onSuccess(self, fields, request):
-        """e-mails data.
-        """
+        """e-mails data."""
         context = get_context(self)
         mailtext = self.get_mail_text(fields, request, context)
         host = api.portal.get_tool(name="MailHost")
@@ -667,12 +655,14 @@ class SaveData(Action):
         return res
 
     def get_saved_form_input_as_xlsx(self, header=False):
-        assert HAS_XLSX_SUPPORT, "XLSX export not suppored, please enable 'downloadxlsx' extra"
+        assert (
+            HAS_XLSX_SUPPORT
+        ), "XLSX export not suppored, please enable 'downloadxlsx' extra"
 
         from openpyxl import Workbook
 
         wb = Workbook()
-        ws = wb.active        
+        ws = wb.active
 
         if header:
             ws.append(self.get_header_row())
@@ -756,7 +746,10 @@ class SaveData(Action):
             'attachment; filename="{0}.xlsx"'.format(self.__name__),
         )
 
-        response.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response.setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
         value = self.get_saved_form_input_as_xlsx(
             getattr(self, "UseColumnNames", False)
         )
@@ -802,8 +795,7 @@ class SaveData(Action):
         storage[id] = value
 
     def onSuccess(self, fields, request):
-        """Saves data.
-        """
+        """Saves data."""
         # if LP_SAVE_TO_CANONICAL and not loopstop:
         # LinguaPlone functionality:
         # check to see if we're in a translated

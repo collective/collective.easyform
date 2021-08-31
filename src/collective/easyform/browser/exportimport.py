@@ -17,12 +17,10 @@ from zope.component import getMultiAdapter
 
 
 class EasyFormExportView(BrowserView):
-    """See ..interfaces.exportimport.IEasyFormExportView.
-    """
+    """See ..interfaces.exportimport.IEasyFormExportView."""
 
     def __call__(self):
-        """See ..interfaces.exportimport.IEasyFormExportView.__call__
-        """
+        """See ..interfaces.exportimport.IEasyFormExportView.__call__"""
         ctx = TarballExportContext(self.context)
         response = self.request.RESPONSE
         disposition = 'attachment; filename="{0}-{1:{2}}.tar.gz"'.format(
@@ -39,8 +37,7 @@ class EasyFormExportView(BrowserView):
 
 
 class EasyFormImportForm(form.Form):
-    """The form class for importing of exported easyforms.
-    """
+    """The form class for importing of exported easyforms."""
 
     fields = field.Fields(IEasyFormImportFormSchema)
     ignoreContext = True

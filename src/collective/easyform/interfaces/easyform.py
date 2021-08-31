@@ -69,7 +69,7 @@ def default_actions(context):
 
 @zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_fields(context):
-    """ Default form fields.
+    """Default form fields.
     Acquire 'easyform_default_fields.xml' or return hard coded default
     """
     portal = api.portal.get()

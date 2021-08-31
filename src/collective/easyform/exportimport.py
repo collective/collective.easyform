@@ -58,8 +58,7 @@ class FieldExtender(object):
 
 @implementer(IFieldMetadataHandler)
 class EasyFormFieldMetadataHandler(object):
-    """Support the easyform: namespace in model definitions.
-    """
+    """Support the easyform: namespace in model definitions."""
 
     namespace = "http://namespaces.plone.org/supermodel/easyform"
     prefix = "easyform"
@@ -130,8 +129,7 @@ class ActionExtender(object):
 
 @implementer(IFieldMetadataHandler)
 class EasyFormActionMetadataHandler(object):
-    """Support the easyform: namespace in model definitions.
-    """
+    """Support the easyform: namespace in model definitions."""
 
     namespace = "http://namespaces.plone.org/supermodel/easyform"
     prefix = "easyform"

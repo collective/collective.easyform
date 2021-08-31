@@ -28,9 +28,7 @@ class ControlPanelTestCase(base.EasyFormTestCase):
     def test_easyform_control_panel_link_to_overview(self):
         self.browser.open(self.portal_url + "/@@overview-controlpanel")
         link = self.browser.getLink("easyform")
-        self.assertEqual(
-            link.url, "http://nohost/plone/@@easyform-controlpanel"
-        )
+        self.assertEqual(link.url, "http://nohost/plone/@@easyform-controlpanel")
 
     def test_easyform_control_panel_contents(self):
         self.browser.open(self.portal_url + "/@@easyform-controlpanel")
@@ -45,16 +43,12 @@ class ControlPanelTestCase(base.EasyFormTestCase):
         self.browser.open(self.portal_url + "/@@easyform-controlpanel")
         self.assertTrue("General" in self.browser.contents)
         link = self.browser.getLink("Add-ons")
-        self.assertEqual(
-            link.url, "http://nohost/plone/prefs_install_products_form"
-        )
+        self.assertEqual(link.url, "http://nohost/plone/prefs_install_products_form")
 
     def test_easyform_control_panel_backlink(self):
         self.browser.open(self.portal_url + "/@@navigation-controlpanel")
         link = self.browser.getLink(id="setup-link")
-        self.assertEqual(
-            link.url, "http://nohost/plone/@@overview-controlpanel"
-        )
+        self.assertEqual(link.url, "http://nohost/plone/@@overview-controlpanel")
 
 
 class ControlPanelFunctionalTestCase(base.EasyFormFunctionalTestCase):
@@ -128,4 +122,6 @@ class ControlPanelFunctionalTestCase(base.EasyFormFunctionalTestCase):
             registry.records["easyform.csv_delimiter"].value,
             ",",
         )
+
+
 # EOF

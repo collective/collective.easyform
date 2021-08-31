@@ -12,7 +12,7 @@ from plone.namedfile.file import NamedFile
 
 
 class TestFunctions(base.EasyFormTestCase):
-    """ Test mailer action """
+    """Test mailer action"""
 
     def afterSetUp(self):
         super(TestFunctions, self).afterSetUp()
@@ -28,7 +28,7 @@ class TestFunctions(base.EasyFormTestCase):
         return request
 
     def test_thankspage(self):
-        """ Test thankspage """
+        """Test thankspage"""
 
         data = {
             "topic": "test subject",
@@ -45,7 +45,7 @@ class TestFunctions(base.EasyFormTestCase):
         )
 
     def test_thankspage_filter(self):
-        """ Test thankspage """
+        """Test thankspage"""
         self.ff1.showAll = False
         self.ff1.showFields = ["comments"]
         data = {

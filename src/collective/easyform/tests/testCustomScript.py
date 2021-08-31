@@ -132,7 +132,7 @@ class SecureFakeRequest(dict):
 
     @security.protected(permissions.ManagePortal)
     def fooProtected(self):
-        """ Only manager can access this """
+        """Only manager can access this"""
         return "foo"
 
 
@@ -141,7 +141,7 @@ InitializeClass(SecureFakeRequest)
 
 class TestCustomScript(base.EasyFormTestCase):
 
-    """ Test FormCustomScriptAdapter functionality in EasyForm """
+    """Test FormCustomScriptAdapter functionality in EasyForm"""
 
     def afterSetUp(self):
         self.request = self.layer["request"]
@@ -162,7 +162,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.assertEqual(len(errors), 0)
 
     def createScript(self):
-        """ Creates FormCustomScript object """
+        """Creates FormCustomScript object"""
         # 1. Create custom script adapter in the form folder
         self.request["form.widgets.title"] = u"Adapter"
         self.request["form.widgets.__name__"] = u"adapter"
@@ -179,7 +179,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.assertTrue("adapter" in actions)
 
     def testSuccess(self):
-        """ Succesful script execution
+        """Succesful script execution
 
         Creates a script, some form content,
         executes form handling.
@@ -199,7 +199,7 @@ class TestCustomScript(base.EasyFormTestCase):
         assert reply == "foo", "Script returned:" + str(reply)
 
     def testRunTimeError(self):
-        """ Script has run-time error """
+        """Script has run-time error"""
         self.createScript()
 
         actions = get_actions(self.ff1)
@@ -220,7 +220,7 @@ class TestCustomScript(base.EasyFormTestCase):
         assert reply is None
 
     def testSyntaxError(self):
-        """ Script has syntax errors
+        """Script has syntax errors
 
         TODO: Syntax errors are not returned in validation?
         """
@@ -246,7 +246,7 @@ class TestCustomScript(base.EasyFormTestCase):
         assert throwed, "Bad script didn't throw run-time exception"
 
     def testBadParameters(self):
-        """ Invalid number of script parameters """
+        """Invalid number of script parameters"""
 
         self.createScript()
 
@@ -265,7 +265,7 @@ class TestCustomScript(base.EasyFormTestCase):
         assert throwed, "Invalid parameters failed silently"
 
     def testDefaultParameters(self):
-        """ Test to make sure the documented parameters are available """
+        """Test to make sure the documented parameters are available"""
 
         self.createScript()
 
@@ -283,7 +283,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.assertEqual(errors, None)
 
     def testSecurity(self):
-        """ Script needing proxy role
+        """Script needing proxy role
 
         TODO: Why no security exceptions are raised?
         """
@@ -320,7 +320,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.assertFalse(throwed, "Unauthorized was raised!")
 
     def testSetProxyRole(self):
-        """ Exercise setProxyRole """
+        """Exercise setProxyRole"""
         self.createScript()
         self.request["form.widgets.title"] = u"Adapter"
         self.request["form.widgets.description"] = u""
@@ -364,7 +364,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.assertEqual(errors[0].message, u"Required input is missing.")
 
     def testProxyRole(self):
-        """ Test seeing how setting proxy role affects unauthorized
+        """Test seeing how setting proxy role affects unauthorized
         Exception
         """
         self.createScript()
