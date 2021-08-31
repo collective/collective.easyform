@@ -67,7 +67,7 @@
     <value key="csscompilation">++resource++easyform.css</value>
     <value key="depends">plone</value>
     <!-- Please keep this in sync with upgrades.update_last_compilation -->
-    <value key="last_compilation">2020-12-09 14:02:00</value>
+    <value key="last_compilation">2021-08-31 00:00:00</value>
     <value key="resources">
     </value>
     <value key="merge_with">default</value>

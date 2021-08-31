@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def update_last_compilation(context):
+def update_last_compilation(contex, timetuple):
     # Let's do the imports inline, so they are not needlessly done at startup.
     # Should not really matter, but oh well.
     from datetime import datetime
@@ -18,7 +18,7 @@ def update_last_compilation(context):
     records = registry.forInterface(IBundleRegistry, prefix="plone.bundles/easyform")
     # Technically we only need year, month and day.
     # But keep this in sync with registry.xml.
-    records.last_compilation = datetime(2020, 12, 9, 14, 2, 0)
+    records.last_compilation = datetime(*timetuple)
     logger.info("Updated the last_compilation date of the easyform bundle.")
 
     # Run the combine-bundles import step or its handler.
@@ -40,3 +40,11 @@ def update_last_compilation(context):
         return
     portal = api.portal.get()
     combine_bundles(portal)
+
+
+def update_last_compilation_1008(context):
+    update_last_compilation(context, (2020, 12, 9, 14, 2, 0))
+
+
+def update_last_compilation_1009(context):
+    update_last_compilation(context, (2021, 8, 31, 0, 0, 0))

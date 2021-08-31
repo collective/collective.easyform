@@ -10,7 +10,7 @@
       >
     <gs:upgradeStep
         title="Update last_compilation of bundle"
-        handler=".update_last_compilation"
+        handler=".update_last_compilation_1008"
         />
   </gs:upgradeSteps>
 

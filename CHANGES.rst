@@ -19,6 +19,9 @@ New features:
 
 Bug fixes:
 
+- Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.
+  [jensens]
+
 - Fixes in German translation.
   [jensens]
 

@@ -3,7 +3,7 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       tal:omit-tag=""
-      i18n:domain="plone.z3cform"
+      i18n:domain="collective.easyform"
 >
 
   <h1 i18n:translate="">Saved Data</h1>
@@ -17,38 +17,41 @@
   >
   </div>
 
-  <div class="crud-form"
-       tal:repeat="form view/subforms"
-       tal:content="structure form/render"
-  >
-  </div>
+  <tal:domain i18n:domain="plone.z3cform">
 
-  <metal:form use-macro="context/@@ploneform-macros/titlelessform">
-    <metal:top-slot fill-slot="actions">
-      <div class="formControls"
-           tal:condition="view/actions/values|nothing"
-      >
-        <div tal:condition="view/is_csv"
-             tal:attributes="class python:'field error' if view.delimiter_missing else 'field'"
+    <div class="crud-form"
+         tal:repeat="form view/subforms"
+         tal:content="structure form/render"
+    >
+    </div>
+
+    <metal:form use-macro="context/@@ploneform-macros/titlelessform">
+      <metal:top-slot fill-slot="actions">
+        <div class="formControls"
+             tal:condition="view/actions/values|nothing"
         >
-          <label for="csv_delimiter"
+          <div tal:condition="python:view.is_csv"
+               tal:attributes="class python:'field error' if view.delimiter_missing else 'field'"
+          >
+            <label for="csv_delimiter"
+                   i18n:translate=""
+                   i18n:domain="collective.easyform">CSV delimiter</label>
+            <div class="error"
+                 tal:condition="view/delimiter_missing"
                  i18n:translate=""
-                 i18n:domain="collective.easyform">CSV delimiter</label>
-          <div class="error" 
-               tal:condition="view/delimiter_missing"
-               i18n:translate=""
-               i18n:domain="collective.easyform">CSV delimiter is required.</div>
-          <input type="text" name="csv_delimiter" id="csv_delimiter" 
-                 value=";" maxlength="1" size="1"
-                 style="width: 3ch; padding-left: 1ch; padding-right: 1ch"
-                 tal:attributes="value view/csv_delimiter" />
+                 i18n:domain="collective.easyform">CSV delimiter is required.</div>
+            <input type="text" name="csv_delimiter" id="csv_delimiter"
+                   value=";" maxlength="1" size="1"
+                   style="width: 3ch; padding-left: 1ch; padding-right: 1ch"
+                   tal:attributes="value python:view.csv_delimiter" />
+          </div>
+          <tal:block repeat="action view/actions/values">
+            <input type="submit"
+                   tal:replace="structure action/render"
+            />
+          </tal:block>
         </div>
-        <tal:block repeat="action view/actions/values">
-          <input type="submit"
-                 tal:replace="structure action/render"
-          />
-        </tal:block>
-      </div>
-    </metal:top-slot>
-  </metal:form>
+      </metal:top-slot>
+    </metal:form>
+  </tal:domain>
 </html>

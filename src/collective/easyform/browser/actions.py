@@ -112,11 +112,10 @@ class SavedDataForm(crud.CrudForm):
     @property
     def csv_delimiter(self):
         if "csv_delimiter" in self.request.form:
-            return self.request.csv_delimiter
-        else:
-            registry = getUtility(IRegistry)
-            delimiter = registry.get("easyform.csv_delimiter").encode("utf-8")
-            return delimiter
+            return self.request["csv_delimiter"]
+        registry = getUtility(IRegistry)
+        delimiter = registry.get("easyform.csv_delimiter").encode("utf-8")
+        return delimiter
 
     @property
     def form_title(self):
@@ -177,13 +176,21 @@ class SavedDataForm(crud.CrudForm):
     def handleClearAll(self, action):
         self.field.clearSavedFormInput()
 
+    def updateActions(self):
+        super(SavedDataForm, self).updateActions()
+        if "download" in self.actions:
+            self.actions["download"].addClass("context")
+
+        if "clearall" in self.actions:
+            self.actions["clearall"].addClass("destructive")
+
 
 @implementer(ISavedDataFormWrapper)
 class SavedDataFormWrapper(layout.FormWrapper):
     def __call__(self):
         if hasattr(self.request, "form.buttons.download"):
             if "csv_delimiter" in self.request.form:
-                delimiter = self.request.csv_delimiter
+                delimiter = self.request["csv_delimiter"]
                 if len(delimiter) == 0:
                     self.form_instance._delimiter_missing = True
                     return super(SavedDataFormWrapper, self).__call__()
@@ -193,8 +200,7 @@ class SavedDataFormWrapper(layout.FormWrapper):
             else:
                 self.context.field.download(self.request.response)
             return u""
-        else:
-            return super(SavedDataFormWrapper, self).__call__()
+        return super(SavedDataFormWrapper, self).__call__()
 
 
 ActionSavedDataView = layout.wrap_form(
