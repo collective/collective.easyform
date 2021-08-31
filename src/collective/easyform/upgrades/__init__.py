@@ -11,8 +11,8 @@ def update_last_compilation(context):
     # Should not really matter, but oh well.
     from datetime import datetime
     from plone.registry.interfaces import IRegistry
-    from zope.component import getUtility
     from Products.CMFPlone.interfaces import IBundleRegistry
+    from zope.component import getUtility
 
     registry = getUtility(IRegistry)
     records = registry.forInterface(IBundleRegistry, prefix="plone.bundles/easyform")

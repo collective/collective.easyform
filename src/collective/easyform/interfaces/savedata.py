@@ -53,7 +53,7 @@ class IExtraData(Interface):
 class ISaveData(IAction):
 
     """A form action adapter that will save form input data and
-       return it in csv- or tab-delimited format."""
+    return it in csv- or tab-delimited format."""
 
     showFields = zope.schema.List(
         title=_(u"label_savefields_text", default=u"Saved Fields"),

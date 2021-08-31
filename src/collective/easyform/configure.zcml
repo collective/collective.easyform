@@ -7,6 +7,10 @@
 
   <include package="plone.app.dexterity" />
 
+  <configure zcml:condition="installed plone.formwidget.recaptcha">"
+    <include package="plone.formwidget.recaptcha" />
+  </configure>
+
   <i18n:registerTranslations directory="locales" />
 
   <include file="permissions.zcml" />

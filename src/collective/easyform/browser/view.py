@@ -48,8 +48,7 @@ try:
 except ImportError:
     # only thing needed to maintain 5.0.x compatibility
     def safe_bytes(value, encoding="utf-8"):
-        """Convert text to bytes of the specified encoding.
-        """
+        """Convert text to bytes of the specified encoding."""
         if isinstance(value, six.text_type):
             value = value.encode(encoding)
         return value
@@ -59,8 +58,7 @@ except ImportError:
 
 @implementer(IEasyFormForm)
 class EasyFormForm(AutoExtensibleForm, form.Form):
-    """EasyForm form.
-    """
+    """EasyForm form."""
 
     form_template = ViewPageTemplateFile("easyform_form.pt")
     thank_you_template = ViewPageTemplateFile("thank_you.pt")
@@ -83,8 +81,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         )
 
     def action(self):
-        """Redefine <form action=''> attribute.
-        """
+        """Redefine <form action=''> attribute."""
         action = getattr(self.context, "formActionOverride")
         if action:
             action = get_expression(self.context, action)
@@ -292,8 +289,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 self.request.response.redirect(secure_url, status="movedtemporarily")
 
     def update(self):
-        """Update form - see interfaces.IForm
-        """
+        """Update form - see interfaces.IForm"""
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
         self.template = self.form_template
@@ -303,7 +299,9 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         # If an adapter has already set errors, don't re-run extraction and
         # validation, just bail out:
         # (we copy the logic from plone.app.z3cform at templates/macros.pt)
-        if self.widgets.errors or self.status == getattr(self, 'formErrorsMessage', None):
+        if self.widgets.errors or self.status == getattr(
+            self, "formErrorsMessage", None
+        ):
             return
         data, errors = self.extractData()
         if errors:
@@ -362,8 +360,7 @@ EasyFormView = EasyFormFormWrapper
 
 
 class EasyFormFormEmbedded(EasyFormForm):
-    """EasyForm form embedded.
-    """
+    """EasyForm form embedded."""
 
     form_template = ViewPageTemplateFile("easyform_form_embedded.pt")
 
@@ -376,8 +373,7 @@ class EasyFormInlineValidationView(InlineValidationView):
 
 class GetSaveDataAdaptersView(BrowserView):
     def __call__(self, *args, **kwargs):
-        """Return all contained save data adapters.
-        """
+        """Return all contained save data adapters."""
         view = EasyFormForm(self.context, self.request)
         form = view.context
         adapters = []

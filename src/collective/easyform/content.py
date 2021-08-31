@@ -6,5 +6,4 @@ from zope.interface import implementer
 
 @implementer(IEasyForm)
 class EasyForm(Item):
-    """An easy form content base
-    """
+    """An easy form content base"""

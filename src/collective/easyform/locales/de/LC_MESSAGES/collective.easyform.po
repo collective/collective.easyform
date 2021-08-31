@@ -49,11 +49,11 @@ msgstr "Erlaubte Felder"
 #: collective/easyform/browser/controlpanel.py:42
 #: collective/easyform/browser/saveddata_form.pt:34
 msgid "CSV delimiter"
-msgstr ""
+msgstr "CSV Trennzeichen"
 
 #: collective/easyform/browser/saveddata_form.pt:37
 msgid "CSV delimiter is required."
-msgstr ""
+msgstr "Das CSV Trennzeichen muss angegeben werden."
 
 #: collective/easyform/browser/saveddata.pt:7
 msgid "Choose an adapter."
@@ -515,7 +515,7 @@ msgstr "Sollen die Spaltenbezeichnungen als erste Zeile in der heruntergeladenen
 #. Default: "Select the validators to use on this field"
 #: collective/easyform/interfaces/fields.py:73
 msgid "help_userfield_validators"
-msgstr "Wáhle die Validatoren für diese Feld aus."
+msgstr "Wähle die Validatoren für diese Feld aus."
 
 #. Default: "Pick any items from the HTTP headers that you'd like to insert as X- headers in the message."
 #: collective/easyform/interfaces/mailer.py:351

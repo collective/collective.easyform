@@ -14,8 +14,7 @@ BAD_SIGNS = frozenset(["<a ", "www.", "http:", ".com", "https:"])
 
 
 def isValidEmail(value, **kwargs):
-    """Check for the user email address.
-    """
+    """Check for the user email address."""
     if value is None:
         return
     reg_tool = api.portal.get_tool("portal_registration")
@@ -24,8 +23,7 @@ def isValidEmail(value, **kwargs):
 
 
 def isCommaSeparatedEmails(value, **kwargs):
-    """Check for one or more E-Mail Addresses separated by commas.
-    """
+    """Check for one or more E-Mail Addresses separated by commas."""
     if value is None:
         # Let the system for required take care of None values
         return

@@ -9,7 +9,7 @@ this_path = os.path.dirname(__file__)
 
 
 try:
-    pkg_resources.get_distribution('openpyxl')
+    pkg_resources.get_distribution("openpyxl")
     HAS_XLSX_SUPPORT = True
 except pkg_resources.DistributionNotFound:
     HAS_XLSX_SUPPORT = False
@@ -44,7 +44,7 @@ with open(
     MAIL_BODY_DEFAULT = safe_unicode(fp.read())
 
 
-FORM_ERROR_MARKER = 'FORM_ERROR_MARKER'
+FORM_ERROR_MARKER = "FORM_ERROR_MARKER"
 
 
 DEFAULT_SCRIPT = u"""

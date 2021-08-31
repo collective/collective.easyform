@@ -16,7 +16,7 @@ class FakeRequest(dict):
 
 class TrueOnceCalled(object):
 
-    """ A mock function that evaluates to True once it has been called. """
+    """A mock function that evaluates to True once it has been called."""
 
     def __init__(self):
         self.called = False
@@ -30,7 +30,7 @@ class TrueOnceCalled(object):
 
 class TestEmbedding(base.EasyFormTestCase):
 
-    """ test embedding of a PFG in another template """
+    """test embedding of a PFG in another template"""
 
     def dummy_send(self, mfrom, mto, messageText, immediate=False):
         self.mfrom = mfrom

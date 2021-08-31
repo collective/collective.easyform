@@ -43,8 +43,7 @@ except ImportError:  # pragma: no cover
 
 @implementer(IEasyFormFieldContext)
 class EasyFormFieldContext(FieldContext):
-    """Wrapper for published zope 3 schema fields.
-    """
+    """Wrapper for published zope 3 schema fields."""
 
 
 @implementer(IEasyFormFieldsContext)
@@ -125,8 +124,7 @@ class EditView(EditView):
 
 
 class ModelEditorView(BrowserView):
-    """Editor view.
-    """
+    """Editor view."""
 
     title = _(u"Edit XML Fields Model")
 
@@ -135,8 +133,7 @@ class ModelEditorView(BrowserView):
 
 
 class AjaxSaveHandler(BrowserView):
-    """Handle AJAX save posts.
-    """
+    """Handle AJAX save posts."""
 
     def authorized(self):
         authenticator = queryMultiAdapter(
@@ -148,7 +145,7 @@ class AjaxSaveHandler(BrowserView):
         self.context.aq_parent.fields_model = source
 
     def __call__(self):
-        """ handle AJAX save post """
+        """handle AJAX save post"""
 
         if not self.authorized():
             raise Unauthorized

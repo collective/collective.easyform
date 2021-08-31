@@ -37,8 +37,8 @@ from z3c.form import form
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import adapter
 from zope.component import getAdapters
-from zope.component import queryUtility
 from zope.component import getUtility
+from zope.component import queryUtility
 from zope.event import notify
 from zope.i18nmessageid import MessageFactory
 from zope.interface import alsoProvides
@@ -103,15 +103,15 @@ class SavedDataForm(crud.CrudForm):
 
     @property
     def delimiter_missing(self):
-        return hasattr(self, '_delimiter_missing') and self._delimiter_missing
+        return hasattr(self, "_delimiter_missing") and self._delimiter_missing
 
     @property
     def is_csv(self):
-        return self.context.field.DownloadFormat == 'csv'
+        return self.context.field.DownloadFormat == "csv"
 
     @property
     def csv_delimiter(self):
-        if 'csv_delimiter' in self.request.form:
+        if "csv_delimiter" in self.request.form:
             return self.request.csv_delimiter
         else:
             registry = getUtility(IRegistry)
@@ -182,7 +182,7 @@ class SavedDataForm(crud.CrudForm):
 class SavedDataFormWrapper(layout.FormWrapper):
     def __call__(self):
         if hasattr(self.request, "form.buttons.download"):
-            if 'csv_delimiter' in self.request.form:
+            if "csv_delimiter" in self.request.form:
                 delimiter = self.request.csv_delimiter
                 if len(delimiter) == 0:
                     self.form_instance._delimiter_missing = True
@@ -204,12 +204,10 @@ ActionSavedDataView = layout.wrap_form(
 
 @implementer(IEasyFormActionContext)
 class EasyFormActionContext(FieldContext):
-    """Wrapper for published zope 3 schema fields.
-    """
+    """Wrapper for published zope 3 schema fields."""
 
     def publishTraverse(self, request, name):
-        """It's not valid to traverse to anything below a field context.
-        """
+        """It's not valid to traverse to anything below a field context."""
         # hack to make inline validation work
         # (plone.app.z3cform doesn't know the form is the default view)
         if name == self.__name__:
@@ -360,8 +358,7 @@ EasyFormActionsListing.handlers.addHandler(but, handler)
 
 
 class ModelEditorView(BrowserView):
-    """Editor view
-    """
+    """Editor view"""
 
     title = _(u"Edit XML Actions Model")
 
@@ -370,8 +367,7 @@ class ModelEditorView(BrowserView):
 
 
 class AjaxSaveHandler(AjaxSaveHandler):
-    """Handle AJAX save posts
-    """
+    """Handle AJAX save posts"""
 
     def save(self, source):
         self.context.aq_parent.actions_model = source

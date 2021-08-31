@@ -7,6 +7,7 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
+from openpyxl import load_workbook
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
@@ -15,10 +16,10 @@ from six.moves import zip
 from transaction import commit
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
-from openpyxl import load_workbook
 
 import plone.protect
 import sys
+
 
 try:
     from plone.testing.zope import Browser
@@ -27,9 +28,10 @@ except ImportError:
 
 try:
     from zope.testbrowser.browser import webtest  # NOQA: F401
-    ZOPE_TESTBROWSER_VERSION = '>5'
+
+    ZOPE_TESTBROWSER_VERSION = ">5"
 except ImportError:
-    ZOPE_TESTBROWSER_VERSION = '<5'
+    ZOPE_TESTBROWSER_VERSION = "<5"
 
 
 def FakeRequest(method="GET", add_auth=False, **kwargs):
@@ -50,7 +52,7 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
 
 class SaveDataTestCase(base.EasyFormTestCase):
 
-    """ test save data adapter """
+    """test save data adapter"""
 
     def setUp(self):
         base.EasyFormTestCase.setUp(self)
@@ -58,7 +60,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.ff1 = getattr(self.folder, "ff1")
 
     def createSaver(self):
-        """ Creates FormCustomScript object """
+        """Creates FormCustomScript object"""
         # 1. Create custom script adapter in the form folder
         self.portal.REQUEST["form.widgets.title"] = u"Saver"
         self.portal.REQUEST["form.widgets.__name__"] = u"saver"
@@ -76,7 +78,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue("saver" in actions)
 
     def testSavedDataView(self):
-        """ test saved data view """
+        """test saved data view"""
 
         self.createSaver()
 
@@ -84,7 +86,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(list(view.items()), [("saver", u"Saver")])
 
     def testSaverDataFormExtraData(self):
-        """ test saver data form extra data"""
+        """test saver data form extra data"""
 
         self.createSaver()
 
@@ -112,7 +114,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(" " in item[1]["dt"])
 
     def testSaverDataFormShowFields(self):
-        """ test saver data form show fields """
+        """test saver data form show fields"""
 
         self.createSaver()
 
@@ -139,7 +141,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue("replyto" not in item[1])
 
     def testSaverDataFormOneItem(self):
-        """ test saver data form one item """
+        """test saver data form one item"""
 
         self.createSaver()
 
@@ -165,7 +167,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(item[1]["comments"], "test comments")
 
     def testSaverDataForm(self):
-        """ test saver data form """
+        """test saver data form"""
 
         self.createSaver()
 
@@ -179,7 +181,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual([i for i in form.get_items()], [])
 
     def testSaver(self):
-        """ test save data adapter action """
+        """test save data adapter action"""
 
         self.createSaver()
 
@@ -206,7 +208,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(res.strip(), "test@test.org,test subject,test comments")
 
     def testSaverExtraData(self):
-        """ test save data adapter action """
+        """test save data adapter action"""
 
         self.createSaver()
 
@@ -228,7 +230,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue("dt" in saver.getSavedFormInput()[0])
 
     def testSaverDownload(self):
-        """ test save data """
+        """test save data"""
 
         self.createSaver()
 
@@ -253,7 +255,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverDownloadTSV(self):
-        """ test save data """
+        """test save data"""
 
         self.createSaver()
 
@@ -279,7 +281,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
 
     def testSaverDownloadXLSX(self):
-        """ test save data """
+        """test save data"""
 
         self.createSaver()
 
@@ -301,12 +303,12 @@ class SaveDataTestCase(base.EasyFormTestCase):
         saver.download(request.response)
         res = request.response.stdout
         self.assertEqual(
-            request.response.headers['content-type'],
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            request.response.headers["content-type"],
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
         self.assertEqual(
-            request.response.headers['content-disposition'],
-            'attachment; filename="saver.xlsx"'
+            request.response.headers["content-disposition"],
+            'attachment; filename="saver.xlsx"',
         )
 
         wb = load_workbook(res)
@@ -315,12 +317,12 @@ class SaveDataTestCase(base.EasyFormTestCase):
         rows = list(ws.rows)
 
         self.assertEqual(len(rows), 1)
-        self.assertEqual(rows[0][0].value, 'test@test.org')
-        self.assertEqual(rows[0][1].value, 'test subject')
-        self.assertEqual(rows[0][2].value, 'test comments')
+        self.assertEqual(rows[0][0].value, "test@test.org")
+        self.assertEqual(rows[0][1].value, "test subject")
+        self.assertEqual(rows[0][2].value, "test comments")
 
     def testSaverDownloadWithTitles(self):
-        """ test save data """
+        """test save data"""
 
         self.createSaver()
 
@@ -346,7 +348,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(saver.getSavedFormInputForEdit(header=True) in res)
 
     def testSaverDownloadExtraData(self):
-        """ test save data """
+        """test save data"""
 
         self.createSaver()
 
@@ -372,8 +374,8 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):
-        """ test save data adapter action and direct access to
-        SavedFormInput """
+        """test save data adapter action and direct access to
+        SavedFormInput"""
 
         self.createSaver()
 
@@ -407,7 +409,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(saver.itemsSaved(), 0)
 
     def testSetSavedFormInput(self):
-        """ test setSavedFormInput functionality """
+        """test setSavedFormInput functionality"""
 
         # set up saver
         self.createSaver()
@@ -448,7 +450,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(saver.getSavedFormInputForEdit(), "")
 
     def testEditSavedFormInput(self):
-        """ test manage_saveData functionality """
+        """test manage_saveData functionality"""
 
         # set up saver
         self.createSaver()
@@ -467,7 +469,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         )
 
     def testDeleteSavedFormInput(self):
-        """ test manage_deleteData functionality """
+        """test manage_deleteData functionality"""
 
         # set up saver
         self.createSaver()
@@ -495,7 +497,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         )
 
     def testSaverInputAsDictionaries(self):
-        """ test save data adapter's InputAsDictionaries """
+        """test save data adapter's InputAsDictionaries"""
 
         self.createSaver()
 
@@ -528,7 +530,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(row["topic"], "test subject")
 
     def testSaverColumnNames(self):
-        """ test save data adapter's getColumnNames function """
+        """test save data adapter's getColumnNames function"""
 
         self.createSaver()
 
@@ -556,7 +558,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(cn[3] == "dt")
 
     def testSaverColumnTitles(self):
-        """ test save data adapter's getColumnTitles function """
+        """test save data adapter's getColumnTitles function"""
 
         self.createSaver()
 
@@ -576,7 +578,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue(cn[3] == "Posting Date/Time")
 
     def testSaverSelectiveFieldSaving(self):
-        """ Test selective inclusion of fields in the data"""
+        """Test selective inclusion of fields in the data"""
 
         self.createSaver()
 
@@ -600,7 +602,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(row["comments"], "test comments")
 
     def testGetSaveDataAdaptersView(self):
-        """ test the @@get_save_data_adapters view """
+        """test the @@get_save_data_adapters view"""
 
         self.createSaver()
 
@@ -612,7 +614,6 @@ class SaveDataTestCase(base.EasyFormTestCase):
 
 
 class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
-
     def setUp(self):
         base.EasyFormFunctionalTestCase.setUp(self)
         self.portal = self.layer["portal"]
@@ -625,7 +626,7 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.createSaver()
 
     def createSaver(self):
-        """ Creates FormCustomScript object """
+        """Creates FormCustomScript object"""
         # 1. Create custom script adapter in the form folder
         self.portal.REQUEST["form.widgets.title"] = u"Saver"
         self.portal.REQUEST["form.widgets.__name__"] = u"saver"
@@ -646,8 +647,8 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
     def test_download_saveddata_suggests_csv_delimiter_default_registry_value(self):
         self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
-        input = self.browser.getControl('CSV delimiter')
-        self.assertEqual(input.value, ',')
+        input = self.browser.getControl("CSV delimiter")
+        self.assertEqual(input.value, ",")
 
     def test_download_saveddata_suggests_csv_delimiter_updated_registry_value(self):
         # 1. set custom CSV delimiter in registry
@@ -657,49 +658,53 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.browser.getControl("Save").click()
         # 2. tests that custom value is used
         self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
-        input = self.browser.getControl('CSV delimiter')
-        self.assertEqual(input.value, ';')
+        input = self.browser.getControl("CSV delimiter")
+        self.assertEqual(input.value, ";")
 
     def test_download_saveddata_csv_delimiter_required(self):
         self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
-        input = self.browser.getControl('CSV delimiter')
-        input.value = ''
-        self.browser.getControl(name='form.buttons.download').click()
+        input = self.browser.getControl("CSV delimiter")
+        input.value = ""
+        self.browser.getControl(name="form.buttons.download").click()
         self.assertEqual(
             self.browser.url,
-            "http://nohost/plone/test-folder/ff1/@@actions/saver/@@data"
+            "http://nohost/plone/test-folder/ff1/@@actions/saver/@@data",
         )
         self.assertTrue("CSV delimiter is required." in self.browser.contents)
 
-    if ZOPE_TESTBROWSER_VERSION == '>5':
+    if ZOPE_TESTBROWSER_VERSION == ">5":
         # tests below do pass with Plone 5.2 and newer zope.testbrowser
         # they would fail with 5.0 or 5.1 because of older zope.testbrowser
 
         # older zope.testbrowser does not manage to give access to content via
         # `.contents` in case of non HTML
         def test_download_saveddata_csv_delimiter_from_form(self):
-            self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
-            self.assertTrue("Saved Data" in self.browser.contents)
-            self.browser.getControl(name='form.buttons.download').click()
-            self.assertEqual(
-                self.browser.contents,
-                'Your E-Mail Address,Subject,Comments\r\n'
+            self.browser.open(
+                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
             )
-            self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
             self.assertTrue("Saved Data" in self.browser.contents)
-            input = self.browser.getControl('CSV delimiter')
-            input.value = ';'
-            self.browser.getControl(name='form.buttons.download').click()
+            self.browser.getControl(name="form.buttons.download").click()
             self.assertEqual(
-                self.browser.contents,
-                'Your E-Mail Address;Subject;Comments\r\n'
+                self.browser.contents, "Your E-Mail Address,Subject,Comments\r\n"
+            )
+            self.browser.open(
+                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+            )
+            self.assertTrue("Saved Data" in self.browser.contents)
+            input = self.browser.getControl("CSV delimiter")
+            input.value = ";"
+            self.browser.getControl(name="form.buttons.download").click()
+            self.assertEqual(
+                self.browser.contents, "Your E-Mail Address;Subject;Comments\r\n"
             )
 
         # this test depends on internals of zope.testbrowser controls
         def test_download_saveddata_suggests_csv_delimiter_defines_maxlength(self):
-            self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+            self.browser.open(
+                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+            )
             self.assertTrue("Saved Data" in self.browser.contents)
-            input = self.browser.getControl('CSV delimiter')
-            self.assertTrue(input._elem.has_attr('maxlength'))
-            self.assertEqual(input._elem.get('maxlength'), u'1')
+            input = self.browser.getControl("CSV delimiter")
+            self.assertTrue(input._elem.has_attr("maxlength"))
+            self.assertEqual(input._elem.get("maxlength"), u"1")

@@ -14,7 +14,6 @@ Changelog
 
 New features: 
 
-
 - Download XLSX version of saved data.
   [mathias.leimgruber] (#285)
 
@@ -24,6 +23,11 @@ New features:
 
 Bug fixes:
 
+- Fixes in German translation.
+  [jensens]
+
+- Fix recaptcha support: include it's zcml when installed.
+  [jensens] 
 
 - Fix translations of validation errors.
   [mathias.leimgruber] (#284)

@@ -12,7 +12,7 @@ from plone import api
 
 
 class TestFunctions(base.EasyFormTestCase):
-    """ Test api """
+    """Test api"""
 
     def afterSetUp(self):
         super(TestFunctions, self).afterSetUp()
@@ -87,7 +87,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(catalog.getCounter(), orig_counter + 1)
 
     def test_selective_widgets(self):
-        """ Test selective inclusion of widgets for mail and thank you page.
+        """Test selective inclusion of widgets for mail and thank you page.
 
         This uses filter_widgets, which needs as input:
         - a context (the form or a mailer)
@@ -112,7 +112,7 @@ class TestFunctions(base.EasyFormTestCase):
         )
 
     def test_selective_fields(self):
-        """ Test selective inclusion of fields for mail and thank you page.
+        """Test selective inclusion of fields for mail and thank you page.
 
         This uses filter_fields, which needs as input:
         - a context (the form or a mailer)
@@ -140,10 +140,12 @@ class TestFunctions(base.EasyFormTestCase):
 
         # Empty data
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, {}).keys()), [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, {}).keys()),
+            [],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, {}, omit=True)), [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, {}, omit=True)),
+            [],
         )
 
         # All data empty
@@ -157,11 +159,13 @@ class TestFunctions(base.EasyFormTestCase):
             ["", "", ""],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)), [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
+            [],
         )
         self.ff1.includeEmpties = False
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data).keys()), [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data).keys()),
+            [],
         )
         self.assertEqual(
             list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
@@ -179,7 +183,8 @@ class TestFunctions(base.EasyFormTestCase):
             ["me@example.org", "Test", "Ni"],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)), [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
+            [],
         )
 
         # Show only specific fields, not active when showAll=True.
@@ -189,7 +194,8 @@ class TestFunctions(base.EasyFormTestCase):
             ["replyto", "topic", "comments"],
         )
         self.assertEqual(
-            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)), [],
+            list(filter_fields(self.ff1, self.dummy_form.schema, data, omit=True)),
+            [],
         )
 
         # Only show specific fields.
