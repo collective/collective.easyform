@@ -670,7 +670,7 @@ class SaveData(Action):
         for row in self.getSavedFormInput():
             ws.append(self.get_row_data(row))
 
-        output = StringIO()
+        output = BytesIO()
         wb.save(output)
         result = output.getvalue()
         return result
