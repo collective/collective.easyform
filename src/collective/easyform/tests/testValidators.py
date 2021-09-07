@@ -14,6 +14,8 @@ from os.path import dirname
 from os.path import join
 from plone import api
 from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
+from plone.formwidget.hcaptcha.interfaces import IHCaptchaSettings
+
 from plone.namedfile.file import NamedFile
 from plone.namedfile.interfaces import INamed
 from plone.registry.interfaces import IRegistry
@@ -451,6 +453,40 @@ class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
     """make sure it works inside a fieldset too"""
 
     schema_fixture = "fieldset_recaptcha.xml"
+
+class TestSingleHcaptchaValidator(LoadFixtureBase):
+
+    """Can't test captcha passes but we can test it fails
+       Copy/paste test from Recaptcha, same api & add'on
+       structure
+    """
+    
+    schema_fixture = "hcaptcha.xml"
+
+    def afterSetUp(self):
+        super(TestSingleHcaptchaValidator, self).afterSetUp()
+
+        # Put some dummy values for recaptcha
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IHCaptchaSettings)
+        proxy.public_key = u"foo"
+        proxy.private_key = u"bar"
+
+    def test_no_answer(self):
+        data = {"verification": ""}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
+
+    def test_wrong(self):
+        data = {"verification": "123"}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
 
 
 class DummyUpload(FileUpload):
