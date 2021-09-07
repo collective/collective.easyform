@@ -47,4 +47,23 @@
         factory="plone.formwidget.recaptcha.ReCaptchaValidator"
         />
   </configure>
+  <configure zcml:condition="installed plone.formwidget.hcaptcha">
+    <utility
+        name="collective.easyform.fields.HCaptcha"
+        component=".fields.HCaptchaFactory"
+        />
+    <utility
+        name="collective.easyform.fields.HCaptcha"
+        component=".fields.HCaptchaHandler"
+        />
+    <adapter
+        provides="z3c.form.interfaces.IValidator"
+        for="collective.easyform.interfaces.IEasyForm
+             *
+             *
+             collective.easyform.interfaces.IHCaptcha
+             *"
+        factory="plone.formwidget.hcaptcha.HCaptchaValidator"
+        />
+  </configure>
 </configure>

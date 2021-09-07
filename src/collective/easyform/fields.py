@@ -5,6 +5,7 @@ from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ILabel
+from collective.easyform.interfaces import IHCaptcha
 from collective.easyform.interfaces import INorobotCaptcha
 from collective.easyform.interfaces import IReCaptcha
 from collective.easyform.interfaces import IRichLabel
@@ -222,6 +223,16 @@ ReCaptchaFactory = FieldFactory(
     ReCaptcha, _(u"label_recaptcha_field", default=u"ReCaptcha")
 )
 ReCaptchaHandler = BaseHandler(ReCaptcha)
+
+@implementer(IHCaptcha)
+class HCaptcha(TextLine):
+    """A HCaptcha field"""
+
+
+HCaptchaFactory = FieldFactory(
+    HCaptcha, _(u"label_hcaptcha_field", default=u"HCaptcha")
+)
+HCaptchaHandler = BaseHandler(HCaptcha)
 
 
 @implementer(INorobotCaptcha)
