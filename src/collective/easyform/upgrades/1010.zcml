@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1010"
+      profile="collective.easyform:default"
+      source="1009"
+      >
+    <gs:upgradeDepends
+        title="Import actions"
+        import_steps="plone.app.registry"
+        run_deps="false"
+        />
+  </gs:upgradeSteps>
+
+</configure>

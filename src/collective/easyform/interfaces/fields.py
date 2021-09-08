@@ -185,6 +185,9 @@ class IRichLabelWidget(ILabelWidget):
 class IReCaptcha(zope.schema.interfaces.ITextLine):
     """ReCaptcha Field."""
 
+class IHCaptcha(zope.schema.interfaces.ITextLine):
+    """ReCaptcha Field."""
+
 
 class INorobotCaptcha(zope.schema.interfaces.ITextLine):
     """Norobot Field."""

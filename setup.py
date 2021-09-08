@@ -60,6 +60,7 @@ setup(
     extras_require={
         "downloadxlsx": ["openpyxl"],
         "recaptcha": ["plone.formwidget.recaptcha"],
+        "hcaptcha": ["plone.formwidget.hcaptcha"],
         "norobots": ["collective.z3cform.norobots"],
         "ploneformgen": ["Products.PloneFormGen",],
         "test": [
@@ -67,6 +68,7 @@ setup(
             "plone.app.robotframework",
             "plone.app.contenttypes",
             "plone.formwidget.recaptcha",
+            "plone.formwidget.hcaptcha",
             "robotframework-selenium2library",
             "robotframework-selenium2screenshots",
         ],

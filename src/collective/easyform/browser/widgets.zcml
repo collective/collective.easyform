@@ -96,6 +96,14 @@
         factory="plone.formwidget.recaptcha.widget.ReCaptchaFieldWidget"
         />
   </configure>
+  <configure zcml:condition="installed plone.formwidget.hcaptcha">
+    <adapter
+        provides="z3c.form.interfaces.IFieldWidget"
+        for="collective.easyform.interfaces.IHCaptcha
+             *"
+        factory="plone.formwidget.hcaptcha.widget.HCaptchaFieldWidget"
+        />
+  </configure>
   <configure zcml:condition="installed collective.z3cform.norobots">
     <adapter
         provides="z3c.form.interfaces.IFieldWidget"
