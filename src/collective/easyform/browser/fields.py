@@ -158,7 +158,7 @@ class AjaxSaveHandler(BrowserView):
             parser = etree.XMLParser(resolve_entities=False, remove_pis=True)
             # Is it valid XML?
             try:
-                root = etree.fromstring(source, parser=parser)
+                root = etree.fromstring(source.encode("utf8"), parser=parser)
             except etree.XMLSyntaxError as e:
                 return dumps(
                     {

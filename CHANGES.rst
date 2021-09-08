@@ -12,7 +12,7 @@ Changelog
 3.1.0 (unreleased)
 ------------------
 
-New features: 
+New features:
 
 - Download XLSX version of saved data.
   [mathias.leimgruber] (#285)
@@ -26,10 +26,13 @@ Bug fixes:
   [jensens]
 
 - Fix recaptcha support: include it's zcml when installed.
-  [jensens] 
+  [jensens]
 
 - Fix translations of validation errors.
   [mathias.leimgruber] (#284)
+
+- Fix parsing of XML fragments with declaration encoding
+  [batlock666] (#216)
 
 
 3.0.5 (2020-11-17)
