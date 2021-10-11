@@ -49,6 +49,7 @@ from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from six import BytesIO
 from six import StringIO
+from tempfile import NamedTemporaryFile
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
@@ -413,9 +414,9 @@ class Mailer(Action):
             ws = wb.active
             ws.append(csvdata)
 
-            output = StringIO()
-            wb.save(output)
-            xlsx = output.getvalue()
+            with NamedTemporaryFile() as tmp:
+                wb.save(tmp.name)
+                output = tmp.read()
 
             now = DateTime().ISO().replace(" ", "-").replace(":", "")
             filename = "formdata_{0}.xlsx".format(now)
@@ -424,7 +425,7 @@ class Mailer(Action):
                     filename,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "utf-8",
-                    xlsx
+                    output
                 )
             )
 

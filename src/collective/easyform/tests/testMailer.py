@@ -17,6 +17,7 @@ from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 from Products.CMFPlone.utils import safe_unicode
 from six import StringIO
+from six import BytesIO
 
 import datetime
 import six
@@ -689,16 +690,11 @@ class TestFunctions(base.EasyFormTestCase):
         )
         name, mime, enc, xlsx = attachments[0]
 
-        file_ = StringIO()
-        file_.write(xlsx)
-        file_.seek(0)
-        wb = load_workbook(file_)
+        wb = load_workbook(BytesIO(xlsx))
         wb.active
         ws = wb.active
-        if six.PY2:
-            row = [cell.value and cell.value.encode('utf-8') or '' for cell in list(ws.rows)[0]]
-        else:
-            row = [cell.value or '' for cell in list(ws.rows)[0]]
+
+        row = [cell.value and cell.value.encode('utf-8') or b'' for cell in list(ws.rows)[0]]
 
         output = (
             b"test@test.org",
@@ -716,18 +712,19 @@ class TestFunctions(base.EasyFormTestCase):
             b'{"fruit": "apple"}',
             b"",
             b"0",
-            b"",
             b"[]",
             b"[]",
             b"[]",
             b"{}",
         )
-
         # the order of the columns can change ... check each
         # TODO should really have a header row
         for value in output:
             self.assertIn(value, row)
 
         # the order of [""A"", ""B""] can change ... check separately
-        self.assertIn(b'"A"', str(row))
-        self.assertIn(b'"B"', str(row))
+        self.assertTrue(
+            b'["A", "B"]' in row or b'["B", "A"]' in row,
+            '["A", "B"] nor ["B", "A"] has been found in: {}'.format(row)
+        )
+
