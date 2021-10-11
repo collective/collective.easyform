@@ -8,6 +8,8 @@ from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from openpyxl import load_workbook
+from os.path import dirname
+from os.path import join
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
@@ -282,6 +284,9 @@ class SaveDataTestCase(base.EasyFormTestCase):
 
     def testSaverDownloadXLSX(self):
         """test save data"""
+
+        with open(join(dirname(__file__), "fixtures", "fieldset_multiple_choice.xml")) as f:
+            self.ff1.fields_model = f.read()
 
         self.createSaver()
 
