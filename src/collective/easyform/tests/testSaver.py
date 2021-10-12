@@ -300,6 +300,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
             topic="test subject",
             replyto="test@test.org",
             comments="test comments",
+            multiplechoice=[u"Red", u"Blue"]
         )
         saver.onSuccess(request.form, request)
 
@@ -321,10 +322,11 @@ class SaveDataTestCase(base.EasyFormTestCase):
         ws = wb.active
         rows = list(ws.rows)
 
-        self.assertEqual(len(rows), 1)
-        self.assertEqual(rows[0][0].value, "test@test.org")
-        self.assertEqual(rows[0][1].value, "test subject")
-        self.assertEqual(rows[0][2].value, "test comments")
+        self.assertEqual(len(rows), 2)  # Row 1 is the header row
+        self.assertEqual(rows[1][0].value, "test@test.org")
+        self.assertEqual(rows[1][1].value, "test subject")
+        self.assertEqual(rows[1][2].value, "test comments")
+        self.assertEqual(rows[1][3].value, '["Red", "Blue"]')
 
     def testSaverDownloadWithTitles(self):
         """test save data"""

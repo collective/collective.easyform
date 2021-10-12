@@ -100,6 +100,30 @@ class ActionFactory(object):
 class Action(Bool):
     """Base action class."""
 
+    def serialize(self, field):
+        """Serializa field to save in various formats, like XML, CSV, etc."""
+        if field is None:
+            return ""
+        if isinstance(field, (set, list, tuple)):
+            list_value = list([self.serialize(f) for f in field])
+            return dumps(list_value)
+        if isinstance(field, dict):
+            dict_value = {str(key): self.serialize(val) for key, val in field.items()}
+            return dumps(dict_value)
+        if isinstance(field, RichTextValue):
+            return field.raw
+        if isinstance(field, datetime):
+            return field.strftime("%Y/%m/%d, %H:%M:%S")
+        if isinstance(field, date):
+            return field.strftime("%Y/%m/%d")
+        if isinstance(field, timedelta):
+            return str(field)
+        if isinstance(field, (int, float, Decimal, bool)):
+            return str(field)
+        if isinstance(field, six.string_types):
+            return safe_unicode(field)
+        return safe_unicode(repr(field))
+
     def onSuccess(self, fields, request):
         raise NotImplementedError(
             "There is not implemented 'onSuccess' of {0!r}".format(self)
@@ -328,30 +352,6 @@ class Mailer(Action):
             )
 
         return headerinfo
-
-    def serialize(self, field):
-        """Serializa field to save to XML."""
-        if field is None:
-            return ""
-        if isinstance(field, (set, list, tuple)):
-            list_value = list([self.serialize(f) for f in field])
-            return dumps(list_value)
-        if isinstance(field, dict):
-            dict_value = {str(key): self.serialize(val) for key, val in field.items()}
-            return dumps(dict_value)
-        if isinstance(field, RichTextValue):
-            return field.raw
-        if isinstance(field, datetime):
-            return field.strftime("%Y/%m/%d, %H:%M:%S")
-        if isinstance(field, date):
-            return field.strftime("%Y/%m/%d")
-        if isinstance(field, timedelta):
-            return str(field)
-        if isinstance(field, (int, float, Decimal, bool)):
-            return str(field)
-        if isinstance(field, six.string_types):
-            return safe_unicode(field)
-        return safe_unicode(repr(field))
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form."""
@@ -698,7 +698,7 @@ class SaveData(Action):
             ws.append(self.get_header_row())
 
         for row in self.getSavedFormInput():
-            ws.append(self.get_row_data(row))
+            ws.append(list(map(self.serialize, self.get_row_data(row))))
 
         output = BytesIO()
         wb.save(output)
