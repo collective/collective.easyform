@@ -74,6 +74,14 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         return self.context.method
 
     @property
+    def prologue(self):
+        return self.context.prologue
+
+    @property
+    def epilogue(self):
+        return self.context.epilogue
+
+    @property
     def default_fieldset_label(self):
         return (
             self.context.default_fieldset_label
