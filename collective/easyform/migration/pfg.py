@@ -93,6 +93,16 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
             '%(asctime)s %(levelname)s %(name)s %(message)s')
         handler.setFormatter(formatter)
 
+        self.migrate()
+
+        self.migration_done = True
+        if data.get('dry_run', False):
+            transaction.abort()
+            logger.info(u'PloneFormGen migration finished (dry run)')
+        else:
+            logger.info(u'PloneFormGen migration finished')
+
+    def migrate(self):
         alsoProvides(self.request, IDisableCSRFProtection)
         portal = getSite()
 
@@ -116,12 +126,6 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
                 enable_link_integrity_checks=True
             )
 
-        self.migration_done = True
-        if data.get('dry_run', False):
-            transaction.abort()
-            logger.info(u'PloneFormGen migration finished (dry run)')
-        else:
-            logger.info(u'PloneFormGen migration finished')
 
     def render(self):
         if getattr(self, 'migration_done', False):
