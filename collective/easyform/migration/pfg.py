@@ -12,6 +12,7 @@ from plone.app.contenttypes.migration.migration import migrate
 from plone.autoform.form import AutoExtensibleForm
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.supermodel import model
+from Products.CMFCore.utils import getToolByName
 from six import StringIO
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
@@ -94,7 +95,26 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
 
         alsoProvides(self.request, IDisableCSRFProtection)
         portal = getSite()
+
+        # Switch linkintegrity off temporarily.
+        ptool = getToolByName(self.context, "portal_properties")
+        site_props = getattr(ptool, 'site_properties', None)
+        link_integrity = False
+        if site_props and site_props.hasProperty(
+                'enable_link_integrity_checks'):
+            link_integrity = site_props.getProperty(
+                'enable_link_integrity_checks', False)
+            if link_integrity:
+                site_props.manage_changeProperties(
+                    enable_link_integrity_checks=False)
+
         migrate(portal, PloneFormGenMigrator)
+
+        # Switch linkintegrity back on, if needed
+        if link_integrity:
+            site_props.manage_changeProperties(
+                enable_link_integrity_checks=True
+            )
 
         self.migration_done = True
         if data.get('dry_run', False):

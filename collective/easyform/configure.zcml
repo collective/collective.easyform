@@ -19,7 +19,10 @@
   <include file="vocabularies.zcml" />
 
   <include package=".browser" />
-  <include zcml:condition="installed Products.PloneFormGen" package=".migration" />
+
+  <configure zcml:condition="installed Products.PloneFormGen">
+    <include zcml:condition="installed plone.app.contenttypes" package=".migration" />
+  </configure>
 
   <genericsetup:registerProfile
       name="default"
