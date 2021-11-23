@@ -101,7 +101,7 @@ def actions_model(ploneformgen):
         type_ = TYPES_MAPPING.get(properties["_portal_type"])
         if type_ is None:
             logger.warning(
-                "Ingoring field '%s' of type '%s'.",
+                "Ignoring field '%s' of type '%s'.",
                 actionname,
                 properties["_portal_type"],
             )
