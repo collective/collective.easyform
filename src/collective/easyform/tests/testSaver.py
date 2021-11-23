@@ -8,6 +8,8 @@ from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from openpyxl import load_workbook
+from os.path import dirname
+from os.path import join
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
@@ -283,6 +285,9 @@ class SaveDataTestCase(base.EasyFormTestCase):
     def testSaverDownloadXLSX(self):
         """test save data"""
 
+        with open(join(dirname(__file__), "fixtures", "fieldset_multiple_choice.xml")) as f:
+            self.ff1.fields_model = f.read()
+
         self.createSaver()
 
         self.assertTrue("saver" in get_actions(self.ff1))
@@ -295,6 +300,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
             topic="test subject",
             replyto="test@test.org",
             comments="test comments",
+            multiplechoice=[u"Red", u"Blue"]
         )
         saver.onSuccess(request.form, request)
 
@@ -316,10 +322,11 @@ class SaveDataTestCase(base.EasyFormTestCase):
         ws = wb.active
         rows = list(ws.rows)
 
-        self.assertEqual(len(rows), 1)
-        self.assertEqual(rows[0][0].value, "test@test.org")
-        self.assertEqual(rows[0][1].value, "test subject")
-        self.assertEqual(rows[0][2].value, "test comments")
+        self.assertEqual(len(rows), 2)  # Row 1 is the header row
+        self.assertEqual(rows[1][0].value, "test@test.org")
+        self.assertEqual(rows[1][1].value, "test subject")
+        self.assertEqual(rows[1][2].value, "test comments")
+        self.assertEqual(rows[1][3].value, '["Red", "Blue"]')
 
     def testSaverDownloadWithTitles(self):
         """test save data"""
