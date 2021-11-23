@@ -9,7 +9,8 @@
   >EasyForm</property>
   <property name="description"
             i18n:translate=""
-  >EasyForm</property>
+  >A web-form builder</property>
+  <property name="icon_expr">string:ui-checks</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">False</property>
   <property name="allowed_content_types" />
