@@ -242,7 +242,7 @@ def fields_model(ploneformgen):
 
         type_ = TYPES_MAPPING.get(portal_type)
         if type_ is None:
-            logger.warning("Ingoring field '%s' of type '%s'.", fieldname, portal_type)
+            logger.warning("Ignoring field '%s' of type '%s'.", fieldname, portal_type)
             continue
 
         if type_.handler is None:
