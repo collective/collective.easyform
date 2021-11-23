@@ -11,12 +11,16 @@ from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
 from email.header import decode_header
+from openpyxl import load_workbook
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 from Products.CMFPlone.utils import safe_unicode
+from six import StringIO
+from six import BytesIO
 
 import datetime
+import six
 
 
 try:
@@ -645,3 +649,82 @@ class TestFunctions(base.EasyFormTestCase):
         # the order of [""A"", ""B""] can change ... check separately
         self.assertIn(b'""A""', csv)
         self.assertIn(b'""B""', csv)
+
+    def test_MailerXLSXAttachments(self):
+        """ Test mailer with dummy_send """
+        mailer = get_actions(self.ff1)["mailer"]
+        mailer.sendXML = False
+        mailer.sendCSV = False
+        mailer.sendXLSX = True
+        context = get_context(mailer)
+        # Test all dexterity field type listed at https://docs.plone.org/external/plone.app.dexterity/docs/reference/fields.html
+        fields = dict(
+            topic="test subject",
+            replyto="test@test.org",
+            richtext=RichTextValue(raw="Raw"),
+            comments=u"test comments😀",
+            datetime=datetime.datetime(2019, 4, 1),
+            date=datetime.date(2019, 4, 2),
+            delta=datetime.timedelta(1),
+            bool=True,
+            number=1981,
+            floating=3.14,
+            tuple=("elemenet1", "element2"),
+            list=[1, 2, 3, 4],
+            map=dict(fruit="apple"),
+            choices=set(["A", "B"]),
+            empty_string="",
+            zero_value=0,
+            none_value=None,
+            empty_tuple=(),
+            empty_list=[],
+            empty_set=set(),
+            empty_map=dict(),
+        )
+        request = self.LoadRequestForm(**fields)
+        attachments = mailer.get_attachments(fields, request)
+        self.assertEqual(1, len(attachments))
+        self.assertIn(
+            u"Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            mailer.get_mail_text(fields, request, context),
+        )
+        name, mime, enc, xlsx = attachments[0]
+
+        wb = load_workbook(BytesIO(xlsx))
+        wb.active
+        ws = wb.active
+
+        row = [cell.value and cell.value.encode('utf-8') or b'' for cell in list(ws.rows)[0]]
+
+        output = (
+            b"test@test.org",
+            b"test subject",
+            b"Raw",
+            b"test comments\xf0\x9f\x98\x80",
+            b"2019/04/01, 00:00:00",
+            b"2019/04/02",
+            b"1 day, 0:00:00",
+            b"True",
+            b"1981",
+            b"3.14",
+            b'["elemenet1", "element2"]',
+            b'["1", "2", "3", "4"]',
+            b'{"fruit": "apple"}',
+            b"",
+            b"0",
+            b"[]",
+            b"[]",
+            b"[]",
+            b"{}",
+        )
+        # the order of the columns can change ... check each
+        # TODO should really have a header row
+        for value in output:
+            self.assertIn(value, row)
+
+        # the order of [""A"", ""B""] can change ... check separately
+        self.assertTrue(
+            b'["A", "B"]' in row or b'["B", "A"]' in row,
+            '["A", "B"] nor ["B", "A"] has been found in: {}'.format(row)
+        )
+

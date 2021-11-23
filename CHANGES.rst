@@ -17,6 +17,10 @@ New features:
 - Download XLSX version of saved data.
   [mathias.leimgruber] (#285)
 
+- Add option to append formdata as xlsx as well.
+  [mathias.leimgruber] (#287)
+
+
 Bug fixes:
 
 - Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.

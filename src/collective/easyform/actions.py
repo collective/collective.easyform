@@ -25,8 +25,8 @@ from copy import deepcopy
 from csv import writer as csvwriter
 from datetime import date
 from datetime import datetime
-from datetime import timedelta
 from DateTime import DateTime
+from datetime import timedelta
 from decimal import Decimal
 from email import encoders
 from email.header import Header
@@ -41,6 +41,7 @@ from logging import getLogger
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
+from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
@@ -48,16 +49,17 @@ from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from six import BytesIO
 from six import StringIO
+from tempfile import NamedTemporaryFile
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
+from zope.component import getUtility
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
-
 import six
 
 
@@ -97,6 +99,30 @@ class ActionFactory(object):
 @implementer(IAction)
 class Action(Bool):
     """Base action class."""
+
+    def serialize(self, field):
+        """Serializa field to save in various formats, like XML, CSV, etc."""
+        if field is None:
+            return ""
+        if isinstance(field, (set, list, tuple)):
+            list_value = list([self.serialize(f) for f in field])
+            return dumps(list_value)
+        if isinstance(field, dict):
+            dict_value = {str(key): self.serialize(val) for key, val in field.items()}
+            return dumps(dict_value)
+        if isinstance(field, RichTextValue):
+            return field.raw
+        if isinstance(field, datetime):
+            return field.strftime("%Y/%m/%d, %H:%M:%S")
+        if isinstance(field, date):
+            return field.strftime("%Y/%m/%d")
+        if isinstance(field, timedelta):
+            return str(field)
+        if isinstance(field, (int, float, Decimal, bool)):
+            return str(field)
+        if isinstance(field, six.string_types):
+            return safe_unicode(field)
+        return safe_unicode(repr(field))
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -327,30 +353,6 @@ class Mailer(Action):
 
         return headerinfo
 
-    def serialize(self, field):
-        """Serializa field to save to XML."""
-        if field is None:
-            return ""
-        if isinstance(field, (set, list, tuple)):
-            list_value = list([self.serialize(f) for f in field])
-            return dumps(list_value)
-        if isinstance(field, dict):
-            dict_value = {str(key): self.serialize(val) for key, val in field.items()}
-            return dumps(dict_value)
-        if isinstance(field, RichTextValue):
-            return field.raw
-        if isinstance(field, datetime):
-            return field.strftime("%Y/%m/%d, %H:%M:%S")
-        if isinstance(field, date):
-            return field.strftime("%Y/%m/%d")
-        if isinstance(field, timedelta):
-            return str(field)
-        if isinstance(field, (int, float, Decimal, bool)):
-            return str(field)
-        if isinstance(field, six.string_types):
-            return safe_unicode(field)
-        return safe_unicode(repr(field))
-
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form."""
 
@@ -358,7 +360,8 @@ class Mailer(Action):
 
         # if requested, generate CSV attachment of form values
         sendCSV = getattr(self, "sendCSV", None)
-        if sendCSV:
+        sendXLSX = getattr(self, "sendXLSX", None)
+        if sendCSV or sendXLSX:
             csvdata = ()
         sendXML = getattr(self, "sendXML", None)
         if sendXML:
@@ -367,7 +370,7 @@ class Mailer(Action):
         for fname in fields:
             field = fields[fname]
 
-            if sendCSV:
+            if sendCSV or sendXLSX:
                 if not is_file_data(field) and (
                     getattr(self, "showAll", True) or fname in showFields
                 ):
@@ -403,6 +406,28 @@ class Mailer(Action):
             filename = "formdata_{0}.csv".format(now)
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
             attachments.append((filename, "application/csv", "utf-8", csv))
+
+        if sendXLSX:
+            from openpyxl import Workbook
+
+            wb = Workbook()
+            ws = wb.active
+            ws.append(csvdata)
+
+            with NamedTemporaryFile() as tmp:
+                wb.save(tmp.name)
+                output = tmp.read()
+
+            now = DateTime().ISO().replace(" ", "-").replace(":", "")
+            filename = "formdata_{0}.xlsx".format(now)
+            attachments.append(
+                (
+                    filename,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "utf-8",
+                    output
+                )
+            )
 
         if sendXML:
             # use ET.write to get a proper XML Header line
@@ -642,6 +667,11 @@ class SaveData(Action):
     def getSavedFormInputForEdit(self, header=False, delimiter=","):
         """Returns saved as CSV text"""
         sbuf = StringIO()
+
+        if len(delimiter) == 0:
+            registry = getUtility(IRegistry)
+            delimiter = registry.get("easyform.csv_delimiter").encode("utf-8")
+
         writer = csvwriter(sbuf, delimiter=delimiter)
 
         if header:
@@ -668,7 +698,7 @@ class SaveData(Action):
             ws.append(self.get_header_row())
 
         for row in self.getSavedFormInput():
-            ws.append(self.get_row_data(row))
+            ws.append(list(map(self.serialize, self.get_row_data(row))))
 
         output = BytesIO()
         wb.save(output)
