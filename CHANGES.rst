@@ -4,7 +4,8 @@ Changelog
 1.0a5.0 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Backport PloneFormGen migration from 2.x.
+  [thomasmassmann]
 
 
 1.0a4 (2020-11-17)
