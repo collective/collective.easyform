@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0a5.0 (unreleased)
---------------------
+1.0.0 (2021-11-24)
+------------------
 
 - Backport PloneFormGen migration from 2.x.
   [thomasmassmann]
