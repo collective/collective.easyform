@@ -242,7 +242,15 @@ def fields_model(ploneformgen):
 
         type_ = TYPES_MAPPING.get(portal_type)
         if type_ is None:
-            logger.warning("Ignoring field '%s' of type '%s'.", fieldname, portal_type)
+            # ploneformgen has been renamed with _MIGRATION_ suffix
+            # hence, we remove 11 chars
+            pfgpath = "/".join(ploneformgen.getPhysicalPath())[:-11]
+            logger.warning(
+                "Ignoring field '%s' of type '%s' of form '%s'.",
+                fieldname,
+                portal_type,
+                pfgpath,
+            )
             continue
 
         if type_.handler is None:

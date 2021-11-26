@@ -100,10 +100,14 @@ def actions_model(ploneformgen):
     for actionname, properties in pfg_actions(ploneformgen):
         type_ = TYPES_MAPPING.get(properties["_portal_type"])
         if type_ is None:
+            # ploneformgen has been renamed with _MIGRATION_ suffix
+            # hence, we remove 11 chars
+            pfgpath = "/".join(ploneformgen.getPhysicalPath())[:-11]
             logger.warning(
-                "Ignoring field '%s' of type '%s'.",
+                "Ignoring field '%s' of type '%s' of form '%s'.",
                 actionname,
                 properties["_portal_type"],
+                pfgpath,
             )
             continue
 
