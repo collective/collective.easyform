@@ -32,6 +32,7 @@
                 name="collective.easyform: Edit TALES Fields"
     >
       <role name="Manager" />
+      <role name="Site Administrator" />
     </permission>
     <permission acquire="True"
                 name="collective.easyform: Edit Python Fields"
