@@ -13,11 +13,11 @@ from zope.schema.interfaces import ISet
 import logging
 
 
-logger = logging.getLogger('collective.easyform.migration')
+logger = logging.getLogger("collective.easyform.migration")
 
 
 def migrate_saved_data(ploneformgen, easyform):
-    for data_adapter in ploneformgen.objectValues('FormSaveDataAdapter'):
+    for data_adapter in ploneformgen.objectValues("FormSaveDataAdapter"):
         actions = get_actions(easyform)
         action = actions.get(data_adapter.getId())
         schema = get_fields(easyform)
@@ -26,16 +26,18 @@ def migrate_saved_data(ploneformgen, easyform):
             for idx, row in enumerate(data_adapter.getSavedFormInput()):
                 if len(row) != len(cols):
                     logger.warning(
-                        'Number of columns does not match. Skipping row %s in '
-                        'data adapter %s/%s', idx,
-                        '/'.join(easyform.getPhysicalPath()),
-                        data_adapter.getId())
+                        "Number of columns does not match. Skipping row %s in "
+                        "data adapter %s/%s",
+                        idx,
+                        "/".join(easyform.getPhysicalPath()),
+                        data_adapter.getId(),
+                    )
                     continue
                 data = {}
                 for key, value in zip(cols, row):
                     field = schema.get(key)
-                    value = value.decode('utf8')
-                    if IFromUnicode.providedBy(field):
+                    value = value.decode("utf8")
+                    if IFromUnicode.providedBy(field) and value:
                         value = field.fromUnicode(value)
                     elif IDatetime.providedBy(field) and value:
                         value = DateTime(value).asdatetime()
@@ -46,6 +48,19 @@ def migrate_saved_data(ploneformgen, easyform):
                             value = set(literal_eval(value))
                         except ValueError:
                             pass
+                        except:
+                            logger.exception(
+                                "There was an error  in the following  with the following data"
+                                "data adapter %s/%s",
+                                "/".join(easyform.getPhysicalPath()),
+                                data_adapter.getId(),
+                            )
+                            print(
+                                "There was an error  in the following  with the following data"
+                                "data adapter %s/%s",
+                                "/".join(easyform.getPhysicalPath()),
+                                data_adapter.getId(),
+                            )
                     elif INamedBlobFileField.providedBy(field):
                         value = None
                     data[key] = value
