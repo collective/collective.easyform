@@ -60,11 +60,30 @@ class PloneFormGenMigrator(ATCTContentMigrator):
         self.new.fields_model = fields_model(self.old)
         self.new.actions_model = actions_model(self.old)
 
+        self.migrate_thankyou_page()
+
         migrate_saved_data(self.old, self.new)
 
     def migrate(self, unittest=0):
         super(PloneFormGenMigrator, self).migrate()
         logger.info("Migrated FormFolder %s", "/".join(self.new.getPhysicalPath()))
+
+    def migrate_thankyou_page(self):
+        pfg_thankspage = self.old.get(self.old.getThanksPage())
+        if pfg_thankspage:
+            ef = self.new
+
+            ef.thankstitle = pfg_thankspage.title
+            ef.thanksdescription = pfg_thankspage.Description()
+            ef.showAll = pfg_thankspage.showAll
+            ef.showFields = pfg_thankspage.showFields
+            ef.includeEmpties = pfg_thankspage.includeEmpties
+            Field("thanksPrologue", migrate_richtextfield).handler(
+                pfg_thankspage, ef, "thanksPrologue", "thanksPrologue"
+            )
+            Field("thanksEpilogue", migrate_richtextfield).handler(
+                pfg_thankspage, ef, "thanksEpilogue", "thanksEpilogue"
+            )
 
 
 class IMigratePloneFormGenFormSchema(model.Schema):
@@ -115,7 +134,6 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
             )
             if link_integrity:
                 site_props.manage_changeProperties(enable_link_integrity_checks=False)
-
         migrate(portal, PloneFormGenMigrator)
 
         # Switch linkintegrity back on, if needed
