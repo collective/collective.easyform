@@ -72,7 +72,7 @@ PROPERTIES_MAPPING = {
     "subjectOverride": Property("subjectOverride", append_node),
     "title": Property("title", append_node),
     "to_field": Property("to_field", append_node),
-    "xinfo_headers": Property("xinfo_headers", append_node),
+    "xinfo_headers": Property("xinfo_headers", append_list_node),
     "ExtraData": Property("ExtraData", append_list_node),
     "DownloadFormat": Property("DownloadFormat", append_node),
     "UseColumnNames": Property("UseColumnNames", append_node),
