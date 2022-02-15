@@ -148,6 +148,7 @@ class IMailer(IAction):
             "sendCSV",
             "sendXML",
             "sendXLSX",
+            "sendWithHeader",
         ],
     )
     directives.read_permission(msg_subject=MODIFY_PORTAL_CONTENT)
@@ -277,6 +278,19 @@ class IMailer(IAction):
             u"Check this to send a CSV file "
             u"attachment containing the values "
             u"filled out in the form.",
+        ),
+        default=False,
+        required=False,
+    )
+
+    directives.read_permission(sendWithHeader=MODIFY_PORTAL_CONTENT)
+    sendWithHeader = zope.schema.Bool(
+        title=_(u"label_sendWithHeader_text", default=u"Include header in attached CSV/XLSX data"),
+        description=_(
+            u"help_sendWithHeader_text",
+            default=u""
+            u"Check this to include the CSV/XLSX header "
+            u"in file attachments.",
         ),
         default=False,
         required=False,
