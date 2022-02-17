@@ -350,8 +350,43 @@ class Mailer(Action):
             headerinfo["X-{0}".format(key)] = self.secure_header_line(
                 request.get(key, "MISSING")
             )
-
         return headerinfo
+
+    def get_header_row(self):
+        titles = self.getColumnTitles()
+        encoded_titles = []
+        for t in titles:
+            if six.PY2 and isinstance(t, six.text_type):
+                t = t.encode("utf-8")
+            encoded_titles.append(t)
+        return encoded_titles
+
+    def getColumnTitles(self):
+        """Returns a list of column titles"""
+        field_names = self.get_field_names_in_order()
+        context = get_context(self)
+        showFields = getattr(self, "showFields", [])
+        fields = {}
+        for name, field in getFieldsInOrder(get_schema(context)):
+            fields[name] = field
+        if showFields is None:
+            showFields = []
+        titles = [fields[name].title for name in field_names]
+        return titles
+
+    def get_field_names_in_order(self):
+        context = get_context(self)
+        show_all = getattr(self, "showAll", True)
+        showFields = getattr(self, "showFields", [])
+        if showFields:
+            # if showFields are set we return the list, to use that order
+            return showFields
+        names = [
+            name
+            for name, field in getFieldsInOrder(get_schema(context))
+            if show_all or not showFields or name in showFields
+        ]
+        return names
 
     def get_attachments(self, fields, request):
         """Return all attachments uploaded in form."""
@@ -360,36 +395,31 @@ class Mailer(Action):
 
         # if requested, generate CSV attachment of form values
         sendCSV = getattr(self, "sendCSV", None)
+        sendWithHeader = getattr(self, "sendWithHeader", None)
         sendXLSX = getattr(self, "sendXLSX", None)
         if sendCSV or sendXLSX:
             csvdata = ()
         sendXML = getattr(self, "sendXML", None)
         if sendXML:
             xmlRoot = ET.Element("form")
-        showFields = getattr(self, "showFields", []) or []
-        for fname in fields:
+        field_names = self.get_field_names_in_order()
+        for fname in field_names:
             field = fields[fname]
 
             if sendCSV or sendXLSX:
-                if not is_file_data(field) and (
-                    getattr(self, "showAll", True) or fname in showFields
-                ):
+                if not is_file_data(field):
                     val = self.serialize(field)
                     if six.PY2:
                         val = val.encode("utf-8")
                     csvdata += (val,)
 
             if sendXML:
-                if not is_file_data(field) and (
-                    getattr(self, "showAll", True) or fname in showFields
-                ):
+                if not is_file_data(field):
                     ET.SubElement(xmlRoot, "field", name=fname).text = self.serialize(
                         field
                     )  # noqa
 
-            if is_file_data(field) and (
-                getattr(self, "showAll", True) or fname in showFields
-            ):
+            if is_file_data(field):
                 data = field.data
                 filename = field.filename
                 mimetype, enc = guess_content_type(filename, data, None)
@@ -398,6 +428,8 @@ class Mailer(Action):
         if sendCSV:
             output = StringIO()
             writer = csvwriter(output)
+            if sendWithHeader:
+                writer.writerow(self.get_header_row())
             writer.writerow(csvdata)
             csv = output.getvalue()
             if six.PY3:
@@ -412,6 +444,8 @@ class Mailer(Action):
 
             wb = Workbook()
             ws = wb.active
+            if sendWithHeader:
+                ws.append(self.get_header_row())
             ws.append(csvdata)
 
             with NamedTemporaryFile() as tmp:
