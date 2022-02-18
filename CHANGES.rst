@@ -35,6 +35,9 @@ Bug fixes:
 - Fix translations of validation errors.
   [mathias.leimgruber] (#284)
 
+- Fix download bug for RichTextFields
+  [szakitibi] (#288)
+
 
 3.0.5 (2020-11-17)
 ------------------
