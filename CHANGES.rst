@@ -16,6 +16,9 @@ New features:
 - Use ``collective.easyform.DownloadSavedInput`` permission for displaying/downloading saved data (#357)
   [laulaz]
 
+- restapi (de)serializer that includes saved data
+  [ThibautBorn, gotcha, Mychae1]
+
 Bug fixes:
 
 - Fix persistence issue with SaveData storage.

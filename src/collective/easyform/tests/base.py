@@ -47,8 +47,10 @@ class Fixture(PloneSandboxLayer):
 
         auto.CSRF_DISABLED = True
         import collective.easyform
+        import plone.restapi
 
         self.loadZCML(package=collective.easyform)
+        self.loadZCML(package=plone.restapi)
         try:
             import plone.formwidget.recaptcha
 
