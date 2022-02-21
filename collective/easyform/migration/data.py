@@ -46,20 +46,14 @@ def migrate_saved_data(ploneformgen, easyform):
                     elif ISet.providedBy(field):
                         try:
                             value = set(literal_eval(value))
-                        except ValueError:
-                            pass
-                        except:
+                        except (ValueError, SyntaxError, TypeError):
                             logger.exception(
-                                "There was an error  in the following  with the following data"
-                                "data adapter %s/%s",
-                                "/".join(easyform.getPhysicalPath()),
-                                data_adapter.getId(),
-                            )
-                            print(
-                                "There was an error  in the following  with the following data"
-                                "data adapter %s/%s",
-                                "/".join(easyform.getPhysicalPath()),
-                                data_adapter.getId(),
+                                ":There was a an error for {}:'{}' in the following data adapter {}/{}. The value was skipped during migration".format(
+                                    key,
+                                    value,
+                                    "/".join(easyform.getPhysicalPath()),
+                                    data_adapter.getId(),
+                                )
                             )
                     elif INamedBlobFileField.providedBy(field):
                         value = None
