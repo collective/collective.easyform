@@ -12,6 +12,12 @@ from plone.restapi.deserializer import json_body
 from zope.schema import getFieldsInOrder
 from collective.easyform.api import get_actions
 from collective.easyform.interfaces import ISaveData
+import json
+
+import logging
+
+
+logger = logging.getLogger("collective.easyform.migration")
 
 
 @implementer(ISerializeToJson)
@@ -31,7 +37,16 @@ class SerializeToJson(DXContentToJson):
                 serializeable = dict()
                 storage[name] = serializeable
                 for key, value in action.getSavedFormInputItems():
-                    serializeable[key] = value
+                    try:
+                        json.dumps(value)
+                        serializeable[key] = value
+                    except TypeError:
+                        logger.exception(
+                            "saved data serialization issue for {}".format(
+                                self.context.absolute_url()
+                            )
+                        )
+
         if storage:
             result["savedDataStorage"] = storage
 
