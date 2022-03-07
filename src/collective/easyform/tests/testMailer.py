@@ -99,7 +99,8 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer = get_actions(self.ff1)["mailer"]
 
-        data = {"topic": "test subject", "comments": "test comments"}
+        data = {"topic": "test subject", "replyto":"test@test.org",
+                "comments": "test comments"}
         request = self.LoadRequestForm(**data)
 
         mailer.additional_headers = ["Generator: Plone", "Token:   abc  "]
@@ -245,7 +246,7 @@ class TestFunctions(base.EasyFormTestCase):
     def test_Utf8ListSubject(self):
         """Test mailer with Unicode encoded subject line"""
         utf8_subject_list = [u"Effacer les entrées", u"sauvegardées"]
-        data = {"topic": utf8_subject_list}
+        data = {"topic": utf8_subject_list, "replyto":"test@test.org"}
         mailer = get_actions(self.ff1)["mailer"]
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
@@ -288,7 +289,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)["mailer"]
         mailer.recipientOverride = "string: eggs@spam.com, spam@spam.com"
 
-        data = {"topic": "test subject"}
+        data = {"topic": "test subject",  "replyto": u"test@test.ts", "comments": u"test comments"}
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -300,7 +301,8 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)["mailer"]
         mailer.recipientOverride = "python: ('eggs@spam.com', 'spam.spam.com')"
 
-        data = {"topic": "test subject"}
+        data = {"topic": "test subject",  "replyto": u"test@test.ts", 
+                "comments": u"test comments"}
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -313,7 +315,8 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.to_field = "replyto"
         mailer.replyto_field = None
 
-        fields = {"topic": "test subject", "replyto": "eggs@spamandeggs.com"}
+        fields = {"topic": "test subject", "replyto": "eggs@spamandeggs.com", 
+                  "comments": u"test comments"}
 
         request = self.LoadRequestForm(**fields)
         mailer.onSuccess(fields, request)
