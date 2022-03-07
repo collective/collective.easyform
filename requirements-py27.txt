@@ -1,0 +1,11 @@
+setuptools==42.0.2
+zc.buildout==2.13.4
+wheel==0.36.2
+
+# Windows specific down here (has to be installed here, fails in buildout)
+# Dependency of zope.sendmail:
+pywin32 ; platform_system == 'Windows'
+# SSL Certs on Windows, because Python is missing them otherwise:
+certifi ; platform_system == 'Windows'
+# Dependency of collective.recipe.omelette:
+ntfsutils ; platform_system == 'Windows' and python_version < '3.0'
