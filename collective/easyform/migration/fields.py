@@ -5,6 +5,7 @@ from Products.PloneFormGen.content.fields import FGFieldsetEnd
 from Products.PloneFormGen.content.fields import FGFieldsetStart
 from Products.PloneFormGen.content.fieldsBase import BaseFormField
 from Products.PloneFormGen.interfaces import IPloneFormGenFieldset
+from Products.CMFPlone.utils import safe_unicode
 
 import logging
 import six
@@ -148,9 +149,10 @@ def convert_tales_expressions(value):
 def to_text(value):
     if isinstance(value, (list, tuple)):
         return [to_text(v) for v in value]
-    value = str(value)
-    if six.PY2:
-        value = value.decode("utf8")
+    elif isinstance(value, (six.text_type, six.binary_type)):
+        value = safe_unicode(value)
+    else:
+        value = str(value)
     return value
 
 
