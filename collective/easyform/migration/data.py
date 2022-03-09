@@ -3,12 +3,14 @@ from ast import literal_eval
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_fields
 from collective.easyform.interfaces import ISaveData
-from DateTime import DateTime
+import DateTime
 from plone.namedfile.interfaces import INamedBlobFileField
 from zope.schema.interfaces import IDate
 from zope.schema.interfaces import IDatetime
 from zope.schema.interfaces import IFromUnicode
 from zope.schema.interfaces import ISet
+from zope.schema.interfaces import ValidationError
+
 
 import logging
 
@@ -35,27 +37,37 @@ def migrate_saved_data(ploneformgen, easyform):
                     continue
                 data = {}
                 for key, value in zip(cols, row):
-                    field = schema.get(key)
-                    value = value.decode("utf8")
-                    if IFromUnicode.providedBy(field) and value:
-                        value = field.fromUnicode(value)
-                    elif IDatetime.providedBy(field) and value:
-                        value = DateTime(value).asdatetime()
-                    elif IDate.providedBy(field) and value:
-                        value = DateTime(value).asdatetime().date()
-                    elif ISet.providedBy(field):
-                        try:
+                    try:
+                        field = schema.get(key)
+                        value = value.decode("utf8")
+                        if IFromUnicode.providedBy(field) and value:
+                            value = field.fromUnicode(value)
+                        elif IDatetime.providedBy(field) and value:
+                            value = DateTime.DateTime(value).asdatetime()
+                        elif IDate.providedBy(field) and value:
+                            value = DateTime.DateTime(value).asdatetime().date()
+                        elif ISet.providedBy(field):
                             value = set(literal_eval(value))
-                        except (ValueError, SyntaxError, TypeError):
-                            logger.exception(
-                                ":There was a an error for {}:'{}' in the following data adapter {}/{}. The value was skipped during migration".format(
-                                    key,
-                                    value,
-                                    "/".join(easyform.getPhysicalPath()),
-                                    data_adapter.getId(),
-                                )
+                        elif INamedBlobFileField.providedBy(field):
+                            value = None
+                    except (
+                        ValueError,
+                        TypeError,
+                        ValidationError,
+                        SyntaxError,
+                        DateTime.interfaces.SyntaxError,
+                    ):
+                        # Exceptions above are often due to long living Forms, where users have changed their minds about
+                        # the Field formats/widgets...
+                        # Older datarows can break in these cases
+                        logger.exception(
+                            "Error for {}:'{}' in the {}/{} data adapter. Value was skipped during migration".format(
+                                key,
+                                value,
+                                "/".join(easyform.getPhysicalPath()),
+                                data_adapter.getId(),
                             )
-                    elif INamedBlobFileField.providedBy(field):
-                        value = None
+                        )
+                        continue
                     data[key] = value
                 action.addDataRow(data)

@@ -76,7 +76,6 @@ PROPERTIES_MAPPING = {
     "ExtraData": Property("ExtraData", append_list_node),
     "DownloadFormat": Property("DownloadFormat", append_node),
     "UseColumnNames": Property("UseColumnNames", append_node),
-    "SavedFormInput": Property("SavedFormInput", append_node),
     "ProxyRole": Property("ProxyRole", append_node),
     "ScriptBody": Property("ScriptBody", append_node),
 }
@@ -127,7 +126,17 @@ def actions_model(ploneformgen):
 
             value = to_text(value)
 
-            prop.handler(field, prop.name, value)
+            try:
+                prop.handler(field, prop.name, value)
+            except ValueError:
+                logger.exception(
+                    "FAIL on '{}' field of PFG form {}/{}.".format(
+                        name,
+                        "/".join(ploneformgen.getPhysicalPath()),
+                        ploneformgen.getId(),
+                    )
+                )
+                continue
 
     return etree.tostring(model, pretty_print=True)
 
