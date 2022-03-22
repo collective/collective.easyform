@@ -25,14 +25,20 @@ def migrate_saved_data(ploneformgen, easyform):
         schema = get_fields(easyform)
         if ISaveData.providedBy(action):
             cols = data_adapter.getColumnNames()
+            column_count_mismatch = False
             for idx, row in enumerate(data_adapter.getSavedFormInput()):
                 if len(row) != len(cols):
-                    logger.warning(
-                        "Number of columns does not match. Skipping row %s in "
-                        "data adapter %s/%s",
+                    if not column_count_mismatch:
+                        logger.warning(
+                            "Number of columns does not match for all rows. Some data were skipped in "
+                            "data adapter %s/%s",
+                            "/".join(easyform.getPhysicalPath()),
+                            data_adapter.getId(),
+                        )
+                        column_count_mismatch = True
+                    logger.info(
+                        "Column count mismatch at row %s",
                         idx,
-                        "/".join(easyform.getPhysicalPath()),
-                        data_adapter.getId(),
                     )
                     continue
                 data = {}
@@ -61,13 +67,20 @@ def migrate_saved_data(ploneformgen, easyform):
                         # the Field formats/widgets...
                         # Older datarows can break in these cases
                         logger.exception(
-                            "Error for {}:'{}' in the {}/{} data adapter. Value was skipped during migration".format(
+                            u"Error for {}:'{}' in the {}/{} data adapter. Value was skipped during migration".format(
                                 key,
                                 value,
                                 "/".join(easyform.getPhysicalPath()),
                                 data_adapter.getId(),
                             )
                         )
-                        continue
+                        logger.warning(
+                            "To Keep data entigrity, the data was skipped for migration in "
+                            "data adapter %s/%s",
+                            "/".join(easyform.getPhysicalPath()),
+                            data_adapter.getId(),
+                        )
+                        # continue
+                        return
                     data[key] = value
                 action.addDataRow(data)
