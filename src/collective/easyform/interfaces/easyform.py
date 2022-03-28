@@ -200,11 +200,12 @@ class IEasyForm(Schema):
             "useCancelButton",
             "resetLabel",
             "form_tabbing",
+            "nameAttribute",
             "default_fieldset_label",
             "method",
             "unload_protection",
             "CSRFProtection",
-            "forceSSL",
+            "forceSSL"
         ],
         order=20,
     )
@@ -224,6 +225,14 @@ class IEasyForm(Schema):
         title=_(u"label_reset_button", default=u"Reset Button Label"),
         description=_(u"help_reset_button", default=u""),
         defaultFactory=default_resetLabel,
+        required=False,
+    )
+    nameAttribute = zope.schema.TextLine(
+        title=_(u"label_name_attribute", default=u"Name attribute"),
+        description=_(
+            u"help_name_attribute",
+            default=u"optional, sets the name attribute on the form container. " \
+                    u"can be used for form analytics"),
         required=False,
     )
     directives.write_permission(form_tabbing=config.EDIT_ADVANCED_PERMISSION)
