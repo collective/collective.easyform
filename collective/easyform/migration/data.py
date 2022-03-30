@@ -5,6 +5,7 @@ from collective.easyform.api import get_fields
 from collective.easyform.interfaces import ISaveData
 import DateTime
 from plone.namedfile.interfaces import INamedBlobFileField
+from Products.CMFPlone.utils import safe_unicode
 from zope.schema.interfaces import IDate
 from zope.schema.interfaces import IDatetime
 from zope.schema.interfaces import IFromUnicode
@@ -66,21 +67,33 @@ def migrate_saved_data(ploneformgen, easyform):
                         # Exceptions above are often due to long living Forms, where users have changed their minds about
                         # the Field formats/widgets...
                         # Older datarows can break in these cases
+
+                        try:
+                            value_to_log = safe_unicode(value)
+                        except UnicodeError:
+                            # in case of file field, try to log the file name
+                            # which is seperated with a colon
+                            if ':' in value:
+                                value_to_log = safe_unicode(value.split(':')[0])
+                            else:
+                                # xxx we hope we are lucky that there are no broken characters in the first 50
+                                value_to_log = safe_unicode(value)[:50]
+
                         logger.exception(
-                            u"Error for {}:'{}' in the {}/{} data adapter. Value was skipped during migration".format(
+                            u"Error for {}:'{}' in the {}/{} data adapter.".format(
                                 key,
-                                value,
+                                value_to_log,
                                 "/".join(easyform.getPhysicalPath()),
                                 data_adapter.getId(),
                             )
                         )
                         logger.warning(
-                            "To Keep data entigrity, the data was skipped for migration in "
-                            "data adapter %s/%s",
+                            "BEWARE: to keep data integrity, the data was not migrated for "
+                            "data adapter %s/%s.",
                             "/".join(easyform.getPhysicalPath()),
                             data_adapter.getId(),
                         )
-                        # continue
+                        action.clearSavedFormInput()
                         return
                     data[key] = value
                 action.addDataRow(data)
