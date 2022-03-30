@@ -42,21 +42,38 @@ class SerializeToJson(DXContentToJson):
     def serializeSavedData(self, result):
         storage = dict()
         actions = getFieldsInOrder(get_actions(self.context))
-        field_names = get_fields(self.context).names()
-        field_names.sort()
+
+        AllFieldsinOrder = getFieldsInOrder(get_fields(self.context))
+        included_columns_in_savedata = []
+        for column, field in AllFieldsinOrder:
+            if "label" not in field.__str__().lower():
+                included_columns_in_savedata.append(column)
+        included_columns_in_savedata.sort()
+
         for name, action in actions:
             if ISaveData.providedBy(action):
                 serializeable = dict()
                 storage[name] = serializeable
+                column_count_mismatch = False
+                count = 0
                 for id, data in action.getSavedFormInputItems():
                     column_names = data.keys()
                     column_names.remove("id")
                     column_names.sort()
-                    if column_names != field_names:
-                        logger.warning(
-                            "Skipped Saveddata row because of field_names mismatch in %s",
+
+                    if column_names != included_columns_in_savedata:
+                        if not column_count_mismatch:
+                            logger.warning(
+                                "Skipped Saveddata row because of mismatch witch current fields in %s",
+                                self.context.absolute_url(),
+                            )
+                            column_count_mismatch = True
+                        logger.info(
+                            "Skipped Saveddata row of '%s' because of field_names mismatch in %s",
+                            count,
                             self.context.absolute_url(),
                         )
+                        count += 1
                         continue
                     try:
                         for key, value in data.items():
@@ -107,11 +124,17 @@ class DeserializeFromJson(DXContentFromJson):
             actions = getFieldsInOrder(get_actions(self.context))
             schema = get_fields(self.context)
 
+            AllFieldsinOrder = schema.namesAndDescriptions()
+            included_columns_in_savedata = []
+            for column, field in AllFieldsinOrder:
+                if "label" not in field.__str__().lower():
+                    included_columns_in_savedata.append(column)
+
             for name, action in actions:
                 if ISaveData.providedBy(action) and storage.has_key(name):
                     savedData = storage[name]
                     for key, value in savedData.items():
-                        for name in schema.names():
+                        for name in included_columns_in_savedata:
                             value[name] = convertAfterDeserialize(
                                 schema[name], value[name]
                             )
