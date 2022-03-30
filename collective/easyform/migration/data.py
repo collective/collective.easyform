@@ -5,6 +5,7 @@ from collective.easyform.api import get_fields
 from collective.easyform.interfaces import ISaveData
 import DateTime
 from plone.namedfile.interfaces import INamedBlobFileField
+from Products.CMFPlone.utils import safe_unicode
 from zope.schema.interfaces import IDate
 from zope.schema.interfaces import IDatetime
 from zope.schema.interfaces import IFromUnicode
@@ -67,20 +68,20 @@ def migrate_saved_data(ploneformgen, easyform):
                         # the Field formats/widgets...
                         # Older datarows can break in these cases
                         logger.exception(
-                            u"Error for {}:'{}' in the {}/{} data adapter. Value was skipped during migration".format(
+                            u"Error for {}:'{}' in the {}/{} data adapter.".format(
                                 key,
-                                value,
+                                safe_unicode(value)[:50],
                                 "/".join(easyform.getPhysicalPath()),
                                 data_adapter.getId(),
                             )
                         )
                         logger.warning(
-                            "To Keep data entigrity, the data was skipped for migration in "
+                            "To Keep data entigrity, the data was not migrated for "
                             "data adapter %s/%s",
                             "/".join(easyform.getPhysicalPath()),
                             data_adapter.getId(),
                         )
-                        # continue
+                        action.clearSavedFormInput()
                         return
                     data[key] = value
                 action.addDataRow(data)
