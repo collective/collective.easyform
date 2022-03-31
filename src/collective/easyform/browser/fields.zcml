@@ -71,13 +71,6 @@
         template="modeleditor.pt"
         layer="..interfaces.IEasyFormLayer"
         />
-    <browser:page
-        name="model-edit-save"
-        for="collective.easyform.interfaces.IEasyFormFieldsContext"
-        permission="cmf.ModifyPortalContent"
-        class=".fields.AjaxSaveHandler"
-        layer="..interfaces.IEasyFormLayer"
-        />
   </configure>
   <configure zcml:condition="installed collective.z3cform.norobots">
     <utility

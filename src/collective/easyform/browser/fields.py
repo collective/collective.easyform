@@ -6,7 +6,6 @@ from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IEasyFormFieldContext
 from collective.easyform.interfaces import IEasyFormFieldsContext
 from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
-from json import dumps
 from lxml import etree
 from plone import api
 from plone.schemaeditor.browser.field.edit import EditView
@@ -15,7 +14,6 @@ from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
-from plone.supermodel import loadString
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFPlone.utils import safe_bytes
 from Products.Five import BrowserView
@@ -26,7 +24,12 @@ from zope.component import getAdapters
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+from Products.statusmessages.interfaces import IStatusMessage
+from Products.CMFPlone.utils import safe_unicode
 
+import html
+
+NAMESPACE = "{http://namespaces.plone.org/supermodel/schema}"
 
 try:
     from plone.schemaeditor import SchemaEditorMessageFactory as __
@@ -125,84 +128,79 @@ class EditView(EditView):
 
 
 class ModelEditorView(BrowserView):
-    """Editor view."""
+    """Editor view.
+    Mostly stolen from plone.app.dexterity.browser.modeleditor.ModelEditorView
+    """
+
+    template = ViewPageTemplateFile("modeleditor.pt")
 
     title = _(u"Edit XML Fields Model")
 
     def modelSource(self):
+        import pdb; pdb.set_trace()
         return self.context.aq_parent.fields_model
 
-
-class AjaxSaveHandler(BrowserView):
-    """Handle AJAX save posts."""
-
-    def authorized(self):
-        authenticator = queryMultiAdapter(
-            (self.context, self.request), name=u"authenticator"
-        )
+    def authorized(self, context, request):
+        authenticator = queryMultiAdapter((context, request), name=u"authenticator")
         return authenticator and authenticator.verify()
 
     def save(self, source):
         self.context.aq_parent.fields_model = source
 
     def __call__(self):
-        """handle AJAX save post"""
+        """View and eventually save the form."""
 
-        if not self.authorized():
-            raise Unauthorized
-
+        save = "form.button.save" in self.request.form
         source = self.request.form.get("source")
-        if source:
+        if save and source:
+
+            # First, check for authenticator
+            if not self.authorized(self.context, self.request):
+                raise Unauthorized
+
+            # Is it valid XML?
             # Some safety measures.
             # We do not want to load entities, especially file:/// entities.
             # Also discard processing instructions.
+            #
+            source = safe_bytes(source)
             parser = etree.XMLParser(resolve_entities=False, remove_pis=True)
-            # Is it valid XML?
             try:
-                source = safe_bytes(source)
                 root = etree.fromstring(source, parser=parser)
             except etree.XMLSyntaxError as e:
-                return dumps(
-                    {
-                        "success": False,
-                        "message": "XMLSyntaxError: {0}".format(
-                            e.message.encode("utf8")
-                        ),
-                    }
+                IStatusMessage(self.request).addStatusMessage(
+                    "XMLSyntaxError: {0}".format(html.escape(safe_unicode(e.args[0]))),
+                    "error",
                 )
+                return super().__call__()
 
             # a little more sanity checking, look at first two element levels
-            basens = "{http://namespaces.plone.org/supermodel/schema}"
-            if root.tag != basens + "model":
-                return dumps(
-                    {
-                        "success": False,
-                        "message": __(u"Error: root tag must be 'model'"),
-                    }
+            if root.tag != NAMESPACE + "model":
+                IStatusMessage(self.request).addStatusMessage(
+                    _(u"Error: root tag must be 'model'"),
+                    "error",
                 )
+                return super().__call__()
+
             for element in root.getchildren():
-                if element.tag != basens + "schema":
-                    return dumps(
-                        {
-                            "success": False,
-                            "message": __(
-                                u"Error: all model elements must be 'schema'"
-                            ),
-                        }
+                if element.tag != NAMESPACE + "schema":
+                    IStatusMessage(self.request).addStatusMessage(
+                        _(u"Error: all model elements must be 'schema'"),
+                        "error",
                     )
+                    return super().__call__()
 
             # can supermodel parse it?
             # This is mainly good for catching bad dotted names.
             try:
-                loadString(source)
+                plone.supermodel.loadString(source, policy=u"dexterity")
             except SupermodelParseError as e:
                 message = e.args[0].replace('\n  File "<unknown>"', "")
-                return dumps(
-                    {
-                        "success": False,
-                        "message": u"SuperModelParseError: {0}".format(message),
-                    }
+                IStatusMessage(self.request).addStatusMessage(
+                    u"SuperModelParseError: {0}".format(html.escape(message)),
+                    "error",
                 )
+                return super().__call__()
 
             # clean up formatting sins
             source = etree.tostring(
@@ -210,6 +208,5 @@ class AjaxSaveHandler(BrowserView):
             )
             # and save
             self.save(source)
-
-            self.request.response.setHeader("Content-Type", "application/json")
-            return dumps({"success": True, "message": __(u"Saved")})
+        # import pdb; pdb.set_trace()
+        return self.template()

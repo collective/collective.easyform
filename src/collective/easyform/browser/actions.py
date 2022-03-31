@@ -5,7 +5,7 @@ from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_context
 from collective.easyform.api import get_schema
-from collective.easyform.browser.fields import AjaxSaveHandler
+from collective.easyform.browser.fields import ModelEditorView
 from collective.easyform.interfaces import IActionEditForm
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import IEasyFormActionContext
@@ -363,17 +363,13 @@ handler = button.Handler(but, EasyFormActionsListing.handleModelEdit)
 EasyFormActionsListing.handlers.addHandler(but, handler)
 
 
-class ModelEditorView(BrowserView):
+class ModelEditorView(ModelEditorView):
     """Editor view"""
 
     title = _(u"Edit XML Actions Model")
 
     def modelSource(self):
         return self.context.aq_parent.actions_model
-
-
-class AjaxSaveHandler(AjaxSaveHandler):
-    """Handle AJAX save posts"""
 
     def save(self, source):
         self.context.aq_parent.actions_model = source
