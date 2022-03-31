@@ -8,6 +8,9 @@
 
   <h1 i18n:translate="">Saved Data</h1>
 
+  <p class="lead"
+     tal:content="python: view.description()"></p>
+
   <p i18n:translate="saveddata_form_description">The saved data of <strong i18n:name="formname" tal:content="view/form_title">form name</strong> stored in the adapter <strong i18n:name="adapter" tal:content="view/name"></strong></p>
 
   <div class="portalMessage"

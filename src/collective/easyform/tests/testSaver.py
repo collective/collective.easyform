@@ -7,7 +7,6 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
-from openpyxl import load_workbook
 from os.path import dirname
 from os.path import join
 from plone import api
@@ -317,6 +316,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
             'attachment; filename="saver.xlsx"',
         )
 
+        from openpyxl import load_workbook
         wb = load_workbook(res)
         wb.active
         ws = wb.active
