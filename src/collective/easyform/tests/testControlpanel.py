@@ -45,11 +45,6 @@ class ControlPanelTestCase(base.EasyFormTestCase):
         link = self.browser.getLink("Add-ons")
         self.assertEqual(link.url, "http://nohost/plone/prefs_install_products_form")
 
-    def test_easyform_control_panel_backlink(self):
-        self.browser.open(self.portal_url + "/@@navigation-controlpanel")
-        link = self.browser.getLink(id="setup-link")
-        self.assertEqual(link.url, "http://nohost/plone/@@overview-controlpanel")
-
 
 class ControlPanelFunctionalTestCase(base.EasyFormFunctionalTestCase):
     """Test that changes in the easyform control panel are actually

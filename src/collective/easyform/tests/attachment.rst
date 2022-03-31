@@ -145,7 +145,7 @@ the file field is not listed in the mailer's showFields::
     >>> browser.getControl(name='form.widgets.attachment').add_file(BytesIO(b'file contents'), 'text/plain', 'test.txt')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
-    >>> "<body>" in portal.MailHost.msg.get_payload()
+    >>> "<body>" in portal.MailHost.msg.get_payload()[0].as_string()
     True
 
     >> browser.getControl('Reset').click()
@@ -169,13 +169,13 @@ Check saved data::
     True
     >>> ".widgets.attachment/@@download/test.txt" in browser.contents
     True
-    >>> '<input id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit" class="submit-widget button-field" value="Apply changes" type="submit" />' in browser.contents
+    >>> '<button type="submit" id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit" class="btn btn-secondary submit-widget button-field" value="Apply changes">' in browser.contents
     True
-    >>> '<input id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete" class="submit-widget button-field" value="Delete" type="submit" />' in browser.contents
+    >>> '<button type="submit" id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete" class="btn btn-secondary submit-widget button-field" value="Delete">' in browser.contents
     True
-    >>> '<input id="form-buttons-download" name="form.buttons.download" class="submit-widget button-field" value="Download" type="submit" />' in browser.contents
+    >>> '<button type="submit" id="form-buttons-download" name="form.buttons.download" class="btn btn-secondary submit-widget button-field context" value="Download">' in browser.contents
     True
-    >>> '<input id="form-buttons-clearall" name="form.buttons.clearall" class="submit-widget button-field" value="Clear all" type="submit" />' in browser.contents
+    >>> '<button type="submit" id="form-buttons-clearall" name="form.buttons.clearall" class="btn btn-secondary submit-widget button-field destructive" value="Clear all">' in browser.contents
     True
     >>> browser.getLink('test.txt').click()
     >>> browser.url
