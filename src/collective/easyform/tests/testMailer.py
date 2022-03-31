@@ -15,11 +15,10 @@ from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 from Products.CMFPlone.utils import safe_unicode
-from six import StringIO
 from six import BytesIO
 
 import datetime
-import six
+import unittest
 
 
 try:
@@ -33,6 +32,83 @@ except ImportError:
 
     LINESEP = b"\n"
 
+try:
+    from openpyxl import load_workbook
+    HAS_OPENPYXL = True
+except ImportError:
+    HAS_OPENPYXL = False
+
+
+MODEL_WITH_ALL_FIELDS = """
+<model xmlns:i18n="http://xml.zope.org/namespaces/i18n" xmlns:marshal="http://namespaces.plone.org/supermodel/marshal" xmlns:form="http://namespaces.plone.org/supermodel/form" xmlns:security="http://namespaces.plone.org/supermodel/security" xmlns:users="http://namespaces.plone.org/supermodel/users" xmlns:lingua="http://namespaces.plone.org/supermodel/lingua" xmlns:easyform="http://namespaces.plone.org/supermodel/easyform" xmlns="http://namespaces.plone.org/supermodel/schema">
+  <schema>
+    <field name="replyto" type="zope.schema.TextLine" easyform:TDefault="python:member and member.getProperty('email', '') or ''" easyform:serverSide="False" easyform:validators="isValidEmail">
+      <description/>
+      <title>Your E-Mail Address</title>
+    </field>
+    <field name="topic" type="zope.schema.TextLine">
+      <description/>
+      <title>Subject</title>
+    </field>
+    <field name="comments" type="zope.schema.Text" easyform:serverSide="False" easyform:THidden="False">
+      <description/>
+      <title>Comments</title>
+    </field>
+    <field name="richtext" type="plone.app.textfield.RichText">
+      <description/>
+      <required>False</required>
+      <title>richtext</title>
+    </field>
+    <field name="datetime" type="zope.schema.Datetime">
+      <description/>
+      <required>False</required>
+      <title>datetime</title>
+    </field>
+    <field name="date" type="zope.schema.Date">
+      <description/>
+      <required>False</required>
+      <title>date</title>
+    </field>
+    <field name="bool" type="zope.schema.Bool">
+      <description/>
+      <required>False</required>
+      <title>bool</title>
+      <form:widget type="z3c.form.browser.radio.RadioFieldWidget"/>
+    </field>
+    <field name="number" type="zope.schema.Int">
+      <description/>
+      <required>False</required>
+      <title>number</title>
+    </field>
+    <field name="floating" type="zope.schema.Float">
+      <description/>
+      <required>False</required>
+      <title>floating</title>
+    </field>
+    <field name="tuple" type="zope.schema.Tuple">
+      <description/>
+      <required>False</required>
+      <title>tuple</title>
+      <value_type type="zope.schema.Choice">
+        <values/>
+      </value_type>
+    </field>
+    <field name="list" type="zope.schema.List">
+      <description/>
+      <required>False</required>
+      <title>list</title>
+      <value_type type="zope.schema.Choice">
+        <values/>
+      </value_type>
+    </field>
+    <field name="empty_string" type="zope.schema.TextLine">
+      <description/>
+      <required>False</required>
+      <title>empty_string</title>
+    </field>
+  </schema>
+</model>
+"""
 
 class TestFunctions(base.EasyFormTestCase):
     """Test mailer action"""
@@ -281,7 +357,7 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)["mailer"]
         mailer.subjectOverride = "fields/topic"
         mailer.recipientOverride = "fields/replyto"
-        data = {"topic": "test subject", "replyto": "test@test.ts", "comments": "test comments"}
+        data = {"topic": "eggs and spam", "replyto": "test@test.ts", "comments": "test comments"}
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -329,6 +405,7 @@ class TestFunctions(base.EasyFormTestCase):
         fields = {
             "topic": "test subject",
             "replyto": ["eggs@spam.com", "spam@spam.com"],
+            "comments": "cool stuff",
         }
         request = self.LoadRequestForm(**fields)
         mailer.onSuccess(fields, request)
@@ -425,7 +502,7 @@ class TestFunctions(base.EasyFormTestCase):
         fields = get_schema(self.ff1)
         fields["comments"].required = False
         set_fields(self.ff1, fields)
-        fields = {"topic": "test subject", "replyto": "test@test.org"}
+        fields = {"topic": "test subject", "replyto": "test@test.org", "comments": ""}
         request = self.LoadRequestForm(**fields)
         self.messageText = b""
         mailer.onSuccess(fields, request)
@@ -510,9 +587,13 @@ class TestFunctions(base.EasyFormTestCase):
             self.portal, "File", id="easyform_mail_body_default.pt"
         )
         default_fields.file = NamedFile("Custom e-mail template!")
+        fields = dict(
+            topic="test subject", replyto="test@test.org", comments="test comments"
+        )
+        request = self.LoadRequestForm(**fields)
 
         mailer = get_actions(self.ff1)["mailer"]
-        mailer.onSuccess({}, self.layer["request"])
+        mailer.onSuccess(fields, request)
         self.assertIn(b"Custom e-mail template!", self.messageText)
 
     def test_MailerXMLAttachments(self):
@@ -521,29 +602,22 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.sendXML = True
         mailer.sendCSV = False
         context = get_context(mailer)
+        context.fields_model = MODEL_WITH_ALL_FIELDS
         # Test all dexterity field type listed at https://docs.plone.org/external/plone.app.dexterity/docs/reference/fields.html
         fields = dict(
             replyto="test@test.org",
             topic="test subject",
-            richtext=RichTextValue(raw="Raw"),
+            richtext="Raw",
             comments=u"test comments😀",
-            datetime=datetime.datetime(2019, 4, 1),
-            date=datetime.date(2019, 4, 2),
+            datetime="2019-04-01T00:00:00",
+            date="2019-04-02",
             delta=datetime.timedelta(1),
             bool=True,
             number=1981,
             floating=3.14,
             tuple=("elemenet1", "element2"),
             list=[1, 2, 3, 4],
-            map=dict(fruit="apple"),
-            choices=set(["A", "B"]),
             empty_string="",
-            zero_value=0,
-            none_value=None,
-            empty_tuple=(),
-            empty_list=[],
-            empty_set=set(),
-            empty_map=dict(),
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
@@ -558,22 +632,14 @@ class TestFunctions(base.EasyFormTestCase):
             b'<field name="topic">test subject</field>',
             b'<field name="richtext">Raw</field>',
             b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
-            b'<field name="datetime">2019/04/01, 00:00:00</field>',
-            b'<field name="date">2019/04/02</field>',
-            b'<field name="delta">1 day, 0:00:00</field>',
+            b'<field name="datetime">2019-04-01T00:00:00</field>',
+            b'<field name="date">2019-04-02</field>',
             b'<field name="bool">True</field>',
             b'<field name="number">1981</field>',
             b'<field name="floating">3.14</field>',
             b'<field name="tuple">["elemenet1", "element2"]</field>',
             b'<field name="list">["1", "2", "3", "4"]</field>',
-            b'<field name="map">{"fruit": "apple"}</field>',
             b'<field name="empty_string" />',
-            b'<field name="zero_value">0</field>',
-            b'<field name="none_value" />',
-            b'<field name="empty_tuple">[]</field>',
-            b'<field name="empty_list">[]</field>',
-            b'<field name="empty_set">[]</field>',
-            b'<field name="empty_map">{}</field>',
         )
 
         self.assertIn(b"<?xml version='1.0' encoding='utf-8'?>\n<form>", xml)
@@ -582,41 +648,31 @@ class TestFunctions(base.EasyFormTestCase):
         for node in output_nodes:
             self.assertIn(node, xml)
 
-        # the order of ["A", "B"] can change ... check separately
-        self.assertIn(b'"A"', xml)
-        self.assertIn(b'"B"', xml)
-
     def test_MailerCSVAttachments(self):
         """Test mailer with dummy_send"""
         mailer = get_actions(self.ff1)["mailer"]
         mailer.sendXML = False
         mailer.sendCSV = True
         context = get_context(mailer)
+        context.fields_model = MODEL_WITH_ALL_FIELDS
         # Test all dexterity field type listed at https://docs.plone.org/external/plone.app.dexterity/docs/reference/fields.html
         fields = dict(
-            topic="test subject",
             replyto="test@test.org",
-            richtext=RichTextValue(raw="Raw"),
+            topic="test subject",
+            richtext="Raw",
             comments=u"test comments😀",
-            datetime=datetime.datetime(2019, 4, 1),
-            date=datetime.date(2019, 4, 2),
+            datetime="2019-04-01T00:00:00",
+            date="2019-04-02",
             delta=datetime.timedelta(1),
             bool=True,
             number=1981,
             floating=3.14,
             tuple=("elemenet1", "element2"),
             list=[1, 2, 3, 4],
-            map=dict(fruit="apple"),
-            choices=set(["A", "B"]),
             empty_string="",
-            zero_value=0,
-            none_value=None,
-            empty_tuple=(),
-            empty_list=[],
-            empty_set=set(),
-            empty_map=dict(),
         )
         request = self.LoadRequestForm(**fields)
+
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
@@ -629,22 +685,14 @@ class TestFunctions(base.EasyFormTestCase):
             b"test subject",
             b"Raw",
             b"test comments\xf0\x9f\x98\x80",
-            b"2019/04/01, 00:00:00",
-            b"2019/04/02",
-            b"1 day, 0:00:00",
+            b"2019-04-01T00:00:00",
+            b"2019-04-02",
             b"True",
             b"1981",
             b"3.14",
             b'[""elemenet1"", ""element2""]',
             b'[""1"", ""2"", ""3"", ""4""]',
-            b'{""fruit"": ""apple""}',
             b"",
-            b"0",
-            b"",
-            b"[]",
-            b"[]",
-            b"[]",
-            b"{}",
         )
 
         # the order of the columns can change ... check each
@@ -652,10 +700,7 @@ class TestFunctions(base.EasyFormTestCase):
         for value in output:
             self.assertIn(value, csv)
 
-        # the order of [""A"", ""B""] can change ... check separately
-        self.assertIn(b'""A""', csv)
-        self.assertIn(b'""B""', csv)
-
+    @unittest.skipUnless(HAS_OPENPYXL, "Requires openpyxl")
     def test_MailerXLSXAttachments(self):
         """ Test mailer with dummy_send """
         mailer = get_actions(self.ff1)["mailer"]
@@ -663,29 +708,22 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.sendCSV = False
         mailer.sendXLSX = True
         context = get_context(mailer)
+        context.fields_model = MODEL_WITH_ALL_FIELDS
         # Test all dexterity field type listed at https://docs.plone.org/external/plone.app.dexterity/docs/reference/fields.html
         fields = dict(
-            topic="test subject",
             replyto="test@test.org",
-            richtext=RichTextValue(raw="Raw"),
+            topic="test subject",
+            richtext="Raw",
             comments=u"test comments😀",
-            datetime=datetime.datetime(2019, 4, 1),
-            date=datetime.date(2019, 4, 2),
+            datetime="2019-04-01T00:00:00",
+            date="2019-04-01",
             delta=datetime.timedelta(1),
             bool=True,
             number=1981,
             floating=3.14,
             tuple=("elemenet1", "element2"),
             list=[1, 2, 3, 4],
-            map=dict(fruit="apple"),
-            choices=set(["A", "B"]),
             empty_string="",
-            zero_value=0,
-            none_value=None,
-            empty_tuple=(),
-            empty_list=[],
-            empty_set=set(),
-            empty_map=dict(),
         )
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
@@ -695,7 +733,6 @@ class TestFunctions(base.EasyFormTestCase):
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, xlsx = attachments[0]
-        from openpyxl import load_workbook
         wb = load_workbook(BytesIO(xlsx))
         wb.active
         ws = wb.active
@@ -709,28 +746,14 @@ class TestFunctions(base.EasyFormTestCase):
             b"test comments\xf0\x9f\x98\x80",
             b"2019/04/01, 00:00:00",
             b"2019/04/02",
-            b"1 day, 0:00:00",
             b"True",
             b"1981",
             b"3.14",
             b'["elemenet1", "element2"]',
             b'["1", "2", "3", "4"]',
-            b'{"fruit": "apple"}',
             b"",
-            b"0",
-            b"[]",
-            b"[]",
-            b"[]",
-            b"{}",
         )
         # the order of the columns can change ... check each
         # TODO should really have a header row
         for value in output:
             self.assertIn(value, row)
-
-        # the order of [""A"", ""B""] can change ... check separately
-        self.assertTrue(
-            b'["A", "B"]' in row or b'["B", "A"]' in row,
-            '["A", "B"] nor ["B", "A"] has been found in: {}'.format(row)
-        )
-

@@ -137,7 +137,6 @@ class ModelEditorView(BrowserView):
     title = _(u"Edit XML Fields Model")
 
     def modelSource(self):
-        import pdb; pdb.set_trace()
         return self.context.aq_parent.fields_model
 
     def authorized(self, context, request):

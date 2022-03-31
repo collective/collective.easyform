@@ -12,6 +12,7 @@ from os.path import join
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
+from plone.testing.zope import Browser
 from six import BytesIO
 from six.moves import zip
 from transaction import commit
@@ -20,19 +21,13 @@ from ZPublisher.HTTPResponse import HTTPResponse
 
 import plone.protect
 import sys
-
-
-try:
-    from plone.testing.zope import Browser
-except ImportError:
-    from plone.testing.z2 import Browser
+import unittest
 
 try:
-    from zope.testbrowser.browser import webtest  # NOQA: F401
-
-    ZOPE_TESTBROWSER_VERSION = ">5"
+    from openpyxl import load_workbook
+    HAS_OPENPYXL = True
 except ImportError:
-    ZOPE_TESTBROWSER_VERSION = "<5"
+    HAS_OPENPYXL = False
 
 
 def FakeRequest(method="GET", add_auth=False, **kwargs):
@@ -281,6 +276,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertTrue('Content-Disposition: attachment; filename="saver.tsv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
 
+    @unittest.skipUnless(HAS_OPENPYXL, "Requires openpyxl")
     def testSaverDownloadXLSX(self):
         """test save data"""
 
@@ -316,7 +312,6 @@ class SaveDataTestCase(base.EasyFormTestCase):
             'attachment; filename="saver.xlsx"',
         )
 
-        from openpyxl import load_workbook
         wb = load_workbook(res)
         wb.active
         ws = wb.active
@@ -680,38 +675,32 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         )
         self.assertTrue("CSV delimiter is required." in self.browser.contents)
 
-    if ZOPE_TESTBROWSER_VERSION == ">5":
-        # tests below do pass with Plone 5.2 and newer zope.testbrowser
-        # they would fail with 5.0 or 5.1 because of older zope.testbrowser
+    def test_download_saveddata_csv_delimiter_from_form(self):
+        self.browser.open(
+            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+        )
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.browser.getControl(name="form.buttons.download").click()
+        self.assertEqual(
+            self.browser.contents, "Your E-Mail Address,Subject,Comments\r\n"
+        )
+        self.browser.open(
+            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+        )
+        self.assertTrue("Saved Data" in self.browser.contents)
+        input = self.browser.getControl("CSV delimiter")
+        input.value = ";"
+        self.browser.getControl(name="form.buttons.download").click()
+        self.assertEqual(
+            self.browser.contents, "Your E-Mail Address;Subject;Comments\r\n"
+        )
 
-        # older zope.testbrowser does not manage to give access to content via
-        # `.contents` in case of non HTML
-        def test_download_saveddata_csv_delimiter_from_form(self):
-            self.browser.open(
-                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-            )
-            self.assertTrue("Saved Data" in self.browser.contents)
-            self.browser.getControl(name="form.buttons.download").click()
-            self.assertEqual(
-                self.browser.contents, "Your E-Mail Address,Subject,Comments\r\n"
-            )
-            self.browser.open(
-                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-            )
-            self.assertTrue("Saved Data" in self.browser.contents)
-            input = self.browser.getControl("CSV delimiter")
-            input.value = ";"
-            self.browser.getControl(name="form.buttons.download").click()
-            self.assertEqual(
-                self.browser.contents, "Your E-Mail Address;Subject;Comments\r\n"
-            )
-
-        # this test depends on internals of zope.testbrowser controls
-        def test_download_saveddata_suggests_csv_delimiter_defines_maxlength(self):
-            self.browser.open(
-                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-            )
-            self.assertTrue("Saved Data" in self.browser.contents)
-            input = self.browser.getControl("CSV delimiter")
-            self.assertTrue(input._elem.has_attr("maxlength"))
-            self.assertEqual(input._elem.get("maxlength"), u"1")
+    # this test depends on internals of zope.testbrowser controls
+    def test_download_saveddata_suggests_csv_delimiter_defines_maxlength(self):
+        self.browser.open(
+            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+        )
+        self.assertTrue("Saved Data" in self.browser.contents)
+        input = self.browser.getControl("CSV delimiter")
+        self.assertTrue(input._elem.has_attr("maxlength"))
+        self.assertEqual(input._elem.get("maxlength"), u"1")
