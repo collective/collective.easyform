@@ -428,7 +428,8 @@ class SaveDataTestCase(base.EasyFormTestCase):
             items[0][1],
             dict(list(zip(["id"] + fields, [items[0][0], "one", "two", "three"]))),
         )
-        self.assertEqual(saver.getSavedFormInputForEdit(), "one,two,three\r\n")
+        for number in ["one", "two", "three"]:
+            self.assertIn(number, saver.getSavedFormInputForEdit())
 
         # save a couple of \n-delimited rows - \n eol
         saver.addDataRow(dict(list(zip(fields, ["four", "five", "six"]))))
