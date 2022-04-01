@@ -17,6 +17,24 @@ New features:
 - Add support for Plone 6
   [pbauer, frappell]
 
+- Update Field/Actions listing to work with Plone 6
+  [petschki] (#260)
+
+- Added Japanese translation, supported by Ochanomizu University. [terapyon] (#263)
+
+- User-friendly delimiter setup for csv download
+  [ThibautBorn, gotcha] (#267)
+
+- Add support for plone.formwidget.hcaptcha
+  [fredvd] (#292)
+
+- Update the css registration and use the schemaeditor pattern
+  [frapell] (#319)
+
+- Add name attribute field to form, default empty doesn't include it.
+  Useful for form analytics like matomo that can check for this attribute.
+  [fredvd] (#328)
+
 - Download XLSX version of saved data.
   [mathias.leimgruber] (#285)
 
@@ -25,6 +43,21 @@ New features:
 
 
 Bug fixes:
+
+- Add upgrade step for the csv_delimiter field.
+  [fredvd] (267b)
+
+- Always display fieldsets legends : in tabbed mode, they are hidden by autotoc pattern
+  [laulaz] (#173)
+
+- Show the pro- and epilogue texts also on embedded forms.
+  [fredvd] (#274)
+
+- Fix field order in Mailer attachments
+  [MrTango]
+
+- Optinally add CSV/XLSX headers to attachments
+  [MrTango] (#323)
 
 - Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.
   [jensens]
@@ -51,6 +84,7 @@ Bug fixes:
 - Fix validators in field sets with zope.interface 5.1+.
   This fixes `issue 252 <https://github.com/collective/collective.easyform/issues/252>`_.
   [maurits] (#252)
+
 - For increased security, in the modeleditor do not resolve entities, and remove processing instructions.
   [maurits] (#3209)
 
