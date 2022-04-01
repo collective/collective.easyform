@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def update_last_compilation(contex, timetuple):
+def update_last_compilation(context, timetuple=None):
     # Let's do the imports inline, so they are not needlessly done at startup.
     # Should not really matter, but oh well.
     from datetime import datetime
@@ -40,6 +40,10 @@ def update_last_compilation(contex, timetuple):
         return
     portal = api.portal.get()
     combine_bundles(portal)
+
+
+def update_last_compilation_1007(context):
+    update_last_compilation(context, (2020, 9, 8, 14, 2, 0))
 
 
 def update_last_compilation_1008(context):

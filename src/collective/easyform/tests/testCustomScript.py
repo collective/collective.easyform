@@ -8,7 +8,7 @@
 """
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
-from App.class_init import InitializeClass
+from AccessControl.class_init import InitializeClass
 from collective.easyform.api import get_actions
 from collective.easyform.tests import base
 from plone.app.testing import logout

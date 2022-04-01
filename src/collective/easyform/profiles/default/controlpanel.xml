@@ -4,7 +4,7 @@
              appId="easyform"
              category="Products"
              condition_expr=""
-             icon_expr="string:$portal_url/Form.gif"
+             icon_expr=""
              title="easyform"
              url_expr="string:${portal_url}/@@easyform-controlpanel"
              visible="True"

@@ -3,31 +3,10 @@
 # Integration tests for miscellaneous stuff
 #
 
-from AccessControl import Unauthorized
-from collective.easyform.actions import OrderedDict
-from collective.easyform.browser.fields import AjaxSaveHandler
 from collective.easyform.tests import base
 from plone import api
 from plone.namedfile.file import NamedFile
 from zope.component import getMultiAdapter
-
-
-class TestMisc(base.EasyFormTestCase):
-    """test miscellaneous stuff"""
-
-    def test_ordereddict_reverse(self):
-        d = OrderedDict()
-        d["a"] = 1
-        d["b"] = 2
-        d["c"] = 3
-        self.assertEqual(d.reverse(), [("c", 3), ("b", 2), ("a", 1)])
-
-    def test_default_values_translated(self):
-        self.layer["request"]["LANGUAGE"] = "de"
-        self.folder.invokeFactory("EasyForm", "ff1")
-        # Check if the submitLabel is translated at all.
-        # If you ever change the german translation of the submit label, change it here also
-        self.assertEqual(self.folder.ff1.submitLabel, "Absenden")
 
 
 class TestGetEasyFormURL(base.EasyFormTestCase):
@@ -108,14 +87,6 @@ class TestIsSubEasyForm(base.EasyFormTestCase):
     def test_is_sub_easyform_root(self):
         view = self.get_view(self.portal)
         self.assertFalse(view())
-
-
-class TestAjaxSaveHandler(base.EasyFormTestCase):
-    def test_ajax_save_handler_call_unathorized(self):
-        self.folder.invokeFactory("EasyForm", "ff1")
-        view = AjaxSaveHandler(self.folder["ff1"], self.layer["request"])
-        with self.assertRaises(Unauthorized):
-            view()
 
 
 class TestCustomTemplates(base.EasyFormTestCase):

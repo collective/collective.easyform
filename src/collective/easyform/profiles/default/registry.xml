@@ -60,17 +60,12 @@
   </record>
 
   <records interface="Products.CMFPlone.interfaces.IBundleRegistry"
-           prefix="plone.bundles/easyform"
-  >
+           prefix="plone.bundles/easyform">
     <value key="enabled">True</value>
-    <value key="compile">False</value>
     <value key="csscompilation">++resource++easyform.css</value>
-    <value key="depends">plone</value>
-    <!-- Please keep this in sync with upgrades.update_last_compilation -->
-    <value key="last_compilation">2021-08-31 00:00:00</value>
-    <value key="resources">
-    </value>
-    <value key="merge_with">default</value>
+    <value key="depends"></value>
+    <value key="load_async">False</value>
+    <value key="load_defer">False</value>
   </records>
 
   <!-- <record name="easyforms.csv_delimiter">

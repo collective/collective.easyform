@@ -2,7 +2,7 @@
     background: #eee;
     padding: 1em 1em 1px 1em;
     margin: 0.5em 0;
-    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
     position: relative;
     border: solid 2px #ccc;
 }
@@ -50,15 +50,6 @@
     border-top: none;
 }
 
-.contenttype-easyform.contenttype-easyform::before {
-    font-family: 'Glyphicons Halflings';
-    content: '\e028';
-    top: 2px;
-}
-
-.icon-easyform-view.toolbar-menu-icon::before {
-    content: '\e807';
-}
 body.portaltype-easyform div.crud-form tbody label {
     display: none;
 }

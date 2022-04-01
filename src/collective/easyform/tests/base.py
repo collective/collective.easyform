@@ -53,6 +53,7 @@ class Fixture(PloneSandboxLayer):
             import plone.formwidget.recaptcha
 
             self.loadZCML(package=plone.formwidget.recaptcha)
+
         except ImportError:
             pass
         try:

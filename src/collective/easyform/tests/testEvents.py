@@ -31,4 +31,4 @@ class TestAdapterPaste(base.EasyFormTestCase):
         active_adapters = tuple(get_actions(ff2))
         self.assertEqual(active_adapters, ("mailer",))
         active_fields = tuple(get_schema(ff2))
-        self.assertEqual(active_fields, ("replyto", "topic", "comments"))
+        self.assertEqual(set(active_fields), set(["replyto", "topic", "comments"]))

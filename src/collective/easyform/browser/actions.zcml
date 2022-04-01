@@ -84,12 +84,5 @@
         template="modeleditor.pt"
         layer="..interfaces.IEasyFormLayer"
         />
-    <browser:page
-        name="model-edit-save"
-        for="collective.easyform.interfaces.IEasyFormActionsContext"
-        permission="cmf.ModifyPortalContent"
-        class=".actions.AjaxSaveHandler"
-        layer="..interfaces.IEasyFormLayer"
-        />
   </configure>
 </configure>

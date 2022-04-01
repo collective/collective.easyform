@@ -205,7 +205,7 @@ class IEasyForm(Schema):
             "method",
             "unload_protection",
             "CSRFProtection",
-            "forceSSL"
+            "forceSSL",
         ],
         order=20,
     )
