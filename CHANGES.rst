@@ -14,6 +14,9 @@ Changelog
 
 New features:
 
+- Add support for Plone 6
+  [pbauer, frappell]
+
 - Download XLSX version of saved data.
   [mathias.leimgruber] (#285)
 
