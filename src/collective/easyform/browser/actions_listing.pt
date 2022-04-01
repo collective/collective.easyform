@@ -1,30 +1,24 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
-      tal:omit-tag=""
-      i18n:domain="plone.schemaeditor"
->
+<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:metal="http://xml.zope.org/namespaces/metal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="plone"
+     class="pat-schemaeditor">
+
+    <a class="pat-plone-modal"
+        id="add-field"
+        href="@@add-action"
+        tal:attributes="
+            href string:${context/absolute_url}/@@add-action;
+        "
+    >
+        <button style="float: right; display: block;"
+                i18n:translate="add_new_action_hellip"
+        >Add new action&hellip;</button>
+    </a>
+
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:top-slot metal:fill-slot="formtop">
       <input tal:replace="structure context/@@authenticator/authenticator" />
-      <script type="text/javascript"
-              tal:attributes="
-                src context/++resource++schemaeditor.js;
-              "
-      ></script>
-      <div class="extraActions">
-        <a class="pat-modal pat-plone-modal"
-           id="add-field"
-           href="@@add-action"
-           tal:attributes="
-             href string:${context/absolute_url}/@@add-action;
-           "
-        >
-          <button style="float: right; display: block;"
-                  i18n:translate="add_new_action_hellip"
-          >Add new action&hellip;</button>
-        </a>
-
-      </div>
     </metal:top-slot>
 
     <metal:fields-slot metal:fill-slot="fields">
@@ -129,4 +123,4 @@
       </tal:block>
     </metal:fields-slot>
   </metal:form>
-</html>
+</div>

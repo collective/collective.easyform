@@ -36,7 +36,8 @@ Finally, let's use a new browser that isn't authenticated, and confirm that for 
 who doesn't have permission to edit the form, SSL will be forced on initial form load as
 well (so the user sees a security icon in their browser.) ::
 
-    >>> browser.open(portal_url + '/testform/content_status_modify?workflow_action=publish')
+    >>> auth = browser.getControl(name='_authenticator', index=0).value
+    >>> browser.open(portal_url + '/testform/content_status_modify?workflow_action=publish&_authenticator={}'.format(auth))
     >>> 'Item state changed' in browser.contents
     True
 

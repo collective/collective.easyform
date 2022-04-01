@@ -13,8 +13,6 @@ from collective.easyform.tests import base
 from os.path import dirname
 from os.path import join
 from plone import api
-from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
-from plone.formwidget.hcaptcha.interfaces import IHCaptchaSettings
 
 from plone.namedfile.file import NamedFile
 from plone.namedfile.interfaces import INamed
@@ -23,12 +21,25 @@ from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.i18n import translate
 from zope.interface import classImplements
 from ZPublisher.BaseRequest import BaseRequest
 from ZPublisher.HTTPRequest import FileUpload
 
+import unittest
+
+try:
+    from plone.formwidget.hcaptcha.interfaces import IHCaptchaSettings
+    HAS_HCAPTCHA = True
+except ImportError:
+    HAS_HCAPTCHA = False
+
+try:
+    from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
+    HAS_RECAPTCHA = True
+except ImportError:
+    HAS_RECAPTCHA = False
 
 IFieldValidator = validators.IFieldValidator
 
@@ -417,6 +428,7 @@ class TestSizeValidator(base.EasyFormTestCase):
         self.assertEqual(translate(validation), u'File type "" is not allowed!')
 
 
+@unittest.skipUnless(HAS_RECAPTCHA, "Requires plone.formwidget.recaptcha")
 class TestSingleRecaptchaValidator(LoadFixtureBase):
 
     """Can't test captcha passes but we can test it fails"""
@@ -428,6 +440,8 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
 
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
+
+
         proxy = registry.forInterface(IReCaptchaSettings)
         proxy.public_key = u"foo"
         proxy.private_key = u"bar"
@@ -454,13 +468,15 @@ class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
 
     schema_fixture = "fieldset_recaptcha.xml"
 
+
+@unittest.skipUnless(HAS_HCAPTCHA, "Requires plone.formwidget.hcaptcha")
 class TestSingleHcaptchaValidator(LoadFixtureBase):
 
     """Can't test captcha passes but we can test it fails
        Copy/paste test from Recaptcha, same api & add'on
        structure
     """
-    
+
     schema_fixture = "hcaptcha.xml"
 
     def afterSetUp(self):
