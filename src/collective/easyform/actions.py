@@ -690,6 +690,8 @@ class SaveData(Action):
 
         def get_data(row, i):
             data = row.get(i, "")
+            if isinstance(data, RichTextValue):
+                return data.raw
             if is_file_data(data):
                 data = data.filename
             if six.PY2 and isinstance(data, six.text_type):
