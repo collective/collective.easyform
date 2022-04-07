@@ -9,7 +9,7 @@ Changelog
 
 .. towncrier release notes start
 
-3.1.0 (unreleased)
+3.1.0 (2022-04-07)
 ------------------
 
 New features:
