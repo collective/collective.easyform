@@ -10,9 +10,9 @@ setup(
     version=version,
     description="Forms for Plone",
     long_description=open("README.rst").read() + "\n" + open("CHANGES.rst").read(),
-    # Get more strings from
-    # http://pypi.python.org/pypi?:action=list_classifiers
+    # Get more strings from https://pypi.org/classifiers/
     classifiers=[
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: Addon",
