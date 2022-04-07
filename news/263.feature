@@ -1,1 +1,0 @@
-Added Japanese translation, supported by Ochanomizu University. [terapyon]

@@ -12,7 +12,15 @@ Changelog
 3.1.0 (unreleased)
 ------------------
 
-New features: 
+New features:
+
+- Added Japanese translation, supported by Ochanomizu University. [terapyon] (#263)
+
+- User-friendly delimiter setup for csv download
+  [ThibautBorn, gotcha] (#267)
+
+- Add support for plone.formwidget.hcaptcha
+  [fredvd] (#292)
 
 - Download XLSX version of saved data.
   [mathias.leimgruber] (#285)
@@ -23,6 +31,15 @@ New features:
 
 Bug fixes:
 
+- Add upgrade step for the csv_delimiter field.
+  [fredvd] (267b)
+
+- Always display fieldsets legends : in tabbed mode, they are hidden by autotoc pattern
+  [laulaz] (#173)
+
+- Show the pro- and epilogue texts also on embedded forms.
+  [fredvd] (#274)
+
 - Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.
   [jensens]
 
@@ -30,7 +47,7 @@ Bug fixes:
   [jensens]
 
 - Fix recaptcha support: include it's zcml when installed.
-  [jensens] 
+  [jensens]
 
 - Fix translations of validation errors.
   [mathias.leimgruber] (#284)

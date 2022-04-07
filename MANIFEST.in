@@ -13,6 +13,3 @@ include *.cfg
 exclude pyvenv.cfg
 include *.rst
 include *.txt
-include pyproject.toml
-recursive-exclude news *
-exclude news
