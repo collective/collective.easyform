@@ -9,8 +9,15 @@ Changelog
 
 .. towncrier release notes start
 
-3.1.0 (unreleased)
+4.0.0 (unreleased)
 ------------------
+
+Breaking change:
+
+- This is for Plone 5.2 and 6 only.
+  At least these are the only versions that are tested.
+  Python 2 and 3 are supported.
+  [maurits]
 
 New features:
 
