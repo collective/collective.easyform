@@ -262,10 +262,14 @@ class Likert(TextLine):
 
     def _validate(self, value):
         super(Likert, self)._validate(value)
+        self.parse(value)
+
+    def parse(self, value):
+        result = dict()
         lines = value.split(',')
         for line in lines:
             if not line:
-                return
+                continue
             id, answer = line.split(':')
             answer = answer.strip()
             if answer not in self.answers:
@@ -273,6 +277,8 @@ class Likert(TextLine):
             index = int(id)
             if index < 1 or index > len(self.questions):
                 raise ValueError('Invalid question index.')
+            result[index] = answer
+        return result
 
 
 LikertFactory = FieldFactory(

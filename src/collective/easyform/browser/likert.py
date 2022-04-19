@@ -3,6 +3,7 @@ import zope.component
 import zope.interface
 import zope.schema.interfaces
 from zope.pagetemplate.interfaces import IPageTemplate
+from plone.memoize.view import memoize
 
 from z3c.form import interfaces
 from z3c.form.widget import Widget, FieldWidget
@@ -44,6 +45,17 @@ class LikertWidget(widget.HTMLTextInputWidget, Widget):
             return '%i: %s' % (index + 1, value)
         else:
             return None
+
+    @memoize
+    def parsed_values(self):
+        return self.field.parse(self.value)
+
+    def checked(self, question_number, answer_number):
+        values = self.parsed_values()
+        if not values or (question_number) not in values:
+            return False
+        else:
+            return values[question_number] == self.field.answers[answer_number - 1]
 
 
 @zope.component.adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)

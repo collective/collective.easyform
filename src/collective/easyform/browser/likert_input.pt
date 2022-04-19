@@ -13,9 +13,14 @@
        tal:attributes="name string:${view/name}-${repeat/question/index}-empty-marker" />
               <td tal:repeat="answer view/field/answers">
                 <input type="radio"
-                       tal:attributes="id string:${view/name}.${repeat/question/index}_${repeat/answer/index};
-                                       name string:${view/name}.${repeat/question/index};
-                                       value answer;" />
+                       tal:define="answer_index repeat/answer/index;
+                                   question_index repeat/question/index;
+                                   answer_number repeat/answer/number;
+                                   question_number repeat/question/number;"
+                       tal:attributes="id string:${view/name}.${question_index}_${answer_index};
+                                       name string:${view/name}.${question_index};
+                                       value answer;
+                                       checked python:view.checked(question_number, answer_number);" />
               </td>
             </tr>
       </tbody></table>
