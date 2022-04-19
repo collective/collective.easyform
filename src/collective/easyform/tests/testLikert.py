@@ -42,6 +42,17 @@ class LikertFieldTests(unittest.TestCase):
         self.assertRaises(ValueError, field.validate, u'-1:agree')
         self.assertRaises(ValueError, field.validate, u'Agree')
 
+    def test_parse(self):
+        field = self._makeOne(required=False, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
+        field.validate(None)
+        self.assertEquals(dict(), field.parse(u''))
+        self.assertEquals({1: u'Agree'}, field.parse(u'1: Agree'))
+        self.assertEquals({2: u'Agree'}, field.parse(u'2: Agree'))
+        self.assertEquals(
+            {1: u'Disagree', 2: u'Agree'},
+            field.parse(u'1: Disagree, 2: Agree')
+        )
+
 
 class LikerWidgetTests(EasyFormTestCase):
 

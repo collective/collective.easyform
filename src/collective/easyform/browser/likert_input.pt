@@ -15,7 +15,8 @@
                 <input type="radio"
                        tal:attributes="id string:${view/name}.${repeat/question/index}_${repeat/answer/index};
                                        name string:${view/name}.${repeat/question/index};
-                                       value answer;" />
+                                       value answer;
+                                       checked python:view.checked(repeat.question.number, repeat.answer.number);" />
               </td>
             </tr>
       </tbody></table>
