@@ -12,7 +12,6 @@ from zope.schema.interfaces import IFromUnicode
 from zope.schema.interfaces import ISet
 from zope.schema.interfaces import ValidationError
 
-
 import logging
 
 
@@ -63,6 +62,7 @@ def migrate_saved_data(ploneformgen, easyform):
                         ValidationError,
                         SyntaxError,
                         DateTime.interfaces.SyntaxError,
+                        DateTime.interfaces.TimeError,
                     ):
                         # Exceptions above are often due to long living Forms, where users have changed their minds about
                         # the Field formats/widgets...
