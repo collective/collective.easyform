@@ -52,3 +52,19 @@ def update_last_compilation_1008(context):
 
 def update_last_compilation_1009(context):
     update_last_compilation(context, (2021, 8, 31, 0, 0, 0))
+
+
+def fix_savedata_persistence_issues(context):
+
+    from persistent.mapping import PersistentMapping
+
+    catalog = api.portal.get_tool("portal_catalog")
+    forms = catalog.unrestrictedSearchResults(portal_type='EasyForm')
+    for item in forms:
+        form = item.getObject()
+        if hasattr(form, '_inputStorage'):
+            # Convert to persistent mapping
+            form._inputStorage = PersistentMapping(form._inputStorage)
+            logger.info(
+                'Fixed storage of {}'.format('/'.join(form.getPhysicalPath()))
+            )
