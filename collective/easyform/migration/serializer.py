@@ -61,20 +61,20 @@ class SerializeToJson(DXContentToJson):
                     column_names.remove("id")
                     column_names.sort()
 
-                    if column_names != included_columns_in_savedata:
-                        if not column_count_mismatch:
-                            logger.warning(
-                                "Skipped Saveddata row because of mismatch witch current fields in %s",
-                                self.context.absolute_url(),
-                            )
-                            column_count_mismatch = True
-                        logger.info(
-                            "Skipped Saveddata row of '%s' because of field_names mismatch in %s",
-                            count,
-                            self.context.absolute_url(),
-                        )
-                        count += 1
-                        continue
+                    # if column_names != included_columns_in_savedata:
+                    #     if not column_count_mismatch:
+                    #         logger.warning(
+                    #             "Skipped Saveddata row because of mismatch witch current fields in %s",
+                    #             self.context.absolute_url(),
+                    #         )
+                    #         column_count_mismatch = True
+                    #     logger.info(
+                    #         "Skipped Saveddata row of '%s' because of field_names mismatch in %s",
+                    #         count,
+                    #         self.context.absolute_url(),
+                    #     )
+                    #     count += 1
+                    #     continue
                     try:
                         for key, value in data.items():
                             data[key] = convertBeforeSerialize(value)
@@ -135,9 +135,14 @@ class DeserializeFromJson(DXContentFromJson):
                     savedData = storage[name]
                     for key, value in savedData.items():
                         for name in included_columns_in_savedata:
-                            value[name] = convertAfterDeserialize(
-                                schema[name], value[name]
-                            )
+                            try:
+                                value[name] = convertAfterDeserialize(
+                                    schema[name], value[name]
+                                )
+                            except KeyError:
+                                value[name] = convertAfterDeserialize(
+                                    schema[name], None
+                                )
                         action.setDataRow(int(key), value)
 
 
