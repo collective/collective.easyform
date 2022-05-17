@@ -32,28 +32,25 @@ def migrate_saved_data(ploneformgen, easyform):
                 if "ReCaptcha" in tuple[1].__str__()
             ]
             for idx, row in enumerate(data_adapter.getSavedFormInput()):
-                if len(row) != len(cols):
-                    import pdb
-
-                    pdb.set_trace()
-                    if not (
-                        len(cols) - len(row) == 1
-                        and recaptcha_in_form
-                        and "x" not in row
-                    ):
-                        if not column_count_mismatch:
-                            logger.warning(
-                                "Number of columns does not match for all rows. Some data were skipped in "
-                                "data adapter %s/%s",
-                                "/".join(easyform.getPhysicalPath()),
-                                data_adapter.getId(),
-                            )
-                            column_count_mismatch = True
-                        logger.info(
-                            "Column count mismatch at row %s",
-                            idx,
-                        )
-                        continue
+                # if len(row) != len(cols):
+                #     if not (
+                #         len(cols) - len(row) == 1
+                #         and recaptcha_in_form
+                #         and "x" not in row
+                #     ):
+                #         if not column_count_mismatch:
+                #             logger.warning(
+                #                 "Number of columns does not match for all rows. Some data were skipped in "
+                #                 "data adapter %s/%s",
+                #                 "/".join(easyform.getPhysicalPath()),
+                #                 data_adapter.getId(),
+                #             )
+                #             column_count_mismatch = True
+                #         logger.info(
+                #             "Column count mismatch at row %s",
+                #             idx,
+                #         )
+                #         continue
                 data = {}
                 for key, value in zip(cols, row):
                     try:
