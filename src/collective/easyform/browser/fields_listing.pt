@@ -4,17 +4,13 @@
      i18n:domain="plone"
      class="pat-schemaeditor">
 
-  <a id="add-field" class="pat-plone-modal"
-     href="${context/absolute_url}/@@add-field">
-    <button style="float: right; display: block;"
-           i18n:translate="add_new_field_hellip">Add new field&hellip;</button>
-  </a>
+  <a id="add-field" class="pat-plone-modal btn btn-primary float-end ms-3"
+     href="${context/absolute_url}/@@add-field"
+     i18n:translate="add_new_field_hellip">Add new field&hellip;</a>
 
-  <a id="add-fieldset" class="pat-plone-modal" tal:condition="context/enableFieldsets"
-     href="${context/absolute_url}/@@add-fieldset">
-    <button style="float: right; display: block;"
-           i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</button>
-  </a>
+  <a id="add-fieldset" class="pat-plone-modal btn btn-primary float-end" tal:condition="context/enableFieldsets"
+     href="${context/absolute_url}/@@add-fieldset" 
+     i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</a>
 
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:top-slot metal:fill-slot="formtop">
@@ -125,4 +121,3 @@
     </metal:fields-slot>
   </metal:form>
 </div>
-
