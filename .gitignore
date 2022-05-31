@@ -37,3 +37,4 @@ var/
 pyvenv.cfg
 /venv/
 /.vscode
+local.cfg
