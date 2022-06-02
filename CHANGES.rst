@@ -52,6 +52,9 @@ Bug fixes:
 - Fix translations of validation errors.
   [mathias.leimgruber] (#284)
 
+- Fix persistence issue with SaveData storage.
+  [mathias.leimgruber] (#259)
+
 
 3.0.5 (2020-11-17)
 ------------------

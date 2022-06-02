@@ -38,6 +38,7 @@ from email.mime.text import MIMEText
 from email.utils import formataddr
 from json import dumps
 from logging import getLogger
+from persistent.mapping import PersistentMapping
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
@@ -620,7 +621,7 @@ class SaveData(Action):
     def _storage(self):
         context = get_context(self)
         if not hasattr(context, "_inputStorage"):
-            context._inputStorage = {}
+            context._inputStorage = PersistentMapping()
         if self.__name__ not in context._inputStorage:
             context._inputStorage[self.__name__] = SavedDataBTree()
         return context._inputStorage[self.__name__]
