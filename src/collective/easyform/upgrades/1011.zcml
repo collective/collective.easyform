@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1011"
+      profile="collective.easyform:default"
+      source="1010"
+      >
+    <gs:upgradeStep
+        title="Fix SaveData persistence issues"
+        handler=".fix_savedata_persistence_issues"
+        />
+  </gs:upgradeSteps>
+
+</configure>

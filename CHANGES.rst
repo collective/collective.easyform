@@ -5,8 +5,16 @@ Changelog
 4.0.1 (unreleased)
 ------------------
 
+New features:
+
 - Add Likert scale field.
   [gotcha]
+
+
+Bug fixes;
+
+- Fix persistence issue with SaveData storage.
+  [mathias.leimgruber] (#259)
 
 
 4.0.0 (2022-04-07)
