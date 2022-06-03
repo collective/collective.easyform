@@ -2,7 +2,6 @@
 #
 # Integeration tests specific to the mailer
 #
-
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_context
 from collective.easyform.api import get_schema
@@ -11,6 +10,7 @@ from collective.easyform.api import set_fields
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.tests import base
 from email.header import decode_header
+from importlib import import_module
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
@@ -37,6 +37,11 @@ try:
     HAS_OPENPYXL = True
 except ImportError:
     HAS_OPENPYXL = False
+
+
+HAS_PLONE_6 = getattr(
+    import_module("Products.CMFPlone.factory"), "PLONE60MARKER", False
+)
 
 
 MODEL_WITH_ALL_FIELDS = """
@@ -609,7 +614,7 @@ class TestFunctions(base.EasyFormTestCase):
             topic="test subject",
             richtext="Raw",
             comments=u"test comments😀",
-            datetime="2019-04-01 00:00:00",
+            datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
             bool=True,
@@ -619,6 +624,8 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             empty_string="",
         )
+        if not HAS_PLONE_6:
+            fields["datetime"] = "2019-04-01 00:00:00"
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
@@ -627,12 +634,12 @@ class TestFunctions(base.EasyFormTestCase):
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, xml = attachments[0]
-        output_nodes = (
+        output_nodes = [
             b'<field name="replyto">test@test.org</field>',
             b'<field name="topic">test subject</field>',
             b'<field name="richtext">Raw</field>',
             b'<field name="comments">test comments\xf0\x9f\x98\x80</field>',
-            b'<field name="datetime">2019-04-01 00:00:00</field>',
+            b'<field name="datetime">2019-04-01T00:00:00</field>',
             b'<field name="date">2019-04-02</field>',
             b'<field name="bool">True</field>',
             b'<field name="number">1981</field>',
@@ -640,7 +647,9 @@ class TestFunctions(base.EasyFormTestCase):
             b'<field name="tuple">["elemenet1", "element2"]</field>',
             b'<field name="list">["1", "2", "3", "4"]</field>',
             b'<field name="empty_string" />',
-        )
+        ]
+        if not HAS_PLONE_6:
+            output_nodes[4] = b'<field name="datetime">2019-04-01 00:00:00</field>'
 
         self.assertIn(b"<?xml version='1.0' encoding='utf-8'?>\n<form>", xml)
 
@@ -661,7 +670,7 @@ class TestFunctions(base.EasyFormTestCase):
             topic="test subject",
             richtext="Raw",
             comments=u"test comments😀",
-            datetime="2019-04-01 00:00:00",
+            datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
             bool=True,
@@ -671,6 +680,8 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             empty_string="",
         )
+        if not HAS_PLONE_6:
+            fields["datetime"] = "2019-04-01 00:00:00"
         request = self.LoadRequestForm(**fields)
 
         attachments = mailer.get_attachments(fields, request)
@@ -680,12 +691,12 @@ class TestFunctions(base.EasyFormTestCase):
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, csv = attachments[0]
-        output = (
+        output = [
             b"test@test.org",
             b"test subject",
             b"Raw",
             b"test comments\xf0\x9f\x98\x80",
-            b"2019-04-01 00:00:00",
+            b"2019-04-01T00:00:00",
             b"2019-04-02",
             b"True",
             b"1981",
@@ -693,7 +704,9 @@ class TestFunctions(base.EasyFormTestCase):
             b'[""elemenet1"", ""element2""]',
             b'[""1"", ""2"", ""3"", ""4""]',
             b"",
-        )
+        ]
+        if not HAS_PLONE_6:
+            output[4] = b"2019-04-01 00:00:00"
 
         # the order of the columns can change ... check each
         # TODO should really have a header row
@@ -715,7 +728,7 @@ class TestFunctions(base.EasyFormTestCase):
             topic="test subject",
             richtext="Raw",
             comments=u"test comments😀",
-            datetime="2019-04-01 00:00:00",
+            datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
             bool=True,
@@ -725,6 +738,9 @@ class TestFunctions(base.EasyFormTestCase):
             list=[1, 2, 3, 4],
             empty_string="",
         )
+        if not HAS_PLONE_6:
+            fields["datetime"] = b"2019-04-01 00:00:00"
+
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
@@ -739,12 +755,12 @@ class TestFunctions(base.EasyFormTestCase):
 
         row = [cell.value and cell.value.encode('utf-8') or b'' for cell in list(ws.rows)[0]]
 
-        output = (
+        output = [
             b"test@test.org",
             b"test subject",
             b"Raw",
             b"test comments\xf0\x9f\x98\x80",
-            b"2019-04-01 00:00:00",
+            b"2019-04-01T00:00:00",
             b"2019-04-02",
             b"True",
             b"1981",
@@ -752,7 +768,10 @@ class TestFunctions(base.EasyFormTestCase):
             b'["elemenet1", "element2"]',
             b'["1", "2", "3", "4"]',
             b"",
-        )
+        ]
+        if not HAS_PLONE_6:
+            output[4] = b"2019-04-01 00:00:00"
+
         # the order of the columns can change ... check each
         # TODO should really have a header row
         for value in output:
