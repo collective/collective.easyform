@@ -268,7 +268,7 @@ class EasyFormActionsListing(SchemaListing):
 
         # update widgets to take the new defaults into account
         self.updateWidgets()
-        self.request.response.redirect(self.context.absolute_url())
+        self.request.response.redirect(aq_parent(self.context).absolute_url())
 
     def handleModelEdit(self, action):
         self.request.response.redirect("@@modeleditor")

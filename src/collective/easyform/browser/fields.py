@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl import Unauthorized
+from Acquisition import aq_parent
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IEasyFormFieldContext
@@ -90,8 +91,25 @@ class FieldsSchemaListing(SchemaListing):
             or super(FieldsSchemaListing, self).default_fieldset_label
         )
 
+    @property
+    def enable_unload_protection(self):
+        return False
+
     def handleModelEdit(self, action):
         self.request.response.redirect("@@modeleditor")
+
+    @button.buttonAndHandler(
+        _(u'Done'),
+    )
+    def handleDone(self, action):
+        return self.request.RESPONSE.redirect(aq_parent(self.context).absolute_url())
+
+    @button.buttonAndHandler(
+        _(u'Save Defaults'),
+        condition=lambda form: getattr(form.context, 'showSaveDefaults', True)
+    )
+    def handleSaveDefaults(self, action):
+        super(FieldsSchemaListing, self).handleSaveDefaults(self, action)
 
 
 if HAVE_RESOURCE_EDITOR:
