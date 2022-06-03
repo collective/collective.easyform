@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:omit-tag="">
+<table class="likert listing" tal:attributes="class string:${view/klass} listing;">
+        <tbody><tr>
+          <th>&nbsp;</th>
+          <th tal:repeat="answer view/field/answers" tal:content="answer" />
+        </tr>
+            <tr tal:repeat="question view/field/questions" tal:attributes="class python:'even' if repeat.question.even else 'odd'">
+              <td>
+<span tal:content="question">Question Number One</span>
+<input name="field-empty-marker" type="hidden" value="1"
+       tal:attributes="name string:${view/name}-${repeat/question/index}-empty-marker" />
+              <td tal:repeat="answer view/field/answers"
+                  onclick="jQuery(event.target).children('input').click()">
+                <input type="radio"
+                       tal:attributes="id string:${view/name}.${repeat/question/index}_${repeat/answer/index};
+                                       name string:${view/name}.${repeat/question/index};
+                                       value answer;
+                                       checked python:view.checked(repeat.question.number, repeat.answer.number);" />
+              </td>
+            </tr>
+      </tbody></table>
+</html>
