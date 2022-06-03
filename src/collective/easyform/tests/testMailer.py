@@ -739,7 +739,7 @@ class TestFunctions(base.EasyFormTestCase):
             empty_string="",
         )
         if not HAS_PLONE_6:
-            fields["datetime"] = b"2019-04-01 00:00:00"
+            fields["datetime"] = "2019-04-01 00:00:00"
 
         request = self.LoadRequestForm(**fields)
         attachments = mailer.get_attachments(fields, request)
