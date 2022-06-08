@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.0.1.dev0'
+version = '1.0.1.dev0+zest0'
 
 setup(name='collective.easyform',
       version=version,
@@ -43,10 +43,14 @@ setup(name='collective.easyform',
           'recaptcha': [
               'plone.formwidget.recaptcha'
           ],
+          'hcaptcha': ['plone.formwidget.hcaptcha'],
+          'norobots': ['collective.z3cform.norobots'],
           'test': [
               'plone.app.contenttypes',
               'plone.app.testing[robot]',
               'plone.app.robotframework',
+              'plone.formwidget.hcaptcha',
+
           ]
       },
       entry_points="""

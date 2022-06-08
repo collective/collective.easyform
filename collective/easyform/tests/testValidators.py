@@ -23,6 +23,21 @@ from zope.component import getUtility
 from zope.component.interfaces import ComponentLookupError
 from zope.interface import classImplements
 
+import unittest
+
+try:
+    from plone.formwidget.hcaptcha.interfaces import IHCaptchaSettings
+    HAS_HCAPTCHA = True
+except ImportError:
+    HAS_HCAPTCHA = False
+
+try:
+    from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
+    HAS_RECAPTCHA = True
+except ImportError:
+    HAS_RECAPTCHA = False
+
+
 IFieldValidator = validators.IFieldValidator
 
 FORM_DATA = {
@@ -260,8 +275,8 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
         from collective.easyform.validators import update_validators
         update_validators()
 
-        validator = lambda n: getUtility(IFieldValidator, name=n)
-        validate = lambda n, v: validator(n) and validator(n)(v)
+        def validator(n): return getUtility(IFieldValidator, name=n)
+        def validate(n, v): return validator(n) and validator(n)(v)
 
         self.assertRaises(
             ComponentLookupError, validate, 'noValidator', 'test')
@@ -279,10 +294,89 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
         # self.assertEqual(validate('isZipCode', 't2x 1v4'), None)
 
 
+@unittest.skipUnless(HAS_RECAPTCHA, "Requires plone.formwidget.recaptcha")
+class TestSingleRecaptchaValidator(LoadFixtureBase):
+
+    """Can't test captcha passes but we can test it fails"""
+
+    schema_fixture = "recaptcha.xml"
+
+    def afterSetUp(self):
+        super(TestSingleRecaptchaValidator, self).afterSetUp()
+
+        # Put some dummy values for recaptcha
+        registry = getUtility(IRegistry)
+
+        proxy = registry.forInterface(IReCaptchaSettings)
+        proxy.public_key = u"foo"
+        proxy.private_key = u"bar"
+
+    def test_no_answer(self):
+        data = {"verification": ""}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn(
+            "The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
+
+    def test_wrong(self):
+        data = {"verification": "123"}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn(
+            "The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
+
+
+class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
+    """make sure it works inside a fieldset too"""
+
+    schema_fixture = "fieldset_recaptcha.xml"
+
+
+@unittest.skipUnless(HAS_HCAPTCHA, "Requires plone.formwidget.hcaptcha")
+class TestSingleHcaptchaValidator(LoadFixtureBase):
+
+    """Can't test captcha passes but we can test it fails
+       Copy/paste test from Recaptcha, same api & add'on
+       structure
+    """
+
+    schema_fixture = "hcaptcha.xml"
+
+    def afterSetUp(self):
+        super(TestSingleHcaptchaValidator, self).afterSetUp()
+
+        # Put some dummy values for recaptcha
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IHCaptchaSettings)
+        proxy.public_key = u"foo"
+        proxy.private_key = u"bar"
+
+    def test_no_answer(self):
+        data = {"verification": ""}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn(
+            "The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
+
+    def test_wrong(self):
+        data = {"verification": "123"}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertIn(
+            "The code you entered was wrong, please enter the new one.", form)
+        self.assertNotIn("Thanks for your input.", form)
+
+
 def test_suite():
-    from unittest import TestSuite, makeSuite
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestBaseValidators))
-    suite.addTest(makeSuite(TestCustomValidators))
-    suite.addTest(makeSuite(TestCustomValidatorMessages))
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestBaseValidators))
+    suite.addTest(unittest.makeSuite(TestCustomValidators))
+    suite.addTest(unittest.makeSuite(TestCustomValidatorMessages))
     return suite

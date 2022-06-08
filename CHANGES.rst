@@ -4,7 +4,14 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Backport re/hcaptcha validator zcml fix to override default easyform validator so that
+  the captcha validator is actually checked.
+  [fredvd]
+
+
+- Backport hcaptcha and norobots suppport from 3.x/4.x for Plone 4.
+  [fredvd]
+
 
 
 1.0.0 (2021-11-24)

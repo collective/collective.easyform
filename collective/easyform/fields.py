@@ -6,6 +6,8 @@ from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ILabel
+from collective.easyform.interfaces import IHCaptcha
+from collective.easyform.interfaces import INorobotCaptcha
 from collective.easyform.interfaces import IReCaptcha
 from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
@@ -40,6 +42,7 @@ class FieldExtenderValidator(z3c_validator.SimpleFieldValidator):
         efield = IFieldExtender(self.field)
         validators = getattr(efield, 'validators', [])
         if validators:
+            print validators
             for validator in validators:
                 vmethod = queryUtility(IFieldValidator, name=validator)
                 if not vmethod:
@@ -123,6 +126,7 @@ class RichLabel(Label):
         self.rich_label = rich_label
         super(RichLabel, self).__init__(**kw)
 
+
 LabelFactory = FieldFactory(Label, _(u'label_label_field', default=u'Label'))
 RichLabelFactory = FieldFactory(
     RichLabel, _(u'label_richlabel_field', default=u'Rich Label'))
@@ -137,6 +141,29 @@ class ReCaptcha(TextLine):
     """
     implements(IReCaptcha)
 
+
 ReCaptchaFactory = FieldFactory(
     ReCaptcha, _(u'label_recaptcha_field', default=u'ReCaptcha'))
 ReCaptchaHandler = BaseHandler(ReCaptcha)
+
+
+class HCaptcha(TextLine):
+    """A HCaptcha field"""
+    implements(IHCaptcha)
+
+
+HCaptchaFactory = FieldFactory(
+    HCaptcha, _(u"label_hcaptcha_field", default=u"HCaptcha")
+)
+HCaptchaHandler = BaseHandler(HCaptcha)
+
+
+@implementer(INorobotCaptcha)
+class NorobotCaptcha(TextLine):
+    """A NorobotCaptcha field"""
+
+
+NorobotFactory = FieldFactory(
+    NorobotCaptcha, _(u"label_norobot_field", default=u"NorobotCaptcha")
+)
+NorobotCaptchaHandler = BaseHandler(NorobotCaptcha)

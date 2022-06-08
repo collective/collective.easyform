@@ -8,6 +8,10 @@
 
   <include package="plone.app.dexterity" />
 
+  <configure zcml:condition="installed plone.formwidget.hcaptcha">"
+    <include package="plone.formwidget.hcaptcha" />
+  </configure>
+  
   <i18n:registerTranslations directory="locales" />
 
   <include file="permissions.zcml" />

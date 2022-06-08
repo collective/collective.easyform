@@ -1083,6 +1083,12 @@ class IReCaptcha(ITextLine):
 
     """ReCaptcha Field."""
 
+class IHCaptcha(ITextLine):
+    """HCaptcha Field."""
+
+
+class INorobotCaptcha(ITextLine):
+    """Norobot Field."""
 
 class IFieldValidator(Interface):
 

@@ -52,6 +52,17 @@ class Fixture(PloneSandboxLayer):
                 package=plone.formwidget.recaptcha, context=configurationContext)
         except ImportError:
             pass
+        try:
+            import plone.formwidget.hcaptcha
+            self.loadZCML(package=plone.formwidget.hcaptcha)
+        except ImportError:
+            pass
+        try:
+            import collective.z3cform.norobots
+
+            self.loadZCML(package=collective.z3cform.norobots)
+        except ImportError:
+            pass
 
     def setUpPloneSite(self, portal):
         try:
@@ -61,6 +72,11 @@ class Fixture(PloneSandboxLayer):
 
         # Install the collective.easyform product
         self.applyProfile(portal, 'collective.easyform:default')
+        try:
+            self.applyProfile(portal, "plone.formwidget.recaptcha:default")
+            self.applyProfile(portal, "plone.formwidget.hcaptcha:default")
+        except KeyError:
+            pass
         portal.acl_users.userFolderAddUser('admin',
                                            'secret',
                                            ['Manager'],

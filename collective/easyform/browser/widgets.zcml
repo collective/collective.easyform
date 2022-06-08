@@ -79,4 +79,26 @@
              *"
         />
     </configure>
+    <configure zcml:condition="installed plone.formwidget.hcaptcha">
+        <adapter
+            provides="z3c.form.interfaces.IFieldWidget"
+            for="collective.easyform.interfaces.IHCaptcha
+                 *"
+            factory="plone.formwidget.hcaptcha.widget.HCaptchaFieldWidget"
+            />
+    </configure>
+    <configure zcml:condition="installed collective.z3cform.norobots">
+        <adapter
+            provides="z3c.form.interfaces.IFieldWidget"
+            for="collective.easyform.interfaces.INorobotCaptcha
+                 *"
+            factory="collective.z3cform.norobots.widget.NorobotsFieldWidget"
+            />
+        <z3c:widgetTemplate
+            template="empty.pt"
+            mode="display"
+            layer="z3c.form.interfaces.IFormLayer"
+            widget="collective.z3cform.norobots.widget.INorobotsWidget"
+            />
+    </configure>
 </configure>
