@@ -167,7 +167,7 @@ msgstr "Danke-Seite"
 
 #: collective/easyform/browser/controlpanel.py:29
 #: collective/easyform/profiles/default/registry.xml
-msgid "This Fields are available for your forms."
+msgid "These Fields are available for your forms."
 msgstr "Diese Felder stehen für das Formular zur Verfügung."
 
 #: collective/easyform/vocabularies.py:31

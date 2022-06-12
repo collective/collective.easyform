@@ -26,7 +26,7 @@ class IEasyFormControlPanel(Interface):
 
     allowedFields = schema.List(
         title=_(u"Allowed Fields"),
-        description=_(u"This Fields are available for your forms."),
+        description=_(u"These Fields are available for your forms."),
         value_type=schema.Choice(
             required=False,
             vocabulary="easyform.SchemaEditorFields",
