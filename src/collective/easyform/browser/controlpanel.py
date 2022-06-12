@@ -17,9 +17,9 @@ def getContent(self):
 class IEasyFormControlPanel(Interface):
 
     migrate_all_forms = schema.Bool(
-        title=u"migrate all the forms to dexterity",
-        description=u"This will migrate all the forms already present "
-        u"in the site from archetype to dexterity",
+        title=_(u"migrate all the forms to dexterity"),
+        description=_(u"This will migrate all the forms already present "
+                      u"in the site from archetype to dexterity"),
         required=False,
         default=False,
     )
@@ -46,7 +46,7 @@ class IEasyFormControlPanel(Interface):
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel
     schema_prefix = "easyform"
-    label = u"easyform Settings"
+    label = _(u"easyform Settings")
 
     def updateFields(self):
         super(EasyFormControlPanelForm, self).updateFields()

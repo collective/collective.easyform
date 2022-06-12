@@ -16,6 +16,9 @@ Bug fixes;
 - Fix persistence issue with SaveData storage.
   [mathias.leimgruber] (#259)
 
+- Add missing translations strings
+  [laulaz]
+
 
 4.0.0 (2022-04-07)
 ------------------
