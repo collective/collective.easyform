@@ -28,10 +28,6 @@ class IEasyFormControlPanel(Interface):
         title=_(u"Allowed Fields"),
         description=_(u"This Fields are available for your forms."),
         value_type=schema.Choice(
-            description=_(
-                u"help_registry_items",
-                default=u"Select the registry items you desire to modify",
-            ),
             required=False,
             vocabulary="easyform.SchemaEditorFields",
         ),
