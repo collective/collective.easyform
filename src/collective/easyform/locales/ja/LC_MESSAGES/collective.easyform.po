@@ -536,7 +536,7 @@ msgstr "このテキストは入力フィールドの前に表示されます"
 # 開発者に問い合わせ後、日本語訳再検討（Formgenの日本語訳）③
 # メールのメール受取人欄に入力された値で置き換えるために評価されるTALES式です。この目的でバリデートされていないデータを要求することは強く警告されます。必要のないときは空欄にします。文字列として評価されます。【註記】この式のエラーはフォーム表示のエラーとして表示されます
 # actionを編集→Overrides→Recipient Expressionの説明文
-#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against usingunvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
 #: collective/easyform/interfaces/mailer.py:448
 #, fuzzy
 msgid "help_recipient_override_text"

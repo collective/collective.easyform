@@ -443,7 +443,7 @@ msgstr ""
 msgid "help_prologue_text"
 msgstr "Deze tekst zal worden getoond boven de velden van het formulier."
 
-#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against usingunvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
 #: collective/easyform/interfaces/mailer.py:448
 msgid "help_recipient_override_text"
 msgstr "Een TALES expressie die gebruikt wordt om de waarde van het e-mailadres van de afzender te overschrijven. We raden sterk af om niet gevalideerde data uit het request hiervoor te gebruiken. Laat leeg indien dit niet nodig is. De expressie moet een 'string' terug geven. MERK OP: fouten in de evaluatie van deze expressie zullen leiden tot fouten in het tonen van het formulier."
