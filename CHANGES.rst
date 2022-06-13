@@ -11,7 +11,7 @@ New features:
   [gotcha]
 
 
-Bug fixes;
+Bug fixes:
 
 - Fix persistence issue with SaveData storage.
   [mathias.leimgruber] (#259)
