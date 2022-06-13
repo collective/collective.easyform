@@ -10,6 +10,8 @@ New features:
 - Add Likert scale field.
   [gotcha]
 
+- Add French translations
+  [mpeeters, laulaz]
 
 Bug fixes:
 
