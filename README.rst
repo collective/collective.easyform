@@ -196,6 +196,23 @@ of this package is taken. If you plan to override start with the the `mail_body_
 it is a valid pagetemplate.
 
 
+Translations
+============
+
+This add-on has been translated into
+
+- Basque
+- Brazilian Portuguese
+- Deutsch
+- Dutch
+- English
+- French
+- Italian
+- Japanese
+- Spanish
+- Ukrainian
+
+
 Related Addons
 ==============
 
