@@ -60,7 +60,7 @@ class IFieldExtender(Schema):
     fieldset(
         u"advanced",
         label=_("Advanced"),
-        fields=["field_widget", "validators", "THidden"],
+        fields=["field_widget", "validators", "THidden", "depends_on"],
     )
     directives.write_permission(field_widget=config.EDIT_ADVANCED_PERMISSION)
     field_widget = zope.schema.Choice(
@@ -86,6 +86,17 @@ class IFieldExtender(Schema):
         description=_(u"help_hidden", default=u"Field is hidden"),
         required=False,
         default=False,
+    )
+    directives.write_permission(depends_on=config.EDIT_TALES_PERMISSION)
+    depends_on = zope.schema.TextLine(
+        title=_(
+            u'Field depends on',
+        ),
+        description=_(
+            u'This is using the pat-depends from patternslib, all options are supported. Please read the <a href="https://patternslib.com/demos/depends" target="_blank">pat-depends documentations</a> for options.',
+        ),
+        default=u'',
+        required=False,
     )
     fieldset(
         u"overrides",

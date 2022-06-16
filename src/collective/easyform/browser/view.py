@@ -23,6 +23,7 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.namedfile.interfaces import INamed
 from plone.z3cform.layout import FormWrapper
 from Products.Five import BrowserView
+from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import form
@@ -255,6 +256,14 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
         return fields
 
+    def set_depends_on(self, fields):
+        for fname, field in fields.items():
+            efield = IFieldExtender(field.field)
+            depends_on = getattr(efield, "depends_on", None)
+            if depends_on:
+                field.field.setTaggedValue("depends_on", depends_on)
+        return fields
+
     def updateFields(self):
         if self.thanksPage:
             return
@@ -264,8 +273,10 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if not hasattr(self, "base_groups"):
             self.base_groups = dict([(i.label, i.fields) for i in self.groups])
         self.fields = self.setOmitFields(self.base_fields)
+        self.fields = self.set_depends_on(self.fields)
         for group in self.groups:
             group.fields = self.setOmitFields(self.base_groups.get(group.label))
+            group.fields = self.set_depends_on(group.fields)
 
     def updateActions(self):
         super(EasyFormForm, self).updateActions()
