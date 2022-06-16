@@ -63,6 +63,7 @@ setup(
         "hcaptcha": ["plone.formwidget.hcaptcha"],
         "norobots": ["collective.z3cform.norobots"],
         "ploneformgen": ["Products.PloneFormGen",],
+        "patternslib": ["plone.patternslib"],
         "test": [
             "plone.app.testing[robot]",
             "plone.app.robotframework",
