@@ -42,6 +42,9 @@ class FieldExtender(object):
     TEnabled = property(
         lambda x: _get_(x, "TEnabled"), lambda x, value: _set_(x, value, "TEnabled")
     )
+    depends_on = property(
+        lambda x: _get_(x, "depends_on"), lambda x, value: _set_(x, value, "depends_on")
+    )
     TValidator = property(
         lambda x: _get_(x, "TValidator"), lambda x, value: _set_(x, value, "TValidator")
     )
@@ -65,7 +68,7 @@ class EasyFormFieldMetadataHandler(object):
 
     def read(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ["TDefault", "TEnabled", "TValidator"]:
+        for i in ["TDefault", "TEnabled", "TValidator", "depends_on"]:
             value = fieldNode.get(ns(i, self.namespace))
             if value:
                 data = schema.queryTaggedValue(i, {})
@@ -92,7 +95,7 @@ class EasyFormFieldMetadataHandler(object):
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ["TDefault", "TEnabled", "TValidator"]:
+        for i in ["TDefault", "TEnabled", "TValidator", "depends_on"]:
             value = schema.queryTaggedValue(i, {}).get(name, None)
             if value:
                 fieldNode.set(ns(i, self.namespace), value)

@@ -6,12 +6,15 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
 from z3c.form.browser import widget
+from z3c.form.interfaces import IWidget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implementer_only
+from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserView
 from zope.schema.interfaces import IField
 
 
@@ -61,3 +64,28 @@ class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
 
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("rich_label.pt")
+
+
+class IRenderWidget(Interface):
+    """
+    """
+
+
+# overriding plone.app.z3cform widget.pt:
+@implementer(IRenderWidget)
+class RenderWidget(ViewMixinForTemplates, BrowserView):
+    index = ViewPageTemplateFile('widget.pt')
+
+
+@adapter(IRenderWidget, Interface)
+@implementer(IBrowserView)
+class WidgetDependencyView(object):
+    def __init__(self, widget, request):
+        self.widget = widget
+        self.request = request
+
+    def __call__(self):
+        depends_on = self.widget.context.field.queryTaggedValue("depends_on")
+        if not depends_on:
+            return ""
+        return depends_on

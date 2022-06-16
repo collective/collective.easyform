@@ -74,6 +74,19 @@
       class=".widgets.RichLabelRenderWidget"
       layer="..interfaces.IEasyFormLayer"
       />
+  <browser:page
+      name="ploneform-render-widget"
+      for="z3c.form.interfaces.IWidget"
+      layer="..interfaces.IEasyFormLayer"
+      class=".widgets.RenderWidget"
+      permission="zope.Public"
+      />
+
+  <adapter
+      factory=".widgets.WidgetDependencyView"
+      name="dependencies"
+      />
+
   <!-- add CheckboxFieldWidget for ISet to enable checkbox list -->
   <adapter
       for="zope.schema.interfaces.ISet
