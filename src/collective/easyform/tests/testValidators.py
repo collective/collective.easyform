@@ -29,6 +29,12 @@ from zope.interface import classImplements
 from ZPublisher.BaseRequest import BaseRequest
 from ZPublisher.HTTPRequest import FileUpload
 
+try:
+    from Products.CMFPlone.utils import get_installer
+except ImportError:
+    # BBB for Plone 5.0 and lower.
+    get_installer = None
+
 
 IFieldValidator = validators.IFieldValidator
 
@@ -460,11 +466,17 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
        Copy/paste test from Recaptcha, same api & add'on
        structure
     """
-    
+
     schema_fixture = "hcaptcha.xml"
 
     def afterSetUp(self):
         super(TestSingleHcaptchaValidator, self).afterSetUp()
+        if get_installer is None:
+            qi = self.portal["portal_quickinstaller"]
+            qi.installProducts(["plone.formwidget.hcaptcha"])
+        else:
+            qi = get_installer(self.portal)
+            qi.install_product("plone.formwidget.hcaptcha")
 
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
