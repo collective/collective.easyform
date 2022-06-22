@@ -11,7 +11,7 @@
   <browser:page
       name="saveddata"
       for="collective.easyform.interfaces.IEasyForm"
-      permission="cmf.ModifyPortalContent"
+      permission="collective.easyform.DownloadSavedInput"
       class=".actions.SavedDataView"
       template="saveddata.pt"
       />
@@ -47,7 +47,7 @@
   <browser:page
       name="data"
       for="collective.easyform.interfaces.IEasyFormActionContext"
-      permission="cmf.ModifyPortalContent"
+      permission="collective.easyform.DownloadSavedInput"
       class=".actions.ActionSavedDataView"
       layer="..interfaces.IEasyFormLayer"
       />
