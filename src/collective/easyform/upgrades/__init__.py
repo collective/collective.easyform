@@ -68,3 +68,14 @@ def fix_savedata_persistence_issues(context):
             logger.info(
                 'Fixed storage of {}'.format('/'.join(form.getPhysicalPath()))
             )
+
+
+def change_saveddata_action_permission(context):
+    portal_actions = api.portal.get_tool("portal_actions")
+    category = portal_actions.get("object_buttons")
+    if category is None:
+        return
+    action = category.get("saveddata")
+    if action is None:
+        return
+    action._setPropValue('permissions', ("collective.easyform: Download Saved Input",))

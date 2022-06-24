@@ -13,6 +13,9 @@ New features:
 - Add French translations
   [mpeeters, laulaz]
 
+- Use ``collective.easyform.DownloadSavedInput`` permission for displaying/downloading saved data (#357)
+  [laulaz]
+
 Bug fixes:
 
 - Fix persistence issue with SaveData storage.
