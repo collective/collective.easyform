@@ -33,7 +33,6 @@ class ControlPanelTestCase(base.EasyFormTestCase):
     def test_easyform_control_panel_contents(self):
         self.browser.open(self.portal_url + "/@@easyform-controlpanel")
         self.assertTrue("easyform Settings" in self.browser.contents)
-        self.assertTrue("migrate all the forms to dexterity" in self.browser.contents)
         self.assertTrue("Allowed Fields" in self.browser.contents)
         self.assertTrue("CSV delimiter" in self.browser.contents)
         input = self.browser.getControl(label="CSV delimiter")

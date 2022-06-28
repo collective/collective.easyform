@@ -79,3 +79,14 @@ def change_saveddata_action_permission(context):
     if action is None:
         return
     action._setPropValue('permissions', ("collective.easyform: Download Saved Input",))
+
+
+def remove_migrate_all_forms_record(context):
+    from plone.registry.interfaces import IRegistry
+    from zope.component import getUtility
+
+    registry = getUtility(IRegistry)
+    record = "easyform.migrate_all_forms"
+    if record in registry.records:
+        del registry.records[record]
+        logger.info("Removed {} registry record".format(record))

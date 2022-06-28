@@ -16,14 +16,6 @@ def getContent(self):
 
 class IEasyFormControlPanel(Interface):
 
-    migrate_all_forms = schema.Bool(
-        title=_(u"migrate all the forms to dexterity"),
-        description=_(u"This will migrate all the forms already present "
-                      u"in the site from archetype to dexterity"),
-        required=False,
-        default=False,
-    )
-
     allowedFields = schema.List(
         title=_(u"Allowed Fields"),
         description=_(u"These Fields are available for your forms."),

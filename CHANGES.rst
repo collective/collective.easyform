@@ -24,6 +24,9 @@ Bug fixes:
 - Add missing translations strings
   [laulaz]
 
+- Remove unused ``migrate_all_forms`` setting and record (#206)
+  [laulaz]
+
 
 4.0.0 (2022-04-07)
 ------------------

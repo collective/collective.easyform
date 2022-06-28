@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1013"
+      profile="collective.easyform:default"
+      source="1012"
+      >
+    <gs:upgradeStep
+        title="Remove unused migrate_all_forms registry record"
+        handler=".remove_migrate_all_forms_record"
+        />
+  </gs:upgradeSteps>
+
+</configure>
