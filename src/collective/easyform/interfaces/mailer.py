@@ -440,6 +440,7 @@ class IMailer(IAction):
             default=u"A TALES expression that will be evaluated to override "
             u'the "From" header. Leave empty if unneeded. '
             u"Your expression should evaluate as a string. "
+            u"Example: python:fields['replyto'] "
             u"PLEASE NOTE: errors in the evaluation of this "
             u"expression will cause an error on form display.",
         ),
