@@ -89,3 +89,16 @@ class WidgetDependencyView(object):
         if not depends_on:
             return ""
         return depends_on
+
+@adapter(IRenderWidget, Interface)
+@implementer(IBrowserView)
+class WidgetCssClassView(object):
+    def __init__(self, widget, request):
+        self.widget = widget
+        self.request = request
+
+    def __call__(self):
+        css_class = self.widget.context.field.queryTaggedValue("css_class")
+        if not css_class:
+            return ""
+        return css_class
