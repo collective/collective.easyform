@@ -87,6 +87,11 @@
       name="dependencies"
       />
 
+  <adapter
+      factory=".widgets.WidgetCssClassView"
+      name="css_class"
+      />
+
   <!-- add CheckboxFieldWidget for ISet to enable checkbox list -->
   <adapter
       for="zope.schema.interfaces.ISet

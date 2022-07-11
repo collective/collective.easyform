@@ -264,6 +264,14 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 field.field.setTaggedValue("depends_on", depends_on)
         return fields
 
+    def set_css_class(self, fields):
+        for fname, field in fields.items():
+            efield = IFieldExtender(field.field)
+            css_class = getattr(efield, "css_class", None)
+            if css_class:
+                field.field.setTaggedValue("css_class", css_class)
+        return fields
+
     def updateFields(self):
         if self.thanksPage:
             return
@@ -274,9 +282,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.base_groups = dict([(i.label, i.fields) for i in self.groups])
         self.fields = self.setOmitFields(self.base_fields)
         self.fields = self.set_depends_on(self.fields)
+        self.fields = self.set_css_class(self.fields)
         for group in self.groups:
             group.fields = self.setOmitFields(self.base_groups.get(group.label))
             group.fields = self.set_depends_on(group.fields)
+            group.fields = self.set_css_class(group.fields)
 
     def updateActions(self):
         super(EasyFormForm, self).updateActions()

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .validators import cssClassConstraint
 from .validators import isTALES
 from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
@@ -12,6 +13,7 @@ from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
 import z3c.form
 from z3c.form.interfaces import IFieldWidget
+from zope import schema
 from zope.component import getGlobalSiteManager
 from zope.interface import Interface
 from zope.interface import provider
@@ -60,7 +62,7 @@ class IFieldExtender(Schema):
     fieldset(
         u"advanced",
         label=_("Advanced"),
-        fields=["field_widget", "validators", "THidden", "depends_on"],
+        fields=["field_widget", "validators", "THidden", "depends_on", "css_class",],
     )
     directives.write_permission(field_widget=config.EDIT_ADVANCED_PERMISSION)
     field_widget = zope.schema.Choice(
@@ -97,6 +99,18 @@ class IFieldExtender(Schema):
         ),
         default=u'',
         required=False,
+    )
+    directives.write_permission(css_class=config.EDIT_TALES_PERMISSION)
+    css_class = zope.schema.TextLine(
+        title=_(
+            u'CSS Class',
+        ),
+        description=_(
+            u'Define additional CSS class for this field here. This allowes for formating individual fields via CSS.',
+        ),
+        default=u'',
+        required=False,
+        constraint=cssClassConstraint,
     )
     fieldset(
         u"overrides",
