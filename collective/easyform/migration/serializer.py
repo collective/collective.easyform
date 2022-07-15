@@ -126,7 +126,7 @@ class DeserializeFromJson(DXContentFromJson):
         return self.context
 
     def deserializeSavedData(self, data):
-        if data.has_key("savedDataAdapter"):
+        if "savedDataAdapter" in data:
             storage = data["savedDataAdapter"]["savedDataStorage"]
             actions = getFieldsInOrder(get_actions(self.context))
             schema = get_fields(self.context)
@@ -138,7 +138,7 @@ class DeserializeFromJson(DXContentFromJson):
                     included_columns_in_savedata.append(column)
 
             for name, action in actions:
-                if ISaveData.providedBy(action) and storage.has_key(name):
+                if ISaveData.providedBy(action) and name in storage:
                     savedData = storage[name]
                     for key, value in savedData.items():
                         for name in included_columns_in_savedata:
