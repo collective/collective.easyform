@@ -326,7 +326,7 @@ class SaveDataTestCase(base.EasyFormTestCase):
         self.assertEqual(rows[1][0].value, "test@test.org")
         self.assertEqual(rows[1][1].value, "test subject")
         self.assertEqual(rows[1][2].value, "test comments")
-        self.assertEqual(rows[1][3].value, '["Red", "Blue"]')
+        self.assertEqual(rows[1][3].value, 'Red|Blue')
 
     def testSaverDownloadWithTitles(self):
         """test save data"""

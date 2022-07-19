@@ -12,7 +12,7 @@ Changelog
 3.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use "|" as delimiter of list types in exports. [mathias.leimgruber]
 
 
 3.1.1 (2022-06-20)
