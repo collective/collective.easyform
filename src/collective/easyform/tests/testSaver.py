@@ -53,7 +53,7 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
     return request
 
 
-class SaveDataTestCase(base.EasyFormTestCase):
+class BaseSaveData(base.EasyFormTestCase):
 
     """test save data adapter"""
 
@@ -79,6 +79,9 @@ class SaveDataTestCase(base.EasyFormTestCase):
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
         self.assertTrue("saver" in actions)
+
+
+class SaveDataTestCase(BaseSaveData):
 
     def testSavedDataView(self):
         """test saved data view"""
