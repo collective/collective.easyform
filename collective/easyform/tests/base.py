@@ -43,6 +43,10 @@ class Fixture(PloneSandboxLayer):
         except ImportError:
             pass
 
+        import plone.restapi
+        self.loadZCML(
+            package=plone.restapi, context=configurationContext)
+        
         import collective.easyform
         self.loadZCML(
             package=collective.easyform, context=configurationContext)
@@ -59,7 +63,7 @@ class Fixture(PloneSandboxLayer):
         except:
             pass
 
-        # Install the collective.easyform product
+        self.applyProfile(portal, 'plone.restapi:default')
         self.applyProfile(portal, 'collective.easyform:default')
         portal.acl_users.userFolderAddUser('admin',
                                            'secret',

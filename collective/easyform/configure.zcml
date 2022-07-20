@@ -31,5 +31,15 @@
       description="Installs the collective.easyform package"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+  
+  <adapter
+    zcml:condition="installed plone.restapi"
+	  factory="collective.easyform.serializer.SerializeToJson"
+	  />
+  
+  <adapter
+    zcml:condition="installed plone.restapi"
+	  factory="collective.easyform.serializer.DeserializeFromJson" 
+	  />
 
 </configure>

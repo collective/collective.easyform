@@ -27,7 +27,7 @@ def FakeRequest(method='GET', add_auth=False, **kwargs):
     return request
 
 
-class TestFunctions(base.EasyFormTestCase):
+class BaseSaveData(base.EasyFormTestCase):
 
     ''' test save data adapter '''
 
@@ -53,6 +53,10 @@ class TestFunctions(base.EasyFormTestCase):
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
         self.assertTrue('saver' in actions)
+        
+
+class TestFunctions(BaseSaveData):
+
 
     def testSavedDataView(self):
         ''' test saved data view '''
@@ -315,24 +319,27 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertEqual(saver.getSavedFormInputForEdit(), '')
 
         # save a row
-        fields = list(get_fields(self.ff1))
-        saver.addDataRow(dict(zip(fields, ['one', 'two', 'three'])))
+        data_row = dict(replyto="tom.hanks@hollywood.com", topic="run", comments="I am too young.")
+        fields = ['id', 'replyto', 'topic', 'comments']
+        saver.addDataRow(data_row)
         self.assertEqual(saver.itemsSaved(), 1)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
-            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
-        self.assertEqual(saver.getSavedFormInputForEdit(), 'one,two,three\r\n')
+            items[0][1], dict(zip(fields, [items[0][0], 'tom.hanks@hollywood.com', 'run', 'I am too young.'])))
+        self.assertEqual(saver.getSavedFormInputForEdit(), 'tom.hanks@hollywood.com,run,I am too young.\r\n')
 
         # save a couple of \n-delimited rows - \n eol
-        saver.addDataRow(dict(zip(fields, ['four', 'five', 'six'])))
+        data_row2 = dict(replyto="tom.hanks@hollywood.com2", topic="run2", comments="I am too young.2")
+        saver.addDataRow(data_row2)
         self.assertEqual(saver.itemsSaved(), 2)
         items = saver.getSavedFormInputItems()
         self.assertEqual(
-            items[0][1], dict(zip(['id'] + fields, [items[0][0], 'one', 'two', 'three'])))
+            items[0][1], dict(zip(fields, [items[0][0], 'tom.hanks@hollywood.com', 'run', 'I am too young.'])))
         self.assertEqual(
-            items[1][1], dict(zip(['id'] + fields, [items[1][0], 'four', 'five', 'six'])))
+            items[1][1], dict(zip(fields, [items[1][0], 'tom.hanks@hollywood.com2', 'run2', 'I am too young.2'])))
         self.assertEqual(
-            saver.getSavedFormInputForEdit(), 'one,two,three\r\nfour,five,six\r\n')
+            saver.getSavedFormInputForEdit(), ('tom.hanks@hollywood.com,run,I am too young.\r\n'
+            'tom.hanks@hollywood.com2,run2,I am too young.2\r\n'))
 
         # save empty string
         saver.clearSavedFormInput()
