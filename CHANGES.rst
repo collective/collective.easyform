@@ -4,7 +4,7 @@ Changelog
 1.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- restapi (de)serializer that includes saved data [ThibautBorn, gotcha, Mychae1]
 
 
 1.0.0 (2021-11-24)

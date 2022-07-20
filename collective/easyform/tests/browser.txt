@@ -36,16 +36,14 @@ Return to form and confirm that it renders properly::
     >>> browser.url
     'http://nohost/plone/testform'
     >>> browser.contents
-    '...<form class="rowlike enableUnloadProtection  easyformForm kssattr-formname-view" action="http://nohost/plone/testform" method="post" id="form" enctype="multipart/form-data">...'
-    >>> """<form class="rowlike enableUnloadProtection  easyformForm kssattr-formname-view" action="http://nohost/plone/testform" method="post" id="form" enctype="multipart/form-data">""" in browser.contents
+    '...action="http://nohost/plone/testform"...'
+    >>> 'name="form.widgets.replyto"' in browser.contents
     True
-    >>> """<input id="form-widgets-replyto" name="form.widgets.replyto" class="text-widget required textline-field" value="" type="text" />""" in browser.contents
+    >>> 'name="form.widgets.topic"' in browser.contents
     True
-    >>> """<input id="form-widgets-topic" name="form.widgets.topic" class="text-widget required textline-field" value="" type="text" />""" in browser.contents
+    >>> 'name="form.widgets.comments"' in browser.contents
     True
-    >>> """<textarea id="form-widgets-comments" name="form.widgets.comments" class="textarea-widget required text-field"></textarea>""" in browser.contents
-    True
-    >>> """<input id="form-buttons-submit" name="form.buttons.submit" class="submit-widget button-field" value="Submit" type="submit" />""" in browser.contents
+    >>> 'name="form.buttons.submit"' in browser.contents
     True
 
 Submit the form.  An incomplete submission should give validation errors::

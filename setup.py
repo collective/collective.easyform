@@ -47,6 +47,8 @@ setup(name='collective.easyform',
               'plone.app.contenttypes',
               'plone.app.testing[robot]',
               'plone.app.robotframework',
+              'plone.restapi',
+              'plone.api',
           ]
       },
       entry_points="""

@@ -27,5 +27,6 @@ lib/
 lib64
 parts/
 pip-selfcheck.json
+pyvenv.cfg
 src/
 var/
