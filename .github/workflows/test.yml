@@ -1,0 +1,41 @@
+name: tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+  # Allow to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        # [Python version, tox env]
+        - ["2.7",   "plone52-py27"]
+        - ["3.6",   "plone52-py36"]
+        - ["3.7",   "plone52-py37"]
+        - ["3.8",   "plone52-py38"]
+    runs-on: ubuntu-latest
+    name: ${{ matrix.config[1] }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.config[0] }}
+    - name: Pip cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.config[0] }}-${{ hashFiles('setup.*', 'tox.ini') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.config[0] }}-
+          ${{ runner.os }}-pip-
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox
+    - name: Test
+      run: tox -e ${{ matrix.config[1] }}

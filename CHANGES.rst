@@ -31,6 +31,9 @@ Changelog
 3.1.1 (2022-06-20)
 ------------------
 
+- restapi (de)serializer that includes saved data
+  [ThibautBorn, gotcha, Mychae1]
+
 Bug fixes:
 
 - Fix persistence issue with SaveData storage.
