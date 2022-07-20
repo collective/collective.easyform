@@ -48,4 +48,12 @@
         factory="plone.formwidget.recaptcha.ReCaptchaValidator"
         />
     </configure>
+    <utility
+        name="collective.easyform.fields.Likert"
+        component=".fields.LikertFactory"
+        />
+    <utility
+        name="collective.easyform.fields.Likert"
+        component=".fields.LikertHandler"
+        />
 </configure>

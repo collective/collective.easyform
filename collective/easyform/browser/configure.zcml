@@ -6,6 +6,7 @@
     <include file="fields.zcml" />
     <include file="actions.zcml" />
     <include file="widgets.zcml" />
+    <include file="likert.zcml" />
     <browser:page
         for="collective.easyform.interfaces.IEasyForm"
         name="view"

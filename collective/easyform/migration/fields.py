@@ -177,6 +177,7 @@ TYPES_MAPPING = {
     ),
     "FormFileField": Type("plone.namedfile.field.NamedBlobFile", append_field),
     "FormCaptchaField": Type("collective.easyform.fields.ReCaptcha", append_field),
+    "FormLikertField": Type("collective.easyform.fields.Likert", append_field),
     "FieldsetStart": Type("", append_fieldset),
     "FieldsetEnd": Type("", None),
 }
@@ -193,6 +194,8 @@ PROPERTIES_MAPPING = {
     "fgTVocabulary": None,  # Not available in collective.easyform
     "fgVocabulary": Property("values", append_vocab_node),
     "hidden": Property("easyform:THidden", set_attribute),
+    "likertQuestions": Property("questions", append_list_node),
+    "likertAnswers": Property("answers", append_list_node),
     "maxval": Property("max", append_node),
     "minval": Property("min", append_node),
     "placeholder": None,  # Not available in collective.easyform

@@ -27,6 +27,7 @@ from plone.schemaeditor.interfaces import ID_RE
 from plone.schemaeditor.interfaces import IFieldContext
 from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
+from plone.schemaeditor.schema import ITextLinesField
 from plone.supermodel.model import Schema
 from plone.supermodel.model import fieldset
 from plone.z3cform.interfaces import IFormWrapper
@@ -52,6 +53,10 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ITextLine
 from zope.tales.tales import CompilerError
+
+import zope.interface
+import zope.schema.interfaces
+import z3c.form.interfaces
 
 try:
     from plone.schemaeditor import SchemaEditorMessageFactory as __
@@ -1087,3 +1092,25 @@ class IReCaptcha(ITextLine):
 class IFieldValidator(Interface):
 
     """Base marker for field validators"""
+
+
+class ILikert(zope.schema.interfaces.IField):
+
+    questions = zope.schema.List(
+        title=_(u'Possible questions'),
+        description=_(u'Enter allowed choices one per line.'),
+        required=zope.schema.interfaces.IChoice['vocabulary'].required,
+        default=zope.schema.interfaces.IChoice['vocabulary'].default,
+        value_type=zope.schema.TextLine())
+    zope.interface.alsoProvides(questions, ITextLinesField)
+
+    answers = zope.schema.List(
+        title=_(u'Possible answers'),
+        description=_(u'Enter allowed choices one per line.'),
+        required=zope.schema.interfaces.IChoice['vocabulary'].required,
+        default=zope.schema.interfaces.IChoice['vocabulary'].default,
+        value_type=zope.schema.TextLine())
+    zope.interface.alsoProvides(questions, ITextLinesField)
+
+class ILikertWidget(z3c.form.interfaces.IWidget):
+    """Likert widget."""
