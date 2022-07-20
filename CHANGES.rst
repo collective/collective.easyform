@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.1 (unreleased)
+1.0.1 (2022-07-20)
 ------------------
 
 - restapi (de)serializer that includes saved data [ThibautBorn, gotcha, Mychae1]
