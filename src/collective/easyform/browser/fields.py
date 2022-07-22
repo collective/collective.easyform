@@ -91,25 +91,15 @@ class FieldsSchemaListing(SchemaListing):
             or super(FieldsSchemaListing, self).default_fieldset_label
         )
 
-    @property
-    def enable_unload_protection(self):
-        return False
-
     def handleModelEdit(self, action):
         self.request.response.redirect("@@modeleditor")
 
     @button.buttonAndHandler(
-        _(u'Done'),
+        _(u'Save'),
     )
-    def handleDone(self, action):
-        return self.request.RESPONSE.redirect(aq_parent(self.context).absolute_url())
-
-    @button.buttonAndHandler(
-        _(u'Save Defaults'),
-        condition=lambda form: getattr(form.context, 'showSaveDefaults', True)
-    )
-    def handleSaveDefaults(self, action):
+    def handleSave(self, action):
         super(FieldsSchemaListing, self).handleSaveDefaults(self, action)
+        return self.request.RESPONSE.redirect(aq_parent(self.context).absolute_url())
 
 
 if HAVE_RESOURCE_EDITOR:
