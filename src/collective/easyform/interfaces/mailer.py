@@ -13,7 +13,10 @@ from Products.CMFPlone.utils import safe_unicode
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
 from plone.autoform.interfaces import OMITTED_KEY
-
+from zope.globalrequest import getRequest
+from zope.i18n import translate
+from zope.interface import provider
+from zope.schema.interfaces import IContextAwareDefaultFactory
 
 import zope.i18nmessageid
 import zope.interface
@@ -22,6 +25,11 @@ import zope.schema.interfaces
 
 PMF = zope.i18nmessageid.MessageFactory("plone")
 MODIFY_PORTAL_CONTENT = "cmf.ModifyPortalContent"
+
+
+@provider(IContextAwareDefaultFactory)
+def default_mail_subject(context):
+    return translate(_(u"Form Submission"), context=getRequest())
 
 
 def default_mail_body():
@@ -161,7 +169,7 @@ class IMailer(IAction):
             u"do not specify a subject field or if the field "
             u"is empty.",
         ),
-        default=u"Form Submission",
+        defaultFactory=default_mail_subject,
         missing_value=u"",
         required=False,
     )
@@ -432,6 +440,7 @@ class IMailer(IAction):
             default=u"A TALES expression that will be evaluated to override "
             u'the "From" header. Leave empty if unneeded. '
             u"Your expression should evaluate as a string. "
+            u"Example: python:fields['replyto'] "
             u"PLEASE NOTE: errors in the evaluation of this "
             u"expression will cause an error on form display.",
         ),

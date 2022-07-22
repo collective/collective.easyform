@@ -1,12 +1,15 @@
-<model xmlns="http://namespaces.plone.org/supermodel/schema">
+<model xmlns="http://namespaces.plone.org/supermodel/schema"
+       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+       i18n:domain="collective.easyform">
+>
   <schema>
     <field name="mailer"
            type="collective.easyform.actions.Mailer"
     >
-      <description>E-Mails Form Input</description>
+      <title i18n:translate="">Mailer</title>
+      <description i18n:translate="">E-Mails Form Input</description>
       <replyto_field>replyto</replyto_field>
       <subject_field>topic</subject_field>
-      <title>Mailer</title>
     </field>
   </schema>
 </model>

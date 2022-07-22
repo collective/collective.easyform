@@ -3,6 +3,7 @@
 # Integration tests specific to save-data adapter.
 #
 
+from AccessControl.unauthorized import Unauthorized
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import ISaveData
@@ -10,17 +11,23 @@ from collective.easyform.tests import base
 from os.path import dirname
 from os.path import join
 from plone import api
+from plone.app.testing import login
+from plone.app.testing import logout
+from plone.app.testing import setRoles
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
+from plone.app.testing import TEST_USER_ID
 from plone.testing.zope import Browser
 from six import BytesIO
 from six.moves import zip
 from transaction import commit
+from zExceptions.unauthorized import Unauthorized as zUnauthorized
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 
 import plone.protect
 import sys
+import transaction
 import unittest
 
 try:
@@ -46,7 +53,7 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
     return request
 
 
-class SaveDataTestCase(base.EasyFormTestCase):
+class BaseSaveData(base.EasyFormTestCase):
 
     """test save data adapter"""
 
@@ -73,6 +80,9 @@ class SaveDataTestCase(base.EasyFormTestCase):
         actions = get_actions(self.ff1)
         self.assertTrue("saver" in actions)
 
+
+class SaveDataTestCase(BaseSaveData):
+
     def testSavedDataView(self):
         """test saved data view"""
 
@@ -80,6 +90,21 @@ class SaveDataTestCase(base.EasyFormTestCase):
 
         view = self.ff1.restrictedTraverse("saveddata")
         self.assertEqual(list(view.items()), [("saver", u"Saver")])
+
+        # as the owner, TEST_USER_ID can still see the saved data
+        setRoles(self.portal, TEST_USER_ID, [])
+        view = self.ff1.restrictedTraverse("saveddata")
+        self.assertIsNotNone(view)
+        logout()
+
+        # other editors / reviewers / ... don't have access to the saved data
+        api.user.create(email="test@plone.org", username="test")
+        setRoles(
+            self.portal, "test", roles=["Reader", "Contributor", "Editor", "Reviewer"]
+        )
+        login(self.portal, "test")
+        with self.assertRaises(Unauthorized):
+            view = self.ff1.restrictedTraverse("saveddata")
 
     def testSaverDataFormExtraData(self):
         """test saver data form extra data"""
@@ -647,6 +672,26 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
         self.assertTrue("saver" in actions)
+
+    def test_download_saveddata_view(self):
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.assertTrue(
+            "viewpermission-collective-easyform-download-saved-input"
+            in self.browser.contents
+        )
+
+        # editors / reviewers / ... don't have access to the saved data
+        api.user.create(email="test@plone.org", username="test", password="password")
+        setRoles(
+            self.portal, "test", roles=["Reader", "Contributor", "Editor", "Reviewer"]
+        )
+        self.browser.addHeader("Authorization", "Basic " + "test" + ":" + "password")
+        transaction.commit()
+        with self.assertRaises(zUnauthorized):
+            self.browser.open(
+                self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+            )
 
     def test_download_saveddata_suggests_csv_delimiter_default_registry_value(self):
         self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")

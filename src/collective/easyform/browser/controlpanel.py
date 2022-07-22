@@ -16,22 +16,10 @@ def getContent(self):
 
 class IEasyFormControlPanel(Interface):
 
-    migrate_all_forms = schema.Bool(
-        title=u"migrate all the forms to dexterity",
-        description=u"This will migrate all the forms already present "
-        u"in the site from archetype to dexterity",
-        required=False,
-        default=False,
-    )
-
     allowedFields = schema.List(
         title=_(u"Allowed Fields"),
-        description=_(u"This Fields are available for your forms."),
+        description=_(u"These Fields are available for your forms."),
         value_type=schema.Choice(
-            description=_(
-                u"help_registry_items",
-                default=u"Select the registry items you desire to modify",
-            ),
             required=False,
             vocabulary="easyform.SchemaEditorFields",
         ),
@@ -50,7 +38,7 @@ class IEasyFormControlPanel(Interface):
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel
     schema_prefix = "easyform"
-    label = u"easyform Settings"
+    label = _(u"easyform Settings")
 
     def updateFields(self):
         super(EasyFormControlPanelForm, self).updateFields()

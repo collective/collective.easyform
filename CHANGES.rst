@@ -10,11 +10,25 @@ New features:
 - Add Likert scale field.
   [gotcha]
 
+- Add French translations
+  [mpeeters, laulaz]
 
-Bug fixes;
+- Use ``collective.easyform.DownloadSavedInput`` permission for displaying/downloading saved data (#357)
+  [laulaz]
+
+- restapi (de)serializer that includes saved data
+  [ThibautBorn, gotcha, Mychae1]
+
+Bug fixes:
 
 - Fix persistence issue with SaveData storage.
   [mathias.leimgruber] (#259)
+
+- Add missing translations strings
+  [laulaz]
+
+- Remove unused ``migrate_all_forms`` setting and record (#206)
+  [laulaz]
 
 Enhancements:
 
