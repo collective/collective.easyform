@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl import Unauthorized
+from Acquisition import aq_parent
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IEasyFormFieldContext
@@ -92,6 +93,13 @@ class FieldsSchemaListing(SchemaListing):
 
     def handleModelEdit(self, action):
         self.request.response.redirect("@@modeleditor")
+
+    @button.buttonAndHandler(
+        _(u'Save'),
+    )
+    def handleSave(self, action):
+        super(FieldsSchemaListing, self).handleSaveDefaults(self, action)
+        return self.request.RESPONSE.redirect(aq_parent(self.context).absolute_url())
 
 
 if HAVE_RESOURCE_EDITOR:

@@ -30,6 +30,12 @@ Bug fixes:
 - Remove unused ``migrate_all_forms`` setting and record (#206)
   [laulaz]
 
+Enhancements:
+
+- Standarize how the "Form Fields" and "Form Actions" behave. Have a single
+  "Save" button that will redirect back to the form once changes are applied
+  [frapell]
+
 
 4.0.0 (2022-04-07)
 ------------------
