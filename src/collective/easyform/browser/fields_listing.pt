@@ -9,7 +9,7 @@
      i18n:translate="add_new_field_hellip">Add new field&hellip;</a>
 
   <a id="add-fieldset" class="pat-plone-modal btn btn-primary float-end" tal:condition="context/enableFieldsets"
-     href="${context/absolute_url}/@@add-fieldset" 
+     href="${context/absolute_url}/@@add-fieldset"
      i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</a>
 
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
@@ -20,13 +20,11 @@
     <metal:fields-slot metal:fill-slot="fields">
 
       <tal:block tal:repeat="group python:[view] + list(view.groups)">
-        <fieldset tal:define="
-                    fieldset_name repeat/group/index;
-                  "
+        <fieldset data-can-add-fields="true"
+                  tal:define="fieldset_name repeat/group/index;"
                   tal:attributes="
                     id string:fieldset-${fieldset_name};
-                    class string:kssattr-fieldset-${fieldset_name};
-                  "
+                    class string:kssattr-fieldset-${fieldset_name};"
         >
 
           <legend tal:define="
@@ -34,6 +32,11 @@
                   "
                   tal:content="group_name"
           >Fieldset name</legend>
+
+          <a id="delete-fieldset-${fieldset_name}" tal:condition="not:repeat/group/start"
+             href="${context/absolute_url}/@@delete-fieldset?name=${python:group.__name__}&_authenticator=${context/@@authenticator/token}"
+                  i18n:translate="delete_fieldset_hellip">Delete fieldset
+          </a>
 
           <tal:block tal:define="
                        errors group/widgets/errors;
