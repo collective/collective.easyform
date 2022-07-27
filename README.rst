@@ -256,5 +256,5 @@ Compatibility
 
 - 1.x targets Plone 4.x
 - 2.x targets Plone 5.x onwards
-- 3.0.4 and later targets Plone 5 + 6
-- 4.x targets Plone 5.2 + 6, on Python 2 and 3
+- 3.x targets Plone 5.2
+- 4.x targets Plone 6, on Python 3
