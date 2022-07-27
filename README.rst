@@ -239,8 +239,8 @@ Compatibility
 
 - 1.x targets Plone 4.x
 - 2.x targets Plone 5.x onwards
-- 3.0.4 and later targets Plone 5 + 6
-- 4.x targets Plone 5.2 + 6, on Python 2 and 3.
+- 3.x targets Plone 5.2
+- 4.x targets Plone 6, on Python 3
 
 The community might decide to let latest 4.x only support Plone 6, and 3.x only support Plone 5.
 See `discussion in issue 341 <https://github.com/collective/collective.easyform/issues/341>`_.
