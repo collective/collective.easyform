@@ -85,7 +85,10 @@ class WidgetDependencyView(object):
         self.request = request
 
     def __call__(self):
-        depends_on = self.widget.context.field.queryTaggedValue("depends_on")
+        field = self.widget.context.field
+        if not field:
+            return ""
+        depends_on = field.queryTaggedValue("depends_on")
         if not depends_on:
             return ""
         return depends_on
@@ -98,7 +101,10 @@ class WidgetCssClassView(object):
         self.request = request
 
     def __call__(self):
-        css_class = self.widget.context.field.queryTaggedValue("css_class")
+        field = self.widget.context.field
+        if not field:
+            return ""
+        css_class = field.queryTaggedValue("css_class")
         if not css_class:
             return ""
         return css_class
