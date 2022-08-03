@@ -19,6 +19,9 @@ New features:
 - restapi (de)serializer that includes saved data
   [ThibautBorn, gotcha, Mychae1]
 
+- Use "|" as delimiter of list types in exports. [mathias.leimgruber]
+
+
 Bug fixes:
 
 - Fix persistence issue with SaveData storage.
