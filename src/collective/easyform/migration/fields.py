@@ -187,6 +187,8 @@ PROPERTIES_MAPPING = {
     "fgTVocabulary": None,  # Not available in collective.easyform
     "fgVocabulary": Property("values", append_vocab_node),
     "hidden": Property("easyform:THidden", set_attribute),
+    "depends_on": Property("easyform:depends_on", set_attribute),
+    "css_class": Property("easyform:css_class", set_attribute),
     "maxval": Property("max", append_node),
     "minval": Property("min", append_node),
     "placeholder": None,  # Not available in collective.easyform

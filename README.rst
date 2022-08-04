@@ -88,6 +88,58 @@ Click on the picture below for a short introduction video:
     :target: https://www.youtube.com/watch?v=DMCYnYE9RKU
     :alt: EasyForm instructional video
 
+Using conditional fields
+------------------------
+
+Under Advanced > field depends on, you can define conditions to hide a field and only fade it in when a condition is fulfilled.
+We are using pat-depends here, all options are documented in the `pat-depends docs <https://patternslib.com/demos/depends>`_.
+
+You can also set a CSS class string for every field under Advanced > CSS Class.
+
+.. image:: docs/images/conditional_fields_and_field_css.png
+    :width: 350
+
+.. image:: docs/images/form_multicolumns.png
+
+Since the form is marked with the ``row`` css class you can use the existing Bootstrap 5 CSS column classes for the fields
+to create simple column layouts. See the `Bootstrap Grid System <https://getbootstrap.com/docs/5.2/layout/grid/>`_ documentation
+for more information.
+
+For more complex layouts you can also add your own CSS classes and definitions. Here is one example CSS
+to define a form with up to 4 columns and different col span for individual fields.
+
+
+.. code-block:: css
+
+    .easyformForm fieldset{
+      display: grid;
+      gap: 1em;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .easyformForm .field{
+      background-color: #eeeeee;
+      padding: 0.5em;
+      grid-column: auto / span 2;
+    }
+
+    .easyformForm fieldset > p:first-of-type{
+      background-color: transparent;
+      grid-column: auto / span 4;
+    }
+
+    .easyformForm .field.formCol14{
+      grid-column: auto / span 1;
+    }
+
+    .easyformForm .field.formCol34{
+      grid-column: auto / span 3;
+    }
+
+    .easyformForm .field.formCol44{
+      grid-column: auto / span 4;
+    }
+
 
 ReCaptcha support
 =================

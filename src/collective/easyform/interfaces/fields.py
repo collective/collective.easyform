@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from .validators import cssClassConstraint
 from .validators import isTALES
 from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
@@ -12,6 +13,7 @@ from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
 import z3c.form
 from z3c.form.interfaces import IFieldWidget
+from zope import schema
 from zope.component import getGlobalSiteManager
 from zope.interface import Interface
 from zope.interface import provider
@@ -60,7 +62,7 @@ class IFieldExtender(Schema):
     fieldset(
         u"advanced",
         label=_("Advanced"),
-        fields=["field_widget", "validators", "THidden"],
+        fields=["field_widget", "validators", "THidden", "depends_on", "css_class",],
     )
     directives.write_permission(field_widget=config.EDIT_ADVANCED_PERMISSION)
     field_widget = zope.schema.Choice(
@@ -86,6 +88,29 @@ class IFieldExtender(Schema):
         description=_(u"help_hidden", default=u"Field is hidden"),
         required=False,
         default=False,
+    )
+    directives.write_permission(depends_on=config.EDIT_TALES_PERMISSION)
+    depends_on = zope.schema.TextLine(
+        title=_(
+            u'Field depends on',
+        ),
+        description=_(
+            u'This is using the pat-depends from patternslib, all options are supported. Please read the <a href="https://patternslib.com/demos/depends" target="_blank">pat-depends documentations</a> for options.',
+        ),
+        default=u'',
+        required=False,
+    )
+    directives.write_permission(css_class=config.EDIT_TALES_PERMISSION)
+    css_class = zope.schema.TextLine(
+        title=_(
+            u'CSS Class',
+        ),
+        description=_(
+            u'Define additional CSS class for this field here. This allowes for formating individual fields via CSS.',
+        ),
+        default=u'',
+        required=False,
+        constraint=cssClassConstraint,
     )
     fieldset(
         u"overrides",
@@ -176,11 +201,15 @@ class IRichLabel(ILabel):
     rich_label = RichText(title=_(u"Rich Label"), default=u"", missing_value=u"")
 
 
-class ILabelWidget(z3c.form.interfaces.IWidget):
+class IEasyFormWidget(z3c.form.interfaces.IWidget):
+    """General marker for easyform widgets."""
+
+
+class ILabelWidget(IEasyFormWidget):
     """Label Widget."""
 
 
-class IRichLabelWidget(ILabelWidget):
+class IRichLabelWidget(IEasyFormWidget):
     """Rich Label Field Widget."""
 
 
@@ -214,7 +243,7 @@ class ILikert(zope.schema.interfaces.IField):
         value_type=zope.schema.TextLine())
     zope.interface.alsoProvides(questions, ITextLinesField)
 
-class ILikertWidget(z3c.form.interfaces.IWidget):
+class ILikertWidget(IEasyFormWidget):
     """Likert widget."""
 
 

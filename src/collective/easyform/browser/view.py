@@ -14,6 +14,7 @@ from collective.easyform.config import FORM_ERROR_MARKER
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
+from collective.easyform.interfaces import IEasyFormWidget
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ISaveData
 from logging import getLogger
@@ -63,7 +64,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     form_template = ViewPageTemplateFile("easyform_form.pt")
     thank_you_template = ViewPageTemplateFile("thank_you.pt")
     ignoreContext = True
-    css_class = "easyformForm"
+    css_class = "easyformForm row"
     thanksPage = False
 
     # allow prefill - see Products/CMFPlone/patches/z3c_form
@@ -255,6 +256,22 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
         return fields
 
+    def set_depends_on(self, fields):
+        for fname, field in fields.items():
+            efield = IFieldExtender(field.field)
+            depends_on = getattr(efield, "depends_on", None)
+            if depends_on:
+                field.field.setTaggedValue("depends_on", depends_on)
+        return fields
+
+    def set_css_class(self, fields):
+        for fname, field in fields.items():
+            efield = IFieldExtender(field.field)
+            css_class = getattr(efield, "css_class", None)
+            if css_class:
+                field.field.setTaggedValue("css_class", css_class)
+        return fields
+
     def updateFields(self):
         if self.thanksPage:
             return
@@ -264,8 +281,12 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if not hasattr(self, "base_groups"):
             self.base_groups = dict([(i.label, i.fields) for i in self.groups])
         self.fields = self.setOmitFields(self.base_fields)
+        self.fields = self.set_depends_on(self.fields)
+        self.fields = self.set_css_class(self.fields)
         for group in self.groups:
             group.fields = self.setOmitFields(self.base_groups.get(group.label))
+            group.fields = self.set_depends_on(group.fields)
+            group.fields = self.set_css_class(group.fields)
 
     def updateActions(self):
         super(EasyFormForm, self).updateActions()
@@ -278,6 +299,13 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                 self.actions["submit"].title = self.context.submitLabel
         if "reset" in self.actions:
             self.actions["reset"].title = self.context.resetLabel
+
+    def updateWidgets(self):
+        super(EasyFormForm, self).updateWidgets()
+        for w in self.widgets.values():
+            if not IEasyFormWidget.providedBy(w):
+                # add marker for custom widget renderer
+                alsoProvides(w, IEasyFormWidget)
 
     def formMaybeForceSSL(self):
         """Redirect to an https:// URL if the 'force SSL' option is on.
@@ -352,7 +380,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if self.context.nameAttribute:
             return self.context.nameAttribute
         return None
-    
+
 
 class EasyFormFormWrapper(FormWrapper):
     form = EasyFormForm

@@ -1,0 +1,45 @@
+<div
+   metal:define-macro="widget-wrapper"
+   i18n:domain="plone"
+   tal:define="widget nocall:context;
+               error python:widget.error;
+               error_class python:error and ' error' or '';
+               empty_values python: (None, '', [], ('', '', '', '00', '00', ''), ('', '', ''));
+               empty_class python: (widget.value in empty_values) and ' empty' or '';
+               dependencies view/@@dependencies;
+               pat_depends_class python: dependencies and 'pat-depends'"
+   data-pat-inlinevalidation='{"type":"z3c.form"}'
+   data-pat-depends="${dependencies}"
+   id="formfield-${python:widget.id}"
+   class="field fieldname-${python:widget.name} widget-mode-${python:widget.mode}${error_class}${empty_class} ${python:getattr(widget, 'wrapper_css_class', '') or ''} ${view/@@css_class} ${pat_depends_class}"
+   data-fieldname="${widget/name}">
+    <label for="${python:widget.id}"
+            class="form-label"
+            tal:condition="python: widget.mode == 'input' and widget.label">
+        <span i18n:translate="" tal:replace="python:widget.label">label</span>
+
+        <span class="required" title="Required"
+                tal:condition="python:widget.required"
+                i18n:attributes="title title_required;"></span>
+    </label>
+    <b class="widget-label form-label d-block"
+            tal:condition="python: widget.mode == 'display' and widget.label">
+        <span i18n:translate="" tal:replace="python:widget.label">label</span>
+    </b>
+
+    <input type="text" tal:replace="structure python:widget.render()"
+            metal:define-slot="widget" />
+
+    <div tal:define="description python: getattr(widget, 'description', widget.field.description)"
+            i18n:translate=""
+            tal:content="structure description"
+            tal:condition="python:description and widget.mode == 'input'"
+            class="form-text">
+        help text
+    </div>
+
+    <div tal:condition="error"
+            tal:replace="structure python:error.render() or False">
+        Error
+    </div>
+</div>
