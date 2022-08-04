@@ -12,9 +12,11 @@ from .customscript import ICustomScript  # noqa
 from .easyform import IEasyForm  # noqa
 from .easyform import IEasyFormImportFormSchema  # noqa
 from .easyform import IEasyFormThanksPage  # noqa
+from .easyform import IRenderWidget  # noqa
 from .fields import IEasyFormFieldContext  # noqa
 from .fields import IEasyFormFieldsContext  # noqa
 from .fields import IEasyFormFieldsEditorExtender  # noqa
+from .fields import IEasyFormWidget  # noqa
 from .fields import IFieldExtender  # noqa
 from .fields import IFieldValidator  # noqa
 from .fields import ILabel  # noqa

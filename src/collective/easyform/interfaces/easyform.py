@@ -455,3 +455,7 @@ class IEasyFormImportFormSchema(Interface):
 
 class IEasyFormThanksPage(Interface):
     """Marker interface for thanks page."""
+
+
+class IRenderWidget(Interface):
+    """Marker for widget render BrowserView"""

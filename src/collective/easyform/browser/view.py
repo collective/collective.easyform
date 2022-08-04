@@ -14,6 +14,7 @@ from collective.easyform.config import FORM_ERROR_MARKER
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
+from collective.easyform.interfaces import IEasyFormWidget
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.interfaces import ISaveData
 from logging import getLogger
@@ -23,7 +24,6 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.namedfile.interfaces import INamed
 from plone.z3cform.layout import FormWrapper
 from Products.Five import BrowserView
-from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
 from z3c.form import form
@@ -64,7 +64,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     form_template = ViewPageTemplateFile("easyform_form.pt")
     thank_you_template = ViewPageTemplateFile("thank_you.pt")
     ignoreContext = True
-    css_class = "easyformForm"
+    css_class = "easyformForm row"
     thanksPage = False
 
     # allow prefill - see Products/CMFPlone/patches/z3c_form
@@ -300,6 +300,13 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if "reset" in self.actions:
             self.actions["reset"].title = self.context.resetLabel
 
+    def updateWidgets(self):
+        super(EasyFormForm, self).updateWidgets()
+        for w in self.widgets.values():
+            if not IEasyFormWidget.providedBy(w):
+                # add marker for custom widget renderer
+                alsoProvides(w, IEasyFormWidget)
+
     def formMaybeForceSSL(self):
         """Redirect to an https:// URL if the 'force SSL' option is on.
 
@@ -373,7 +380,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if self.context.nameAttribute:
             return self.context.nameAttribute
         return None
-    
+
 
 class EasyFormFormWrapper(FormWrapper):
     form = EasyFormForm

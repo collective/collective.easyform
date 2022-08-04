@@ -108,7 +108,7 @@ class IFieldExtender(Schema):
         description=_(
             u'Define additional CSS class for this field here. This allowes for formating individual fields via CSS.',
         ),
-        default=u'',
+        default=u'mb-3',  # set this as default (see plone.app.z3cform) so one can remove it if needed.
         required=False,
         constraint=cssClassConstraint,
     )
@@ -201,11 +201,15 @@ class IRichLabel(ILabel):
     rich_label = RichText(title=_(u"Rich Label"), default=u"", missing_value=u"")
 
 
-class ILabelWidget(z3c.form.interfaces.IWidget):
+class IEasyFormWidget(z3c.form.interfaces.IWidget):
+    """General marker for easyform widgets."""
+
+
+class ILabelWidget(IEasyFormWidget):
     """Label Widget."""
 
 
-class IRichLabelWidget(ILabelWidget):
+class IRichLabelWidget(IEasyFormWidget):
     """Rich Label Field Widget."""
 
 
@@ -239,7 +243,7 @@ class ILikert(zope.schema.interfaces.IField):
         value_type=zope.schema.TextLine())
     zope.interface.alsoProvides(questions, ITextLinesField)
 
-class ILikertWidget(z3c.form.interfaces.IWidget):
+class ILikertWidget(IEasyFormWidget):
     """Likert widget."""
 
 
