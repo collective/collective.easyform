@@ -33,7 +33,7 @@
                   tal:content="group_name"
           >Fieldset name</legend>
 
-          <a id="delete-fieldset-${fieldset_name}" tal:condition="not:repeat/group/start"
+          <a id="delete-fieldset-${fieldset_name}" tal:condition="not:repeat/group/start" class="btn btn-sm btn-danger"
              href="${context/absolute_url}/@@delete-fieldset?name=${python:group.__name__}&_authenticator=${context/@@authenticator/token}"
                   i18n:translate="delete_fieldset_hellip">Delete fieldset
           </a>
