@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from collective.easyform.interfaces import ILabelWidget
+from collective.easyform.interfaces import IRenderWidget
 from collective.easyform.interfaces import IRichLabelWidget
 from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
 from z3c.form.browser import widget
+from z3c.form.interfaces import IWidget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implementer_only
+from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserView
 from zope.schema.interfaces import IField
 
 
@@ -61,3 +65,42 @@ class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
 
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("rich_label.pt")
+
+
+# overriding plone.app.z3cform widget.pt:
+@implementer(IRenderWidget)
+class RenderWidget(ViewMixinForTemplates, BrowserView):
+    index = ViewPageTemplateFile('widget.pt')
+
+
+@adapter(IRenderWidget, Interface)
+@implementer(IBrowserView)
+class WidgetDependencyView(object):
+    def __init__(self, widget, request):
+        self.widget = widget
+        self.request = request
+
+    def __call__(self):
+        field = self.widget.context.field
+        if not field:
+            return ""
+        depends_on = field.queryTaggedValue("depends_on")
+        if not depends_on:
+            return ""
+        return depends_on
+
+@adapter(IRenderWidget, Interface)
+@implementer(IBrowserView)
+class WidgetCssClassView(object):
+    def __init__(self, widget, request):
+        self.widget = widget
+        self.request = request
+
+    def __call__(self):
+        field = self.widget.context.field
+        if not field:
+            return ""
+        css_class = field.queryTaggedValue("css_class")
+        if not css_class:
+            return ""
+        return css_class
