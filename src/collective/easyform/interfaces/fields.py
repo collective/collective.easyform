@@ -108,7 +108,7 @@ class IFieldExtender(Schema):
         description=_(
             u'Define additional CSS class for this field here. This allowes for formating individual fields via CSS.',
         ),
-        default=u'mb-3',  # set this as default (see plone.app.z3cform) so one can remove it if needed.
+        default=u'',
         required=False,
         constraint=cssClassConstraint,
     )

@@ -98,9 +98,11 @@ class WidgetCssClassView(object):
 
     def __call__(self):
         field = self.widget.context.field
+        # default bottom margin (see plone.app.z3cform)
+        dflt = "mb-3"
         if not field:
-            return ""
+            return dflt
         css_class = field.queryTaggedValue("css_class")
         if not css_class:
-            return ""
+            return dflt
         return css_class

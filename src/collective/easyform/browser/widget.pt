@@ -11,7 +11,7 @@
    data-pat-inlinevalidation='{"type":"z3c.form"}'
    data-pat-depends="${dependencies}"
    id="formfield-${python:widget.id}"
-   class="field fieldname-${python:widget.name} widget-mode-${python:widget.mode}${error_class}${empty_class} ${python:getattr(widget, 'wrapper_css_class', False) or False} ${view/@@css_class} ${pat_depends_class}"
+   class="field fieldname-${python:widget.name} widget-mode-${python:widget.mode}${error_class}${empty_class} ${python:getattr(widget, 'wrapper_css_class', '') or ''} ${view/@@css_class} ${pat_depends_class}"
    data-fieldname="${widget/name}">
     <label for="${python:widget.id}"
             class="form-label"
