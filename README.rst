@@ -96,13 +96,17 @@ We are using pat-depends here, all options are documented in the `pat-depends do
 
 You can also set a CSS class string for every field under Advanced > CSS Class.
 
-.. image:: ./conditional_fields_and_field_css.png
+.. image:: docs/images/conditional_fields_and_field_css.png
+    :width: 350
 
-.. image:: ./form_multicolumns.png
+.. image:: docs/images/form_multicolumns.png
 
+Since the form is marked with the ``row`` css class you can use the existing Bootstrap 5 CSS column classes for the fields
+to create simple column layouts. See the `Bootstrap Grid System <https://getbootstrap.com/docs/5.2/layout/grid/>`_ documentation
+for more information.
 
-
-Here is one example CSS to define a form with up to 4 columns and different col span for individual fields.
+For more complex layouts you can also add your own CSS classes and definitions. Here is one example CSS
+to define a form with up to 4 columns and different col span for individual fields.
 
 
 .. code-block:: css
