@@ -76,7 +76,7 @@
       />
   <browser:page
       name="ploneform-render-widget"
-      for="z3c.form.interfaces.IWidget"
+      for="collective.easyform.interfaces.IEasyFormWidget"
       layer="..interfaces.IEasyFormLayer"
       class=".widgets.RenderWidget"
       permission="zope.Public"

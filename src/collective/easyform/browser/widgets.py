@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from collective.easyform.interfaces import ILabelWidget
+from collective.easyform.interfaces import IRenderWidget
 from collective.easyform.interfaces import IRichLabelWidget
 from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
@@ -64,11 +65,6 @@ class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
 
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("rich_label.pt")
-
-
-class IRenderWidget(Interface):
-    """
-    """
 
 
 # overriding plone.app.z3cform widget.pt:

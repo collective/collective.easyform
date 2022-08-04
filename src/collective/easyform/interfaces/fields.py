@@ -199,11 +199,15 @@ class IRichLabel(ILabel):
     rich_label = RichText(title=_(u"Rich Label"), default=u"", missing_value=u"")
 
 
-class ILabelWidget(z3c.form.interfaces.IWidget):
+class IEasyFormWidget(z3c.form.interfaces.IWidget):
+    """General marker for easyform widgets."""
+
+
+class ILabelWidget(IEasyFormWidget):
     """Label Widget."""
 
 
-class IRichLabelWidget(ILabelWidget):
+class IRichLabelWidget(IEasyFormWidget):
     """Rich Label Field Widget."""
 
 
