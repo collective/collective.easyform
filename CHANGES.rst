@@ -7,6 +7,12 @@ Changelog
 
 New features:
 
+- Add support for field level CSS classes.
+  [mrtango]
+
+- Add support for conditional fields.
+  [mrtango]
+
 - Add Likert scale field.
   [gotcha]
 
