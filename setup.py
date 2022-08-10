@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "4.0.1.dev0"
+version = "4.1.0.dev0"
 
 setup(
     name="collective.easyform",
@@ -18,7 +18,6 @@ setup(
         "Framework :: Plone :: Addon",
         "Framework :: Plone :: 6.0",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
