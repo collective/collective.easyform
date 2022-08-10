@@ -96,9 +96,9 @@ We are using pat-depends here, all options are documented in the `pat-depends do
 
 You can also set a CSS class string for every field under Advanced > CSS Class.
 
-.. image:: ./conditional_fields_and_field_css.png
+.. image:: https://github.com/collective/collective.easyform/raw/3.x/conditional_fields_and_field_css.png
 
-.. image:: ./form_multicolumns.png
+.. image:: https://github.com/collective/collective.easyform/raw/3.x/form_multicolumns.png
 
 
 
