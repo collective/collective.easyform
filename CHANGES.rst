@@ -9,7 +9,7 @@ Changelog
 
 .. towncrier release notes start
 
-3.2.0 (unreleased)
+3.2.0 (2022-08-10)
 ------------------
 
 - Add support for field level CSS classes.
