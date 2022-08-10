@@ -9,8 +9,14 @@ Changelog
 
 .. towncrier release notes start
 
-3.1.2 (unreleased)
+3.2.0 (unreleased)
 ------------------
+
+- Add support for field level CSS classes.
+  [mrtango]
+
+- Add support for conditional fields.
+  [mrtango]
 
 - Use "|" as delimiter of list types in exports. [mathias.leimgruber]
 
