@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.0.1 (unreleased)
+4.1.0 (2022-08-10)
 ------------------
 
 New features:
