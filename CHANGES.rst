@@ -45,6 +45,9 @@ Bug fixes:
 - Remove unused ``migrate_all_forms`` setting and record (#206)
   [laulaz]
 
+- Modify the "Form Fields" to work with latest schemaeditor (#345)
+  [frapell]
+
 Enhancements:
 
 - Standarize how the "Form Fields" and "Form Actions" behave. Have a single
