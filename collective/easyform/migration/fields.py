@@ -280,6 +280,20 @@ def fields_model(ploneformgen):
             if name.startswith("fgT"):
                 value = convert_tales_expressions(value)
 
+            if (
+                type_.name == "zope.schema.Choice"
+                and value == "flex"
+                and len(properties.get("fgVocabulary", [])) > 4
+            ):
+                # Flex is always migrated to RadioFieldWidget
+                # Here we switch to select if there are more than 4 options (same as the old flex option did)
+                value = "select"
+                logger.debug(
+                    "Switch flex field %s to select in %s",
+                    fieldname,
+                    ploneformgen.absolute_url(),
+                )
+
             prop.handler(field, prop.name, value)
 
         if portal_type == "FieldsetStart":
