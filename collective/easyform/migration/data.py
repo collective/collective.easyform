@@ -53,7 +53,10 @@ def migrate_saved_data(ploneformgen, easyform):
                         elif IDate.providedBy(field) and value:
                             value = DateTime.DateTime(value).asdatetime().date()
                         elif ISet.providedBy(field):
-                            value = set(literal_eval(value))
+                            if not value or value == [""]:
+                                value = set()
+                            else:
+                                value = set(value)
                         elif INamedBlobFileField.providedBy(field):
                             value = None
                     except (
