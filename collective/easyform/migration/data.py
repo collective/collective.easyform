@@ -45,7 +45,7 @@ def migrate_saved_data(ploneformgen, easyform):
                 for key, value in zip(cols, row):
                     try:
                         field = schema.get(key)
-                        value = value.decode("utf8")
+                        value = safe_unicode(value)
                         if IFromUnicode.providedBy(field) and value:
                             value = field.fromUnicode(value)
                         elif IDatetime.providedBy(field) and value:
