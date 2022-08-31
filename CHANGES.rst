@@ -12,7 +12,8 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Prevent RichLabel fields from breaking the form
+  [MrTango]
 
 
 3.2.0 (2022-08-10)
