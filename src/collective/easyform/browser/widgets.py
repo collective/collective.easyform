@@ -59,10 +59,12 @@ def RichLabelFieldWidget(field, request):
     return FieldWidget(field, RichLabelWidget(request))
 
 
+@implementer(IRenderWidget)
 class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("label.pt")
 
 
+@implementer(IRenderWidget)
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("rich_label.pt")
 
