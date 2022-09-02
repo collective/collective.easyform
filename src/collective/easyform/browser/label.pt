@@ -8,7 +8,6 @@
        dependencies view/@@dependencies;
        pat_depends_class python: dependencies and 'pat-depends'
      "
-     data-pat-inlinevalidation='{"type":"z3c.form"}'
      data-pat-depends="${dependencies}"
      tal:attributes="
        class string:field z3cformInlineValidation ${fieldname_class}${error_class} ${view/@@css_class} ${pat_depends_class};
