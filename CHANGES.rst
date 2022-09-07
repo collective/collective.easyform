@@ -5,6 +5,9 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Add icon for the control panel tool
+  [frapell]
+
 - Prevent RichLabel fields from breaking the form
   [MrTango]
 
