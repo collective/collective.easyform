@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1014"
+      profile="collective.easyform:default"
+      source="1013"
+      >
+
+    <gs:upgradeDepends
+        title="Apply controlpanel.xml from default profile"
+        import_steps="controlpanel"
+        />
+
+  </gs:upgradeSteps>
+
+</configure>

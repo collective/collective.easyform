@@ -4,7 +4,7 @@
              appId="easyform"
              category="Products"
              condition_expr=""
-             icon_expr=""
+             icon_expr="string:ui-checks"
              title="easyform"
              url_expr="string:${portal_url}/@@easyform-controlpanel"
              visible="True"
