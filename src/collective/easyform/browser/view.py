@@ -353,6 +353,12 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.widgets.mode = self.mode = DISPLAY_MODE
         self.widgets.update()
 
+        # Set the widget values to the extracted data, since we don't have a
+        # context to extract from
+        for name in self.widgets:
+            if name in data:
+                self.widgets[name].value = data[name]
+
         for group in self.groups:
             group.fields = self.setThanksFields(self.base_groups.get(group.label), data)
             for name in list(group.widgets.keys()):
@@ -360,6 +366,10 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
                     del group.widgets[name]
             group.widgets.mode = DISPLAY_MODE
             group.widgets.update()
+            for name in group.widgets:
+                if name in data:
+                    group.widgets[name].value = data[name]
+
         prologue = self.context.thanksPrologue
         epilogue = self.context.thanksEpilogue
         self.thanksPrologue = prologue and dollar_replacer(prologue.output, data)
