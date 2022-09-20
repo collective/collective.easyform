@@ -76,4 +76,11 @@
           interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
           name="easyform.csv_delimiter"></record>
 
+  <record name="plone.icon.contenttype/easyform">
+    <field type="plone.registry.field.TextLine">
+      <title>Easyform</title>
+    </field>
+    <value key="resource">++plone++bootstrap-icons/ui-checks.svg</value>
+  </record>
+
 </registry>
