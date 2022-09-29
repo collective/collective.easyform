@@ -17,6 +17,23 @@ import logging
 
 logger = logging.getLogger("collective.easyform.migration")
 
+def should_migrate_row(data_adapter, easyform, idx, row, has_failed_row):
+    cols = data_adapter.getColumnNames()
+    if len(row) != len(cols):
+        if not has_failed_row:
+            logger.warning(
+                "Number of columns does not match for all rows. Some data were skipped in "
+                "data adapter %s/%s",
+                "/".join(easyform.getPhysicalPath()),
+                data_adapter.getId(),
+            )
+        logger.info(
+            "Column count mismatch at row %s",
+            idx,
+        )
+        return False
+    else:
+        return True
 
 def migrate_saved_data(ploneformgen, easyform):
     for data_adapter in ploneformgen.objectValues("FormSaveDataAdapter"):
@@ -25,22 +42,12 @@ def migrate_saved_data(ploneformgen, easyform):
         schema = get_fields(easyform)
         if ISaveData.providedBy(action):
             cols = data_adapter.getColumnNames()
-            column_count_mismatch = False
+            has_failed_row = False
             for idx, row in enumerate(data_adapter.getSavedFormInput()):
-                if len(row) != len(cols):
-                    if not column_count_mismatch:
-                        logger.warning(
-                            "Number of columns does not match for all rows. Some data were skipped in "
-                            "data adapter %s/%s",
-                            "/".join(easyform.getPhysicalPath()),
-                            data_adapter.getId(),
-                        )
-                        column_count_mismatch = True
-                    logger.info(
-                        "Column count mismatch at row %s",
-                        idx,
-                    )
+                if not should_migrate_row(data_adapter, easyform, idx, row, has_failed_row):
+                    has_failed_row = True
                     continue
+
                 data = {}
                 for key, value in zip(cols, row):
                     try:
@@ -63,6 +70,7 @@ def migrate_saved_data(ploneformgen, easyform):
                         SyntaxError,
                         DateTime.interfaces.SyntaxError,
                         DateTime.interfaces.TimeError,
+                        DateTime.interfaces.DateError
                     ):
                         # Exceptions above are often due to long living Forms, where users have changed their minds about
                         # the Field formats/widgets...
