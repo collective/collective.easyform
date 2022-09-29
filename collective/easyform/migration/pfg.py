@@ -20,6 +20,7 @@ from zope import schema
 from zope.component.hooks import getSite
 from zope.interface import alsoProvides
 
+
 import logging
 import transaction
 
@@ -84,7 +85,6 @@ class PloneFormGenMigrator(ATCTContentMigrator):
             Field("thanksEpilogue", migrate_richtextfield).handler(
                 pfg_thankspage, ef, "thanksEpilogue", "thanksEpilogue"
             )
-
 
 class IMigratePloneFormGenFormSchema(model.Schema):
     dry_run = schema.Bool(
