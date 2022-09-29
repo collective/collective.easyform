@@ -66,8 +66,11 @@ class PloneFormGenMigrator(ATCTContentMigrator):
         migrate_saved_data(self.old, self.new)
 
     def migrate(self, unittest=0):
-        super(PloneFormGenMigrator, self).migrate()
-        logger.info("Migrated FormFolder %s", "/".join(self.new.getPhysicalPath()))
+        try:
+            super(PloneFormGenMigrator, self).migrate()
+            logger.info("Migrated FormFolder %s", "/".join(self.new.getPhysicalPath()))
+        except Exception:
+            logger.info(u"Could not migrate %r", self.old, exc_info=True)
 
     def migrate_thankyou_page(self):
         pfg_thankspage = self.old.get(self.old.getThanksPage())

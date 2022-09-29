@@ -52,7 +52,7 @@ def migrate_saved_data(ploneformgen, easyform):
                 for key, value in zip(cols, row):
                     try:
                         field = schema.get(key)
-                        value = value.decode("utf8")
+                        value = safe_unicode(value)
                         if IFromUnicode.providedBy(field) and value:
                             value = field.fromUnicode(value)
                         elif IDatetime.providedBy(field) and value:
@@ -60,7 +60,10 @@ def migrate_saved_data(ploneformgen, easyform):
                         elif IDate.providedBy(field) and value:
                             value = DateTime.DateTime(value).asdatetime().date()
                         elif ISet.providedBy(field):
-                            value = set(literal_eval(value))
+                            if not value or value == [""]:
+                                value = set()
+                            else:
+                                value = set(value)
                         elif INamedBlobFileField.providedBy(field):
                             value = None
                     except (
