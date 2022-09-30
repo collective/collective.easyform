@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 from collective.easyform.migration.actions import actions_model
-from collective.easyform.migration.data import migrate_saved_data
+from collective.easyform.migration.data import SavedDataMigrator
 from collective.easyform.migration.fields import fields_model
 from plone.app.contenttypes.migration.field_migrators import (
     migrate_richtextfield,  # noqa
@@ -54,6 +54,7 @@ class PloneFormGenMigrator(ATCTContentMigrator):
     src_meta_type = "FormFolder"
     dst_portal_type = "EasyForm"
     dst_meta_type = None  # not used
+    saved_data_migrator = SavedDataMigrator()
 
     def migrate_ploneformgen(self):
         for pfg_field, ef_field in FIELD_MAPPING.items():
@@ -63,7 +64,7 @@ class PloneFormGenMigrator(ATCTContentMigrator):
 
         self.migrate_thankyou_page()
 
-        migrate_saved_data(self.old, self.new)
+        self.saved_data_migrator.migrate(self.old, self.new)
 
     def migrate(self, unittest=0):
         super(PloneFormGenMigrator, self).migrate()
@@ -98,6 +99,7 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
     label = u"Migrate PloneFormGen Forms"
     ignoreContext = True
     schema = IMigratePloneFormGenFormSchema
+    migrator = PloneFormGenMigrator
 
     @buttonAndHandler(u"Migrate")
     def handle_migrate(self, action):
@@ -134,7 +136,7 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
             )
             if link_integrity:
                 site_props.manage_changeProperties(enable_link_integrity_checks=False)
-        migrate(portal, PloneFormGenMigrator)
+        migrate(portal, self.migrator)
 
         # Switch linkintegrity back on, if needed
         if link_integrity:
