@@ -75,6 +75,10 @@ class Fixture(PloneSandboxLayer):
         # Install the collective.easyform product
         self.applyProfile(portal, "collective.easyform:default")
         try:
+            self.applyProfile(portal, "plone.formwidget.hcaptcha:default")
+        except KeyError:
+            pass
+        try:
             self.applyProfile(portal, "plone.formwidget.recaptcha:default")
         except KeyError:
             pass
