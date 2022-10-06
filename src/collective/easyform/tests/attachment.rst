@@ -169,13 +169,13 @@ Check saved data::
     True
     >>> ".widgets.attachment/@@download/test.txt" in browser.contents
     True
-    >>> '<input id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit" class="submit-widget button-field" value="Apply changes" type="submit" />' in browser.contents
+    >>> 'id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit"' in browser.contents
     True
-    >>> '<input id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete" class="submit-widget button-field" value="Delete" type="submit" />' in browser.contents
+    >>> 'id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete"' in browser.contents
     True
-    >>> '<input id="form-buttons-download" name="form.buttons.download" class="submit-widget button-field" value="Download" type="submit" />' in browser.contents
+    >>> 'id="form-buttons-download" name="form.buttons.download"' in browser.contents
     True
-    >>> '<input id="form-buttons-clearall" name="form.buttons.clearall" class="submit-widget button-field" value="Clear all" type="submit" />' in browser.contents
+    >>> 'id="form-buttons-clearall" name="form.buttons.clearall"' in browser.contents
     True
     >>> browser.getLink('test.txt').click()
     >>> browser.url

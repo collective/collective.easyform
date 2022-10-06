@@ -95,20 +95,20 @@ class TestFunctions(base.EasyFormTestCase):
         """
 
         self.assertEqual(
-            list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            ["replyto", "topic", "comments"],
+            set(filter_widgets(self.ff1, self.dummy_form.w).keys()),
+            set(["replyto", "topic", "comments"]),
         )
 
         self.ff1.showFields = ("topic", "comments")
         self.assertEqual(
-            list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            ["replyto", "topic", "comments"],
+            set(filter_widgets(self.ff1, self.dummy_form.w).keys()),
+            set(["replyto", "topic", "comments"]),
         )
 
         self.ff1.showAll = False
         self.assertEqual(
-            list(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            ["topic", "comments"],
+            set(filter_widgets(self.ff1, self.dummy_form.w).keys()),
+            set(["topic", "comments"]),
         )
 
     def test_selective_fields(self):
