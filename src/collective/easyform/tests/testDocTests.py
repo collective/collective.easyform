@@ -1,28 +1,18 @@
 # -*- coding: utf-8 -*-
 from collective.easyform.tests.base import FUNCTIONAL_TESTING
-from plone import api
+from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.testing import layered
+from plone.testing.zope import Browser
 
 import doctest
 import os
 import re
 import six
-import transaction
 import unittest
 
 
-try:
-    from plone.testing.zope import Browser
-except ImportError:
-    from plone.testing.z2 import Browser
-
-try:
-    from email import message_from_bytes  # NOQA: F401
-
-    LINESEP = b"\r\n"
-except ImportError:
-    # Python 2
-    LINESEP = b"\n"
+LINESEP = b"\r\n"
 
 optionflags = (
     doctest.REPORT_ONLY_FIRST_FAILURE
@@ -54,11 +44,10 @@ def get_browser(layer, auth=True):
     browser = Browser(layer["app"])
     browser.handleErrors = False
     if auth:
-        api.user.create(
-            username="adm", password="secret", email="a@example.org", roles=("Manager",)
-        )
-        transaction.commit()
-        browser.addHeader("Authorization", "Basic adm:secret")
+        browser.open('http://nohost/plone/login_form')
+        browser.getControl('Login Name').value = SITE_OWNER_NAME
+        browser.getControl('Password').value = SITE_OWNER_PASSWORD
+        browser.getControl('Log in').click()
     return browser
 
 

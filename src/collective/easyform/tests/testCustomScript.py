@@ -154,6 +154,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.request["form.widgets.description"] = u"foobar"
         self.request["form.widgets.factory"] = ["label_textline_field"]
         self.request["form.widgets.required"] = ["selected"]
+        self.request["form.widgets.fieldset_id"] = "0"
         self.request["form.buttons.add"] = u"Add"
         view = self.ff1.restrictedTraverse("fields/@@add-field")
         view.update()

@@ -61,10 +61,12 @@ also site contributors.
 Let's logout and then login as 'contributor', a portal member that has the
 contributor role assigned::
 
+    >>> from plone.app.testing import TEST_USER_NAME
+    >>> from plone.app.testing import TEST_USER_PASSWORD
     >>> browser.getLink('Log out').click()
     >>> browser.open(portal_url + '/login_form')
-    >>> browser.getControl(name='__ac_name').value = 'contributor'
-    >>> browser.getControl(name='__ac_password').value = 'secret'
+    >>> browser.getControl(name='__ac_name').value = TEST_USER_NAME
+    >>> browser.getControl(name='__ac_password').value = TEST_USER_PASSWORD
     >>> browser.getControl('Log in').click()
     >>> browser.open(portal_url)
 
