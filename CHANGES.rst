@@ -11,6 +11,9 @@ Changelog
 - Prevent RichLabel fields from breaking the form
   [MrTango]
 
+- Schemaeditor UI: close modals and reload fields(sets) when saving.
+  [petschki]
+
 
 4.1.0 (2022-08-10)
 ------------------
