@@ -493,7 +493,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertIn("<div class=\"invalid-feedback\">", form)
         self.assertNotIn("Thanks for your input.", form)
 
     def test_wrong(self):
@@ -501,7 +501,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertIn("<div class=\"invalid-feedback\">", form)
         self.assertNotIn("Thanks for your input.", form)
 
 

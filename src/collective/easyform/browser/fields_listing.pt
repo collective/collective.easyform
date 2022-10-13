@@ -5,10 +5,20 @@
      class="pat-schemaeditor">
 
   <a id="add-field" class="pat-plone-modal btn btn-primary float-end ms-3"
+     data-pat-plone-modal='{
+      "actionOptions": {
+        "displayInModal": false
+      }
+     }'
      href="${context/absolute_url}/@@add-field"
      i18n:translate="add_new_field_hellip">Add new field&hellip;</a>
 
   <a id="add-fieldset" class="pat-plone-modal btn btn-primary float-end" tal:condition="context/enableFieldsets"
+     data-pat-plone-modal='{
+      "actionOptions": {
+        "displayInModal": false
+      }
+     }'
      href="${context/absolute_url}/@@add-fieldset"
      i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</a>
 
@@ -87,13 +97,16 @@
                    i18n:domain="plone.schemaeditor"
               >
                 <a class="fieldSettings pat-modal pat-plone-modal"
+                   data-pat-plone-modal='{
+                    "actionOptions": {
+                      "displayInModal": false
+                    }
+                   }'
                    tal:define="
                      edit_url python:view.edit_url(widget.field);
                    "
                    tal:condition="edit_url"
-                   tal:attributes="
-                     href edit_url;
-                   "
+                   href="${edit_url}"
                    i18n:translate=""
                 >Settings&hellip;</a>
                 <a class="schemaeditor-delete-field"
@@ -104,9 +117,7 @@
                      delete_url python:view.delete_url(widget.field);
                    "
                    tal:condition="delete_url"
-                   tal:attributes="
-                     href delete_url;
-                   "
+                   href="${delete_url}"
                    i18n:attributes="title; data-confirm_msg"
                 >&times;</a>
               </div>
