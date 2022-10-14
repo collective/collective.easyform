@@ -300,12 +300,14 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if "reset" in self.actions:
             self.actions["reset"].title = self.context.resetLabel
 
-    def updateWidgets(self):
-        super(EasyFormForm, self).updateWidgets()
+    def markWidgets(self):
         for w in self.widgets.values():
             if not IEasyFormWidget.providedBy(w):
-                # add marker for custom widget renderer
                 alsoProvides(w, IEasyFormWidget)
+        for g in self.groups:
+            for w in g.widgets.values():
+                if not IEasyFormWidget.providedBy(w):
+                    alsoProvides(w, IEasyFormWidget)
 
     def formMaybeForceSSL(self):
         """Redirect to an https:// URL if the 'force SSL' option is on.
@@ -328,6 +330,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         """Update form - see interfaces.IForm"""
         self.formMaybeForceSSL()
         super(EasyFormForm, self).update()
+        self.markWidgets()
         self.template = self.form_template
         if self.request.method != "POST" or self.context.thanksPageOverride:
             # go with all but default thank you page rendering
