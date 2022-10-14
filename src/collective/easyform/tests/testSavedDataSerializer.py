@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, date
-from plone.app.textfield import RichText, RichTextValue
-from .testSaver import BaseSaveData, FakeRequest
-from collective.easyform.api import get_actions, set_fields
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.interfaces import IDeserializeFromJson
-from zope.component import getMultiAdapter
-import json
-from zope.interface import Interface
-from plone.supermodel import model
+from .testSaver import BaseSaveData
+from .testSaver import FakeRequest
+from collective.easyform.api import get_actions
+from collective.easyform.api import set_fields
+from datetime import date
+from datetime import datetime
 from plone import schema
+from plone.app.textfield import RichText
+from plone.app.textfield import RichTextValue
+from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import ISerializeToJson
+from plone.supermodel import model
+from zope.component import getMultiAdapter
+from zope.interface import Interface
+
+import json
+
 
 class ISpecialConverters(model.Schema, Interface):
 
@@ -17,10 +23,9 @@ class ISpecialConverters(model.Schema, Interface):
     date = schema.Date()
     set = schema.Set()
     rich = RichText()
-    
 
-class SavedDataSerializerTestCase(BaseSaveData):  
 
+class SavedDataSerializerTestCase(BaseSaveData):
     def testDefaultFormDataSerialization(self):
         self.request = self.layer["request"]
         self.createSaver()
@@ -57,7 +62,7 @@ class SavedDataSerializerTestCase(BaseSaveData):
             datetime=datetime(1999, 12, 25, 19, 0, 0),
             date=date(2004, 11, 30),
             set=set(["please", "kill", "me"]),
-            rich=RichTextValue(raw=u"<div><b>testing is fùn</b> says Michaël</div>"),
+            rich=RichTextValue(raw="<div><b>testing is fùn</b> says Michaël</div>"),
         )
         saver.onSuccess(request.form, request)
 
@@ -70,7 +75,9 @@ class SavedDataSerializerTestCase(BaseSaveData):
         self.assertIn("please", json.dumps(obj))
         self.assertIn("kill", json.dumps(obj))
         self.assertIn("me", json.dumps(obj))
-        self.assertIn(u"<div><b>testing is f\\u00f9n</b> says Micha\\u00ebl</div>", json.dumps(obj))
+        self.assertIn(
+            "<div><b>testing is f\\u00f9n</b> says Micha\\u00ebl</div>", json.dumps(obj)
+        )
 
     def serialize(self, obj=None):
         if obj is None:
@@ -80,79 +87,83 @@ class SavedDataSerializerTestCase(BaseSaveData):
 
 
 class SavedDataDeserializerTestCase(BaseSaveData):
-
     def testDefaultFormDataDeserialization(self):
-        BODY = ( '{"actions_model": "<model '
-                'xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
-                'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
-                'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
-                'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
-                'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
-                'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
-                'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
-                'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\" '
-                'i18n:domain=\\"collective.easyform\\">\\n  <schema>\\n   <field '
-                'name=\\"saver\\" type=\\"collective.easyform.actions.SaveData\\">\\n      '
-                '<title>Saver</title>\\n    </field>\\n  </schema>\\n</model>",'
-                '"savedDataStorage": '
-                '{"saver": {"1658237759974": {"topic": "test subject", "replyto": '
-                '"test@test.org", "comments": "test comments", "id": 1658237759974}}}}')
+        BODY = (
+            '{"actions_model": "<model '
+            'xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
+            'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
+            'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
+            'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
+            'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
+            'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
+            'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
+            'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\" '
+            'i18n:domain=\\"collective.easyform\\">\\n  <schema>\\n   <field '
+            'name=\\"saver\\" type=\\"collective.easyform.actions.SaveData\\">\\n      '
+            '<title>Saver</title>\\n    </field>\\n  </schema>\\n</model>",'
+            '"savedDataStorage": '
+            '{"saver": {"1658237759974": {"topic": "test subject", "replyto": '
+            '"test@test.org", "comments": "test comments", "id": 1658237759974}}}}'
+        )
         self.deserialize(body=BODY, context=self.ff1)
         saver = get_actions(self.ff1)["saver"]
         data = saver.getSavedFormInput()[0]
         self.assertIn("topic", data)
-        self.assertEqual("test subject", data['topic'])
+        self.assertEqual("test subject", data["topic"])
         self.assertIn("replyto", data)
-        self.assertEqual("test@test.org", data['replyto'])
+        self.assertEqual("test@test.org", data["replyto"])
         self.assertIn("comments", data)
-        self.assertEqual("test comments", data['comments'])
+        self.assertEqual("test comments", data["comments"])
 
     def testSpecialConvertersFormDataDeserialization(self):
-        BODY = ( '{"fields_model": "<model xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
-                'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
-                'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
-                'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
-                'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
-                'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
-                'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
-                'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\">\\n  <schema '
-                'based-on=\\"zope.interface.Interface\\">\\n    <field name=\\"datetime\\" '
-                'type=\\"zope.schema.Datetime\\"/>\\n    <field name=\\"date\\" '
-                'type=\\"zope.schema.Date\\"/>\\n    <field name=\\"set\\" '
-                'type=\\"zope.schema.Set\\"/>\\n    <field name=\\"rich\\" '
-                'type=\\"plone.app.textfield.RichText\\"/>\\n  </schema>\\n</model>", '
-                '"actions_model": "<model '
-                'xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
-                'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
-                'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
-                'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
-                'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
-                'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
-                'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
-                'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\" '
-                'i18n:domain=\\"collective.easyform\\">\\n  <schema>\\n   <field '
-                'name=\\"saver\\" type=\\"collective.easyform.actions.SaveData\\">\\n      '
-                '<title>Saver</title>\\n    </field>\\n  </schema>\\n</model>",'
-                '"savedDataStorage": '
-                '{"saver": {"1658240583228": {"datetime": "1999-12-25T19:00:00", "date": '
-                '"2004-11-30", "set": ["please", "me", "kill"], "rich": "<div><b>testing is '
-                'f\\u00f9n</b> says Micha\\u00ebl</div>", "id": 1658240583228}}}}')
+        BODY = (
+            '{"fields_model": "<model xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
+            'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
+            'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
+            'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
+            'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
+            'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
+            'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
+            'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\">\\n  <schema '
+            'based-on=\\"zope.interface.Interface\\">\\n    <field name=\\"datetime\\" '
+            'type=\\"zope.schema.Datetime\\"/>\\n    <field name=\\"date\\" '
+            'type=\\"zope.schema.Date\\"/>\\n    <field name=\\"set\\" '
+            'type=\\"zope.schema.Set\\"/>\\n    <field name=\\"rich\\" '
+            'type=\\"plone.app.textfield.RichText\\"/>\\n  </schema>\\n</model>", '
+            '"actions_model": "<model '
+            'xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
+            'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
+            'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
+            'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
+            'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
+            'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
+            'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
+            'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\" '
+            'i18n:domain=\\"collective.easyform\\">\\n  <schema>\\n   <field '
+            'name=\\"saver\\" type=\\"collective.easyform.actions.SaveData\\">\\n      '
+            '<title>Saver</title>\\n    </field>\\n  </schema>\\n</model>",'
+            '"savedDataStorage": '
+            '{"saver": {"1658240583228": {"datetime": "1999-12-25T19:00:00", "date": '
+            '"2004-11-30", "set": ["please", "me", "kill"], "rich": "<div><b>testing is '
+            'f\\u00f9n</b> says Micha\\u00ebl</div>", "id": 1658240583228}}}}'
+        )
 
         self.deserialize(body=BODY, context=self.ff1)
         saver = get_actions(self.ff1)["saver"]
         data = saver.getSavedFormInput()[0]
         self.assertIn("datetime", data)
-        self.assertEqual(datetime(1999, 12, 25, 19, 0, 0), data['datetime'])
+        self.assertEqual(datetime(1999, 12, 25, 19, 0, 0), data["datetime"])
         self.assertIn("date", data)
-        self.assertEqual(datetime(2004, 11, 30), data['date'])
+        self.assertEqual(datetime(2004, 11, 30), data["date"])
         self.assertIn("set", data)
-        setdata = list(data['set'])
+        setdata = list(data["set"])
         setdata.sort()
         self.assertEqual(["kill", "me", "please"], setdata)
         self.assertIn("rich", data)
-        self.assertEqual(u"<div><b>testing is fùn</b> says Michaël</div>", data['rich'].raw)
+        self.assertEqual(
+            "<div><b>testing is fùn</b> says Michaël</div>", data["rich"].raw
+        )
 
-    
     def deserialize(self, body="{}", validate_all=False, context=None, create=False):
         self.request = self.layer["request"]
         self.request["BODY"] = body

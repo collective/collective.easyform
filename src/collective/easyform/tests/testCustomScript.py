@@ -149,13 +149,13 @@ class TestCustomScript(base.EasyFormTestCase):
         self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = getattr(self.folder, "ff1")
         self.ff1.CSRFProtection = False
-        self.request["form.widgets.title"] = u"Test field"
-        self.request["form.widgets.__name__"] = u"test_field"
-        self.request["form.widgets.description"] = u"foobar"
+        self.request["form.widgets.title"] = "Test field"
+        self.request["form.widgets.__name__"] = "test_field"
+        self.request["form.widgets.description"] = "foobar"
         self.request["form.widgets.factory"] = ["label_textline_field"]
         self.request["form.widgets.required"] = ["selected"]
         self.request["form.widgets.fieldset_id"] = "0"
-        self.request["form.buttons.add"] = u"Add"
+        self.request["form.buttons.add"] = "Add"
         view = self.ff1.restrictedTraverse("fields/@@add-field")
         view.update()
         form = view.form_instance
@@ -165,11 +165,11 @@ class TestCustomScript(base.EasyFormTestCase):
     def createScript(self):
         """Creates FormCustomScript object"""
         # 1. Create custom script adapter in the form folder
-        self.request["form.widgets.title"] = u"Adapter"
-        self.request["form.widgets.__name__"] = u"adapter"
-        self.request["form.widgets.description"] = u""
+        self.request["form.widgets.title"] = "Adapter"
+        self.request["form.widgets.__name__"] = "adapter"
+        self.request["form.widgets.description"] = ""
         self.request["form.widgets.factory"] = ["Custom Script"]
-        self.request["form.buttons.add"] = u"Add"
+        self.request["form.buttons.add"] = "Add"
         view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()
         form = view.form_instance
@@ -309,7 +309,7 @@ class TestCustomScript(base.EasyFormTestCase):
 
         self.assertTrue(throwed, "Bypassed security, baaad!")
 
-        adapter.ProxyRole = u"Manager"
+        adapter.ProxyRole = "Manager"
         throwed = False
         try:
             adapter.onSuccess({}, FakeRequest())
@@ -323,12 +323,12 @@ class TestCustomScript(base.EasyFormTestCase):
     def testSetProxyRole(self):
         """Exercise setProxyRole"""
         self.createScript()
-        self.request["form.widgets.title"] = u"Adapter"
-        self.request["form.widgets.description"] = u""
-        self.request["form.widgets.ProxyRole"] = [u"Manager"]
+        self.request["form.widgets.title"] = "Adapter"
+        self.request["form.widgets.description"] = ""
+        self.request["form.widgets.ProxyRole"] = ["Manager"]
         self.request["form.widgets.ScriptBody"] = six.text_type(proxied_script)
-        self.request["form.widgets.IActionExtender.execCondition"] = u""
-        self.request["form.buttons.save"] = u"Save"
+        self.request["form.widgets.IActionExtender.execCondition"] = ""
+        self.request["form.buttons.save"] = "Save"
         view = self.ff1.restrictedTraverse("actions")
         view = view.publishTraverse(view.request, "adapter")
         view = view.publishTraverse(view.request, "adapter")
@@ -336,12 +336,12 @@ class TestCustomScript(base.EasyFormTestCase):
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
-        self.request["form.widgets.title"] = u"Adapter"
-        self.request["form.widgets.description"] = u""
-        self.request["form.widgets.ProxyRole"] = [u"none"]
+        self.request["form.widgets.title"] = "Adapter"
+        self.request["form.widgets.description"] = ""
+        self.request["form.widgets.ProxyRole"] = ["none"]
         self.request["form.widgets.ScriptBody"] = six.text_type(proxied_script)
-        self.request["form.widgets.IActionExtender.execCondition"] = u""
-        self.request["form.buttons.save"] = u"Save"
+        self.request["form.widgets.IActionExtender.execCondition"] = ""
+        self.request["form.buttons.save"] = "Save"
         view = self.ff1.restrictedTraverse("actions")
         view = view.publishTraverse(view.request, "adapter")
         view = view.publishTraverse(view.request, "adapter")
@@ -349,12 +349,12 @@ class TestCustomScript(base.EasyFormTestCase):
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 0)
-        self.request["form.widgets.title"] = u"Adapter"
-        self.request["form.widgets.description"] = u""
-        self.request["form.widgets.ProxyRole"] = [u"bogus"]
+        self.request["form.widgets.title"] = "Adapter"
+        self.request["form.widgets.description"] = ""
+        self.request["form.widgets.ProxyRole"] = ["bogus"]
         self.request["form.widgets.ScriptBody"] = six.text_type(proxied_script)
-        self.request["form.widgets.IActionExtender.execCondition"] = u""
-        self.request["form.buttons.save"] = u"Save"
+        self.request["form.widgets.IActionExtender.execCondition"] = ""
+        self.request["form.buttons.save"] = "Save"
         view = self.ff1.restrictedTraverse("actions")
         view = view.publishTraverse(view.request, "adapter")
         view = view.publishTraverse(view.request, "adapter")
@@ -362,7 +362,7 @@ class TestCustomScript(base.EasyFormTestCase):
         form = view.form_instance
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
-        self.assertEqual(errors[0].message, u"Required input is missing.")
+        self.assertEqual(errors[0].message, "Required input is missing.")
 
     def testProxyRole(self):
         """Test seeing how setting proxy role affects unauthorized

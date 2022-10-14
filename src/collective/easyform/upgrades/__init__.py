@@ -59,15 +59,13 @@ def fix_savedata_persistence_issues(context):
     from persistent.mapping import PersistentMapping
 
     catalog = api.portal.get_tool("portal_catalog")
-    forms = catalog.unrestrictedSearchResults(portal_type='EasyForm')
+    forms = catalog.unrestrictedSearchResults(portal_type="EasyForm")
     for item in forms:
         form = item.getObject()
-        if hasattr(form, '_inputStorage'):
+        if hasattr(form, "_inputStorage"):
             # Convert to persistent mapping
             form._inputStorage = PersistentMapping(form._inputStorage)
-            logger.info(
-                'Fixed storage of {}'.format('/'.join(form.getPhysicalPath()))
-            )
+            logger.info("Fixed storage of {}".format("/".join(form.getPhysicalPath())))
 
 
 def change_saveddata_action_permission(context):
@@ -78,7 +76,7 @@ def change_saveddata_action_permission(context):
     action = category.get("saveddata")
     if action is None:
         return
-    action._setPropValue('permissions', ("collective.easyform: Download Saved Input",))
+    action._setPropValue("permissions", ("collective.easyform: Download Saved Input",))
 
 
 def remove_migrate_all_forms_record(context):

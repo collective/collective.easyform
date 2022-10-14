@@ -31,7 +31,7 @@ def isCommaSeparatedEmails(value, **kwargs):
     for v in value.split(","):
         if not reg_tool.isValidEmail(v.strip()):
             return _(
-                u"Must be a valid list of email addresses " u"(separated by commas)."
+                "Must be a valid list of email addresses " "(separated by commas)."
             )
 
 
@@ -40,12 +40,12 @@ def isChecked(value, **kwargs):
         (isinstance(value, bool) and value)
         or (isinstance(value, six.string_types) and value == "1")
     ):
-        return _(u"Must be checked.")
+        return _("Must be checked.")
 
 
 def isUnchecked(value, **kwargs):
     if not isChecked(value):
-        return _(u"Must be unchecked.")
+        return _("Must be unchecked.")
 
 
 def isNotLinkSpam(value, **kwargs):

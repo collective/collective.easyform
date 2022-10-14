@@ -1,32 +1,33 @@
-import datetime
-from datetime import date, datetime
-import imp
-import pdb
-from dateutil import parser
-import json
-import logging
-
-from zope.component import adapter
-from zope.interface import implementer
-from zope.interface import Interface
-from zope.schema import getFieldsInOrder
-from zope.schema.interfaces import ISet, IDate, IDatetime
-
-from plone.restapi.serializer.dxcontent import SerializeToJson as DXContentToJson
-from plone.restapi.deserializer.dxcontent import (
-    DeserializeFromJson as DXContentFromJson,
-)
-from plone.restapi.deserializer import json_body
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.interfaces import IDeserializeFromJson
-from plone.app.textfield.value import RichTextValue
-from plone.app.textfield.interfaces import IRichText
-
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import ISaveData
+from datetime import date
+from datetime import datetime
+from dateutil import parser
+from plone.app.textfield.interfaces import IRichText
+from plone.app.textfield.value import RichTextValue
+from plone.restapi.deserializer import json_body
+from plone.restapi.deserializer.dxcontent import (
+    DeserializeFromJson as DXContentFromJson,
+)
+from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.serializer.dxcontent import SerializeToJson as DXContentToJson
 from Products.CMFPlone.utils import safe_unicode
+from zope.component import adapter
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.schema import getFieldsInOrder
+from zope.schema.interfaces import IDate
+from zope.schema.interfaces import IDatetime
+from zope.schema.interfaces import ISet
+
+import datetime
+import imp
+import json
+import logging
+import pdb
 
 
 logger = logging.getLogger("collective.easyform.migration")
@@ -87,7 +88,7 @@ def convertBeforeSerialize(value):
     elif isinstance(value, set):
         return list(value)
     elif isinstance(value, RichTextValue):
-        return safe_unicode(value.raw) #raw_encoded
+        return safe_unicode(value.raw)  # raw_encoded
     else:
         return value
 

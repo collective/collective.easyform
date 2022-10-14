@@ -184,7 +184,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.status = self.formErrorsMessage
 
     @button.buttonAndHandler(
-        PMF(u"Submit"), name="submit", condition=lambda form: not form.thanksPage
+        PMF("Submit"), name="submit", condition=lambda form: not form.thanksPage
     )
     def handleSubmit(self, action):
         unsorted_data, errors = self.extractData()
@@ -217,7 +217,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.request.response.write(safe_encode(thanksPage))
 
     @button.buttonAndHandler(
-        _(u"Reset"), name="reset", condition=lambda form: form.context.useCancelButton
+        _("Reset"), name="reset", condition=lambda form: form.context.useCancelButton
     )
     def handleReset(self, action):
         self.request.response.redirect(self.nextURL())
@@ -396,7 +396,7 @@ class EasyFormFormWrapper(FormWrapper):
     def css_class(self):
         css_class = None
         if self.form_instance.thanksPage:
-            css_class = u"easyform-thankspage"
+            css_class = "easyform-thankspage"
         return css_class
 
 
@@ -439,7 +439,7 @@ class ValidateFile(BrowserView):
             return _(
                 "msg_file_too_big",
                 mapping={"size": size},
-                default=u"File is bigger than allowed size of ${size} bytes!",
+                default="File is bigger than allowed size of ${size} bytes!",
             )
         ftype = splitext(value.filename)[-1]
         # remove leading dot '.' from file extension
@@ -448,13 +448,13 @@ class ValidateFile(BrowserView):
             return _(
                 "msg_file_not_allowed",
                 mapping={"ftype": ftype.upper()},
-                default=u'File type "${ftype}" is not allowed!',
+                default='File type "${ftype}" is not allowed!',
             )
         if forbidden_types and ftype in forbidden_types:
             return _(
                 "msg_file_not_allowed",
                 mapping={"ftype": ftype.upper()},
-                default=u'File type "${ftype}" is not allowed!',
+                default='File type "${ftype}" is not allowed!',
             )
         return False
 

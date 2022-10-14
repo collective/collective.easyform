@@ -1,23 +1,24 @@
 __docformat__ = "reStructuredText"
+from collective.easyform.interfaces import ILikertWidget
+from plone.memoize.view import memoize
+from z3c.form import interfaces
+from z3c.form.browser import widget
+from z3c.form.widget import FieldWidget
+from z3c.form.widget import Widget
+from zope.pagetemplate.interfaces import IPageTemplate
+
 import zope.component
 import zope.interface
 import zope.schema.interfaces
-from zope.pagetemplate.interfaces import IPageTemplate
-from plone.memoize.view import memoize
 
-from z3c.form import interfaces
-from z3c.form.widget import Widget, FieldWidget
-from z3c.form.browser import widget
-
-from collective.easyform.interfaces import ILikertWidget
 
 @zope.interface.implementer_only(ILikertWidget)
 class LikertWidget(widget.HTMLTextInputWidget, Widget):
     """Input type text widget implementation."""
 
-    klass = u'likert-widget'
-    css = u'text'
-    value = u''
+    klass = "likert-widget"
+    css = "text"
+    value = ""
 
     def update(self):
         super(LikertWidget, self).update()
@@ -27,22 +28,21 @@ class LikertWidget(widget.HTMLTextInputWidget, Widget):
         """See z3c.form.interfaces.IWidget."""
         answers = []
         if self.field.questions is None:
-            return ''
+            return ""
         for index, question in enumerate(self.field.questions):
             question_answer = self.extract_question_answer(index, default)
             if question_answer is not None:
                 answers.append(question_answer)
-        return u', '.join(answers)
+        return ", ".join(answers)
 
     def extract_question_answer(self, index, default):
         """See z3c.form.interfaces.IWidget."""
-        name = '%s.%i' % (self.name, index)
-        if (name not in self.request and
-            '%s-empty-marker' % name in self.request):
+        name = "%s.%i" % (self.name, index)
+        if name not in self.request and "%s-empty-marker" % name in self.request:
             return None
         value = self.request.get(name, default)
         if value != default:
-            return '%i: %s' % (index + 1, value)
+            return "%i: %s" % (index + 1, value)
         else:
             return None
 

@@ -43,7 +43,7 @@ class EasyFormImportForm(form.Form):
     ignoreContext = True
     ignoreReadonly = True
 
-    @button.buttonAndHandler(_(u"import"), name="import")
+    @button.buttonAndHandler(_("import"), name="import")
     def handleImport(self, action):
         data, errors = self.extractData()
         if errors:
@@ -53,7 +53,7 @@ class EasyFormImportForm(form.Form):
         ctx = TarballImportContext(self.context, data["upload"])
         IFilesystemImporter(self.context).import_(ctx, "structure", True)
 
-        self.status = _(u"Form imported.")
+        self.status = _("Form imported.")
         IStatusMessage(self.request).addStatusMessage(self.status, type="info")
 
         url = getMultiAdapter((self.context, self.request), name="absolute_url")()

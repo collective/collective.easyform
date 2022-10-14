@@ -34,6 +34,7 @@ except ImportError:
 
 try:
     from openpyxl import load_workbook
+
     HAS_OPENPYXL = True
 except ImportError:
     HAS_OPENPYXL = False
@@ -115,6 +116,7 @@ MODEL_WITH_ALL_FIELDS = """
 </model>
 """
 
+
 class TestFunctions(base.EasyFormTestCase):
     """Test mailer action"""
 
@@ -136,7 +138,7 @@ class TestFunctions(base.EasyFormTestCase):
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         actions = get_actions(self.ff1)
-        actions["mailer"].recipient_email = u"mdummy@address.com"
+        actions["mailer"].recipient_email = "mdummy@address.com"
         set_actions(self.ff1, actions)
 
     def LoadRequestForm(self, **kwargs):
@@ -164,7 +166,11 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer = get_actions(self.ff1)["mailer"]
 
-        data = {"topic": "test subject", "replyto": "foo@spam.com", "comments": "test comments"}
+        data = {
+            "topic": "test subject",
+            "replyto": "foo@spam.com",
+            "comments": "test comments",
+        }
         request = self.LoadRequestForm(**data)
 
         mailer.onSuccess(data, request)
@@ -179,7 +185,11 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer = get_actions(self.ff1)["mailer"]
 
-        data = {"topic": "test subject", "replyto": "foo@spam.com", "comments": "test comments"}
+        data = {
+            "topic": "test subject",
+            "replyto": "foo@spam.com",
+            "comments": "test comments",
+        }
         request = self.LoadRequestForm(**data)
 
         mailer.additional_headers = ["Generator: Plone", "Token:   abc  "]
@@ -203,7 +213,11 @@ class TestFunctions(base.EasyFormTestCase):
 
         mailer = get_actions(self.ff1)["mailer"]
 
-        data = {"topic": long_subject, "replyto": "foo@spam.com", "comments": "test comments"}
+        data = {
+            "topic": long_subject,
+            "replyto": "foo@spam.com",
+            "comments": "test comments",
+        }
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -292,7 +306,7 @@ class TestFunctions(base.EasyFormTestCase):
     def test_UTF8Subject(self):
         """Test mailer with uft-8 encoded subject line"""
 
-        utf8_subject = u"Effacer les entrées sauvegardées"
+        utf8_subject = "Effacer les entrées sauvegardées"
         data = dict(
             topic=utf8_subject, replyto="test@test.org", comments="test comments"
         )
@@ -310,7 +324,7 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_UnicodeSubject(self):
         """Test mailer with Unicode encoded subject line"""
-        utf8_subject = u"Effacer les entrées sauvegardées"
+        utf8_subject = "Effacer les entrées sauvegardées"
         unicode_subject = utf8_subject
         data = dict(
             topic=unicode_subject, replyto="test@test.org", comments="test comments"
@@ -328,7 +342,7 @@ class TestFunctions(base.EasyFormTestCase):
 
     def test_Utf8ListSubject(self):
         """Test mailer with Unicode encoded subject line"""
-        utf8_subject_list = [u"Effacer les entrées", u"sauvegardées"]
+        utf8_subject_list = ["Effacer les entrées", "sauvegardées"]
         data = dict(
             topic=utf8_subject_list, replyto="test@test.org", comments="test comments"
         )
@@ -350,7 +364,11 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.subjectOverride = "python: '{0} and {1}'.format('eggs', 'spam')"
         mailer.senderOverride = "string: spam@eggs.com"
         mailer.recipientOverride = "string: eggs@spam.com"
-        data = {"topic": "test subject", "replyto": "foo@spam.com", "comments": "test comments"}
+        data = {
+            "topic": "test subject",
+            "replyto": "foo@spam.com",
+            "comments": "test comments",
+        }
         request = self.LoadRequestForm(**data)
 
         mailer.onSuccess(data, request)
@@ -362,7 +380,11 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)["mailer"]
         mailer.subjectOverride = "fields/topic"
         mailer.recipientOverride = "fields/replyto"
-        data = {"topic": "eggs and spam", "replyto": "test@test.ts", "comments": "test comments"}
+        data = {
+            "topic": "eggs and spam",
+            "replyto": "test@test.ts",
+            "comments": "test comments",
+        }
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -375,7 +397,11 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)["mailer"]
         mailer.recipientOverride = "string: eggs@spam.com, spam@spam.com"
 
-        data = {"topic": "test subject", "replyto": "foo@spam.com", "comments": "cool stuff"}
+        data = {
+            "topic": "test subject",
+            "replyto": "foo@spam.com",
+            "comments": "cool stuff",
+        }
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -387,7 +413,11 @@ class TestFunctions(base.EasyFormTestCase):
         mailer = get_actions(self.ff1)["mailer"]
         mailer.recipientOverride = "python: ('eggs@spam.com', 'spam.spam.com')"
 
-        data = {"topic": "test subject", "replyto": "foo@spam.com", "comments": "cool stuff"}
+        data = {
+            "topic": "test subject",
+            "replyto": "foo@spam.com",
+            "comments": "cool stuff",
+        }
         request = self.LoadRequestForm(**data)
         mailer.onSuccess(data, request)
 
@@ -400,7 +430,11 @@ class TestFunctions(base.EasyFormTestCase):
         mailer.to_field = "replyto"
         mailer.replyto_field = None
 
-        fields = {"topic": "test subject", "replyto": "eggs@spamandeggs.com", "comments": "cool stuff"}
+        fields = {
+            "topic": "test subject",
+            "replyto": "eggs@spamandeggs.com",
+            "comments": "cool stuff",
+        }
 
         request = self.LoadRequestForm(**fields)
         mailer.onSuccess(fields, request)
@@ -574,7 +608,7 @@ class TestFunctions(base.EasyFormTestCase):
         for easyforms. It will not take the default site's recipient.
         """
         mailer = get_actions(self.ff1)["mailer"]
-        mailer.recipient_email = u""
+        mailer.recipient_email = ""
         mailer.to_field = None
         mailer.replyto_field = None
         fields = dict(
@@ -613,7 +647,7 @@ class TestFunctions(base.EasyFormTestCase):
             replyto="test@test.org",
             topic="test subject",
             richtext="Raw",
-            comments=u"test comments😀",
+            comments="test comments😀",
             datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
@@ -630,7 +664,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u"Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            "Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, xml = attachments[0]
@@ -669,7 +703,7 @@ class TestFunctions(base.EasyFormTestCase):
             replyto="test@test.org",
             topic="test subject",
             richtext="Raw",
-            comments=u"test comments😀",
+            comments="test comments😀",
             datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
@@ -687,7 +721,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u"Content-Type: application/csv\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            "Content-Type: application/csv\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, csv = attachments[0]
@@ -715,7 +749,7 @@ class TestFunctions(base.EasyFormTestCase):
 
     @unittest.skipUnless(HAS_OPENPYXL, "Requires openpyxl")
     def test_MailerXLSXAttachments(self):
-        """ Test mailer with dummy_send """
+        """Test mailer with dummy_send"""
         mailer = get_actions(self.ff1)["mailer"]
         mailer.sendXML = False
         mailer.sendCSV = False
@@ -727,7 +761,7 @@ class TestFunctions(base.EasyFormTestCase):
             replyto="test@test.org",
             topic="test subject",
             richtext="Raw",
-            comments=u"test comments😀",
+            comments="test comments😀",
             datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
@@ -745,7 +779,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u"Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            "Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, xlsx = attachments[0]
@@ -753,7 +787,10 @@ class TestFunctions(base.EasyFormTestCase):
         wb.active
         ws = wb.active
 
-        row = [cell.value and cell.value.encode('utf-8') or b'' for cell in list(ws.rows)[0]]
+        row = [
+            cell.value and cell.value.encode("utf-8") or b""
+            for cell in list(ws.rows)[0]
+        ]
 
         output = [
             b"test@test.org",

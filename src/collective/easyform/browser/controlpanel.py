@@ -17,8 +17,8 @@ def getContent(self):
 class IEasyFormControlPanel(Interface):
 
     allowedFields = schema.List(
-        title=_(u"Allowed Fields"),
-        description=_(u"These Fields are available for your forms."),
+        title=_("Allowed Fields"),
+        description=_("These Fields are available for your forms."),
         value_type=schema.Choice(
             required=False,
             vocabulary="easyform.SchemaEditorFields",
@@ -27,18 +27,18 @@ class IEasyFormControlPanel(Interface):
     )
 
     csv_delimiter = schema.TextLine(
-        title=_(u"CSV delimiter"),
+        title=_("CSV delimiter"),
         max_length=1,
-        description=_(u"Set the default delimiter for CSV download."),
+        description=_("Set the default delimiter for CSV download."),
         required=True,
-        default=u",",
+        default=",",
     )
 
 
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel
     schema_prefix = "easyform"
-    label = _(u"easyform Settings")
+    label = _("easyform Settings")
 
     def updateFields(self):
         super(EasyFormControlPanelForm, self).updateFields()

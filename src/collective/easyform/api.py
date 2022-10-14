@@ -20,7 +20,7 @@ from zope.schema import getFieldsInOrder
 import six
 
 
-CONTEXT_KEY = u"context"
+CONTEXT_KEY = "context"
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
 dollarRE = compile(r"\$\{(.+?)\}")
@@ -244,7 +244,7 @@ def cleanup(value):
     """
     if isinstance(value, six.string_types):
         value = safe_unicode(value).strip()
-        value = value.replace(u",", u"\n").replace(u";", u"\n")
+        value = value.replace(",", "\n").replace(";", "\n")
         value = [s for s in value.splitlines()]
 
     if isinstance(value, (list, tuple)):

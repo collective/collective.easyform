@@ -31,24 +31,24 @@ class IEasyFormActionsEditorExtender(IFieldEditorExtender):
 def isValidFieldName(value):
     if not ID_RE.match(value):
         raise zope.interface.Invalid(
-            __(u"Please use only letters, numbers and " u"the following characters: _.")
+            __("Please use only letters, numbers and " "the following characters: _.")
         )
     return True
 
 
 class INewAction(Schema):
 
-    title = zope.schema.TextLine(title=__(u"Title"), required=True)
+    title = zope.schema.TextLine(title=__("Title"), required=True)
 
     __name__ = zope.schema.ASCIILine(
-        title=__(u"Short Name"),
-        description=__(u"Used for programmatic access to the field."),
+        title=__("Short Name"),
+        description=__("Used for programmatic access to the field."),
         required=True,
         constraint=isValidFieldName,
     )
 
     factory = zope.schema.Choice(
-        title=_(u"Action type"), vocabulary="EasyFormActions", required=True
+        title=_("Action type"), vocabulary="EasyFormActions", required=True
     )
 
     @zope.interface.invariant
@@ -59,14 +59,14 @@ class INewAction(Schema):
                 and data.factory.fieldcls is not zope.schema.TextLine
             ):
                 raise zope.interface.Invalid(
-                    __(u"The 'title' field must be a Text line (string) " u"field.")
+                    __("The 'title' field must be a Text line (string) " "field.")
                 )
 
 
 class IActionFactory(zope.schema.interfaces.IField):
     """A component that instantiates a action when called."""
 
-    title = zope.schema.TextLine(title=__(u"Title"))
+    title = zope.schema.TextLine(title=__("Title"))
 
 
 class IEasyFormActionsContext(ISchemaContext):
@@ -74,22 +74,22 @@ class IEasyFormActionsContext(ISchemaContext):
 
 
 class IActionExtender(Schema):
-    fieldset(u"overrides", label=_("Overrides"), fields=["execCondition"])
+    fieldset("overrides", label=_("Overrides"), fields=["execCondition"])
     directives.read_permission(execCondition=MODIFY_PORTAL_CONTENT)
     directives.write_permission(execCondition=config.EDIT_TALES_PERMISSION)
     execCondition = zope.schema.TextLine(
-        title=_(u"label_execcondition_text", default=u"Execution Condition"),
+        title=_("label_execcondition_text", default="Execution Condition"),
         description=_(
-            u"help_execcondition_text",
-            default=u"A TALES expression that will be evaluated to determine "
-            u"whether or not to execute this action. Leave empty if "
-            u"unneeded, and the action will be executed. Your "
-            u"expression should evaluate as a boolean; return True "
-            u"if you wish the action to execute. PLEASE NOTE: errors "
-            u"in the evaluation of this expression will  cause an "
-            u"error on form display.",
+            "help_execcondition_text",
+            default="A TALES expression that will be evaluated to determine "
+            "whether or not to execute this action. Leave empty if "
+            "unneeded, and the action will be executed. Your "
+            "expression should evaluate as a boolean; return True "
+            "if you wish the action to execute. PLEASE NOTE: errors "
+            "in the evaluation of this expression will  cause an "
+            "error on form display.",
         ),
-        default=u"",
+        default="",
         constraint=isTALES,
         required=False,
     )

@@ -47,7 +47,7 @@ with open(
 FORM_ERROR_MARKER = "FORM_ERROR_MARKER"
 
 
-DEFAULT_SCRIPT = u"""
+DEFAULT_SCRIPT = """
 ## Python Script
 ##bind container=container
 ##bind context=context

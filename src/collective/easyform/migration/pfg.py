@@ -68,18 +68,18 @@ class PloneFormGenMigrator(ATCTContentMigrator):
 
 class IMigratePloneFormGenFormSchema(model.Schema):
     dry_run = schema.Bool(
-        title=u"Dry run",
+        title="Dry run",
         required=True,
         default=False,
     )
 
 
 class MigratePloneFormGenForm(AutoExtensibleForm, Form):
-    label = u"Migrate PloneFormGen Forms"
+    label = "Migrate PloneFormGen Forms"
     ignoreContext = True
     schema = IMigratePloneFormGenFormSchema
 
-    @buttonAndHandler(u"Migrate")
+    @buttonAndHandler("Migrate")
     def handle_migrate(self, action):
         data, errors = self.extractData()
         if len(errors) > 0:
@@ -96,9 +96,9 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
         self.migration_done = True
         if data.get("dry_run", False):
             transaction.abort()
-            logger.info(u"PloneFormGen migration finished (dry run)")
+            logger.info("PloneFormGen migration finished (dry run)")
         else:
-            logger.info(u"PloneFormGen migration finished")
+            logger.info("PloneFormGen migration finished")
 
     def migrate(self):
         alsoProvides(self.request, IDisableCSRFProtection)

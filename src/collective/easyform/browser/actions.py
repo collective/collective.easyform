@@ -134,7 +134,7 @@ class SavedDataForm(crud.CrudForm):
         return get_schema(get_context(self.field))
 
     def description(self):
-        return _(u"${items} input(s) saved", mapping={"items": self.field.itemsSaved()})
+        return _("${items} input(s) saved", mapping={"items": self.field.itemsSaved()})
 
     @property
     def update_schema(self):
@@ -168,11 +168,11 @@ class SavedDataForm(crud.CrudForm):
         (id, item) = id_and_item
         self.field.delDataRow(id)
 
-    @button.buttonAndHandler(PMF(u"Download"), name="download")
+    @button.buttonAndHandler(PMF("Download"), name="download")
     def handleDownload(self, action):
         pass
 
-    @button.buttonAndHandler(_(u"Clear all"), name="clearall")
+    @button.buttonAndHandler(_("Clear all"), name="clearall")
     def handleClearAll(self, action):
         self.field.clearSavedFormInput()
 
@@ -199,7 +199,7 @@ class SavedDataFormWrapper(layout.FormWrapper):
                 self.context.field.download(self.request.response, delimiter=delimiter)
             else:
                 self.context.field.download(self.request.response)
-            return u""
+            return ""
         return super(SavedDataFormWrapper, self).__call__()
 
 
@@ -252,10 +252,10 @@ class EasyFormActionsListing(SchemaListing):
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = u"{0}.{1}".format(field.__module__, field.__class__.__name__)
+        field_identifier = "{0}.{1}".format(field.__module__, field.__class__.__name__)
         return queryUtility(IActionFactory, name=field_identifier)
 
-    @button.buttonAndHandler(PMF(u"Save"))
+    @button.buttonAndHandler(PMF("Save"))
     def handleSaveDefaults(self, action):
         data, errors = self.extractData()
         if errors:
@@ -316,7 +316,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         )
         return [v for k, v in adapters]
 
-    @button.buttonAndHandler(PMF(u"Save"), name="save")
+    @button.buttonAndHandler(PMF("Save"), name="save")
     def handleSave(self, action):
         data, errors = self.extractData()
         if errors:
@@ -333,7 +333,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         notify(SchemaModifiedEvent(self.context.aq_parent))
         self.redirectToParent()
 
-    @button.buttonAndHandler(PMF(u"Cancel"), name="cancel")
+    @button.buttonAndHandler(PMF("Cancel"), name="cancel")
     def handleCancel(self, action):
         self.redirectToParent()
 
@@ -353,11 +353,11 @@ class ActionEditView(layout.FormWrapper):
     @lazy_property
     def label(self):
         return _(
-            u"Edit Action '${fieldname}'", mapping={"fieldname": self.field.__name__}
+            "Edit Action '${fieldname}'", mapping={"fieldname": self.field.__name__}
         )
 
 
-but = button.Button("modeleditor", title=_(u"Edit XML Actions Model"))
+but = button.Button("modeleditor", title=_("Edit XML Actions Model"))
 EasyFormActionsListing.buttons += button.Buttons(but)
 handler = button.Handler(but, EasyFormActionsListing.handleModelEdit)
 EasyFormActionsListing.handlers.addHandler(but, handler)
@@ -366,7 +366,7 @@ EasyFormActionsListing.handlers.addHandler(but, handler)
 class ModelEditorView(ModelEditorView):
     """Editor view"""
 
-    title = _(u"Edit XML Actions Model")
+    title = _("Edit XML Actions Model")
 
     def modelSource(self):
         return self.context.aq_parent.actions_model

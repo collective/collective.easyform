@@ -17,18 +17,19 @@ from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFPlone.utils import safe_bytes
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getAdapters
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from ZPublisher.BaseRequest import DefaultPublishTraverse
-from Products.statusmessages.interfaces import IStatusMessage
-from Products.CMFPlone.utils import safe_unicode
 
 import html
+
 
 NAMESPACE = "{http://namespaces.plone.org/supermodel/schema}"
 
@@ -95,7 +96,7 @@ class FieldsSchemaListing(SchemaListing):
         self.request.response.redirect("@@modeleditor")
 
     @button.buttonAndHandler(
-        _(u'Save'),
+        _("Save"),
     )
     def handleSave(self, action):
         super(FieldsSchemaListing, self).handleSaveDefaults(self, action)
@@ -103,7 +104,7 @@ class FieldsSchemaListing(SchemaListing):
 
 
 if HAVE_RESOURCE_EDITOR:
-    but = button.Button("modeleditor", title=_(u"Edit XML Fields Model"))
+    but = button.Button("modeleditor", title=_("Edit XML Fields Model"))
     FieldsSchemaListing.buttons += button.Buttons(but)
     handler = button.Handler(but, FieldsSchemaListing.handleModelEdit)
     FieldsSchemaListing.handlers.addHandler(but, handler)
@@ -142,13 +143,13 @@ class ModelEditorView(BrowserView):
 
     template = ViewPageTemplateFile("modeleditor.pt")
 
-    title = _(u"Edit XML Fields Model")
+    title = _("Edit XML Fields Model")
 
     def modelSource(self):
         return self.context.aq_parent.fields_model
 
     def authorized(self, context, request):
-        authenticator = queryMultiAdapter((context, request), name=u"authenticator")
+        authenticator = queryMultiAdapter((context, request), name="authenticator")
         return authenticator and authenticator.verify()
 
     def save(self, source):
@@ -184,7 +185,7 @@ class ModelEditorView(BrowserView):
             # a little more sanity checking, look at first two element levels
             if root.tag != NAMESPACE + "model":
                 IStatusMessage(self.request).addStatusMessage(
-                    _(u"Error: root tag must be 'model'"),
+                    _("Error: root tag must be 'model'"),
                     "error",
                 )
                 return super().__call__()
@@ -192,7 +193,7 @@ class ModelEditorView(BrowserView):
             for element in root.getchildren():
                 if element.tag != NAMESPACE + "schema":
                     IStatusMessage(self.request).addStatusMessage(
-                        _(u"Error: all model elements must be 'schema'"),
+                        _("Error: all model elements must be 'schema'"),
                         "error",
                     )
                     return super().__call__()
@@ -200,11 +201,11 @@ class ModelEditorView(BrowserView):
             # can supermodel parse it?
             # This is mainly good for catching bad dotted names.
             try:
-                plone.supermodel.loadString(source, policy=u"dexterity")
+                plone.supermodel.loadString(source, policy="dexterity")
             except SupermodelParseError as e:
                 message = e.args[0].replace('\n  File "<unknown>"', "")
                 IStatusMessage(self.request).addStatusMessage(
-                    u"SuperModelParseError: {0}".format(html.escape(message)),
+                    "SuperModelParseError: {0}".format(html.escape(message)),
                     "error",
                 )
                 return super().__call__()

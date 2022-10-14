@@ -3,6 +3,7 @@ try:
     from StringIO import StringIO  # for Python 2
 except ImportError:
     from io import StringIO  # for Python 3
+
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
@@ -13,7 +14,6 @@ from collective.easyform.tests import base
 from os.path import dirname
 from os.path import join
 from plone import api
-
 from plone.namedfile.file import NamedFile
 from plone.namedfile.interfaces import INamed
 from plone.registry.interfaces import IRegistry
@@ -21,22 +21,25 @@ from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
-from zope.interface.interfaces import ComponentLookupError
 from zope.i18n import translate
 from zope.interface import classImplements
+from zope.interface.interfaces import ComponentLookupError
 from ZPublisher.BaseRequest import BaseRequest
 from ZPublisher.HTTPRequest import FileUpload
 
 import unittest
 
+
 try:
     from plone.formwidget.hcaptcha.interfaces import IHCaptchaSettings
+
     HAS_HCAPTCHA = True
 except ImportError:
     HAS_HCAPTCHA = False
 
 try:
     from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
+
     HAS_RECAPTCHA = True
 except ImportError:
     HAS_RECAPTCHA = False
@@ -44,9 +47,9 @@ except ImportError:
 IFieldValidator = validators.IFieldValidator
 
 FORM_DATA = {
-    "topic": u"test subject",
-    "replyto": u"test@test.org",
-    "comments": u"test comments",
+    "topic": "test subject",
+    "replyto": "test@test.org",
+    "comments": "test comments",
 }
 
 
@@ -172,8 +175,8 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(len(errors), 1)
 
         expected_error_message = (
-            u"Validierung fehlgeschlagen (isInternationalPhoneNumber): "
-            u"'testcomments' Ist keine g\xfcltige internationale Telefonnummer"
+            "Validierung fehlgeschlagen (isInternationalPhoneNumber): "
+            "'testcomments' Ist keine g\xfcltige internationale Telefonnummer"
         )
         self.assertEqual(errors[0].createMessage(), expected_error_message)
 
@@ -388,20 +391,20 @@ class TestSizeValidator(base.EasyFormTestCase):
     def test_filiesize_bigsize_validation(self):
         self.assertEqual(
             translate(self.validate_view(DummyFile(1000000000))),
-            u"File is bigger than allowed size of 1048576 bytes!",
+            "File is bigger than allowed size of 1048576 bytes!",
         )
 
     def test_filiesize_bigsize_custom_validation(self):
         self.assertEqual(
             translate(self.validate_view(DummyFile(1025), 1024)),
-            u"File is bigger than allowed size of 1024 bytes!",
+            "File is bigger than allowed size of 1024 bytes!",
         )
 
     def test_forbidden_type_validation_fail(self):
         validation = self.validate_view(
             DummyFile(filename="foo.ZIP"), forbidden_types=("zip",)
         )
-        self.assertEqual(translate(validation), u'File type "ZIP" is not allowed!')
+        self.assertEqual(translate(validation), 'File type "ZIP" is not allowed!')
 
     def test_forbidden_type_validation_pass(self):
         validation = self.validate_view(
@@ -413,7 +416,7 @@ class TestSizeValidator(base.EasyFormTestCase):
         validation = self.validate_view(
             DummyFile(filename="foo.ZIP"), allowed_types=("txt",)
         )
-        self.assertEqual(translate(validation), u'File type "ZIP" is not allowed!')
+        self.assertEqual(translate(validation), 'File type "ZIP" is not allowed!')
 
     def test_allowed_type_validation_pass(self):
         validation = self.validate_view(
@@ -425,7 +428,7 @@ class TestSizeValidator(base.EasyFormTestCase):
         validation = self.validate_view(
             DummyFile(filename="foo"), allowed_types=("txt",)
         )
-        self.assertEqual(translate(validation), u'File type "" is not allowed!')
+        self.assertEqual(translate(validation), 'File type "" is not allowed!')
 
 
 @unittest.skipUnless(HAS_RECAPTCHA, "Requires plone.formwidget.recaptcha")
@@ -441,10 +444,9 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
 
-
         proxy = registry.forInterface(IReCaptchaSettings)
-        proxy.public_key = u"foo"
-        proxy.private_key = u"bar"
+        proxy.public_key = "foo"
+        proxy.private_key = "bar"
 
     def test_no_answer(self):
         data = {"verification": ""}
@@ -473,8 +475,8 @@ class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
 class TestSingleHcaptchaValidator(LoadFixtureBase):
 
     """Can't test captcha passes but we can test it fails
-       Copy/paste test from Recaptcha, same api & add'on
-       structure
+    Copy/paste test from Recaptcha, same api & add'on
+    structure
     """
 
     schema_fixture = "hcaptcha.xml"
@@ -485,15 +487,15 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IHCaptchaSettings)
-        proxy.public_key = u"foo"
-        proxy.private_key = u"bar"
+        proxy.public_key = "foo"
+        proxy.private_key = "bar"
 
     def test_no_answer(self):
         data = {"verification": ""}
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("<div class=\"invalid-feedback\">", form)
+        self.assertIn('<div class="invalid-feedback">', form)
         self.assertNotIn("Thanks for your input.", form)
 
     def test_wrong(self):
@@ -501,7 +503,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("<div class=\"invalid-feedback\">", form)
+        self.assertIn('<div class="invalid-feedback">', form)
         self.assertNotIn("Thanks for your input.", form)
 
 

@@ -25,8 +25,8 @@ from copy import deepcopy
 from csv import writer as csvwriter
 from datetime import date
 from datetime import datetime
-from DateTime import DateTime
 from datetime import timedelta
+from DateTime import DateTime
 from decimal import Decimal
 from email import encoders
 from email.header import Header
@@ -61,6 +61,7 @@ from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
+
 import six
 
 
@@ -70,7 +71,7 @@ logger = getLogger("collective.easyform")
 @implementer(IActionFactory)
 class ActionFactory(object):
 
-    title = u""
+    title = ""
 
     def __init__(self, fieldcls, title, permission, *args, **kw):
         self.fieldcls = fieldcls
@@ -223,9 +224,9 @@ class Mailer(Action):
             toemail = self.get_portal_email_address(context)
         if not toemail:
             raise ValueError(
-                u"Unable to mail form input because no recipient address has "
-                u"been specified. Please check the recipient settings of the "
-                u"EasyForm Mailer within the current form folder."
+                "Unable to mail form input because no recipient address has "
+                "been specified. Please check the recipient settings of the "
+                "EasyForm Mailer within the current form folder."
             )
         return (fullname, toemail)
 
@@ -273,7 +274,7 @@ class Mailer(Action):
     def get_subject(self, fields, request, context):
         """Return subject."""
         # get subject header
-        nosubject = u"(no subject)"  # TODO: translate
+        nosubject = "(no subject)"  # TODO: translate
         subject = None
         if hasattr(self, "subjectOverride") and self.subjectOverride:
             # subject has a TALES override
@@ -460,7 +461,7 @@ class Mailer(Action):
                     filename,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "utf-8",
-                    output
+                    output,
                 )
             )
 
@@ -575,7 +576,7 @@ class CustomScript(Action):
         script._validateProxy = lambda i=None: None
 
         # Force proxy role
-        if role != u"none":
+        if role != "none":
             script.manage_proxy((role,))
 
         if six.PY2 and isinstance(body, six.text_type):
@@ -698,9 +699,9 @@ class SaveData(Action):
             if six.PY2 and isinstance(data, six.text_type):
                 return data.encode("utf-8")
             if isinstance(data, (list, tuple, set)):
-                data = '|'.join(data)
+                data = "|".join(data)
                 if six.PY2:
-                    return data.encode('utf-8')
+                    return data.encode("utf-8")
             return data
 
         return [get_data(row, i) for i in names]
@@ -901,17 +902,17 @@ class SaveData(Action):
 
 MailerAction = ActionFactory(
     Mailer,
-    _(u"label_mailer_action", default=u"Mailer"),
+    _("label_mailer_action", default="Mailer"),
     "collective.easyform.AddMailers",
 )
 CustomScriptAction = ActionFactory(
     CustomScript,
-    _(u"label_customscript_action", default=u"Custom Script"),
+    _("label_customscript_action", default="Custom Script"),
     "collective.easyform.AddCustomScripts",
 )
 SaveDataAction = ActionFactory(
     SaveData,
-    _(u"label_savedata_action", default=u"Save Data"),
+    _("label_savedata_action", default="Save Data"),
     "collective.easyform.AddDataSavers",
 )
 

@@ -4,11 +4,11 @@ from collective.easyform.api import get_expression
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
-from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import IHCaptcha
+from collective.easyform.interfaces import ILabel
+from collective.easyform.interfaces import ILikert
 from collective.easyform.interfaces import INorobotCaptcha
 from collective.easyform.interfaces import IReCaptcha
-from collective.easyform.interfaces import ILikert
 from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
@@ -29,7 +29,7 @@ from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
 
 
-def superAdapter(specific_interface, adapter, objects, name=u""):
+def superAdapter(specific_interface, adapter, objects, name=""):
     """Find the next most specific adapter.
 
     This is called by a FieldExtenderValidator or FieldExtenderDefault instance.
@@ -199,16 +199,16 @@ class Label(Field):
 class RichLabel(Label):
     """A Rich Label field"""
 
-    rich_label = u""
+    rich_label = ""
 
-    def __init__(self, rich_label=u"", **kw):
+    def __init__(self, rich_label="", **kw):
         self.rich_label = rich_label
         super(RichLabel, self).__init__(**kw)
 
 
-LabelFactory = FieldFactory(Label, _(u"label_label_field", default=u"Label"))
+LabelFactory = FieldFactory(Label, _("label_label_field", default="Label"))
 RichLabelFactory = FieldFactory(
-    RichLabel, _(u"label_richlabel_field", default=u"Rich Label")
+    RichLabel, _("label_richlabel_field", default="Rich Label")
 )
 
 LabelHandler = BaseHandler(Label)
@@ -221,18 +221,17 @@ class ReCaptcha(TextLine):
 
 
 ReCaptchaFactory = FieldFactory(
-    ReCaptcha, _(u"label_recaptcha_field", default=u"ReCaptcha")
+    ReCaptcha, _("label_recaptcha_field", default="ReCaptcha")
 )
 ReCaptchaHandler = BaseHandler(ReCaptcha)
+
 
 @implementer(IHCaptcha)
 class HCaptcha(TextLine):
     """A HCaptcha field"""
 
 
-HCaptchaFactory = FieldFactory(
-    HCaptcha, _(u"label_hcaptcha_field", default=u"HCaptcha")
-)
+HCaptchaFactory = FieldFactory(HCaptcha, _("label_hcaptcha_field", default="HCaptcha"))
 HCaptchaHandler = BaseHandler(HCaptcha)
 
 
@@ -242,7 +241,7 @@ class NorobotCaptcha(TextLine):
 
 
 NorobotFactory = FieldFactory(
-    NorobotCaptcha, _(u"label_norobot_field", default=u"NorobotCaptcha")
+    NorobotCaptcha, _("label_norobot_field", default="NorobotCaptcha")
 )
 NorobotCaptchaHandler = BaseHandler(NorobotCaptcha)
 
@@ -252,12 +251,12 @@ class Likert(TextLine):
     """A Likert field"""
 
     def __init__(self, **kwargs):
-        self.answers = kwargs.get('answers', None)
-        if 'answers' in kwargs:
-            del kwargs['answers']
-        self.questions = kwargs.get('questions', None)
-        if 'questions' in kwargs:
-            del kwargs['questions']
+        self.answers = kwargs.get("answers", None)
+        if "answers" in kwargs:
+            del kwargs["answers"]
+        self.questions = kwargs.get("questions", None)
+        if "questions" in kwargs:
+            del kwargs["questions"]
         Field.__init__(self, **kwargs)
 
     def _validate(self, value):
@@ -266,23 +265,20 @@ class Likert(TextLine):
 
     def parse(self, value):
         result = dict()
-        lines = value.split(',')
+        lines = value.split(",")
         for line in lines:
             if not line:
                 continue
-            id, answer = line.split(':')
+            id, answer = line.split(":")
             answer = answer.strip()
             if answer not in self.answers:
-                raise ValueError('Invalid answer value.')
+                raise ValueError("Invalid answer value.")
             index = int(id)
             if index < 1 or index > len(self.questions):
-                raise ValueError('Invalid question index.')
+                raise ValueError("Invalid question index.")
             result[index] = answer
         return result
 
 
-LikertFactory = FieldFactory(
-    Likert, _(u"label_likert_field", default=u"Likert")
-)
+LikertFactory = FieldFactory(Likert, _("label_likert_field", default="Likert"))
 LikertHandler = BaseHandler(Likert)
-

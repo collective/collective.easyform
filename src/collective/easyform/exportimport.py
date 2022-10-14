@@ -71,7 +71,13 @@ class EasyFormFieldMetadataHandler(object):
 
     def read(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ["TDefault", "TEnabled", "TValidator", "depends_on", "css_class",]:
+        for i in [
+            "TDefault",
+            "TEnabled",
+            "TValidator",
+            "depends_on",
+            "css_class",
+        ]:
             value = fieldNode.get(ns(i, self.namespace))
             if value:
                 data = schema.queryTaggedValue(i, {})
@@ -98,7 +104,13 @@ class EasyFormFieldMetadataHandler(object):
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ["TDefault", "TEnabled", "TValidator", "depends_on", "css_class",]:
+        for i in [
+            "TDefault",
+            "TEnabled",
+            "TValidator",
+            "depends_on",
+            "css_class",
+        ]:
             value = schema.queryTaggedValue(i, {}).get(name, None)
             if value:
                 fieldNode.set(ns(i, self.namespace), value)

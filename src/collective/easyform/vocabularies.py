@@ -27,47 +27,47 @@ def _make_vocabulary(items):
 
 @provider(IVocabularyFactory)
 def CustomActionsVocabularyFactory(context):
-    items = [(_(u"Traverse to"), u"traverse_to"), (_(u"Redirect to"), u"redirect_to")]
+    items = [(_("Traverse to"), "traverse_to"), (_("Redirect to"), "redirect_to")]
     return _make_vocabulary(items)
 
 
 @provider(IVocabularyFactory)
 def MimeListVocabularyFactory(context):
-    items = [(u"HTML", u"html"), (PMF(u"Text"), u"plain")]
+    items = [("HTML", "html"), (PMF("Text"), "plain")]
     return _make_vocabulary(items)
 
 
 @provider(IVocabularyFactory)
 def FormMethodsVocabularyFactory(context):
-    return SimpleVocabulary.fromValues((u"post", u"get"))
+    return SimpleVocabulary.fromValues(("post", "get"))
 
 
 @provider(IVocabularyFactory)
 def XinfoHeadersVocabularyFactory(context):
     return SimpleVocabulary.fromValues(
         (
-            u"HTTP_X_FORWARDED_FOR",
-            u"REMOTE_ADDR",
-            u"PATH_INFO",
-            u"HTTP_USER_AGENT",
-            u"HTTP_REFERER",
+            "HTTP_X_FORWARDED_FOR",
+            "REMOTE_ADDR",
+            "PATH_INFO",
+            "HTTP_USER_AGENT",
+            "HTTP_REFERER",
         )
     )
 
 
 @provider(IVocabularyFactory)
 def ProxyRoleChoicesVocabularyFactory(context):
-    items = [(u"No proxy role", u"none"), (u"Manager", u"Manager")]
+    items = [("No proxy role", "none"), ("Manager", "Manager")]
     return _make_vocabulary(items)
 
 
 @provider(IVocabularyFactory)
 def ExtraDataDLVocabularyFactory(context):
     items = [
-        (_(u"vocabulary_postingdt_text", default=u"Posting Date/Time"), u"dt"),
-        (u"HTTP_X_FORWARDED_FOR", u"HTTP_X_FORWARDED_FOR"),
-        (u"REMOTE_ADDR", u"REMOTE_ADDR"),
-        (u"HTTP_USER_AGENT", u"HTTP_USER_AGENT"),
+        (_("vocabulary_postingdt_text", default="Posting Date/Time"), "dt"),
+        ("HTTP_X_FORWARDED_FOR", "HTTP_X_FORWARDED_FOR"),
+        ("REMOTE_ADDR", "REMOTE_ADDR"),
+        ("HTTP_USER_AGENT", "HTTP_USER_AGENT"),
     ]
     return _make_vocabulary(items)
 
@@ -75,13 +75,13 @@ def ExtraDataDLVocabularyFactory(context):
 @provider(IVocabularyFactory)
 def FormatDLVocabularyFactory(context):
     items = [
-        (_(u"vocabulary_tsv_text", default=u"Tab-Separated Values"), u"tsv"),
-        (_(u"vocabulary_csv_text", default=u"Comma-Separated Values"), u"csv"),
+        (_("vocabulary_tsv_text", default="Tab-Separated Values"), "tsv"),
+        (_("vocabulary_csv_text", default="Comma-Separated Values"), "csv"),
     ]
 
     if HAS_XLSX_SUPPORT:
         items.append(
-            (_(u"vocabulary_xlsx_text", default=u"XLSX"), u"xlsx"),
+            (_("vocabulary_xlsx_text", default="XLSX"), "xlsx"),
         )
     return _make_vocabulary(items)
 

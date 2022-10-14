@@ -44,10 +44,10 @@ def get_browser(layer, auth=True):
     browser = Browser(layer["app"])
     browser.handleErrors = False
     if auth:
-        browser.open('http://nohost/plone/login_form')
-        browser.getControl('Login Name').value = SITE_OWNER_NAME
-        browser.getControl('Password').value = SITE_OWNER_PASSWORD
-        browser.getControl('Log in').click()
+        browser.open("http://nohost/plone/login_form")
+        browser.getControl("Login Name").value = SITE_OWNER_NAME
+        browser.getControl("Password").value = SITE_OWNER_PASSWORD
+        browser.getControl("Log in").click()
     return browser
 
 
