@@ -46,6 +46,7 @@ setup(
         "plone.schema",
         "plone.schemaeditor>=4.0.0b1",
         "plone.supermodel",
+        "plone.restapi",
         "Products.CMFPlone>=6.0.0b1",
         "Products.validation",
         "setuptools",
