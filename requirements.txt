@@ -1,1 +1,6 @@
-zc.buildout==3.0.0rc3
+-c constraints.txt
+-e .[test] --install-option="--pre"
+
+# WSGI: A system for configuration of WSGI web components in declarative .ini format.
+Paste
+pdbpp

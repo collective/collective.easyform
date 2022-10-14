@@ -38,3 +38,10 @@ pyvenv.cfg
 /venv/
 /.vscode
 local.cfg
+
+.*.cfg
+*-mxdev.txt
+/.make-sentinels/
+sources/
+.installed.txt
+stamp-yarn
