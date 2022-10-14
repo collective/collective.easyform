@@ -13,7 +13,9 @@ Changelog
 ------------------
 
 - Use "|" as delimiter of list types in exports. [mathias.leimgruber]
-- Added batch_size in savedataview [gianniftp]
+- Added batch_size in savedataview. The value can be edited trough the SaveDataAdapter add/edit form. [gianniftp]
+
+
 
 3.1.1 (2022-06-20)
 ------------------

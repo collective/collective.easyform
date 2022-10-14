@@ -100,7 +100,7 @@ class DataWrapper(dict):
 class SavedDataForm(crud.CrudForm):
     template = ViewPageTemplateFile("saveddata_form.pt")
     addform_factory = crud.NullForm
-    batch_size = 10
+    # batch_size = 10
 
     @property
     def delimiter_missing(self):
@@ -189,6 +189,8 @@ class SavedDataForm(crud.CrudForm):
 @implementer(ISavedDataFormWrapper)
 class SavedDataFormWrapper(layout.FormWrapper):
     def __call__(self):
+        if hasattr(self.context.field, 'BatchSize'):
+            self.form_instance.batch_size = self.context.field.BatchSize
         if hasattr(self.request, "form.buttons.download"):
             if "csv_delimiter" in self.request.form:
                 delimiter = self.request["csv_delimiter"]
@@ -197,7 +199,8 @@ class SavedDataFormWrapper(layout.FormWrapper):
                     return super(SavedDataFormWrapper, self).__call__()
                 else:
                     delimiter = delimiter[0]
-                self.context.field.download(self.request.response, delimiter=delimiter)
+                self.context.field.download(
+                    self.request.response, delimiter=delimiter)
             else:
                 self.context.field.download(self.request.response)
             return u""
@@ -230,7 +233,8 @@ class EasyFormActionsView(SchemaContext):
 
     def __init__(self, context, request):
         self.schema = get_actions(context)
-        super(EasyFormActionsView, self).__init__(self.schema, request, name="actions")
+        super(EasyFormActionsView, self).__init__(
+            self.schema, request, name="actions")
 
     def publishTraverse(self, request, name):
         """Look up the field whose name matches the next URL path element,
@@ -253,7 +257,8 @@ class EasyFormActionsListing(SchemaListing):
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = u"{0}.{1}".format(field.__module__, field.__class__.__name__)
+        field_identifier = u"{0}.{1}".format(
+            field.__module__, field.__class__.__name__)
         return queryUtility(IActionFactory, name=field_identifier)
 
     @button.buttonAndHandler(PMF(u"Save"))
