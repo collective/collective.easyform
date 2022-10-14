@@ -23,11 +23,8 @@ from zope.schema.interfaces import IDate
 from zope.schema.interfaces import IDatetime
 from zope.schema.interfaces import ISet
 
-import datetime
-import imp
 import json
 import logging
-import pdb
 
 
 logger = logging.getLogger("collective.easyform.migration")
