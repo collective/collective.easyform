@@ -1,7 +1,7 @@
 import unittest
 import six
 
-from collective.easyform.tests.base import EasyFormTestCase
+from collective.easyform.tests.base import EasyFormFunctionalTestCase
 
 
 class LikertFieldTests(unittest.TestCase):
@@ -54,18 +54,16 @@ class LikertFieldTests(unittest.TestCase):
         )
 
 
-class LikerWidgetTests(EasyFormTestCase):
+class LikerWidgetTests(EasyFormFunctionalTestCase):
 
-    def test_dummy(self):
-        self.folder.invokeFactory("EasyForm", "ff1")
+    def setUp(self):
+        super(LikerWidgetTests, self).setUp()
         ff1 = getattr(self.folder, "ff1")
         self.assertEqual(ff1.portal_type, u'EasyForm')
 
         from zope.interface import Interface
-        from zope.schema import getFieldsInOrder
         from collective.easyform.api import set_fields
         from collective.easyform.api import set_actions
-        from collective.easyform.api import get_schema
         from collective.easyform.actions import SaveData
         from collective.easyform.fields import Likert
 
@@ -74,6 +72,20 @@ class LikerWidgetTests(EasyFormTestCase):
 
         set_fields(ff1, IWithLikert)
 
+        class IWithSaver(Interface):
+            saver = SaveData(showFields=[])
+
+        IWithSaver.setTaggedValue('context', ff1)
+        set_actions(ff1, IWithSaver)
+        import transaction
+        transaction.commit()
+
+    def test_widget_input(self):
+        from zope.schema import getFieldsInOrder
+        from collective.easyform.api import get_schema
+        from collective.easyform.fields import Likert
+
+        ff1 = getattr(self.folder, "ff1")
         schema = get_schema(ff1)
         fields = getFieldsInOrder(schema)
         self.assertEqual(len(fields), 1)
@@ -90,12 +102,10 @@ class LikerWidgetTests(EasyFormTestCase):
         self.assertTrue(u"<th>Agree</th>" in rendered)
         self.assertTrue(u"<th>Disagree</th>" in rendered)
 
-        class IWithSaver(Interface):
-            saver = SaveData(showFields=[])
-
-        IWithSaver.setTaggedValue('context', ff1)
-        set_actions(ff1, IWithSaver)
-
+    def test_likert_saved(self):
+        import transaction
+        ff1 = getattr(self.folder, "ff1")
+        view = ff1.restrictedTraverse('view')
         # submit data to test value extraction from widget
         ff1.CSRFProtection = False  # no csrf protection
         view.request.form = {
@@ -107,3 +117,31 @@ class LikerWidgetTests(EasyFormTestCase):
         rendered = view()
         self.assertTrue(u"Thank You" in rendered)
         self.assertTrue(u"1: Agree, 2: Disagree" in rendered)
+        transaction.commit()
+        actions_view = ff1.restrictedTraverse('actions')
+        saver_view = actions_view.publishTraverse(actions_view.request, 'saver')
+        data_view = saver_view.restrictedTraverse('@@data')
+        rendered = data_view()
+        from bs4 import BeautifulSoup
+        radio_buttons = BeautifulSoup(rendered, 'html.parser').find_all(type="radio")
+        self.assertEquals(len(radio_buttons), 4) # 2 rows of 2 answers
+
+        # First question: answered Agree -> Agree input checked
+        self.assertTrue("0_0" in radio_buttons[0]['id'])
+        self.assertEquals(radio_buttons[0]['value'], "Agree")
+        self.assertTrue(radio_buttons[0].has_attr('checked'))
+
+        # First question: answered Agree -> Disagree input not checked
+        self.assertTrue("0_1" in radio_buttons[1]['id'])
+        self.assertEquals(radio_buttons[1]['value'], "Disagree")
+        self.assertFalse(radio_buttons[1].has_attr('checked'))
+
+        # Second question: answered Disagree -> Agree input not checked
+        self.assertTrue("1_0" in radio_buttons[2]['id'])
+        self.assertEquals(radio_buttons[2]['value'], "Agree")
+        self.assertFalse(radio_buttons[2].has_attr('checked'))
+
+        # Second question: answered Disagree -> Disagree input checked
+        self.assertTrue("1_1" in radio_buttons[3]['id'])
+        self.assertEquals(radio_buttons[3]['value'], "Disagree")
+        self.assertTrue(radio_buttons[3].has_attr('checked'))
