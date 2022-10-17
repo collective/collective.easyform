@@ -97,10 +97,10 @@ class ISaveData(IAction):
         title=_(u"label_batch_size", default=u"Batch size"),
         description=_(
             u"batch_size_text",
-            default=u"Define a batch size to avoid gateway timeout error when "
-            u"there are lot of rows to manage. Leave blank or set to 0 to disable batching",
+            default=u"Define a batch size. Leave blank or set to 0 to disable batching in @@data view.",
         ),
         default=10,
+        min=0,
         required=False,
     )
 
