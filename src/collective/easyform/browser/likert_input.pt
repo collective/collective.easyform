@@ -14,10 +14,14 @@
               <td tal:repeat="answer view/field/answers"
                   onclick="jQuery(event.target).children('input').click()">
                 <input type="radio"
-                       tal:attributes="id string:${view/name}.${repeat/question/index}_${repeat/answer/index};
-                                       name string:${view/name}.${repeat/question/index};
+                       tal:define="answer_index repeat/answer/index;
+                                   question_index repeat/question/index;
+                                   answer_number repeat/answer/number;
+                                   question_number repeat/question/number;"
+                       tal:attributes="id string:${view/name}.${question_index}_${answer_index};
+                                       name string:${view/name}.${question_index};
                                        value answer;
-                                       checked python:view.checked(repeat.question.number, repeat.answer.number);" />
+                                       checked python:view.checked(question_number, answer_number);" />
               </td>
             </tr>
       </tbody></table>
