@@ -20,6 +20,7 @@ from collective.easyform.interfaces import ISaveData
 from logging import getLogger
 from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
+from plone.app.z3cform.interfaces import ISelectWidget
 from plone.autoform.form import AutoExtensibleForm
 from plone.namedfile.interfaces import INamed
 from plone.z3cform.layout import FormWrapper
@@ -353,11 +354,17 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.widgets.mode = self.mode = DISPLAY_MODE
         self.widgets.update()
 
-        # Set the widget values to the extracted data, since we don't have a
-        # context to extract from
+        # If we have an empty widget value, set it to the extracted data, since
+        # we don't have a context to extract from. Plone Select widgets store
+        # values as strings, but the display widget expects the extracted list,
+        # so we need special case extraction here.
         for name in self.widgets:
-            if name in data:
-                self.widgets[name].value = data[name]
+            widget = self.widgets[name]
+            is_select = ISelectWidget.providedBy(widget)
+            if name in data and (is_select or not widget.value):
+                widget.value = data[name]
+                if is_select and isinstance(widget.value, six.string_types):
+                    widget.value = (widget.value,)
 
         for group in self.groups:
             group.fields = self.setThanksFields(self.base_groups.get(group.label), data)
@@ -367,8 +374,12 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             group.widgets.mode = DISPLAY_MODE
             group.widgets.update()
             for name in group.widgets:
-                if name in data:
-                    group.widgets[name].value = data[name]
+                widget = group.widgets[name]
+                is_select = ISelectWidget.providedBy(widget)
+                if name in data and (is_select or not widget.value):
+                    widget.value = data[name]
+                    if is_select and isinstance(widget.value, six.string_types):
+                        widget.value = (widget.value,)
 
         prologue = self.context.thanksPrologue
         epilogue = self.context.thanksEpilogue
