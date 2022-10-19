@@ -5,6 +5,9 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
+- Fix display of stored values in Likert field was
+  [gotcha]
+
 - Add icon for the control panel tool
   [frapell]
 
