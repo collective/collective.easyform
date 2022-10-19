@@ -61,6 +61,7 @@ setup(
             "Products.PloneFormGen",
         ],
         "test": [
+            "beautifulsoup4",
             "plone.app.testing[robot]",
             "plone.app.robotframework",
             "plone.app.contenttypes",
