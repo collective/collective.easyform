@@ -5,7 +5,7 @@ Changelog
 4.1.1 (unreleased)
 ------------------
 
-- Fix display of stored values in Likert field was
+- Fix display of stored values in Likert field.
   [gotcha]
 
 - Add icon for the control panel tool
