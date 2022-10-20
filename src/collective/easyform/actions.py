@@ -659,11 +659,10 @@ class SaveData(Action):
             data = row.get(i, "")
             if is_file_data(data):
                 data = data.filename
-            if six.PY2 and isinstance(data, six.text_type):
-                return data.encode("utf-8")
             if isinstance(data, (list, tuple, set)):
                 data = '|'.join(data)
-                return data.encode('utf-8')
+            if six.PY2 and isinstance(data, six.text_type):
+                return data.encode("utf-8")
             return data
 
         return [get_data(row, i) for i in names]

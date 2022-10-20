@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="z3c.form">
+
+  <class class=".likert.LikertWidget">
+    <require
+        permission="zope.Public"
+        interface="..interfaces.ILikertWidget"
+        />
+  </class>
+
+  <adapter
+      factory=".likert.LikertFieldWidget"
+      for="..interfaces.ILikert
+           z3c.form.interfaces.IFormLayer"
+      />
+  
+  <z3c:widgetTemplate
+      mode="display"
+      widget="..interfaces.ILikertWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="likert_display.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="input"
+      widget="..interfaces.ILikertWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="likert_input.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="hidden"
+      widget="..interfaces.ILikertWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="likert_hidden.pt"
+      />
+
+</configure>
