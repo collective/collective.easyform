@@ -32,6 +32,13 @@ def append_label_field(schema, type_, name, properties):
     return field
 
 
+def append_lines_field(schema, type_, name, properties):
+    field = append_field(schema, type_, name, properties)
+    node = etree.SubElement(field, "value_type")
+    node.set("type", "zope.schema.TextLine")
+    return field
+
+
 def append_date_field(schema, type_, name, properties):
     if properties.get("fgShowHM", False):
         return append_field(schema, u"zope.schema.Datetime", name, properties)
@@ -158,7 +165,7 @@ TYPES_MAPPING = {
     "FormBooleanField": Type("zope.schema.Bool", append_field),
     "FormDateField": Type("zope.schema.Date", append_date_field),
     "FormLabelField": Type("collective.easyform.fields.Label", append_label_field),
-    "FormLinesField": Type("zope.schema.Text", append_field),
+    "FormLinesField": Type("zope.schema.List", append_lines_field),
     "FormSelectionField": Type("zope.schema.Choice", append_field),
     "FormMultiSelectionField": Type("zope.schema.Set", append_field),
     "FormTextField": Type("zope.schema.Text", append_field),
