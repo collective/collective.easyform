@@ -3,13 +3,28 @@ import zope.component
 import zope.interface
 import zope.schema.interfaces
 from zope.pagetemplate.interfaces import IPageTemplate
-from plone.memoize.view import memoize
+from plone.memoize.request import cache
 
 from z3c.form import interfaces
 from z3c.form.widget import Widget, FieldWidget
 from z3c.form.browser import widget
 
 from collective.easyform.interfaces import ILikertWidget
+
+
+def widget_key(func, self, *args, **kwargs):
+    """We can't use the request cache because it doesn't account for the
+    field name."""
+    key = (
+        '/'.join(self.context.getPhysicalPath() or ()),
+        self.__class__.__name__,
+        func.__name__,
+        self.field.__name__,
+        tuple(args),
+        frozenset(kwargs.items()),
+    )
+    return tuple(key)
+
 
 @zope.interface.implementer_only(ILikertWidget)
 class LikertWidget(widget.HTMLTextInputWidget, Widget):
@@ -46,7 +61,7 @@ class LikertWidget(widget.HTMLTextInputWidget, Widget):
         else:
             return None
 
-    @memoize
+    @cache(widget_key, 'self.request')
     def parsed_values(self):
         return self.field.parse(self.value)
 
@@ -56,6 +71,12 @@ class LikertWidget(widget.HTMLTextInputWidget, Widget):
             return False
         else:
             return values[question_number] == self.field.answers[answer_number - 1]
+
+    def display_value(self):
+        return u', '.join(
+            u'{}: {}'.format(self.field.questions[a - 1], q)
+            for a, q in self.parsed_values().items()
+        )
 
 
 @zope.component.adapter(zope.schema.interfaces.IField, interfaces.IFormLayer)
