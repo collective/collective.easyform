@@ -76,6 +76,7 @@ class LikertWidget(widget.HTMLTextInputWidget, Widget):
         return u', '.join(
             u'{}: {}'.format(self.field.questions[a - 1], q)
             for a, q in self.parsed_values().items()
+            if a >= 1 and len(self.field.questions) >= a
         )
 
 
