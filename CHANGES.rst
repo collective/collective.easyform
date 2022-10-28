@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.1.1 (unreleased)
+4.1.1 (2022-10-28)
 ------------------
 
 - Fix display of stored values in Likert field.
