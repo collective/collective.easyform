@@ -47,8 +47,10 @@ from zope.interface import noLongerProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFieldsInOrder
 from ZPublisher.BaseRequest import DefaultPublishTraverse
+import logging
 
 
+logger = logging.getLogger(__name__)
 PMF = MessageFactory("plone")
 
 
@@ -141,7 +143,18 @@ class SavedDataForm(crud.CrudForm):
         fields = field.Fields(self.get_schema)
         showFields = getattr(self.field, "showFields", [])
         if showFields:
-            fields = fields.select(*showFields)
+            # showFields is a fixed list of field ids, and if those ids are no
+            # longer there, you get an exception, so first filter them.
+            existingFields = []
+            for fid in showFields:
+                if fid not in fields:
+                    logger.warning(
+                        "Field '%s' is no longer present in the form %s. Ignoring." %
+                        (fid, '/'.join(self.context.getPhysicalPath()))
+                    )
+                else:
+                    existingFields.append(fid)
+            fields = fields.select(*existingFields)
         return fields
 
     @property

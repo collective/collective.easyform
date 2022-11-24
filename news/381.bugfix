@@ -1,0 +1,2 @@
+Prevent "Saved data" view from raising an exception if a field is not found
+[frapell]
