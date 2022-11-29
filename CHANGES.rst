@@ -12,6 +12,11 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
+- Add Likert scale field. [gotcha]
+
+- restapi (de)serializer that includes saved data
+  [ThibautBorn, gotcha, Mychae1]
+
 - Prevent RichLabel fields from breaking the form
   [MrTango]
 

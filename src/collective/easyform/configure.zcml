@@ -57,4 +57,15 @@
       name="collective.easyform-hiddenprofiles"
       factory=".setuphandlers.HiddenProfiles"
       />
+    
+  <adapter
+    zcml:condition="installed plone.restapi"
+	  factory="collective.easyform.serializer.SerializeToJson"
+	  />
+  
+  <adapter
+    zcml:condition="installed plone.restapi"
+	  factory="collective.easyform.serializer.DeserializeFromJson" 
+	  />
+
 </configure>
