@@ -657,6 +657,8 @@ class SaveData(Action):
 
         def get_data(row, i):
             data = row.get(i, "")
+            if isinstance(data, RichTextValue):
+                return data.raw
             if is_file_data(data):
                 data = data.filename
             if isinstance(data, (list, tuple, set)):

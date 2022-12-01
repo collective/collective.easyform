@@ -12,6 +12,17 @@ Changelog
 3.2.1 (unreleased)
 ------------------
 
+- Fix GHA run for Python 2.7, remove Python 3.6 from the matrix.
+  [fredvd]
+
+- Backport from 4.x: fix download bug for RichTextFields
+  [szakitibi, fredvd]
+
+- Backport from 4.x: Add name attribute field to form, default empty doesn't
+  include it. Useful for form analytics like matomo that can check for this
+  attribute.
+  [fredvd]
+
 - Add Likert scale field. [gotcha]
 
 - restapi (de)serializer that includes saved data
