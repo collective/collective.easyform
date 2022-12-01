@@ -16,7 +16,7 @@ jobs:
         - ["2.7",   "plone52-py27"]
         - ["3.7",   "plone52-py37"]
         - ["3.8",   "plone52-py38"]
-      runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04
     name: ${{ matrix.config[1] }}
     steps:
     - uses: actions/checkout@v2
