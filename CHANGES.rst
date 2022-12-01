@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.2.1 (unreleased)
+3.2.1 (2022-12-01)
 ------------------
 
 - Fix GHA run for Python 2.7, remove Python 3.6 from the matrix.
