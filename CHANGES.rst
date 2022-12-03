@@ -76,9 +76,8 @@ Enhancements:
 
 Breaking change:
 
-- This is for Plone 5.2 and 6 only.
-  At least these are the only versions that are tested.
-  Python 2 and 3 are supported.
+- This is for Plone 6 only. At least this is the only version that is tested. 
+  (Changelog edited later to avoid misunderstandings, use 3.x for Plone 5.2)
   [maurits]
 
 New features:
