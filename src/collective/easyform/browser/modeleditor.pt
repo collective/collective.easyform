@@ -51,7 +51,7 @@
               <textarea
                   name="source"
                   class="modeleditor__source pat-code-editor"
-                  data-pat-code-editor="language: xml; theme: okaidia">${view/modelSource}</textarea>
+                  data-pat-code-editor="language: xml; theme: okaidia">${view/escaped_model_source}</textarea>
 
             </form>
           </div>

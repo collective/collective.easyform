@@ -5,7 +5,10 @@ Changelog
 4.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix xml schema editor for fields and actions.
+  Fixes `issue 366 <https://github.com/collective/collective.easyform/issues/366>`_.
+  [maurits]
+
 
 
 4.1.1 (2022-10-28)
@@ -76,7 +79,7 @@ Enhancements:
 
 Breaking change:
 
-- This is for Plone 6 only. At least this is the only version that is tested. 
+- This is for Plone 6 only. At least this is the only version that is tested.
   (Changelog edited later to avoid misunderstandings, use 3.x for Plone 5.2)
   [maurits]
 

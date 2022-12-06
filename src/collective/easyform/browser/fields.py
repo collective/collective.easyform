@@ -15,6 +15,7 @@ from plone.schemaeditor.browser.field.traversal import FieldContext
 from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
+from plone.supermodel import loadString
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFPlone.utils import safe_bytes
 from Products.Five import BrowserView
@@ -29,6 +30,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFPlone.utils import safe_unicode
 
 import html
+
 
 NAMESPACE = "{http://namespaces.plone.org/supermodel/schema}"
 
@@ -144,21 +146,63 @@ class ModelEditorView(BrowserView):
 
     title = _(u"Edit XML Fields Model")
 
+    @property
+    def escaped_model_source(self):
+        # Return the HTML escaped model source.
+        source = self.modelSource()
+        # html.escape only accepts string.
+        # We expect to have this, but let's be careful.
+        if isinstance(source, bytes):
+            source = source.decode("utf-8")
+        return html.escape(source, False)
+
     def modelSource(self):
         return self.context.aq_parent.fields_model
 
+    def _unescaped_source_from_request(self):
+        """Unescape the source from the request.
+
+        We expect that the source we get from the request is escaped html.
+        If we pass this directly to the lxml parser, we get:
+        Error: XMLSyntaxError: Start tag expected
+        See https://github.com/plone/Products.CMFPlone/issues/3695
+        So we need to unescape it.
+
+        There is a danger that we unescape too much.  If we somehow get already
+        unescaped xml, this may contain escaped html.  If we then call html.unescape,
+        this html gets unescaped, which is not what we want.
+        The source likely starts with one of these strings:
+
+          &lt;?xml
+          &lt;model
+
+        We check if it starts with '&lt;' and we only unescape then.
+        """
+        source = self.request.form.get("source")
+        if not source:
+            return
+        # If you let the source start with spaces, it actually becomes invisible
+        # in the code editor.  So strip it to be safe.
+        source = source.strip()
+        if source.startswith("&lt;"):
+            source = html.unescape(source)
+        return source
+
     def authorized(self, context, request):
-        authenticator = queryMultiAdapter((context, request), name=u"authenticator")
+        authenticator = queryMultiAdapter((context, request), name="authenticator")
         return authenticator and authenticator.verify()
 
     def save(self, source):
+        # We must save a string, but we probably get bytes.
+        if isinstance(source, bytes):
+            source = source.decode("utf-8")
         self.context.aq_parent.fields_model = source
 
     def __call__(self):
         """View and eventually save the form."""
 
         save = "form.button.save" in self.request.form
-        source = self.request.form.get("source")
+        source = self._unescaped_source_from_request()
         if save and source:
 
             # First, check for authenticator
@@ -176,7 +220,7 @@ class ModelEditorView(BrowserView):
                 root = etree.fromstring(source, parser=parser)
             except etree.XMLSyntaxError as e:
                 IStatusMessage(self.request).addStatusMessage(
-                    "XMLSyntaxError: {0}".format(html.escape(safe_unicode(e.args[0]))),
+                    f"XMLSyntaxError: {html.escape(safe_text(e.args[0]))}",
                     "error",
                 )
                 return super().__call__()
@@ -184,7 +228,7 @@ class ModelEditorView(BrowserView):
             # a little more sanity checking, look at first two element levels
             if root.tag != NAMESPACE + "model":
                 IStatusMessage(self.request).addStatusMessage(
-                    _(u"Error: root tag must be 'model'"),
+                    _("Error: root tag must be 'model'"),
                     "error",
                 )
                 return super().__call__()
@@ -192,7 +236,7 @@ class ModelEditorView(BrowserView):
             for element in root.getchildren():
                 if element.tag != NAMESPACE + "schema":
                     IStatusMessage(self.request).addStatusMessage(
-                        _(u"Error: all model elements must be 'schema'"),
+                        _("Error: all model elements must be 'schema'"),
                         "error",
                     )
                     return super().__call__()
@@ -200,11 +244,11 @@ class ModelEditorView(BrowserView):
             # can supermodel parse it?
             # This is mainly good for catching bad dotted names.
             try:
-                plone.supermodel.loadString(source, policy=u"dexterity")
+                loadString(source, policy="dexterity")
             except SupermodelParseError as e:
                 message = e.args[0].replace('\n  File "<unknown>"', "")
                 IStatusMessage(self.request).addStatusMessage(
-                    u"SuperModelParseError: {0}".format(html.escape(message)),
+                    f"SuperModelParseError: {html.escape(message)}",
                     "error",
                 )
                 return super().__call__()
@@ -215,5 +259,9 @@ class ModelEditorView(BrowserView):
             )
             # and save
             self.save(source)
-        # import pdb; pdb.set_trace()
+            IStatusMessage(self.request).addStatusMessage(
+                _("Changes saved."),
+                "info",
+            )
+
         return self.template()
