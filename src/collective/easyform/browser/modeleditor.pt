@@ -12,9 +12,6 @@
     <metal:main fill-slot="content">
       <tal:main-macro metal:define-macro="content">
         <div id="content">
-          <style type="text/css"
-                 tal:content="string:@import url(${portal_url}/++resource++plone.app.dexterity.modeleditor.css);"
-          ></style>
           <div id="page-intro">
             <h1 class="documentFirstHeading"
                 tal:content="view/title"
