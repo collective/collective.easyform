@@ -18,6 +18,7 @@ from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel import loadString
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFPlone.utils import safe_bytes
+from Products.CMFPlone.utils import safe_text
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
