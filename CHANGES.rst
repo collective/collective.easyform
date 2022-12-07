@@ -8,6 +8,11 @@ Changelog
 - Define 'Edit' and 'View' icons for the form. (#390)
   [frapell]
 
+- Make dependencies and css_class work in fieldsets as well.
+  Note that this overrides ``widget.pt`` from ``plone.app.z3cform`` for *all* forms.
+  Should be okay: they are currently very similar.
+  [maurits]
+
 - Require at least Python 3.8.  Test with 3.8-3.11.  [maurits]
 
 
