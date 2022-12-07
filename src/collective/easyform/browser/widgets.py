@@ -3,6 +3,7 @@
 from collective.easyform.interfaces import ILabelWidget
 from collective.easyform.interfaces import IRenderWidget
 from collective.easyform.interfaces import IRichLabelWidget
+from plone.app.z3cform.views import RenderWidget as PloneRenderWidget
 from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
@@ -17,6 +18,11 @@ from zope.interface import implementer_only
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserView
 from zope.schema.interfaces import IField
+
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 @implementer_only(ILabelWidget)
@@ -106,3 +112,19 @@ class WidgetCssClassView(object):
         if not css_class:
             return dflt
         return css_class
+
+
+PloneRenderWidget.index = ViewPageTemplateFile("widget.pt")
+logger.info("Patched plone.app.z3cform.views.RenderWidget to use our widget.pt.")
+
+
+@adapter(PloneRenderWidget, Interface)
+@implementer(IBrowserView)
+class PloneWidgetDependencyView(WidgetDependencyView):
+    pass
+
+
+@adapter(PloneRenderWidget, Interface)
+@implementer(IBrowserView)
+class PloneWidgetCssClassView(WidgetCssClassView):
+    pass

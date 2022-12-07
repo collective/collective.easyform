@@ -104,9 +104,17 @@
       factory=".widgets.WidgetDependencyView"
       name="dependencies"
       />
+  <adapter
+      factory=".widgets.PloneWidgetDependencyView"
+      name="dependencies"
+      />
 
   <adapter
       factory=".widgets.WidgetCssClassView"
+      name="css_class"
+      />
+  <adapter
+      factory=".widgets.PloneWidgetCssClassView"
       name="css_class"
       />
 

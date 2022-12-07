@@ -5,6 +5,11 @@ Changelog
 4.1.2 (unreleased)
 ------------------
 
+- Make dependencies and css_class work in fieldsets as well.
+  Note that this overrides ``widget.pt`` from ``plone.app.z3cform`` for *all* forms.
+  Should be okay: they are currently very similar.
+  [maurits]
+
 - Fix xml schema editor for fields and actions.
   Fixes `issue 366 <https://github.com/collective/collective.easyform/issues/366>`_.
   [maurits]
