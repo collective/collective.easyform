@@ -5,6 +5,9 @@ Changelog
 4.1.2 (unreleased)
 ------------------
 
+- Define 'Edit' and 'View' icons for the form. (#390)
+  [frapell]
+
 - Require at least Python 3.8.  Test with 3.8-3.11.  [maurits]
 
 
