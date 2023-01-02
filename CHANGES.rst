@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.1.2 (unreleased)
+4.1.2 (2023-01-02)
 ------------------
 
 - Define 'Edit' and 'View' icons for the form. (#390)
