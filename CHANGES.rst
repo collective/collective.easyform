@@ -4,7 +4,9 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Backport Likert field from 4.x.  [gotcha]
+
+- Various PloneFormGen migration fixes.  [ThibautBorn]
 
 
 1.0.1 (2022-07-20)
