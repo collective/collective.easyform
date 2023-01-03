@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.0 (unreleased)
+1.1.0 (2023-01-03)
 ------------------
 
 - Backport Likert field from 4.x.  [gotcha]
