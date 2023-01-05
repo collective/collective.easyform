@@ -75,7 +75,8 @@ Submit the form with an image attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(open(get_image_path(), 'rb'), 'image/png', 'test.png')
+    >>> with open(get_image_path(), 'rb') as image_file:
+    ...     browser.getControl(name='form.widgets.attachment').add_file(image_file, 'image/png', 'test.png')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
