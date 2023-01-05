@@ -16,11 +16,9 @@ from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
 from Products.CMFPlone.utils import safe_unicode
-from six import StringIO
 from six import BytesIO
 
 import datetime
-import six
 
 
 try:
