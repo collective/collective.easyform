@@ -5,7 +5,8 @@ Changelog
 4.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix absence in custom script adapters space of server side flagged field
+  [sauzher]
 
 
 4.1.2 (2023-01-02)
