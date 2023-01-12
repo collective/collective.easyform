@@ -5,7 +5,7 @@ Changelog
 4.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix missing ServerSide flagged fields in custom action scripts
 
 
 4.1.2 (2023-01-02)
