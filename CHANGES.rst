@@ -32,6 +32,9 @@ Changelog
 - Schemaeditor UI: close modals and reload fields(sets) when saving.
   [petschki]
 
+- Fix bug which did not render correctly GroupForm widgets (see #370)
+  [petschki]
+
 
 4.1.0 (2022-08-10)
 ------------------
