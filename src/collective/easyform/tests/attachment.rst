@@ -75,7 +75,8 @@ Submit the form with an image attachment::
     >>> browser.getControl('Your E-Mail Address').value = 'test@example.com'
     >>> browser.getControl('Subject').value = 'test'
     >>> browser.getControl('Comments').value = 'PFG rocks!'
-    >>> browser.getControl(name='form.widgets.attachment').add_file(open(get_image_path(), 'rb'), 'image/png', 'test.png')
+    >>> with open(get_image_path(), 'rb') as image_file:
+    ...     browser.getControl(name='form.widgets.attachment').add_file(image_file, 'image/png', 'test.png')
     >>> browser.getControl('Submit').click()
     <sent mail from ...to ['mdummy@address.com']>
     >>> 'Thanks for your input.' in browser.contents
@@ -169,13 +170,13 @@ Check saved data::
     True
     >>> ".widgets.attachment/@@download/test.txt" in browser.contents
     True
-    >>> '<input id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit" class="submit-widget button-field" value="Apply changes" type="submit" />' in browser.contents
+    >>> 'id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit"' in browser.contents
     True
-    >>> '<input id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete" class="submit-widget button-field" value="Delete" type="submit" />' in browser.contents
+    >>> 'id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete"' in browser.contents
     True
-    >>> '<input id="form-buttons-download" name="form.buttons.download" class="submit-widget button-field" value="Download" type="submit" />' in browser.contents
+    >>> 'id="form-buttons-download" name="form.buttons.download"' in browser.contents
     True
-    >>> '<input id="form-buttons-clearall" name="form.buttons.clearall" class="submit-widget button-field" value="Clear all" type="submit" />' in browser.contents
+    >>> 'id="form-buttons-clearall" name="form.buttons.clearall"' in browser.contents
     True
     >>> browser.getLink('test.txt').click()
     >>> browser.url

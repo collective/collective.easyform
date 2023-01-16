@@ -58,6 +58,24 @@
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="hidden"
+      widget="collective.easyform.interfaces.IRichLabelWidget"
+      />
+  <z3c:widgetTemplate
+      template="empty.pt"
+      layer="..interfaces.IEasyFormLayer"
+      mode="display"
+      widget="collective.easyform.interfaces.IRichLabelWidget"
+      />
+  <z3c:widgetTemplate
+      template="empty.pt"
+      layer="..interfaces.IEasyFormLayer"
+      mode="input"
+      widget="collective.easyform.interfaces.IRichLabelWidget"
+      />
+  <z3c:widgetTemplate
+      template="empty.pt"
+      layer="..interfaces.IEasyFormLayer"
+      mode="hidden"
       widget="collective.easyform.interfaces.ILabelWidget"
       />
   <browser:page

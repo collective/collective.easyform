@@ -8,6 +8,7 @@
       file="permissions.zcml"
       />
   <include file="fields.zcml" />
+  <include file="likert.zcml" />
   <include file="actions.zcml" />
   <include file="widgets.zcml" />
   <browser:page

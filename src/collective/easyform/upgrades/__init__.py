@@ -42,6 +42,10 @@ def update_last_compilation(contex, timetuple):
     combine_bundles(portal)
 
 
+def update_last_compilation_1007(context):
+    update_last_compilation(context, (2020, 9, 8, 17, 52, 0))
+
+
 def update_last_compilation_1008(context):
     update_last_compilation(context, (2020, 12, 9, 14, 2, 0))
 

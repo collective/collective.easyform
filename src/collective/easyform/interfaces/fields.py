@@ -8,8 +8,10 @@ from plone.autoform import directives
 from plone.schemaeditor.interfaces import IFieldContext
 from plone.schemaeditor.interfaces import IFieldEditorExtender
 from plone.schemaeditor.interfaces import ISchemaContext
+from plone.schemaeditor.schema import ITextLinesField
 from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
+import z3c.form
 from z3c.form.interfaces import IFieldWidget
 from zope import schema
 from zope.component import getGlobalSiteManager
@@ -214,12 +216,35 @@ class IRichLabelWidget(IEasyFormWidget):
 class IReCaptcha(zope.schema.interfaces.ITextLine):
     """ReCaptcha Field."""
 
+
 class IHCaptcha(zope.schema.interfaces.ITextLine):
     """ReCaptcha Field."""
 
 
 class INorobotCaptcha(zope.schema.interfaces.ITextLine):
     """Norobot Field."""
+
+
+class ILikert(zope.schema.interfaces.IField):
+
+    questions = zope.schema.List(
+        title=_(u'Possible questions'),
+        description=_(u'Enter allowed choices one per line.'),
+        required=zope.schema.interfaces.IChoice['vocabulary'].required,
+        default=zope.schema.interfaces.IChoice['vocabulary'].default,
+        value_type=zope.schema.TextLine())
+    zope.interface.alsoProvides(questions, ITextLinesField)
+
+    answers = zope.schema.List(
+        title=_(u'Possible answers'),
+        description=_(u'Enter allowed choices one per line.'),
+        required=zope.schema.interfaces.IChoice['vocabulary'].required,
+        default=zope.schema.interfaces.IChoice['vocabulary'].default,
+        value_type=zope.schema.TextLine())
+    zope.interface.alsoProvides(questions, ITextLinesField)
+
+class ILikertWidget(z3c.form.interfaces.IWidget):
+    """Likert widget."""
 
 
 class IFieldValidator(Interface):

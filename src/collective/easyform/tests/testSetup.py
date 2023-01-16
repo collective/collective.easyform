@@ -10,13 +10,6 @@ from Products.CMFCore.utils import getToolByName
 import Products
 
 
-try:
-    from Products.CMFPlone.utils import get_installer
-except ImportError:
-    # BBB for Plone 5.0 and lower.
-    get_installer = None
-
-
 def getAddPermission(product, name):
     """find the add permission for a meta_type"""
 
@@ -99,45 +92,6 @@ class TestInstallation(base.EasyFormTestCase):
         self.assertTrue(
             self.portal.portal_actions.getActionInfo("object_buttons/saveddata")
         )
-
-    def testModificationsToPropSheetLinesNotPuged(self):
-        property_mappings = [
-            {
-                "propsheet": "site_properties",
-                "added_props": [
-                    "use_folder_tabs",
-                    "typesLinkToFolderContentsInFC",
-                    "default_page_types",
-                ],
-            }
-        ]
-
-        # add garbage prop element to each lines property
-        for mapping in property_mappings:
-            sheet = self.properties[mapping["propsheet"]]
-            for lines_prop in mapping["added_props"]:
-                propitems = list(sheet.getProperty(lines_prop))
-                propitems.append("foo")
-                sheet.manage_changeProperties({lines_prop: propitems})
-
-        # reinstall
-        if get_installer is None:
-            qi = self.portal["portal_quickinstaller"]
-        else:
-            qi = get_installer(self.portal)
-        qi.reinstallProducts(["collective.easyform"])
-
-        # now make sure our garbage values survived the reinstall
-        for mapping in property_mappings:
-            sheet = self.properties[mapping["propsheet"]]
-            for lines_prop in mapping["added_props"]:
-                self.assertTrue(
-                    "foo" in sheet.getProperty(lines_prop),
-                    "Our garbage item didn't survive reinstall for property "
-                    "{0} within property sheet {1}".format(
-                        lines_prop, mapping["propsheet"]
-                    ),
-                )
 
     def test_EasyFormInDefaultPageTypes(self):
         values = api.portal.get_registry_record("plone.default_page_types")

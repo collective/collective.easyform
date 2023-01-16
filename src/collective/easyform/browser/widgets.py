@@ -7,7 +7,6 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
 from z3c.form.browser import widget
-from z3c.form.interfaces import IWidget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -59,10 +58,12 @@ def RichLabelFieldWidget(field, request):
     return FieldWidget(field, RichLabelWidget(request))
 
 
+@implementer(IRenderWidget)
 class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("label.pt")
 
 
+@implementer(IRenderWidget)
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("rich_label.pt")
 

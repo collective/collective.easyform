@@ -23,7 +23,7 @@ from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ComponentLookupError
 from zope.i18n import translate
 from zope.interface import classImplements
 from ZPublisher.BaseRequest import BaseRequest
@@ -460,7 +460,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
        Copy/paste test from Recaptcha, same api & add'on
        structure
     """
-    
+
     schema_fixture = "hcaptcha.xml"
 
     def afterSetUp(self):
@@ -477,7 +477,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertIn("We are not yet sure whether you are human. Please try again.", form)
         self.assertNotIn("Thanks for your input.", form)
 
     def test_wrong(self):
@@ -485,7 +485,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("The code you entered was wrong, please enter the new one.", form)
+        self.assertIn("We are not yet sure whether you are human. Please try again.", form)
         self.assertNotIn("Thanks for your input.", form)
 
 

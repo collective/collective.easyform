@@ -36,3 +36,4 @@ var/
 pyvenv.cfg
 /.vscode
 /venv
+/.python-version

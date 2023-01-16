@@ -1,16 +1,43 @@
 Changelog
 =========
 
-
-.. You should *NOT* be adding new change log entries to this file.
-   You should create a file in the news directory instead.
-   For helpful instructions, please see:
-   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
-
-.. towncrier release notes start
-
-3.1.2 (unreleased)
+3.2.2 (unreleased)
 ------------------
+
+- Nothing changed yet.
+
+
+3.2.1 (2022-12-01)
+------------------
+
+- Fix GHA run for Python 2.7, remove Python 3.6 from the matrix.
+  [fredvd]
+
+- Backport from 4.x: fix download bug for RichTextFields
+  [szakitibi, fredvd]
+
+- Backport from 4.x: Add name attribute field to form, default empty doesn't
+  include it. Useful for form analytics like matomo that can check for this
+  attribute.
+  [fredvd]
+
+- Add Likert scale field. [gotcha]
+
+- restapi (de)serializer that includes saved data
+  [ThibautBorn, gotcha, Mychae1]
+
+- Prevent RichLabel fields from breaking the form
+  [MrTango]
+
+
+3.2.0 (2022-08-10)
+------------------
+
+- Add support for field level CSS classes.
+  [mrtango]
+
+- Add support for conditional fields.
+  [mrtango]
 
 - Use "|" as delimiter of list types in exports. [mathias.leimgruber]
 - Added batch_size in savedataview. The value can be edited trough the SaveDataAdapter add/edit form, with minimum validation set to 0. [gianniftp]

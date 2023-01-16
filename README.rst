@@ -96,9 +96,9 @@ We are using pat-depends here, all options are documented in the `pat-depends do
 
 You can also set a CSS class string for every field under Advanced > CSS Class.
 
-.. image:: ./conditional_fields_and_field_css.png
+.. image:: https://github.com/collective/collective.easyform/raw/3.x/conditional_fields_and_field_css.png
 
-.. image:: ./form_multicolumns.png
+.. image:: https://github.com/collective/collective.easyform/raw/3.x/form_multicolumns.png
 
 
 
@@ -287,8 +287,5 @@ Compatibility
 
 - 1.x targets Plone 4.x
 - 2.x targets Plone 5.x onwards
-- 3.x targets Plone 5.2
+- 3.x targets Plone 5.2, on Python 2.7, 3.7, 3.8
 - 4.x targets Plone 6, on Python 3
-
-The community might decide to let latest 4.x only support Plone 6, and 3.x only support Plone 5.
-See `discussion in issue 341 <https://github.com/collective/collective.easyform/issues/341>`_.

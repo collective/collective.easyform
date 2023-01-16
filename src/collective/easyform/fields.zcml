@@ -66,4 +66,12 @@
         factory="plone.formwidget.hcaptcha.HCaptchaValidator"
         />
   </configure>
+    <utility
+        name="collective.easyform.fields.Likert"
+        component=".fields.LikertFactory"
+        />
+    <utility
+        name="collective.easyform.fields.Likert"
+        component=".fields.LikertHandler"
+        />
 </configure>

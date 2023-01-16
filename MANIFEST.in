@@ -1,6 +1,7 @@
 graft docs
 graft src/collective
 include *.rst
+exclude *.png
 global-exclude *.pyc __pycache__
 exclude *.sh
 exclude .*.cfg
