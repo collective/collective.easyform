@@ -2,7 +2,6 @@ __docformat__ = "reStructuredText"
 import zope.component
 import zope.interface
 import zope.schema.interfaces
-from zope.pagetemplate.interfaces import IPageTemplate
 from plone.memoize.view import memoize
 
 from z3c.form import interfaces
