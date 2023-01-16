@@ -82,7 +82,8 @@ class ISaveData(IAction):
         vocabulary="easyform.FormatDL",
     )
     UseColumnNames = zope.schema.Bool(
-        title=_(u"label_usecolumnnames_text", default=u"Include Column Names"),
+        title=_(u"label_usecolumnnames_text",
+                default=u"Include Column Names"),
         description=_(
             u"help_usecolumnnames_text",
             default=u"Do you wish to have column names on the first line of "
@@ -91,3 +92,15 @@ class ISaveData(IAction):
         default=True,
         required=False,
     )
+
+    BatchSize = zope.schema.Int(
+        title=_(u"label_batch_size", default=u"Batch size"),
+        description=_(
+            u"batch_size_text",
+            default=u"Define a batch size. Leave blank or set to 0 to disable batching in @@data view.",
+        ),
+        default=10,
+        min=0,
+        required=False,
+    )
+

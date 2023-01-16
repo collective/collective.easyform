@@ -5,6 +5,7 @@
 
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
+from collective.easyform.api import set_actions
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from openpyxl import load_workbook
@@ -635,10 +636,12 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.browser.addHeader(
             "Authorization", "Basic " + SITE_OWNER_NAME + ":" + SITE_OWNER_PASSWORD
         )
+        # Make sure we have an email address so the mailer action works.
+        api.portal.set_registry_record("plone.email_from_address", "to@example.org")
         self.createSaver()
 
     def createSaver(self):
-        """Creates FormCustomScript object"""
+        """Creates SaveData object"""
         # 1. Create custom script adapter in the form folder
         self.portal.REQUEST["form.widgets.title"] = u"Saver"
         self.portal.REQUEST["form.widgets.__name__"] = u"saver"
@@ -655,6 +658,12 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
         self.assertTrue("saver" in actions)
+
+        # Set a smaller batch size.
+        saver = actions["saver"]
+        saver.BatchSize = 3
+        set_actions(self.ff1, actions)
+        commit()
 
     def test_download_saveddata_suggests_csv_delimiter_default_registry_value(self):
         self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
@@ -684,6 +693,46 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
             "http://nohost/plone/test-folder/ff1/@@actions/saver/@@data",
         )
         self.assertTrue("CSV delimiter is required." in self.browser.contents)
+
+    def add_sample_data(self):
+        for i in range(1, 6):
+            self.browser.open(self.portal_url + "/test-folder/ff1")
+            self.browser.getControl(name="form.widgets.replyto").value = \
+                "me%d@example.org" % i
+            self.browser.getControl(name="form.widgets.topic").value = "Subject %d" % i
+            self.browser.getControl(name="form.widgets.comments").value = \
+                "Comments %d" % i
+            self.browser.getControl(name="form.buttons.submit").click()
+            self.assertIn("Thanks for your input.", self.browser.contents)
+
+    def test_view_saveddata_batched(self):
+        self.add_sample_data()
+        self.browser.open(
+            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
+        )
+        with open('/tmp/test2.html', 'w') as testfile:
+            testfile.write(self.browser.contents)
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.assertTrue("me1@example.org" in self.browser.contents)
+        self.assertTrue("Subject 1" in self.browser.contents)
+        self.assertTrue("Comments 1" in self.browser.contents)
+        self.assertTrue("me2@example.org" in self.browser.contents)
+        self.assertTrue("me3@example.org" in self.browser.contents)
+        # We have a batch size of three, so the remaining two
+        # should not be visible.
+        self.assertFalse("me4@example.org" in self.browser.contents)
+        self.assertFalse("me5@example.org" in self.browser.contents)
+
+        # Go to the next batch
+        self.browser.getLink("Next 2 items").click()
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.assertFalse("me1@example.org" in self.browser.contents)
+        self.assertFalse("me2@example.org" in self.browser.contents)
+        self.assertFalse("me3@example.org" in self.browser.contents)
+        self.assertTrue("me4@example.org" in self.browser.contents)
+        self.assertTrue("me5@example.org" in self.browser.contents)
+        self.assertTrue("Subject 4" in self.browser.contents)
+        self.assertTrue("Comments 5" in self.browser.contents)
 
     if ZOPE_TESTBROWSER_VERSION == ">5":
         # tests below do pass with Plone 5.2 and newer zope.testbrowser
