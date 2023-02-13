@@ -5,7 +5,11 @@ Changelog
 4.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+
+Bug fixes:
+
+- Update Spanish translations.
+  [macagua]
 
 
 4.1.2 (2023-01-02)
