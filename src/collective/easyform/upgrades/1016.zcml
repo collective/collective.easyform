@@ -22,11 +22,6 @@
         import_profile="collective.easyform.upgrades:1016"
         />
 
-    <gs:upgradeDepends
-        title="Apply actions definition from default profile"
-        import_steps="actions"
-        />
-
   </gs:upgradeSteps>
 
 </configure>

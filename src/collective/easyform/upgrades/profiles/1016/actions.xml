@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+        meta_type="Plone Actions Tool"
+        name="portal_actions"
+>
+  <object meta_type="CMF Action Category"
+          name="object"
+  >
+    <object meta_type="CMF Action"
+            name="easyform-view"
+            i18n:domain="collective.easyform"
+    >
+      <property name="icon_expr">string:ui-checks</property>
+    </object>
+  </object>
+  <object meta_type="CMF Action Category"
+          name="object_buttons"
+  >
+    <object meta_type="CMF Action"
+            name="export"
+            i18n:domain="collective.easyform"
+    >
+      <property name="icon_expr">string:box-arrow-right</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="import"
+            i18n:domain="collective.easyform"
+    >
+      <property name="icon_expr">string:box-arrow-in-left</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="saveddata"
+            i18n:domain="collective.easyform"
+    >
+      <property name="icon_expr">string:database</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="Fields"
+            i18n:domain="collective.easyform"
+    >
+      <property name="icon_expr">string:list</property>
+    </object>
+    <object meta_type="CMF Action"
+            name="Actions"
+            i18n:domain="collective.easyform"
+    >
+      <property name="icon_expr">string:list-check</property>
+    </object>
+  </object>
+</object>
