@@ -8,6 +8,12 @@ Changelog
 
 Bug fixes:
 
+- Add upgrade step and profile to update contenttype icon in registry.
+  [maurits]
+
+- Add icon expressions for actions.
+  [maurits]
+
 - Update Spanish translations.
   [macagua]
 

@@ -18,7 +18,7 @@
                 i18n:translate=""
       />
       <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('')</property>
-      <property name="icon_expr" />
+      <property name="icon_expr">string:ui-checks</property>
       <property name="available_expr">python:object.portal_type == 'EasyForm' and object.restrictedTraverse('@@is-sub-easyform')()</property>
       <property name="permissions">
         <element value="Manage portal" />
@@ -40,7 +40,7 @@
                 i18n:translate=""
       />
       <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@export-easyform')</property>
-      <property name="icon_expr" />
+      <property name="icon_expr">string:box-arrow-right</property>
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
         <element value="Manage portal" />
@@ -58,7 +58,7 @@
                 i18n:translate=""
       />
       <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@import-easyform')</property>
-      <property name="icon_expr" />
+      <property name="icon_expr">string:box-arrow-in-left</property>
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
         <element value="Manage portal" />
@@ -76,7 +76,7 @@
                 i18n:translate=""
       />
       <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('@@saveddata')</property>
-      <property name="icon_expr" />
+      <property name="icon_expr">string:database</property>
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
         <element value="collective.easyform: Download Saved Input" />
@@ -94,7 +94,7 @@
                 i18n:translate=""
       />
       <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('fields')</property>
-      <property name="icon_expr" />
+      <property name="icon_expr">string:list</property>
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
         <element value="Modify portal content" />
@@ -112,7 +112,7 @@
                 i18n:translate=""
       />
       <property name="url_expr">python:context.restrictedTraverse('@@get-easyform-url')('actions')</property>
-      <property name="icon_expr" />
+      <property name="icon_expr">string:list-check</property>
       <property name="available_expr">python:object.portal_type == 'EasyForm'</property>
       <property name="permissions">
         <element value="Modify portal content" />
