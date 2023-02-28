@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:upgradeSteps
+      destination="1016"
+      profile="collective.easyform:default"
+      source="1015"
+      >
+
+    <gs:upgradeDepends
+        title="Apply actions definition from default profile"
+        import_steps="actions"
+        />
+
+  </gs:upgradeSteps>
+
+</configure>

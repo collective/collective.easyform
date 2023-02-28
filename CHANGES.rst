@@ -8,6 +8,9 @@ Changelog
 
 Bug fixes:
 
+- Add icon expressions for actions.
+  [maurits]
+
 - Update Spanish translations.
   [macagua]
 
