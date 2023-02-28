@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<registry>
+
+  <record name="plone.icon.contenttype/easyform">
+    <field type="plone.registry.field.TextLine">
+      <title>Easyform</title>
+    </field>
+    <value key="resource">++plone++bootstrap-icons/ui-checks.svg</value>
+  </record>
+
+</registry>
