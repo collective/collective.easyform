@@ -111,6 +111,9 @@ Changelog
 
 - make ReCaptcha fields not required during PloneFormGen migration [ThibautBorn]
 
+- Fix encoding issues when using umlauts in FROM/TO/REPLAY-TO headers
+  [MrTango]
+
 
 4.1.3 (2023-05-16)
 ------------------
