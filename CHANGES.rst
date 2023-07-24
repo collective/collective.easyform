@@ -4,7 +4,7 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- make ReCaptcha fields not required during PloneFormGen migration  [ThibautBorn]
 
 
 1.1.0 (2023-01-03)
