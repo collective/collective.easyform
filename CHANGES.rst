@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.1.4 (unreleased)
+4.1.4 (2023-07-27)
 ------------------
 
 - fix folder_contents accessibility from @@saveddata. [ThibautBorn]
