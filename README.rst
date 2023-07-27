@@ -6,8 +6,8 @@ EasyForm - Form Builder for Plone
     :target: https://badge.fury.io/py/collective.easyform
     :alt: latest release version badge by Badge Fury
 
-.. image:: https://travis-ci.org/collective/collective.easyform.png?branch=master
-    :target: https://travis-ci.org/collective/collective.easyform
+.. image:: https://github.com/collective/collective.easyform/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/collective/collective.easyform/actions
     :alt: Travis CI status
 
 .. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master
