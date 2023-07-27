@@ -5,6 +5,8 @@ Changelog
 4.1.4 (unreleased)
 ------------------
 
+- fix folder_contents accessibility from @@saveddata. [ThibautBorn]
+
 - make ReCaptcha fields not required during PloneFormGen migration [ThibautBorn]
 
 

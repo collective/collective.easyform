@@ -51,6 +51,12 @@
       permission="zope2.View"
       class=".view.FolderContentsView"
       />
+  <browser:page
+      name="folder_contents"
+      for="collective.easyform.browser.actions.EasyFormActionsView"
+      permission="zope2.View"
+      class=".view.FolderContentsView"
+      />
   <configure zcml:condition="installed plone.dexterity.exportimport">
     <browser:page
         name="export-easyform"
