@@ -5,7 +5,8 @@ Changelog
 4.1.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix folder_contents accessibility from @@saveddata. [ThibautBorn]
+
 
 
 4.1.3 (2023-05-16)
