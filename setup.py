@@ -28,6 +28,7 @@ setup(name='collective.easyform',
       namespace_packages=['collective'],
       include_package_data=True,
       zip_safe=False,
+      python_requires="<3",
       install_requires=[
           'setuptools',
           'plone.app.dexterity',
