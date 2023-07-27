@@ -15,13 +15,11 @@ jobs:
         # [Python version, tox env]
         - ["2.7",   "plone43-py27"]
     runs-on: ubuntu-latest
+    container:
+      image: python:2.7.18
     name: ${{ matrix.config[1] }}
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.config[0] }}
     - name: Pip cache
       uses: actions/cache@v2
       with:
