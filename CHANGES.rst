@@ -5,7 +5,8 @@ Changelog
 4.1.7 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add filesize upload limit.
+  [ThibautBorn]
 
 
 4.1.6 (2024-03-08)

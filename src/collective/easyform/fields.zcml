@@ -74,4 +74,13 @@
         name="collective.easyform.fields.Likert"
         component=".fields.LikertHandler"
         />
+    <adapter
+        provides="z3c.form.interfaces.IValidator"
+        for="collective.easyform.interfaces.IEasyForm
+             *
+             *
+             plone.namedfile.interfaces.INamedFileField
+             *"
+        factory="collective.easyform.validators.FileSizeValidator"
+        />
 </configure>

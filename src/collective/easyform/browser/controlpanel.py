@@ -34,6 +34,12 @@ class IEasyFormControlPanel(Interface):
         default=u",",
     )
 
+    max_filesize = schema.Int(
+        title=_(u"Filesize limit"),
+        description=_(u"Set the maximum filesize (in bytes) that users should be able to upload."),
+        required=False
+    )
+
 
 class EasyFormControlPanelForm(RegistryEditForm):
     schema = IEasyFormControlPanel
