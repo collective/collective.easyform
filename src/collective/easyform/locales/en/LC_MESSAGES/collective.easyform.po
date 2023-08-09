@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-13 19:03+0000\n"
+"POT-Creation-Date: 2023-08-09 07:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,16 +39,20 @@ msgid "Addressing"
 msgstr ""
 
 #: collective/easyform/interfaces/easyform.py:197
-#: collective/easyform/interfaces/fields.py:62
+#: collective/easyform/interfaces/fields.py:64
 msgid "Advanced"
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:28
+#: collective/easyform/browser/controlpanel.py:20
 #: collective/easyform/profiles/default/registry.xml
 msgid "Allowed Fields"
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:38
+#: collective/easyform/interfaces/fields.py:105
+msgid "CSS Class"
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py:30
 #: collective/easyform/browser/saveddata_form.pt:39
 msgid "CSV delimiter"
 msgstr ""
@@ -67,6 +71,10 @@ msgstr ""
 
 #: collective/easyform/default_schemata/fields_default.xml
 msgid "Comments"
+msgstr ""
+
+#: collective/easyform/interfaces/fields.py:108
+msgid "Define additional CSS class for this field here. This allowes for formating individual fields via CSS."
 msgstr ""
 
 #: collective/easyform/profiles/default/actions.xml
@@ -93,19 +101,19 @@ msgstr ""
 msgid "Edit XML Actions Model"
 msgstr ""
 
-#: collective/easyform/browser/fields.py:98
+#: collective/easyform/browser/fields.py:106
 msgid "Edit XML Fields Model"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:203
+#: collective/easyform/interfaces/fields.py:232
 msgid "Enter allowed choices one per line."
 msgstr ""
 
-#: collective/easyform/browser/fields.py:187
+#: collective/easyform/browser/fields.py:195
 msgid "Error: all model elements must be 'schema'"
 msgstr ""
 
-#: collective/easyform/browser/fields.py:179
+#: collective/easyform/browser/fields.py:187
 msgid "Error: root tag must be 'model'"
 msgstr ""
 
@@ -113,8 +121,16 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
+#: collective/easyform/interfaces/fields.py:94
+msgid "Field depends on"
+msgstr ""
+
 #: collective/easyform/interfaces/easyform.py:90
 msgid "Fields Model"
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py:38
+msgid "Filesize limit"
 msgstr ""
 
 #: collective/easyform/interfaces/mailer.py:32
@@ -133,7 +149,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: collective/easyform/validators.py:58
+#: collective/easyform/validators.py:62
 msgid "Links are not allowed."
 msgstr ""
 
@@ -145,15 +161,15 @@ msgstr ""
 msgid "Mailer"
 msgstr ""
 
-#: collective/easyform/validators.py:33
+#: collective/easyform/validators.py:37
 msgid "Must be a valid list of email addresses (separated by commas)."
 msgstr ""
 
-#: collective/easyform/validators.py:43
+#: collective/easyform/validators.py:47
 msgid "Must be checked."
 msgstr ""
 
-#: collective/easyform/validators.py:48
+#: collective/easyform/validators.py:52
 msgid "Must be unchecked."
 msgstr ""
 
@@ -163,15 +179,15 @@ msgstr ""
 
 #: collective/easyform/interfaces/actions.py:77
 #: collective/easyform/interfaces/easyform.py:304
-#: collective/easyform/interfaces/fields.py:92
+#: collective/easyform/interfaces/fields.py:117
 msgid "Overrides"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:210
+#: collective/easyform/interfaces/fields.py:239
 msgid "Possible answers"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:202
+#: collective/easyform/interfaces/fields.py:231
 msgid "Possible questions"
 msgstr ""
 
@@ -183,12 +199,16 @@ msgstr ""
 msgid "Redirect to"
 msgstr ""
 
-#: collective/easyform/browser/view.py:219
+#: collective/easyform/browser/view.py:220
 msgid "Reset"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:176
+#: collective/easyform/interfaces/fields.py:201
 msgid "Rich Label"
+msgstr ""
+
+#: collective/easyform/browser/fields.py:98
+msgid "Save"
 msgstr ""
 
 #: collective/easyform/browser/saveddata_form.pt:9
@@ -199,8 +219,12 @@ msgstr ""
 msgid "Saved data"
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:40
+#: collective/easyform/browser/controlpanel.py:32
 msgid "Set the default delimiter for CSV download."
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py:39
+msgid "Set the maximum filesize (in bytes) that users should be able to upload."
 msgstr ""
 
 #: collective/easyform/default_schemata/fields_default.xml
@@ -211,20 +235,20 @@ msgstr ""
 msgid "Thanks Page"
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:29
+#: collective/easyform/browser/controlpanel.py:21
 #: collective/easyform/profiles/default/registry.xml
 msgid "These Fields are available for your forms."
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:21
-msgid "This will migrate all the forms already present in the site from archetype to dexterity"
+#: collective/easyform/interfaces/fields.py:97
+msgid "This is using the pat-depends from patternslib, all options are supported. Please read the <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> for options."
 msgstr ""
 
 #: collective/easyform/vocabularies.py:30
 msgid "Traverse to"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:74
+#: collective/easyform/interfaces/fields.py:76
 msgid "Validators"
 msgstr ""
 
@@ -257,11 +281,11 @@ msgid "default_thankstitle"
 msgstr ""
 
 #. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
-#: collective/easyform/interfaces/fields.py:149
+#: collective/easyform/interfaces/fields.py:174
 msgid "description_server_side_text"
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:49
+#: collective/easyform/browser/controlpanel.py:47
 msgid "easyform Settings"
 msgstr ""
 
@@ -282,12 +306,12 @@ msgid "help_OnDisplayOverride_text"
 msgstr ""
 
 #. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the BCC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/mailer.py:497
+#: collective/easyform/interfaces/mailer.py:498
 msgid "help_bcc_override_text"
 msgstr ""
 
 #. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the CC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/mailer.py:477
+#: collective/easyform/interfaces/mailer.py:478
 msgid "help_cc_override_text"
 msgstr ""
 
@@ -311,7 +335,7 @@ msgstr ""
 msgid "help_execcondition_text"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:68
+#: collective/easyform/interfaces/fields.py:70
 msgid "help_field_widget"
 msgstr ""
 
@@ -405,7 +429,7 @@ msgid "help_headerInjection_text"
 msgstr ""
 
 #. Default: "Field is hidden"
-#: collective/easyform/interfaces/fields.py:86
+#: collective/easyform/interfaces/fields.py:88
 msgid "help_hidden"
 msgstr ""
 
@@ -444,7 +468,7 @@ msgid "help_prologue_text"
 msgstr ""
 
 #. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against usingunvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/mailer.py:456
+#: collective/easyform/interfaces/mailer.py:457
 msgid "help_recipient_override_text"
 msgstr ""
 
@@ -492,7 +516,7 @@ msgstr ""
 msgid "help_sendXML_text"
 msgstr ""
 
-#. Default: "A TALES expression that will be evaluated to override the \"From\" header. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#. Default: "A TALES expression that will be evaluated to override the \"From\" header. Leave empty if unneeded. Your expression should evaluate as a string. Example: python:fields['replyto'] PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
 #: collective/easyform/interfaces/mailer.py:438
 msgid "help_sender_override_text"
 msgstr ""
@@ -526,12 +550,12 @@ msgid "help_submitlabeloverride_text"
 msgstr ""
 
 #. Default: "A TALES expression that will be evaluated when the formis displayed to get the field default value. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:98
+#: collective/easyform/interfaces/fields.py:123
 msgid "help_tdefault_text"
 msgstr ""
 
 #. Default: "A TALES expression that will be evaluated when the form is displayed to determine whether or not the field is enabled. Your expression should evaluate as True if the field should be included in the form, False if it should be omitted. Leave this expression field empty if unneeded: the field will be included. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:113
+#: collective/easyform/interfaces/fields.py:138
 msgid "help_tenabled_text"
 msgstr ""
 
@@ -561,7 +585,7 @@ msgid "help_thanksprologue_text"
 msgstr ""
 
 #. Default: "A TALES expression that will be evaluated when the form is validated. Validate against 'value', which will contain the field input. Return False if valid; if not valid return a string error message. E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" will require \"eggs\" for input. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:131
+#: collective/easyform/interfaces/fields.py:156
 msgid "help_tvalidator_text"
 msgstr ""
 
@@ -575,7 +599,7 @@ msgid "help_usecolumnnames_text"
 msgstr ""
 
 #. Default: "Select the validators to use on this field"
-#: collective/easyform/interfaces/fields.py:75
+#: collective/easyform/interfaces/fields.py:77
 msgid "help_userfield_validators"
 msgstr ""
 
@@ -599,12 +623,12 @@ msgid "label_OnDisplayOverride_text"
 msgstr ""
 
 #. Default: "BCC Expression"
-#: collective/easyform/interfaces/mailer.py:496
+#: collective/easyform/interfaces/mailer.py:497
 msgid "label_bcc_override_text"
 msgstr ""
 
 #. Default: "CC Expression"
-#: collective/easyform/interfaces/mailer.py:476
+#: collective/easyform/interfaces/mailer.py:477
 msgid "label_cc_override_text"
 msgstr ""
 
@@ -614,7 +638,7 @@ msgid "label_csrf"
 msgstr ""
 
 #. Default: "Custom Script"
-#: collective/easyform/actions.py:905
+#: collective/easyform/actions.py:909
 msgid "label_customscript_action"
 msgstr ""
 
@@ -639,7 +663,7 @@ msgid "label_execcondition_text"
 msgstr ""
 
 #. Default: "Field Widget"
-#: collective/easyform/interfaces/fields.py:67
+#: collective/easyform/interfaces/fields.py:69
 msgid "label_field_widget"
 msgstr ""
 
@@ -739,7 +763,7 @@ msgid "label_headerInjection_text"
 msgstr ""
 
 #. Default: "Hidden"
-#: collective/easyform/interfaces/fields.py:85
+#: collective/easyform/interfaces/fields.py:87
 msgid "label_hidden"
 msgstr ""
 
@@ -769,7 +793,7 @@ msgid "label_mailallfields_text"
 msgstr ""
 
 #. Default: "Mailer"
-#: collective/easyform/actions.py:900
+#: collective/easyform/actions.py:904
 msgid "label_mailer_action"
 msgstr ""
 
@@ -804,7 +828,7 @@ msgid "label_recaptcha_field"
 msgstr ""
 
 #. Default: "Recipient Expression"
-#: collective/easyform/interfaces/mailer.py:455
+#: collective/easyform/interfaces/mailer.py:456
 msgid "label_recipient_override_text"
 msgstr ""
 
@@ -819,7 +843,7 @@ msgid "label_richlabel_field"
 msgstr ""
 
 #. Default: "Save Data"
-#: collective/easyform/actions.py:910
+#: collective/easyform/actions.py:914
 msgid "label_savedata_action"
 msgstr ""
 
@@ -869,7 +893,7 @@ msgid "label_sender_override_text"
 msgstr ""
 
 #. Default: "Server-Side Variable"
-#: collective/easyform/interfaces/fields.py:148
+#: collective/easyform/interfaces/fields.py:173
 msgid "label_server_side_text"
 msgstr ""
 
@@ -904,12 +928,12 @@ msgid "label_submitlabeloverride_text"
 msgstr ""
 
 #. Default: "Default Expression"
-#: collective/easyform/interfaces/fields.py:97
+#: collective/easyform/interfaces/fields.py:122
 msgid "label_tdefault_text"
 msgstr ""
 
 #. Default: "Enabling Expression"
-#: collective/easyform/interfaces/fields.py:112
+#: collective/easyform/interfaces/fields.py:137
 msgid "label_tenabled_text"
 msgstr ""
 
@@ -944,7 +968,7 @@ msgid "label_thankstitle"
 msgstr ""
 
 #. Default: "Custom Validator"
-#: collective/easyform/interfaces/fields.py:130
+#: collective/easyform/interfaces/fields.py:155
 msgid "label_tvalidator_text"
 msgstr ""
 
@@ -963,15 +987,11 @@ msgstr ""
 msgid "label_xinfo_headers_text"
 msgstr ""
 
-#: collective/easyform/browser/controlpanel.py:20
-msgid "migrate all the forms to dexterity"
-msgstr ""
-
-#: collective/easyform/browser/view.py:417
+#: collective/easyform/browser/view.py:448
 msgid "msg_file_not_allowed"
 msgstr ""
 
-#: collective/easyform/browser/view.py:408
+#: collective/easyform/browser/view.py:439
 msgid "msg_file_too_big"
 msgstr ""
 
