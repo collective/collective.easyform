@@ -5,7 +5,7 @@ Changelog
 4.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix (de)serialize issues with Labels [gotcha]
 
 
 4.1.4 (2023-07-27)
