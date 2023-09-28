@@ -8,6 +8,8 @@ Changelog
 - Add plone.shortname behaviour to EasyForm type.
   [ThibautBorn]
 
+- fix (de)serialize issues with Labels [gotcha]
+
 
 4.2.0 (2024-03-15)
 ------------------
@@ -34,6 +36,11 @@ Changelog
 
 - check for "collective.easyform.DownloadSavedInput" permission, before including the saved data in serializer.
   [MrTango]
+
+- Add filesize upload limit. [ThibautBorn]
+
+- update Dutch translations [ThibautBorn]
+
 
 
 4.1.4 (2023-07-27)

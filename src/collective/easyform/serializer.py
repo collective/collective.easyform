@@ -24,6 +24,7 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.config import DOWNLOAD_SAVED_PERMISSION
 from collective.easyform.interfaces import IEasyForm
+from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import ISaveData
 from Products.CMFPlone.utils import safe_unicode
 
@@ -47,7 +48,8 @@ class SerializeToJson(DXContentToJson):
         AllFieldsinOrder = getFieldsInOrder(get_schema(self.context))
         included_columns_in_savedata = []
         for column, field in AllFieldsinOrder:
-            if "label" not in field.__str__().lower():
+            # Labels must be excluded to avoid column mismatch
+            if not ILabel.providedBy(field):
                 included_columns_in_savedata.append(column)
         included_columns_in_savedata.sort()
 
@@ -118,7 +120,9 @@ class DeserializeFromJson(DXContentFromJson):
             AllFieldsinOrder = schema.namesAndDescriptions()
             included_columns_in_savedata = []
             for column, field in AllFieldsinOrder:
-                if "label" not in field.__str__().lower():
+                # Labels must be excluded
+                # because their column are not included in serialized data.
+                if not ILabel.providedBy(field):
                     included_columns_in_savedata.append(column)
 
             for name, action in actions:
