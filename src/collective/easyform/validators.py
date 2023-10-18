@@ -8,6 +8,7 @@ from Products.validation import validation
 from Products.validation.validators.BaseValidators import baseValidators
 from zope.component import provideUtility
 from zope.schema import ValidationError
+from z3c.form.interfaces import NOT_CHANGED
 from z3c.form import validator
 
 
@@ -95,7 +96,10 @@ class FileTooBig(ValidationError):
 class FileSizeValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
-
+        # The NOT_CHANGED value needs to be handled better since we may have
+        # stored an invalid value in an earlier request.
+        if value is NOT_CHANGED:
+            value = self.widget.value
         super(FileSizeValidator, self).validate(value)
         view = ValidateFile(self.context, self.request)
         max_size = api.portal.get_registry_record("easyform.max_filesize")

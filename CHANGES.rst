@@ -5,7 +5,7 @@ Changelog
 4.1.7 (unreleased)
 ------------------
 
-- Add filesize upload limit.
+- Add filesize upload limit for file and image uploads.
   [ThibautBorn]
 
 

@@ -79,7 +79,7 @@
         for="collective.easyform.interfaces.IEasyForm
              *
              *
-             plone.namedfile.interfaces.INamedFileField
+             plone.namedfile.interfaces.INamedField
              *"
         factory="collective.easyform.validators.FileSizeValidator"
         />
