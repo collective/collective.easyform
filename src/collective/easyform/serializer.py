@@ -12,6 +12,7 @@ from zope.interface import Interface
 from zope.schema import getFieldsInOrder
 from zope.schema.interfaces import ISet, IDate, IDatetime
 
+from plone import api
 from plone.restapi.serializer.dxcontent import SerializeToJson as DXContentToJson
 from plone.restapi.deserializer.dxcontent import (
     DeserializeFromJson as DXContentFromJson,
@@ -37,8 +38,8 @@ logger = logging.getLogger("collective.easyform.migration")
 class SerializeToJson(DXContentToJson):
     def __call__(self, version=None, include_items=True):
         result = super(SerializeToJson, self).__call__(version, include_items)
-        self.serializeSavedData(result)
-
+        if api.user.has_permission('collective.easyform.DownloadSavedInput', obj=self.context):
+            self.serializeSavedData(result)
         return result
 
     def serializeSavedData(self, result):

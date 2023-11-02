@@ -5,7 +5,8 @@ Changelog
 4.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- check for "collective.easyform.DownloadSavedInput" permission, before including the saved data in serializer.
+  [MrTango]
 
 
 4.1.4 (2023-07-27)
