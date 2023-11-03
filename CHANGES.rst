@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.1.5 (unreleased)
+4.1.5 (2023-11-03)
 ------------------
 
 - check for "collective.easyform.DownloadSavedInput" permission, before including the saved data in serializer.
