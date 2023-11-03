@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:8080/Plone
+
+###
+
+get {{baseUrl}}/form
+
+###
+get {{baseUrl}}/form
+Authorization: Basic admin:admin
