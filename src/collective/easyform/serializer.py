@@ -25,6 +25,7 @@ from plone.app.textfield.interfaces import IRichText
 
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
+from collective.easyform.config import DOWNLOAD_SAVED_PERMISSION
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import ISaveData
 from Products.CMFPlone.utils import safe_unicode
@@ -38,7 +39,7 @@ logger = logging.getLogger("collective.easyform.migration")
 class SerializeToJson(DXContentToJson):
     def __call__(self, version=None, include_items=True):
         result = super(SerializeToJson, self).__call__(version, include_items)
-        if api.user.has_permission('collective.easyform.DownloadSavedInput', obj=self.context):
+        if api.user.has_permission(DOWNLOAD_SAVED_PERMISSION, obj=self.context):
             self.serializeSavedData(result)
         return result
 
