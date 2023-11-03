@@ -1,9 +1,15 @@
+# Example config for VS Code REST Client (Huachao Mao)
+# After installing the extension, you can click on the send buttons in any section to do a REST-API call.
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
 @baseUrl = http://localhost:8080/Plone
 
 ###
+# send annonymous GET request to form:
 
 get {{baseUrl}}/form
 
 ###
+# send GET request, as admin to form:
 get {{baseUrl}}/form
 Authorization: Basic admin:admin

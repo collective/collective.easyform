@@ -9,3 +9,4 @@ exclude .DS_Store
 exclude .tx
 exclude .tx/config
 exclude buildout.cfg
+exclude api.http
