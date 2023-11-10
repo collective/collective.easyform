@@ -137,7 +137,7 @@ class DeserializeFromJson(DXContentFromJson):
                                 value[name] = convertAfterDeserialize(
                                     schema[name], value[name]
                                 )
-                            else:
+                            elif name in value:
                                 del value[name]
                         action.setDataRow(int(key), value)
 
