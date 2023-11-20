@@ -5,7 +5,8 @@ Changelog
 4.1.6 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix unused, incorrect and undeclared imports in serializer.
+  [thet]
 
 
 4.1.5 (2023-11-03)
