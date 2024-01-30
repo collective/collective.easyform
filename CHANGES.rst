@@ -5,7 +5,8 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Allow editors to remove fieldset
+  [ThibautBorn]
 
 
 4.3.0 (2024-12-13)
