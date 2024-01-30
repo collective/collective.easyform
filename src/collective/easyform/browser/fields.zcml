@@ -31,6 +31,13 @@
       class="plone.schemaeditor.browser.schema.add_fieldset.FieldsetAddFormPage"
       layer="..interfaces.IEasyFormLayer"
       />
+   <browser:page
+      name="delete-fieldset"
+      for="collective.easyform.interfaces.IEasyFormFieldsContext"
+      permission="cmf.ModifyPortalContent"
+      class="plone.schemaeditor.browser.schema.delete_fieldset.DeleteFieldset"
+      layer="..interfaces.IEasyFormLayer"
+      />
   <browser:page
       name="edit"
       for="collective.easyform.interfaces.IEasyFormFieldContext"
