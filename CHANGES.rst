@@ -14,6 +14,9 @@ Changelog
 - Improve Likert widget layout
   [ThibautBorn]
 
+- Allow editors to remove fieldset
+  [ThibautBorn]
+
 
 4.3.0 (2024-12-13)
 ------------------
