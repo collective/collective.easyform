@@ -88,7 +88,8 @@ def columns_to_serialize(action, data):
         column_names = list(data.keys())
         column_names.remove("id")
         for extra in action.ExtraData:
-            column_names.remove(extra)
+            if extra in column_names:
+                column_names.remove(extra)
     column_names.sort()
     return column_names
 
