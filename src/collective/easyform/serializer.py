@@ -162,6 +162,8 @@ def convertAfterDeserialize(field, value):
     if ISet.providedBy(field):
         return set(value)
     elif IDate.providedBy(field) or IDatetime.providedBy(field):
+        if not value: # empty dates are saved as empty string which breaks the parser
+            return None
         return parser.parse(value)
     elif IRichText.providedBy(field):
         return RichTextValue(value)
