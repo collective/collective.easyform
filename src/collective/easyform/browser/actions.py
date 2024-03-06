@@ -156,6 +156,20 @@ class SavedDataForm(crud.CrudForm):
             for key, value in self.field.getSavedFormInputItems()
         ]
 
+    def simple_data(self):
+        columns = self.field.getColumnNames()
+        html = '<table><thead><tr>'
+        for column in columns:
+            html += u'<th scope="col">{}</th>'.format(column)
+        html += '</tr></thead><tbody>'
+        for rownr, row in self.field.getSavedFormInputItems():
+            html += '<tr>'
+            for column in columns:
+                html += u'<td">{}</td>'.format(row.get(column,''))
+            html += '</tr>'
+        html += '</tbody></table>'
+        return html
+
     # def add(self, data):
     # storage = self.context._inputStorage
 

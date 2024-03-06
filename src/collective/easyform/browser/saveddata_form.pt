@@ -23,8 +23,15 @@
   <tal:domain i18n:domain="plone.z3cform">
 
     <div class="crud-form"
+         tal:condition="not: exists:request/simple"
          tal:repeat="form view/subforms"
          tal:content="structure form/render"
+    >
+    </div>
+
+    <div style="overflow-x:auto;"
+      tal:condition="exists:request/simple"
+      tal:content="structure view/simple_data"
     >
     </div>
 
@@ -56,5 +63,9 @@
         </div>
       </metal:top-slot>
     </metal:form>
+    <a href="link"
+      tal:attributes="href request/getURL">default overview</a>
+    <a href="link"
+      tal:attributes="href python: request.getURL() + '?simple'">simple overview</a>
   </tal:domain>
 </html>
