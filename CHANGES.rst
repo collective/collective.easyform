@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.1.6 (unreleased)
+4.1.6 (2024-03-08)
 ------------------
 
 - Fix unused, incorrect and undeclared imports in serializer.
