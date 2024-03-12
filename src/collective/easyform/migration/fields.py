@@ -125,6 +125,13 @@ def append_or_set_title(field, name, value):
         append_node(field, name, value)
 
 
+def append_or_set_description(field, name, value):
+    if field.tag == 'fieldset':
+        set_attribute(field, 'description', value)
+    else:
+        append_node(field, name, value)
+
+
 def convert_tales_expressions(value):
     if value == u'here/memberEmail':
         return u"python:member and member.getProperty('email', '') or ''"
@@ -168,7 +175,7 @@ TYPES_MAPPING = {
 }
 
 PROPERTIES_MAPPING = {
-    'description': Property('description', append_node),
+    'description': Property('description', append_or_set_description),
     'fgDefault': Property('default', append_default_node),
     'fgmaxlength': Property('max_length', append_maxlength_node),
     'fgsize': None,  # Not available in collective.easyform
