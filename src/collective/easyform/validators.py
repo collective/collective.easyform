@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from collective.easyform import easyformMessageFactory as _
+from collective.easyform.browser.view import ValidateFile
 from collective.easyform.interfaces import IFieldValidator
 from plone import api
 from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from Products.validation.validators.BaseValidators import baseValidators
 from zope.component import provideUtility
+from zope.schema import ValidationError
+from z3c.form.interfaces import NOT_CHANGED
+from z3c.form import validator
+
 
 import six
 
@@ -79,6 +84,29 @@ def update_validators():
             provideUtility(
                 method(validator.name), provides=IFieldValidator, name=validator.name
             )
+
+
+class FileTooBig(ValidationError):
+    def __init__(self, message):
+        self.message = message
+
+    def doc(self):
+        return self.message
+
+class FileSizeValidator(validator.SimpleFieldValidator):
+
+    def validate(self, value):
+        # The NOT_CHANGED value needs to be handled better since we may have
+        # stored an invalid value in an earlier request.
+        if value is NOT_CHANGED:
+            value = self.widget.value
+        super(FileSizeValidator, self).validate(value)
+        view = ValidateFile(self.context, self.request)
+        max_size = api.portal.get_registry_record("easyform.max_filesize")
+        if max_size:
+            result = view(value, size=max_size)
+            if result:
+                raise FileTooBig(result)
 
 
 update_validators()

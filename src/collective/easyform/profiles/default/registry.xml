@@ -76,6 +76,11 @@
           interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
           name="easyform.csv_delimiter"></record>
 
+  <record name="easyform.max_filesize"
+          interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
+          field="max_filesize">
+  </record>
+
   <record name="plone.icon.contenttype/easyform">
     <field type="plone.registry.field.TextLine">
       <title>Easyform</title>

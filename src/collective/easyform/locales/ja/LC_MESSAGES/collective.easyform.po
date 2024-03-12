@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-13 19:03+0000\n"
+"POT-Creation-Date: 2023-08-09 07:42+0000\n"
 "PO-Revision-Date: 2021-03-31 11:45 +0900\n"
 "Last-Translator: Manabu TERADA <terada@cmscom.jp>\n"
 "Language-Team: None\n"
@@ -51,17 +51,21 @@ msgstr "アドレス指定"
 
 # EasyForm を編集→「Advanced」など
 #: collective/easyform/interfaces/easyform.py:197
-#: collective/easyform/interfaces/fields.py:62
+#: collective/easyform/interfaces/fields.py:64
 msgid "Advanced"
 msgstr "上級者向け設定"
 
 # コントロールパネル内
-#: collective/easyform/browser/controlpanel.py:28
+#: collective/easyform/browser/controlpanel.py:20
 #: collective/easyform/profiles/default/registry.xml
 msgid "Allowed Fields"
 msgstr "追加許可フィールド"
 
-#: collective/easyform/browser/controlpanel.py:38
+#: collective/easyform/interfaces/fields.py:105
+msgid "CSS Class"
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py:30
 #: collective/easyform/browser/saveddata_form.pt:39
 msgid "CSV delimiter"
 msgstr ""
@@ -82,6 +86,10 @@ msgstr "全件削除"
 
 #: collective/easyform/default_schemata/fields_default.xml
 msgid "Comments"
+msgstr ""
+
+#: collective/easyform/interfaces/fields.py:108
+msgid "Define additional CSS class for this field here. This allowes for formating individual fields via CSS."
 msgstr ""
 
 # 編集操作→Define form actions
@@ -116,19 +124,19 @@ msgstr " XML アクションズモデルを編集"
 
 # 開発者に問い合わせ（何をやっているのか？）
 # Define form fields→fieldsを編集→右下ボタン
-#: collective/easyform/browser/fields.py:98
+#: collective/easyform/browser/fields.py:106
 msgid "Edit XML Fields Model"
 msgstr " XML アクションズフィールドを編集"
 
-#: collective/easyform/interfaces/fields.py:203
+#: collective/easyform/interfaces/fields.py:232
 msgid "Enter allowed choices one per line."
 msgstr ""
 
-#: collective/easyform/browser/fields.py:187
+#: collective/easyform/browser/fields.py:195
 msgid "Error: all model elements must be 'schema'"
 msgstr ""
 
-#: collective/easyform/browser/fields.py:179
+#: collective/easyform/browser/fields.py:187
 msgid "Error: root tag must be 'model'"
 msgstr ""
 
@@ -137,9 +145,17 @@ msgstr ""
 msgid "Export"
 msgstr "エクスポート"
 
+#: collective/easyform/interfaces/fields.py:94
+msgid "Field depends on"
+msgstr ""
+
 # 場所不明
 #: collective/easyform/interfaces/easyform.py:90
 msgid "Fields Model"
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py:38
+msgid "Filesize limit"
 msgstr ""
 
 #: collective/easyform/interfaces/mailer.py:32
@@ -161,7 +177,7 @@ msgid "Import"
 msgstr "インポート"
 
 # 場所不明
-#: collective/easyform/validators.py:58
+#: collective/easyform/validators.py:62
 msgid "Links are not allowed."
 msgstr "リンクは許可されていません"
 
@@ -175,17 +191,17 @@ msgid "Mailer"
 msgstr ""
 
 # 場所不明
-#: collective/easyform/validators.py:33
+#: collective/easyform/validators.py:37
 msgid "Must be a valid list of email addresses (separated by commas)."
 msgstr "有効なEメールアドレスのリストを入力してください（カンマ区切り）"
 
 # 場所不明
-#: collective/easyform/validators.py:43
+#: collective/easyform/validators.py:47
 msgid "Must be checked."
 msgstr "チェックを入れてください"
 
 # 場所不明
-#: collective/easyform/validators.py:48
+#: collective/easyform/validators.py:52
 msgid "Must be unchecked."
 msgstr "チェックを外してください"
 
@@ -197,15 +213,15 @@ msgstr "使用できるアダプターはありません"
 # 開発者に問い合わせ（何をやっているのか？）
 #: collective/easyform/interfaces/actions.py:77
 #: collective/easyform/interfaces/easyform.py:304
-#: collective/easyform/interfaces/fields.py:92
+#: collective/easyform/interfaces/fields.py:117
 msgid "Overrides"
 msgstr "上書き"
 
-#: collective/easyform/interfaces/fields.py:210
+#: collective/easyform/interfaces/fields.py:239
 msgid "Possible answers"
 msgstr ""
 
-#: collective/easyform/interfaces/fields.py:202
+#: collective/easyform/interfaces/fields.py:231
 msgid "Possible questions"
 msgstr ""
 
@@ -221,14 +237,18 @@ msgid "Redirect to"
 msgstr " Redirect to "
 
 # EasyForm を編集→「Advanced」内Reset Button Label箱の中？
-#: collective/easyform/browser/view.py:219
+#: collective/easyform/browser/view.py:220
 msgid "Reset"
 msgstr "リセット"
 
 # 編集操作→Define form fields→fields を編集→Add new field→新しいフィールドを追加内「フィールドタイプ」リストの中？
-#: collective/easyform/interfaces/fields.py:176
+#: collective/easyform/interfaces/fields.py:201
 msgid "Rich Label"
 msgstr "リッチテキストラベル"
+
+#: collective/easyform/browser/fields.py:98
+msgid "Save"
+msgstr ""
 
 #: collective/easyform/browser/saveddata_form.pt:9
 msgid "Saved Data"
@@ -239,8 +259,12 @@ msgstr ""
 msgid "Saved data"
 msgstr "保存データ"
 
-#: collective/easyform/browser/controlpanel.py:40
+#: collective/easyform/browser/controlpanel.py:32
 msgid "Set the default delimiter for CSV download."
+msgstr ""
+
+#: collective/easyform/browser/controlpanel.py:39
+msgid "Set the maximum filesize (in bytes) that users should be able to upload."
 msgstr ""
 
 #: collective/easyform/default_schemata/fields_default.xml
@@ -253,13 +277,13 @@ msgid "Thanks Page"
 msgstr "送信完了ページ"
 
 # コントロールパネル
-#: collective/easyform/browser/controlpanel.py:29
+#: collective/easyform/browser/controlpanel.py:21
 #: collective/easyform/profiles/default/registry.xml
 msgid "These Fields are available for your forms."
 msgstr "このフォームで利用できるフィールドは、以下の通りです"
 
-#: collective/easyform/browser/controlpanel.py:21
-msgid "This will migrate all the forms already present in the site from archetype to dexterity"
+#: collective/easyform/interfaces/fields.py:97
+msgid "This is using the pat-depends from patternslib, all options are supported. Please read the <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> for options."
 msgstr ""
 
 # 翻訳これでいい？
@@ -269,7 +293,7 @@ msgid "Traverse to"
 msgstr " Traverse to "
 
 # Define form fields→fieldsを編集→フィールド〇〇を編集→Advanced内「Validators」
-#: collective/easyform/interfaces/fields.py:74
+#: collective/easyform/interfaces/fields.py:76
 msgid "Validators"
 msgstr "有効なデータ形式"
 
@@ -307,11 +331,11 @@ msgstr "ありがとうございました"
 
 # 開発者に問い合わせ（何をやっているのか？）
 #. Default: "Mark this field as a value to be injected into the request form for use by action adapters and is not modifiable by or exposed to the client."
-#: collective/easyform/interfaces/fields.py:149
+#: collective/easyform/interfaces/fields.py:174
 msgid "description_server_side_text"
 msgstr "このフィールドを、アクションアダプターで使用するためにリクエストフォームに挿入する値としてマークします。クライアントによって変更されたり、クライアントに公開されたりすることはありません"
 
-#: collective/easyform/browser/controlpanel.py:49
+#: collective/easyform/browser/controlpanel.py:47
 msgid "easyform Settings"
 msgstr ""
 
@@ -339,14 +363,14 @@ msgstr "フォームが表示されたときに呼び出されるTALES式です�
 # 開発者に問い合わせ後、日本語訳再検討（Formgenの日本語訳）
 # actions を編集→MailerのSettings→Overridesタブ
 #. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the BCC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/mailer.py:497
+#: collective/easyform/interfaces/mailer.py:498
 msgid "help_bcc_override_text"
 msgstr "BCCリストに入力された値を上書きするために評価されるTALES式です。リクエストからの未検証のデータを使用しないよう、特に注意してください。不要な場合は空欄にしてください。式は文字列のシーケンスとして評価されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
 # 開発者に問い合わせ後、日本語訳再検討（Formgenの日本語訳）
 # actions を編集→MailerのSettings→Overridesタブ
 #. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the CC list. You are strongly cautioned against using unvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a sequence of strings. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/mailer.py:477
+#: collective/easyform/interfaces/mailer.py:478
 msgid "help_cc_override_text"
 msgstr "CCリストに入力された値を上書きするために評価されるTALES式です。リクエストからの未検証のデータを使用しないよう、特に注意してください。不要な場合は空欄にしてください。式は文字列のシーケンスとして評価されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
@@ -377,7 +401,7 @@ msgid "help_execcondition_text"
 msgstr "このアクションを実行するかどうかを決定するために評価されるTALES式です。不要な場合は空欄にしておくと、アクションが実行されます。式はブール値として評価されます。アクションを実行する場合はTrueを返してください。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
 # 英語原文なし
-#: collective/easyform/interfaces/fields.py:68
+#: collective/easyform/interfaces/fields.py:70
 msgid "help_field_widget"
 msgstr ""
 
@@ -494,7 +518,7 @@ msgstr "xhtmlヘッドにコンテンツを挿入するための上書きフィ�
 
 # Define form fields→fieldsを編集→フィールド〇〇を編集→Advanced内「Hidden」
 #. Default: "Field is hidden"
-#: collective/easyform/interfaces/fields.py:86
+#: collective/easyform/interfaces/fields.py:88
 msgid "help_hidden"
 msgstr "チェックを入れるとフィールドが非表示になります"
 
@@ -541,7 +565,7 @@ msgstr "このテキストは入力フィールドの前に表示されます"
 # メールのメール受取人欄に入力された値で置き換えるために評価されるTALES式です。この目的でバリデートされていないデータを要求することは強く警告されます。必要のないときは空欄にします。文字列として評価されます。【註記】この式のエラーはフォーム表示のエラーとして表示されます
 # actionを編集→Overrides→Recipient Expressionの説明文
 #. Default: "A TALES expression that will be evaluated to override any value otherwise entered for the recipient e-mail address. You are strongly cautioned against usingunvalidated data from the request for this purpose. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/mailer.py:456
+#: collective/easyform/interfaces/mailer.py:457
 #, fuzzy
 msgid "help_recipient_override_text"
 msgstr "受信者のEメールアドレスに入力された値を上書きするために評価されるTALES式です。この目的でリクエストからの未検証のデータを使用しないよう、特に注意してください。不要な場合は空欄にしてください。式は文字列として評価されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
@@ -599,8 +623,9 @@ msgstr "フォームに入力された値を含むXMLファイルを添付して
 
 # 開発者に問い合わせ後、日本語訳再検討（Formgenの日本語訳）②
 # From欄を置き換えるために評価されるTALES式です。必要ないときは空欄にします。文字列として評価されます。【註記】この式のエラーはフォーム表示のエラーとして表示されます
-#. Default: "A TALES expression that will be evaluated to override the \"From\" header. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
+#. Default: "A TALES expression that will be evaluated to override the \"From\" header. Leave empty if unneeded. Your expression should evaluate as a string. Example: python:fields['replyto'] PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
 #: collective/easyform/interfaces/mailer.py:438
+#, fuzzy
 msgid "help_sender_override_text"
 msgstr " \"From\" ヘッダーを上書きするために評価されるTALES式です。不要な場合は空欄にしてください。式は文字列のシーケンスとして評価されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
@@ -640,13 +665,13 @@ msgstr "送信ボタンのラベルを変えるための上書きフィールド
 
 # fieldsを編集⇒Overridesタブ⇒Default Expression
 #. Default: "A TALES expression that will be evaluated when the formis displayed to get the field default value. Leave empty if unneeded. Your expression should evaluate as a string. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:98
+#: collective/easyform/interfaces/fields.py:123
 msgid "help_tdefault_text"
 msgstr "フィールドのデフォルトの値を取得するために、フォームが表示されたときに評価されるTALES式。不要な場合は空欄にしてください。この式は文字列として評価されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
 # fieldsを編集⇒Overridesタブ⇒Enabling Expression
 #. Default: "A TALES expression that will be evaluated when the form is displayed to determine whether or not the field is enabled. Your expression should evaluate as True if the field should be included in the form, False if it should be omitted. Leave this expression field empty if unneeded: the field will be included. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:113
+#: collective/easyform/interfaces/fields.py:138
 msgid "help_tenabled_text"
 msgstr "フィールドが有効かどうかを決定するために、フォームが表示されたときに評価されるTALES式。この式はフォームにフィールドが含まれている場合にはTrue、フィールドが含まれていない場合にはFalseと評価されます。不要な場合は空欄にしてください（その場合フィールドは含まれます）。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
@@ -685,7 +710,7 @@ msgstr "このテキストは、「回答内容の表示」で選択した項目
 # 開発者に何を行うものなのか確認
 # fields を編集⇒Setting⇒Overrides⇒Custom Validator
 #. Default: "A TALES expression that will be evaluated when the form is validated. Validate against 'value', which will contain the field input. Return False if valid; if not valid return a string error message. E.G., \"python: test(value=='eggs', False, 'input must be eggs')\" will require \"eggs\" for input. PLEASE NOTE: errors in the evaluation of this expression will cause an error on form display."
-#: collective/easyform/interfaces/fields.py:131
+#: collective/easyform/interfaces/fields.py:156
 msgid "help_tvalidator_text"
 msgstr "フォームがバリデーションされたときに評価されるTALES式。”value”が含まれるフィールド入力に対してバリデーションします。適切であればFalse、不適切であれば文字列のエラーメッセージを返します。例： \"python: test(value=='eggs', False, 'input must be eggs')\\u3092指定したとき、\"eggs\"の入力が要求されます。注意：この式の評価がエラーの場合には、フォームの表示にもエラーが生じます"
 
@@ -703,7 +728,7 @@ msgstr "入力内容をダウンロードした際、一行目にカラム名を
 
 # fields を編集⇒Setting⇒Advancedタブ　Validatorsの注意書き
 #. Default: "Select the validators to use on this field"
-#: collective/easyform/interfaces/fields.py:75
+#: collective/easyform/interfaces/fields.py:77
 msgid "help_userfield_validators"
 msgstr "このフィールドに使用するバリデータ（データ仕様）を選んでください"
 
@@ -735,14 +760,14 @@ msgstr "フォームセットアップスクリプト"
 # 開発者に何を行うものなのか確認
 # actions を編集⇒MailerのSettings⇒Overrides
 #. Default: "BCC Expression"
-#: collective/easyform/interfaces/mailer.py:496
+#: collective/easyform/interfaces/mailer.py:497
 msgid "label_bcc_override_text"
 msgstr "BCCの表示"
 
 # 開発者に何を行うものなのか確認
 # actions を編集⇒MailerのSettings⇒Overrides
 #. Default: "CC Expression"
-#: collective/easyform/interfaces/mailer.py:476
+#: collective/easyform/interfaces/mailer.py:477
 msgid "label_cc_override_text"
 msgstr "CCの表示"
 
@@ -754,7 +779,7 @@ msgstr " CSRF（リクエスト強要からの）保護"
 
 # actions を編集
 #. Default: "Custom Script"
-#: collective/easyform/actions.py:905
+#: collective/easyform/actions.py:909
 msgid "label_customscript_action"
 msgstr "カスタムスクリプト"
 
@@ -786,7 +811,7 @@ msgstr "実行条件"
 
 # fields を編集⇒Settings⇒Advancedタブ
 #. Default: "Field Widget"
-#: collective/easyform/interfaces/fields.py:67
+#: collective/easyform/interfaces/fields.py:69
 msgid "label_field_widget"
 msgstr "フィールドウィジェット（入力欄の形式）"
 
@@ -909,7 +934,7 @@ msgstr "ヘッダーインジェクション"
 
 # fields を編集⇒Advanced
 #. Default: "Hidden"
-#: collective/easyform/interfaces/fields.py:85
+#: collective/easyform/interfaces/fields.py:87
 msgid "label_hidden"
 msgstr "非表示"
 
@@ -943,7 +968,7 @@ msgstr "全てのフィールドを含める"
 
 # actions を編集⇒Add new action⇒Mailer　作成後のラベル名？
 #. Default: "Mailer"
-#: collective/easyform/actions.py:900
+#: collective/easyform/actions.py:904
 msgid "label_mailer_action"
 msgstr "メーラー"
 
@@ -983,7 +1008,7 @@ msgstr "リキャプチャ"
 # 開発者に問い合わせ
 # actions を編集⇒MailerのSettings⇒Overrides
 #. Default: "Recipient Expression"
-#: collective/easyform/interfaces/mailer.py:455
+#: collective/easyform/interfaces/mailer.py:456
 msgid "label_recipient_override_text"
 msgstr "受信者の表示"
 
@@ -1001,7 +1026,7 @@ msgstr "リッチテキストラベル"
 
 # actions を編集⇒Save Dataのラベル
 #. Default: "Save Data"
-#: collective/easyform/actions.py:910
+#: collective/easyform/actions.py:914
 msgid "label_savedata_action"
 msgstr "データ保存"
 
@@ -1061,7 +1086,7 @@ msgstr "送信者の表示"
 # 開発者に問い合わせ
 # fieldsを編集⇒Overridesタブ
 #. Default: "Server-Side Variable"
-#: collective/easyform/interfaces/fields.py:148
+#: collective/easyform/interfaces/fields.py:173
 msgid "label_server_side_text"
 msgstr "サーバーサイドの変数"
 
@@ -1106,7 +1131,7 @@ msgstr "送信ボタンラベルのカスタム"
 # 開発者に問い合わせ
 # fields を編集⇒Settings⇒Overrides
 #. Default: "Default Expression"
-#: collective/easyform/interfaces/fields.py:97
+#: collective/easyform/interfaces/fields.py:122
 msgid "label_tdefault_text"
 msgstr "デフォルト値の表示"
 
@@ -1114,7 +1139,7 @@ msgstr "デフォルト値の表示"
 # 開発者に問い合わせ
 # fields を編集⇒Settings⇒Overrides
 #. Default: "Enabling Expression"
-#: collective/easyform/interfaces/fields.py:112
+#: collective/easyform/interfaces/fields.py:137
 msgid "label_tenabled_text"
 msgstr "表現を有効にする"
 
@@ -1159,7 +1184,7 @@ msgstr "送信完了ページのタイトル"
 # 開発者に問い合わせ
 # fields を編集⇒Setting⇒Overrides
 #. Default: "Custom Validator"
-#: collective/easyform/interfaces/fields.py:130
+#: collective/easyform/interfaces/fields.py:155
 msgid "label_tvalidator_text"
 msgstr "バリデータのカスタム"
 
@@ -1182,16 +1207,12 @@ msgstr "列名を含める"
 msgid "label_xinfo_headers_text"
 msgstr "HTTPヘッダー"
 
-#: collective/easyform/browser/controlpanel.py:20
-msgid "migrate all the forms to dexterity"
-msgstr ""
-
-#: collective/easyform/browser/view.py:417
+#: collective/easyform/browser/view.py:448
 msgid "msg_file_not_allowed"
 msgstr "このファイル形式は許可されていません"
 
 # 何らかのファイル容量が大きすぎるときのエラー？
-#: collective/easyform/browser/view.py:408
+#: collective/easyform/browser/view.py:439
 msgid "msg_file_too_big"
 msgstr "ファイルサイズが大きすぎます"
 

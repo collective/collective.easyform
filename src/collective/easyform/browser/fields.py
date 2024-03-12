@@ -215,5 +215,4 @@ class ModelEditorView(BrowserView):
             )
             # and save
             self.save(source)
-        # import pdb; pdb.set_trace()
         return self.template()
