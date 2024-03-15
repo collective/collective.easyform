@@ -5,6 +5,9 @@ Changelog
 4.1.7 (unreleased)
 ------------------
 
+- Set fieldset description as attribute, not node, when migrating from PFG.
+  [thomasmassmann]
+
 - Add filesize upload limit for file and image uploads.
   [ThibautBorn]
 
