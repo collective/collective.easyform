@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.1.7 (unreleased)
+4.2.0 (2024-03-15)
 ------------------
 
 - Set fieldset description as attribute, not node, when migrating from PFG.
