@@ -55,7 +55,7 @@ def default_thanksdescription(context):
 @zope.interface.provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_actions(context):
     """Default mail body for mailer action.
-    Acquire 'mail_body_default.pt' or return hard coded default
+    Acquire 'easyform_default_actions.xml' or return hard coded default
     """
     portal = api.portal.get()
     default_actions = portal.restrictedTraverse(
