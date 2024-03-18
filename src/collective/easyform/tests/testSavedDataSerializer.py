@@ -10,6 +10,10 @@ import json
 from zope.interface import Interface
 from plone.supermodel import model
 from plone import schema
+from os.path import dirname
+from os.path import join
+from plone import api
+from plone.namedfile.file import NamedFile
 
 class ISpecialConverters(model.Schema, Interface):
 
@@ -47,6 +51,47 @@ class SavedDataSerializerTestCase(BaseSaveData):
         self.assertIn("test subject", json.dumps(obj))
         self.assertIn("test@test.org", json.dumps(obj))
         self.assertIn("test comments", json.dumps(obj))
+
+    def testDefaultFormDataSerializationWithRowWithBadColumnCount(self):
+        self.request = self.layer["request"]
+        self.createSaver()
+        saver = get_actions(self.ff1)["saver"]
+        request = FakeRequest(
+            topic="test subject", replyto="test@test.org", comments="test comments"
+        )
+        saver.onSuccess(request.form, request)
+
+        field_template = api.content.create(
+            self.layer["portal"], "File", id="easyform_default_fields.xml"
+        )
+        with open(join(dirname(__file__), "fixtures", "single_field.xml")) as f:
+            filecontent = NamedFile(f.read(), contentType="application/xml")
+        field_template.file = filecontent
+        request = FakeRequest(
+            replyto="single_field@test.org"
+        )
+        saver.onSuccess(request.form, request)
+
+        view = self.ff1.restrictedTraverse("@@actions")
+        view = view.publishTraverse(view.request, "saver")
+        view = view.publishTraverse(view.request, "data")
+        view.update()
+        form = view.form_instance
+        message = form.description()
+        self.assertEqual(message.mapping, {"items": 2})
+        item = form.get_items()[0]
+        self.assertEqual(item[1]["id"], item[0])
+        self.assertEqual(item[1]["topic"], "test subject")
+        self.assertEqual(item[1]["replyto"], "test@test.org")
+        self.assertEqual(item[1]["comments"], "test comments")
+        item = form.get_items()[1]
+        self.assertEqual(item[1]["id"], item[0])
+        self.assertEqual(item[1]["replyto"], "single_field@test.org")
+        obj = self.serialize(self.ff1)
+        self.assertIn("savedDataStorage", obj)
+        serialized = json.dumps(obj)
+        self.assertIn("single_field@test.org", serialized)
+        self.assertNotIn("test@test.org", serialized)
 
     def testSpecialConverterFormDataSerialization(self):
         self.request = self.layer["request"]
@@ -193,6 +238,45 @@ class SavedDataDeserializerTestCase(BaseSaveData):
         self.assertEqual(["kill", "me", "please"], setdata)
         self.assertIn("rich", data)
         self.assertEqual(u"<div><b>testing is fùn</b> says Michaël</div>", data['rich'].raw)
+
+    def testEmptyDatesFormDataDeserialization(self):
+        BODY = ( '{"fields_model": "<model xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
+                'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
+                'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
+                'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
+                'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
+                'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
+                'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
+                'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\">\\n  <schema '
+                'based-on=\\"zope.interface.Interface\\">\\n    <field name=\\"datetime\\" '
+                'type=\\"zope.schema.Datetime\\"/>\\n    <field name=\\"date\\" '
+                'type=\\"zope.schema.Date\\"/>\\n    <field name=\\"set\\" '
+                'type=\\"zope.schema.Set\\"/>\\n    <field name=\\"rich\\" '
+                'type=\\"plone.app.textfield.RichText\\"/>\\n  </schema>\\n</model>", '
+                '"actions_model": "<model '
+                'xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
+                'xmlns:marshal=\\"http://namespaces.plone.org/supermodel/marshal\\" '
+                'xmlns:form=\\"http://namespaces.plone.org/supermodel/form\\" '
+                'xmlns:security=\\"http://namespaces.plone.org/supermodel/security\\" '
+                'xmlns:users=\\"http://namespaces.plone.org/supermodel/users\\" '
+                'xmlns:lingua=\\"http://namespaces.plone.org/supermodel/lingua\\" '
+                'xmlns:easyform=\\"http://namespaces.plone.org/supermodel/easyform\\" '
+                'xmlns=\\"http://namespaces.plone.org/supermodel/schema\\" '
+                'i18n:domain=\\"collective.easyform\\">\\n  <schema>\\n   <field '
+                'name=\\"saver\\" type=\\"collective.easyform.actions.SaveData\\">\\n      '
+                '<title>Saver</title>\\n    </field>\\n  </schema>\\n</model>",'
+                '"savedDataStorage": '
+                '{"saver": {"1658240583228": {"datetime": "", "date": '
+                '"", "set": ["please", "me", "kill"], "rich": "<div><b>testing is '
+                'f\\u00f9n</b> says Micha\\u00ebl</div>", "id": 1658240583228}}}}')
+
+        self.deserialize(body=BODY, context=self.ff1)
+        saver = get_actions(self.ff1)["saver"]
+        data = saver.getSavedFormInput()[0]
+        self.assertIn("datetime", data)
+        self.assertEqual(None, data['datetime'])
+        self.assertIn("date", data)
+        self.assertEqual(None, data['date'])
 
     def testShowFieldsFormDataDeserialization(self):
         BODY = ( '{"actions_model": "<model '
