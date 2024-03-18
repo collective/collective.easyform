@@ -542,3 +542,19 @@ class TestFieldsetFileValidator(LoadFixtureBase):
         form = EasyFormForm(self.ff1, request)()
         self.assertNotIn("Thanks for your input.", form)
         self.assertIn("File is bigger than allowed size of 300 bytes!", form)
+
+
+class TestFieldsetFileMaxSizeValidator(LoadFixtureBase):
+    """ensure file validators works"""
+
+    schema_fixture = "fieldset_file_maxsize.xml"
+
+    def test_too_big(self):
+        registry = getUtility(IRegistry)
+        registry.records["easyform.max_filesize"].value = 300
+        data = {"file1": DummyUpload(2000, "blah.pdf")}
+        request = self.LoadRequestForm(**data)
+        request.method = "POST"
+        form = EasyFormForm(self.ff1, request)()
+        self.assertNotIn("Thanks for your input.", form)
+        self.assertIn("File is bigger than allowed size of 300 bytes!", form)
