@@ -17,9 +17,9 @@ class ISpecialConverters(model.Schema, Interface):
     date = schema.Date()
     set = schema.Set()
     rich = RichText()
-    
 
-class SavedDataSerializerTestCase(BaseSaveData):  
+
+class SavedDataSerializerTestCase(BaseSaveData):
 
     def testDefaultFormDataSerialization(self):
         self.request = self.layer["request"]
@@ -252,7 +252,7 @@ class SavedDataDeserializerTestCase(BaseSaveData):
         self.assertIn("dt", data)
         self.assertEqual("2023/11/10 09:54:5.924947 GMT+1", data['dt'])
         self.assertIn("HTTP_X_FORWARDED_FOR", data)
-    
+
     def deserialize(self, body="{}", validate_all=False, context=None, create=False):
         self.request = self.layer["request"]
         self.request["BODY"] = body
