@@ -5,7 +5,8 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Test max_size validator
+  [gotcha]
 
 
 4.3.0 (2024-12-13)
