@@ -18,7 +18,7 @@
       >
 
     <gs:upgradeDepends
-        title="Add max filesize in registry"
+        title="Add max filesize in registry and plone.shortname behavior to form."
         import_profile="collective.easyform.upgrades:1017"
         />
 

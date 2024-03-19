@@ -5,7 +5,8 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add plone.shortname behaviour to EasyForm type.
+  [ThibautBorn]
 
 
 4.2.0 (2024-03-15)
