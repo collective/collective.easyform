@@ -27,6 +27,7 @@ from zope.schema import Field
 from zope.schema import TextLine
 from zope.schema._bootstrapinterfaces import IFromUnicode
 from zope.schema.interfaces import IField
+from zope.schema.interfaces import ValidationError
 
 
 def superAdapter(specific_interface, adapter, objects, name=u""):
@@ -247,6 +248,10 @@ NorobotFactory = FieldFactory(
 NorobotCaptchaHandler = BaseHandler(NorobotCaptcha)
 
 
+class AllAnswersRequired(ValidationError):
+    __doc__ = _("Answers are required for each question.")
+
+
 @implementer(ILikert)
 class Likert(TextLine):
     """A Likert field"""
@@ -262,7 +267,9 @@ class Likert(TextLine):
 
     def _validate(self, value):
         super(Likert, self)._validate(value)
-        self.parse(value)
+        result = self.parse(value)
+        if self.required and len(result) != len(self.questions):
+            raise AllAnswersRequired()
 
     def parse(self, value):
         result = dict()
