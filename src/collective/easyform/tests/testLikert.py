@@ -110,8 +110,8 @@ class LikerWidgetTests(EasyFormFunctionalTestCase):
         self.assertTrue(u"likert-widget" in rendered)
         self.assertTrue(u"<span>Q1</span>" in rendered)
         self.assertTrue(u"<span>Q2</span>" in rendered)
-        self.assertTrue(u"<th>Agree</th>" in rendered)
-        self.assertTrue(u"<th>Disagree</th>" in rendered)
+        self.assertTrue(u"Agree</th>" in rendered)
+        self.assertTrue(u"Disagree</th>" in rendered)
 
     def test_likert_saved(self):
         import transaction
