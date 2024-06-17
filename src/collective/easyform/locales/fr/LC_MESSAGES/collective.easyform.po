@@ -48,6 +48,10 @@ msgstr "Avancé"
 msgid "Allowed Fields"
 msgstr "Champs autorisés"
 
+#: collective/easyform/fields.py
+msgid "Answers are required for each question."
+msgstr "Chaque question nécessite une réponse."
+
 #: collective/easyform/interfaces/fields.py:105
 msgid "CSS Class"
 msgstr ""
