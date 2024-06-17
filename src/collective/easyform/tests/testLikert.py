@@ -2,6 +2,7 @@ import unittest
 import six
 
 from collective.easyform.tests.base import EasyFormFunctionalTestCase
+from zope.schema.interfaces import RequiredMissing
 
 
 class LikertFieldTests(unittest.TestCase):
@@ -41,6 +42,16 @@ class LikertFieldTests(unittest.TestCase):
         self.assertRaises(ValueError, field.validate, u'1:agree')
         self.assertRaises(ValueError, field.validate, u'-1:agree')
         self.assertRaises(ValueError, field.validate, u'Agree')
+
+    def test_validate_required(self):
+        from collective.easyform.fields import AllAnswersRequired
+
+        field = self._makeOne(required=True, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
+
+        field.validate(u'1: Disagree, 2: Agree')
+        self.assertRaises(RequiredMissing, field.validate, None)
+        self.assertRaises(AllAnswersRequired, field.validate, u'1:Agree')
+        self.assertRaises(AllAnswersRequired, field.validate, u'')
 
     def test_parse(self):
         field = self._makeOne(required=False, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
