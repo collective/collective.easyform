@@ -9,9 +9,9 @@
 >
 
   <body>
-    <metal:main fill-slot="content">
-      <tal:main-macro metal:define-macro="content">
-        <div id="content">
+    <metal:block fill-slot="content">
+      <metal:content metal:define-macro="content">
+        <article id="content">
           <style type="text/css"
                  tal:content="string:@import url(${portal_url}/++resource++plone.app.dexterity.modeleditor.css);"
           ></style>
@@ -56,8 +56,8 @@
             </form>
           </div>
 
-        </div>
-      </tal:main-macro>
-    </metal:main>
+        </article>
+      </metal:content>
+    </metal:block>
   </body>
 </html>
