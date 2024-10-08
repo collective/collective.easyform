@@ -11,6 +11,10 @@ Changelog
 - Add plone.shortname behaviour to EasyForm type.
   [ThibautBorn]
 
+- Include the Products.validation ZCML to load the proper translation catalog.
+  Refs. `issue 434 <https://github.com/collective/collective.easyform/issues/434>`_.
+  [ale-rt]
+
 
 4.2.0 (2024-03-15)
 ------------------
