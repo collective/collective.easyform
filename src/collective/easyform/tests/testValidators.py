@@ -156,11 +156,6 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(len(errors), 1)
 
     def test_validator_translation(self):
-        request = self.layer["request"]
-        request["LANGUAGE"] = "de"
-        request.LANGUAGE_TOOL.LANGUAGE = "de"
-        request.LANGUAGE_TOOL.DEFAULT_LANGUAGE = "de"
-
         fields = get_schema(self.ff1)
         IFieldExtender(fields["comments"]).validators = ["isInternationalPhoneNumber"]
         set_fields(self.ff1, fields)
@@ -168,6 +163,9 @@ class TestBaseValidators(base.EasyFormTestCase):
         view = self.ff1.restrictedTraverse("view")
         form = view.form_instance
         form.update()
+
+        form.request.LANGUAGE_TOOL.LANGUAGE = "de"
+        form.request.LANGUAGE = "de"
 
         data, errors = form.extractData()
         self.assertEqual(len(errors), 1)
