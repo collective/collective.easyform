@@ -15,6 +15,7 @@
 .mr.developer.cfg
 .Python
 .python-version
+/.tox
 bin/
 buildout-cache/
 build/
