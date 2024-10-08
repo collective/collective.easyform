@@ -5,6 +5,9 @@ Changelog
 4.2.1 (unreleased)
 ------------------
 
+- Fix Plone 5 related upgrade steps in Plone 6.
+  [thet]
+
 - Add plone.shortname behaviour to EasyForm type.
   [ThibautBorn]
 
