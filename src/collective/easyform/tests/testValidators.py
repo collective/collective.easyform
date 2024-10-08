@@ -159,6 +159,7 @@ class TestBaseValidators(base.EasyFormTestCase):
         request = self.layer["request"]
         request["LANGUAGE"] = "de"
         request.LANGUAGE_TOOL.LANGUAGE = "de"
+        request.LANGUAGE_TOOL.DEFAULT_LANGUAGE = "de"
 
         fields = get_schema(self.ff1)
         IFieldExtender(fields["comments"]).validators = ["isInternationalPhoneNumber"]
