@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.2.1 (unreleased)
+4.2.1 (2024-10-08)
 ------------------
 
 - Fix Plone 5 related upgrade steps in Plone 6.
