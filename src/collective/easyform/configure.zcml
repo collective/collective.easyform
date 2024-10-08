@@ -6,6 +6,7 @@
     >
 
   <include package="plone.app.dexterity" />
+  <include package="Products.validation" />
 
   <configure zcml:condition="installed plone.formwidget.recaptcha">"
     <include package="plone.formwidget.recaptcha" />
@@ -26,7 +27,7 @@
 
   <include package=".browser" />
   <include package=".upgrades" />
-  <include zcml:condition="installed Products.PloneFormGen" package=".migration" /> 
+  <include zcml:condition="installed Products.PloneFormGen" package=".migration" />
 
   <genericsetup:registerProfile
       name="default"
@@ -57,15 +58,15 @@
       name="collective.easyform-hiddenprofiles"
       factory=".setuphandlers.HiddenProfiles"
       />
-    
+
   <adapter
     zcml:condition="installed plone.restapi"
 	  factory="collective.easyform.serializer.SerializeToJson"
 	  />
-  
+
   <adapter
     zcml:condition="installed plone.restapi"
-	  factory="collective.easyform.serializer.DeserializeFromJson" 
+	  factory="collective.easyform.serializer.DeserializeFromJson"
 	  />
 
 </configure>
