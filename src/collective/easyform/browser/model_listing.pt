@@ -3,24 +3,16 @@
 >
   <body>
     <metal:block fill-slot="content">
-      <div id="edit-bar"
-           tal:define="
-             context nocall:context/aq_parent;
-           "
-           tal:content="structure provider:plone.contentviews"
-           tal:on-error="nothing"
-      ></div>
-      <div metal:use-macro="context/global_statusmessage/macros/portal_message">
-            Status message
-      </div>
-      <div id="content">
-        <h1 class="documentFirstHeading"
-            tal:content="view/label | nothing"
-        ></h1>
-        <div id="content-core">
-          <span tal:replace="structure view/contents"></span>
-        </div>
-      </div>
+      <metal:content metal:define-macro="content">
+        <article id="content">
+          <h1 class="documentFirstHeading"
+              tal:content="view/label | nothing"
+          ></h1>
+          <div id="content-core">
+            <span tal:replace="structure view/contents"></span>
+          </div>
+        </article>
+      </metal:content>
     </metal:block>
   </body>
 </html>
