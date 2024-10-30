@@ -52,6 +52,10 @@ msgstr "Geavanceerd"
 msgid "Allowed Fields"
 msgstr "Toegestane velden"
 
+#: collective/easyform/fields.py
+msgid "Answers are required for each question."
+msgstr "Elke vraag dient beantwoord te worden."
+
 #: collective/easyform/interfaces/fields.py:105
 msgid "CSS Class"
 msgstr ""

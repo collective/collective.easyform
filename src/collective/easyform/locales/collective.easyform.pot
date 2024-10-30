@@ -51,6 +51,10 @@ msgstr ""
 msgid "Allowed Fields"
 msgstr ""
 
+#: collective/easyform/fields.py
+msgid "Answers are required for each question."
+msgstr ""
+
 #: collective/easyform/interfaces/fields.py:105
 msgid "CSS Class"
 msgstr ""
