@@ -5,7 +5,8 @@ Changelog
 4.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Pin version `Products.validation>=3.0.0`
+  [petschki]
 
 
 4.2.1 (2024-10-08)

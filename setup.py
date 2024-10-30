@@ -50,7 +50,7 @@ setup(
         "plone.supermodel",
         "plone.restapi",
         "Products.CMFPlone>=6.0.0b1",
-        "Products.validation",
+        "Products.validation>=3.0.0",
         "setuptools",
         "six",
         # -*- Extra requirements: -*-
