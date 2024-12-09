@@ -105,6 +105,10 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         return self.context.form_tabbing
 
     @property
+    def enable_autofocus(self):
+        return self.context.autofocus
+
+    @property
     def enable_unload_protection(self):
         return self.context.unload_protection
 
