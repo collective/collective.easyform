@@ -200,6 +200,7 @@ class IEasyForm(Schema):
             "useCancelButton",
             "resetLabel",
             "form_tabbing",
+            "autofocus",
             "nameAttribute",
             "default_fieldset_label",
             "method",
@@ -239,6 +240,13 @@ class IEasyForm(Schema):
     form_tabbing = zope.schema.Bool(
         title=_(u"label_form_tabbing", default=u"Turn fieldsets to tabs"),
         description=_(u"help_form_tabbing", default=u""),
+        default=True,
+        required=False,
+    )
+    directives.write_permission(autofocus=config.EDIT_ADVANCED_PERMISSION)
+    autofocus = zope.schema.Bool(
+        title=_(u"label_autofocus", default=u"Enable focus on the first input"),
+        description=_(u"help_autofocus", default=u""),
         default=True,
         required=False,
     )
