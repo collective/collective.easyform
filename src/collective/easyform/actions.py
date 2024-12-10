@@ -314,12 +314,11 @@ class Mailer(Action):
         """
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
 
-        email_charset = "utf-8"
         headerinfo = OrderedDict()
-        headerinfo["To"] = self.secure_header_line(to).encode(email_charset, "replace")
-        headerinfo["From"] = self.secure_header_line(from_addr).encode(email_charset, "replace")
+        headerinfo["To"] = self.secure_header_line(to)
+        headerinfo["From"] = self.secure_header_line(from_addr)
         if reply:
-            headerinfo["Reply-To"] = self.secure_header_line(reply).encode(email_charset, "replace")
+            headerinfo["Reply-To"] = self.secure_header_line(reply)
         headerinfo["Subject"] = self.get_subject(fields, request, context)
 
         # CC
