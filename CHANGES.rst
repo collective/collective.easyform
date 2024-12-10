@@ -5,6 +5,9 @@ Changelog
 4.2.2 (unreleased)
 ------------------
 
+- Use batching on the saved data page.
+  [maurits]
+
 - Pin version `Products.validation>=3.0.0`
   [petschki]
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-12-09 14:13+0000\n"
+"POT-Creation-Date: 2024-12-10 17:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr ""
 msgid "Actions Model"
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr ""
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Choose an adapter."
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr ""
 
@@ -96,11 +96,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr ""
 
@@ -261,6 +261,11 @@ msgstr ""
 
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
+msgstr ""
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
 msgstr ""
 
 #. Default: "Reset"
@@ -623,6 +628,11 @@ msgstr ""
 #. Default: "Form Setup Script"
 #: ./collective/easyform/interfaces/easyform.py:377
 msgid "label_OnDisplayOverride_text"
+msgstr ""
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
 msgstr ""
 
 #. Default: "BCC Expression"

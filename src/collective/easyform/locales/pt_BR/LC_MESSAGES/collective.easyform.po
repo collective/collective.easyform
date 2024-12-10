@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-12-09 14:13+0000\n"
+"POT-Creation-Date: 2024-12-10 17:27+0000\n"
 "PO-Revision-Date: 2019-11-28 17:09+0100\n"
 "Last-Translator: Érico Andrei <ericof@plone.org>\n"
 "Language-Team: \n"
@@ -30,7 +30,7 @@ msgstr "Tipo de ação"
 msgid "Actions Model"
 msgstr "Modelo de ação"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Adicionar nova ação"
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Choose an adapter."
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Limpar tudo"
 
@@ -93,11 +93,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr "Formulário"
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Editar ação '${fieldname}'"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Editar o XML do modelo de ação"
 
@@ -258,6 +258,11 @@ msgstr ""
 
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
+msgstr ""
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
 msgstr ""
 
 #. Default: "Reset"
@@ -623,6 +628,11 @@ msgstr "Script pós-validação"
 #: ./collective/easyform/interfaces/easyform.py:377
 msgid "label_OnDisplayOverride_text"
 msgstr "Script para configuração do formulário"
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
+msgstr ""
 
 #. Default: "BCC Expression"
 #: ./collective/easyform/interfaces/mailer.py:497

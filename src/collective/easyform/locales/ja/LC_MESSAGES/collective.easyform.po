@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-12-09 14:13+0000\n"
+"POT-Creation-Date: 2024-12-10 17:27+0000\n"
 "PO-Revision-Date: 2021-03-31 11:45 +0900\n"
 "Last-Translator: Manabu TERADA <terada@cmscom.jp>\n"
 "Language-Team: None\n"
@@ -40,7 +40,7 @@ msgid "Actions Model"
 msgstr "アクションモデル"
 
 # Define form actions→「アクションを編集」右上ボタン
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "新規アクションを追加"
 
@@ -80,7 +80,7 @@ msgid "Choose an adapter."
 msgstr "アダプターを選択してください"
 
 # セーブデータ内など
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "全件削除"
 
@@ -112,13 +112,13 @@ msgid "EasyForm"
 msgstr "EasyForm"
 
 # Define form actions→「actionsを編集」
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "‘${fieldname}‘のアクションを編集"
 
 # 開発者に問い合わせ（何をやっているのか？）
 # Define form actions→actionsを編集→右下ボタン
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr " XML アクションズモデルを編集"
 
@@ -303,6 +303,11 @@ msgstr ""
 
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
+msgstr ""
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
 msgstr ""
 
 # Easyform最初のページ下ボタン？
@@ -756,6 +761,11 @@ msgstr "バリデーション後のスクリプト"
 #: ./collective/easyform/interfaces/easyform.py:377
 msgid "label_OnDisplayOverride_text"
 msgstr "フォームセットアップスクリプト"
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
+msgstr ""
 
 # 開発者に何を行うものなのか確認
 # actions を編集⇒MailerのSettings⇒Overrides
