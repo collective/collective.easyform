@@ -76,7 +76,7 @@ msgstr ""
 
 #: ./collective/easyform/interfaces/fields.py:108
 msgid "Define additional CSS class for this field here. This allowes for formating individual fields via CSS."
-msgstr ""
+msgstr "Definisci qui una classe CSS addizionale per questo campo. Questo serve a formattare individualmente un campo via CSS."
 
 #: ./collective/easyform/profiles/default/actions.xml
 msgid "Define form actions"
@@ -124,7 +124,7 @@ msgstr "Esporta"
 
 #: ./collective/easyform/interfaces/fields.py:94
 msgid "Field depends on"
-msgstr ""
+msgstr "Il campo dipende da"
 
 #: ./collective/easyform/interfaces/easyform.py:90
 msgid "Fields Model"
@@ -243,7 +243,7 @@ msgstr "Questi campi sono disponibili per le tue form"
 
 #: ./collective/easyform/interfaces/fields.py:97
 msgid "This is using the pat-depends from patternslib, all options are supported. Please read the <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> for options."
-msgstr ""
+msgstr "Utilizza pat-depends da patternslib, tutte le opzioni sono supportate. Si prega di leggere <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> per le opzioni"
 
 #: ./collective/easyform/vocabularies.py:30
 msgid "Traverse to"
@@ -264,7 +264,7 @@ msgstr ""
 #. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
 #: ./collective/easyform/interfaces/savedata.py:96
 msgid "batch_size_text"
-msgstr ""
+msgstr "Definisci in numero di elementi per pagina. Lascia in bianco o impostalo a 0 per disabilitare la paginazione nella vista @@data"
 
 #. Default: "Reset"
 #: ./collective/easyform/interfaces/easyform.py:34
@@ -485,12 +485,12 @@ msgstr ""
 #. Default: "Pick any extra data you'd like saved with the form input."
 #: ./collective/easyform/interfaces/savedata.py:72
 msgid "help_savedataextra_text"
-msgstr ""
+msgstr "Scegli ogni altro dato extra che desideri salvare con il modulo di input."
 
 #. Default: "Pick the fields whose inputs you'd like to include in the saved data. If empty, all fields will be saved."
 #: ./collective/easyform/interfaces/savedata.py:60
 msgid "help_savefields_text"
-msgstr ""
+msgstr "Scegli i campi il cui inserimento desideri includere nei dati salvati. Se vuoto, tutti i campi saranno salvati."
 
 #. Default: "Write your script here."
 #: ./collective/easyform/interfaces/customscript.py:32
@@ -602,7 +602,7 @@ msgstr ""
 #. Default: "Do you wish to have column names on the first line of downloaded input?"
 #: ./collective/easyform/interfaces/savedata.py:86
 msgid "help_usecolumnnames_text"
-msgstr ""
+msgstr "Desideri avere i nomi delle colonne sulla prima linea degli input scaricati?"
 
 #. Default: "Select the validators to use on this field"
 #: ./collective/easyform/interfaces/fields.py:77
