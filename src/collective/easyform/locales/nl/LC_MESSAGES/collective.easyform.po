@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone 5-buildout\n"
-"POT-Creation-Date: 2024-12-09 14:13+0000\n"
+"POT-Creation-Date: 2024-12-10 17:27+0000\n"
 "PO-Revision-Date: 2021-06-02 16:11+0200\n"
 "Last-Translator: Thibaut Born <thibaut.born@kuleuven.be>\n"
 "Language-Team: Dutch\n"
@@ -34,7 +34,7 @@ msgstr "Type actie"
 msgid "Actions Model"
 msgstr "Actiemodel"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Voeg nieuwe actie toe"
 
@@ -69,7 +69,7 @@ msgstr ""
 msgid "Choose an adapter."
 msgstr "Kies een adapter"
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Wis alles"
 
@@ -97,11 +97,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Bewerk '${fieldname}' actie"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Bewerk XML actiemodel"
 
@@ -263,6 +263,11 @@ msgstr ""
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
 msgstr "Jouw e-mailadres"
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
+msgstr ""
 
 #. Default: "Reset"
 #: ./collective/easyform/interfaces/easyform.py:34
@@ -627,6 +632,11 @@ msgstr "Script na validatie"
 #: ./collective/easyform/interfaces/easyform.py:377
 msgid "label_OnDisplayOverride_text"
 msgstr "Formulier opstart script"
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
+msgstr ""
 
 #. Default: "BCC Expression"
 #: ./collective/easyform/interfaces/mailer.py:497

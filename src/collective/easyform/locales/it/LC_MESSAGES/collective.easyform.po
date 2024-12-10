@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-12-09 14:13+0000\n"
+"POT-Creation-Date: 2024-12-10 17:27+0000\n"
 "PO-Revision-Date: 2014-05-06 16.00+0000\n"
 "Last-Translator: Giorgio Borelli\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Tipo di azione"
 msgid "Actions Model"
 msgstr "Modello azioni"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Aggiungi azione"
 
@@ -66,7 +66,7 @@ msgstr "Il separatore per il CSV è obbligatorio"
 msgid "Choose an adapter."
 msgstr "Scegli un adattatore"
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Cancella i dati salvati"
 
@@ -94,11 +94,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr "EasyForm"
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Modifica l'azione '${fieldname}'"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Modifica l'XML delle azioni"
 
@@ -259,6 +259,11 @@ msgstr "Vista"
 
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
+msgstr ""
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
 msgstr ""
 
 #. Default: "Reset"
@@ -621,6 +626,11 @@ msgstr ""
 #. Default: "Form Setup Script"
 #: ./collective/easyform/interfaces/easyform.py:377
 msgid "label_OnDisplayOverride_text"
+msgstr ""
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
 msgstr ""
 
 #. Default: "BCC Expression"

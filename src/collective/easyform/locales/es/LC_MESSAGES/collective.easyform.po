@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-12-09 14:13+0000\n"
+"POT-Creation-Date: 2024-12-10 17:27+0000\n"
 "PO-Revision-Date: 2023-02-13 03:30-0400\n"
 "Last-Translator: Leonardo J. Caballero G. <leonardocaballero@gmail.com>\n"
 "Language-Team: ES <LL@li.org>\n"
@@ -36,7 +36,7 @@ msgstr "Tipo de Acción"
 msgid "Actions Model"
 msgstr "Modelo de Acción"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Añadir nueva acción"
 
@@ -71,7 +71,7 @@ msgstr "El delimitador CSV es obligatorio."
 msgid "Choose an adapter."
 msgstr "Elige un adaptador."
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Limpiar"
 
@@ -99,11 +99,11 @@ msgstr "Entrada de formulario de correos electrónicos"
 msgid "EasyForm"
 msgstr "EasyForm"
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Editar acción '${fieldname}'"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Editar XML de Modelo de Acción"
 
@@ -265,6 +265,11 @@ msgstr "Vista"
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
 msgstr "Su dirección de correo electrónico"
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
+msgstr ""
 
 #. Default: "Reset"
 #: ./collective/easyform/interfaces/easyform.py:34
@@ -628,6 +633,11 @@ msgstr "Script post-validación"
 #: ./collective/easyform/interfaces/easyform.py:377
 msgid "label_OnDisplayOverride_text"
 msgstr "Script de preparación del formulario"
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
+msgstr ""
 
 #. Default: "BCC Expression"
 #: ./collective/easyform/interfaces/mailer.py:497
