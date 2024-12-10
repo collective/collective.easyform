@@ -150,6 +150,10 @@ class SavedDataForm(crud.CrudForm):
         if ExtraData:
             return field.Fields(IExtraData).select(*ExtraData)
 
+    @property
+    def batch_size(self):
+        return int(self.request.form.get("batch_size", 10))
+
     def get_items(self):
         return [
             (key, DataWrapper(key, value, self.context))
