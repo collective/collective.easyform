@@ -1,3 +1,4 @@
+from importlib import import_module
 from plone import api
 
 import logging
@@ -5,8 +6,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+HAS_PLONE_6 = getattr(
+    import_module("Products.CMFPlone.factory"), "PLONE60MARKER", False
+)
+
 
 def update_last_compilation(context, timetuple=None):
+    if HAS_PLONE_6:
+        # No need to update the `last_compilation` time on Plone 6.
+        # The resources are refreshed with every restart of the instance
+        # automatically.
+        return
+
     # Let's do the imports inline, so they are not needlessly done at startup.
     # Should not really matter, but oh well.
     from datetime import datetime

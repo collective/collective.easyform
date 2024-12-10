@@ -2,11 +2,25 @@ Changelog
 =========
 
 
-4.2.1 (unreleased)
+4.2.2 (unreleased)
 ------------------
+
+- Pin version `Products.validation>=3.0.0`
+  [petschki]
+
+
+4.2.1 (2024-10-08)
+------------------
+
+- Fix Plone 5 related upgrade steps in Plone 6.
+  [thet]
 
 - Add plone.shortname behaviour to EasyForm type.
   [ThibautBorn]
+
+- Include the Products.validation ZCML to load the proper translation catalog.
+  Refs. `issue 434 <https://github.com/collective/collective.easyform/issues/434>`_.
+  [ale-rt]
 
 
 4.2.0 (2024-03-15)

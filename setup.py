@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "4.2.1.dev0"
+version = "4.2.2.dev0"
 
 setup(
     name="collective.easyform",
@@ -50,7 +50,7 @@ setup(
         "plone.supermodel",
         "plone.restapi",
         "Products.CMFPlone>=6.0.0b1",
-        "Products.validation",
+        "Products.validation>=3.0.0",
         "setuptools",
         "six",
         # -*- Extra requirements: -*-
