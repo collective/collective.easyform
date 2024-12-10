@@ -7,6 +7,8 @@ Changelog
 
 - Pin version `Products.validation>=3.0.0`
   [petschki]
+- Add a checkbox to disable autofocus on the first input
+  [yurj]
 
 
 4.2.1 (2024-10-08)
