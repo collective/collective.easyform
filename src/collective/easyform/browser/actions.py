@@ -150,9 +150,6 @@ class SavedDataForm(crud.CrudForm):
         if ExtraData:
             return field.Fields(IExtraData).select(*ExtraData)
 
-    @property
-    def batch_size(self):
-        return int(self.request.form.get("batch_size", 10))
 
     def get_items(self):
         return [
@@ -204,6 +201,8 @@ class SavedDataFormWrapper(layout.FormWrapper):
             else:
                 self.context.field.download(self.request.response)
             return u""
+        if hasattr(self.context.field, 'BatchSize'):
+            self.form_instance.batch_size = self.context.field.BatchSize
         return super(SavedDataFormWrapper, self).__call__()
 
 
