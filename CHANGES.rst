@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.2.2 (unreleased)
+4.3.0 (2024-12-13)
 ------------------
 
 - Use batching on the saved data page.
