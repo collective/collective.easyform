@@ -45,7 +45,8 @@ from plone.autoform.view import WidgetsView
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
+from plone.base.utils import safe_bytes
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from six import BytesIO
@@ -122,8 +123,8 @@ class Action(Bool):
         if isinstance(field, (int, float, Decimal, bool)):
             return str(field)
         if isinstance(field, six.string_types):
-            return safe_unicode(field)
-        return safe_unicode(repr(field))
+            return safe_text(field)
+        return safe_text(repr(field))
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -291,15 +292,15 @@ class Mailer(Action):
                 subject = dollar_replacer(subject, fields)
 
         if isinstance(subject, six.string_types):
-            subject = safe_unicode(subject)
+            subject = safe_text(subject)
         elif subject and isinstance(subject, (set, tuple, list)):
-            subject = ", ".join([safe_unicode(s) for s in subject])
+            subject = ", ".join([safe_text(s) for s in subject])
         else:
             subject = nosubject
 
-        # transform subject into mail header encoded string
         email_charset = "utf-8"
-        msgSubject = self.secure_header_line(subject).encode(email_charset, "replace")
+        # transform subject into mail header encoded string
+        msgSubject = safe_bytes(self.secure_header_line(subject))
         return Header(msgSubject, email_charset)
 
     def get_header_info(
@@ -315,10 +316,10 @@ class Mailer(Action):
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
 
         headerinfo = OrderedDict()
-        headerinfo["To"] = self.secure_header_line(to)
-        headerinfo["From"] = self.secure_header_line(from_addr)
+        headerinfo["To"] = safe_bytes(self.secure_header_line(to))
+        headerinfo["From"] = safe_bytes(self.secure_header_line(from_addr))
         if reply:
-            headerinfo["Reply-To"] = self.secure_header_line(reply)
+            headerinfo["Reply-To"] = safe_bytes(self.secure_header_line(reply))
         headerinfo["Subject"] = self.get_subject(fields, request, context)
 
         # CC
@@ -358,7 +359,7 @@ class Mailer(Action):
         encoded_titles = []
         for t in titles:
             if six.PY2 and isinstance(t, six.text_type):
-                t = t.encode("utf-8")
+                t = safe_bytes(t)
             encoded_titles.append(t)
         return encoded_titles
 
@@ -411,7 +412,7 @@ class Mailer(Action):
                 if not is_file_data(field):
                     val = self.serialize(field)
                     if six.PY2:
-                        val = val.encode("utf-8")
+                        val = safe_bytes(val)
                     csvdata += (val,)
 
             if sendXML:
@@ -434,7 +435,7 @@ class Mailer(Action):
             writer.writerow(csvdata)
             csv = output.getvalue()
             if six.PY3:
-                csv = csv.encode("utf-8")
+                csv = safe_bytes(csv)
             now = DateTime().ISO().replace(" ", "-").replace(":", "")
             filename = "formdata_{0}.csv".format(now)
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
@@ -482,14 +483,14 @@ class Mailer(Action):
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
         if six.PY2 and isinstance(body, six.text_type):
-            body = body.encode("utf-8")
+            body = safe_bytes(body)
         email_charset = "utf-8"
         # always use text/plain for encrypted bodies
         subtype = (
             getattr(self, "gpg_keyid", False) and "plain" or self.body_type or "html"
         )
         mime_text = MIMEText(
-            safe_unicode(body).encode(email_charset, "replace"),
+            safe_bytes(body),
             _subtype=subtype,
             _charset=email_charset,
         )
@@ -538,7 +539,7 @@ class Mailer(Action):
 
             # Set the filename parameter
             if six.PY2 and isinstance(filename, six.text_type):
-                filename = filename.encode("utf-8")
+                filename = safe_bytes(filename)
             msg.add_header(
                 "Content-Disposition", "attachment", filename=("utf-8", "", filename)
             )
@@ -579,7 +580,7 @@ class CustomScript(Action):
             script.manage_proxy((role,))
 
         if six.PY2 and isinstance(body, six.text_type):
-            body = body.encode("utf-8")
+            body = safe_bytes(body)
         params = "fields, easyform, request"
         script.ZPythonScript_edit(params, body)
         return script
@@ -682,7 +683,7 @@ class SaveData(Action):
         encoded_titles = []
         for t in titles:
             if six.PY2 and isinstance(t, six.text_type):
-                t = t.encode("utf-8")
+                t = safe_bytes(t)
             encoded_titles.append(t)
         return encoded_titles
 
@@ -696,11 +697,11 @@ class SaveData(Action):
             if is_file_data(data):
                 data = data.filename
             if six.PY2 and isinstance(data, six.text_type):
-                return data.encode("utf-8")
+                return safe_bytes(data)
             if isinstance(data, (list, tuple, set)):
                 data = '|'.join(data)
                 if six.PY2:
-                    return data.encode('utf-8')
+                    return safe_bytes(data)
             return data
 
         return [get_data(row, i) for i in names]
@@ -791,7 +792,7 @@ class SaveData(Action):
             getattr(self, "UseColumnNames", False), delimiter=delimiter
         )
         if isinstance(value, six.text_type):
-            value = value.encode("utf-8")
+            value = safe_bytes(value)
         response.write(value)
 
     def download_tsv(self, response):
@@ -806,7 +807,7 @@ class SaveData(Action):
             getattr(self, "UseColumnNames", False), delimiter="\t"
         )
         if isinstance(value, six.text_type):
-            value = value.encode("utf-8")
+            value = safe_bytes(value)
         response.write(value)
 
     def download_xlsx(self, response):
