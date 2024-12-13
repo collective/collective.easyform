@@ -5,8 +5,12 @@ Changelog
 4.2.2 (unreleased)
 ------------------
 
+- Use batching on the saved data page.
+  [maurits]
+
 - Pin version `Products.validation>=3.0.0`
   [petschki]
+
 - Add a checkbox to disable autofocus on the first input
   [yurj]
 

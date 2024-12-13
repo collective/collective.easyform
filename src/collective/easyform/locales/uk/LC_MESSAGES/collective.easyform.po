@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: collective.easyform\n"
-"POT-Creation-Date: 2024-12-09 14:39+0000\n"
+"POT-Creation-Date: 2024-12-13 10:36+0000\n"
 "PO-Revision-Date: 2015-10-13 11:16+0200\n"
 "Last-Translator: Zoriana Zaiats <sorenabell@quintagroup.com>\n"
 "Language-Team: Ukrainian <support@quintagroup.com>\n"
@@ -33,7 +33,7 @@ msgstr "Тип дії"
 msgid "Actions Model"
 msgstr "Модель дій"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Додати нову дію"
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Choose an adapter."
 msgstr ""
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Очистити все"
 
@@ -96,11 +96,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr "EasyForm"
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Редагувати дію '${fieldname}'"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Редагувати XML модель дій"
 
@@ -261,6 +261,11 @@ msgstr ""
 
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
+msgstr ""
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
 msgstr ""
 
 #. Default: "Reset"
@@ -639,6 +644,11 @@ msgstr "Скрипт для налаштування форми"
 #. Default: "Enable focus on the first input"
 #: ./collective/easyform/interfaces/easyform.py:248
 msgid "label_autofocus"
+msgstr ""
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
 msgstr ""
 
 #. Default: "BCC Expression"

@@ -91,3 +91,13 @@ class ISaveData(IAction):
         default=True,
         required=False,
     )
+    BatchSize = zope.schema.Int(
+        title=_(u"label_batch_size", default=u"Batch size"),
+        description=_(
+            u"batch_size_text",
+            default=u"Define a batch size. Leave blank or set to 0 to disable batching in @@data view.",
+        ),
+        default=10,
+        min=0,
+        required=False,
+    )

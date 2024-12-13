@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-12-09 14:39+0000\n"
+"POT-Creation-Date: 2024-12-13 10:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr "Type d'action"
 msgid "Actions Model"
 msgstr "Modèle des actions"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Ajouter une nouvelle action"
 
@@ -65,7 +65,7 @@ msgstr "Le délimiteur CSV est requis."
 msgid "Choose an adapter."
 msgstr "Choisissez un élément."
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Effacer tout"
 
@@ -93,11 +93,11 @@ msgstr "Envoie par courriel les réponses au formulaire"
 msgid "EasyForm"
 msgstr "Formulaire"
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Editer l'action '${fieldname}'"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Editer le modèle XML des actions"
 
@@ -259,6 +259,11 @@ msgstr "Voir"
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
 msgstr "Votre adresse courriel"
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
+msgstr ""
 
 #. Default: "Reset"
 #: ./collective/easyform/interfaces/easyform.py:34
@@ -631,6 +636,11 @@ msgstr "Script de configuration du formulaire"
 #. Default: "Enable focus on the first input"
 #: ./collective/easyform/interfaces/easyform.py:248
 msgid "label_autofocus"
+msgstr ""
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
 msgstr ""
 
 #. Default: "BCC Expression"

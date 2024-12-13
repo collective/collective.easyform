@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-12-09 14:39+0000\n"
+"POT-Creation-Date: 2024-12-13 10:36+0000\n"
 "PO-Revision-Date: 2014-05-06 16.00+0000\n"
 "Last-Translator: Giorgio Borelli\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Tipo di azione"
 msgid "Actions Model"
 msgstr "Modello azioni"
 
-#: ./collective/easyform/browser/actions.py:292
+#: ./collective/easyform/browser/actions.py:295
 msgid "Add new action"
 msgstr "Aggiungi azione"
 
@@ -66,7 +66,7 @@ msgstr "Il separatore per il CSV è obbligatorio"
 msgid "Choose an adapter."
 msgstr "Scegli un adattatore"
 
-#: ./collective/easyform/browser/actions.py:175
+#: ./collective/easyform/browser/actions.py:176
 msgid "Clear all"
 msgstr "Cancella i dati salvati"
 
@@ -76,7 +76,7 @@ msgstr ""
 
 #: ./collective/easyform/interfaces/fields.py:108
 msgid "Define additional CSS class for this field here. This allowes for formating individual fields via CSS."
-msgstr ""
+msgstr "Definisci qui una classe CSS addizionale per questo campo. Questo serve a formattare individualmente un campo via CSS."
 
 #: ./collective/easyform/profiles/default/actions.xml
 msgid "Define form actions"
@@ -94,11 +94,11 @@ msgstr ""
 msgid "EasyForm"
 msgstr "EasyForm"
 
-#: ./collective/easyform/browser/actions.py:355
+#: ./collective/easyform/browser/actions.py:358
 msgid "Edit Action '${fieldname}'"
 msgstr "Modifica l'azione '${fieldname}'"
 
-#: ./collective/easyform/browser/actions.py:360
+#: ./collective/easyform/browser/actions.py:363
 msgid "Edit XML Actions Model"
 msgstr "Modifica l'XML delle azioni"
 
@@ -124,7 +124,7 @@ msgstr "Esporta"
 
 #: ./collective/easyform/interfaces/fields.py:94
 msgid "Field depends on"
-msgstr ""
+msgstr "Il campo dipende da"
 
 #: ./collective/easyform/interfaces/easyform.py:90
 msgid "Fields Model"
@@ -243,7 +243,7 @@ msgstr "Questi campi sono disponibili per le tue form"
 
 #: ./collective/easyform/interfaces/fields.py:97
 msgid "This is using the pat-depends from patternslib, all options are supported. Please read the <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> for options."
-msgstr ""
+msgstr "Utilizza pat-depends da patternslib, tutte le opzioni sono supportate. Si prega di leggere <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> per le opzioni"
 
 #: ./collective/easyform/vocabularies.py:30
 msgid "Traverse to"
@@ -260,6 +260,11 @@ msgstr "Vista"
 #: ./collective/easyform/default_schemata/fields_default.xml
 msgid "Your E-Mail Address"
 msgstr ""
+
+#. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
+#: ./collective/easyform/interfaces/savedata.py:96
+msgid "batch_size_text"
+msgstr "Definisci in numero di elementi per pagina. Lascia in bianco o impostalo a 0 per disabilitare la paginazione nella vista @@data"
 
 #. Default: "Reset"
 #: ./collective/easyform/interfaces/easyform.py:34
@@ -484,12 +489,12 @@ msgstr ""
 #. Default: "Pick any extra data you'd like saved with the form input."
 #: ./collective/easyform/interfaces/savedata.py:72
 msgid "help_savedataextra_text"
-msgstr ""
+msgstr "Scegli ogni altro dato extra che desideri salvare con il modulo di input."
 
 #. Default: "Pick the fields whose inputs you'd like to include in the saved data. If empty, all fields will be saved."
 #: ./collective/easyform/interfaces/savedata.py:60
 msgid "help_savefields_text"
-msgstr ""
+msgstr "Scegli i campi il cui inserimento desideri includere nei dati salvati. Se vuoto, tutti i campi saranno salvati."
 
 #. Default: "Write your script here."
 #: ./collective/easyform/interfaces/customscript.py:32
@@ -601,7 +606,7 @@ msgstr ""
 #. Default: "Do you wish to have column names on the first line of downloaded input?"
 #: ./collective/easyform/interfaces/savedata.py:86
 msgid "help_usecolumnnames_text"
-msgstr ""
+msgstr "Desideri avere i nomi delle colonne sulla prima linea degli input scaricati?"
 
 #. Default: "Select the validators to use on this field"
 #: ./collective/easyform/interfaces/fields.py:77
@@ -631,6 +636,11 @@ msgstr ""
 #: ./collective/easyform/interfaces/easyform.py:248
 msgid "label_autofocus"
 msgstr "Autofocus"
+
+#. Default: "Batch size"
+#: ./collective/easyform/interfaces/savedata.py:95
+msgid "label_batch_size"
+msgstr ""
 
 #. Default: "BCC Expression"
 #: ./collective/easyform/interfaces/mailer.py:497

@@ -150,6 +150,7 @@ class SavedDataForm(crud.CrudForm):
         if ExtraData:
             return field.Fields(IExtraData).select(*ExtraData)
 
+
     def get_items(self):
         return [
             (key, DataWrapper(key, value, self.context))
@@ -200,6 +201,8 @@ class SavedDataFormWrapper(layout.FormWrapper):
             else:
                 self.context.field.download(self.request.response)
             return u""
+        if hasattr(self.context.field, 'BatchSize'):
+            self.form_instance.batch_size = self.context.field.BatchSize
         return super(SavedDataFormWrapper, self).__call__()
 
 
