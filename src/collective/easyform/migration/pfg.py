@@ -11,6 +11,7 @@ from plone.app.contenttypes.migration.migration import migrate
 from plone.autoform.form import AutoExtensibleForm
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.supermodel import model
+from Products.CMFPlone.utils import safe_unicode
 from six import StringIO
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
@@ -22,6 +23,20 @@ import transaction
 
 logger = logging.getLogger('collective.easyform.migration')
 
+
+def migrate_talesfield(src_obj, dst_obj, src_fieldname, dst_fieldname):
+    """Migrate a a TALES field.
+    These should be simply copied raw, and not evaluated.
+    """
+    field = src_obj.getField(src_fieldname)
+    if field:
+        at_value = field.getRaw(src_obj)
+        if at_value:
+            setattr(dst_obj, dst_fieldname, safe_unicode(at_value))
+            path = '/'.join(dst_obj.getPhysicalPath())
+            logger.warning(" TALES Field migration for %s at %s" % (dst_fieldname, path))
+
+
 Field = namedtuple('Type', ['name', 'handler'])
 
 FIELD_MAPPING = {
@@ -31,11 +46,11 @@ FIELD_MAPPING = {
     'forceSSL': Field('forceSSL', migrate_simplefield),
     'formPrologue': Field('formPrologue', migrate_richtextfield),
     'formEpilogue': Field('formEpilogue', migrate_richtextfield),
-    'thanksPageOverride': Field('thanksPageOverride', migrate_simplefield),
-    'formActionOverride': Field('formActionOverride', migrate_simplefield),
-    'onDisplayOverride': Field('onDisplayOverride', migrate_simplefield),
-    'afterValidationOverride': Field('afterValidationOverride', migrate_simplefield),  # noqa
-    'headerInjection': Field('headerInjection', migrate_simplefield),
+    'thanksPageOverride': Field('thanksPageOverride', migrate_talesfield),
+    'formActionOverride': Field('formActionOverride', migrate_talesfield),
+    'onDisplayOverride': Field('onDisplayOverride', migrate_talesfield),
+    'afterValidationOverride': Field('afterValidationOverride', migrate_talesfield),  # noqa
+    'headerInjection': Field('headerInjection', migrate_talesfield),
     'checkAuthenticator': Field('CSRFProtection', migrate_simplefield),
 }
 
