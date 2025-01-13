@@ -35,7 +35,6 @@ class TestInstallation(base.EasyFormTestCase):
         base.EasyFormTestCase.afterSetUp(self)
 
         self.types = self.portal.portal_types
-        self.properties = self.portal.portal_properties
         self.controlpanel = self.portal.portal_controlpanel
 
         self.metaTypes = ("EasyForm",)
