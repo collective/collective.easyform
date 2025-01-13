@@ -5,7 +5,6 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-<<<<<<< HEAD
 - Log when sending mail
   [Mychae1]
 
@@ -23,6 +22,9 @@ Changelog
 
 - improve serialization around `showfields` and `extradata`
   [ThibautBorn, Mychae1, gotcha]
+
+- Some tuning of migration from PFG
+  [ThibautBorn]
 
 
 4.3.0 (2024-12-13)
