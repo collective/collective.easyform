@@ -5,7 +5,11 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- When Likert field is required, answer is required for each question.
+  [gotcha]
+
+- Improve Likert widget layout
+  [ThibautBorn]
 
 
 4.3.0 (2024-12-13)
