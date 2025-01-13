@@ -45,10 +45,10 @@ class LikertFieldTests(unittest.TestCase):
     def test_parse(self):
         field = self._makeOne(required=False, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
         field.validate(None)
-        self.assertEquals(dict(), field.parse(u''))
-        self.assertEquals({1: u'Agree'}, field.parse(u'1: Agree'))
-        self.assertEquals({2: u'Agree'}, field.parse(u'2: Agree'))
-        self.assertEquals(
+        self.assertEqual(dict(), field.parse(u''))
+        self.assertEqual({1: u'Agree'}, field.parse(u'1: Agree'))
+        self.assertEqual({2: u'Agree'}, field.parse(u'2: Agree'))
+        self.assertEqual(
             {1: u'Disagree', 2: u'Agree'},
             field.parse(u'1: Disagree, 2: Agree')
         )
@@ -124,24 +124,24 @@ class LikerWidgetTests(EasyFormFunctionalTestCase):
         rendered = data_view()
         from bs4 import BeautifulSoup
         radio_buttons = BeautifulSoup(rendered, 'html.parser').find_all(type="radio")
-        self.assertEquals(len(radio_buttons), 4) # 2 rows of 2 answers
+        self.assertEqual(len(radio_buttons), 4) # 2 rows of 2 answers
 
         # First question: answered Agree -> Agree input checked
         self.assertTrue("0_0" in radio_buttons[0]['id'])
-        self.assertEquals(radio_buttons[0]['value'], "Agree")
+        self.assertEqual(radio_buttons[0]['value'], "Agree")
         self.assertTrue(radio_buttons[0].has_attr('checked'))
 
         # First question: answered Agree -> Disagree input not checked
         self.assertTrue("0_1" in radio_buttons[1]['id'])
-        self.assertEquals(radio_buttons[1]['value'], "Disagree")
+        self.assertEqual(radio_buttons[1]['value'], "Disagree")
         self.assertFalse(radio_buttons[1].has_attr('checked'))
 
         # Second question: answered Disagree -> Agree input not checked
         self.assertTrue("1_0" in radio_buttons[2]['id'])
-        self.assertEquals(radio_buttons[2]['value'], "Agree")
+        self.assertEqual(radio_buttons[2]['value'], "Agree")
         self.assertFalse(radio_buttons[2].has_attr('checked'))
 
         # Second question: answered Disagree -> Disagree input checked
         self.assertTrue("1_1" in radio_buttons[3]['id'])
-        self.assertEquals(radio_buttons[3]['value'], "Disagree")
+        self.assertEqual(radio_buttons[3]['value'], "Disagree")
         self.assertTrue(radio_buttons[3].has_attr('checked'))
