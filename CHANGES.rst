@@ -5,7 +5,14 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Log when sending mail [Mychae1]
+- Log when sending mail
+  [Mychae1]
+
+- When Likert field is required, answer is required for each question.
+  [gotcha]
+
+- Improve Likert widget layout
+  [ThibautBorn]
 
 
 4.3.0 (2024-12-13)
