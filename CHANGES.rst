@@ -5,7 +5,7 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Log when sending mail [Mychae1]
 
 
 4.3.0 (2024-12-13)
