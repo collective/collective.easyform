@@ -172,7 +172,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"To: mdummy@address.com", self.messageText)
         self.assertIn(b"Subject: =?utf-8?q?test_subject?=", self.messageText)
         msg = message_from_bytes(self.messageText)
-        self.assertIn("test comments", msg.get_payload(decode=False))
+        TOREMOVE = (b"=" + LINESEP).decode("utf8")
+        normalized = msg.get_payload(decode=False).replace(TOREMOVE, "")
+        self.assertIn("test comments", normalized)
 
     def test_MailerAdditionalHeaders(self):
         """Test mailer with dummy_send"""
@@ -191,7 +193,9 @@ class TestFunctions(base.EasyFormTestCase):
         self.assertIn(b"To: mdummy@address.com", self.messageText)
         self.assertIn(b"Subject: =?utf-8?q?test_subject?=", self.messageText)
         msg = message_from_bytes(self.messageText)
-        self.assertIn("test comments", msg.get_payload(decode=False))
+        TOREMOVE = (b"=" + LINESEP).decode("utf8")
+        normalized = msg.get_payload(decode=False).replace(TOREMOVE, "")
+        self.assertIn("test comments", normalized)
 
     def test_MailerLongSubject(self):
         """Test mailer with subject line > 76 chars (Tracker # 84)"""
@@ -469,25 +473,28 @@ class TestFunctions(base.EasyFormTestCase):
         # make sure all fields are sent unless otherwise specified
         self.messageText = b""
         mailer.onSuccess(fields, request)
-        self.assertIn(b"te=" + LINESEP + b"st subject", self.messageBody)
-        self.assertIn(b"test@test.org", self.messageBody)
-        self.assertIn(b"test comments", self.messageBody)
+        normalized = self.messageBody.replace(b"=" + LINESEP, b"")
+        self.assertIn(b"test subject", normalized)
+        self.assertIn(b"test@test.org", normalized)
+        self.assertIn(b"test comments", normalized)
 
         # setting some show fields shouldn't change that
         mailer.showFields = ("topic", "comments")
         self.messageText = b""
         mailer.onSuccess(fields, request)
-        self.assertIn(b"te=" + LINESEP + b"st subject", self.messageBody)
-        self.assertIn(b"test@test.org", self.messageBody)
-        self.assertIn(b"test comments", self.messageBody)
+        normalized = self.messageBody.replace(b"=" + LINESEP, b"")
+        self.assertIn(b"test subject", normalized)
+        self.assertIn(b"test@test.org", normalized)
+        self.assertIn(b"test comments", normalized)
 
         # until we turn off the showAll flag
         mailer.showAll = False
         self.messageText = b""
         mailer.onSuccess(fields, request)
-        self.assertIn(b"te=" + LINESEP + b"st subject", self.messageBody)
-        self.assertNotIn(b"test@test.org", self.messageBody)
-        self.assertIn(b"test comments", self.messageBody)
+        normalized = self.messageBody.replace(b"=" + LINESEP, b"")
+        self.assertIn(b"test subject", normalized)
+        self.assertNotIn(b"test@test.org", normalized)
+        self.assertIn(b"test comments", normalized)
 
         # check includeEmpties
         mailer.includeEmpties = False
