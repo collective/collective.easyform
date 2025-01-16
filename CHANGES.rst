@@ -21,6 +21,9 @@ Changelog
 - fix (de)serialize issues with Labels
   [gotcha]
 
+- improve serialization around `showfields` and `extradata`
+  [ThibautBorn, Mychae1, gotcha]
+
 
 4.3.0 (2024-12-13)
 ------------------
