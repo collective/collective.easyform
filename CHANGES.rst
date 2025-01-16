@@ -29,6 +29,9 @@ Changelog
 - Test max_size validator
   [gotcha]
 
+- Tests support Plone 6.1
+  [gotcha]
+
 
 4.3.0 (2024-12-13)
 ------------------
