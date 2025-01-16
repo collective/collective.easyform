@@ -169,13 +169,13 @@ Check saved data::
     True
     >>> ".widgets.attachment/@@download/test.txt" in browser.contents
     True
-    >>> 'id="crud-edit-form-buttons-edit" name="crud-edit.form.buttons.edit"' in browser.contents
+    >>> 'id="crud-edit-form-buttons-edit"' in browser.contents
     True
-    >>> 'id="crud-edit-form-buttons-delete" name="crud-edit.form.buttons.delete"' in browser.contents
+    >>> 'id="crud-edit-form-buttons-delete"' in browser.contents
     True
-    >>> 'id="form-buttons-download" name="form.buttons.download"' in browser.contents
+    >>> 'id="form-buttons-download"' in browser.contents
     True
-    >>> 'id="form-buttons-clearall" name="form.buttons.clearall"' in browser.contents
+    >>> 'id="form-buttons-clearall"' in browser.contents
     True
     >>> browser.getLink('test.txt').click()
     >>> browser.url

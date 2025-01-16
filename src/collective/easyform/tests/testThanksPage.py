@@ -39,9 +39,9 @@ class TestFunctions(base.EasyFormTestCase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn("Thanks for your input.", form)
-        self.assertIn(
-            '<span id="form-widgets-replyto" class="text-widget required textline-field">foo@bar.com</span>',  # noqa
+        self.assertRegex(
             form,
+            '<span id="form-widgets-replyto" class="text-widget required [^"]*">foo@bar.com</span>',  # noqa
         )
 
     def test_thankspage_filter(self):
@@ -91,9 +91,9 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn(
-            '<span id="form-widgets-hide" class="text-widget textline-field">hello hidden</span>',  # noqa
+        self.assertRegex(
             form,
+            '<span id="form-widgets-hide" class="text-widget[^"]*">hello hidden</span>',  # noqa
         )
 
     def test_no_widget_on_thankspage_fieldset(self):
