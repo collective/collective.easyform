@@ -5,6 +5,7 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+<<<<<<< HEAD
 - Log when sending mail
   [Mychae1]
 
@@ -16,6 +17,9 @@ Changelog
 
 - Allow editors to remove fieldset
   [ThibautBorn]
+
+- fix (de)serialize issues with Labels
+  [gotcha]
 
 
 4.3.0 (2024-12-13)
@@ -70,6 +74,11 @@ Changelog
 
 - check for "collective.easyform.DownloadSavedInput" permission, before including the saved data in serializer.
   [MrTango]
+
+- Add filesize upload limit. [ThibautBorn]
+
+- update Dutch translations [ThibautBorn]
+
 
 
 4.1.4 (2023-07-27)
