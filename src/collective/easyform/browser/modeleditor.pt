@@ -38,7 +38,7 @@
             </div>
 
             <form id="saveform"
-                  method="POST"
+                  method="post"
                   tal:define="authenticator context/@@authenticator/authenticator | nothing;"
                   tal:attributes="action string:${context/absolute_url}/@@modeleditor;">
               <input tal:replace="structure authenticator" />
