@@ -24,6 +24,7 @@ from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.config import DOWNLOAD_SAVED_PERMISSION
 from collective.easyform.interfaces import IEasyForm
+from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import ISaveData
 from Products.CMFPlone.utils import safe_unicode
 
@@ -44,11 +45,13 @@ class SerializeToJson(DXContentToJson):
         storage = dict()
         actions = getFieldsInOrder(get_actions(self.context))
 
-        AllFieldsinOrder = getFieldsInOrder(get_schema(self.context))
-        included_columns_in_savedata = []
-        for column, field in AllFieldsinOrder:
-            if "label" not in field.__str__().lower():
-                included_columns_in_savedata.append(column)
+        allFieldsInOrder = getFieldsInOrder(get_schema(self.context))
+        included_columns_in_savedata = [
+            column
+            for column, field in allFieldsInOrder
+            # Labels must be excluded to avoid column mismatch
+            if not ILabel.providedBy(field)
+        ]
         included_columns_in_savedata.sort()
 
         for name, action in actions:
@@ -56,10 +59,8 @@ class SerializeToJson(DXContentToJson):
                 serializeable = dict()
                 storage[name] = serializeable
                 for id, data in action.getSavedFormInputItems():
-                    column_names = list(data.keys())
-                    column_names.remove("id")
-                    column_names.sort()
-                    if column_names != included_columns_in_savedata:
+                    relevant_columns = columns_to_serialize(action, data)
+                    if not action.showFields and relevant_columns != included_columns_in_savedata:
                         logger.warning(
                             "Skipped Saveddata row because of mismatch witch current fields in %s",
                             self.context.absolute_url(),
@@ -78,6 +79,26 @@ class SerializeToJson(DXContentToJson):
                         )
         if storage:
             result["savedDataStorage"] = storage
+
+
+def columns_to_serialize(action, data):
+    if action.showFields:
+        return action.showFields
+    else:
+        column_names = list(data.keys())
+        column_names.remove("id")
+        column_names = filter_extradata(column_names, action)
+        column_names.sort()
+        return column_names
+
+
+def filter_extradata(column_names, action):
+    if not action.ExtraData:
+        return column_names
+    for extra in action.ExtraData:
+        if extra in column_names:
+            column_names.remove(extra)
+    return column_names
 
 
 def convertBeforeSerialize(value):
@@ -115,27 +136,41 @@ class DeserializeFromJson(DXContentFromJson):
             actions = getFieldsInOrder(get_actions(self.context))
             schema = get_schema(self.context)
 
-            AllFieldsinOrder = schema.namesAndDescriptions()
-            included_columns_in_savedata = []
-            for column, field in AllFieldsinOrder:
-                if "label" not in field.__str__().lower():
-                    included_columns_in_savedata.append(column)
-
             for name, action in actions:
                 if ISaveData.providedBy(action) and name in storage:
+                    relevant_columns = columns_to_deserialize(action, schema)
                     savedData = storage[name]
                     for key, value in savedData.items():
-                        for name in included_columns_in_savedata:  # schema.names():
-                            value[name] = convertAfterDeserialize(
-                                schema[name], value[name]
-                            )
+                        for name in schema.names():
+                            if name in relevant_columns:
+                                value[name] = convertAfterDeserialize(
+                                    schema[name], value[name]
+                                )
+                            elif name in value:
+                                del value[name]
                         action.setDataRow(int(key), value)
+
+
+def columns_to_deserialize(action, schema):
+    if action.showFields:
+        return action.showFields
+    else:
+        return [
+            column
+            for column, field in schema.namesAndDescriptions()
+            # Labels must be excluded
+            # because their column are not included in serialized data.
+            if not ILabel.providedBy(field)
+        ]
 
 
 def convertAfterDeserialize(field, value):
     if ISet.providedBy(field):
         return set(value)
     elif IDate.providedBy(field) or IDatetime.providedBy(field):
+        # empty dates are saved as empty string which breaks the parser
+        if not value:
+            return None
         return parser.parse(value)
     elif IRichText.providedBy(field):
         return RichTextValue(value)

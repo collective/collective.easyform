@@ -61,7 +61,7 @@ def append_node(field, name, value):
         name = "{{{}}}{}".format(ns, name)
     node = etree.SubElement(field, name)
     if isinstance(value, (list, tuple)):
-        value = u" ".join(value)
+        value = u"\n".join(value)
     node.text = value
     return node
 
@@ -97,8 +97,9 @@ def append_vocab_node(field, name, value):
 
 
 def append_default_node(field, name, value):
-    if isinstance(value, list):
-        return
+    # commented out, as it is unclear why we wouldn't set default lists?
+    # if isinstance(value, list):
+    #     return
     if field.get("type") == "collective.easyform.fields.RichLabel":
         append_node(field, "rich_label", value)
     else:

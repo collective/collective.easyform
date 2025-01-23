@@ -18,6 +18,10 @@ jobs:
         - ["3.10",  "plone60-py310"]
         - ["3.11",  "plone60-py311"]
         - ["3.12",  "plone60-py312"]
+        - ["3.10",  "plone61-py310"]
+        - ["3.11",  "plone61-py311"]
+        - ["3.12",  "plone61-py312"]
+        - ["3.13",  "plone61-py313"]
     runs-on: ubuntu-latest
     name: ${{ matrix.config[1] }}
     steps:

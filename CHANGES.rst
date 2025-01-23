@@ -5,6 +5,33 @@ Changelog
 4.3.1 (unreleased)
 ------------------
 
+- Log when sending mail
+  [Mychae1]
+
+- When Likert field is required, answer is required for each question.
+  [gotcha]
+
+- Improve Likert widget layout
+  [ThibautBorn]
+
+- Allow editors to remove fieldset
+  [ThibautBorn]
+
+- fix (de)serialize issues with Labels
+  [gotcha]
+
+- improve serialization around `showfields` and `extradata`
+  [ThibautBorn, Mychae1, gotcha]
+
+- Some tuning of migration from PFG
+  [ThibautBorn]
+
+- Test max_size validator
+  [gotcha]
+
+- Tests support Plone 6.1
+  [gotcha]
+
 - Use POST method for XML modeleditor
   [szakitibi]
 
@@ -61,6 +88,11 @@ Changelog
 
 - check for "collective.easyform.DownloadSavedInput" permission, before including the saved data in serializer.
   [MrTango]
+
+- Add filesize upload limit. [ThibautBorn]
+
+- update Dutch translations [ThibautBorn]
+
 
 
 4.1.4 (2023-07-27)
