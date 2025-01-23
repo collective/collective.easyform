@@ -32,6 +32,9 @@ Changelog
 - Tests support Plone 6.1
   [gotcha]
 
+- Use POST method for XML modeleditor
+  [szakitibi]
+
 
 4.3.0 (2024-12-13)
 ------------------
