@@ -169,7 +169,7 @@ TYPES_MAPPING = {
     'FormRichTextField': Type('plone.app.textfield.RichText', append_field),
     'FormRichLabelField': Type('collective.easyform.fields.RichLabel', append_label_field),
     'FormFileField': Type('plone.namedfile.field.NamedBlobFile', append_field),
-    'FormCaptchaField': Type('collective.easyform.fields.ReCaptcha', append_field),
+    'FormCaptchaField': Type('collective.easyform.fields.ReCaptcha', append_label_field),
     'FieldsetStart': Type('', append_fieldset),
     'FieldsetEnd': Type('', None),
 }
