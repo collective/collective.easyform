@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.3.1 (unreleased)
+4.4.0 (unreleased)
 ------------------
 
 - Log when sending mail
@@ -34,6 +34,9 @@ Changelog
 
 - Use POST method for XML modeleditor
   [szakitibi]
+
+- Drop Python 3.8 support
+  [gotcha]
 
 
 4.3.0 (2024-12-13)

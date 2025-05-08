@@ -3,7 +3,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "4.3.1.dev0"
+version = "4.4.0.dev0"
 
 setup(
     name="collective.easyform",
@@ -19,7 +19,6 @@ setup(
         "Framework :: Plone :: 6.0",
         "Framework :: Plone :: 6.1",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
@@ -40,7 +39,7 @@ setup(
     package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     install_requires=[
         "plone.api",
         "plone.app.dexterity",
