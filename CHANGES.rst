@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.4.0 (unreleased)
+4.4.0 (2025-05-08)
 ------------------
 
 - Log when sending mail
