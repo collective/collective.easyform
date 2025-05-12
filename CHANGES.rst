@@ -4,7 +4,8 @@ Changelog
 3.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Enables the SelectFieldWidget (Select2 pattern) option on IChoice field
+  [sauzher]
 
 
 3.2.1 (2022-12-01)
