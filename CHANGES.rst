@@ -5,7 +5,8 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- fix encoding for UTF8 headers
+  [MrTango]
 
 
 4.4.0 (2025-05-08)

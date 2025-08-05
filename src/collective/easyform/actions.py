@@ -300,7 +300,7 @@ class Mailer(Action):
 
         email_charset = "utf-8"
         # transform subject into mail header encoded string
-        msgSubject = safe_bytes(self.secure_header_line(subject))
+        msgSubject = safe_text(self.secure_header_line(subject))
         return Header(msgSubject, email_charset)
 
     def get_header_info(
@@ -316,10 +316,10 @@ class Mailer(Action):
         (to, from_addr, reply) = self.get_addresses(fields, request, context)
 
         headerinfo = OrderedDict()
-        headerinfo["To"] = safe_bytes(self.secure_header_line(to))
-        headerinfo["From"] = safe_bytes(self.secure_header_line(from_addr))
+        headerinfo["To"] = safe_text(self.secure_header_line(to))
+        headerinfo["From"] = safe_text(self.secure_header_line(from_addr))
         if reply:
-            headerinfo["Reply-To"] = safe_bytes(self.secure_header_line(reply))
+            headerinfo["Reply-To"] = safe_text(self.secure_header_line(reply))
         headerinfo["Subject"] = self.get_subject(fields, request, context)
 
         # CC
@@ -359,7 +359,7 @@ class Mailer(Action):
         encoded_titles = []
         for t in titles:
             if six.PY2 and isinstance(t, six.text_type):
-                t = safe_bytes(t)
+                t = safe_text(t)
             encoded_titles.append(t)
         return encoded_titles
 
@@ -412,7 +412,7 @@ class Mailer(Action):
                 if not is_file_data(field):
                     val = self.serialize(field)
                     if six.PY2:
-                        val = safe_bytes(val)
+                        val = safe_text(val)
                     csvdata += (val,)
 
             if sendXML:
@@ -435,7 +435,7 @@ class Mailer(Action):
             writer.writerow(csvdata)
             csv = output.getvalue()
             if six.PY3:
-                csv = safe_bytes(csv)
+                csv = safe_text(csv)
             now = DateTime().ISO().replace(" ", "-").replace(":", "")
             filename = "formdata_{0}.csv".format(now)
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
@@ -483,14 +483,14 @@ class Mailer(Action):
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
         if six.PY2 and isinstance(body, six.text_type):
-            body = safe_bytes(body)
+            body = safe_text(body)
         email_charset = "utf-8"
         # always use text/plain for encrypted bodies
         subtype = (
             getattr(self, "gpg_keyid", False) and "plain" or self.body_type or "html"
         )
         mime_text = MIMEText(
-            safe_bytes(body),
+            safe_text(body),
             _subtype=subtype,
             _charset=email_charset,
         )
@@ -539,7 +539,7 @@ class Mailer(Action):
 
             # Set the filename parameter
             if six.PY2 and isinstance(filename, six.text_type):
-                filename = safe_bytes(filename)
+                filename = safe_text(filename)
             msg.add_header(
                 "Content-Disposition", "attachment", filename=("utf-8", "", filename)
             )
@@ -589,7 +589,7 @@ class CustomScript(Action):
             script.manage_proxy((role,))
 
         if six.PY2 and isinstance(body, six.text_type):
-            body = safe_bytes(body)
+            body = safe_text(body)
         params = "fields, easyform, request"
         script.ZPythonScript_edit(params, body)
         return script
@@ -692,7 +692,7 @@ class SaveData(Action):
         encoded_titles = []
         for t in titles:
             if six.PY2 and isinstance(t, six.text_type):
-                t = safe_bytes(t)
+                t = safe_text(t)
             encoded_titles.append(t)
         return encoded_titles
 
@@ -706,11 +706,11 @@ class SaveData(Action):
             if is_file_data(data):
                 data = data.filename
             if six.PY2 and isinstance(data, six.text_type):
-                return safe_bytes(data)
+                return safe_text(data)
             if isinstance(data, (list, tuple, set)):
                 data = '|'.join(data)
                 if six.PY2:
-                    return safe_bytes(data)
+                    return safe_text(data)
             return data
 
         return [get_data(row, i) for i in names]
