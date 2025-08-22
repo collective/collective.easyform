@@ -120,12 +120,13 @@ class DeserializeFromJson(DXContentFromJson):
         validate_all=False,
         data=None,
         create=False,
+        **kwargs,
     ):  # noqa: ignore=C901
 
         if data is None:
             data = json_body(self.request)
 
-        super(DeserializeFromJson, self).__call__(validate_all, data, create)
+        super(DeserializeFromJson, self).__call__(validate_all, data, create, **kwargs)
 
         self.deserializeSavedData(data)
         return self.context
