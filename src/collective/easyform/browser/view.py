@@ -56,6 +56,88 @@ except ImportError:
 
     safe_encode = safe_bytes
 
+def evaluate_dependson(field, op, value):
+    """Perform comparison based on the Patternslib operator"""
+    
+    # Normalize: handle both list and string values
+    field_value = field.value
+    if isinstance(field_value, list):
+        fv = [str(v) for v in field_value]
+    else:
+        fv = str(field_value)
+
+    if op == "~=":   # contains
+        return value in fv
+    elif op == "=":  # equal
+        return fv == value
+    elif op == "!=": # not equal
+        return fv != value
+    else:
+        # Numeric comparisons (try casting to float)
+        try:
+            fv_num = float(fv)
+            val_num = float(value)
+        except ValueError:
+            return False  # if not numbers, comparison fails
+
+        if op == "<=":
+            return fv_num <= val_num
+        elif op == "<":
+            return fv_num < val_num
+        elif op == ">=":
+            return fv_num >= val_num
+        elif op == ">":
+            return fv_num > val_num
+
+    return False    
+    
+def remove_required(widgets):
+    # Iterate over all widgets in the form
+    for name, widget in widgets.items():
+        # Access Plone's internal tagged values for the field
+        element_tagged_values = widget.field._Element__tagged_values
+        if not element_tagged_values:
+            continue
+        
+        # Get the 'depends_on' condition, if any
+        depends_on = element_tagged_values.get("depends_on", "")
+        if not depends_on:
+            continue
+        
+        # Clean up the condition string (remove "condition:" prefix)
+        depends_on = depends_on.replace("condition:", "").strip()
+        
+        # Regex pattern to extract field, operator, and value
+        # Example: "form.widgets.somefield = value"        
+        pattern = re.compile(
+            r"form\.widgets\.(?P<field>[\w_]+)(?::list)?\s*(?P<op>~=|=|!=|<=|<|>=|>)\s*(?P<value>.+)"
+        )
+        
+        # Match the depends_on string against the regex
+        match = pattern.match(depends_on)
+        if not match:
+            raise ValueError(f"Condition not valid: {depends_on}")
+        
+        # Extract components from the condition
+        field_id = match.group("field")
+        op = match.group("op")
+        value = match.group("value").strip()
+        
+        # Get the referenced field from the widgets collection
+        field = widgets._data.get(field_id, "")
+        if not field:
+            raise ValueError(f"Depends_on field not found: {field_id}")
+        
+        # Evaluate the condition using helper function
+        result = evaluate_dependson(field, op, value)
+        
+        # If condition is NOT satisfied, mark the widget as not required
+        if not result:
+            widget.required = False
+            widget.field.required = False
+    
+    # Return updated widgets with corrected 'required' flags
+    return widgets
 
 @implementer(IEasyFormForm)
 class EasyFormForm(AutoExtensibleForm, form.Form):
@@ -187,6 +269,17 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.widgets[field].error = view
         self.status = self.formErrorsMessage
 
+    def extractData(self, setErrors=True):
+        # Apply the "remove_required" logic to main form widgets
+        self.widgets = remove_required(self.widgets)
+        
+        # Apply it to widgets inside groups as well
+        for group in self.groups:
+            group.widgets = remove_required(group.widgets)
+        
+        # Call original behavior (super)
+        return super().extractData(setErrors=setErrors)      
+    
     @button.buttonAndHandler(
         PMF(u"Submit"), name="submit", condition=lambda form: not form.thanksPage
     )
