@@ -593,7 +593,7 @@ class CustomScript(Action):
         script.ZPythonScript_edit(params, body)
         return script
 
-    def sanifyFields(self, form):
+    def sanifyFields(self, form, fields):
         # Makes request.form fields accessible in a script
         #
         # Avoid Unauthorized exceptions since request.form is inaccesible
@@ -601,6 +601,12 @@ class CustomScript(Action):
         result = {}
         for field in form:
             result[field] = form[field]
+
+        # append in the results all serverside fields variable
+        for field in fields:
+            key = 'form.widgets.{}'.format(field)
+            if key not in result:
+                result[field] = fields[field]
         return result
 
     def checkWarningsAndErrors(self, script):
@@ -647,7 +653,7 @@ class CustomScript(Action):
     def onSuccess(self, fields, request):
         # Executes the custom script
         form = get_context(self)
-        resultData = self.sanifyFields(request.form)
+        resultData = self.sanifyFields(request.form, fields)
         return self.executeCustomScript(resultData, form, request)
 
 
