@@ -388,6 +388,17 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             return self.context.nameAttribute
         return None
 
+    def getOnDisplayOverride(self):
+        """Evaluate form setup script TALES expression stored in the
+        onDisplayOverride field if defined
+        """
+        if self.context.onDisplayOverride:
+            get_expression(self.context, self.context.onDisplayOverride)
+
+    def render(self):
+        self.getOnDisplayOverride()
+        return super(EasyFormForm, self).render()
+
 
 class EasyFormFormWrapper(FormWrapper):
     form = EasyFormForm
