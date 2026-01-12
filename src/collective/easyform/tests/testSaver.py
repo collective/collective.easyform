@@ -271,7 +271,7 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.csv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverDownloadTSV(self):
@@ -297,7 +297,7 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response)
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/tab-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.tsv"' in res)
+        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.tsv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
 
     @unittest.skipUnless(HAS_OPENPYXL, "Requires openpyxl")
@@ -333,7 +333,7 @@ class SaveDataTestCase(BaseSaveData):
         )
         self.assertEqual(
             request.response.headers["content-disposition"],
-            'attachment; filename="saver.xlsx"',
+            'attachment; filename="ff1-saver.xlsx"',
         )
 
         wb = load_workbook(res)
@@ -370,7 +370,7 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.csv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit(header=True) in res)
 
     def testSaverDownloadExtraData(self):
@@ -396,7 +396,7 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.csv"' in res)
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):

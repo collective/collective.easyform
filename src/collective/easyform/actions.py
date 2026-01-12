@@ -648,6 +648,11 @@ class SaveData(Action):
         super().__init__(**kw)
 
     @property
+    def name_for_download(self):
+        context = get_context(self)
+        return f"{context.__name__}-{self.__name__}"
+
+    @property
     def _storage(self):
         context = get_context(self)
         if not hasattr(context, "_inputStorage"):
@@ -774,7 +779,7 @@ class SaveData(Action):
         # """
         response.setHeader(
             "Content-Disposition",
-            'attachment; filename="{}.csv"'.format(self.__name__),
+            f'attachment; filename="{self.name_for_download}.csv"',
         )
         response.setHeader("Content-Type", "text/comma-separated-values")
         value = self.getSavedFormInputForEdit(
@@ -789,7 +794,7 @@ class SaveData(Action):
         # """
         response.setHeader(
             "Content-Disposition",
-            'attachment; filename="{}.tsv"'.format(self.__name__),
+            f'attachment; filename="{self.name_for_download}.tsv"',
         )
         response.setHeader("Content-Type", "text/tab-separated-values")
         value = self.getSavedFormInputForEdit(
@@ -804,7 +809,7 @@ class SaveData(Action):
         # """
         response.setHeader(
             "Content-Disposition",
-            'attachment; filename="{}.xlsx"'.format(self.__name__),
+            f'attachment; filename="{self.name_for_download}.xlsx"',
         )
 
         response.setHeader(
