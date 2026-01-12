@@ -38,8 +38,6 @@ from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
 from ZPublisher.mapply import mapply
 
-import six
-
 
 logger = getLogger("collective.easyform")
 PMF = MessageFactory("plone")
@@ -198,8 +196,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             return
         thanksPageOverrideAction = self.context.thanksPageOverrideAction
         thanksPage = get_expression(self.context, thanksPageOverride)
-        if six.PY2 and isinstance(thanksPage, str):
-            thanksPage = thanksPage.encode("utf-8")
         if thanksPageOverrideAction == "redirect_to":
             self.request.response.redirect(thanksPage)
             return
@@ -366,8 +362,6 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if not tal_expression:
             return ""
         header_to_inject = get_expression(self.context, tal_expression)
-        if six.PY2 and isinstance(header_to_inject, str):
-            header_to_inject = header_to_inject.encode("utf-8")
 
         return header_to_inject
 

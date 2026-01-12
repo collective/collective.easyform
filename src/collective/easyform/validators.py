@@ -11,9 +11,6 @@ from z3c.form.interfaces import NOT_CHANGED
 from z3c.form import validator
 
 
-import six
-
-
 BAD_SIGNS = frozenset(["<a ", "www.", "http:", ".com", "https:"])
 
 
@@ -71,8 +68,6 @@ def update_validators():
                 if value is None:
                     # Let the system for required take care of None values
                     return
-                if six.PY2 and isinstance(value, str):
-                    value = value.encode("utf-8")
                 res = validation(name, value, **kwargs)
                 if res != 1:
                     return res

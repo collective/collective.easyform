@@ -16,8 +16,6 @@ from plone.base.utils import safe_text
 from re import compile
 from zope.schema import getFieldsInOrder
 
-import six
-
 
 CONTEXT_KEY = "context"
 # regular expression for dollar-sign variable replacement.
@@ -94,9 +92,6 @@ def get_expression(context, expression_string, **kwargs):
     :param dict kwargs: additional arguments for expression
     :returns: result of TALES expression
     """
-    if six.PY2 and isinstance(expression_string, str):
-        expression_string = expression_string.encode("utf-8")
-
     expression_context = getExprContext(context, context)
     for key in kwargs:
         expression_context.setGlobal(key, kwargs[key])
@@ -249,9 +244,6 @@ def cleanup(value):
     if isinstance(value, (list, tuple)):
         value = [safe_text(s).strip() for s in value]
 
-    if six.PY2:
-        # py2 expects a list of bytes
-        value = [s.encode("utf-8") for s in value if s]
     return value
 
 

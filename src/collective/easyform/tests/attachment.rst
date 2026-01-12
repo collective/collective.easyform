@@ -2,7 +2,7 @@ File attachments
 ================
 
 ::
-    >>> from six import BytesIO
+    >>> from io import BytesIO
     >>> browser = get_browser(layer)
 
 Add a new EasyForm::

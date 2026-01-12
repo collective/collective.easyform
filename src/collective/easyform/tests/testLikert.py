@@ -1,5 +1,4 @@
 import unittest
-import six
 
 from collective.easyform.tests.base import EasyFormFunctionalTestCase
 from zope.schema.interfaces import RequiredMissing

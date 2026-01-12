@@ -19,7 +19,6 @@ from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
-import six
 import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces

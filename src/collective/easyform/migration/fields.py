@@ -6,7 +6,6 @@ from Products.PloneFormGen.content.fieldsBase import BaseFormField
 from Products.PloneFormGen.interfaces import IPloneFormGenFieldset
 
 import logging
-import six
 
 
 logger = logging.getLogger("collective.easyform.migration")
@@ -149,8 +148,6 @@ def to_text(value):
     if isinstance(value, (list, tuple)):
         return [to_text(v) for v in value]
     value = str(value)
-    if six.PY2:
-        value = value.decode("utf8")
     return value
 
 

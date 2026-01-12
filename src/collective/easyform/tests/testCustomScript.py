@@ -13,8 +13,6 @@ from collective.easyform.tests import base
 from plone.app.testing import logout
 from Products.CMFCore import permissions
 
-import six
-
 
 test_script = """
 ## Python Script

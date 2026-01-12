@@ -60,7 +60,6 @@ from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
-import six
 
 
 logger = getLogger("collective.easyform")
@@ -356,8 +355,6 @@ class Mailer(Action):
         titles = self.getColumnTitles()
         encoded_titles = []
         for t in titles:
-            if six.PY2 and isinstance(t, str):
-                t = t.encode("utf-8")
             encoded_titles.append(t)
         return encoded_titles
 
@@ -409,8 +406,6 @@ class Mailer(Action):
             if sendCSV or sendXLSX:
                 if not is_file_data(field):
                     val = self.serialize(field)
-                    if six.PY2:
-                        val = val.encode("utf-8")
                     csvdata += (val,)
 
             if sendXML:
@@ -479,8 +474,6 @@ class Mailer(Action):
         """Get header and body of e-mail as text (string)"""
         headerinfo = self.get_header_info(fields, request, context)
         body = self.get_mail_body(fields, request, context)
-        if six.PY2 and isinstance(body, str):
-            body = body.encode("utf-8")
         email_charset = "utf-8"
         # always use text/plain for encrypted bodies
         subtype = (
@@ -521,7 +514,7 @@ class Mailer(Action):
             maintype, subtype = ctype.split("/", 1)
 
             if maintype == "text":
-                if not six.PY2 and isinstance(content, bytes):
+                if isinstance(content, bytes):
                     content = content.decode("utf-8")
                 msg = MIMEText(content, _subtype=subtype)
             elif maintype == "image":
@@ -535,8 +528,6 @@ class Mailer(Action):
                 encoders.encode_base64(msg)
 
             # Set the filename parameter
-            if six.PY2 and isinstance(filename, str):
-                filename = filename.encode("utf-8")
             msg.add_header(
                 "Content-Disposition", "attachment", filename=("utf-8", "", filename)
             )
@@ -585,8 +576,6 @@ class CustomScript(Action):
         if role != "none":
             script.manage_proxy((role,))
 
-        if six.PY2 and isinstance(body, str):
-            body = body.encode("utf-8")
         params = "fields, easyform, request"
         script.ZPythonScript_edit(params, body)
         return script
@@ -688,8 +677,6 @@ class SaveData(Action):
         titles = self.getColumnTitles()
         encoded_titles = []
         for t in titles:
-            if six.PY2 and isinstance(t, str):
-                t = t.encode("utf-8")
             encoded_titles.append(t)
         return encoded_titles
 
@@ -702,12 +689,8 @@ class SaveData(Action):
                 return data.raw
             if is_file_data(data):
                 data = data.filename
-            if six.PY2 and isinstance(data, str):
-                return data.encode("utf-8")
             if isinstance(data, (list, tuple, set)):
                 data = '|'.join(data)
-                if six.PY2:
-                    return data.encode('utf-8')
             return data
 
         return [get_data(row, i) for i in names]
