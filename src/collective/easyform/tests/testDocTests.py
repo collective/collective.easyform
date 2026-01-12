@@ -6,8 +6,6 @@ from plone.testing.zope import Browser
 
 import doctest
 import os
-import re
-import six
 import unittest
 
 
@@ -29,14 +27,6 @@ testfiles = (
     "ssl.rst",
     "action_errors.rst",
 )
-
-
-class Py23DocChecker(doctest.OutputChecker):
-    def check_output(self, want, got, optionflags):
-        if six.PY2:
-            got = re.sub("zExceptions.NotFound", "NotFound", got)
-            got = re.sub("u'(.*?)'", "'\\1'", want)
-        return doctest.OutputChecker.check_output(self, want, got, optionflags)
 
 
 def get_browser(layer, auth=True):
@@ -68,7 +58,6 @@ def test_suite():
                         "get_browser": get_browser,
                         "get_image_path": get_image_path,
                     },
-                    checker=Py23DocChecker(),
                 ),
                 layer=FUNCTIONAL_TESTING,
             )

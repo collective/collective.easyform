@@ -53,7 +53,6 @@ setup(
         "Products.CMFPlone>=6.0.0b1",
         "Products.validation>=3.0.0",
         "setuptools",
-        "six",
         # -*- Extra requirements: -*-
     ],
     extras_require={
