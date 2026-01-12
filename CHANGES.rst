@@ -5,7 +5,7 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Update deprecated imports for Plone 6.0 and higher.  [maurits]
 
 
 4.5.0 (2026-01-12)

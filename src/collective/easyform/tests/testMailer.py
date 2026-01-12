@@ -14,7 +14,7 @@ from importlib import import_module
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 from six import BytesIO
 
 import datetime
@@ -310,7 +310,7 @@ class TestFunctions(base.EasyFormTestCase):
         encoded_subject_header = msg["subject"]
         decoded_header = decode_header(encoded_subject_header)[0][0]
 
-        self.assertEqual(safe_unicode(decoded_header), utf8_subject)
+        self.assertEqual(safe_text(decoded_header), utf8_subject)
 
     def test_UnicodeSubject(self):
         """Test mailer with Unicode encoded subject line"""
@@ -328,7 +328,7 @@ class TestFunctions(base.EasyFormTestCase):
         encoded_subject_header = msg["subject"]
         decoded_header = decode_header(encoded_subject_header)[0][0]
 
-        self.assertEqual(safe_unicode(decoded_header), utf8_subject)
+        self.assertEqual(safe_text(decoded_header), utf8_subject)
 
     def test_Utf8ListSubject(self):
         """Test mailer with Unicode encoded subject line"""
@@ -345,7 +345,7 @@ class TestFunctions(base.EasyFormTestCase):
         encoded_subject_header = msg["subject"]
         decoded_header = decode_header(encoded_subject_header)[0][0]
 
-        self.assertEqual(safe_unicode(decoded_header), ", ".join(utf8_subject_list))
+        self.assertEqual(safe_text(decoded_header), ", ".join(utf8_subject_list))
 
     def test_MailerOverrides(self):
         """Test mailer override functions"""

@@ -26,7 +26,7 @@ from collective.easyform.config import DOWNLOAD_SAVED_PERMISSION
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import ISaveData
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 
 
 logger = logging.getLogger("collective.easyform.migration")
@@ -107,7 +107,7 @@ def convertBeforeSerialize(value):
     elif isinstance(value, set):
         return list(value)
     elif isinstance(value, RichTextValue):
-        return safe_unicode(value.raw) #raw_encoded
+        return safe_text(value.raw) #raw_encoded
     else:
         return value
 

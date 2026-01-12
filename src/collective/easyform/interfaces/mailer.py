@@ -9,7 +9,7 @@ from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.schema import Email
 from plone.supermodel.directives import fieldset
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
 from plone.autoform.interfaces import OMITTED_KEY
@@ -45,7 +45,7 @@ def default_mail_body():
         "easyform_mail_body_default.pt", default=None
     )
     if mail_body_default:
-        return safe_unicode(mail_body_default.file.data)
+        return safe_text(mail_body_default.file.data)
     else:
         return config.MAIL_BODY_DEFAULT
 

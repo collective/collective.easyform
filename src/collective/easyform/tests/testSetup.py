@@ -10,13 +10,6 @@ from Products.CMFCore.utils import getToolByName
 import Products
 
 
-try:
-    from Products.CMFPlone.utils import get_installer
-except ImportError:
-    # BBB for Plone 5.0 and lower.
-    get_installer = None
-
-
 def getAddPermission(product, name):
     """find the add permission for a meta_type"""
 

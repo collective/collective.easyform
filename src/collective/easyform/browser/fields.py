@@ -16,7 +16,7 @@ from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel.parser import SupermodelParseError
-from Products.CMFPlone.utils import safe_bytes
+from plone.base.utils import safe_bytes
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from z3c.form import button
@@ -26,7 +26,7 @@ from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 from Products.statusmessages.interfaces import IStatusMessage
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 
 import html
 
@@ -176,7 +176,7 @@ class ModelEditorView(BrowserView):
                 root = etree.fromstring(source, parser=parser)
             except etree.XMLSyntaxError as e:
                 IStatusMessage(self.request).addStatusMessage(
-                    "XMLSyntaxError: {0}".format(html.escape(safe_unicode(e.args[0]))),
+                    "XMLSyntaxError: {0}".format(html.escape(safe_text(e.args[0]))),
                     "error",
                 )
                 return super().__call__()

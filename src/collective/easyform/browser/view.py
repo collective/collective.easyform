@@ -21,6 +21,7 @@ from logging import getLogger
 from os.path import splitext
 from plone.app.z3cform.inline_validation import InlineValidationView
 from plone.autoform.form import AutoExtensibleForm
+from plone.base.utils import safe_bytes
 from plone.namedfile.interfaces import INamed
 from plone.z3cform.layout import FormWrapper
 from Products.Five import BrowserView
@@ -43,18 +44,6 @@ import six
 
 logger = getLogger("collective.easyform")
 PMF = MessageFactory("plone")
-
-try:
-    from Products.CMFPlone.utils import safe_encode
-except ImportError:
-    # only thing needed to maintain 5.0.x compatibility
-    def safe_bytes(value, encoding="utf-8"):
-        """Convert text to bytes of the specified encoding."""
-        if isinstance(value, six.text_type):
-            value = value.encode(encoding)
-        return value
-
-    safe_encode = safe_bytes
 
 
 @implementer(IEasyFormForm)
@@ -218,7 +207,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if thanksPageOverrideAction == "traverse_to":
             thanksPage = self.context.restrictedTraverse(thanksPage)
             thanksPage = mapply(thanksPage, self.request.args, self.request)
-            self.request.response.write(safe_encode(thanksPage))
+            self.request.response.write(safe_bytes(thanksPage))
 
     @button.buttonAndHandler(
         _(u"Reset"), name="reset", condition=lambda form: form.context.useCancelButton

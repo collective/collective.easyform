@@ -13,7 +13,7 @@ from plone.supermodel import serializeSchema
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 from re import compile
 from zope.schema import getFieldsInOrder
 
@@ -243,12 +243,12 @@ def cleanup(value):
     and returns a list of native strings.
     """
     if isinstance(value, six.string_types):
-        value = safe_unicode(value).strip()
+        value = safe_text(value).strip()
         value = value.replace(u",", u"\n").replace(u";", u"\n")
         value = [s for s in value.splitlines()]
 
     if isinstance(value, (list, tuple)):
-        value = [safe_unicode(s).strip() for s in value]
+        value = [safe_text(s).strip() for s in value]
 
     if six.PY2:
         # py2 expects a list of bytes

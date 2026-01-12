@@ -45,7 +45,7 @@ from plone.autoform.view import WidgetsView
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
 from six import BytesIO
@@ -122,8 +122,8 @@ class Action(Bool):
         if isinstance(field, (int, float, Decimal, bool)):
             return str(field)
         if isinstance(field, six.string_types):
-            return safe_unicode(field)
-        return safe_unicode(repr(field))
+            return safe_text(field)
+        return safe_text(repr(field))
 
     def onSuccess(self, fields, request):
         raise NotImplementedError(
@@ -291,9 +291,9 @@ class Mailer(Action):
                 subject = dollar_replacer(subject, fields)
 
         if isinstance(subject, six.string_types):
-            subject = safe_unicode(subject)
+            subject = safe_text(subject)
         elif subject and isinstance(subject, (set, tuple, list)):
-            subject = ", ".join([safe_unicode(s) for s in subject])
+            subject = ", ".join([safe_text(s) for s in subject])
         else:
             subject = nosubject
 
@@ -489,7 +489,7 @@ class Mailer(Action):
             getattr(self, "gpg_keyid", False) and "plain" or self.body_type or "html"
         )
         mime_text = MIMEText(
-            safe_unicode(body).encode(email_charset, "replace"),
+            safe_text(body).encode(email_charset, "replace"),
             _subtype=subtype,
             _charset=email_charset,
         )

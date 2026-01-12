@@ -7,7 +7,7 @@ from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
@@ -62,7 +62,7 @@ def default_actions(context):
         "easyform_default_actions.xml", default=None
     )
     if default_actions:
-        return safe_unicode(default_actions.file.data)
+        return safe_text(default_actions.file.data)
     else:
         return config.ACTIONS_DEFAULT
 
@@ -77,7 +77,7 @@ def default_fields(context):
         "easyform_default_fields.xml", default=None
     )
     if default_fields:
-        return safe_unicode(default_fields.file.data)
+        return safe_text(default_fields.file.data)
     else:
         return config.FIELDS_DEFAULT
 
