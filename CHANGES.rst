@@ -5,7 +5,7 @@ Changelog
 4.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add depends_on support for label and richlabel fields. [MrTango]
 
 
 4.4.0 (2025-05-08)
