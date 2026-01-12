@@ -16,61 +16,61 @@ class LikertFieldTests(unittest.TestCase):
 
     def test_ctor_defaults(self):
         txt = self._makeOne()
-        self.assertEqual(txt._type, six.text_type)
+        self.assertEqual(txt._type, str)
 
     def test_validate_not_required(self):
         field = self._makeOne(required=False)
         field.validate(None)
-        field.validate(u'')
+        field.validate('')
 
     def test_validate_with_answers(self):
-        field = self._makeOne(required=False, questions=[u'Question 1'], answers=[u'Agree', u'Disagree'])
+        field = self._makeOne(required=False, questions=['Question 1'], answers=['Agree', 'Disagree'])
         field.validate(None)
-        field.validate(u'')
-        field.validate(u'1: Agree')
-        self.assertRaises(ValueError, field.validate, u'1:agree')
-        self.assertRaises(ValueError, field.validate, u'-1:agree')
-        self.assertRaises(ValueError, field.validate, u'Agree')
+        field.validate('')
+        field.validate('1: Agree')
+        self.assertRaises(ValueError, field.validate, '1:agree')
+        self.assertRaises(ValueError, field.validate, '-1:agree')
+        self.assertRaises(ValueError, field.validate, 'Agree')
 
     def test_validate_with_more_answers(self):
-        field = self._makeOne(required=False, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
+        field = self._makeOne(required=False, questions=['Question 1', 'Question 2'], answers=['Agree', 'Disagree'])
         field.validate(None)
-        field.validate(u'')
-        field.validate(u'1: Agree')
-        field.validate(u'2: Agree')
-        field.validate(u'1: Disagree, 2: Agree')
-        self.assertRaises(ValueError, field.validate, u'1:agree')
-        self.assertRaises(ValueError, field.validate, u'-1:agree')
-        self.assertRaises(ValueError, field.validate, u'Agree')
+        field.validate('')
+        field.validate('1: Agree')
+        field.validate('2: Agree')
+        field.validate('1: Disagree, 2: Agree')
+        self.assertRaises(ValueError, field.validate, '1:agree')
+        self.assertRaises(ValueError, field.validate, '-1:agree')
+        self.assertRaises(ValueError, field.validate, 'Agree')
 
     def test_validate_required(self):
         from collective.easyform.fields import AllAnswersRequired
 
-        field = self._makeOne(required=True, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
+        field = self._makeOne(required=True, questions=['Question 1', 'Question 2'], answers=['Agree', 'Disagree'])
 
-        field.validate(u'1: Disagree, 2: Agree')
+        field.validate('1: Disagree, 2: Agree')
         self.assertRaises(RequiredMissing, field.validate, None)
-        self.assertRaises(AllAnswersRequired, field.validate, u'1:Agree')
-        self.assertRaises(AllAnswersRequired, field.validate, u'')
+        self.assertRaises(AllAnswersRequired, field.validate, '1:Agree')
+        self.assertRaises(AllAnswersRequired, field.validate, '')
 
     def test_parse(self):
-        field = self._makeOne(required=False, questions=[u'Question 1', u'Question 2'], answers=[u'Agree', u'Disagree'])
+        field = self._makeOne(required=False, questions=['Question 1', 'Question 2'], answers=['Agree', 'Disagree'])
         field.validate(None)
-        self.assertEqual(dict(), field.parse(u''))
-        self.assertEqual({1: u'Agree'}, field.parse(u'1: Agree'))
-        self.assertEqual({2: u'Agree'}, field.parse(u'2: Agree'))
+        self.assertEqual(dict(), field.parse(''))
+        self.assertEqual({1: 'Agree'}, field.parse('1: Agree'))
+        self.assertEqual({2: 'Agree'}, field.parse('2: Agree'))
         self.assertEqual(
-            {1: u'Disagree', 2: u'Agree'},
-            field.parse(u'1: Disagree, 2: Agree')
+            {1: 'Disagree', 2: 'Agree'},
+            field.parse('1: Disagree, 2: Agree')
         )
 
 
 class LikerWidgetTests(EasyFormFunctionalTestCase):
 
     def setUp(self):
-        super(LikerWidgetTests, self).setUp()
+        super().setUp()
         ff1 = getattr(self.folder, "ff1")
-        self.assertEqual(ff1.portal_type, u'EasyForm')
+        self.assertEqual(ff1.portal_type, 'EasyForm')
 
         from zope.interface import Interface
         from collective.easyform.api import set_fields
@@ -79,7 +79,7 @@ class LikerWidgetTests(EasyFormFunctionalTestCase):
         from collective.easyform.fields import Likert
 
         class IWithLikert(Interface):
-            likert = Likert(questions=[u"Q1", u"Q2"], answers=[u"Agree", u"Disagree"])
+            likert = Likert(questions=["Q1", "Q2"], answers=["Agree", "Disagree"])
 
         set_fields(ff1, IWithLikert)
 
@@ -107,11 +107,11 @@ class LikerWidgetTests(EasyFormFunctionalTestCase):
         # and that questions and answers are rendered in a table
         view = ff1.restrictedTraverse('view')
         rendered = view()
-        self.assertTrue(u"likert-widget" in rendered)
-        self.assertTrue(u"<span>Q1</span>" in rendered)
-        self.assertTrue(u"<span>Q2</span>" in rendered)
-        self.assertTrue(u"Agree</th>" in rendered)
-        self.assertTrue(u"Disagree</th>" in rendered)
+        self.assertTrue("likert-widget" in rendered)
+        self.assertTrue("<span>Q1</span>" in rendered)
+        self.assertTrue("<span>Q2</span>" in rendered)
+        self.assertTrue("Agree</th>" in rendered)
+        self.assertTrue("Disagree</th>" in rendered)
 
     def test_likert_saved(self):
         import transaction
@@ -126,8 +126,8 @@ class LikerWidgetTests(EasyFormFunctionalTestCase):
         }
         view.request.method = 'POST'
         rendered = view()
-        self.assertTrue(u"Thank You" in rendered)
-        self.assertTrue(u"1: Agree, 2: Disagree" in rendered)
+        self.assertTrue("Thank You" in rendered)
+        self.assertTrue("1: Agree, 2: Disagree" in rendered)
         transaction.commit()
         actions_view = ff1.restrictedTraverse('actions')
         saver_view = actions_view.publishTraverse(actions_view.request, 'saver')

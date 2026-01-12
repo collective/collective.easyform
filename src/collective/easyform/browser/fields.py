@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from AccessControl import Unauthorized
 from Acquisition import aq_parent
 from collective.easyform import easyformMessageFactory as _
@@ -58,7 +56,7 @@ class EasyFormFieldsView(SchemaContext):
 
     def __init__(self, context, request):
         self.schema = get_schema(context)
-        super(EasyFormFieldsView, self).__init__(self.schema, request, name="fields")
+        super().__init__(self.schema, request, name="fields")
 
     def publishTraverse(self, request, name):
         """Look up the field whose name matches the next URL path element,
@@ -88,22 +86,22 @@ class FieldsSchemaListing(SchemaListing):
     def default_fieldset_label(self):
         return (
             self.context.aq_parent.default_fieldset_label
-            or super(FieldsSchemaListing, self).default_fieldset_label
+            or super().default_fieldset_label
         )
 
     def handleModelEdit(self, action):
         self.request.response.redirect("@@modeleditor")
 
     @button.buttonAndHandler(
-        _(u'Save'),
+        _('Save'),
     )
     def handleSave(self, action):
-        super(FieldsSchemaListing, self).handleSaveDefaults(self, action)
+        super().handleSaveDefaults(self, action)
         return self.request.RESPONSE.redirect(aq_parent(self.context).absolute_url())
 
 
 if HAVE_RESOURCE_EDITOR:
-    but = button.Button("modeleditor", title=_(u"Edit XML Fields Model"))
+    but = button.Button("modeleditor", title=_("Edit XML Fields Model"))
     FieldsSchemaListing.buttons += button.Buttons(but)
     handler = button.Handler(but, FieldsSchemaListing.handleModelEdit)
     FieldsSchemaListing.handlers.addHandler(but, handler)
@@ -142,13 +140,13 @@ class ModelEditorView(BrowserView):
 
     template = ViewPageTemplateFile("modeleditor.pt")
 
-    title = _(u"Edit XML Fields Model")
+    title = _("Edit XML Fields Model")
 
     def modelSource(self):
         return self.context.aq_parent.fields_model
 
     def authorized(self, context, request):
-        authenticator = queryMultiAdapter((context, request), name=u"authenticator")
+        authenticator = queryMultiAdapter((context, request), name="authenticator")
         return authenticator and authenticator.verify()
 
     def save(self, source):
@@ -176,7 +174,7 @@ class ModelEditorView(BrowserView):
                 root = etree.fromstring(source, parser=parser)
             except etree.XMLSyntaxError as e:
                 IStatusMessage(self.request).addStatusMessage(
-                    "XMLSyntaxError: {0}".format(html.escape(safe_text(e.args[0]))),
+                    "XMLSyntaxError: {}".format(html.escape(safe_text(e.args[0]))),
                     "error",
                 )
                 return super().__call__()
@@ -184,7 +182,7 @@ class ModelEditorView(BrowserView):
             # a little more sanity checking, look at first two element levels
             if root.tag != NAMESPACE + "model":
                 IStatusMessage(self.request).addStatusMessage(
-                    _(u"Error: root tag must be 'model'"),
+                    _("Error: root tag must be 'model'"),
                     "error",
                 )
                 return super().__call__()
@@ -192,7 +190,7 @@ class ModelEditorView(BrowserView):
             for element in root.getchildren():
                 if element.tag != NAMESPACE + "schema":
                     IStatusMessage(self.request).addStatusMessage(
-                        _(u"Error: all model elements must be 'schema'"),
+                        _("Error: all model elements must be 'schema'"),
                         "error",
                     )
                     return super().__call__()
@@ -200,11 +198,11 @@ class ModelEditorView(BrowserView):
             # can supermodel parse it?
             # This is mainly good for catching bad dotted names.
             try:
-                plone.supermodel.loadString(source, policy=u"dexterity")
+                plone.supermodel.loadString(source, policy="dexterity")
             except SupermodelParseError as e:
                 message = e.args[0].replace('\n  File "<unknown>"', "")
                 IStatusMessage(self.request).addStatusMessage(
-                    u"SuperModelParseError: {0}".format(html.escape(message)),
+                    "SuperModelParseError: {}".format(html.escape(message)),
                     "error",
                 )
                 return super().__call__()

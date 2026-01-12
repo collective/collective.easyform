@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # collective.easyform documentation build configuration file, created by
 # sphinx-quickstart on Mon Feb 24 23:51:08 2014.
@@ -51,8 +50,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"collective.easyform"
-copyright = u"2014, Roman Kozlovskyi"
+project = "collective.easyform"
+copyright = "2014, Roman Kozlovskyi"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -195,8 +194,8 @@ latex_documents = [
     (
         "index",
         "collectiveeasyform.tex",
-        u"collective.easyform Documentation",
-        u"Roman Kozlovskyi",
+        "collective.easyform Documentation",
+        "Roman Kozlovskyi",
         "manual",
     ),
 ]
@@ -230,8 +229,8 @@ man_pages = [
     (
         "index",
         "collectiveeasyform",
-        u"collective.easyform Documentation",
-        [u"Roman Kozlovskyi"],
+        "collective.easyform Documentation",
+        ["Roman Kozlovskyi"],
         1,
     )
 ]
@@ -249,8 +248,8 @@ texinfo_documents = [
     (
         "index",
         "collectiveeasyform",
-        u"collective.easyform Documentation",
-        u"Roman Kozlovskyi",
+        "collective.easyform Documentation",
+        "Roman Kozlovskyi",
         "collectiveeasyform",
         "One line description of project.",
         "Miscellaneous",

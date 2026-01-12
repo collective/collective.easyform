@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from plone.base.utils import safe_text
 
 import os
@@ -47,7 +46,7 @@ with open(
 FORM_ERROR_MARKER = "FORM_ERROR_MARKER"
 
 
-DEFAULT_SCRIPT = u"""
+DEFAULT_SCRIPT = """
 ## Python Script
 ##bind container=container
 ##bind context=context

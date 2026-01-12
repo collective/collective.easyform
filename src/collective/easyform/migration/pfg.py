@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import namedtuple
 from collective.easyform.migration.actions import actions_model
 from collective.easyform.migration.data import migrate_saved_data
@@ -13,7 +12,7 @@ from plone.app.contenttypes.migration.migration import migrate
 from plone.autoform.form import AutoExtensibleForm
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.supermodel import model
-from six import StringIO
+from io import StringIO
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from zope import schema
@@ -62,24 +61,24 @@ class PloneFormGenMigrator(ATCTContentMigrator):
         migrate_saved_data(self.old, self.new)
 
     def migrate(self, unittest=0):
-        super(PloneFormGenMigrator, self).migrate()
+        super().migrate()
         logger.info("Migrated FormFolder %s", "/".join(self.new.getPhysicalPath()))
 
 
 class IMigratePloneFormGenFormSchema(model.Schema):
     dry_run = schema.Bool(
-        title=u"Dry run",
+        title="Dry run",
         required=True,
         default=False,
     )
 
 
 class MigratePloneFormGenForm(AutoExtensibleForm, Form):
-    label = u"Migrate PloneFormGen Forms"
+    label = "Migrate PloneFormGen Forms"
     ignoreContext = True
     schema = IMigratePloneFormGenFormSchema
 
-    @buttonAndHandler(u"Migrate")
+    @buttonAndHandler("Migrate")
     def handle_migrate(self, action):
         data, errors = self.extractData()
         if len(errors) > 0:
@@ -96,9 +95,9 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
         self.migration_done = True
         if data.get("dry_run", False):
             transaction.abort()
-            logger.info(u"PloneFormGen migration finished (dry run)")
+            logger.info("PloneFormGen migration finished (dry run)")
         else:
-            logger.info(u"PloneFormGen migration finished")
+            logger.info("PloneFormGen migration finished")
 
     def migrate(self):
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -108,4 +107,4 @@ class MigratePloneFormGenForm(AutoExtensibleForm, Form):
     def render(self):
         if getattr(self, "migration_done", False):
             return self.log.getvalue()
-        return super(MigratePloneFormGenForm, self).render()
+        return super().render()

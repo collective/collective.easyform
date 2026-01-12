@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from collections import OrderedDict as BaseDict
@@ -20,7 +19,7 @@ from zope.schema import getFieldsInOrder
 import six
 
 
-CONTEXT_KEY = u"context"
+CONTEXT_KEY = "context"
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
 dollarRE = compile(r"\$\{(.+?)\}")
@@ -43,7 +42,7 @@ class OrderedDict(BaseDict):
 InitializeClass(OrderedDict)
 
 
-class DollarVarReplacer(object):
+class DollarVarReplacer:
     """Initialize with a dictionary, then self.sub returns a string
     with all ${key} substrings replaced with values looked
     up from the dictionary.
@@ -95,7 +94,7 @@ def get_expression(context, expression_string, **kwargs):
     :param dict kwargs: additional arguments for expression
     :returns: result of TALES expression
     """
-    if six.PY2 and isinstance(expression_string, six.text_type):
+    if six.PY2 and isinstance(expression_string, str):
         expression_string = expression_string.encode("utf-8")
 
     expression_context = getExprContext(context, context)
@@ -242,9 +241,9 @@ def cleanup(value):
     """Accepts lists, tuples or comma/semicolon-separated strings
     and returns a list of native strings.
     """
-    if isinstance(value, six.string_types):
+    if isinstance(value, str):
         value = safe_text(value).strip()
-        value = value.replace(u",", u"\n").replace(u";", u"\n")
+        value = value.replace(",", "\n").replace(";", "\n")
         value = [s for s in value.splitlines()]
 
     if isinstance(value, (list, tuple)):

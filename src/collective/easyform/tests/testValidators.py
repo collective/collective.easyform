@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 try:
     from StringIO import StringIO  # for Python 2
 except ImportError:
@@ -44,9 +43,9 @@ except ImportError:
 IFieldValidator = validators.IFieldValidator
 
 FORM_DATA = {
-    "topic": u"test subject",
-    "replyto": u"test@test.org",
-    "comments": u"test comments",
+    "topic": "test subject",
+    "replyto": "test@test.org",
+    "comments": "test comments",
 }
 
 
@@ -63,7 +62,7 @@ class TestBaseValidators(base.EasyFormTestCase):
 
         request = self.layer["request"]
         for i in FORM_DATA:
-            request.form["form.widgets.{0}".format(i)] = FORM_DATA[i]
+            request.form["form.widgets.{}".format(i)] = FORM_DATA[i]
 
     def test_defaultvalidator(self):
         view = self.ff1.restrictedTraverse("view")
@@ -172,8 +171,8 @@ class TestBaseValidators(base.EasyFormTestCase):
         self.assertEqual(len(errors), 1)
 
         expected_error_message = (
-            u"Validierung fehlgeschlagen (isInternationalPhoneNumber): "
-            u"'testcomments' Ist keine g\xfcltige internationale Telefonnummer"
+            "Validierung fehlgeschlagen (isInternationalPhoneNumber): "
+            "'testcomments' Ist keine g\xfcltige internationale Telefonnummer"
         )
         self.assertEqual(errors[0].createMessage(), expected_error_message)
 
@@ -300,7 +299,7 @@ class TestCustomValidators(base.EasyFormTestCase):
         self.assertEqual(v(good), None)
         for b in bad:
             self.assertNotEqual(
-                v(b), None, '"{0}" should be considered a link.'.format(b)
+                v(b), None, '"{}" should be considered a link.'.format(b)
             )
 
     def ttest_isNotTooLong2(self):
@@ -312,7 +311,7 @@ class TestCustomValidators(base.EasyFormTestCase):
         # there was a bug where widget.maxlength could possibly be defined as
         # '' which means calling int(widget.maxlength) would fail
 
-        class Mock(object):
+        class Mock:
             pass
 
         field = Mock()
@@ -359,7 +358,7 @@ class TestCustomValidatorMessages(base.EasyFormTestCase):
         self.assertNotEqual(validate("isZipCode", "12345-1234"), None)
 
 
-class DummyFile(object):
+class DummyFile:
     def __init__(self, size=1, filename=""):
         self.size = size
         self.filename = filename
@@ -388,20 +387,20 @@ class TestSizeValidator(base.EasyFormTestCase):
     def test_filiesize_bigsize_validation(self):
         self.assertEqual(
             translate(self.validate_view(DummyFile(1000000000))),
-            u"File is bigger than allowed size of 1048576 bytes!",
+            "File is bigger than allowed size of 1048576 bytes!",
         )
 
     def test_filiesize_bigsize_custom_validation(self):
         self.assertEqual(
             translate(self.validate_view(DummyFile(1025), 1024)),
-            u"File is bigger than allowed size of 1024 bytes!",
+            "File is bigger than allowed size of 1024 bytes!",
         )
 
     def test_forbidden_type_validation_fail(self):
         validation = self.validate_view(
             DummyFile(filename="foo.ZIP"), forbidden_types=("zip",)
         )
-        self.assertEqual(translate(validation), u'File type "ZIP" is not allowed!')
+        self.assertEqual(translate(validation), 'File type "ZIP" is not allowed!')
 
     def test_forbidden_type_validation_pass(self):
         validation = self.validate_view(
@@ -413,7 +412,7 @@ class TestSizeValidator(base.EasyFormTestCase):
         validation = self.validate_view(
             DummyFile(filename="foo.ZIP"), allowed_types=("txt",)
         )
-        self.assertEqual(translate(validation), u'File type "ZIP" is not allowed!')
+        self.assertEqual(translate(validation), 'File type "ZIP" is not allowed!')
 
     def test_allowed_type_validation_pass(self):
         validation = self.validate_view(
@@ -425,7 +424,7 @@ class TestSizeValidator(base.EasyFormTestCase):
         validation = self.validate_view(
             DummyFile(filename="foo"), allowed_types=("txt",)
         )
-        self.assertEqual(translate(validation), u'File type "" is not allowed!')
+        self.assertEqual(translate(validation), 'File type "" is not allowed!')
 
 
 @unittest.skipUnless(HAS_RECAPTCHA, "Requires plone.formwidget.recaptcha")
@@ -436,15 +435,15 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
     schema_fixture = "recaptcha.xml"
 
     def afterSetUp(self):
-        super(TestSingleRecaptchaValidator, self).afterSetUp()
+        super().afterSetUp()
 
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
 
 
         proxy = registry.forInterface(IReCaptchaSettings)
-        proxy.public_key = u"foo"
-        proxy.private_key = u"bar"
+        proxy.public_key = "foo"
+        proxy.private_key = "bar"
 
     def test_no_answer(self):
         data = {"verification": ""}
@@ -480,13 +479,13 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
     schema_fixture = "hcaptcha.xml"
 
     def afterSetUp(self):
-        super(TestSingleHcaptchaValidator, self).afterSetUp()
+        super().afterSetUp()
 
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
         proxy = registry.forInterface(IHCaptchaSettings)
-        proxy.public_key = u"foo"
-        proxy.private_key = u"bar"
+        proxy.public_key = "foo"
+        proxy.private_key = "bar"
 
     def test_no_answer(self):
         data = {"verification": ""}

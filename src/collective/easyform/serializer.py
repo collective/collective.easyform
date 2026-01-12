@@ -36,7 +36,7 @@ logger = logging.getLogger("collective.easyform.migration")
 @adapter(IEasyForm, Interface)
 class SerializeToJson(DXContentToJson):
     def __call__(self, version=None, include_items=True):
-        result = super(SerializeToJson, self).__call__(version, include_items)
+        result = super().__call__(version, include_items)
         if api.user.has_permission(DOWNLOAD_SAVED_PERMISSION, obj=self.context):
             self.serializeSavedData(result)
         return result
@@ -125,7 +125,7 @@ class DeserializeFromJson(DXContentFromJson):
         if data is None:
             data = json_body(self.request)
 
-        super(DeserializeFromJson, self).__call__(validate_all, data, create)
+        super().__call__(validate_all, data, create)
 
         self.deserializeSavedData(data)
         return self.context

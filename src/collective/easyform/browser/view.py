@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl import getSecurityManager
 from Acquisition import aq_base
 from Acquisition import aq_chain
@@ -75,7 +74,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def default_fieldset_label(self):
         return (
             self.context.default_fieldset_label
-            or super(EasyFormForm, self).default_fieldset_label
+            or super().default_fieldset_label
         )
 
     def action(self):
@@ -177,7 +176,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         self.status = self.formErrorsMessage
 
     @button.buttonAndHandler(
-        PMF(u"Submit"), name="submit", condition=lambda form: not form.thanksPage
+        PMF("Submit"), name="submit", condition=lambda form: not form.thanksPage
     )
     def handleSubmit(self, action):
         unsorted_data, errors = self.extractData()
@@ -199,7 +198,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             return
         thanksPageOverrideAction = self.context.thanksPageOverrideAction
         thanksPage = get_expression(self.context, thanksPageOverride)
-        if six.PY2 and isinstance(thanksPage, six.text_type):
+        if six.PY2 and isinstance(thanksPage, str):
             thanksPage = thanksPage.encode("utf-8")
         if thanksPageOverrideAction == "redirect_to":
             self.request.response.redirect(thanksPage)
@@ -210,7 +209,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             self.request.response.write(safe_bytes(thanksPage))
 
     @button.buttonAndHandler(
-        _(u"Reset"), name="reset", condition=lambda form: form.context.useCancelButton
+        _("Reset"), name="reset", condition=lambda form: form.context.useCancelButton
     )
     def handleReset(self, action):
         self.request.response.redirect(self.nextURL())
@@ -268,11 +267,11 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def updateFields(self):
         if self.thanksPage:
             return
-        super(EasyFormForm, self).updateFields()
+        super().updateFields()
         if not hasattr(self, "base_fields"):
             self.base_fields = self.fields
         if not hasattr(self, "base_groups"):
-            self.base_groups = dict([(i.label, i.fields) for i in self.groups])
+            self.base_groups = {i.label: i.fields for i in self.groups}
         self.fields = self.setOmitFields(self.base_fields)
         self.fields = self.set_depends_on(self.fields)
         self.fields = self.set_css_class(self.fields)
@@ -282,7 +281,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
             group.fields = self.set_css_class(group.fields)
 
     def updateActions(self):
-        super(EasyFormForm, self).updateActions()
+        super().updateActions()
         if "submit" in self.actions:
             if self.context.submitLabelOverride:
                 self.actions["submit"].title = get_expression(
@@ -322,7 +321,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def update(self):
         """Update form - see interfaces.IForm"""
         self.formMaybeForceSSL()
-        super(EasyFormForm, self).update()
+        super().update()
         self.markWidgets()
         self.template = self.form_template
         if self.request.method != "POST" or self.context.thanksPageOverride:
@@ -367,7 +366,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
         if not tal_expression:
             return ""
         header_to_inject = get_expression(self.context, tal_expression)
-        if six.PY2 and isinstance(header_to_inject, six.text_type):
+        if six.PY2 and isinstance(header_to_inject, str):
             header_to_inject = header_to_inject.encode("utf-8")
 
         return header_to_inject
@@ -389,7 +388,7 @@ class EasyFormFormWrapper(FormWrapper):
     def css_class(self):
         css_class = None
         if self.form_instance.thanksPage:
-            css_class = u"easyform-thankspage"
+            css_class = "easyform-thankspage"
         return css_class
 
 
@@ -405,7 +404,7 @@ class EasyFormFormEmbedded(EasyFormForm):
 class EasyFormInlineValidationView(InlineValidationView):
     def __call__(self, fname=None, fset=None):
         self.context = EasyFormForm(self.context, self.request)
-        return super(EasyFormInlineValidationView, self).__call__(fname, fset)
+        return super().__call__(fname, fset)
 
 
 class GetSaveDataAdaptersView(BrowserView):
@@ -432,7 +431,7 @@ class ValidateFile(BrowserView):
             return _(
                 "msg_file_too_big",
                 mapping={"size": size},
-                default=u"File is bigger than allowed size of ${size} bytes!",
+                default="File is bigger than allowed size of ${size} bytes!",
             )
         ftype = splitext(value.filename)[-1]
         # remove leading dot '.' from file extension
@@ -441,13 +440,13 @@ class ValidateFile(BrowserView):
             return _(
                 "msg_file_not_allowed",
                 mapping={"ftype": ftype.upper()},
-                default=u'File type "${ftype}" is not allowed!',
+                default='File type "${ftype}" is not allowed!',
             )
         if forbidden_types and ftype in forbidden_types:
             return _(
                 "msg_file_not_allowed",
                 mapping={"ftype": ftype.upper()},
-                default=u'File type "${ftype}" is not allowed!',
+                default='File type "${ftype}" is not allowed!',
             )
         return False
 

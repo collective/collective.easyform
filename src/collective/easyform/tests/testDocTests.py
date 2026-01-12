@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform.tests.base import FUNCTIONAL_TESTING
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
@@ -53,7 +52,7 @@ def get_browser(layer, auth=True):
 
 def get_image_path():
     dir_name = os.path.dirname(os.path.realpath(__file__))
-    return "{0}/PloneLogo.png".format(dir_name)
+    return "{}/PloneLogo.png".format(dir_name)
 
 
 def test_suite():

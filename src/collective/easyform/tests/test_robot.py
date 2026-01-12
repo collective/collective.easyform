@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform.tests.base import ACCEPTANCE_TESTING
 from plone.app.testing import ROBOT_TEST_LEVEL
 from plone.testing import layered
