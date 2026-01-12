@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .actions import IAction  # noqa
 from .actions import IActionEditForm  # noqa
 from .actions import IActionExtender  # noqa

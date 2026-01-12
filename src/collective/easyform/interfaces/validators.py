@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Products.PageTemplates.Expressions import getEngine
 from zope.tales import tales
 
@@ -7,7 +6,7 @@ import zope.schema.interfaces
 
 
 class InvalidTALESError(zope.schema.ValidationError):
-    __doc__ = u"Please enter a valid TALES expression."
+    __doc__ = "Please enter a valid TALES expression."
 
 
 def isTALES(value):
@@ -20,7 +19,7 @@ def isTALES(value):
 
 
 class InvalidCSSClassNameError(zope.schema.ValidationError):
-    __doc__ = u"Please enter valid CSS class names."
+    __doc__ = "Please enter valid CSS class names."
 
 
 def cssClassConstraint(value):

@@ -15,12 +15,12 @@ from collective.easyform.interfaces import ILikertWidget
 class LikertWidget(widget.HTMLTextInputWidget, Widget):
     """Input type text widget implementation."""
 
-    klass = u'likert-widget'
-    css = u'text'
-    value = u''
+    klass = 'likert-widget'
+    css = 'text'
+    value = ''
 
     def update(self):
-        super(LikertWidget, self).update()
+        super().update()
         widget.addFieldClass(self)
 
     def extract(self, default=interfaces.NO_VALUE):
@@ -32,7 +32,7 @@ class LikertWidget(widget.HTMLTextInputWidget, Widget):
             question_answer = self.extract_question_answer(index, default)
             if question_answer is not None:
                 answers.append(question_answer)
-        return u', '.join(answers)
+        return ', '.join(answers)
 
     def extract_question_answer(self, index, default):
         """See z3c.form.interfaces.IWidget."""

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import namedtuple
 from lxml import etree
 from Products.PloneFormGen.content.fields import FGFieldsetEnd
@@ -7,7 +6,6 @@ from Products.PloneFormGen.content.fieldsBase import BaseFormField
 from Products.PloneFormGen.interfaces import IPloneFormGenFieldset
 
 import logging
-import six
 
 
 logger = logging.getLogger("collective.easyform.migration")
@@ -20,36 +18,36 @@ NAMESPACES = {
 
 
 def append_field(schema, type_, name, properties):
-    field = etree.SubElement(schema, u"field")
-    field.set(u"name", name)
-    field.set(u"type", type_)
+    field = etree.SubElement(schema, "field")
+    field.set("name", name)
+    field.set("type", type_)
     return field
 
 
 def append_label_field(schema, type_, name, properties):
     field = append_field(schema, type_, name, properties)
-    append_node(field, u"required", u"False")
+    append_node(field, "required", "False")
     return field
 
 
 def append_date_field(schema, type_, name, properties):
     if properties.get("fgShowHM", False):
-        return append_field(schema, u"zope.schema.Datetime", name, properties)
+        return append_field(schema, "zope.schema.Datetime", name, properties)
     else:
-        return append_field(schema, u"zope.schema.Date", name, properties)
+        return append_field(schema, "zope.schema.Date", name, properties)
 
 
 def append_fieldset(schema, type_, name, properties):
-    fieldset = etree.SubElement(schema, u"fieldset")
-    fieldset.set(u"name", name)
+    fieldset = etree.SubElement(schema, "fieldset")
+    fieldset.set("name", name)
     return fieldset
 
 
 def set_attribute(field, name, value):
-    if u":" in name:
+    if ":" in name:
         ns, attr = name.split(":")
         ns = NAMESPACES.get(ns, ns)
-        field.set(u"{{{}}}{}".format(ns, attr), value)
+        field.set("{{{}}}{}".format(ns, attr), value)
     else:
         field.set(name, value)
 
@@ -61,7 +59,7 @@ def append_node(field, name, value):
         name = "{{{}}}{}".format(ns, name)
     node = etree.SubElement(field, name)
     if isinstance(value, (list, tuple)):
-        value = u"\n".join(value)
+        value = "\n".join(value)
     node.text = value
     return node
 
@@ -77,12 +75,12 @@ def append_list_node(field, name, value):
 
 
 def append_required_node(field, name, value):
-    if value == u"False":
+    if value == "False":
         append_node(field, name, value)
 
 
 def append_maxlength_node(field, name, value):
-    if value != u"0":
+    if value != "0":
         append_node(field, name, value)
 
 
@@ -93,7 +91,7 @@ def append_vocab_node(field, name, value):
     else:
         node = field
 
-    append_list_node(node, u"values", value)
+    append_list_node(node, "values", value)
 
 
 def append_default_node(field, name, value):
@@ -137,12 +135,12 @@ def append_or_set_description(field, name, value):
 
 
 def convert_tales_expressions(value):
-    if value == u"here/memberEmail":
-        return u"python:member and member.getProperty('email', '') or ''"
-    elif value == u"here/memberFullName":
-        return u"python:member and member.getProperty('fullname', '') or ''"
-    elif value == u"here/memberId":
-        return u"python:member and member.id or ''"
+    if value == "here/memberEmail":
+        return "python:member and member.getProperty('email', '') or ''"
+    elif value == "here/memberFullName":
+        return "python:member and member.getProperty('fullname', '') or ''"
+    elif value == "here/memberId":
+        return "python:member and member.id or ''"
     return value
 
 
@@ -150,8 +148,6 @@ def to_text(value):
     if isinstance(value, (list, tuple)):
         return [to_text(v) for v in value]
     value = str(value)
-    if six.PY2:
-        value = value.decode("utf8")
     return value
 
 

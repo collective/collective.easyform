@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Test EasyForm event-handler functionality
 #
@@ -19,7 +18,7 @@ class TestAdapterPaste(base.EasyFormTestCase):
     )
 
     def afterSetUp(self):
-        super(TestAdapterPaste, self).afterSetUp()
+        super().afterSetUp()
         self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = getattr(self.folder, "ff1")
 
@@ -31,4 +30,4 @@ class TestAdapterPaste(base.EasyFormTestCase):
         active_adapters = tuple(get_actions(ff2))
         self.assertEqual(active_adapters, ("mailer",))
         active_fields = tuple(get_schema(ff2))
-        self.assertEqual(set(active_fields), set(["replyto", "topic", "comments"]))
+        self.assertEqual(set(active_fields), {"replyto", "topic", "comments"})

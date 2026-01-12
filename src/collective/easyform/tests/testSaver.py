@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Integration tests specific to save-data adapter.
 #
@@ -19,8 +18,7 @@ from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.testing.zope import Browser
-from six import BytesIO
-from six.moves import zip
+from io import BytesIO
 from transaction import commit
 from zExceptions.unauthorized import Unauthorized as zUnauthorized
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -66,11 +64,11 @@ class BaseSaveData(base.EasyFormTestCase):
     def createSaver(self):
         """Creates FormCustomScript object"""
         # 1. Create custom script adapter in the form folder
-        self.portal.REQUEST["form.widgets.title"] = u"Saver"
-        self.portal.REQUEST["form.widgets.__name__"] = u"saver"
-        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.title"] = "Saver"
+        self.portal.REQUEST["form.widgets.__name__"] = "saver"
+        self.portal.REQUEST["form.widgets.description"] = ""
         self.portal.REQUEST["form.widgets.factory"] = ["Save Data"]
-        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        self.portal.REQUEST["form.buttons.add"] = "Add"
         view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()
         form = view.form_instance
@@ -90,7 +88,7 @@ class SaveDataTestCase(BaseSaveData):
         self.createSaver()
 
         view = self.ff1.restrictedTraverse("saveddata")
-        self.assertEqual(list(view.items()), [("saver", u"Saver")])
+        self.assertEqual(list(view.items()), [("saver", "Saver")])
 
         # as the owner, TEST_USER_ID can still see the saved data
         setRoles(self.portal, TEST_USER_ID, [])
@@ -660,11 +658,11 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
     def createSaver(self):
         """Creates SaveData object"""
         # 1. Create custom script adapter in the form folder
-        self.portal.REQUEST["form.widgets.title"] = u"Saver"
-        self.portal.REQUEST["form.widgets.__name__"] = u"saver"
-        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.title"] = "Saver"
+        self.portal.REQUEST["form.widgets.__name__"] = "saver"
+        self.portal.REQUEST["form.widgets.description"] = ""
         self.portal.REQUEST["form.widgets.factory"] = ["Save Data"]
-        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        self.portal.REQUEST["form.buttons.add"] = "Add"
         view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()
         commit()
@@ -799,4 +797,4 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.assertTrue("Saved Data" in self.browser.contents)
         input = self.browser.getControl("CSV delimiter")
         self.assertTrue(input._elem.has_attr("maxlength"))
-        self.assertEqual(input._elem.get("maxlength"), u"1")
+        self.assertEqual(input._elem.get("maxlength"), "1")

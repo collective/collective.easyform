@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function
-
 from plone import api
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
@@ -30,7 +27,7 @@ except ImportError:
 
 class MailHostMock(MailHost):
     def _send(self, mfrom, mto, messageText, immediate=False):
-        print("<sent mail from {0} to {1}>".format(mfrom, mto))  # noqa: T003
+        print("<sent mail from {} to {}>".format(mfrom, mto))  # noqa: T003
         if hasattr(messageText, "encode"):
             # It is text instead of bytes.
             messageText = messageText.encode("utf-8")

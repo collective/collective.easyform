@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform.tests import base
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD

@@ -26,7 +26,7 @@ from collective.easyform.config import DOWNLOAD_SAVED_PERMISSION
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import ISaveData
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 
 
 logger = logging.getLogger("collective.easyform.migration")
@@ -36,7 +36,7 @@ logger = logging.getLogger("collective.easyform.migration")
 @adapter(IEasyForm, Interface)
 class SerializeToJson(DXContentToJson):
     def __call__(self, version=None, include_items=True):
-        result = super(SerializeToJson, self).__call__(version, include_items)
+        result = super().__call__(version, include_items)
         if api.user.has_permission(DOWNLOAD_SAVED_PERMISSION, obj=self.context):
             self.serializeSavedData(result)
         return result
@@ -107,7 +107,7 @@ def convertBeforeSerialize(value):
     elif isinstance(value, set):
         return list(value)
     elif isinstance(value, RichTextValue):
-        return safe_unicode(value.raw) #raw_encoded
+        return safe_text(value.raw) #raw_encoded
     else:
         return value
 
@@ -125,7 +125,7 @@ class DeserializeFromJson(DXContentFromJson):
         if data is None:
             data = json_body(self.request)
 
-        super(DeserializeFromJson, self).__call__(validate_all, data, create)
+        super().__call__(validate_all, data, create)
 
         self.deserializeSavedData(data)
         return self.context

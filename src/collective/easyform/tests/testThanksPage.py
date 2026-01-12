@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Integeration tests specific to the mailer
 #
@@ -15,7 +14,7 @@ class TestFunctions(base.EasyFormTestCase):
     """Test mailer action"""
 
     def afterSetUp(self):
-        super(TestFunctions, self).afterSetUp()
+        super().afterSetUp()
         ff1_id = self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = self.folder[ff1_id]
 

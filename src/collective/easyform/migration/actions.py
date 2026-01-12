@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import namedtuple
 from collective.easyform.interfaces.mailer import default_mail_body
 from collective.easyform.migration.fields import append_field

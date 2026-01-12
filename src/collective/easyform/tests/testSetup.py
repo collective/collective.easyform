@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Test EasyForm initialisation and set-up
 #
@@ -10,17 +9,10 @@ from Products.CMFCore.utils import getToolByName
 import Products
 
 
-try:
-    from Products.CMFPlone.utils import get_installer
-except ImportError:
-    # BBB for Plone 5.0 and lower.
-    get_installer = None
-
-
 def getAddPermission(product, name):
     """find the add permission for a meta_type"""
 
-    name = "{0}: {1}".format(product, name)
+    name = "{}: {}".format(product, name)
     for mt in Products.meta_types:
         if mt["name"] == name:
             return mt["permission"]

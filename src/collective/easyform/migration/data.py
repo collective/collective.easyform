@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ast import literal_eval
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
