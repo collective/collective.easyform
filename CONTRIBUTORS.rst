@@ -19,3 +19,4 @@ Google Summer of Code student Prakhar Joshi pushed a lot further.
 - T. Kim Nguyen, kim.nguyen@wildcardcorp.com
 - Quang Nguyen, quang.nguyen@pretagov.com.au
 - Jon Pentland, jon.pentland@pretagov.co.uk
+- Maik Derstappen, md@derico.de
