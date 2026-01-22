@@ -5,7 +5,7 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Implement `onDisplayOverride` TALES field (#376) [chiruzzimarco]
 
 
 4.5.0 (2026-01-12)
