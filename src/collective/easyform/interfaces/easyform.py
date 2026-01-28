@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .validators import isTALES
 from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _  # NOQA
@@ -7,7 +6,7 @@ from plone.app.textfield import RichText
 from plone.autoform import directives
 from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
@@ -23,7 +22,7 @@ PMF = zope.i18nmessageid.MessageFactory("plone")
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_submitLabel(context):
     return translate(
-        _(u"default_submitLabel", u"Submit"),
+        _("default_submitLabel", "Submit"),
         target_language=api.portal.get_current_language(),
     )
 
@@ -31,7 +30,7 @@ def default_submitLabel(context):
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_resetLabel(context):
     return translate(
-        _(u"default_resetLabel", u"Reset"),
+        _("default_resetLabel", "Reset"),
         target_language=api.portal.get_current_language(),
     )
 
@@ -39,7 +38,7 @@ def default_resetLabel(context):
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_thankstitle(context):
     return translate(
-        _(u"default_thankstitle", u"Thank You"),
+        _("default_thankstitle", "Thank You"),
         target_language=api.portal.get_current_language(),
     )
 
@@ -47,7 +46,7 @@ def default_thankstitle(context):
 @provider(zope.schema.interfaces.IContextAwareDefaultFactory)
 def default_thanksdescription(context):
     return translate(
-        _(u"default_thanksdescription", u"Thanks for your input."),
+        _("default_thanksdescription", "Thanks for your input."),
         target_language=api.portal.get_current_language(),
     )
 
@@ -62,7 +61,7 @@ def default_actions(context):
         "easyform_default_actions.xml", default=None
     )
     if default_actions:
-        return safe_unicode(default_actions.file.data)
+        return safe_text(default_actions.file.data)
     else:
         return config.ACTIONS_DEFAULT
 
@@ -77,7 +76,7 @@ def default_fields(context):
         "easyform_default_fields.xml", default=None
     )
     if default_fields:
-        return safe_unicode(default_fields.file.data)
+        return safe_text(default_fields.file.data)
     else:
         return config.FIELDS_DEFAULT
 
@@ -87,33 +86,33 @@ class IEasyForm(Schema):
 
     directives.omitted("fields_model", "actions_model")
     fields_model = zope.schema.Text(
-        title=_(u"Fields Model"), defaultFactory=default_fields
+        title=_("Fields Model"), defaultFactory=default_fields
     )
     actions_model = zope.schema.Text(
-        title=_(u"Actions Model"), defaultFactory=default_actions
+        title=_("Actions Model"), defaultFactory=default_actions
     )
 
     # DEFAULT
     formPrologue = RichText(
-        title=_(u"label_prologue_text", default=u"Form Prologue"),
+        title=_("label_prologue_text", default="Form Prologue"),
         description=_(
-            u"help_prologue_text",
-            default=u"This text will be displayed above the form fields.",
+            "help_prologue_text",
+            default="This text will be displayed above the form fields.",
         ),
         required=False,
     )
     formEpilogue = RichText(
-        title=_(u"label_epilogue_text", default=u"Form Epilogue"),
+        title=_("label_epilogue_text", default="Form Epilogue"),
         description=_(
-            u"help_epilogue_text",
-            default=u"The text will be displayed after the form fields.",
+            "help_epilogue_text",
+            default="The text will be displayed after the form fields.",
         ),
         required=False,
     )
 
     # THANKYOU
     fieldset(
-        u"thankyou",
+        "thankyou",
         label=_("Thanks Page"),
         fields=[
             "thankstitle",
@@ -127,73 +126,73 @@ class IEasyForm(Schema):
         order=10,
     )
     thankstitle = zope.schema.TextLine(
-        title=_(u"label_thankstitle", default=u"Thanks title"),
+        title=_("label_thankstitle", default="Thanks title"),
         defaultFactory=default_thankstitle,
         required=True,
     )
     thanksdescription = zope.schema.Text(
-        title=_(u"label_thanksdescription", default=u"Thanks summary"),
-        description=_(u"help_thanksdescription", default=u"Used in thanks page."),
+        title=_("label_thanksdescription", default="Thanks summary"),
+        description=_("help_thanksdescription", default="Used in thanks page."),
         defaultFactory=default_thanksdescription,
         required=False,
-        missing_value=u"",
+        missing_value="",
     )
     showAll = zope.schema.Bool(
-        title=_(u"label_showallfields_text", default=u"Show All Fields"),
+        title=_("label_showallfields_text", default="Show All Fields"),
         description=_(
-            u"help_showallfields_text",
-            default=u""
-            u"Check this to display input for all fields "
-            u"(except label and file fields). If you check "
-            u"this, the choices in the pick box below "
-            u"will be ignored.",
+            "help_showallfields_text",
+            default=""
+            "Check this to display input for all fields "
+            "(except label and file fields). If you check "
+            "this, the choices in the pick box below "
+            "will be ignored.",
         ),
         default=True,
         required=False,
     )
     showFields = zope.schema.List(
-        title=_(u"label_showfields_text", default=u"Show Responses"),
+        title=_("label_showfields_text", default="Show Responses"),
         description=_(
-            u"help_showfields_text",
-            default=u"Pick the fields whose inputs you'd like to display on "
-            u"the success page.",
+            "help_showfields_text",
+            default="Pick the fields whose inputs you'd like to display on "
+            "the success page.",
         ),
         unique=True,
         required=False,
         value_type=zope.schema.Choice(vocabulary="easyform.Fields"),  # noqa
     )
     includeEmpties = zope.schema.Bool(
-        title=_(u"label_includeEmpties_text", default=u"Include Empties"),
+        title=_("label_includeEmpties_text", default="Include Empties"),
         description=_(
-            u"help_includeEmpties_text",
-            default=u""
-            u"Check this to display field titles "
-            u"for fields that received no input. Uncheck "
-            u"to leave fields with no input off the list.",
+            "help_includeEmpties_text",
+            default=""
+            "Check this to display field titles "
+            "for fields that received no input. Uncheck "
+            "to leave fields with no input off the list.",
         ),
         default=True,
         required=False,
     )
     thanksPrologue = RichText(
-        title=_(u"label_thanksprologue_text", default=u"Thanks Prologue"),
+        title=_("label_thanksprologue_text", default="Thanks Prologue"),
         description=_(
-            u"help_thanksprologue_text",
-            default=u"This text will be displayed above the selected field " u"inputs.",
+            "help_thanksprologue_text",
+            default="This text will be displayed above the selected field " "inputs.",
         ),
         required=False,
     )
     thanksEpilogue = RichText(
-        title=_(u"label_thanksepilogue_text", default=u"Thanks Epilogue"),
+        title=_("label_thanksepilogue_text", default="Thanks Epilogue"),
         description=_(
-            u"help_thanksepilogue_text",
-            default=u"The text will be displayed after the field inputs.",
+            "help_thanksepilogue_text",
+            default="The text will be displayed after the field inputs.",
         ),
         required=False,
     )
 
     # ADVANCED
     fieldset(
-        u"advanced",
+        "advanced",
         label=_("Advanced"),
         fields=[
             "submitLabel",
@@ -211,96 +210,96 @@ class IEasyForm(Schema):
         order=20,
     )
     submitLabel = zope.schema.TextLine(
-        title=_(u"label_submitlabel_text", default=u"Submit Button Label"),
-        description=_(u"help_submitlabel_text", default=u""),
+        title=_("label_submitlabel_text", default="Submit Button Label"),
+        description=_("help_submitlabel_text", default=""),
         defaultFactory=default_submitLabel,
         required=False,
     )
     useCancelButton = zope.schema.Bool(
-        title=_(u"label_showcancel_text", default=u"Show Reset Button"),
-        description=_(u"help_showcancel_text", default=u""),
+        title=_("label_showcancel_text", default="Show Reset Button"),
+        description=_("help_showcancel_text", default=""),
         default=False,
         required=False,
     )
     resetLabel = zope.schema.TextLine(
-        title=_(u"label_reset_button", default=u"Reset Button Label"),
-        description=_(u"help_reset_button", default=u""),
+        title=_("label_reset_button", default="Reset Button Label"),
+        description=_("help_reset_button", default=""),
         defaultFactory=default_resetLabel,
         required=False,
     )
     nameAttribute = zope.schema.TextLine(
-        title=_(u"label_name_attribute", default=u"Name attribute"),
+        title=_("label_name_attribute", default="Name attribute"),
         description=_(
-            u"help_name_attribute",
-            default=u"optional, sets the name attribute on the form container. " \
-                    u"can be used for form analytics"),
+            "help_name_attribute",
+            default="optional, sets the name attribute on the form container. " \
+                    "can be used for form analytics"),
         required=False,
     )
     directives.write_permission(form_tabbing=config.EDIT_ADVANCED_PERMISSION)
     form_tabbing = zope.schema.Bool(
-        title=_(u"label_form_tabbing", default=u"Turn fieldsets to tabs"),
-        description=_(u"help_form_tabbing", default=u""),
+        title=_("label_form_tabbing", default="Turn fieldsets to tabs"),
+        description=_("help_form_tabbing", default=""),
         default=True,
         required=False,
     )
     directives.write_permission(autofocus=config.EDIT_ADVANCED_PERMISSION)
     autofocus = zope.schema.Bool(
-        title=_(u"label_autofocus", default=u"Enable focus on the first input"),
-        description=_(u"help_autofocus", default=u""),
+        title=_("label_autofocus", default="Enable focus on the first input"),
+        description=_("help_autofocus", default=""),
         default=True,
         required=False,
     )
     directives.write_permission(default_fieldset_label=config.EDIT_ADVANCED_PERMISSION)
     default_fieldset_label = zope.schema.TextLine(
         title=_(
-            u"label_default_fieldset_label_text",
-            default=u"Custom Default Fieldset Label",
+            "label_default_fieldset_label_text",
+            default="Custom Default Fieldset Label",
         ),
         description=_(
-            u"help_default_fieldset_label_text",
-            default=u"This field allows you to change default fieldset label.",
+            "help_default_fieldset_label_text",
+            default="This field allows you to change default fieldset label.",
         ),
         required=False,
-        default=u"",
+        default="",
     )
     directives.write_permission(method=config.EDIT_TECHNICAL_PERMISSION)
     method = zope.schema.Choice(
-        title=_(u"label_method", default=u"Form method"),
-        description=_(u"help_method", default=u""),
-        default=u"post",
+        title=_("label_method", default="Form method"),
+        description=_("help_method", default=""),
+        default="post",
         required=False,
         vocabulary="easyform.FormMethods",
     )
     directives.write_permission(unload_protection=config.EDIT_TECHNICAL_PERMISSION)
     unload_protection = zope.schema.Bool(
-        title=_(u"label_unload_protection", default=u"Unload protection"),
-        description=_(u"help_unload_protection", default=u""),
+        title=_("label_unload_protection", default="Unload protection"),
+        description=_("help_unload_protection", default=""),
         default=True,
         required=False,
     )
     directives.write_permission(CSRFProtection=config.EDIT_TECHNICAL_PERMISSION)
     CSRFProtection = zope.schema.Bool(
-        title=_(u"label_csrf", default=u"CSRF Protection"),
+        title=_("label_csrf", default="CSRF Protection"),
         description=_(
-            u"help_csrf",
-            default=u"Check this to employ Cross-Site "
-            u"Request Forgery protection. Note that only HTTP Post "
-            u"actions will be allowed.",
+            "help_csrf",
+            default="Check this to employ Cross-Site "
+            "Request Forgery protection. Note that only HTTP Post "
+            "actions will be allowed.",
         ),
         default=True,
         required=False,
     )
     directives.write_permission(forceSSL=config.EDIT_TECHNICAL_PERMISSION)
     forceSSL = zope.schema.Bool(
-        title=_(u"label_force_ssl", default=u"Force SSL connection"),
+        title=_("label_force_ssl", default="Force SSL connection"),
         description=_(
-            u"help_force_ssl",
-            default=u"Check this to make the form redirect to an SSL-enabled "
-            u"version of itself (https://) if accessed via a non-SSL "
-            u"URL (http://).  In order to function properly, "
-            u"this requires a web server that has been configured to "
-            u"handle the HTTPS protocol on port 443 and forward it to "
-            u"Zope.",
+            "help_force_ssl",
+            default="Check this to make the form redirect to an SSL-enabled "
+            "version of itself (https://) if accessed via a non-SSL "
+            "URL (http://).  In order to function properly, "
+            "this requires a web server that has been configured to "
+            "handle the HTTPS protocol on port 443 and forward it to "
+            "Zope.",
         ),
         default=False,
         required=False,
@@ -308,7 +307,7 @@ class IEasyForm(Schema):
 
     # OVERRIDES
     fieldset(
-        u"overrides",
+        "overrides",
         label=_("Overrides"),
         fields=[
             "thanksPageOverrideAction",
@@ -324,141 +323,141 @@ class IEasyForm(Schema):
     directives.write_permission(thanksPageOverrideAction=config.EDIT_TALES_PERMISSION)
     thanksPageOverrideAction = zope.schema.Choice(
         title=_(
-            u"label_thankspageoverrideaction_text",
-            default=u"Custom Success Action Type",
+            "label_thankspageoverrideaction_text",
+            default="Custom Success Action Type",
         ),
         description=_(
-            u"help_thankspageoverrideaction_text",
-            default=u"Use this field in place of a thanks-page designation "
-            u"to determine final action after calling "
-            u"your action adapter (if you have one). You would "
-            u"usually use this for a custom success template or "
-            u"script. Leave empty if unneeded. Otherwise, specify as "
-            u"you would a CMFFormController action type and argument, "
-            u"complete with type of action to execute "
-            u'(e.g., "redirect_to" or "traverse_to") '
-            u"and a TALES expression. For example, "
-            u'"Redirect to" and "string:thanks-page" would redirect '
-            u'to "thanks-page".',
+            "help_thankspageoverrideaction_text",
+            default="Use this field in place of a thanks-page designation "
+            "to determine final action after calling "
+            "your action adapter (if you have one). You would "
+            "usually use this for a custom success template or "
+            "script. Leave empty if unneeded. Otherwise, specify as "
+            "you would a CMFFormController action type and argument, "
+            "complete with type of action to execute "
+            '(e.g., "redirect_to" or "traverse_to") '
+            "and a TALES expression. For example, "
+            '"Redirect to" and "string:thanks-page" would redirect '
+            'to "thanks-page".',
         ),
-        default=u"redirect_to",
+        default="redirect_to",
         required=False,
         vocabulary="easyform.CustomActions",
     )
     directives.write_permission(thanksPageOverride=config.EDIT_TALES_PERMISSION)
     thanksPageOverride = zope.schema.TextLine(
-        title=_(u"label_thankspageoverride_text", default=u"Custom Success Action"),
+        title=_("label_thankspageoverride_text", default="Custom Success Action"),
         description=_(
-            u"help_thankspageoverride_text",
-            default=u"Use this field in place of a thanks-page designation "
-            u"to determine final action after calling your action "
-            u"adapter (if you have one). You would usually use "
-            u"this for a custom success template or script. "
-            u"Leave empty if unneeded. Otherwise, specify as you "
-            u"would a CMFFormController action type and argument, "
-            u"complete with type of action to execute "
-            u'(e.g., "redirect_to" or "traverse_to") '
-            u"and a TALES expression. For example, "
-            u'"Redirect to" and "string:thanks-page" would redirect '
-            u'to "thanks-page".',
+            "help_thankspageoverride_text",
+            default="Use this field in place of a thanks-page designation "
+            "to determine final action after calling your action "
+            "adapter (if you have one). You would usually use "
+            "this for a custom success template or script. "
+            "Leave empty if unneeded. Otherwise, specify as you "
+            "would a CMFFormController action type and argument, "
+            "complete with type of action to execute "
+            '(e.g., "redirect_to" or "traverse_to") '
+            "and a TALES expression. For example, "
+            '"Redirect to" and "string:thanks-page" would redirect '
+            'to "thanks-page".',
         ),
-        default=u"",
+        default="",
         constraint=isTALES,
         required=False,
     )
     directives.write_permission(formActionOverride=config.EDIT_TALES_PERMISSION)
     formActionOverride = zope.schema.TextLine(
-        title=_(u"label_formactionoverride_text", default=u"Custom Form Action"),
+        title=_("label_formactionoverride_text", default="Custom Form Action"),
         description=_(
-            u"help_formactionoverride_text",
-            default=u"Use this field to override the form action attribute. "
-            u"Specify a URL to which the form will post. "
-            u"This will bypass form validation, success action "
-            u"adapter and thanks page.",
+            "help_formactionoverride_text",
+            default="Use this field to override the form action attribute. "
+            "Specify a URL to which the form will post. "
+            "This will bypass form validation, success action "
+            "adapter and thanks page.",
         ),
-        default=u"",
+        default="",
         required=False,
         constraint=isTALES,
     )
     directives.write_permission(onDisplayOverride=config.EDIT_TALES_PERMISSION)
     onDisplayOverride = zope.schema.TextLine(
-        title=_(u"label_OnDisplayOverride_text", default=u"Form Setup Script"),
+        title=_("label_OnDisplayOverride_text", default="Form Setup Script"),
         description=_(
-            u"help_OnDisplayOverride_text",
-            default=u"A TALES expression that will be called when the form is "
-            u"displayed. Leave empty if unneeded. The most common "
-            u"use of this field is to call a python script that "
-            u"sets defaults for multiple fields by pre-populating "
-            u"request.form. "
-            u"Any value returned by the expression is ignored. "
-            u"PLEASE NOTE: errors in the evaluation of this "
-            u"expression will cause an error on form display.",
+            "help_OnDisplayOverride_text",
+            default="A TALES expression that will be called when the form is "
+            "displayed. Leave empty if unneeded. The most common "
+            "use of this field is to call a python script that "
+            "sets defaults for multiple fields by pre-populating "
+            "request.form. "
+            "Any value returned by the expression is ignored. "
+            "PLEASE NOTE: errors in the evaluation of this "
+            "expression will cause an error on form display.",
         ),
         constraint=isTALES,
         required=False,
-        default=u"",
+        default="",
     )
     directives.write_permission(afterValidationOverride=config.EDIT_TALES_PERMISSION)
     afterValidationOverride = zope.schema.TextLine(
         title=_(
-            u"label_AfterValidationOverride_text", default=u"After Validation Script"
+            "label_AfterValidationOverride_text", default="After Validation Script"
         ),
         description=_(
-            u"help_AfterValidationOverride_text",
-            default=u"A TALES expression that will be called after the form is"
-            u"successfully validated, but before calling an action "
-            u"adapter (if any) or displaying a thanks page."
-            u"Form input will be in the request.form dictionary."
-            u"Leave empty if unneeded. The most "
-            u"common use of this field is to call a python script"
-            u"to clean up form input or to script an alternative "
-            u"action. Any value returned by the expression is ignored."
-            u"PLEASE NOTE: errors in the evaluation of this "
-            u"expression willcause an error on form display.",
+            "help_AfterValidationOverride_text",
+            default="A TALES expression that will be called after the form is"
+            "successfully validated, but before calling an action "
+            "adapter (if any) or displaying a thanks page."
+            "Form input will be in the request.form dictionary."
+            "Leave empty if unneeded. The most "
+            "common use of this field is to call a python script"
+            "to clean up form input or to script an alternative "
+            "action. Any value returned by the expression is ignored."
+            "PLEASE NOTE: errors in the evaluation of this "
+            "expression willcause an error on form display.",
         ),
         constraint=isTALES,
         required=False,
-        default=u"",
+        default="",
     )
     directives.write_permission(headerInjection=config.EDIT_TALES_PERMISSION)
     headerInjection = zope.schema.TextLine(
-        title=_(u"label_headerInjection_text", default=u"Header Injection"),
+        title=_("label_headerInjection_text", default="Header Injection"),
         description=_(
-            u"help_headerInjection_text",
-            default=u"This override field allows you to insert content into "
-            u"the xhtml head. The typical use is to add custom CSS "
-            u"or JavaScript. Specify a TALES expression returning a "
-            u"string. The string will be inserted with no "
-            u"interpretation. PLEASE NOTE: errors in the evaluation "
-            u"of this expression will cause an error on form display.",
+            "help_headerInjection_text",
+            default="This override field allows you to insert content into "
+            "the xhtml head. The typical use is to add custom CSS "
+            "or JavaScript. Specify a TALES expression returning a "
+            "string. The string will be inserted with no "
+            "interpretation. PLEASE NOTE: errors in the evaluation "
+            "of this expression will cause an error on form display.",
         ),
         constraint=isTALES,
         required=False,
-        default=u"",
+        default="",
     )
     directives.write_permission(submitLabelOverride=config.EDIT_TALES_PERMISSION)
     submitLabelOverride = zope.schema.TextLine(
         title=_(
-            u"label_submitlabeloverride_text", default=u"Custom Submit Button Label"
+            "label_submitlabeloverride_text", default="Custom Submit Button Label"
         ),
         description=_(
-            u"help_submitlabeloverride_text",
-            default=u"This override field allows you to change submit button "
-            u"label. The typical use is to set label with request "
-            u"parameters. Specify a TALES expression returning a "
-            u"string. PLEASE NOTE: errors in the evaluation of this "
-            u"expression will cause an error on form display.",
+            "help_submitlabeloverride_text",
+            default="This override field allows you to change submit button "
+            "label. The typical use is to set label with request "
+            "parameters. Specify a TALES expression returning a "
+            "string. PLEASE NOTE: errors in the evaluation of this "
+            "expression will cause an error on form display.",
         ),
         constraint=isTALES,
         required=False,
-        default=u"",
+        default="",
     )
 
 
 class IEasyFormImportFormSchema(Interface):
     """Schema for easyform import form."""
 
-    upload = zope.schema.Bytes(title=PMF(u"Upload"), required=True)
+    upload = zope.schema.Bytes(title=PMF("Upload"), required=True)
 
 
 class IEasyFormThanksPage(Interface):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .actions import IAction
 from collective.easyform import config
 from collective.easyform import easyformMessageFactory as _
@@ -17,20 +16,20 @@ class ICustomScript(IAction):
     directives.read_permission(ProxyRole=MODIFY_PORTAL_CONTENT)
     directives.write_permission(ProxyRole=config.EDIT_PYTHON_PERMISSION)
     ProxyRole = zope.schema.Choice(
-        title=_(u"label_script_proxy", default=u"Proxy role"),
+        title=_("label_script_proxy", default="Proxy role"),
         description=_(
-            u"help_script_proxy", default=u"Role under which to run the script."
+            "help_script_proxy", default="Role under which to run the script."
         ),
-        default=u"none",
+        default="none",
         required=True,
         vocabulary="easyform.ProxyRoleChoices",
     )
     directives.read_permission(ScriptBody=MODIFY_PORTAL_CONTENT)
     directives.write_permission(ScriptBody=config.EDIT_PYTHON_PERMISSION)
     ScriptBody = zope.schema.Text(
-        title=_(u"label_script_body", default=u"Script body"),
-        description=_(u"help_script_body", default=u"Write your script here."),
+        title=_("label_script_body", default="Script body"),
+        description=_("help_script_body", default="Write your script here."),
         default=config.DEFAULT_SCRIPT,
         required=False,
-        missing_value=u"",
+        missing_value="",
     )

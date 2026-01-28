@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import get_expression
 from collective.easyform.interfaces import IEasyForm
@@ -30,7 +29,7 @@ from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
 
 
-def superAdapter(specific_interface, adapter, objects, name=u""):
+def superAdapter(specific_interface, adapter, objects, name=""):
     """Find the next most specific adapter.
 
     This is called by a FieldExtenderValidator or FieldExtenderDefault instance.
@@ -63,7 +62,7 @@ def superAdapter(specific_interface, adapter, objects, name=u""):
             super_inferface = interfaces[index + 1]
 
             @implementer(super_inferface)
-            class Wrapper(object):
+            class Wrapper:
                 def __init__(self, view):
                     self.__view__ = view
 
@@ -91,7 +90,7 @@ def superAdapter(specific_interface, adapter, objects, name=u""):
 
 @implementer(IValidator)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
-class FieldExtenderValidator(object):
+class FieldExtenderValidator:
     """z3c.form validator class for easyform fields in the default fieldset"""
 
     def __init__(self, context, request, view, field, widget):
@@ -144,7 +143,7 @@ class GroupFieldExtenderValidator(FieldExtenderValidator):
 
 @implementer(IValue)
 @adapter(IEasyForm, Interface, IEasyFormForm, IField, Interface)
-class FieldExtenderDefault(object):
+class FieldExtenderDefault:
     """z3c.form default class for easyform fields in the default fieldset"""
 
     def __init__(self, context, request, view, field, widget):
@@ -200,16 +199,16 @@ class Label(Field):
 class RichLabel(Label):
     """A Rich Label field"""
 
-    rich_label = u""
+    rich_label = ""
 
-    def __init__(self, rich_label=u"", **kw):
+    def __init__(self, rich_label="", **kw):
         self.rich_label = rich_label
-        super(RichLabel, self).__init__(**kw)
+        super().__init__(**kw)
 
 
-LabelFactory = FieldFactory(Label, _(u"label_label_field", default=u"Label"))
+LabelFactory = FieldFactory(Label, _("label_label_field", default="Label"))
 RichLabelFactory = FieldFactory(
-    RichLabel, _(u"label_richlabel_field", default=u"Rich Label")
+    RichLabel, _("label_richlabel_field", default="Rich Label")
 )
 
 LabelHandler = BaseHandler(Label)
@@ -222,7 +221,7 @@ class ReCaptcha(TextLine):
 
 
 ReCaptchaFactory = FieldFactory(
-    ReCaptcha, _(u"label_recaptcha_field", default=u"ReCaptcha")
+    ReCaptcha, _("label_recaptcha_field", default="ReCaptcha")
 )
 ReCaptchaHandler = BaseHandler(ReCaptcha)
 
@@ -232,7 +231,7 @@ class HCaptcha(TextLine):
 
 
 HCaptchaFactory = FieldFactory(
-    HCaptcha, _(u"label_hcaptcha_field", default=u"HCaptcha")
+    HCaptcha, _("label_hcaptcha_field", default="HCaptcha")
 )
 HCaptchaHandler = BaseHandler(HCaptcha)
 
@@ -243,7 +242,7 @@ class NorobotCaptcha(TextLine):
 
 
 NorobotFactory = FieldFactory(
-    NorobotCaptcha, _(u"label_norobot_field", default=u"NorobotCaptcha")
+    NorobotCaptcha, _("label_norobot_field", default="NorobotCaptcha")
 )
 NorobotCaptchaHandler = BaseHandler(NorobotCaptcha)
 
@@ -266,7 +265,7 @@ class Likert(TextLine):
         Field.__init__(self, **kwargs)
 
     def _validate(self, value):
-        super(Likert, self)._validate(value)
+        super()._validate(value)
         result = self.parse(value)
         if self.required and len(result) != len(self.questions):
             raise AllAnswersRequired()
@@ -289,7 +288,7 @@ class Likert(TextLine):
 
 
 LikertFactory = FieldFactory(
-    Likert, _(u"label_likert_field", default=u"Likert")
+    Likert, _("label_likert_field", default="Likert")
 )
 LikertHandler = BaseHandler(Likert)
 

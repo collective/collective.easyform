@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.browser.view import ValidateFile
 from collective.easyform.interfaces import IFieldValidator
@@ -10,9 +9,6 @@ from zope.component import provideUtility
 from zope.schema import ValidationError
 from z3c.form.interfaces import NOT_CHANGED
 from z3c.form import validator
-
-
-import six
 
 
 BAD_SIGNS = frozenset(["<a ", "www.", "http:", ".com", "https:"])
@@ -36,21 +32,21 @@ def isCommaSeparatedEmails(value, **kwargs):
     for v in value.split(","):
         if not reg_tool.isValidEmail(v.strip()):
             return _(
-                u"Must be a valid list of email addresses " u"(separated by commas)."
+                "Must be a valid list of email addresses " "(separated by commas)."
             )
 
 
 def isChecked(value, **kwargs):
     if not (
         (isinstance(value, bool) and value)
-        or (isinstance(value, six.string_types) and value == "1")
+        or (isinstance(value, str) and value == "1")
     ):
-        return _(u"Must be checked.")
+        return _("Must be checked.")
 
 
 def isUnchecked(value, **kwargs):
     if not isChecked(value):
-        return _(u"Must be unchecked.")
+        return _("Must be unchecked.")
 
 
 def isNotLinkSpam(value, **kwargs):
@@ -72,8 +68,6 @@ def update_validators():
                 if value is None:
                     # Let the system for required take care of None values
                     return
-                if six.PY2 and isinstance(value, six.text_type):
-                    value = value.encode("utf-8")
                 res = validation(name, value, **kwargs)
                 if res != 1:
                     return res
@@ -100,7 +94,7 @@ class FileSizeValidator(validator.SimpleFieldValidator):
         # stored an invalid value in an earlier request.
         if value is NOT_CHANGED:
             value = self.widget.value
-        super(FileSizeValidator, self).validate(value)
+        super().validate(value)
         view = ValidateFile(self.context, self.request)
         max_size = api.portal.get_registry_record("easyform.max_filesize")
         if max_size:

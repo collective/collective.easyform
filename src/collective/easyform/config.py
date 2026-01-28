@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from Products.CMFPlone.utils import safe_unicode
+from plone.base.utils import safe_text
 
 import os
 import pkg_resources
@@ -26,28 +25,28 @@ DOWNLOAD_SAVED_PERMISSION = "collective.easyform.DownloadSavedInput"
 with open(
     os.path.join(this_path, "default_schemata", "model_default.xml")
 ) as fp:  # noqa
-    MODEL_DEFAULT = safe_unicode(fp.read())
+    MODEL_DEFAULT = safe_text(fp.read())
 
 with open(
     os.path.join(this_path, "default_schemata", "fields_default.xml")
 ) as fp:  # noqa
-    FIELDS_DEFAULT = safe_unicode(fp.read())
+    FIELDS_DEFAULT = safe_text(fp.read())
 
 with open(
     os.path.join(this_path, "default_schemata", "actions_default.xml")
 ) as fp:  # noqa
-    ACTIONS_DEFAULT = safe_unicode(fp.read())
+    ACTIONS_DEFAULT = safe_text(fp.read())
 
 with open(
     os.path.join(this_path, "default_schemata", "mail_body_default.pt")
 ) as fp:  # noqa
-    MAIL_BODY_DEFAULT = safe_unicode(fp.read())
+    MAIL_BODY_DEFAULT = safe_text(fp.read())
 
 
 FORM_ERROR_MARKER = "FORM_ERROR_MARKER"
 
 
-DEFAULT_SCRIPT = u"""
+DEFAULT_SCRIPT = """
 ## Python Script
 ##bind container=container
 ##bind context=context

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Integeration tests specific to the mailer
 #
@@ -14,8 +13,8 @@ from importlib import import_module
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedFile
-from Products.CMFPlone.utils import safe_unicode
-from six import BytesIO
+from plone.base.utils import safe_text
+from io import BytesIO
 
 import datetime
 import unittest
@@ -129,14 +128,14 @@ class TestFunctions(base.EasyFormTestCase):
         self.messageBody = TWOLINESEP.join(messageText.split(TWOLINESEP)[1:])
 
     def afterSetUp(self):
-        super(TestFunctions, self).afterSetUp()
+        super().afterSetUp()
         self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = getattr(self.folder, "ff1")
         self.ff1.CSRFProtection = False  # no csrf protection
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
         actions = get_actions(self.ff1)
-        actions["mailer"].recipient_email = u"mdummy@address.com"
+        actions["mailer"].recipient_email = "mdummy@address.com"
         set_actions(self.ff1, actions)
 
     def LoadRequestForm(self, **kwargs):
@@ -296,7 +295,7 @@ class TestFunctions(base.EasyFormTestCase):
     def test_UTF8Subject(self):
         """Test mailer with uft-8 encoded subject line"""
 
-        utf8_subject = u"Effacer les entrées sauvegardées"
+        utf8_subject = "Effacer les entrées sauvegardées"
         data = dict(
             topic=utf8_subject, replyto="test@test.org", comments="test comments"
         )
@@ -310,11 +309,11 @@ class TestFunctions(base.EasyFormTestCase):
         encoded_subject_header = msg["subject"]
         decoded_header = decode_header(encoded_subject_header)[0][0]
 
-        self.assertEqual(safe_unicode(decoded_header), utf8_subject)
+        self.assertEqual(safe_text(decoded_header), utf8_subject)
 
     def test_UnicodeSubject(self):
         """Test mailer with Unicode encoded subject line"""
-        utf8_subject = u"Effacer les entrées sauvegardées"
+        utf8_subject = "Effacer les entrées sauvegardées"
         unicode_subject = utf8_subject
         data = dict(
             topic=unicode_subject, replyto="test@test.org", comments="test comments"
@@ -328,11 +327,11 @@ class TestFunctions(base.EasyFormTestCase):
         encoded_subject_header = msg["subject"]
         decoded_header = decode_header(encoded_subject_header)[0][0]
 
-        self.assertEqual(safe_unicode(decoded_header), utf8_subject)
+        self.assertEqual(safe_text(decoded_header), utf8_subject)
 
     def test_Utf8ListSubject(self):
         """Test mailer with Unicode encoded subject line"""
-        utf8_subject_list = [u"Effacer les entrées", u"sauvegardées"]
+        utf8_subject_list = ["Effacer les entrées", "sauvegardées"]
         data = dict(
             topic=utf8_subject_list, replyto="test@test.org", comments="test comments"
         )
@@ -345,7 +344,7 @@ class TestFunctions(base.EasyFormTestCase):
         encoded_subject_header = msg["subject"]
         decoded_header = decode_header(encoded_subject_header)[0][0]
 
-        self.assertEqual(safe_unicode(decoded_header), ", ".join(utf8_subject_list))
+        self.assertEqual(safe_text(decoded_header), ", ".join(utf8_subject_list))
 
     def test_MailerOverrides(self):
         """Test mailer override functions"""
@@ -581,7 +580,7 @@ class TestFunctions(base.EasyFormTestCase):
         for easyforms. It will not take the default site's recipient.
         """
         mailer = get_actions(self.ff1)["mailer"]
-        mailer.recipient_email = u""
+        mailer.recipient_email = ""
         mailer.to_field = None
         mailer.replyto_field = None
         fields = dict(
@@ -620,7 +619,7 @@ class TestFunctions(base.EasyFormTestCase):
             replyto="test@test.org",
             topic="test subject",
             richtext="Raw",
-            comments=u"test comments😀",
+            comments="test comments😀",
             datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
@@ -637,7 +636,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u"Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            "Content-Type: application/xml\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, xml = attachments[0]
@@ -676,7 +675,7 @@ class TestFunctions(base.EasyFormTestCase):
             replyto="test@test.org",
             topic="test subject",
             richtext="Raw",
-            comments=u"test comments😀",
+            comments="test comments😀",
             datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
@@ -694,7 +693,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u"Content-Type: application/csv\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            "Content-Type: application/csv\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, csv = attachments[0]
@@ -734,7 +733,7 @@ class TestFunctions(base.EasyFormTestCase):
             replyto="test@test.org",
             topic="test subject",
             richtext="Raw",
-            comments=u"test comments😀",
+            comments="test comments😀",
             datetime="2019-04-01T00:00:00",
             date="2019-04-02",
             delta=datetime.timedelta(1),
@@ -752,7 +751,7 @@ class TestFunctions(base.EasyFormTestCase):
         attachments = mailer.get_attachments(fields, request)
         self.assertEqual(1, len(attachments))
         self.assertIn(
-            u"Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
+            "Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\nMIME-Version: 1.0\nContent-Transfer-Encoding: base64\nContent-Disposition: attachment",
             mailer.get_mail_text(fields, request, context),
         )
         name, mime, enc, xlsx = attachments[0]

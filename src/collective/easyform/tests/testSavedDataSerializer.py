@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from datetime import datetime, date
 from plone.app.textfield import RichText, RichTextValue
 from .testSaver import BaseSaveData, FakeRequest
@@ -101,8 +100,8 @@ class SavedDataSerializerTestCase(BaseSaveData):
         request = FakeRequest(
             datetime=datetime(1999, 12, 25, 19, 0, 0),
             date=date(2004, 11, 30),
-            set=set(["please", "kill", "me"]),
-            rich=RichTextValue(raw=u"<div><b>testing is fùn</b> says Michaël</div>"),
+            set={"please", "kill", "me"},
+            rich=RichTextValue(raw="<div><b>testing is fùn</b> says Michaël</div>"),
         )
         saver.onSuccess(request.form, request)
 
@@ -115,7 +114,7 @@ class SavedDataSerializerTestCase(BaseSaveData):
         self.assertIn("please", json.dumps(obj))
         self.assertIn("kill", json.dumps(obj))
         self.assertIn("me", json.dumps(obj))
-        self.assertIn(u"<div><b>testing is f\\u00f9n</b> says Micha\\u00ebl</div>", json.dumps(obj))
+        self.assertIn("<div><b>testing is f\\u00f9n</b> says Micha\\u00ebl</div>", json.dumps(obj))
 
     def testShowFieldsFormDataSerialization(self):
         self.request = self.layer["request"]
@@ -237,7 +236,7 @@ class SavedDataDeserializerTestCase(BaseSaveData):
         setdata.sort()
         self.assertEqual(["kill", "me", "please"], setdata)
         self.assertIn("rich", data)
-        self.assertEqual(u"<div><b>testing is fùn</b> says Michaël</div>", data['rich'].raw)
+        self.assertEqual("<div><b>testing is fùn</b> says Michaël</div>", data['rich'].raw)
 
     def testEmptyDatesFormDataDeserialization(self):
         BODY = ( '{"fields_model": "<model xmlns:i18n=\\"http://xml.zope.org/namespaces/i18n\\" '
