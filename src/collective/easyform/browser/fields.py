@@ -209,8 +209,9 @@ class ModelEditorView(BrowserView):
 
             # clean up formatting sins
             source = etree.tostring(
-                root, pretty_print=True, xml_declaration=True, encoding="utf8"
+                root, pretty_print=True, encoding=str
             )
             # and save
             self.save(source)
+
         return self.template()
