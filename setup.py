@@ -2,7 +2,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = "4.5.1.dev0"
+version = "4.5.1"
 
 setup(
     name="collective.easyform",

@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-4.5.1 (unreleased)
+4.5.1 (2026-02-10)
 ------------------
 
 - Save field and action xml as string instead of bytes when editing xml directly.  [Mychae1]
