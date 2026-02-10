@@ -5,6 +5,7 @@ Changelog
 4.5.1 (unreleased)
 ------------------
 
+- Save field and action xml as string instead of bytes when editing xml directly.  [Mychae1]
 - Include form name in the filename of the save data download.  [maurits]
 - Remove usage of the ``six`` compatibility library.  [maurits]
 - Update deprecated imports for Plone 6.0 and higher.  [maurits]
