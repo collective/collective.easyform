@@ -124,6 +124,13 @@
       factory="z3c.form.browser.radio.RadioFieldWidget"
       />
 
+  <!-- add SelectFieldWidget for IChoice to enable Select2 pattern widget -->
+  <adapter
+        for="zope.schema.interfaces.IChoice
+             *"
+        factory="plone.app.z3cform.widget.SelectFieldWidget"
+        />
+
   <configure zcml:condition="installed plone.formwidget.recaptcha">
     <adapter
         provides="z3c.form.interfaces.IFieldWidget"
