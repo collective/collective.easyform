@@ -58,7 +58,10 @@ from zope.component import queryUtility
 from zope.contenttype import guess_content_type
 from zope.interface import implementer
 from zope.schema import Bool
+from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import ICollection
 from zope.schema import getFieldsInOrder
+from zope.schema import getFields
 from zope.security.interfaces import IPermission
 
 
@@ -721,7 +724,6 @@ class SaveData(Action):
             
             field = fields.get(i)
             if field:
-                from zope.schema.interfaces import IChoice, ICollection
                 is_choice = IChoice.providedBy(field)
                 is_collection = ICollection.providedBy(field) and getattr(field, 'value_type', None) and IChoice.providedBy(field.value_type)
                 
