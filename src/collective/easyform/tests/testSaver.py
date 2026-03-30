@@ -6,6 +6,7 @@ from AccessControl.unauthorized import Unauthorized
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_actions
+from collective.easyform.api import set_fields
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from os.path import dirname
@@ -17,10 +18,13 @@ from plone.app.testing import setRoles
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
+from plone.supermodel.model import Schema
 from plone.testing.zope import Browser
 from io import BytesIO
 from transaction import commit
 from zExceptions.unauthorized import Unauthorized as zUnauthorized
+from zope.schema import Choice, List
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 
@@ -31,6 +35,7 @@ import unittest
 
 try:
     from openpyxl import load_workbook
+
     HAS_OPENPYXL = True
 except ImportError:
     HAS_OPENPYXL = False
@@ -53,7 +58,6 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
 
 
 class BaseSaveData(base.EasyFormTestCase):
-
     """test save data adapter"""
 
     def setUp(self):
@@ -81,6 +85,62 @@ class BaseSaveData(base.EasyFormTestCase):
 
 
 class SaveDataTestCase(BaseSaveData):
+    def testSaverCSVExportVocabularyTitles(self):
+        """Test that Choice/Collection fields export their vocabulary titles, not tokens."""
+        self.createSaver()
+
+        # Create a dynamic schema with Choice and List fields
+        vocab = SimpleVocabulary(
+            [
+                SimpleTerm(value="es", token="es", title="Spain"),
+                SimpleTerm(value="fr", token="fr", title="France"),
+            ]
+        )
+
+        class ITestSchema(Schema):
+            single_choice = Choice(
+                title="Single Choice",
+                vocabulary=vocab,
+                required=False,
+            )
+            multi_choice = List(
+                title="Multiple Choice",
+                value_type=Choice(vocabulary=vocab),
+                required=False,
+            )
+
+        set_fields(self.ff1, ITestSchema)
+
+        self.assertTrue("saver" in get_actions(self.ff1))
+        saver = get_actions(self.ff1)["saver"]
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        # Submit data using the raw values (tokens)
+        request = FakeRequest(
+            add_auth=True,
+            method="POST",
+            single_choice="es",
+            multi_choice=["es", "fr"],
+        )
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+
+        # Test CSV export
+        saver.download(request.response, delimiter=",")
+        res = request.response.stdout.getvalue().decode("utf-8")
+
+        # Check that the vocabulary TITLES ("Spain", "France") are in the CSV
+        self.assertIn("Spain", res)
+        self.assertIn("Spain|France", res)
+
+        # Ensure the raw tokens ("es", "fr") are not dumped as the final value
+        # (Though they might appear in the headers/internal fields, we specifically check the data rows)
+        data_rows = [row for row in res.splitlines() if "Spain" in row]
+        self.assertTrue(len(data_rows) == 1)
+        self.assertTrue(
+            "Spain,Spain|France" in data_rows[0] or "Spain|France" in data_rows[0]
+        )
 
     def testSavedDataView(self):
         """test saved data view"""
@@ -271,7 +331,9 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.csv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.csv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverDownloadTSV(self):
@@ -297,14 +359,18 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response)
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/tab-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.tsv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.tsv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
 
     @unittest.skipUnless(HAS_OPENPYXL, "Requires openpyxl")
     def testSaverDownloadXLSX(self):
         """test save data"""
 
-        with open(join(dirname(__file__), "fixtures", "fieldset_multiple_choice.xml")) as f:
+        with open(
+            join(dirname(__file__), "fixtures", "fieldset_multiple_choice.xml")
+        ) as f:
             self.ff1.fields_model = f.read()
 
         self.createSaver()
@@ -319,7 +385,7 @@ class SaveDataTestCase(BaseSaveData):
             topic="test subject",
             replyto="test@test.org",
             comments="test comments",
-            multiplechoice=["Red", "Blue"]
+            multiplechoice=["Red", "Blue"],
         )
         saver.onSuccess(request.form, request)
 
@@ -370,7 +436,9 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.csv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.csv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit(header=True) in res)
 
     def testSaverDownloadExtraData(self):
@@ -396,7 +464,9 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="ff1-saver.csv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.csv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):
@@ -730,17 +800,13 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.assertTrue("CSV delimiter is required." in self.browser.contents)
 
     def test_download_saveddata_csv_delimiter_from_form(self):
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
         self.browser.getControl(name="form.buttons.download").click()
         self.assertEqual(
             self.browser.contents, "Your E-Mail Address,Subject,Comments\r\n"
         )
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
         input = self.browser.getControl("CSV delimiter")
         input.value = ";"
@@ -752,20 +818,20 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
     def add_sample_data(self):
         for i in range(1, 6):
             self.browser.open(self.portal_url + "/test-folder/ff1")
-            self.browser.getControl(name="form.widgets.replyto").value = \
+            self.browser.getControl(name="form.widgets.replyto").value = (
                 "me%d@example.org" % i
+            )
             self.browser.getControl(name="form.widgets.topic").value = "Subject %d" % i
-            self.browser.getControl(name="form.widgets.comments").value = \
+            self.browser.getControl(name="form.widgets.comments").value = (
                 "Comments %d" % i
+            )
             self.browser.getControl(name="form.buttons.submit").click()
             self.assertIn("Thanks for your input.", self.browser.contents)
 
     def test_view_saveddata_batched(self):
         self.add_sample_data()
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
-        with open('/tmp/test2.html', 'w') as testfile:
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        with open("/tmp/test2.html", "w") as testfile:
             testfile.write(self.browser.contents)
         self.assertTrue("Saved Data" in self.browser.contents)
         self.assertTrue("me1@example.org" in self.browser.contents)
@@ -791,9 +857,7 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
 
     # this test depends on internals of zope.testbrowser controls
     def test_download_saveddata_suggests_csv_delimiter_defines_maxlength(self):
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
         input = self.browser.getControl("CSV delimiter")
         self.assertTrue(input._elem.has_attr("maxlength"))
