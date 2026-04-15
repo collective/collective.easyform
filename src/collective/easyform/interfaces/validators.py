@@ -28,7 +28,6 @@ def cssClassConstraint(value):
         return True
     parts = value.strip().split(" ")
     for part in parts:
-        if not re.match(r'^[A-Za-z]*[A-Za-z\-\_0-9]*[\w][\s]?$', part):
+        if not re.match(r"^[A-Za-z]*[A-Za-z\-\_0-9]*[\w][\s]?$", part):
             raise InvalidCSSClassNameError
     return True
-

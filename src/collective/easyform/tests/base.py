@@ -11,7 +11,6 @@ from Products.MailHost.MailHost import MailHost
 from unittest import TestCase
 from zope.component import getSiteManager
 
-
 try:
     from plone.testing.zope import WSGI_SERVER_FIXTURE
 except ImportError:
@@ -27,7 +26,7 @@ except ImportError:
 
 class MailHostMock(MailHost):
     def _send(self, mfrom, mto, messageText, immediate=False):
-        print("<sent mail from {} to {}>".format(mfrom, mto))  # noqa: T003
+        print(f"<sent mail from {mfrom} to {mto}>")  # noqa: T003
         if hasattr(messageText, "encode"):
             # It is text instead of bytes.
             messageText = messageText.encode("utf-8")

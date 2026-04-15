@@ -10,7 +10,6 @@ from Products.PloneFormGen.content.actionAdapter import FormActionAdapter
 
 import logging
 
-
 logger = logging.getLogger("collective.easyform.migration")
 
 
@@ -112,10 +111,14 @@ def actions_model(ploneformgen):
 
         # remove outdated/deleted fields from the showfields list for saveddata adapters
         # otherwise a keyerror will be thrown when viewing the data in easyform
-        if type_.name == 'collective.easyform.actions.SaveData':
+        if type_.name == "collective.easyform.actions.SaveData":
             available_fields = [field.getName() for field in ploneformgen.fgFields()]
-            filteredFields = [fieldname for fieldname in properties.get('showFields') if fieldname in available_fields]
-            properties['showFields'] = filteredFields
+            filteredFields = [
+                fieldname
+                for fieldname in properties.get("showFields")
+                if fieldname in available_fields
+            ]
+            properties["showFields"] = filteredFields
 
         field = type_.handler(schema, type_.name, actionname, properties)
 

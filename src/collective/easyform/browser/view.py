@@ -38,7 +38,6 @@ from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
 from ZPublisher.mapply import mapply
 
-
 logger = getLogger("collective.easyform")
 PMF = MessageFactory("plone")
 
@@ -70,10 +69,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     @property
     def default_fieldset_label(self):
-        return (
-            self.context.default_fieldset_label
-            or super().default_fieldset_label
-        )
+        return self.context.default_fieldset_label or super().default_fieldset_label
 
     def action(self):
         """Redefine <form action=''> attribute."""

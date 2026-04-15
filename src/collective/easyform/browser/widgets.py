@@ -5,7 +5,6 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
 from z3c.form.browser import widget
-from z3c.form.interfaces import IWidget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -70,7 +69,7 @@ class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
 # overriding plone.app.z3cform widget.pt:
 @implementer(IRenderWidget)
 class RenderWidget(ViewMixinForTemplates, BrowserView):
-    index = ViewPageTemplateFile('widget.pt')
+    index = ViewPageTemplateFile("widget.pt")
 
 
 @adapter(IRenderWidget, Interface)
@@ -88,6 +87,7 @@ class WidgetDependencyView:
         if not depends_on:
             return ""
         return depends_on
+
 
 @adapter(IRenderWidget, Interface)
 @implementer(IBrowserView)

@@ -4,17 +4,17 @@
     >
 
   <gs:registerProfile
-      directory="profiles/1017"
-      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
       name="1017"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
       title="EasyForm upgrade"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      directory="profiles/1017"
       />
 
   <gs:upgradeSteps
-      destination="1017"
       profile="collective.easyform:default"
       source="1016"
+      destination="1017"
       >
 
     <gs:upgradeDepends

@@ -13,7 +13,6 @@ import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
 
-
 try:
     from plone.schemaeditor import SchemaEditorMessageFactory as __  # NOQA
 except ImportError:

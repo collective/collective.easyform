@@ -213,7 +213,7 @@ Bug fixes:
 
 Enhancements:
 
-- Standarize how the "Form Fields" and "Form Actions" behave. Have a single
+- Standardize how the "Form Fields" and "Form Actions" behave. Have a single
   "Save" button that will redirect back to the form once changes are applied
   [frapell]
 
@@ -271,7 +271,7 @@ Bug fixes:
 - Fix field order in Mailer attachments
   [MrTango]
 
-- Optinally add CSV/XLSX headers to attachments
+- Optionally add CSV/XLSX headers to attachments
   [MrTango] (#323)
 
 - Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.
@@ -339,7 +339,7 @@ Bug fixes:
 
 - Better saved data handling (ux forms, redirect to only adapter). [jensens (#1)
 - More German translations [jensens] (#2)
-- Fixes #217: Stop loosing action errors in form update. [wobsta] (#238)
+- Fixes #217: Stop losing action errors in form update. [wobsta] (#238)
 - Fixes #182: actions urls when on action or field traverser. [jensens] (#239)
 
 
@@ -725,7 +725,7 @@ Bug fixes:
   https://github.com/collective/collective.easyform/issues/49
   [tomgross]
 
-- Allow managment of fields enabled for c.easyform in controlpanel
+- Allow management of fields enabled for c.easyform in controlpanel
   [karalics]
 
 
@@ -793,7 +793,7 @@ New:
   mechanism.
   [thet]
 
-- Reworked mail address formating, avoiding recipient address in the form of
+- Reworked mail address formatting, avoiding recipient address in the form of
   ``name <<account@domain.com>>`` and having instead
   ``name <account@domain.com>``.
   [thet]

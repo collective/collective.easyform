@@ -1,6 +1,8 @@
 graft docs
 graft src/collective
 include *.rst
+include requirements.txt
+include constraints.txt
 global-exclude *.pyc __pycache__
 exclude *.sh
 exclude .*.cfg

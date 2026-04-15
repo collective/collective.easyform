@@ -7,7 +7,6 @@ from Products.PloneFormGen.interfaces import IPloneFormGenFieldset
 
 import logging
 
-
 logger = logging.getLogger("collective.easyform.migration")
 
 
@@ -47,7 +46,7 @@ def set_attribute(field, name, value):
     if ":" in name:
         ns, attr = name.split(":")
         ns = NAMESPACES.get(ns, ns)
-        field.set("{{{}}}{}".format(ns, attr), value)
+        field.set(f"{{{ns}}}{attr}", value)
     else:
         field.set(name, value)
 
@@ -56,7 +55,7 @@ def append_node(field, name, value):
     if ":" in name:
         ns, name = name.split(":")
         ns = NAMESPACES.get(ns, ns)
-        name = "{{{}}}{}".format(ns, name)
+        name = f"{{{ns}}}{name}"
     node = etree.SubElement(field, name)
     if isinstance(value, (list, tuple)):
         value = "\n".join(value)
@@ -128,8 +127,8 @@ def append_or_set_title(field, name, value):
 
 
 def append_or_set_description(field, name, value):
-    if field.tag == 'fieldset':
-        set_attribute(field, 'description', value)
+    if field.tag == "fieldset":
+        set_attribute(field, "description", value)
     else:
         append_node(field, name, value)
 
@@ -171,7 +170,9 @@ TYPES_MAPPING = {
         "collective.easyform.fields.RichLabel", append_label_field
     ),
     "FormFileField": Type("plone.namedfile.field.NamedBlobFile", append_field),
-    "FormCaptchaField": Type("collective.easyform.fields.ReCaptcha", append_label_field),
+    "FormCaptchaField": Type(
+        "collective.easyform.fields.ReCaptcha", append_label_field
+    ),
     "FormLikertField": Type("collective.easyform.fields.Likert", append_field),
     "FieldsetStart": Type("", append_fieldset),
     "FieldsetEnd": Type("", None),

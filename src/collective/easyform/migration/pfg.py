@@ -2,6 +2,7 @@ from collections import namedtuple
 from collective.easyform.migration.actions import actions_model
 from collective.easyform.migration.data import migrate_saved_data
 from collective.easyform.migration.fields import fields_model
+from io import StringIO
 from plone import api
 from plone.app.contenttypes.migration.field_migrators import (  # noqa
     migrate_richtextfield,
@@ -12,7 +13,6 @@ from plone.app.contenttypes.migration.migration import migrate
 from plone.autoform.form import AutoExtensibleForm
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.supermodel import model
-from io import StringIO
 from z3c.form.button import buttonAndHandler
 from z3c.form.form import Form
 from zope import schema
@@ -20,7 +20,6 @@ from zope.interface import alsoProvides
 
 import logging
 import transaction
-
 
 logger = logging.getLogger("collective.easyform.migration")
 

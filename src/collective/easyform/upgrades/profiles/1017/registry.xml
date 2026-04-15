@@ -1,9 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <registry>
 
-  <record name="easyform.max_filesize"
+  <record field="max_filesize"
           interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
-          field="max_filesize">
+          name="easyform.max_filesize"
+  >
   </record>
 
 </registry>

@@ -1,6 +1,4 @@
-from setuptools import find_packages
 from setuptools import setup
-
 
 version = "4.5.2.dev0"
 
@@ -15,14 +13,13 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: Addon",
-        "Framework :: Plone :: 6.0",
-        "Framework :: Plone :: 6.1",
+        "Framework :: Plone :: 6.2",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
@@ -33,36 +30,28 @@ setup(
     maintainer_email="releaseteam@plone.org",
     url="https://github.com/collective/collective.easyform",
     license="GPLv2",
-    packages=find_packages("src", exclude=["ez_setup"]),
-    namespace_packages=["collective"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     install_requires=[
         "plone.api",
         "plone.app.dexterity",
-        "plone.app.textfield >= 1.2.8",
+        "plone.app.textfield",
         "plone.autoform",
         "plone.dexterity",
         "plone.namedfile",
         "plone.schema",
-        "plone.schemaeditor>=4.0.0b1",
+        "plone.schemaeditor",
         "plone.supermodel",
         "plone.restapi",
-        "Products.CMFPlone>=6.0.0b1",
-        "Products.validation>=3.0.0",
-        "setuptools",
-        # -*- Extra requirements: -*-
+        "Products.CMFPlone",
+        "Products.validation",
     ],
     extras_require={
         "downloadxlsx": ["openpyxl"],
         "recaptcha": ["plone.formwidget.recaptcha"],
         "hcaptcha": ["plone.formwidget.hcaptcha"],
         "norobots": ["collective.z3cform.norobots"],
-        "ploneformgen": [
-            "Products.PloneFormGen",
-        ],
         "test": [
             "beautifulsoup4",
             "plone.app.testing[robot]",
@@ -70,13 +59,11 @@ setup(
             "plone.app.contenttypes",
             "plone.formwidget.recaptcha",
             "plone.formwidget.hcaptcha",
-            "robotframework-selenium2library",
-            "robotframework-selenium2screenshots",
         ],
     },
     entry_points="""
     # -*- Entry points: -*-
-    [z3c.autoinclude.plugin]
+    [plone.autoinclude.plugin]
     target = plone
     """,
 )

@@ -14,7 +14,6 @@ class FakeRequest(dict):
 
 
 class TrueOnceCalled:
-
     """A mock function that evaluates to True once it has been called."""
 
     def __init__(self):
@@ -28,7 +27,6 @@ class TrueOnceCalled:
 
 
 class TestEmbedding(base.EasyFormTestCase):
-
     """test embedding of a PFG in another template"""
 
     def dummy_send(self, mfrom, mto, messageText, immediate=False):
@@ -64,7 +62,7 @@ class TestEmbedding(base.EasyFormTestCase):
         self.assertTrue("Your E-Mail Address" in res)
 
         # form action equals request URL
-        self.assertTrue('action="{url}"'.format(url=self.ff1.absolute_url()) in res)
+        self.assertTrue(f'action="{self.ff1.absolute_url()}"' in res)
 
         # no form prefix
         # self.assertTrue('name="form.submitted"' in res)
@@ -146,9 +144,9 @@ class TestEmbedding(base.EasyFormTestCase):
         # self.assertTrue(committed)
 
         # make sure it can deal with VHM URLs
-        self.app.REQUEST._orig_env[
-            "PATH_TRANSLATED"
-        ] = "/VirtualHostBase/http/nohost:80/VirtualHostRoot"
+        self.app.REQUEST._orig_env["PATH_TRANSLATED"] = (
+            "/VirtualHostBase/http/nohost:80/VirtualHostRoot"
+        )
         view = self.ff1.restrictedTraverse("@@embedded")
         res = view()
 

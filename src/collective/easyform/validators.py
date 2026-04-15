@@ -5,11 +5,10 @@ from plone import api
 from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from Products.validation.validators.BaseValidators import baseValidators
+from z3c.form import validator
+from z3c.form.interfaces import NOT_CHANGED
 from zope.component import provideUtility
 from zope.schema import ValidationError
-from z3c.form.interfaces import NOT_CHANGED
-from z3c.form import validator
-
 
 BAD_SIGNS = frozenset(["<a ", "www.", "http:", ".com", "https:"])
 
@@ -38,8 +37,7 @@ def isCommaSeparatedEmails(value, **kwargs):
 
 def isChecked(value, **kwargs):
     if not (
-        (isinstance(value, bool) and value)
-        or (isinstance(value, str) and value == "1")
+        (isinstance(value, bool) and value) or (isinstance(value, str) and value == "1")
     ):
         return _("Must be checked.")
 
@@ -74,9 +72,9 @@ def update_validators():
 
             return validate
 
-        for validator in baseValidators:
+        for _validator in baseValidators:
             provideUtility(
-                method(validator.name), provides=IFieldValidator, name=validator.name
+                method(_validator.name), provides=IFieldValidator, name=_validator.name
             )
 
 
@@ -86,6 +84,7 @@ class FileTooBig(ValidationError):
 
     def doc(self):
         return self.message
+
 
 class FileSizeValidator(validator.SimpleFieldValidator):
 

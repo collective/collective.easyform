@@ -4,7 +4,6 @@ from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
-
 try:
     from plone.testing.zope import Browser
 except ImportError:

@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1008"
       profile="collective.easyform:default"
       source="1007"
+      destination="1008"
       >
     <gs:upgradeStep
         title="Update last_compilation of bundle"

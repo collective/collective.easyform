@@ -24,8 +24,8 @@ from copy import deepcopy
 from csv import writer as csvwriter
 from datetime import date
 from datetime import datetime
-from DateTime import DateTime
 from datetime import timedelta
+from DateTime import DateTime
 from decimal import Decimal
 from email import encoders
 from email.header import Header
@@ -35,20 +35,20 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
+from io import BytesIO
+from io import StringIO
 from json import dumps
 from logging import getLogger
 from persistent.mapping import PersistentMapping
 from plone import api
 from plone.app.textfield.value import RichTextValue
 from plone.autoform.view import WidgetsView
+from plone.base.utils import safe_text
 from plone.registry.interfaces import IRegistry
 from plone.supermodel.exportimport import BaseHandler
 from Products.CMFCore.utils import getToolByName
-from plone.base.utils import safe_text
 from Products.PageTemplates.ZopePageTemplate import ZopePageTemplate
 from Products.PythonScripts.PythonScript import PythonScript
-from io import BytesIO
-from io import StringIO
 from tempfile import NamedTemporaryFile
 from time import time
 from xml.etree import ElementTree as ET
@@ -60,7 +60,6 @@ from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
-
 
 logger = getLogger("collective.easyform")
 
@@ -124,9 +123,7 @@ class Action(Bool):
         return safe_text(repr(field))
 
     def onSuccess(self, fields, request):
-        raise NotImplementedError(
-            "There is not implemented 'onSuccess' of {!r}".format(self)
-        )
+        raise NotImplementedError(f"There is not implemented 'onSuccess' of {self!r}")
 
 
 class DummyFormView(WidgetsView):
@@ -175,7 +172,7 @@ class Mailer(Action):
         bodyfield = self.body_pt
 
         # pass both the bare_fields (fgFields only) and full fields.
-        # bare_fields for compatability with older templates,
+        # bare_fields for compatibility with older templates,
         # full fields to enable access to htmlValue
         if isinstance(self.body_pre, str):
             body_pre = self.body_pre
@@ -262,7 +259,7 @@ class Mailer(Action):
         elif recip_email:
             to = format_addresses(recip_email, self.recipient_name)
         else:
-            # Use owner adress or fall back to portal email_from_address.
+            # Use owner address or fall back to portal email_from_address.
             to = formataddr(self.get_owner_info(context))
 
         assert to
@@ -310,7 +307,7 @@ class Mailer(Action):
         Keyword arguments:
         request -- (optional) alternate request object to use
         """
-        (to, from_addr, reply) = self.get_addresses(fields, request, context)
+        to, from_addr, reply = self.get_addresses(fields, request, context)
 
         headerinfo = OrderedDict()
         headerinfo["To"] = self.secure_header_line(to)
@@ -346,7 +343,7 @@ class Mailer(Action):
             headerinfo["Bcc"] = format_addresses(bcc_recips)
 
         for key in getattr(self, "xinfo_headers", []):
-            headerinfo["X-{}".format(key)] = self.secure_header_line(
+            headerinfo[f"X-{key}"] = self.secure_header_line(
                 request.get(key, "MISSING")
             )
         return headerinfo
@@ -429,7 +426,7 @@ class Mailer(Action):
             csv = output.getvalue()
             csv = csv.encode("utf-8")
             now = DateTime().ISO().replace(" ", "-").replace(":", "")
-            filename = "formdata_{}.csv".format(now)
+            filename = f"formdata_{now}.csv"
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
             attachments.append((filename, "application/csv", "utf-8", csv))
 
@@ -447,13 +444,13 @@ class Mailer(Action):
                 output = tmp.read()
 
             now = DateTime().ISO().replace(" ", "-").replace(":", "")
-            filename = "formdata_{}.xlsx".format(now)
+            filename = f"formdata_{now}.xlsx"
             attachments.append(
                 (
                     filename,
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "utf-8",
-                    output
+                    output,
                 )
             )
 
@@ -464,7 +461,7 @@ class Mailer(Action):
             doc.write(output, encoding="utf-8", xml_declaration=True)
             xmlstr = output.getvalue()
             now = DateTime().ISO().replace(" ", "-").replace(":", "")
-            filename = "formdata_{}.xml".format(now)
+            filename = f"formdata_{now}.xml"
             # Set MIME type of attachment to 'application' so that it will be encoded with base64
             attachments.append((filename, "application/xml", "utf-8", xmlstr))
 
@@ -583,7 +580,7 @@ class CustomScript(Action):
     def sanifyFields(self, form):
         # Makes request.form fields accessible in a script
         #
-        # Avoid Unauthorized exceptions since request.form is inaccesible
+        # Avoid Unauthorized exceptions since request.form is inaccessible
 
         result = {}
         for field in form:
@@ -695,7 +692,7 @@ class SaveData(Action):
             if is_file_data(data):
                 data = data.filename
             if isinstance(data, (list, tuple, set)):
-                data = '|'.join(data)
+                data = "|".join(data)
             return data
 
         return [get_data(row, i) for i in names]
@@ -723,7 +720,7 @@ class SaveData(Action):
     def get_saved_form_input_as_xlsx(self, header=False):
         assert (
             HAS_XLSX_SUPPORT
-        ), "XLSX export not suppored, please enable 'downloadxlsx' extra"
+        ), "XLSX export not supported, please enable 'downloadxlsx' extra"
 
         from openpyxl import Workbook
 
