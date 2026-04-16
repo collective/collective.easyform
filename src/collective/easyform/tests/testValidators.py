@@ -1,8 +1,3 @@
-try:
-    from StringIO import StringIO  # for Python 2
-except ImportError:
-    from io import StringIO  # for Python 3
-
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
@@ -10,6 +5,7 @@ from collective.easyform.browser.view import EasyFormForm
 from collective.easyform.browser.view import ValidateFile
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
+from io import StringIO
 from os.path import dirname
 from os.path import join
 from plone import api

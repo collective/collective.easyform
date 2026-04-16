@@ -7,3 +7,7 @@ commit-id = "2.8.0"
 
 [pyproject]
 codespell_ignores = "Ist"
+dependencies_mappings = [
+    "'beautifulsoup4' = ['bs4']",
+]
+dependencies_ignores = "['zest.pocompile','zestreleaser.towncrier', 'zest.releaser', 'Products.Five','collective.z3cform.norobots','plone.formwidget.hcaptcha','plone.formwidget.recaptcha']"

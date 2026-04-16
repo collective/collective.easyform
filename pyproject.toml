@@ -86,6 +86,8 @@ Zope = [
 ]
 python-dateutil = ['dateutil']
 pytest-plone = ['pytest', 'zope.pytestlayer', 'plone.testing', 'plone.app.testing']
+ignore-packages = ['zest.pocompile','zestreleaser.towncrier', 'zest.releaser', 'Products.Five','collective.z3cform.norobots','plone.formwidget.hcaptcha','plone.formwidget.recaptcha']
+'beautifulsoup4' = ['bs4']
 
 ##
 # Add extra configuration options in .meta.toml:

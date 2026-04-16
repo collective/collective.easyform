@@ -6,7 +6,8 @@ this_path = os.path.dirname(__file__)
 
 
 try:
-    import openpyxl
+    import openpyxl  # noqa: F401
+
     HAS_XLSX_SUPPORT = True
 except ImportError:
     HAS_XLSX_SUPPORT = False
