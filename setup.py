@@ -58,7 +58,6 @@ setup(
         "plone.supermodel",
         "Products.CMFCore",
         "Products.CMFPlone",
-        "Products.PloneFormGen",
         "Products.statusmessages",
         "Products.validation",
         "python-dateutil",
