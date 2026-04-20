@@ -3,7 +3,7 @@ Changelog
 
 
 5.0.0a1 (unreleased)
-------------------
+--------------------
 
 - Breaking: make package ready for pip install method, PEP 420 native namespace  [1letter]
 - Breaking: remove Products.PloneFormGen
