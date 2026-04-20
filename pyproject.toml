@@ -6,6 +6,42 @@ requires = ["setuptools>=68.2,<83", "wheel"]
 
 
 
+[tool.towncrier]
+directory = "news/"
+filename = "CHANGES.rst"
+title_format = "{version} ({project_date})"
+underlines = ["-", ""]
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Breaking changes:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "feature"
+name = "New features:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name = "Bug fixes:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "internal"
+name = "Internal:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation:"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "tests"
+name = "Tests:"
+showcontent = true
+
 ##
 # Add extra configuration options in .meta.toml:
 #  [pyproject]
@@ -86,7 +122,7 @@ Zope = [
 ]
 python-dateutil = ['dateutil']
 pytest-plone = ['pytest', 'zope.pytestlayer', 'plone.testing', 'plone.app.testing']
-ignore-packages = ['zest.pocompile','zestreleaser.towncrier', 'zest.releaser', 'Products.Five','collective.z3cform.norobots','plone.formwidget.hcaptcha','plone.formwidget.recaptcha', 'Products.PloneFormGen']
+ignore-packages = ['zest.pocompile','zestreleaser.towncrier', 'zest.releaser', 'Products.Five','collective.z3cform.norobots','plone.formwidget.hcaptcha','plone.formwidget.recaptcha']
 'beautifulsoup4' = ['bs4']
 
 ##
