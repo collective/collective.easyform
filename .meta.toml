@@ -11,3 +11,13 @@ dependencies_mappings = [
     "'beautifulsoup4' = ['bs4']",
 ]
 dependencies_ignores = "['zest.pocompile','zestreleaser.towncrier', 'zest.releaser', 'Products.Five','collective.z3cform.norobots','plone.formwidget.hcaptcha','plone.formwidget.recaptcha', 'Products.PloneFormGen']"
+
+[gitignore]
+extra_lines = """
+.mxdev_cache
+"""
+
+[tox]
+# enable mxdev, while Product.validation==3.0.0 in Plone 6.1
+# see https://github.com/plone/buildout.coredev/issues/1086
+use_mxdev = true

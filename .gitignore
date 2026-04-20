@@ -48,6 +48,7 @@ local.cfg
 /venv/
 .installed.txt
 
+.mxdev_cache
 
 ##
 # Add extra configuration options in .meta.toml:
