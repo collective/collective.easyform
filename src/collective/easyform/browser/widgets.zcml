@@ -5,9 +5,9 @@
     xmlns:zcml="http://namespaces.zope.org/zcml"
     >
   <adapter
+      factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
       for="collective.easyform.interfaces.IAction
            collective.easyform.interfaces.IActionEditForm"
-      factory="z3c.form.browser.checkbox.SingleCheckBoxFieldWidget"
       />
   <include
       package="z3c.form"
@@ -15,10 +15,10 @@
       />
   <z3c:widgetTemplate
       for="collective.easyform.interfaces.IEasyFormActionsContext"
+      widget="z3c.form.interfaces.ICheckBoxWidget"
       template="action_input.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="input"
-      widget="z3c.form.interfaces.ICheckBoxWidget"
       />
   <class class=".widgets.LabelWidget">
     <require
@@ -27,9 +27,9 @@
         />
   </class>
   <adapter
+      factory=".widgets.LabelFieldWidget"
       for="collective.easyform.interfaces.ILabel
            *"
-      factory=".widgets.LabelFieldWidget"
       />
   <class class=".widgets.RichLabelWidget">
     <require
@@ -38,66 +38,66 @@
         />
   </class>
   <adapter
+      factory=".widgets.RichLabelFieldWidget"
       for="collective.easyform.interfaces.IRichLabel
            *"
-      factory=".widgets.RichLabelFieldWidget"
       />
   <z3c:widgetTemplate
+      widget="collective.easyform.interfaces.ILabelWidget"
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="display"
-      widget="collective.easyform.interfaces.ILabelWidget"
       />
   <z3c:widgetTemplate
+      widget="collective.easyform.interfaces.ILabelWidget"
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="input"
-      widget="collective.easyform.interfaces.ILabelWidget"
       />
   <z3c:widgetTemplate
+      widget="collective.easyform.interfaces.IRichLabelWidget"
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="hidden"
-      widget="collective.easyform.interfaces.IRichLabelWidget"
       />
   <z3c:widgetTemplate
+      widget="collective.easyform.interfaces.IRichLabelWidget"
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="display"
-      widget="collective.easyform.interfaces.IRichLabelWidget"
       />
   <z3c:widgetTemplate
+      widget="collective.easyform.interfaces.IRichLabelWidget"
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="input"
-      widget="collective.easyform.interfaces.IRichLabelWidget"
       />
   <z3c:widgetTemplate
+      widget="collective.easyform.interfaces.ILabelWidget"
       template="empty.pt"
       layer="..interfaces.IEasyFormLayer"
       mode="hidden"
-      widget="collective.easyform.interfaces.ILabelWidget"
       />
   <browser:page
       name="ploneform-render-widget"
       for="collective.easyform.interfaces.ILabelWidget"
-      permission="zope.Public"
       class=".widgets.LabelRenderWidget"
+      permission="zope.Public"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="ploneform-render-widget"
       for="collective.easyform.interfaces.IRichLabelWidget"
-      permission="zope.Public"
       class=".widgets.RichLabelRenderWidget"
+      permission="zope.Public"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="ploneform-render-widget"
       for="collective.easyform.interfaces.IEasyFormWidget"
-      layer="..interfaces.IEasyFormLayer"
       class=".widgets.RenderWidget"
       permission="zope.Public"
+      layer="..interfaces.IEasyFormLayer"
       />
 
   <adapter
@@ -112,46 +112,46 @@
 
   <!-- add CheckboxFieldWidget for ISet to enable checkbox list -->
   <adapter
+      factory="z3c.form.browser.checkbox.CheckBoxFieldWidget"
       for="zope.schema.interfaces.ISet
            ..interfaces.IEasyFormFieldContext"
-      factory="z3c.form.browser.checkbox.CheckBoxFieldWidget"
       />
 
   <!-- add RadioFieldWidget for IChoice to enable checkbox list -->
   <adapter
+      factory="z3c.form.browser.radio.RadioFieldWidget"
       for="zope.schema.interfaces.IChoice
            ..interfaces.IEasyFormFieldContext"
-      factory="z3c.form.browser.radio.RadioFieldWidget"
       />
 
   <configure zcml:condition="installed plone.formwidget.recaptcha">
     <adapter
+        factory="plone.formwidget.recaptcha.widget.ReCaptchaFieldWidget"
         provides="z3c.form.interfaces.IFieldWidget"
         for="collective.easyform.interfaces.IReCaptcha
              *"
-        factory="plone.formwidget.recaptcha.widget.ReCaptchaFieldWidget"
         />
   </configure>
   <configure zcml:condition="installed plone.formwidget.hcaptcha">
     <adapter
+        factory="plone.formwidget.hcaptcha.widget.HCaptchaFieldWidget"
         provides="z3c.form.interfaces.IFieldWidget"
         for="collective.easyform.interfaces.IHCaptcha
              *"
-        factory="plone.formwidget.hcaptcha.widget.HCaptchaFieldWidget"
         />
   </configure>
   <configure zcml:condition="installed collective.z3cform.norobots">
     <adapter
+        factory="collective.z3cform.norobots.widget.NorobotsFieldWidget"
         provides="z3c.form.interfaces.IFieldWidget"
         for="collective.easyform.interfaces.INorobotCaptcha
              *"
-        factory="collective.z3cform.norobots.widget.NorobotsFieldWidget"
         />
     <z3c:widgetTemplate
+        widget="collective.z3cform.norobots.widget.INorobotsWidget"
         template="empty.pt"
         layer="..interfaces.IEasyFormLayer"
         mode="display"
-        widget="collective.z3cform.norobots.widget.INorobotsWidget"
         />
 
   </configure>

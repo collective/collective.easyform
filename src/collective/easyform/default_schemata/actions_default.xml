@@ -1,7 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <model xmlns="http://namespaces.plone.org/supermodel/schema"
        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-       i18n:domain="collective.easyform">
+       i18n:domain="collective.easyform"
 >
+&gt;
   <schema>
     <field name="mailer"
            type="collective.easyform.actions.Mailer"

@@ -1,16 +1,15 @@
 from plone.base.utils import safe_text
 
 import os
-import pkg_resources
-
 
 this_path = os.path.dirname(__file__)
 
 
 try:
-    pkg_resources.get_distribution("openpyxl")
+    import openpyxl  # noqa: F401
+
     HAS_XLSX_SUPPORT = True
-except pkg_resources.DistributionNotFound:
+except ImportError:
     HAS_XLSX_SUPPORT = False
 
 

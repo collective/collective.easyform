@@ -35,8 +35,10 @@ class IEasyFormControlPanel(Interface):
 
     max_filesize = schema.Int(
         title=_("Filesize limit"),
-        description=_("Set the maximum filesize (in bytes) that users should be able to upload."),
-        required=False
+        description=_(
+            "Set the maximum filesize (in bytes) that users should be able to upload."
+        ),
+        required=False,
     )
 
 

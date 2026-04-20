@@ -12,7 +12,7 @@ import Products
 def getAddPermission(product, name):
     """find the add permission for a meta_type"""
 
-    name = "{}: {}".format(product, name)
+    name = f"{product}: {name}"
     for mt in Products.meta_types:
         if mt["name"] == name:
             return mt["permission"]
@@ -20,7 +20,6 @@ def getAddPermission(product, name):
 
 
 class TestInstallation(base.EasyFormTestCase):
-
     """Ensure product is properly installed"""
 
     def afterSetUp(self):

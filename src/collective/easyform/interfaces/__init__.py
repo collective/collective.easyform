@@ -17,13 +17,13 @@ from .fields import IEasyFormFieldsEditorExtender  # noqa
 from .fields import IEasyFormWidget  # noqa
 from .fields import IFieldExtender  # noqa
 from .fields import IFieldValidator  # noqa
+from .fields import IHCaptcha  # noqa
 from .fields import ILabel  # noqa
 from .fields import ILabelWidget  # noqa
-from .fields import INorobotCaptcha  # noqa
-from .fields import IReCaptcha  # noqa
 from .fields import ILikert  # noqa
 from .fields import ILikertWidget  # noqa
-from .fields import IHCaptcha  # noqa
+from .fields import INorobotCaptcha  # noqa
+from .fields import IReCaptcha  # noqa
 from .fields import IRichLabel  # noqa
 from .fields import IRichLabelWidget  # noqa
 from .layer import IEasyFormLayer  # noqa
@@ -35,14 +35,12 @@ from zope.interface import Interface
 
 
 class IEasyFormView(Interface):
-
     """
     EasyForm view interface
     """
 
 
 class IEasyFormForm(Interface):
-
     """
     EasyForm view interface
     """

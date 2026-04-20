@@ -6,7 +6,6 @@ from plone.autoform import directives
 import zope.interface
 import zope.schema.interfaces
 
-
 MODIFY_PORTAL_CONTENT = "cmf.ModifyPortalContent"
 
 

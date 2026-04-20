@@ -1,0 +1,2 @@
+make package ready for pip install method, PEP 420 native namespace  [1letter]
+remove Products.PloneFormGen migration code  [1letter]

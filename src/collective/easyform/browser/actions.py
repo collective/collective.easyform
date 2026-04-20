@@ -47,7 +47,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFieldsInOrder
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 
-
 PMF = MessageFactory("plone")
 
 
@@ -149,7 +148,6 @@ class SavedDataForm(crud.CrudForm):
         if ExtraData:
             return field.Fields(IExtraData).select(*ExtraData)
 
-
     def get_items(self):
         return [
             (key, DataWrapper(key, value, self.context))
@@ -165,7 +163,7 @@ class SavedDataForm(crud.CrudForm):
         self.field.setDataRow(id_, item.copy())
 
     def remove(self, id_and_item):
-        (id, item) = id_and_item
+        id, item = id_and_item
         self.field.delDataRow(id)
 
     @button.buttonAndHandler(PMF("Download"), name="download")
@@ -200,7 +198,7 @@ class SavedDataFormWrapper(layout.FormWrapper):
             else:
                 self.context.field.download(self.request.response)
             return ""
-        if hasattr(self.context.field, 'BatchSize'):
+        if hasattr(self.context.field, "BatchSize"):
             self.form_instance.batch_size = self.context.field.BatchSize
         return super().__call__()
 
@@ -254,7 +252,7 @@ class EasyFormActionsListing(SchemaListing):
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = "{}.{}".format(field.__module__, field.__class__.__name__)
+        field_identifier = f"{field.__module__}.{field.__class__.__name__}"
         return queryUtility(IActionFactory, name=field_identifier)
 
     @button.buttonAndHandler(PMF("Save"))

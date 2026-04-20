@@ -23,7 +23,7 @@
       id="collective.easyform.EditPythonFields"
       title="collective.easyform: Edit Python Fields"
       />
-  <permission 
+  <permission
       id="collective.easyform.EditTechnicalFields"
       title="collective.easyform: Edit Technical Fields"
       />

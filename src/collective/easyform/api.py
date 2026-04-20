@@ -5,6 +5,7 @@ from collective.easyform.config import MODEL_DEFAULT
 from collective.easyform.interfaces import IFieldExtender
 from email.utils import formataddr
 from plone import api
+from plone.base.utils import safe_text
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
 from plone.supermodel import loadString
@@ -12,10 +13,8 @@ from plone.supermodel import serializeSchema
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
-from plone.base.utils import safe_text
 from re import compile
 from zope.schema import getFieldsInOrder
-
 
 CONTEXT_KEY = "context"
 # regular expression for dollar-sign variable replacement.
@@ -117,7 +116,7 @@ def get_model(data, context):
         except SupermodelParseError:  # pragma: no cover
             pass
 
-    # 2nd we try aquire the model
+    # 2nd we try acquire the model
     if not schema:
         nav_root = api.portal.get_navigation_root(context)
         schema = nav_root.get("easyform_model_default.xml")

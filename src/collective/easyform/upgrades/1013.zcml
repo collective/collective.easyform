@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1013"
       profile="collective.easyform:default"
       source="1012"
+      destination="1013"
       >
     <gs:upgradeStep
         title="Remove unused migrate_all_forms registry record"

@@ -1,26 +1,32 @@
-<div xmlns:tal="http://xml.zope.org/namespaces/tal"
+<div xmlns:i18n="http://xml.zope.org/namespaces/i18n"
      xmlns:metal="http://xml.zope.org/namespaces/metal"
-     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     class="pat-schemaeditor"
      i18n:domain="plone"
-     class="pat-schemaeditor">
+>
 
-  <a id="add-field" class="pat-plone-modal btn btn-primary float-end ms-3"
-     data-pat-plone-modal='{
-      "actionOptions": {
-        "displayInModal": false
-      }
-     }'
+  <a class="pat-plone-modal btn btn-primary float-end ms-3"
+     id="add-field"
      href="${context/absolute_url}/@@add-field"
-     i18n:translate="add_new_field_hellip">Add new field&hellip;</a>
-
-  <a id="add-fieldset" class="pat-plone-modal btn btn-primary float-end" tal:condition="context/enableFieldsets"
      data-pat-plone-modal='{
       "actionOptions": {
         "displayInModal": false
       }
      }'
+     i18n:translate="add_new_field_hellip"
+  >Add new field&hellip;</a>
+
+  <a class="pat-plone-modal btn btn-primary float-end"
+     id="add-fieldset"
      href="${context/absolute_url}/@@add-fieldset"
-     i18n:translate="add_fieldset_hellip">Add new fieldset&hellip;</a>
+     data-pat-plone-modal='{
+      "actionOptions": {
+        "displayInModal": false
+      }
+     }'
+     tal:condition="context/enableFieldsets"
+     i18n:translate="add_fieldset_hellip"
+  >Add new fieldset&hellip;</a>
 
   <metal:form metal:use-macro="context/@@ploneform-macros/form">
     <metal:top-slot metal:fill-slot="formtop">
@@ -31,10 +37,13 @@
 
       <tal:block tal:repeat="group python:[view] + list(view.groups)">
         <fieldset data-can-add-fields="true"
-                  tal:define="fieldset_name repeat/group/index;"
+                  tal:define="
+                    fieldset_name repeat/group/index;
+                  "
                   tal:attributes="
                     id string:fieldset-${fieldset_name};
-                    class string:kssattr-fieldset-${fieldset_name};"
+                    class string:kssattr-fieldset-${fieldset_name};
+                  "
         >
 
           <legend tal:define="
@@ -43,9 +52,12 @@
                   tal:content="group_name"
           >Fieldset name</legend>
 
-          <a id="delete-fieldset-${fieldset_name}" tal:condition="not:repeat/group/start" class="btn btn-sm btn-danger"
-             href="${context/absolute_url}/@@delete-fieldset?name=${python:group.__name__}&_authenticator=${context/@@authenticator/token}"
-                  i18n:translate="delete_fieldset_hellip">Delete fieldset
+          <a class="btn btn-sm btn-danger"
+             id="delete-fieldset-${fieldset_name}"
+             href="${context/absolute_url}/@@delete-fieldset?name=${python:group.__name__}&amp;_authenticator=${context/@@authenticator/token}"
+             tal:condition="not:repeat/group/start"
+             i18n:translate="delete_fieldset_hellip"
+          >Delete fieldset
           </a>
 
           <tal:block tal:define="
@@ -97,6 +109,7 @@
                    i18n:domain="plone.schemaeditor"
               >
                 <a class="fieldSettings pat-modal pat-plone-modal"
+                   href="${edit_url}"
                    data-pat-plone-modal='{
                     "actionOptions": {
                       "displayInModal": false
@@ -106,10 +119,10 @@
                      edit_url python:view.edit_url(widget.field);
                    "
                    tal:condition="edit_url"
-                   href="${edit_url}"
                    i18n:translate=""
                 >Settings&hellip;</a>
                 <a class="schemaeditor-delete-field"
+                   href="${delete_url}"
                    style="margin-left: 1em; font-size: 150%; border: none"
                    title="Delete field"
                    data-confirm_msg="Are you sure you want to delete this field?"
@@ -117,7 +130,6 @@
                      delete_url python:view.delete_url(widget.field);
                    "
                    tal:condition="delete_url"
-                   href="${delete_url}"
                    i18n:attributes="title; data-confirm_msg"
                 >&times;</a>
               </div>

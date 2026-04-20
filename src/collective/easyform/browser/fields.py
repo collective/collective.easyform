@@ -7,6 +7,8 @@ from collective.easyform.interfaces import IEasyFormFieldsContext
 from collective.easyform.interfaces import IEasyFormFieldsEditorExtender
 from lxml import etree
 from plone import api
+from plone.base.utils import safe_bytes
+from plone.base.utils import safe_text
 from plone.schemaeditor.browser.field.edit import EditView
 from plone.schemaeditor.browser.field.edit import FieldEditForm
 from plone.schemaeditor.browser.field.traversal import FieldContext
@@ -14,26 +16,20 @@ from plone.schemaeditor.browser.schema.listing import SchemaListing
 from plone.schemaeditor.browser.schema.listing import SchemaListingPage
 from plone.schemaeditor.browser.schema.traversal import SchemaContext
 from plone.supermodel.parser import SupermodelParseError
-from plone.base.utils import safe_bytes
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from zope.cachedescriptors.property import Lazy as lazy_property
 from zope.component import getAdapters
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from ZPublisher.BaseRequest import DefaultPublishTraverse
-from Products.statusmessages.interfaces import IStatusMessage
-from plone.base.utils import safe_text
 
 import html
 
 NAMESPACE = "{http://namespaces.plone.org/supermodel/schema}"
 
-try:
-    from plone.schemaeditor import SchemaEditorMessageFactory as __
-except ImportError:
-    from plone.schemaeditor import _ as __
 
 try:
     import plone.resourceeditor
@@ -93,7 +89,7 @@ class FieldsSchemaListing(SchemaListing):
         self.request.response.redirect("@@modeleditor")
 
     @button.buttonAndHandler(
-        _('Save'),
+        _("Save"),
     )
     def handleSave(self, action):
         super().handleSaveDefaults(self, action)
@@ -174,7 +170,7 @@ class ModelEditorView(BrowserView):
                 root = etree.fromstring(source, parser=parser)
             except etree.XMLSyntaxError as e:
                 IStatusMessage(self.request).addStatusMessage(
-                    "XMLSyntaxError: {}".format(html.escape(safe_text(e.args[0]))),
+                    f"XMLSyntaxError: {html.escape(safe_text(e.args[0]))}",
                     "error",
                 )
                 return super().__call__()
@@ -202,15 +198,13 @@ class ModelEditorView(BrowserView):
             except SupermodelParseError as e:
                 message = e.args[0].replace('\n  File "<unknown>"', "")
                 IStatusMessage(self.request).addStatusMessage(
-                    "SuperModelParseError: {}".format(html.escape(message)),
+                    f"SuperModelParseError: {html.escape(message)}",
                     "error",
                 )
                 return super().__call__()
 
             # clean up formatting sins
-            source = etree.tostring(
-                root, pretty_print=True, encoding=str
-            )
+            source = etree.tostring(root, pretty_print=True, encoding=str)
             # and save
             self.save(source)
 

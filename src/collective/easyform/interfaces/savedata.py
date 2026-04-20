@@ -50,7 +50,6 @@ class IExtraData(Interface):
 
 
 class ISaveData(IAction):
-
     """A form action adapter that will save form input data and
     return it in csv- or tab-delimited format."""
 

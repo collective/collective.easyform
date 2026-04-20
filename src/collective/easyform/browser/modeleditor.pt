@@ -3,7 +3,7 @@
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       lang="en"
-      metal:use-macro="context/main_template/macros/master"
+      metal:use-macro="context/@@main_template/macros/master"
       xml:lang="en"
       i18n:domain="plone"
 >
@@ -21,7 +21,9 @@
             >Edit field model for name</h1>
             <a class="link-parent"
                href=""
-               tal:attributes="href string:${context/absolute_url};"
+               tal:attributes="
+                 href string:${context/absolute_url};
+               "
                i18n:translate="label_back_to_schemaeditor"
             >
                         Back to the schema editor
@@ -32,27 +34,33 @@
                  role="status"
             >
               <span id="messagespan"
-                    style="display:none">
+                    style="display:none"
+              >
                     &nbsp;
               </span>&nbsp;
             </div>
 
             <form id="saveform"
                   method="post"
-                  tal:define="authenticator context/@@authenticator/authenticator | nothing;"
-                  tal:attributes="action string:${context/absolute_url}/@@modeleditor;">
+                  tal:define="
+                    authenticator context/@@authenticator/authenticator | nothing;
+                  "
+                  tal:attributes="
+                    action string:${context/absolute_url}/@@modeleditor;
+                  "
+            >
               <input tal:replace="structure authenticator" />
 
-              <button
-                  class="btn btn-primary"
-                  type="submit"
-                  name="form.button.save"
-                  i18n:translate="">Save</button>
+              <button class="btn btn-primary"
+                      name="form.button.save"
+                      type="submit"
+                      i18n:translate=""
+              >Save</button>
 
-              <textarea
-                  name="source"
-                  class="modeleditor__source pat-code-editor"
-                  data-pat-code-editor="language: xml; theme: okaidia">${view/modelSource}</textarea>
+              <textarea class="modeleditor__source pat-code-editor"
+                        name="source"
+                        data-pat-code-editor="language: xml; theme: okaidia"
+              >${view/modelSource}</textarea>
 
             </form>
           </div>
