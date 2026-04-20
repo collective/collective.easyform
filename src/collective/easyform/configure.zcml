@@ -27,10 +27,6 @@
 
   <include package=".browser" />
   <include package=".upgrades" />
-  <include
-      package=".migration"
-      zcml:condition="installed Products.PloneFormGen"
-      />
 
   <genericsetup:registerProfile
       name="default"
