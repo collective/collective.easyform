@@ -49,7 +49,7 @@
       title="EasyForm testing"
       description="Used for testing only"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      for="plone.base.interfaces.siteroot.IPloneSiteRoot"
       directory="profiles/testing"
       />
 

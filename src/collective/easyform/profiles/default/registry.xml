@@ -55,7 +55,7 @@
     </value>
   </record>
 
-  <records interface="Products.CMFPlone.interfaces.IBundleRegistry"
+  <records interface="plone.base.interfaces.resources.IBundleRegistry"
            prefix="plone.bundles/easyform"
   >
     <value key="enabled">True</value>

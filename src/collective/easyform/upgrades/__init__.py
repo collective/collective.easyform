@@ -20,8 +20,8 @@ def update_last_compilation(context, timetuple=None):
     # Let's do the imports inline, so they are not needlessly done at startup.
     # Should not really matter, but oh well.
     from datetime import datetime
+    from plone.base.interfaces.resources import IBundleRegistry
     from plone.registry.interfaces import IRegistry
-    from Products.CMFPlone.interfaces import IBundleRegistry
     from zope.component import getUtility
 
     registry = getUtility(IRegistry)

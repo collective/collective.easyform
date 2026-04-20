@@ -7,7 +7,7 @@
       name="1016"
       title="EasyForm upgrade"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      for="Products.CMFPlone.interfaces.IMigratingPloneSiteRoot"
+      for="plone.base.interfaces.siteroot.IMigratingPloneSiteRoot"
       directory="profiles/1016"
       />
 

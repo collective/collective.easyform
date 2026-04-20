@@ -26,7 +26,7 @@
       />
   <browser:page
       name="easyform-controlpanel"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      for="plone.base.interfaces.siteroot.IPloneSiteRoot"
       class=".controlpanel.EasyFormControlPanelView"
       permission="cmf.ManagePortal"
       layer="..interfaces.IEasyFormLayer"
