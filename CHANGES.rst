@@ -2,10 +2,11 @@ Changelog
 =========
 
 
-4.5.2 (unreleased)
+5.0.0a1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Breaking: make package ready for pip install method, PEP 420 native namespace  [1letter]
+- Breaking: remove Products.PloneFormGen
 
 
 4.5.1 (2026-02-10)
