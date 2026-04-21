@@ -1,3 +1,8 @@
+Changelog
+=========
+
+<!-- towncrier release notes start -->
+
 5.0.0 (2026-04-20)
 ------------------
 
@@ -7,15 +12,6 @@ Breaking changes:
 - Plone 6.2 compatible release, compatibility with < 6.2 dropped. [1letter]
   Make package ready for pip install method, PEP 420 native namespace.  [1letter]
   Remove Products.PloneFormGen migration code.  [1letter]
-
-
-Changelog
-=========
-
-
-5.0.0a1 (unreleased)
---------------------
-
 
 
 4.5.1 (2026-02-10)
