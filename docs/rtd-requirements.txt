@@ -5,7 +5,7 @@ DateTime==3.0.3
 DocumentTemplate==2.13.2
 ExtensionClass==2.13.2
 Jinja2==2.11.3
-Markdown==2.0.3
+Markdown==3.8.1
 MarkupSafe==0.23
 Missing==2.13.1
 MultiMapping==2.13.0
