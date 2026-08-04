@@ -1,0 +1,2 @@
+Fix ``HCaptchaFieldWidget`` location to work in all ``plone.formwidget.hcaptcha`` versions.
+[maurits]

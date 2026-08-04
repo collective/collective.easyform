@@ -134,7 +134,7 @@
   </configure>
   <configure zcml:condition="installed plone.formwidget.hcaptcha">
     <adapter
-        factory="plone.formwidget.hcaptcha.widget.HCaptchaFieldWidget"
+        factory="plone.formwidget.hcaptcha.HCaptchaFieldWidget"
         provides="z3c.form.interfaces.IFieldWidget"
         for="collective.easyform.interfaces.IHCaptcha
              *"
