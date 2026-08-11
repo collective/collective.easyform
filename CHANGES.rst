@@ -1,3 +1,13 @@
+5.0.1 (2026-08-11)
+------------------
+
+Bug fixes:
+
+
+- Fix ``HCaptchaFieldWidget`` location to work in all ``plone.formwidget.hcaptcha`` versions.
+  [maurits]
+
+
 Changelog
 =========
 
