@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = "5.0.1"
+version = "5.0.2.dev0"
 
 setup(
     name="collective.easyform",
