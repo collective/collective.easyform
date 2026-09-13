@@ -1,3 +1,12 @@
+5.0.2 (2026-09-13)
+------------------
+
+Bug fixes:
+
+
+- Only use pat-plone-modal and remove pat-modal to prevent double initialization with Patternslib. [thet] (pat-plone-modal)
+
+
 5.0.1 (2026-08-11)
 ------------------
 
