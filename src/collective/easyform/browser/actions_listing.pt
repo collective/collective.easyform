@@ -85,7 +85,7 @@
               <div class="fieldControls"
                    i18n:domain="plone.schemaeditor"
               >
-                <a class="fieldSettings pat-modal pat-plone-modal"
+                <a class="fieldSettings pat-plone-modal"
                    tal:define="
                      edit_url python:view.edit_url(widget.field);
                    "
