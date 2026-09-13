@@ -108,7 +108,7 @@
               <div class="fieldControls"
                    i18n:domain="plone.schemaeditor"
               >
-                <a class="fieldSettings pat-modal pat-plone-modal"
+                <a class="fieldSettings pat-plone-modal"
                    href="${edit_url}"
                    data-pat-plone-modal='{
                     "actionOptions": {
