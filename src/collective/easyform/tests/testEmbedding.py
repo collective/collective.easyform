@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform.api import get_actions
 from collective.easyform.api import set_actions
 from collective.easyform.tests import base
@@ -14,8 +13,7 @@ class FakeRequest(dict):
         self.form = kwargs
 
 
-class TrueOnceCalled(object):
-
+class TrueOnceCalled:
     """A mock function that evaluates to True once it has been called."""
 
     def __init__(self):
@@ -29,7 +27,6 @@ class TrueOnceCalled(object):
 
 
 class TestEmbedding(base.EasyFormTestCase):
-
     """test embedding of a PFG in another template"""
 
     def dummy_send(self, mfrom, mto, messageText, immediate=False):
@@ -48,10 +45,10 @@ class TestEmbedding(base.EasyFormTestCase):
         base.EasyFormTestCase.afterSetUp(self)
         self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = getattr(self.folder, "ff1")
-        self.ff1.title = u"ff1"
+        self.ff1.title = "ff1"
         self.ff1.CSRFProtection = False  # no csrf protection
         actions = get_actions(self.ff1)
-        actions["mailer"].recipient_email = u"mdummy@address.com"
+        actions["mailer"].recipient_email = "mdummy@address.com"
         set_actions(self.ff1, actions)
         self.mailhost = self.folder.MailHost
         self.mailhost._send = self.dummy_send
@@ -65,7 +62,7 @@ class TestEmbedding(base.EasyFormTestCase):
         self.assertTrue("Your E-Mail Address" in res)
 
         # form action equals request URL
-        self.assertTrue('action="{url}"'.format(url=self.ff1.absolute_url()) in res)
+        self.assertTrue(f'action="{self.ff1.absolute_url()}"' in res)
 
         # no form prefix
         # self.assertTrue('name="form.submitted"' in res)
@@ -77,7 +74,7 @@ class TestEmbedding(base.EasyFormTestCase):
 
     def test_embedded_form_validates(self):
         # fake an incomplete form submission
-        self.LoadRequestForm(**{"mypfg.buttons.submit": u"Submit"})
+        self.LoadRequestForm(**{"mypfg.buttons.submit": "Submit"})
 
         # render the form
         view = self.ff1.restrictedTraverse("@@embedded")
@@ -90,7 +87,7 @@ class TestEmbedding(base.EasyFormTestCase):
     def test_doesnt_process_submission_of_other_form(self):
         # fake submission of a *different* form (note mismatch of form
         # submission marker with prefix)
-        self.LoadRequestForm(**{"form.buttons.submit": u"Submit"})
+        self.LoadRequestForm(**{"form.buttons.submit": "Submit"})
 
         # let's preset a faux controller_state (as if from the other form)
         # to make sure it doesn't throw things off
@@ -125,10 +122,10 @@ class TestEmbedding(base.EasyFormTestCase):
 
         self.LoadRequestForm(
             **{
-                "form.widgets.topic": u"monkeys",
-                "form.widgets.comments": u"I am not a walnut.",
-                "form.widgets.replyto": u"foobar@example.com",
-                "form.buttons.submit": u"Submit",
+                "form.widgets.topic": "monkeys",
+                "form.widgets.comments": "I am not a walnut.",
+                "form.widgets.replyto": "foobar@example.com",
+                "form.buttons.submit": "Submit",
             }
         )
         # should raise a retry exception triggering a new publish attempt
@@ -147,9 +144,9 @@ class TestEmbedding(base.EasyFormTestCase):
         # self.assertTrue(committed)
 
         # make sure it can deal with VHM URLs
-        self.app.REQUEST._orig_env[
-            "PATH_TRANSLATED"
-        ] = "/VirtualHostBase/http/nohost:80/VirtualHostRoot"
+        self.app.REQUEST._orig_env["PATH_TRANSLATED"] = (
+            "/VirtualHostBase/http/nohost:80/VirtualHostRoot"
+        )
         view = self.ff1.restrictedTraverse("@@embedded")
         res = view()
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Test EasyForm initialisation and set-up
 #
@@ -10,17 +9,10 @@ from Products.CMFCore.utils import getToolByName
 import Products
 
 
-try:
-    from Products.CMFPlone.utils import get_installer
-except ImportError:
-    # BBB for Plone 5.0 and lower.
-    get_installer = None
-
-
 def getAddPermission(product, name):
     """find the add permission for a meta_type"""
 
-    name = "{0}: {1}".format(product, name)
+    name = f"{product}: {name}"
     for mt in Products.meta_types:
         if mt["name"] == name:
             return mt["permission"]
@@ -28,14 +20,12 @@ def getAddPermission(product, name):
 
 
 class TestInstallation(base.EasyFormTestCase):
-
     """Ensure product is properly installed"""
 
     def afterSetUp(self):
         base.EasyFormTestCase.afterSetUp(self)
 
         self.types = self.portal.portal_types
-        self.properties = self.portal.portal_properties
         self.controlpanel = self.portal.portal_controlpanel
 
         self.metaTypes = ("EasyForm",)

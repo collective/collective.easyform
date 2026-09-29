@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:registerProfile
+      name="1016"
+      title="EasyForm upgrade"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="plone.base.interfaces.siteroot.IMigratingPloneSiteRoot"
+      directory="profiles/1016"
+      />
+
+  <gs:upgradeSteps
+      profile="collective.easyform:default"
+      source="1015"
+      destination="1016"
+      >
+
+    <gs:upgradeDepends
+        title="Upgrade contenttype icon in registry"
+        import_profile="collective.easyform.upgrades:1016"
+        />
+
+  </gs:upgradeSteps>
+
+</configure>

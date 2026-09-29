@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 

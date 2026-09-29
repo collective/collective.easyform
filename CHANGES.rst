@@ -1,11 +1,178 @@
 Changelog
 =========
 
+.. You should *NOT* be adding new change log entries to this file.
+   You should create a file in the news directory instead.
+   For helpful instructions, please see:
+   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
 
-4.1.3 (unreleased)
+.. towncrier release notes start
+
+
+5.0.2 (2026-09-13)
 ------------------
 
 - Implement `onDisplayOverride` TALES field (#376) [chiruzzimarco]
+
+Bug fixes:
+
+- Only use pat-plone-modal and remove pat-modal to prevent double initialization with Patternslib. [thet] (pat-plone-modal)
+
+
+5.0.1 (2026-08-11)
+------------------
+
+Bug fixes:
+
+
+- Fix ``HCaptchaFieldWidget`` location to work in all ``plone.formwidget.hcaptcha`` versions.
+  [maurits]
+
+
+5.0.0 (2026-04-20)
+------------------
+
+Breaking changes:
+
+
+- Plone 6.2 compatible release, compatibility with < 6.2 dropped. [1letter]
+  Make package ready for pip install method, PEP 420 native namespace.  [1letter]
+  Remove Products.PloneFormGen migration code.  [1letter]
+
+
+4.5.1 (2026-02-10)
+------------------
+
+- Save field and action xml as string instead of bytes when editing xml directly.  [Mychae1]
+- Include form name in the filename of the save data download.  [maurits]
+- Remove usage of the ``six`` compatibility library.  [maurits]
+- Update deprecated imports for Plone 6.0 and higher.  [maurits]
+
+
+4.5.0 (2026-01-12)
+------------------
+
+- Add depends_on support for label and richlabel fields. [MrTango]
+
+
+4.4.0 (2025-05-08)
+------------------
+
+- Log when sending mail
+  [Mychae1]
+
+- When Likert field is required, answer is required for each question.
+  [gotcha]
+
+- Improve Likert widget layout
+  [ThibautBorn]
+
+- Allow editors to remove fieldset
+  [ThibautBorn]
+
+- fix (de)serialize issues with Labels
+  [gotcha]
+
+- improve serialization around `showfields` and `extradata`
+  [ThibautBorn, Mychae1, gotcha]
+
+- Some tuning of migration from PFG
+  [ThibautBorn]
+
+- Test max_size validator
+  [gotcha]
+
+- Tests support Plone 6.1
+  [gotcha]
+
+- Use POST method for XML modeleditor
+  [szakitibi]
+
+- Drop Python 3.8 support
+  [gotcha]
+
+
+4.3.0 (2024-12-13)
+------------------
+
+- Use batching on the saved data page.
+  [maurits]
+
+- Pin version `Products.validation>=3.0.0`
+  [petschki]
+
+- Add a checkbox to disable autofocus on the first input
+  [yurj]
+
+
+4.2.1 (2024-10-08)
+------------------
+
+- Fix Plone 5 related upgrade steps in Plone 6.
+  [thet]
+
+- Add plone.shortname behaviour to EasyForm type.
+  [ThibautBorn]
+
+- Include the Products.validation ZCML to load the proper translation catalog.
+  Refs. `issue 434 <https://github.com/collective/collective.easyform/issues/434>`_.
+  [ale-rt]
+
+
+4.2.0 (2024-03-15)
+------------------
+
+- Set fieldset description as attribute, not node, when migrating from PFG.
+  [thomasmassmann]
+
+- Add filesize upload limit for file and image uploads.
+  [ThibautBorn]
+
+- Update Dutch translations.
+  [ThibautBorn]
+
+
+4.1.6 (2024-03-08)
+------------------
+
+- Fix unused, incorrect and undeclared imports in serializer.
+  [thet]
+
+
+4.1.5 (2023-11-03)
+------------------
+
+- check for "collective.easyform.DownloadSavedInput" permission, before including the saved data in serializer.
+  [MrTango]
+
+- Add filesize upload limit. [ThibautBorn]
+
+- update Dutch translations [ThibautBorn]
+
+
+
+4.1.4 (2023-07-27)
+------------------
+
+- fix folder_contents accessibility from @@saveddata. [ThibautBorn]
+
+- make ReCaptcha fields not required during PloneFormGen migration [ThibautBorn]
+
+
+4.1.3 (2023-05-16)
+------------------
+
+
+Bug fixes:
+
+- Add upgrade step and profile to update contenttype icon in registry.
+  [maurits]
+
+- Add icon expressions for actions.
+  [maurits]
+
+- Update Spanish translations.
+  [macagua]
 
 
 4.1.2 (2023-01-02)
@@ -78,7 +245,7 @@ Bug fixes:
 
 Enhancements:
 
-- Standarize how the "Form Fields" and "Form Actions" behave. Have a single
+- Standardize how the "Form Fields" and "Form Actions" behave. Have a single
   "Save" button that will redirect back to the form once changes are applied
   [frapell]
 
@@ -136,7 +303,7 @@ Bug fixes:
 - Fix field order in Mailer attachments
   [MrTango]
 
-- Optinally add CSV/XLSX headers to attachments
+- Optionally add CSV/XLSX headers to attachments
   [MrTango] (#323)
 
 - Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.
@@ -204,7 +371,7 @@ Bug fixes:
 
 - Better saved data handling (ux forms, redirect to only adapter). [jensens (#1)
 - More German translations [jensens] (#2)
-- Fixes #217: Stop loosing action errors in form update. [wobsta] (#238)
+- Fixes #217: Stop losing action errors in form update. [wobsta] (#238)
 - Fixes #182: actions urls when on action or field traverser. [jensens] (#239)
 
 
@@ -590,7 +757,7 @@ Bug fixes:
   https://github.com/collective/collective.easyform/issues/49
   [tomgross]
 
-- Allow managment of fields enabled for c.easyform in controlpanel
+- Allow management of fields enabled for c.easyform in controlpanel
   [karalics]
 
 
@@ -658,7 +825,7 @@ New:
   mechanism.
   [thet]
 
-- Reworked mail address formating, avoiding recipient address in the form of
+- Reworked mail address formatting, avoiding recipient address in the form of
   ``name <<account@domain.com>>`` and having instead
   ``name <account@domain.com>``.
   [thet]

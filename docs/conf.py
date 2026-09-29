@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # collective.easyform documentation build configuration file, created by
 # sphinx-quickstart on Mon Feb 24 23:51:08 2014.
@@ -10,9 +9,6 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
-
-import os
-import sys
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -51,8 +47,8 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = u"collective.easyform"
-copyright = u"2014, Roman Kozlovskyi"
+project = "collective.easyform"
+copyright = "2014, Roman Kozlovskyi"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -182,11 +178,11 @@ htmlhelp_basename = "collectiveeasyformdoc"
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
-    #'papersize': 'letterpaper',
+    # 'papersize': 'letterpaper',
     # The font size ('10pt', '11pt' or '12pt').
-    #'pointsize': '10pt',
+    # 'pointsize': '10pt',
     # Additional stuff for the LaTeX preamble.
-    #'preamble': '',
+    # 'preamble': '',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
@@ -195,8 +191,8 @@ latex_documents = [
     (
         "index",
         "collectiveeasyform.tex",
-        u"collective.easyform Documentation",
-        u"Roman Kozlovskyi",
+        "collective.easyform Documentation",
+        "Roman Kozlovskyi",
         "manual",
     ),
 ]
@@ -230,8 +226,8 @@ man_pages = [
     (
         "index",
         "collectiveeasyform",
-        u"collective.easyform Documentation",
-        [u"Roman Kozlovskyi"],
+        "collective.easyform Documentation",
+        ["Roman Kozlovskyi"],
         1,
     )
 ]
@@ -249,8 +245,8 @@ texinfo_documents = [
     (
         "index",
         "collectiveeasyform",
-        u"collective.easyform Documentation",
-        u"Roman Kozlovskyi",
+        "collective.easyform Documentation",
+        "Roman Kozlovskyi",
         "collectiveeasyform",
         "One line description of project.",
         "Miscellaneous",

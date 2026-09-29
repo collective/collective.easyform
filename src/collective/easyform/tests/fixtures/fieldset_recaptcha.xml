@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <model xmlns="http://namespaces.plone.org/supermodel/schema"
        xmlns:easyform="http://namespaces.plone.org/supermodel/easyform"
        xmlns:form="http://namespaces.plone.org/supermodel/form"

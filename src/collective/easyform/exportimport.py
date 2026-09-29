@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionExtender
 from collective.easyform.interfaces import IEasyFormActionsContext
@@ -29,7 +28,7 @@ def _set_(self, value, key):
 
 @implementer(IFieldExtender)
 @adapter(IField)
-class FieldExtender(object):
+class FieldExtender:
     def __init__(self, field):
         self.field = field
 
@@ -63,7 +62,7 @@ class FieldExtender(object):
 
 
 @implementer(IFieldMetadataHandler)
-class EasyFormFieldMetadataHandler(object):
+class EasyFormFieldMetadataHandler:
     """Support the easyform: namespace in model definitions."""
 
     namespace = "http://namespaces.plone.org/supermodel/easyform"
@@ -71,7 +70,13 @@ class EasyFormFieldMetadataHandler(object):
 
     def read(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ["TDefault", "TEnabled", "TValidator", "depends_on", "css_class",]:
+        for i in [
+            "TDefault",
+            "TEnabled",
+            "TValidator",
+            "depends_on",
+            "css_class",
+        ]:
             value = fieldNode.get(ns(i, self.namespace))
             if value:
                 data = schema.queryTaggedValue(i, {})
@@ -98,7 +103,13 @@ class EasyFormFieldMetadataHandler(object):
 
     def write(self, fieldNode, schema, field):
         name = field.__name__
-        for i in ["TDefault", "TEnabled", "TValidator", "depends_on", "css_class",]:
+        for i in [
+            "TDefault",
+            "TEnabled",
+            "TValidator",
+            "depends_on",
+            "css_class",
+        ]:
             value = schema.queryTaggedValue(i, {}).get(name, None)
             if value:
                 fieldNode.set(ns(i, self.namespace), value)
@@ -123,7 +134,7 @@ def get_action_extender(context, action):
 
 @implementer(IActionExtender)
 @adapter(IAction)
-class ActionExtender(object):
+class ActionExtender:
     def __init__(self, field):
         self.field = field
 
@@ -134,7 +145,7 @@ class ActionExtender(object):
 
 
 @implementer(IFieldMetadataHandler)
-class EasyFormActionMetadataHandler(object):
+class EasyFormActionMetadataHandler:
     """Support the easyform: namespace in model definitions."""
 
     namespace = "http://namespaces.plone.org/supermodel/easyform"

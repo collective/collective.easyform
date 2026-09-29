@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-from setuptools import find_packages
 from setuptools import setup
 
-
-version = "4.1.3.dev0"
+version = "5.0.3.dev0"
 
 setup(
     name="collective.easyform",
@@ -16,12 +13,13 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: Addon",
-        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.2",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
@@ -32,51 +30,62 @@ setup(
     maintainer_email="releaseteam@plone.org",
     url="https://github.com/collective/collective.easyform",
     license="GPLv2",
-    packages=find_packages("src", exclude=["ez_setup"]),
-    namespace_packages=["collective"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     install_requires=[
+        "AccessControl",
+        "beautifulsoup4",
+        "lxml",
+        "openpyxl",
         "plone.api",
-        "plone.app.dexterity",
-        "plone.app.textfield >= 1.2.8",
         "plone.autoform",
+        "plone.app.dexterity",
+        "plone.app.registry",
+        "plone.app.textfield",
+        "plone.app.z3cform",
+        "plone.base",
         "plone.dexterity",
+        "plone.memoize",
         "plone.namedfile",
-        "plone.schema",
-        "plone.schemaeditor>=4.0.0b1",
-        "plone.supermodel",
+        "plone.resourceeditor",
         "plone.restapi",
-        "Products.CMFPlone>=6.0.0b1",
+        "plone.registry",
+        "plone.schema",
+        "plone.schemaeditor",
+        "plone.supermodel",
+        "Products.CMFCore",
+        "Products.CMFPlone",
+        "Products.statusmessages",
         "Products.validation",
-        "setuptools",
-        "six",
-        # -*- Extra requirements: -*-
+        "python-dateutil",
+        "z3c.form",
+        "Zope",
     ],
     extras_require={
-        "downloadxlsx": ["openpyxl"],
-        "recaptcha": ["plone.formwidget.recaptcha"],
-        "hcaptcha": ["plone.formwidget.hcaptcha"],
-        "norobots": ["collective.z3cform.norobots"],
-        "ploneformgen": [
-            "Products.PloneFormGen",
-        ],
         "test": [
-            "beautifulsoup4",
+            "collective.z3cform.norobots",
+            "Products.MailHost",
+            "plone.app.contenttypes",
             "plone.app.testing[robot]",
             "plone.app.robotframework",
             "plone.app.contenttypes",
             "plone.formwidget.recaptcha",
             "plone.formwidget.hcaptcha",
-            "robotframework-selenium2library",
-            "robotframework-selenium2screenshots",
+            "plone.protect",
+            "plone.testing",
+            "robotsuite",
+            "Zope",
+            "transaction",
         ],
+        "downloadxlsx": ["openpyxl"],
+        "recaptcha": ["plone.formwidget.recaptcha"],
+        "hcaptcha": ["plone.formwidget.hcaptcha"],
+        "norobots": ["collective.z3cform.norobots"],
     },
     entry_points="""
     # -*- Entry points: -*-
-    [z3c.autoinclude.plugin]
+    [plone.autoinclude.plugin]
     target = plone
     """,
 )

@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:registerProfile
+      name="1017"
+      title="EasyForm upgrade"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="plone.base.interfaces.siteroot.IMigratingPloneSiteRoot"
+      directory="profiles/1017"
+      />
+
+  <gs:upgradeSteps
+      profile="collective.easyform:default"
+      source="1016"
+      destination="1017"
+      >
+
+    <gs:upgradeDepends
+        title="Add max filesize in registry and plone.shortname behavior to form."
+        import_profile="collective.easyform.upgrades:1017"
+        />
+
+  </gs:upgradeSteps>
+
+</configure>

@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1004"
       profile="collective.easyform:default"
       source="1003"
+      destination="1004"
       >
     <gs:upgradeDepends
         title="Changed permission of saveddata action"

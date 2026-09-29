@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from collective.easyform.interfaces import ILabelWidget
 from collective.easyform.interfaces import IRenderWidget
 from collective.easyform.interfaces import IRichLabelWidget
@@ -7,7 +5,6 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.metaconfigure import ViewMixinForTemplates
 from z3c.form import interfaces
 from z3c.form.browser import widget
-from z3c.form.interfaces import IWidget
 from z3c.form.widget import FieldWidget
 from z3c.form.widget import Widget
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -23,12 +20,12 @@ from zope.schema.interfaces import IField
 class LabelWidget(widget.HTMLFormElement, Widget):
     """Textarea widget implementation."""
 
-    klass = u"label-widget"
-    css = u"label"
-    value = u""
+    klass = "label-widget"
+    css = "label"
+    value = ""
 
     def update(self):
-        super(LabelWidget, self).update()
+        super().update()
         widget.addFieldClass(self)
 
 
@@ -43,12 +40,12 @@ def LabelFieldWidget(field, request):
 class RichLabelWidget(widget.HTMLFormElement, Widget):
     """Textarea widget implementation."""
 
-    klass = u"rich-label-widget"
-    css = u"richlabel"
-    value = u""
+    klass = "rich-label-widget"
+    css = "richlabel"
+    value = ""
 
     def update(self):
-        super(RichLabelWidget, self).update()
+        super().update()
         widget.addFieldClass(self)
 
 
@@ -59,10 +56,12 @@ def RichLabelFieldWidget(field, request):
     return FieldWidget(field, RichLabelWidget(request))
 
 
+@implementer(IRenderWidget)
 class LabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("label.pt")
 
 
+@implementer(IRenderWidget)
 class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
     index = ViewPageTemplateFile("rich_label.pt")
 
@@ -70,12 +69,12 @@ class RichLabelRenderWidget(ViewMixinForTemplates, BrowserView):
 # overriding plone.app.z3cform widget.pt:
 @implementer(IRenderWidget)
 class RenderWidget(ViewMixinForTemplates, BrowserView):
-    index = ViewPageTemplateFile('widget.pt')
+    index = ViewPageTemplateFile("widget.pt")
 
 
 @adapter(IRenderWidget, Interface)
 @implementer(IBrowserView)
-class WidgetDependencyView(object):
+class WidgetDependencyView:
     def __init__(self, widget, request):
         self.widget = widget
         self.request = request
@@ -89,9 +88,10 @@ class WidgetDependencyView(object):
             return ""
         return depends_on
 
+
 @adapter(IRenderWidget, Interface)
 @implementer(IBrowserView)
-class WidgetCssClassView(object):
+class WidgetCssClassView:
     def __init__(self, widget, request):
         self.widget = widget
         self.request = request

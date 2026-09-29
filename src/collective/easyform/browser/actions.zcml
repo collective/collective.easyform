@@ -5,83 +5,83 @@
     i18n_domain="collective.easyform"
     >
   <adapter
-      name="widget"
       factory=".actions.SavedDataTraversal"
+      name="widget"
       />
   <browser:page
       name="saveddata"
       for="collective.easyform.interfaces.IEasyForm"
-      permission="collective.easyform.DownloadSavedInput"
       class=".actions.SavedDataView"
       template="saveddata.pt"
+      permission="collective.easyform.DownloadSavedInput"
       />
   <browser:page
       name="actions"
       for="collective.easyform.interfaces.IEasyForm"
-      permission="cmf.ModifyPortalContent"
       class=".actions.EasyFormActionsView"
-      layer="..interfaces.IEasyFormLayer"
       allowed_interface="collective.easyform.interfaces.IEasyFormActionsContext"
+      permission="cmf.ModifyPortalContent"
+      layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="listing"
       for="collective.easyform.interfaces.IEasyFormActionsContext"
-      permission="cmf.ModifyPortalContent"
       class=".actions.EasyFormActionsListingPage"
+      permission="cmf.ModifyPortalContent"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="add-action"
       for="collective.easyform.interfaces.IEasyFormActionsContext"
-      permission="cmf.ModifyPortalContent"
       class=".actions.ActionAddFormPage"
+      permission="cmf.ModifyPortalContent"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="edit"
       for="collective.easyform.interfaces.IEasyFormActionContext"
-      permission="cmf.ModifyPortalContent"
       class=".actions.ActionEditView"
+      permission="cmf.ModifyPortalContent"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="data"
       for="collective.easyform.interfaces.IEasyFormActionContext"
-      permission="collective.easyform.DownloadSavedInput"
       class=".actions.ActionSavedDataView"
+      permission="collective.easyform.DownloadSavedInput"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="order"
       for="collective.easyform.interfaces.IEasyFormActionContext"
-      permission="cmf.ModifyPortalContent"
       class="plone.schemaeditor.browser.field.order.FieldOrderView"
       attribute="move"
+      permission="cmf.ModifyPortalContent"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="delete"
       for="collective.easyform.interfaces.IEasyFormActionContext"
-      permission="cmf.ModifyPortalContent"
       class="plone.schemaeditor.browser.field.order.FieldOrderView"
       attribute="delete"
+      permission="cmf.ModifyPortalContent"
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
       name="changefieldset"
       for="collective.easyform.interfaces.IEasyFormActionContext"
-      permission="cmf.ModifyPortalContent"
       class="plone.schemaeditor.browser.field.fieldset.ChangeFieldsetView"
       attribute="change"
+      permission="cmf.ModifyPortalContent"
       layer="..interfaces.IEasyFormLayer"
       />
   <configure zcml:condition="installed plone.resourceeditor">
     <browser:page
         name="modeleditor"
         for="collective.easyform.interfaces.IEasyFormActionsContext"
-        permission="cmf.ModifyPortalContent"
         class=".actions.ModelEditorView"
         template="modeleditor.pt"
+        permission="cmf.ModifyPortalContent"
         layer="..interfaces.IEasyFormLayer"
         />
   </configure>

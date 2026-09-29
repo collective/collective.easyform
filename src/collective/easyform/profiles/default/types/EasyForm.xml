@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         meta_type="Dexterity FTI"
         name="EasyForm"
@@ -25,6 +25,7 @@
     <element value="plone.namefromtitle" />
     <element value="plone.allowdiscussion" />
     <element value="plone.excludefromnavigation" />
+    <element value="plone.shortname" />
     <element value="plone.dublincore" />
   </property>
 
@@ -59,9 +60,9 @@
   <action action_id="view"
           category="object"
           condition_expr=""
+          icon_expr="string:toolbar-action/view"
           title="View"
           url_expr="string:${object_url}"
-          icon_expr="string:toolbar-action/view"
           visible="True"
           i18n:attributes="title"
           i18n:domain="plone"
@@ -72,9 +73,9 @@
   <action action_id="edit"
           category="object"
           condition_expr=""
+          icon_expr="string:toolbar-action/edit"
           title="Edit"
           url_expr="string:${object_url}/edit"
-          icon_expr="string:toolbar-action/edit"
           visible="True"
           i18n:attributes="title"
           i18n:domain="plone"

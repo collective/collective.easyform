@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective.easyform import easyformMessageFactory as _
@@ -48,7 +47,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.schema import getFieldsInOrder
 from ZPublisher.BaseRequest import DefaultPublishTraverse
 
-
 PMF = MessageFactory("plone")
 
 
@@ -71,7 +69,7 @@ class SavedDataTraversal(WrapperWidgetTraversal):
                         target = self._form_traverse(subsubform, id_)
                         target.__parent__ = aq_inner(self.context)
                         return target
-        return super(SavedDataTraversal, self).traverse(name, ignored)
+        return super().traverse(name, ignored)
 
 
 class SavedDataView(BrowserView):
@@ -82,7 +80,7 @@ class SavedDataView(BrowserView):
             if ISaveData.providedBy(action)
         ]
         if len(items) == 1:
-            url = "{0}/actions/{1}/@@data".format(
+            url = "{}/actions/{}/@@data".format(
                 self.context.absolute_url(),
                 items[0][0],
             )
@@ -134,7 +132,7 @@ class SavedDataForm(crud.CrudForm):
         return get_schema(get_context(self.field))
 
     def description(self):
-        return _(u"${items} input(s) saved", mapping={"items": self.field.itemsSaved()})
+        return _("${items} input(s) saved", mapping={"items": self.field.itemsSaved()})
 
     @property
     def update_schema(self):
@@ -165,19 +163,19 @@ class SavedDataForm(crud.CrudForm):
         self.field.setDataRow(id_, item.copy())
 
     def remove(self, id_and_item):
-        (id, item) = id_and_item
+        id, item = id_and_item
         self.field.delDataRow(id)
 
-    @button.buttonAndHandler(PMF(u"Download"), name="download")
+    @button.buttonAndHandler(PMF("Download"), name="download")
     def handleDownload(self, action):
         pass
 
-    @button.buttonAndHandler(_(u"Clear all"), name="clearall")
+    @button.buttonAndHandler(_("Clear all"), name="clearall")
     def handleClearAll(self, action):
         self.field.clearSavedFormInput()
 
     def updateActions(self):
-        super(SavedDataForm, self).updateActions()
+        super().updateActions()
         if "download" in self.actions:
             self.actions["download"].addClass("context")
 
@@ -193,14 +191,16 @@ class SavedDataFormWrapper(layout.FormWrapper):
                 delimiter = self.request["csv_delimiter"]
                 if len(delimiter) == 0:
                     self.form_instance._delimiter_missing = True
-                    return super(SavedDataFormWrapper, self).__call__()
+                    return super().__call__()
                 else:
                     delimiter = delimiter[0]
                 self.context.field.download(self.request.response, delimiter=delimiter)
             else:
                 self.context.field.download(self.request.response)
-            return u""
-        return super(SavedDataFormWrapper, self).__call__()
+            return ""
+        if hasattr(self.context.field, "BatchSize"):
+            self.form_instance.batch_size = self.context.field.BatchSize
+        return super().__call__()
 
 
 ActionSavedDataView = layout.wrap_form(
@@ -229,7 +229,7 @@ class EasyFormActionsView(SchemaContext):
 
     def __init__(self, context, request):
         self.schema = get_actions(context)
-        super(EasyFormActionsView, self).__init__(self.schema, request, name="actions")
+        super().__init__(self.schema, request, name="actions")
 
     def publishTraverse(self, request, name):
         """Look up the field whose name matches the next URL path element,
@@ -252,10 +252,10 @@ class EasyFormActionsListing(SchemaListing):
 
     @memoize
     def _field_factory(self, field):
-        field_identifier = u"{0}.{1}".format(field.__module__, field.__class__.__name__)
+        field_identifier = f"{field.__module__}.{field.__class__.__name__}"
         return queryUtility(IActionFactory, name=field_identifier)
 
-    @button.buttonAndHandler(PMF(u"Save"))
+    @button.buttonAndHandler(PMF("Save"))
     def handleSaveDefaults(self, action):
         data, errors = self.extractData()
         if errors:
@@ -316,7 +316,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         )
         return [v for k, v in adapters]
 
-    @button.buttonAndHandler(PMF(u"Save"), name="save")
+    @button.buttonAndHandler(PMF("Save"), name="save")
     def handleSave(self, action):
         data, errors = self.extractData()
         if errors:
@@ -333,7 +333,7 @@ class ActionEditForm(AutoExtensibleForm, form.EditForm):
         notify(SchemaModifiedEvent(self.context.aq_parent))
         self.redirectToParent()
 
-    @button.buttonAndHandler(PMF(u"Cancel"), name="cancel")
+    @button.buttonAndHandler(PMF("Cancel"), name="cancel")
     def handleCancel(self, action):
         self.redirectToParent()
 
@@ -347,17 +347,17 @@ class ActionEditView(layout.FormWrapper):
     form = ActionEditForm
 
     def __init__(self, context, request):
-        super(ActionEditView, self).__init__(context, request)
+        super().__init__(context, request)
         self.field = context.field
 
     @lazy_property
     def label(self):
         return _(
-            u"Edit Action '${fieldname}'", mapping={"fieldname": self.field.__name__}
+            "Edit Action '${fieldname}'", mapping={"fieldname": self.field.__name__}
         )
 
 
-but = button.Button("modeleditor", title=_(u"Edit XML Actions Model"))
+but = button.Button("modeleditor", title=_("Edit XML Actions Model"))
 EasyFormActionsListing.buttons += button.Buttons(but)
 handler = button.Handler(but, EasyFormActionsListing.handleModelEdit)
 EasyFormActionsListing.handlers.addHandler(but, handler)
@@ -366,7 +366,7 @@ EasyFormActionsListing.handlers.addHandler(but, handler)
 class ModelEditorView(ModelEditorView):
     """Editor view"""
 
-    title = _(u"Edit XML Actions Model")
+    title = _("Edit XML Actions Model")
 
     def modelSource(self):
         return self.context.aq_parent.actions_model

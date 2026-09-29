@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Integration tests for miscellaneous stuff
 #
@@ -91,7 +90,7 @@ class TestIsSubEasyForm(base.EasyFormTestCase):
 
 class TestCustomTemplates(base.EasyFormTestCase):
 
-    no_schema = u"""
+    no_schema = """
   <model xmlns="http://namespaces.plone.org/supermodel/schema">
     <schema></schema>
   </model>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Integration tests specific to the api
 #
@@ -15,7 +14,7 @@ class TestFunctions(base.EasyFormTestCase):
     """Test api"""
 
     def afterSetUp(self):
-        super(TestFunctions, self).afterSetUp()
+        super().afterSetUp()
         self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = getattr(self.folder, "ff1")
         self.dummy_form = DummyFormView(self.ff1, self.layer["request"])
@@ -96,19 +95,19 @@ class TestFunctions(base.EasyFormTestCase):
 
         self.assertEqual(
             set(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            set(["replyto", "topic", "comments"]),
+            {"replyto", "topic", "comments"},
         )
 
         self.ff1.showFields = ("topic", "comments")
         self.assertEqual(
             set(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            set(["replyto", "topic", "comments"]),
+            {"replyto", "topic", "comments"},
         )
 
         self.ff1.showAll = False
         self.assertEqual(
             set(filter_widgets(self.ff1, self.dummy_form.w).keys()),
-            set(["topic", "comments"]),
+            {"topic", "comments"},
         )
 
     def test_selective_fields(self):

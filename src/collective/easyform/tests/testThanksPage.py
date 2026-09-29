@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 #
-# Integeration tests specific to the mailer
+# Integration tests specific to the mailer
 #
 
 from collective.easyform.browser.view import EasyFormForm
@@ -15,7 +14,7 @@ class TestFunctions(base.EasyFormTestCase):
     """Test mailer action"""
 
     def afterSetUp(self):
-        super(TestFunctions, self).afterSetUp()
+        super().afterSetUp()
         ff1_id = self.folder.invokeFactory("EasyForm", "ff1")
         self.ff1 = self.folder[ff1_id]
 
@@ -39,9 +38,9 @@ class TestFunctions(base.EasyFormTestCase):
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
         self.assertIn("Thanks for your input.", form)
-        self.assertIn(
-            '<span id="form-widgets-replyto" class="text-widget required textline-field">foo@bar.com</span>',  # noqa
+        self.assertRegex(
             form,
+            '<span id="form-widgets-replyto" class="text-widget required [^"]*">foo@bar.com</span>',  # noqa
         )
 
     def test_thankspage_filter(self):
@@ -91,9 +90,9 @@ class TestFunctions(base.EasyFormTestCase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn(
-            '<span id="form-widgets-hide" class="text-widget textline-field">hello hidden</span>',  # noqa
+        self.assertRegex(
             form,
+            '<span id="form-widgets-hide" class="text-widget[^"]*">hello hidden</span>',  # noqa
         )
 
     def test_no_widget_on_thankspage_fieldset(self):
@@ -152,15 +151,15 @@ class TestThanksPageTraverseFunctional(base.EasyFormFunctionalTestCase):
         portal_url = self.portal.absolute_url()
         self.portal.invokeFactory("Folder", "news")
         self.browser.open(portal_url + "/testform/actions/mailer")
-        self.browser.getControl(
-            name="form.widgets.recipient_email"
-        ).value = "mdummy@address.com"
+        self.browser.getControl(name="form.widgets.recipient_email").value = (
+            "mdummy@address.com"
+        )
         self.browser.getControl("Save").click()
         self.browser.open(portal_url + "/testform/edit")
         self.browser.getControl("Traverse to").selected = True
-        self.browser.getControl(
-            name="form.widgets.thanksPageOverride"
-        ).value = "string:news"
+        self.browser.getControl(name="form.widgets.thanksPageOverride").value = (
+            "string:news"
+        )
         self.browser.getControl("Save").click()
         self.browser.getControl("Your E-Mail Address").value = "test@example.com"
         self.browser.getControl("Subject").value = "Test Subject"

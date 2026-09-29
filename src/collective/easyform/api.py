@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from AccessControl import ClassSecurityInfo
 from AccessControl.class_init import InitializeClass
 from collections import OrderedDict as BaseDict
@@ -6,6 +5,7 @@ from collective.easyform.config import MODEL_DEFAULT
 from collective.easyform.interfaces import IFieldExtender
 from email.utils import formataddr
 from plone import api
+from plone.base.utils import safe_text
 from plone.namedfile.interfaces import INamedBlobFile
 from plone.namedfile.interfaces import INamedFile
 from plone.supermodel import loadString
@@ -13,14 +13,10 @@ from plone.supermodel import serializeSchema
 from plone.supermodel.parser import SupermodelParseError
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.Expression import getExprContext
-from Products.CMFPlone.utils import safe_unicode
 from re import compile
 from zope.schema import getFieldsInOrder
 
-import six
-
-
-CONTEXT_KEY = u"context"
+CONTEXT_KEY = "context"
 # regular expression for dollar-sign variable replacement.
 # we want to find ${identifier} patterns
 dollarRE = compile(r"\$\{(.+?)\}")
@@ -43,7 +39,7 @@ class OrderedDict(BaseDict):
 InitializeClass(OrderedDict)
 
 
-class DollarVarReplacer(object):
+class DollarVarReplacer:
     """Initialize with a dictionary, then self.sub returns a string
     with all ${key} substrings replaced with values looked
     up from the dictionary.
@@ -95,9 +91,6 @@ def get_expression(context, expression_string, **kwargs):
     :param dict kwargs: additional arguments for expression
     :returns: result of TALES expression
     """
-    if six.PY2 and isinstance(expression_string, six.text_type):
-        expression_string = expression_string.encode("utf-8")
-
     expression_context = getExprContext(context, context)
     for key in kwargs:
         expression_context.setGlobal(key, kwargs[key])
@@ -123,7 +116,7 @@ def get_model(data, context):
         except SupermodelParseError:  # pragma: no cover
             pass
 
-    # 2nd we try aquire the model
+    # 2nd we try acquire the model
     if not schema:
         nav_root = api.portal.get_navigation_root(context)
         schema = nav_root.get("easyform_model_default.xml")
@@ -242,17 +235,14 @@ def cleanup(value):
     """Accepts lists, tuples or comma/semicolon-separated strings
     and returns a list of native strings.
     """
-    if isinstance(value, six.string_types):
-        value = safe_unicode(value).strip()
-        value = value.replace(u",", u"\n").replace(u";", u"\n")
+    if isinstance(value, str):
+        value = safe_text(value).strip()
+        value = value.replace(",", "\n").replace(";", "\n")
         value = [s for s in value.splitlines()]
 
     if isinstance(value, (list, tuple)):
-        value = [safe_unicode(s).strip() for s in value]
+        value = [safe_text(s).strip() for s in value]
 
-    if six.PY2:
-        # py2 expects a list of bytes
-        value = [s.encode("utf-8") for s in value if s]
     return value
 
 

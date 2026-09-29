@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Integration tests specific to save-data adapter.
 #
@@ -6,8 +5,10 @@
 from AccessControl.unauthorized import Unauthorized
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
+from collective.easyform.api import set_actions
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
+from io import BytesIO
 from os.path import dirname
 from os.path import join
 from plone import api
@@ -18,8 +19,6 @@ from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.testing.zope import Browser
-from six import BytesIO
-from six.moves import zip
 from transaction import commit
 from zExceptions.unauthorized import Unauthorized as zUnauthorized
 from ZPublisher.HTTPRequest import HTTPRequest
@@ -32,6 +31,7 @@ import unittest
 
 try:
     from openpyxl import load_workbook
+
     HAS_OPENPYXL = True
 except ImportError:
     HAS_OPENPYXL = False
@@ -54,7 +54,6 @@ def FakeRequest(method="GET", add_auth=False, **kwargs):
 
 
 class BaseSaveData(base.EasyFormTestCase):
-
     """test save data adapter"""
 
     def setUp(self):
@@ -65,11 +64,11 @@ class BaseSaveData(base.EasyFormTestCase):
     def createSaver(self):
         """Creates FormCustomScript object"""
         # 1. Create custom script adapter in the form folder
-        self.portal.REQUEST["form.widgets.title"] = u"Saver"
-        self.portal.REQUEST["form.widgets.__name__"] = u"saver"
-        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.title"] = "Saver"
+        self.portal.REQUEST["form.widgets.__name__"] = "saver"
+        self.portal.REQUEST["form.widgets.description"] = ""
         self.portal.REQUEST["form.widgets.factory"] = ["Save Data"]
-        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        self.portal.REQUEST["form.buttons.add"] = "Add"
         view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()
         form = view.form_instance
@@ -89,7 +88,7 @@ class SaveDataTestCase(BaseSaveData):
         self.createSaver()
 
         view = self.ff1.restrictedTraverse("saveddata")
-        self.assertEqual(list(view.items()), [("saver", u"Saver")])
+        self.assertEqual(list(view.items()), [("saver", "Saver")])
 
         # as the owner, TEST_USER_ID can still see the saved data
         setRoles(self.portal, TEST_USER_ID, [])
@@ -272,7 +271,9 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.csv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverDownloadTSV(self):
@@ -298,14 +299,18 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response)
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/tab-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.tsv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.tsv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit(delimiter="\t") in res)
 
     @unittest.skipUnless(HAS_OPENPYXL, "Requires openpyxl")
     def testSaverDownloadXLSX(self):
         """test save data"""
 
-        with open(join(dirname(__file__), "fixtures", "fieldset_multiple_choice.xml")) as f:
+        with open(
+            join(dirname(__file__), "fixtures", "fieldset_multiple_choice.xml")
+        ) as f:
             self.ff1.fields_model = f.read()
 
         self.createSaver()
@@ -320,7 +325,7 @@ class SaveDataTestCase(BaseSaveData):
             topic="test subject",
             replyto="test@test.org",
             comments="test comments",
-            multiplechoice=["Red", "Blue"]
+            multiplechoice=["Red", "Blue"],
         )
         saver.onSuccess(request.form, request)
 
@@ -334,7 +339,7 @@ class SaveDataTestCase(BaseSaveData):
         )
         self.assertEqual(
             request.response.headers["content-disposition"],
-            'attachment; filename="saver.xlsx"',
+            'attachment; filename="ff1-saver.xlsx"',
         )
 
         wb = load_workbook(res)
@@ -371,7 +376,9 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.csv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit(header=True) in res)
 
     def testSaverDownloadExtraData(self):
@@ -397,7 +404,9 @@ class SaveDataTestCase(BaseSaveData):
         saver.download(request.response, delimiter=",")
         res = request.response.stdout.getvalue().decode("utf-8")
         self.assertTrue("Content-Type: text/comma-separated-values" in res)
-        self.assertTrue('Content-Disposition: attachment; filename="saver.csv"' in res)
+        self.assertTrue(
+            'Content-Disposition: attachment; filename="ff1-saver.csv"' in res
+        )
         self.assertTrue(saver.getSavedFormInputForEdit() in res)
 
     def testSaverSavedFormInput(self):
@@ -652,16 +661,18 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.browser.addHeader(
             "Authorization", "Basic " + SITE_OWNER_NAME + ":" + SITE_OWNER_PASSWORD
         )
+        # Make sure we have an email address so the mailer action works.
+        api.portal.set_registry_record("plone.email_from_address", "to@example.org")
         self.createSaver()
 
     def createSaver(self):
-        """Creates FormCustomScript object"""
+        """Creates SaveData object"""
         # 1. Create custom script adapter in the form folder
-        self.portal.REQUEST["form.widgets.title"] = u"Saver"
-        self.portal.REQUEST["form.widgets.__name__"] = u"saver"
-        self.portal.REQUEST["form.widgets.description"] = u""
+        self.portal.REQUEST["form.widgets.title"] = "Saver"
+        self.portal.REQUEST["form.widgets.__name__"] = "saver"
+        self.portal.REQUEST["form.widgets.description"] = ""
         self.portal.REQUEST["form.widgets.factory"] = ["Save Data"]
-        self.portal.REQUEST["form.buttons.add"] = u"Add"
+        self.portal.REQUEST["form.buttons.add"] = "Add"
         view = self.ff1.restrictedTraverse("actions/@@add-action")
         view.update()
         commit()
@@ -672,6 +683,12 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         # 2. Check that creation succeeded
         actions = get_actions(self.ff1)
         self.assertTrue("saver" in actions)
+
+        # Set a smaller batch size.
+        saver = actions["saver"]
+        saver.BatchSize = 3
+        set_actions(self.ff1, actions)
+        commit()
 
     def test_download_saveddata_view(self):
         self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
@@ -723,17 +740,13 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
         self.assertTrue("CSV delimiter is required." in self.browser.contents)
 
     def test_download_saveddata_csv_delimiter_from_form(self):
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
         self.browser.getControl(name="form.buttons.download").click()
         self.assertEqual(
             self.browser.contents, "Your E-Mail Address,Subject,Comments\r\n"
         )
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
         input = self.browser.getControl("CSV delimiter")
         input.value = ";"
@@ -742,12 +755,50 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
             self.browser.contents, "Your E-Mail Address;Subject;Comments\r\n"
         )
 
+    def add_sample_data(self):
+        for i in range(1, 6):
+            self.browser.open(self.portal_url + "/test-folder/ff1")
+            self.browser.getControl(name="form.widgets.replyto").value = (
+                "me%d@example.org" % i
+            )
+            self.browser.getControl(name="form.widgets.topic").value = "Subject %d" % i
+            self.browser.getControl(name="form.widgets.comments").value = (
+                "Comments %d" % i
+            )
+            self.browser.getControl(name="form.buttons.submit").click()
+            self.assertIn("Thanks for your input.", self.browser.contents)
+
+    def test_view_saveddata_batched(self):
+        self.add_sample_data()
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
+        with open("/tmp/test2.html", "w") as testfile:
+            testfile.write(self.browser.contents)
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.assertTrue("me1@example.org" in self.browser.contents)
+        self.assertTrue("Subject 1" in self.browser.contents)
+        self.assertTrue("Comments 1" in self.browser.contents)
+        self.assertTrue("me2@example.org" in self.browser.contents)
+        self.assertTrue("me3@example.org" in self.browser.contents)
+        # We have a batch size of three, so the remaining two
+        # should not be visible.
+        self.assertFalse("me4@example.org" in self.browser.contents)
+        self.assertFalse("me5@example.org" in self.browser.contents)
+
+        # Go to the next batch
+        self.browser.getLink("Next 2 items").click()
+        self.assertTrue("Saved Data" in self.browser.contents)
+        self.assertFalse("me1@example.org" in self.browser.contents)
+        self.assertFalse("me2@example.org" in self.browser.contents)
+        self.assertFalse("me3@example.org" in self.browser.contents)
+        self.assertTrue("me4@example.org" in self.browser.contents)
+        self.assertTrue("me5@example.org" in self.browser.contents)
+        self.assertTrue("Subject 4" in self.browser.contents)
+        self.assertTrue("Comments 5" in self.browser.contents)
+
     # this test depends on internals of zope.testbrowser controls
     def test_download_saveddata_suggests_csv_delimiter_defines_maxlength(self):
-        self.browser.open(
-            self.portal_url + "/test-folder/ff1/@@actions/saver/@@data"
-        )
+        self.browser.open(self.portal_url + "/test-folder/ff1/@@actions/saver/@@data")
         self.assertTrue("Saved Data" in self.browser.contents)
         input = self.browser.getControl("CSV delimiter")
         self.assertTrue(input._elem.has_attr("maxlength"))
-        self.assertEqual(input._elem.get("maxlength"), u"1")
+        self.assertEqual(input._elem.get("maxlength"), "1")

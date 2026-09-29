@@ -1,1 +1,2 @@
-zc.buildout==3.0.1
+-c constraints.txt
+-e .[test]

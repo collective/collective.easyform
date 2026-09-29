@@ -45,7 +45,7 @@ Submit the form::
     >>> 'Thanks for your input.' in browser.contents
     True
 
-Let's raise a field error in the script adapter by returing
+Let's raise a field error in the script adapter by returning
 a dictionary::
 
     >>> browser.open(portal_url + '/testform/actions/custom')

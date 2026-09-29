@@ -9,9 +9,17 @@
   <h1 i18n:translate="">Saved Data</h1>
 
   <p class="lead"
-     tal:content="python: view.description()"></p>
+     tal:content="python: view.description()"
+  ></p>
 
-  <p i18n:translate="saveddata_form_description">The saved data of <strong i18n:name="formname" tal:content="view/form_title">form name</strong> stored in the adapter <strong i18n:name="adapter" tal:content="view/name"></strong></p>
+  <p i18n:translate="saveddata_form_description">The saved data of
+    <strong tal:content="view/form_title"
+            i18n:name="formname"
+    >form name</strong>
+    stored in the adapter
+    <strong tal:content="view/name"
+            i18n:name="adapter"
+    ></strong></p>
 
   <div class="portalMessage"
        role="status"
@@ -34,19 +42,30 @@
              tal:condition="view/actions/values|nothing"
         >
           <div tal:condition="python:view.is_csv"
-               tal:attributes="class python:'field error' if view.delimiter_missing else 'field'"
+               tal:attributes="
+                 class python:'field error' if view.delimiter_missing else 'field';
+               "
           >
             <label for="csv_delimiter"
+                   i18n:domain="collective.easyform"
                    i18n:translate=""
-                   i18n:domain="collective.easyform">CSV delimiter</label>
+            >CSV delimiter</label>
             <div class="error"
                  tal:condition="view/delimiter_missing"
+                 i18n:domain="collective.easyform"
                  i18n:translate=""
-                 i18n:domain="collective.easyform">CSV delimiter is required.</div>
-            <input type="text" name="csv_delimiter" id="csv_delimiter"
-                   value=";" maxlength="1" size="1"
+            >CSV delimiter is required.</div>
+            <input id="csv_delimiter"
+                   maxlength="1"
+                   name="csv_delimiter"
+                   size="1"
                    style="width: 3ch; padding-left: 1ch; padding-right: 1ch"
-                   tal:attributes="value python:view.csv_delimiter" />
+                   type="text"
+                   value=";"
+                   tal:attributes="
+                     value python:view.csv_delimiter;
+                   "
+            />
           </div>
           <tal:block repeat="action view/actions/values">
             <input type="submit"

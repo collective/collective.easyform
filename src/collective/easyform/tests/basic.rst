@@ -2,7 +2,7 @@ The EasyForm content type
 =========================
 
 In this section we are tesing the EasyForm content type by performing
-basic operations like adding, updadating and deleting EasyForm content
+basic operations like adding, updating and deleting EasyForm content
 items::
 
     >>> browser = get_browser(layer)

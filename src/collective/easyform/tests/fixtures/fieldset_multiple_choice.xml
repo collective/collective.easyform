@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <model xmlns="http://namespaces.plone.org/supermodel/schema"
        xmlns:easyform="http://namespaces.plone.org/supermodel/easyform"
        xmlns:i18n="http://xml.zope.org/namespaces/i18n"
@@ -25,7 +26,9 @@
       <description />
       <title>Comments</title>
     </field>
-    <field name="multiplechoice" type="zope.schema.Set">
+    <field name="multiplechoice"
+           type="zope.schema.Set"
+    >
       <description />
       <required>False</required>
       <title>Multiplechoice</title>

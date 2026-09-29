@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1014"
       profile="collective.easyform:default"
       source="1013"
+      destination="1014"
       >
 
     <gs:upgradeDepends

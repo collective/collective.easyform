@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1002"
       profile="collective.easyform:default"
       source="1001"
+      destination="1002"
       >
     <gs:upgradeDepends
         title="Remove ProtectedEmail and ProtectedTextLine as addable fields"

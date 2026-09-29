@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1006"
       profile="collective.easyform:default"
       source="1005"
+      destination="1006"
       >
     <gs:upgradeDepends
         title="Import rolemap"
