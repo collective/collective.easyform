@@ -48,6 +48,7 @@ setup(
         "plone.dexterity",
         "plone.memoize",
         "plone.namedfile",
+        "plone.protect",
         "plone.resourceeditor",
         "plone.restapi",
         "plone.registry",
