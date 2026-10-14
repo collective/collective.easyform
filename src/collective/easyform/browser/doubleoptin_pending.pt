@@ -1,0 +1,14 @@
+<html metal:use-macro="context/@@main_template/macros/master"
+      i18n:domain="collective.easyform"
+>
+  <body>
+    <metal:block fill-slot="content-core">
+      <h1 class="documentFirstHeading"
+          tal:content="view/title"
+      >Please confirm your e-mail address</h1>
+      <div class="easyform-doubleoptin-pending"
+           tal:content="structure view/text"
+      ></div>
+    </metal:block>
+  </body>
+</html>

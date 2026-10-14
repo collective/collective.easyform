@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: plone 5-buildout\n"
-"POT-Creation-Date: 2026-04-15 11:30+0000\n"
+"POT-Creation-Date: 2026-10-14 06:42+0000\n"
 "PO-Revision-Date: 2021-06-02 16:11+0200\n"
 "Last-Translator: Thibaut Born <thibaut.born@kuleuven.be>\n"
 "Language-Team: Dutch\n"
@@ -56,6 +56,10 @@ msgstr "Toegestane velden"
 msgid "Answers are required for each question."
 msgstr "Elke vraag dient beantwoord te worden."
 
+#: collective/easyform/browser/doubleoptin_confirm.pt:62
+msgid "Back to the form"
+msgstr ""
+
 #: collective/easyform/interfaces/fields.py:108
 msgid "CSS Class"
 msgstr ""
@@ -79,6 +83,14 @@ msgstr "Wis alles"
 
 #: collective/easyform/default_schemata/fields_default.xml
 msgid "Comments"
+msgstr ""
+
+#: collective/easyform/browser/doubleoptin_confirm.pt:29
+msgid "Confirm"
+msgstr ""
+
+#: collective/easyform/browser/doubleoptin_confirm.pt:8
+msgid "Confirm your submission"
 msgstr ""
 
 #: collective/easyform/interfaces/fields.py:111
@@ -191,6 +203,26 @@ msgstr "Geen adapters beschikbaar"
 msgid "Overrides"
 msgstr ""
 
+#: collective/easyform/browser/doubleoptin_confirm.pt:13
+msgid "Please click the button to confirm your submission to the form ${form_title}."
+msgstr ""
+
+#: collective/easyform/interfaces/doubleoptin.py:33
+msgid "Please confirm your e-mail address"
+msgstr ""
+
+#: collective/easyform/interfaces/doubleoptin.py:10
+msgid "Please confirm your submission"
+msgstr ""
+
+#: collective/easyform/actions.py:1047
+msgid "Please confirm your submission via the e-mail we just sent."
+msgstr ""
+
+#: collective/easyform/actions.py:1025
+msgid "Please enter a valid e-mail address."
+msgstr ""
+
 #: collective/easyform/interfaces/fields.py:243
 msgid "Possible answers"
 msgstr "Mogelijke antwoorden"
@@ -243,10 +275,18 @@ msgstr "Onderwerp"
 msgid "Thanks Page"
 msgstr "'Bedankt' pagina"
 
+#: collective/easyform/browser/doubleoptin_confirm.pt:58
+msgid "The link has already been used or has expired. Please fill in the form again."
+msgstr ""
+
 #: collective/easyform/browser/controlpanel.py:20
 #: collective/easyform/profiles/default/registry.xml
 msgid "These Fields are available for your forms."
 msgstr "Deze velden zijn beschikbaar voor het formulier"
+
+#: collective/easyform/browser/doubleoptin_confirm.pt:55
+msgid "This confirmation link is not valid"
+msgstr ""
 
 #: collective/easyform/interfaces/fields.py:100
 msgid "This is using the pat-depends from patternslib, all options are supported. Please read the <a href=\"https://patternslib.com/demos/depends\" target=\"_blank\">pat-depends documentations</a> for options."
@@ -268,9 +308,23 @@ msgstr ""
 msgid "Your E-Mail Address"
 msgstr "Jouw e-mailadres"
 
+#: collective/easyform/browser/doubleoptin_confirm.pt:71
+msgid "Your submission could not be processed"
+msgstr ""
+
 #. Default: "Define a batch size. Leave blank or set to 0 to disable batching in @@data view."
 #: collective/easyform/interfaces/savedata.py:94
 msgid "batch_size_text"
+msgstr ""
+
+#. Default: "Hello,\n\nsomeone entered this e-mail address in the form \"${form_title}\". To complete the submission, please confirm it by opening the following link:\n\n${confirm_url}\n\nThe link is valid for ${expiry_hours} hours. If you did not fill in this form, simply ignore this e-mail - nothing will be submitted without your confirmation."
+#: collective/easyform/interfaces/doubleoptin.py:15
+msgid "default_doi_body"
+msgstr ""
+
+#. Default: "We have sent a confirmation link to the e-mail address you entered. Your submission is only complete once you have opened that link. If the e-mail does not arrive, please check your spam folder."
+#: collective/easyform/interfaces/doubleoptin.py:38
+msgid "default_doi_pending_text"
 msgstr ""
 
 #. Default: "Reset"
@@ -341,6 +395,16 @@ msgstr "Selecteer dit om Cross-Site Request Forgery aan te zetten. Let op dat al
 #: collective/easyform/interfaces/easyform.py:258
 msgid "help_default_fieldset_label_text"
 msgstr "Dit veld maakt het mogelijk om het standaard fieldset-label te wijzigen"
+
+#. Default: "Plain text. Placeholders: ${confirm_url} (the confirmation link, required), ${expiry_hours}, ${form_title}, ${email} and ${<field name>} for any form field."
+#: collective/easyform/interfaces/doubleoptin.py:75
+msgid "help_doi_body"
+msgstr ""
+
+#. Default: "The form field holding the e-mail address that has to confirm the submission."
+#: collective/easyform/interfaces/doubleoptin.py:58
+msgid "help_doi_email_field"
+msgstr ""
 
 #. Default: "The text will be displayed after the form fields."
 #: collective/easyform/interfaces/easyform.py:105
@@ -667,7 +731,7 @@ msgid "label_csrf"
 msgstr "CSRF beveiliging"
 
 #. Default: "Custom Script"
-#: collective/easyform/actions.py:901
+#: collective/easyform/actions.py:1080
 msgid "label_customscript_action"
 msgstr "Aangepast script"
 
@@ -675,6 +739,41 @@ msgstr "Aangepast script"
 #: collective/easyform/interfaces/easyform.py:254
 msgid "label_default_fieldset_label_text"
 msgstr "Eigen standaard Fieldset-label"
+
+#. Default: "Text of the confirmation e-mail"
+#: collective/easyform/interfaces/doubleoptin.py:74
+msgid "label_doi_body"
+msgstr ""
+
+#. Default: "E-mail field"
+#: collective/easyform/interfaces/doubleoptin.py:57
+msgid "label_doi_email_field"
+msgstr ""
+
+#. Default: "Validity of the confirmation link (hours)"
+#: collective/easyform/interfaces/doubleoptin.py:86
+msgid "label_doi_expiry_hours"
+msgstr ""
+
+#. Default: "Text of the page shown after submitting the form"
+#: collective/easyform/interfaces/doubleoptin.py:105
+msgid "label_doi_pending_text"
+msgstr ""
+
+#. Default: "Title of the page shown after submitting the form"
+#: collective/easyform/interfaces/doubleoptin.py:96
+msgid "label_doi_pending_title"
+msgstr ""
+
+#. Default: "Subject of the confirmation e-mail"
+#: collective/easyform/interfaces/doubleoptin.py:68
+msgid "label_doi_subject"
+msgstr ""
+
+#. Default: "Double Opt-In"
+#: collective/easyform/actions.py:1090
+msgid "label_doubleoptin_action"
+msgstr ""
 
 #. Default: "Download Format"
 #: collective/easyform/interfaces/savedata.py:78
@@ -822,7 +921,7 @@ msgid "label_mailallfields_text"
 msgstr "Alle velden toevoegen"
 
 #. Default: "Mailer"
-#: collective/easyform/actions.py:896
+#: collective/easyform/actions.py:1075
 msgid "label_mailer_action"
 msgstr ""
 
@@ -872,7 +971,7 @@ msgid "label_richlabel_field"
 msgstr "Label met opmaak"
 
 #. Default: "Save Data"
-#: collective/easyform/actions.py:906
+#: collective/easyform/actions.py:1085
 msgid "label_savedata_action"
 msgstr "Opslag"
 
