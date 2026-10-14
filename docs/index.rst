@@ -21,6 +21,14 @@ docstring if you want to regenerate them.
    actions
 
 
+Contributing to the documentation
+---------------------------------
+
+The pages live in the ``docs`` directory of the repository and are built
+with Sphinx. Every push and pull request runs the *Documentation* workflow
+on GitHub (warnings are errors), and pull requests get a preview build on
+Read the Docs - the link is posted as a comment on the pull request.
+
 Further reading
 ---------------
 

@@ -1,0 +1,25 @@
+# Comments the link to the Read the Docs preview build on new pull
+# requests. The preview itself is built by Read the Docs, which needs
+# "Build pull requests for this project" enabled in the project settings
+# (https://app.readthedocs.org/dashboard/collectiveeasyform/edit/).
+# Not managed by plone/meta.
+name: Read the Docs preview
+permissions: {}
+
+on:
+  pull_request_target:
+    types:
+      - opened
+    paths:
+      - "docs/**"
+      - ".readthedocs.yaml"
+
+jobs:
+  documentation-links:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: readthedocs/actions/preview@v1
+        with:
+          project-slug: "collectiveeasyform"
