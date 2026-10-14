@@ -104,8 +104,9 @@ Anybody can type somebody else's name and e-mail address into a form -
 a captcha only proves that a human is present. The Double Opt-In action
 holds a submission back until the entered e-mail address confirmed it:
 
-1. Add an action of type *Double Opt-In* and move it to the **first position**
-   of the action list - only the actions *after* it are held back.
+1. Add an action of type *Double Opt-In*. Its position in the action list
+   does not matter: as long as it is enabled, all other actions of the form
+   are held back until the submission is confirmed.
 2. Select the *E-mail field*: the form field holding the address that has to
    confirm the submission. Subject and text of the confirmation e-mail, the
    validity of the link (default 48 hours) and the title and text of the page

@@ -249,8 +249,8 @@ of this package is taken. If you plan to override start with the the `mail_body_
 it is a valid pagetemplate.
 
 The Double Opt-In action holds a submission back until the entered e-mail address confirmed it via a token
-link; only then the actions listed after it (mailer, data storage, ...) are executed. Put it first in the
-list of actions and select the form field holding the e-mail address. See the documentation for details.
+link; only then the other actions of the form (mailer, data storage, ...) are executed, whatever their
+position in the list. Select the form field holding the e-mail address. See the documentation for details.
 
 
 Translations

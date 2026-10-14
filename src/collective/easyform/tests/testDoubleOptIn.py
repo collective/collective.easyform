@@ -44,6 +44,27 @@ ACTIONS_MODEL = """
 </model>
 """
 
+# same actions, Double Opt-In added last - as it happens when an editor adds it
+# to an existing form
+ACTIONS_MODEL_DOUBLEOPTIN_LAST = """
+<model xmlns="http://namespaces.plone.org/supermodel/schema">
+  <schema>
+    <field name="mailer" type="collective.easyform.actions.Mailer">
+      <title>Mailer</title>
+      <recipient_email>mdummy@address.com</recipient_email>
+      <msg_subject>New submission</msg_subject>
+    </field>
+    <field name="saver" type="collective.easyform.actions.SaveData">
+      <title>Save Data</title>
+    </field>
+    <field name="doubleoptin" type="collective.easyform.actions.DoubleOptIn">
+      <title>Double Opt-In</title>
+      <email_field>email</email_field>
+    </field>
+  </schema>
+</model>
+"""
+
 SUBMITTER = "submitter@example.org"
 
 
@@ -148,6 +169,34 @@ class DoubleOptInTests(base.EasyFormTestCase):
         view, html = self.confirm(token)
         self.assertEqual(view.status, "invalid")
         self.assertEqual(len(self.messages), 1)
+
+    def test_position_of_the_action_does_not_matter(self):
+        self.ff1.actions_model = ACTIONS_MODEL_DOUBLEOPTIN_LAST
+        self.submit(name="Maria Muster", email=SUBMITTER)
+
+        self.assertEqual(len(self.messages), 1, "only the confirmation mail is sent")
+        self.assertEqual(self.messages[0][1], [SUBMITTER])
+        self.assertEqual(get_actions(self.ff1)["saver"].itemsSaved(), 0)
+        self.assertEqual(len(get_doubleoptin_store(self.ff1)), 1)
+
+        token = self.token_from_mail()
+        self.messages = []
+        view, html = self.confirm(token)
+        self.assertEqual(view.status, "confirmed")
+        self.assertEqual(self.messages[0][1], ["mdummy@address.com"])
+        self.assertEqual(get_actions(self.ff1)["saver"].itemsSaved(), 1)
+
+    def test_disabled_action_holds_nothing_back(self):
+        actions = get_actions(self.ff1)
+        actions["doubleoptin"].required = False
+        from collective.easyform.api import set_actions
+
+        set_actions(self.ff1, actions)
+        self.submit(name="Maria Muster", email=SUBMITTER)
+
+        self.assertEqual(self.messages[0][1], ["mdummy@address.com"])
+        self.assertEqual(get_actions(self.ff1)["saver"].itemsSaved(), 1)
+        self.assertEqual(len(get_doubleoptin_store(self.ff1)), 0)
 
     def test_confirmation_honours_thanks_page_redirect(self):
         self.ff1.thanksPageOverrideAction = "redirect_to"
