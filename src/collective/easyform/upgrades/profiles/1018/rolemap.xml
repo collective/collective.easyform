@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rolemap>
+  <permissions>
+
+    <permission acquire="True"
+                name="collective.easyform: Add Mailers"
+    >
+      <role name="Editor" />
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Add Data Savers"
+    >
+      <role name="Editor" />
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit Advanced Fields"
+    >
+      <role name="Editor" />
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+    <permission acquire="True"
+                name="collective.easyform: Edit Mail Addresses"
+    >
+      <role name="Editor" />
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Site Administrator" />
+    </permission>
+
+  </permissions>
+</rolemap>
