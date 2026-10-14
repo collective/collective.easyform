@@ -1,0 +1,3 @@
+Update configuration files from plone/meta 2.11. Test matrix is now
+explicit in .meta.toml: Plone 6.0 - 6.2 on Python 3.10+.
+[petschki]
