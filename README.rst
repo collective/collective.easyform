@@ -6,29 +6,40 @@ EasyForm - Form Builder for Plone
     :target: https://badge.fury.io/py/collective.easyform
     :alt: latest release version badge by Badge Fury
 
-.. image:: https://github.com/collective/collective.easyform/actions/workflows/test.yml/badge.svg
-    :target: https://github.com/collective/collective.easyform/actions
-    :alt: Travis CI status
+.. image:: https://github.com/collective/collective.easyform/actions/workflows/test-matrix.yml/badge.svg
+    :target: https://github.com/collective/collective.easyform/actions/workflows/test-matrix.yml
+    :alt: Tests
 
 .. image:: https://coveralls.io/repos/github/collective/collective.easyform/badge.svg?branch=master
     :target: https://coveralls.io/github/collective/collective.easyform?branch=master
     :alt: Coveralls status
 
+.. image:: https://readthedocs.org/projects/collectiveeasyform/badge/?version=latest
+    :target: https://collectiveeasyform.readthedocs.io/en/latest/
+    :alt: Documentation
 
-The add on ``collective.easyform`` adds Plone content types for form creation.
 
-EasyForm provides a Plone form builder through-the-web using fields, widgets, actions and validators (based on `Dexterity <https://github.com/plone/plone.dexterity>`_).
+``collective.easyform`` is a form builder for Plone: editors create forms through the web by adding fields,
+fieldsets and actions - no code needed. It is based on `Dexterity <https://github.com/plone/plone.dexterity>`_.
 
-Form input can be saved or emailed.
-A simple and user-friendly interface allows non-programmers to create custom forms.
+Form input can be mailed, stored for download, handed to a custom script or held back until the sender
+confirmed their e-mail address.
+
+Documentation with screenshots: https://collectiveeasyform.readthedocs.io/
 
 
 Installation
 ============
 
-Install collective.easyform by adding it to your buildout:
+Add ``collective.easyform`` to the dependencies of your project - with pip:
 
 .. code-block:: shell
+
+    pip install collective.easyform
+
+or with buildout:
+
+.. code-block:: ini
 
     [buildout]
 
@@ -37,14 +48,7 @@ Install collective.easyform by adding it to your buildout:
     eggs =
         collective.easyform
 
-
-Run buildout:
-
-.. code-block:: shell
-
-    bin/buildout
-
-The last step is to activate ``EasyForm`` in the Add-ons control panel.
+Then activate ``EasyForm`` in the Add-ons control panel.
 
 
 Migration from PloneFormGen
@@ -84,7 +88,7 @@ Usage
 
 Click on the picture below for a short introduction video:
 
-.. image:: docs/images/easyform-youtube.png
+.. image:: https://raw.githubusercontent.com/collective/collective.easyform/master/docs/images/easyform-youtube.png
     :target: https://www.youtube.com/watch?v=DMCYnYE9RKU
     :alt: EasyForm instructional video
 
@@ -96,10 +100,10 @@ We are using pat-depends here, all options are documented in the `pat-depends do
 
 You can also set a CSS class string for every field under Advanced > CSS Class.
 
-.. image:: docs/images/conditional_fields_and_field_css.png
+.. image:: https://raw.githubusercontent.com/collective/collective.easyform/master/docs/images/conditional_fields_and_field_css.png
     :width: 350
 
-.. image:: docs/images/form_multicolumns.png
+.. image:: https://raw.githubusercontent.com/collective/collective.easyform/master/docs/images/form_multicolumns.png
 
 Since the form is marked with the ``row`` css class you can use the existing Bootstrap 5 CSS column classes for the fields
 to create simple column layouts. See the `Bootstrap Grid System <https://getbootstrap.com/docs/5.2/layout/grid/>`_ documentation
@@ -160,7 +164,7 @@ Run buildout. In the Add-ons control panel, activate both EasyForm and the ReCap
 
 In the ReCaptcha control panel, set the public key and private key values you obtained from https://developers.google.com/recaptcha/ (you can use reCAPTCHA V2).
 
-In the EasyFrom control panel (``/@@easyform-controlpanel``), add the "ReCaptcha" field to "Allowed Fields".
+In the EasyForm control panel (``/@@easyform-controlpanel``), add the "ReCaptcha" field to "Allowed Fields".
 Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:
 
 .. code-block:: xml
@@ -196,7 +200,7 @@ Install ``collective.easyform`` with the  ``norobots`` extra:
 
 Run buildout. In the Add-ons control panel, install EasyForm.
 
-In the EasyFrom control panel (``/@@easyform-controlpanel``), add the "NorobotCaptcha" field to "Allowed Fields".
+In the EasyForm control panel (``/@@easyform-controlpanel``), add the "NorobotCaptcha" field to "Allowed Fields".
 Alternatively, activate it by adding it as an ``registry.xml`` entry for Generic Setup:
 
 .. code-block:: xml
@@ -245,7 +249,7 @@ You can choose between the following actions after form submission:
 
 The mailer stores a HTML template for sending the results of the form. You can override it with a file named
 `easyform_mail_body_default.pt` in your site. If it is not found the default from the `default_schemata` directory
-of this package is taken. If you plan to override start with the the `mail_body_default.pt` file and make sure
+of this package is taken. If you plan to override start with the `mail_body_default.pt` file and make sure
 it is a valid pagetemplate.
 
 The Double Opt-In action holds a submission back until the entered e-mail address confirmed it via a token
@@ -275,7 +279,8 @@ This add-on has been translated into
 Related Addons
 ==============
 
-**Note:** This Plone package is similar to `Archetypes <http://docs.plone.org/develop/plone/content/archetypes/>`_ based `Products.PloneFormGen <https://github.com/smcmahon/Products.PloneFormGen>`_ for Plone versions 1 to 4. Now, Dexterity is the default framework for building content types in Plone 5. ``collective.easyform`` is based on Dexterity.
+``collective.easyform`` is the Dexterity based successor of `Products.PloneFormGen <https://github.com/smcmahon/Products.PloneFormGen>`_,
+the Archetypes based form builder of Plone 4. See *Migration from PloneFormGen* above.
 
 
 Source Code and Contributions
@@ -313,7 +318,8 @@ The project is licensed under the GPLv2.
 Compatibility
 =============
 
-- 1.x targets Plone 4.x
-- 2.x targets Plone 5.x onwards
-- 3.x targets Plone 5.2
+- 5.x targets Plone 6.0 - 6.2 on Python 3.10 and later
 - 4.x targets Plone 6, on Python 3
+- 3.x targets Plone 5.2
+- 2.x targets Plone 5.x onwards
+- 1.x targets Plone 4.x

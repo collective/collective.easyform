@@ -1,0 +1,4 @@
+Rewrite the documentation for Plone 6 with current screenshots, add a
+script to regenerate them (docs/make_screenshots.py), make the Read the
+Docs build work again (.readthedocs.yaml) and update the README.
+[petschki]
