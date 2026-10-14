@@ -94,7 +94,7 @@ initgroups==2.13.0
 lxml==4.6.5
 mailinglogger==3.7.0
 mccabe==0.3
-mechanize==0.2.5
+mechanize==0.4.6
 ordereddict==1.1
 pep8==1.5.7
 plone.alterego==1.0
