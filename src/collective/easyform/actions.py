@@ -930,9 +930,29 @@ def doubleoptin_is_expired(entry, expiry_hours):
 
 
 def doubleoptin_purge_expired(store, expiry_hours):
+    """Remove the expired entries of a store, return how many."""
+    removed = 0
     for token, entry in list(store.items()):
         if doubleoptin_is_expired(entry, expiry_hours):
             del store[token]
+            removed += 1
+    return removed
+
+
+def doubleoptin_purge(form):
+    """Purge the pending submissions of a form: the expired ones, or all
+    of them when the form has no enabled Double Opt-In action left (they
+    could never be confirmed). Returns ``(removed, remaining)``."""
+    store = IAnnotations(form).get(DOUBLEOPTIN_PENDING_KEY)
+    if store is None:
+        return 0, 0
+    action = get_doubleoptin_action(form)
+    if action is None:
+        removed = len(store)
+        store.clear()
+    else:
+        removed = doubleoptin_purge_expired(store, action.expiry_hours)
+    return removed, len(store)
 
 
 def doubleoptin_peek(form, token):

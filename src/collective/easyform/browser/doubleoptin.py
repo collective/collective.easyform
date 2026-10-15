@@ -1,10 +1,13 @@
 from collective.easyform.actions import doubleoptin_confirm
 from collective.easyform.actions import doubleoptin_peek
+from collective.easyform.actions import doubleoptin_purge
 from collective.easyform.actions import doubleoptin_substitution_data
 from collective.easyform.actions import get_doubleoptin_action
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import get_expression
+from collective.easyform.interfaces import IEasyForm
 from html import escape
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -96,3 +99,38 @@ class DoubleOptInConfirmView(BrowserView):
             self.thanks_prologue = dollar_replacer(form.thanksPrologue.output, data)
         if form.thanksEpilogue:
             self.thanks_epilogue = dollar_replacer(form.thanksEpilogue.output, data)
+
+
+class DoubleOptInPurgeView(BrowserView):
+    """Remove stale pending submissions, meant for a cron job.
+
+    On a form it purges that form, on the site root every form of the
+    site. The response is a plain text report with one line per form
+    that holds pending submissions.
+    """
+
+    def __call__(self):
+        # a Manager-only request that only removes stale data: safe to
+        # serve without a CSRF token, which a cron job cannot provide
+        alsoProvides(self.request, IDisableCSRFProtection)
+        self.request.response.setHeader("Content-Type", "text/plain; charset=utf-8")
+        forms = self.forms()
+        lines = []
+        total_removed = total_remaining = 0
+        for form in forms:
+            removed, remaining = doubleoptin_purge(form)
+            total_removed += removed
+            total_remaining += remaining
+            if removed or remaining:
+                path = "/".join(form.getPhysicalPath())
+                lines.append(f"{path}: removed {removed}, {remaining} pending")
+        lines.append(
+            f"{len(forms)} form(s): removed {total_removed}, {total_remaining} pending"
+        )
+        return "\n".join(lines) + "\n"
+
+    def forms(self):
+        if IEasyForm.providedBy(self.context):
+            return [self.context]
+        brains = api.content.find(context=self.context, portal_type="EasyForm")
+        return [brain.getObject() for brain in brains]

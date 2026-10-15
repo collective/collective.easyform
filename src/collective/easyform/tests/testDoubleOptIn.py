@@ -1,13 +1,17 @@
 #
 # Integration tests specific to the Double Opt-In action
 #
+from AccessControl import Unauthorized
 from collective.easyform.actions import doubleoptin_peek
 from collective.easyform.actions import get_doubleoptin_store
 from collective.easyform.api import get_actions
+from collective.easyform.api import set_actions
 from collective.easyform.tests import base
 from datetime import timedelta
 from email import message_from_bytes
 from plone import api
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 
 import re
 
@@ -189,8 +193,6 @@ class DoubleOptInTests(base.EasyFormTestCase):
     def test_disabled_action_holds_nothing_back(self):
         actions = get_actions(self.ff1)
         actions["doubleoptin"].required = False
-        from collective.easyform.api import set_actions
-
         set_actions(self.ff1, actions)
         self.submit(name="Maria Muster", email=SUBMITTER)
 
@@ -242,3 +244,38 @@ class DoubleOptInTests(base.EasyFormTestCase):
         html = self.ff1.restrictedTraverse("@@doubleoptin-pending")()
         self.assertIn("Please confirm your e-mail address", html)
         self.assertIn("confirmation link", html)
+
+    def test_purge_view(self):
+        self.submit(name="Maria Muster", email=SUBMITTER)
+        token = self.token_from_mail()
+        self.submit(name="Max Muster", email=SUBMITTER)
+        store = get_doubleoptin_store(self.ff1)
+        self.assertEqual(len(store), 2)
+        store[token]["created"] -= timedelta(hours=49)
+
+        # on the form: only the expired entry goes
+        report = self.ff1.restrictedTraverse("@@doubleoptin-purge")()
+        self.assertIn("/ff1: removed 1, 1 pending", report)
+        self.assertIn("1 form(s): removed 1, 1 pending", report)
+        self.assertEqual(len(store), 1)
+
+        # on the site root: every form of the site
+        report = self.portal.restrictedTraverse("@@doubleoptin-purge")()
+        self.assertIn("/ff1: removed 0, 1 pending", report)
+        self.assertIn("1 form(s): removed 0, 1 pending", report)
+
+        # without an enabled Double Opt-In action nothing can be confirmed
+        # anymore, so everything is removed
+        actions = get_actions(self.ff1)
+        actions["doubleoptin"].required = False
+        set_actions(self.ff1, actions)
+        report = self.ff1.restrictedTraverse("@@doubleoptin-purge")()
+        self.assertIn("/ff1: removed 1, 0 pending", report)
+        self.assertEqual(len(store), 0)
+
+    def test_purge_view_is_for_managers_only(self):
+        setRoles(self.portal, TEST_USER_ID, ["Member"])
+        with self.assertRaises(Unauthorized):
+            self.ff1.restrictedTraverse("@@doubleoptin-purge")
+        with self.assertRaises(Unauthorized):
+            self.portal.restrictedTraverse("@@doubleoptin-purge")

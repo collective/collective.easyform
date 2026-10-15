@@ -128,3 +128,15 @@ Script* actions: on the replay they get the form data via ``fields``, while
 
 Adding this action requires the *collective.easyform: Add Mailers*
 permission, since it sends mail.
+
+Expired submissions are removed whenever the form receives a new
+submission. To remove them independently of that - say, nightly - call the
+purge view as a Manager: ``<form>/@@doubleoptin-purge`` purges one form,
+``<site>/@@doubleoptin-purge`` every form of the site. It answers with a
+plain text report, which makes it easy to run from a cron job::
+
+    curl -sf -u cronuser:secret https://www.example.org/@@doubleoptin-purge
+
+Forms whose Double Opt-In action has been disabled or removed lose all
+their pending submissions on purge, since nobody could confirm them
+anymore.
