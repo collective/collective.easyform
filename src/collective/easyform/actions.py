@@ -1,6 +1,7 @@
 from AccessControl import getSecurityManager
 from BTrees.IOBTree import IOBTree
 from BTrees.LOBTree import LOBTree as SavedDataBTree
+from BTrees.OOBTree import OOBTree
 from collective.easyform import easyformMessageFactory as _
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import filter_fields
@@ -17,6 +18,7 @@ from collective.easyform.config import HAS_XLSX_SUPPORT
 from collective.easyform.interfaces import IAction
 from collective.easyform.interfaces import IActionFactory
 from collective.easyform.interfaces import ICustomScript
+from collective.easyform.interfaces import IDoubleOptIn
 from collective.easyform.interfaces import IExtraData
 from collective.easyform.interfaces import IMailer
 from collective.easyform.interfaces import ISaveData
@@ -53,13 +55,18 @@ from tempfile import NamedTemporaryFile
 from time import time
 from xml.etree import ElementTree as ET
 from z3c.form.interfaces import DISPLAY_MODE
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component import queryUtility
 from zope.contenttype import guess_content_type
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import implementer
 from zope.schema import Bool
 from zope.schema import getFieldsInOrder
 from zope.security.interfaces import IPermission
+
+import secrets
 
 logger = getLogger("collective.easyform")
 
@@ -891,6 +898,198 @@ class SaveData(Action):
         self.addDataRow(data)
 
 
+DOUBLEOPTIN_PENDING_KEY = "collective.easyform.doubleoptin.pending"
+# request marker: the actions run as replay of a confirmed submission,
+# the Double Opt-In action itself has nothing left to do
+DOUBLEOPTIN_CONFIRMED_MARKER = "collective.easyform.doubleoptin.confirmed"
+DOUBLEOPTIN_CONFIRM_VIEW = "@@doubleoptin-confirm"
+DOUBLEOPTIN_PENDING_VIEW = "@@doubleoptin-pending"
+
+
+def get_doubleoptin_store(form):
+    """Pending submissions of a form, keyed by token."""
+    annotations = IAnnotations(form)
+    store = annotations.get(DOUBLEOPTIN_PENDING_KEY)
+    if store is None:
+        store = annotations[DOUBLEOPTIN_PENDING_KEY] = OOBTree()
+    return store
+
+
+def get_doubleoptin_action(form):
+    """The enabled Double Opt-In action of a form, if any."""
+    from collective.easyform.api import get_actions
+
+    for name, action in getFieldsInOrder(get_actions(form)):
+        if IDoubleOptIn.providedBy(action) and action.required:
+            return action
+    return None
+
+
+def doubleoptin_is_expired(entry, expiry_hours):
+    return entry["created"] + timedelta(hours=expiry_hours) < datetime.utcnow()
+
+
+def doubleoptin_purge_expired(store, expiry_hours):
+    """Remove the expired entries of a store, return how many."""
+    removed = 0
+    for token, entry in list(store.items()):
+        if doubleoptin_is_expired(entry, expiry_hours):
+            del store[token]
+            removed += 1
+    return removed
+
+
+def doubleoptin_purge(form):
+    """Purge the pending submissions of a form: the expired ones, or all
+    of them when the form has no enabled Double Opt-In action left (they
+    could never be confirmed). Returns ``(removed, remaining)``."""
+    store = IAnnotations(form).get(DOUBLEOPTIN_PENDING_KEY)
+    if store is None:
+        return 0, 0
+    action = get_doubleoptin_action(form)
+    if action is None:
+        removed = len(store)
+        store.clear()
+    else:
+        removed = doubleoptin_purge_expired(store, action.expiry_hours)
+    return removed, len(store)
+
+
+def doubleoptin_peek(form, token):
+    """The pending entry for a token without consuming it, or None."""
+    action = get_doubleoptin_action(form)
+    if action is None or not token:
+        return None
+    entry = get_doubleoptin_store(form).get(token)
+    if entry is None or doubleoptin_is_expired(entry, action.expiry_hours):
+        return None
+    return entry
+
+
+def doubleoptin_form_data(request):
+    """The submitted widget values (strings and lists of strings), so the
+    replayed actions can render the widgets like on the original request.
+    File uploads are left out, the actions get those from the fields."""
+    data = {}
+    for key, value in request.form.items():
+        if not key.startswith("form.widgets."):
+            continue
+        if isinstance(value, str):
+            data[key] = value
+        elif isinstance(value, (list, tuple)) and all(
+            isinstance(item, str) for item in value
+        ):
+            data[key] = list(value)
+    return data
+
+
+def doubleoptin_substitution_data(action, form, fields, **extra):
+    """All form values plus extras as strings for ${...} replacement."""
+    data = {}
+    for name, value in fields.items():
+        if isinstance(value, (list, tuple, set)):
+            data[name] = ", ".join(action.serialize(v) for v in value)
+        else:
+            data[name] = action.serialize(value)
+    data["form_title"] = form.Title()
+    data.update({key: str(value) for key, value in extra.items()})
+    return data
+
+
+def doubleoptin_confirm(form, token, request):
+    """Consume a token and replay the submission through the other actions.
+
+    Returns ``(status, payload)``: ``("confirmed", fields)``,
+    ``("invalid", None)`` for unknown or expired tokens, or
+    ``("error", errors)`` if one of the replayed actions failed.
+    """
+    action = get_doubleoptin_action(form)
+    if action is None or not token:
+        return "invalid", None
+    store = get_doubleoptin_store(form)
+    entry = store.pop(token, None)
+    if entry is None or doubleoptin_is_expired(entry, action.expiry_hours):
+        return "invalid", None
+    fields = dict(entry["data"])
+    # the mailer renders the widgets from request.form, not from fields
+    request.form.update(dict(entry.get("request_form", {})))
+    request.set(DOUBLEOPTIN_CONFIRMED_MARKER, True)
+    from collective.easyform.browser.view import EasyFormForm
+
+    errors = EasyFormForm(form, request).processActions(fields)
+    if errors:
+        return "error", errors
+    return "confirmed", fields
+
+
+@implementer(IDoubleOptIn)
+class DoubleOptIn(Action):
+    __doc__ = IDoubleOptIn.__doc__
+
+    def __init__(self, **kw):
+        for i, f in IDoubleOptIn.namesAndDescriptions():
+            setattr(self, i, kw.pop(i, f.default))
+        super().__init__(**kw)
+
+    def onSuccess(self, fields, request):
+        """Store the submission, mail the confirmation link and stop the
+        action chain. Has nothing to do when the confirmation view replays
+        a confirmed submission."""
+        if request.get(DOUBLEOPTIN_CONFIRMED_MARKER):
+            return None
+        form = get_context(self)
+        email = (fields.get(self.email_field) or "").strip()
+        if "@" not in email or " " in email:
+            return {
+                self.email_field: translate(
+                    _("Please enter a valid e-mail address."), context=getRequest()
+                )
+            }
+
+        store = get_doubleoptin_store(form)
+        doubleoptin_purge_expired(store, self.expiry_hours)
+        token = secrets.token_urlsafe(32)
+        entry = PersistentMapping()
+        entry["created"] = datetime.utcnow()
+        entry["email"] = email
+        entry["data"] = PersistentMapping(fields)
+        entry["request_form"] = PersistentMapping(doubleoptin_form_data(request))
+        store[token] = entry
+
+        self.send_confirmation(form, fields, email, token)
+
+        request.response.redirect(f"{form.absolute_url()}/{DOUBLEOPTIN_PENDING_VIEW}")
+        # a non-empty error dict ends the action chain in
+        # EasyFormForm.processActions; the redirect takes precedence over
+        # the error rendering, the visitor lands on the pending page.
+        return {
+            FORM_ERROR_MARKER: translate(
+                _("Please confirm your submission via the e-mail we just sent."),
+                context=getRequest(),
+            )
+        }
+
+    def send_confirmation(self, form, fields, email, token):
+        confirm_url = f"{form.absolute_url()}/{DOUBLEOPTIN_CONFIRM_VIEW}?token={token}"
+        data = doubleoptin_substitution_data(
+            self,
+            form,
+            fields,
+            confirm_url=confirm_url,
+            expiry_hours=self.expiry_hours,
+            email=email,
+        )
+        mailhost = api.portal.get_tool("MailHost")
+        mailhost.send(
+            dollar_replacer(self.body, data),
+            mto=email,
+            mfrom=api.portal.get_registry_record("plone.email_from_address"),
+            subject=dollar_replacer(self.msg_subject, data),
+            charset="utf-8",
+            msg_type="text/plain",
+        )
+
+
 MailerAction = ActionFactory(
     Mailer,
     _("label_mailer_action", default="Mailer"),
@@ -906,7 +1105,13 @@ SaveDataAction = ActionFactory(
     _("label_savedata_action", default="Save Data"),
     "collective.easyform.AddDataSavers",
 )
+DoubleOptInAction = ActionFactory(
+    DoubleOptIn,
+    _("label_doubleoptin_action", default="Double Opt-In"),
+    "collective.easyform.AddMailers",
+)
 
 MailerHandler = BaseHandler(Mailer)
 CustomScriptHandler = BaseHandler(CustomScript)
 SaveDataHandler = BaseHandler(SaveData)
+DoubleOptInHandler = BaseHandler(DoubleOptIn)

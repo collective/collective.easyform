@@ -7,6 +7,7 @@ from .actions import IEasyFormActionsContext  # noqa
 from .actions import IEasyFormActionsEditorExtender  # noqa
 from .actions import INewAction  # noqa
 from .customscript import ICustomScript  # noqa
+from .doubleoptin import IDoubleOptIn  # noqa
 from .easyform import IEasyForm  # noqa
 from .easyform import IEasyFormImportFormSchema  # noqa
 from .easyform import IEasyFormThanksPage  # noqa

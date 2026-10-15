@@ -46,6 +46,30 @@
       layer="..interfaces.IEasyFormLayer"
       />
   <browser:page
+      name="doubleoptin-pending"
+      for="collective.easyform.interfaces.IEasyForm"
+      class=".doubleoptin.DoubleOptInPendingView"
+      permission="zope2.View"
+      />
+  <browser:page
+      name="doubleoptin-confirm"
+      for="collective.easyform.interfaces.IEasyForm"
+      class=".doubleoptin.DoubleOptInConfirmView"
+      permission="zope2.View"
+      />
+  <browser:page
+      name="doubleoptin-purge"
+      for="collective.easyform.interfaces.IEasyForm"
+      class=".doubleoptin.DoubleOptInPurgeView"
+      permission="cmf.ManagePortal"
+      />
+  <browser:page
+      name="doubleoptin-purge"
+      for="plone.base.interfaces.siteroot.IPloneSiteRoot"
+      class=".doubleoptin.DoubleOptInPurgeView"
+      permission="cmf.ManagePortal"
+      />
+  <browser:page
       name="folder_contents"
       for="collective.easyform.interfaces.IEasyForm"
       class=".view.FolderContentsView"
