@@ -32,6 +32,11 @@ Save data adapter
 The Save Data adapter saves data submitted to a form. You can export the saved data as a comma-separated values (CSV)
 or a tab-separated values (TSV) file. You can view the saved data and edit it.
 
+Downloading saved data requires the ``collective.easyform: Download Saved
+Input`` permission, which is granted to Reviewer, Owner, Site Administrator and
+Manager by default.
+See :doc:`permissions` for the complete role map.
+
 If you need programmatic access to the saved data, e.g. to display the number of saved data rows for a given form,
 use the `@@get_save_data_adapters` view. The following `count_items` page template displays the number of saved data
 rows for all save data adapters for a given form by calling the `@@get_save_data_adapters` view then, for each
