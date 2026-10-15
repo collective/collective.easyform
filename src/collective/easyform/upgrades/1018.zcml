@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:gs="http://namespaces.zope.org/genericsetup"
+    >
+
+  <gs:registerProfile
+      name="1018"
+      title="EasyForm upgrade"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="plone.base.interfaces.siteroot.IMigratingPloneSiteRoot"
+      directory="profiles/1018"
+      />
+
+  <gs:upgradeSteps
+      profile="collective.easyform:default"
+      source="1017"
+      destination="1018"
+      >
+
+    <gs:upgradeDepends
+        title="Permissions roles update: Allow Editor where Owner is allowed."
+        import_profile="collective.easyform.upgrades:1018"
+        />
+
+  </gs:upgradeSteps>
+
+</configure>
