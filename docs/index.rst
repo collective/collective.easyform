@@ -57,6 +57,7 @@ Contents
    adding
    fields
    actions
+   permissions
    tests
 
 

@@ -47,6 +47,15 @@ Run buildout:
 The last step is to activate ``EasyForm`` in the Add-ons control panel.
 
 
+Permissions and roles
+=====================
+
+See the `permissions and roles reference <docs/permissions.rst>`_ for a table
+of EasyForm's default permission assignments and guidance for integrators.
+For example, Reviewers can download saved form data, while Editors can add
+mailers and data savers and edit advanced fields and mail addresses.
+
+
 Migration from PloneFormGen
 ===========================
 

@@ -96,11 +96,9 @@ class SaveDataTestCase(BaseSaveData):
         self.assertIsNotNone(view)
         logout()
 
-        # other editors / reviewers / ... don't have access to the saved data
+        # other editors / contributors / ... don't have access to the saved data
         api.user.create(email="test@plone.org", username="test")
-        setRoles(
-            self.portal, "test", roles=["Reader", "Contributor", "Editor", "Reviewer"]
-        )
+        setRoles(self.portal, "test", roles=["Reader", "Contributor", "Editor"])
         login(self.portal, "test")
         with self.assertRaises(Unauthorized):
             view = self.ff1.restrictedTraverse("saveddata")
@@ -698,11 +696,9 @@ class SaverIntegrationTestCase(base.EasyFormFunctionalTestCase):
             in self.browser.contents
         )
 
-        # editors / reviewers / ... don't have access to the saved data
+        # editors / contributors / ... don't have access to the saved data
         api.user.create(email="test@plone.org", username="test", password="password")
-        setRoles(
-            self.portal, "test", roles=["Reader", "Contributor", "Editor", "Reviewer"]
-        )
+        setRoles(self.portal, "test", roles=["Reader", "Contributor", "Editor"])
         self.browser.addHeader("Authorization", "Basic " + "test" + ":" + "password")
         transaction.commit()
         with self.assertRaises(zUnauthorized):
