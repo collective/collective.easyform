@@ -10,9 +10,9 @@
            accesskey=""
            alt=""
            checked="checked"
-           disabled=""
+           disabled
            name=""
-           readonly=""
+           readonly
            tabindex=""
            title=""
            type="checkbox"
@@ -50,9 +50,9 @@
            id=""
            accesskey=""
            alt=""
-           disabled=""
+           disabled
            name=""
-           readonly=""
+           readonly
            tabindex=""
            title=""
            type="checkbox"

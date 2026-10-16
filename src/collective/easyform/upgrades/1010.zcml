@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1010"
       profile="collective.easyform:default"
       source="1009"
+      destination="1010"
       >
     <gs:upgradeDepends
         title="Import actions"

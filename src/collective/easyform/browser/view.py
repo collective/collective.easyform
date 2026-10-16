@@ -4,6 +4,7 @@ from Acquisition import aq_chain
 from Acquisition import aq_parent
 from collections import OrderedDict
 from collective.easyform import easyformMessageFactory as _
+from collective.easyform.actions import DOUBLEOPTIN_CONFIRMED_MARKER
 from collective.easyform.api import dollar_replacer
 from collective.easyform.api import filter_fields
 from collective.easyform.api import get_actions
@@ -11,6 +12,7 @@ from collective.easyform.api import get_expression
 from collective.easyform.api import get_schema
 from collective.easyform.config import FORM_ERROR_MARKER
 from collective.easyform.interfaces import IActionExtender
+from collective.easyform.interfaces import IDoubleOptIn
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IEasyFormThanksPage
 from collective.easyform.interfaces import IEasyFormWidget
@@ -37,7 +39,6 @@ from zope.interface import implementer
 from zope.schema import getFieldsInOrder
 from zope.schema import ValidationError
 from ZPublisher.mapply import mapply
-
 
 logger = getLogger("collective.easyform")
 PMF = MessageFactory("plone")
@@ -70,10 +71,7 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
 
     @property
     def default_fieldset_label(self):
-        return (
-            self.context.default_fieldset_label
-            or super().default_fieldset_label
-        )
+        return self.context.default_fieldset_label or super().default_fieldset_label
 
     def action(self):
         """Redefine <form action=''> attribute."""
@@ -134,6 +132,16 @@ class EasyFormForm(AutoExtensibleForm, form.Form):
     def processActions(self, fields):
         # get a list of adapters with no duplicates, retaining order
         actions = getFieldsInOrder(get_actions(self.context))
+        if not self.request.get(DOUBLEOPTIN_CONFIRMED_MARKER):
+            # an enabled Double Opt-In action holds all other actions back
+            # until the submission is confirmed, whatever its position
+            doubleoptin = [
+                (name, action)
+                for name, action in actions
+                if IDoubleOptIn.providedBy(action) and action.required
+            ]
+            if doubleoptin:
+                actions = doubleoptin
         for name, action in actions:
             if not action.required:
                 continue

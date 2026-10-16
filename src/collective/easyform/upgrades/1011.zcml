@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1011"
       profile="collective.easyform:default"
       source="1010"
+      destination="1011"
       >
     <gs:upgradeStep
         title="Fix SaveData persistence issues"

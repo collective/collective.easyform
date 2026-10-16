@@ -1,30 +1,32 @@
-<html metal:use-macro="context/main_template/macros/master"
+<html metal:use-macro="context/@@main_template/macros/master"
       i18n:domain="collective.easyform"
 >
   <body>
     <metal:block fill-slot="content-core">
       <h1 i18n:translate="">List of Save Data Adapters</h1>
       <p i18n:translate="">Choose an adapter.</p>
-      <tal:set tal:define="items python:view.items()">
+      <tal:set tal:define="
+                 items python:view.items();
+               ">
         <ol tal:condition="items">
           <li tal:repeat="item items">
             <a href=""
-              tal:define="
-                name python:item[0];
-                title python:item[1];
-              "
-              tal:content="title"
-              tal:attributes="
-                href string:${context/absolute_url}/actions/${name}/@@data;
-                title title;
-              "
+               tal:define="
+                 name python:item[0];
+                 title python:item[1];
+               "
+               tal:content="title"
+               tal:attributes="
+                 href string:${context/absolute_url}/actions/${name}/@@data;
+                 title title;
+               "
             >Title</a>
           </li>
         </ol>
         <div tal:condition="python: not items">
           <strong i18n:translate="">No adapters available.</strong>
         </div>
-    </tal:set>
+      </tal:set>
     </metal:block>
   </body>
 </html>

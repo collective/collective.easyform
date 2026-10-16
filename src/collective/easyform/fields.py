@@ -3,11 +3,11 @@ from collective.easyform.api import get_expression
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import IEasyFormForm
 from collective.easyform.interfaces import IFieldExtender
-from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import IHCaptcha
+from collective.easyform.interfaces import ILabel
+from collective.easyform.interfaces import ILikert
 from collective.easyform.interfaces import INorobotCaptcha
 from collective.easyform.interfaces import IReCaptcha
-from collective.easyform.interfaces import ILikert
 from collective.easyform.interfaces import IRichLabel
 from collective.easyform.validators import IFieldValidator
 from plone.schemaeditor.fields import FieldFactory
@@ -225,14 +225,13 @@ ReCaptchaFactory = FieldFactory(
 )
 ReCaptchaHandler = BaseHandler(ReCaptcha)
 
+
 @implementer(IHCaptcha)
 class HCaptcha(TextLine):
     """A HCaptcha field"""
 
 
-HCaptchaFactory = FieldFactory(
-    HCaptcha, _("label_hcaptcha_field", default="HCaptcha")
-)
+HCaptchaFactory = FieldFactory(HCaptcha, _("label_hcaptcha_field", default="HCaptcha"))
 HCaptchaHandler = BaseHandler(HCaptcha)
 
 
@@ -256,12 +255,12 @@ class Likert(TextLine):
     """A Likert field"""
 
     def __init__(self, **kwargs):
-        self.answers = kwargs.get('answers', None)
-        if 'answers' in kwargs:
-            del kwargs['answers']
-        self.questions = kwargs.get('questions', None)
-        if 'questions' in kwargs:
-            del kwargs['questions']
+        self.answers = kwargs.get("answers", None)
+        if "answers" in kwargs:
+            del kwargs["answers"]
+        self.questions = kwargs.get("questions", None)
+        if "questions" in kwargs:
+            del kwargs["questions"]
         Field.__init__(self, **kwargs)
 
     def _validate(self, value):
@@ -272,23 +271,20 @@ class Likert(TextLine):
 
     def parse(self, value):
         result = dict()
-        lines = value.split(',')
+        lines = value.split(",")
         for line in lines:
             if not line:
                 continue
-            id, answer = line.split(':')
+            id, answer = line.split(":")
             answer = answer.strip()
             if answer not in self.answers:
-                raise ValueError('Invalid answer value.')
+                raise ValueError("Invalid answer value.")
             index = int(id)
             if index < 1 or index > len(self.questions):
-                raise ValueError('Invalid question index.')
+                raise ValueError("Invalid question index.")
             result[index] = answer
         return result
 
 
-LikertFactory = FieldFactory(
-    Likert, _("label_likert_field", default="Likert")
-)
+LikertFactory = FieldFactory(Likert, _("label_likert_field", default="Likert"))
 LikertHandler = BaseHandler(Likert)
-

@@ -23,4 +23,12 @@
       name="collective.easyform.actions.SaveData"
       component=".actions.SaveDataHandler"
       />
+  <utility
+      name="collective.easyform.actions.DoubleOptIn"
+      component=".actions.DoubleOptInAction"
+      />
+  <utility
+      name="collective.easyform.actions.DoubleOptIn"
+      component=".actions.DoubleOptInHandler"
+      />
 </configure>

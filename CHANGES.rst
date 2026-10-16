@@ -1,11 +1,42 @@
 Changelog
 =========
 
+.. You should *NOT* be adding new change log entries to this file.
+   You should create a file in the news directory instead.
+   For helpful instructions, please see:
+   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
 
-4.5.2 (unreleased)
+.. towncrier release notes start
+
+
+5.0.2 (2026-09-13)
 ------------------
 
-- Nothing changed yet.
+Bug fixes:
+
+
+- Only use pat-plone-modal and remove pat-modal to prevent double initialization with Patternslib. [thet] (pat-plone-modal)
+
+
+5.0.1 (2026-08-11)
+------------------
+
+Bug fixes:
+
+
+- Fix ``HCaptchaFieldWidget`` location to work in all ``plone.formwidget.hcaptcha`` versions.
+  [maurits]
+
+
+5.0.0 (2026-04-20)
+------------------
+
+Breaking changes:
+
+
+- Plone 6.2 compatible release, compatibility with < 6.2 dropped. [1letter]
+  Make package ready for pip install method, PEP 420 native namespace.  [1letter]
+  Remove Products.PloneFormGen migration code.  [1letter]
 
 
 4.5.1 (2026-02-10)
@@ -213,7 +244,7 @@ Bug fixes:
 
 Enhancements:
 
-- Standarize how the "Form Fields" and "Form Actions" behave. Have a single
+- Standardize how the "Form Fields" and "Form Actions" behave. Have a single
   "Save" button that will redirect back to the form once changes are applied
   [frapell]
 
@@ -271,7 +302,7 @@ Bug fixes:
 - Fix field order in Mailer attachments
   [MrTango]
 
-- Optinally add CSV/XLSX headers to attachments
+- Optionally add CSV/XLSX headers to attachments
   [MrTango] (#323)
 
 - Fix table of saved data: do not show labels in table; colored buttons, slight cleanup.
@@ -339,7 +370,7 @@ Bug fixes:
 
 - Better saved data handling (ux forms, redirect to only adapter). [jensens (#1)
 - More German translations [jensens] (#2)
-- Fixes #217: Stop loosing action errors in form update. [wobsta] (#238)
+- Fixes #217: Stop losing action errors in form update. [wobsta] (#238)
 - Fixes #182: actions urls when on action or field traverser. [jensens] (#239)
 
 
@@ -725,7 +756,7 @@ Bug fixes:
   https://github.com/collective/collective.easyform/issues/49
   [tomgross]
 
-- Allow managment of fields enabled for c.easyform in controlpanel
+- Allow management of fields enabled for c.easyform in controlpanel
   [karalics]
 
 
@@ -793,7 +824,7 @@ New:
   mechanism.
   [thet]
 
-- Reworked mail address formating, avoiding recipient address in the form of
+- Reworked mail address formatting, avoiding recipient address in the form of
   ``name <<account@domain.com>>`` and having instead
   ``name <account@domain.com>``.
   [thet]

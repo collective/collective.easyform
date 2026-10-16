@@ -5,7 +5,7 @@
 @baseUrl = http://localhost:8080/Plone
 
 ###
-# send annonymous GET request to form:
+# send anonymous GET request to form:
 
 get {{baseUrl}}/form
 

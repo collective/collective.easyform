@@ -1,8 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     >
 
   <include package="plone.app.dexterity" />
@@ -27,7 +27,6 @@
 
   <include package=".browser" />
   <include package=".upgrades" />
-  <include zcml:condition="installed Products.PloneFormGen" package=".migration" />
 
   <genericsetup:registerProfile
       name="default"
@@ -50,23 +49,23 @@
       title="EasyForm testing"
       description="Used for testing only"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      for="plone.base.interfaces.siteroot.IPloneSiteRoot"
       directory="profiles/testing"
       />
 
   <utility
-      name="collective.easyform-hiddenprofiles"
       factory=".setuphandlers.HiddenProfiles"
+      name="collective.easyform-hiddenprofiles"
       />
 
   <adapter
-    zcml:condition="installed plone.restapi"
-	  factory="collective.easyform.serializer.SerializeToJson"
-	  />
+      factory="collective.easyform.serializer.SerializeToJson"
+      zcml:condition="installed plone.restapi"
+      />
 
   <adapter
-    zcml:condition="installed plone.restapi"
-	  factory="collective.easyform.serializer.DeserializeFromJson"
-	  />
+      factory="collective.easyform.serializer.DeserializeFromJson"
+      zcml:condition="installed plone.restapi"
+      />
 
 </configure>

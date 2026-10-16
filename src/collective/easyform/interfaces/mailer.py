@@ -6,12 +6,12 @@ from collective.easyform.interfaces import IAction
 from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
+from plone.autoform.interfaces import OMITTED_KEY
+from plone.base.utils import safe_text
 from plone.schema import Email
 from plone.supermodel.directives import fieldset
-from plone.base.utils import safe_text
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.browser.textarea import TextAreaWidget
-from plone.autoform.interfaces import OMITTED_KEY
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import provider
@@ -20,7 +20,6 @@ from zope.schema.interfaces import IContextAwareDefaultFactory
 import zope.i18nmessageid
 import zope.interface
 import zope.schema.interfaces
-
 
 PMF = zope.i18nmessageid.MessageFactory("plone")
 MODIFY_PORTAL_CONTENT = "cmf.ModifyPortalContent"
@@ -55,9 +54,7 @@ class IMailer(IAction):
     directives.write_permission(recipient_name=config.EDIT_ADDRESSING_PERMISSION)
     directives.read_permission(recipient_name=MODIFY_PORTAL_CONTENT)
     recipient_name = zope.schema.TextLine(
-        title=_(
-            "label_formmailer_recipient_fullname", default="Recipient's full name"
-        ),
+        title=_("label_formmailer_recipient_fullname", default="Recipient's full name"),
         description=_(
             "help_formmailer_recipient_fullname",
             default="The full name of the recipient of the mailed form.",
@@ -292,7 +289,10 @@ class IMailer(IAction):
 
     directives.read_permission(sendWithHeader=MODIFY_PORTAL_CONTENT)
     sendWithHeader = zope.schema.Bool(
-        title=_("label_sendWithHeader_text", default="Include header in attached CSV/XLSX data"),
+        title=_(
+            "label_sendWithHeader_text",
+            default="Include header in attached CSV/XLSX data",
+        ),
         description=_(
             "help_sendWithHeader_text",
             default=""
@@ -316,7 +316,6 @@ class IMailer(IAction):
         default=False,
         required=False,
     )
-
 
     directives.read_permission(sendXML=MODIFY_PORTAL_CONTENT)
     sendXML = zope.schema.Bool(
@@ -393,9 +392,7 @@ class IMailer(IAction):
         unique=True,
         required=False,
         value_type=zope.schema.TextLine(
-            title=_(
-                "extra_header", default="${name} Header", mapping={"name": "HTTP"}
-            )
+            title=_("extra_header", default="${name} Header", mapping={"name": "HTTP"})
         ),
     )
 
@@ -515,6 +512,5 @@ class IMailer(IAction):
 # extend list of omitted fields if XLSX extra is not available
 if not HAS_XLSX_SUPPORT:
     omitted_fields = IMailer.queryTaggedValue(OMITTED_KEY, [])[:]
-    omitted_fields.append((zope.interface.Interface, 'sendXLSX', 'true'))
+    omitted_fields.append((zope.interface.Interface, "sendXLSX", "true"))
     IMailer.setTaggedValue(OMITTED_KEY, omitted_fields)
-

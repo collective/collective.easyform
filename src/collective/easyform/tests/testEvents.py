@@ -8,7 +8,6 @@ from collective.easyform.tests import base
 
 
 class TestAdapterPaste(base.EasyFormTestCase):
-
     """Ensure content types can be created and edited"""
 
     adapterTypes = (

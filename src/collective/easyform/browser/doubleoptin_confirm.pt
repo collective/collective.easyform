@@ -1,0 +1,83 @@
+<html metal:use-macro="context/@@main_template/macros/master"
+      i18n:domain="collective.easyform"
+>
+  <body>
+    <metal:block fill-slot="content-core">
+
+      <tal:ask condition="python: view.status == 'ask'">
+        <h1 class="documentFirstHeading"
+            i18n:translate=""
+        >Confirm your submission</h1>
+        <p i18n:translate="">
+          Please click the button to confirm your submission to the form
+          <strong tal:content="context/Title"
+                  i18n:name="form_title"
+          >Form</strong>.
+        </p>
+        <form class="easyform-doubleoptin-confirm"
+              method="post"
+              tal:attributes="
+                action string:${context/absolute_url}/@@doubleoptin-confirm;
+              "
+        >
+          <input name="token"
+                 type="hidden"
+                 tal:attributes="
+                   value view/token;
+                 "
+          />
+          <button class="btn btn-primary"
+                  type="submit"
+                  i18n:translate=""
+          >Confirm</button>
+        </form>
+      </tal:ask>
+
+      <tal:confirmed condition="python: view.status == 'confirmed'">
+        <h1 class="documentFirstHeading"
+            tal:content="view/thanks_title"
+        >Thank you</h1>
+        <p class="discreet"
+           tal:condition="view/thanks_description"
+           tal:content="view/thanks_description"
+        ></p>
+        <div id="formPrologue"
+             tal:condition="view/thanks_prologue"
+             tal:content="structure view/thanks_prologue"
+        ></div>
+        <div id="formEpilogue"
+             tal:condition="view/thanks_epilogue"
+             tal:content="structure view/thanks_epilogue"
+        ></div>
+      </tal:confirmed>
+
+      <tal:invalid condition="python: view.status == 'invalid'">
+        <h1 class="documentFirstHeading"
+            i18n:translate=""
+        >This confirmation link is not valid</h1>
+        <p i18n:translate="">
+          The link has already been used or has expired. Please fill in the form again.
+        </p>
+        <p>
+          <a tal:attributes="
+               href context/absolute_url;
+             "
+             i18n:translate=""
+          >Back to the form</a>
+        </p>
+      </tal:invalid>
+
+      <tal:error condition="python: view.status == 'error'">
+        <h1 class="documentFirstHeading"
+            i18n:translate=""
+        >Your submission could not be processed</h1>
+        <ul>
+          <li tal:repeat="message view/errors/values"
+              tal:content="message"
+          ></li>
+        </ul>
+      </tal:error>
+
+    </metal:block>
+  </body>
+</html>

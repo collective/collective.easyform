@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object xmlns:i18n="http://xml.zope.org/namespaces/i18n"
         meta_type="Plone Actions Tool"
         name="portal_actions"
@@ -6,9 +6,9 @@
   <object meta_type="CMF Action Category"
           name="object"
   >
-    <object meta_type="CMF Action"
+    <object insert-after="folderContents"
+            meta_type="CMF Action"
             name="easyform-view"
-            insert-after="folderContents"
             i18n:domain="collective.easyform"
     >
       <property name="title"

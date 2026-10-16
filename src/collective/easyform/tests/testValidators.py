@@ -1,7 +1,3 @@
-try:
-    from StringIO import StringIO  # for Python 2
-except ImportError:
-    from io import StringIO  # for Python 3
 from collective.easyform import validators
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_fields
@@ -9,10 +5,10 @@ from collective.easyform.browser.view import EasyFormForm
 from collective.easyform.browser.view import ValidateFile
 from collective.easyform.interfaces import IFieldExtender
 from collective.easyform.tests import base
+from io import StringIO
 from os.path import dirname
 from os.path import join
 from plone import api
-
 from plone.namedfile.file import NamedFile
 from plone.namedfile.interfaces import INamed
 from plone.registry.interfaces import IRegistry
@@ -20,9 +16,9 @@ from Products.CMFPlone.RegistrationTool import EmailAddressInvalid
 from Products.validation import validation
 from z3c.form.interfaces import IFormLayer
 from zope.component import getUtility
-from zope.interface.interfaces import ComponentLookupError
 from zope.i18n import translate
 from zope.interface import classImplements
+from zope.interface.interfaces import ComponentLookupError
 from ZPublisher.BaseRequest import BaseRequest
 from ZPublisher.HTTPRequest import FileUpload
 
@@ -30,12 +26,14 @@ import unittest
 
 try:
     from plone.formwidget.hcaptcha.interfaces import IHCaptchaSettings
+
     HAS_HCAPTCHA = True
 except ImportError:
     HAS_HCAPTCHA = False
 
 try:
     from plone.formwidget.recaptcha.interfaces import IReCaptchaSettings
+
     HAS_RECAPTCHA = True
 except ImportError:
     HAS_RECAPTCHA = False
@@ -50,7 +48,6 @@ FORM_DATA = {
 
 
 class TestBaseValidators(base.EasyFormTestCase):
-
     """test base validators"""
 
     def afterSetUp(self):
@@ -62,7 +59,7 @@ class TestBaseValidators(base.EasyFormTestCase):
 
         request = self.layer["request"]
         for i in FORM_DATA:
-            request.form["form.widgets.{}".format(i)] = FORM_DATA[i]
+            request.form[f"form.widgets.{i}"] = FORM_DATA[i]
 
     def test_defaultvalidator(self):
         view = self.ff1.restrictedTraverse("view")
@@ -172,7 +169,7 @@ class TestBaseValidators(base.EasyFormTestCase):
 
         expected_error_message = (
             "Validierung fehlgeschlagen (isInternationalPhoneNumber): "
-            "'testcomments' Ist keine g\xfcltige internationale Telefonnummer"
+            "'testcomments' Ist keine gültige internationale Telefonnummer"
         )
         self.assertEqual(errors[0].createMessage(), expected_error_message)
 
@@ -210,7 +207,6 @@ class LoadFixtureBase(base.EasyFormTestCase):
 
 
 class TestSingleFieldValidator(LoadFixtureBase):
-
     """test validator in form outside of fieldset
 
     The test methods are reused in TestFieldsetValidator.
@@ -247,7 +243,6 @@ class TestSingleFieldValidator(LoadFixtureBase):
 
 
 class TestFieldsetValidator(TestSingleFieldValidator):
-
     """test validator in fieldset
 
     This reuses the test methods from TestSingleFieldValidator.
@@ -298,9 +293,7 @@ class TestCustomValidators(base.EasyFormTestCase):
 
         self.assertEqual(v(good), None)
         for b in bad:
-            self.assertNotEqual(
-                v(b), None, '"{}" should be considered a link.'.format(b)
-            )
+            self.assertNotEqual(v(b), None, f'"{b}" should be considered a link.')
 
     def ttest_isNotTooLong2(self):
         v = validation.validatorFor("isNotTooLong")
@@ -429,7 +422,6 @@ class TestSizeValidator(base.EasyFormTestCase):
 
 @unittest.skipUnless(HAS_RECAPTCHA, "Requires plone.formwidget.recaptcha")
 class TestSingleRecaptchaValidator(LoadFixtureBase):
-
     """Can't test captcha passes but we can test it fails"""
 
     schema_fixture = "recaptcha.xml"
@@ -439,7 +431,6 @@ class TestSingleRecaptchaValidator(LoadFixtureBase):
 
         # Put some dummy values for recaptcha
         registry = getUtility(IRegistry)
-
 
         proxy = registry.forInterface(IReCaptchaSettings)
         proxy.public_key = "foo"
@@ -470,10 +461,9 @@ class TestFieldsetRecaptchaValidator(TestSingleRecaptchaValidator):
 
 @unittest.skipUnless(HAS_HCAPTCHA, "Requires plone.formwidget.hcaptcha")
 class TestSingleHcaptchaValidator(LoadFixtureBase):
-
     """Can't test captcha passes but we can test it fails
-       Copy/paste test from Recaptcha, same api & add'on
-       structure
+    Copy/paste test from Recaptcha, same api & add'on
+    structure
     """
 
     schema_fixture = "hcaptcha.xml"
@@ -492,7 +482,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("class=\"invalid-feedback\"", form)
+        self.assertIn('class="invalid-feedback"', form)
         self.assertNotIn("Thanks for your input.", form)
 
     def test_wrong(self):
@@ -500,7 +490,7 @@ class TestSingleHcaptchaValidator(LoadFixtureBase):
         request = self.LoadRequestForm(**data)
         request.method = "POST"
         form = EasyFormForm(self.ff1, request)()
-        self.assertIn("class=\"invalid-feedback\"", form)
+        self.assertIn('class="invalid-feedback"', form)
         self.assertNotIn("Thanks for your input.", form)
 
 

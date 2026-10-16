@@ -1,4 +1,4 @@
-<html metal:use-macro="context/main_template/macros/master"
+<html metal:use-macro="context/@@main_template/macros/master"
       i18n:domain="collective.easyform"
 >
   <body>

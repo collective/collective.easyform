@@ -9,6 +9,7 @@ from collective.easyform.api import set_actions
 from collective.easyform.api import set_fields
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
+from io import BytesIO
 from os.path import dirname
 from os.path import join
 from plone import api
@@ -20,7 +21,6 @@ from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
 from plone.supermodel.model import Schema
 from plone.testing.zope import Browser
-from io import BytesIO
 from transaction import commit
 from zExceptions.unauthorized import Unauthorized as zUnauthorized
 from zope.schema import Choice, List

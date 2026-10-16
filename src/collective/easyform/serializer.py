@@ -1,33 +1,33 @@
-from datetime import date, datetime
-from dateutil import parser
-import json
-import logging
-
-from zope.component import adapter
-from zope.interface import implementer
-from zope.interface import Interface
-from zope.schema import getFieldsInOrder
-from zope.schema.interfaces import ISet, IDate, IDatetime
-
-from plone import api
-from plone.restapi.serializer.dxcontent import SerializeToJson as DXContentToJson
-from plone.restapi.deserializer.dxcontent import (
-    DeserializeFromJson as DXContentFromJson,
-)
-from plone.restapi.deserializer import json_body
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.interfaces import IDeserializeFromJson
-from plone.app.textfield.value import RichTextValue
-from plone.app.textfield.interfaces import IRichText
-
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.config import DOWNLOAD_SAVED_PERMISSION
 from collective.easyform.interfaces import IEasyForm
 from collective.easyform.interfaces import ILabel
 from collective.easyform.interfaces import ISaveData
+from datetime import date
+from datetime import datetime
+from dateutil import parser
+from plone import api
+from plone.app.textfield.interfaces import IRichText
+from plone.app.textfield.value import RichTextValue
 from plone.base.utils import safe_text
+from plone.restapi.deserializer import json_body
+from plone.restapi.deserializer.dxcontent import (
+    DeserializeFromJson as DXContentFromJson,
+)
+from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.serializer.dxcontent import SerializeToJson as DXContentToJson
+from zope.component import adapter
+from zope.interface import implementer
+from zope.interface import Interface
+from zope.schema import getFieldsInOrder
+from zope.schema.interfaces import IDate
+from zope.schema.interfaces import IDatetime
+from zope.schema.interfaces import ISet
 
+import json
+import logging
 
 logger = logging.getLogger("collective.easyform.migration")
 
@@ -60,7 +60,10 @@ class SerializeToJson(DXContentToJson):
                 storage[name] = serializeable
                 for id, data in action.getSavedFormInputItems():
                     relevant_columns = columns_to_serialize(action, data)
-                    if not action.showFields and relevant_columns != included_columns_in_savedata:
+                    if (
+                        not action.showFields
+                        and relevant_columns != included_columns_in_savedata
+                    ):
                         logger.warning(
                             "Skipped Saveddata row because of mismatch witch current fields in %s",
                             self.context.absolute_url(),
@@ -107,7 +110,7 @@ def convertBeforeSerialize(value):
     elif isinstance(value, set):
         return list(value)
     elif isinstance(value, RichTextValue):
-        return safe_text(value.raw) #raw_encoded
+        return safe_text(value.raw)  # raw_encoded
     else:
         return value
 

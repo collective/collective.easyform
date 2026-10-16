@@ -1,10 +1,11 @@
 """
 
-    Unit test for EasyForm custom scripts
+Unit test for EasyForm custom scripts
 
-    Copyright 2006 Red Innovation http://www.redinnovation.com
+Copyright 2006 Red Innovation http://www.redinnovation.com
 
 """
+
 from AccessControl import ClassSecurityInfo
 from AccessControl import Unauthorized
 from AccessControl.class_init import InitializeClass
@@ -13,14 +14,13 @@ from collective.easyform.tests import base
 from plone.app.testing import logout
 from Products.CMFCore import permissions
 
-
 test_script = """
 ## Python Script
 ##bind container=container
 ##bind context=context
 ##bind subpath=traverse_subpath
 ##parameters=fields, easyform, request
-##title=Succesfully working script
+##title=Successfully working script
 ##
 
 from Products.CMFCore.utils import getToolByName
@@ -137,7 +137,6 @@ InitializeClass(SecureFakeRequest)
 
 
 class TestCustomScript(base.EasyFormTestCase):
-
     """Test FormCustomScriptAdapter functionality in EasyForm"""
 
     def afterSetUp(self):
@@ -177,7 +176,7 @@ class TestCustomScript(base.EasyFormTestCase):
         self.assertTrue("adapter" in actions)
 
     def testSuccess(self):
-        """Succesful script execution
+        """Successful script execution
 
         Creates a script, some form content,
         executes form handling.
@@ -207,14 +206,14 @@ class TestCustomScript(base.EasyFormTestCase):
         adapter.ScriptBody = runtime_error_script
 
         # Execute script
-        throwed = False
+        thrown = False
         try:
             reply = adapter.onSuccess({})
         except TypeError:
             reply = None
-            throwed = True
+            thrown = True
 
-        assert throwed, "Bad script didn't throw run-time exception, got " + str(reply)
+        assert thrown, "Bad script didn't throw run-time exception, got " + str(reply)
         assert reply is None
 
     def testSyntaxError(self):
@@ -235,13 +234,13 @@ class TestCustomScript(base.EasyFormTestCase):
         adapter.ScriptBody = syntax_error_script
 
         # Execute script
-        throwed = False
+        thrown = False
         try:
             adapter.onSuccess({}, FakeRequest())
         except ValueError:
-            throwed = True
+            thrown = True
 
-        assert throwed, "Bad script didn't throw run-time exception"
+        assert thrown, "Bad script didn't throw run-time exception"
 
     def testBadParameters(self):
         """Invalid number of script parameters"""
@@ -255,12 +254,12 @@ class TestCustomScript(base.EasyFormTestCase):
         adapter.ScriptBody = bad_parameters_script
 
         # Execute script
-        throwed = False
+        thrown = False
         try:
             adapter.onSuccess([])
         except TypeError:
-            throwed = True
-        assert throwed, "Invalid parameters failed silently"
+            thrown = True
+        assert thrown, "Invalid parameters failed silently"
 
     def testDefaultParameters(self):
         """Test to make sure the documented parameters are available"""
@@ -295,27 +294,27 @@ class TestCustomScript(base.EasyFormTestCase):
         adapter.ScriptBody = security_script
 
         # Execute script
-        throwed = False
+        thrown = False
         try:
             adapter.onSuccess({}, FakeRequest())
         except Unauthorized:
-            throwed = True
+            thrown = True
 
         if self.portal.hasProperty("foo"):
-            assert "Script executed under full priviledges"
+            assert "Script executed under full privileges"
 
-        self.assertTrue(throwed, "Bypassed security, baaad!")
+        self.assertTrue(thrown, "Bypassed security, baaad!")
 
         adapter.ProxyRole = "Manager"
-        throwed = False
+        thrown = False
         try:
             adapter.onSuccess({}, FakeRequest())
         except Unauthorized:
-            throwed = True
+            thrown = True
 
         if not self.portal.hasProperty("foo"):
             assert "Script not executed thru proxy role"
-        self.assertFalse(throwed, "Unauthorized was raised!")
+        self.assertFalse(thrown, "Unauthorized was raised!")
 
     def testSetProxyRole(self):
         """Exercise setProxyRole"""

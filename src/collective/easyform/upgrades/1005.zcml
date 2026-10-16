@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1005"
       profile="collective.easyform:default"
       source="1004"
+      destination="1005"
       >
     <gs:upgradeDepends
         title="Reload profile to register bundle"

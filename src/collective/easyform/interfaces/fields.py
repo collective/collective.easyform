@@ -10,15 +10,14 @@ from plone.schemaeditor.interfaces import ISchemaContext
 from plone.schemaeditor.schema import ITextLinesField
 from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
-import z3c.form
 from z3c.form.interfaces import IFieldWidget
-from zope import schema
 from zope.component import getGlobalSiteManager
 from zope.interface import Interface
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
+import z3c.form
 import z3c.form.interfaces
 import zope.interface
 import zope.schema.interfaces
@@ -47,7 +46,7 @@ def widgetsFactory(context):
         )
     ]
     for adapter in set(adapters):
-        name = "{}.{}".format(adapter.__module__, adapter.__name__)
+        name = f"{adapter.__module__}.{adapter.__name__}"
         terms.append(WidgetVocabulary.createTerm(name, str(name), adapter.__name__))
     return WidgetVocabulary(terms)
 
@@ -60,7 +59,13 @@ class IFieldExtender(Schema):
     fieldset(
         "advanced",
         label=_("Advanced"),
-        fields=["field_widget", "validators", "THidden", "depends_on", "css_class",],
+        fields=[
+            "field_widget",
+            "validators",
+            "THidden",
+            "depends_on",
+            "css_class",
+        ],
     )
     directives.write_permission(field_widget=config.EDIT_ADVANCED_PERMISSION)
     field_widget = zope.schema.Choice(
@@ -90,23 +95,23 @@ class IFieldExtender(Schema):
     directives.write_permission(depends_on=config.EDIT_TALES_PERMISSION)
     depends_on = zope.schema.TextLine(
         title=_(
-            'Field depends on',
+            "Field depends on",
         ),
         description=_(
             'This is using the pat-depends from patternslib, all options are supported. Please read the <a href="https://patternslib.com/demos/depends" target="_blank">pat-depends documentations</a> for options.',
         ),
-        default='',
+        default="",
         required=False,
     )
     directives.write_permission(css_class=config.EDIT_TALES_PERMISSION)
     css_class = zope.schema.TextLine(
         title=_(
-            'CSS Class',
+            "CSS Class",
         ),
         description=_(
-            'Define additional CSS class for this field here. This allowes for formating individual fields via CSS.',
+            "Define additional CSS class for this field here. This allows for formatting individual fields via CSS.",
         ),
-        default='',
+        default="",
         required=False,
         constraint=cssClassConstraint,
     )
@@ -226,20 +231,23 @@ class INorobotCaptcha(zope.schema.interfaces.ITextLine):
 class ILikert(zope.schema.interfaces.IField):
 
     questions = zope.schema.List(
-        title=_('Possible questions'),
-        description=_('Enter allowed choices one per line.'),
-        required=zope.schema.interfaces.IChoice['vocabulary'].required,
-        default=zope.schema.interfaces.IChoice['vocabulary'].default,
-        value_type=zope.schema.TextLine())
+        title=_("Possible questions"),
+        description=_("Enter allowed choices one per line."),
+        required=zope.schema.interfaces.IChoice["vocabulary"].required,
+        default=zope.schema.interfaces.IChoice["vocabulary"].default,
+        value_type=zope.schema.TextLine(),
+    )
     zope.interface.alsoProvides(questions, ITextLinesField)
 
     answers = zope.schema.List(
-        title=_('Possible answers'),
-        description=_('Enter allowed choices one per line.'),
-        required=zope.schema.interfaces.IChoice['vocabulary'].required,
-        default=zope.schema.interfaces.IChoice['vocabulary'].default,
-        value_type=zope.schema.TextLine())
+        title=_("Possible answers"),
+        description=_("Enter allowed choices one per line."),
+        required=zope.schema.interfaces.IChoice["vocabulary"].required,
+        default=zope.schema.interfaces.IChoice["vocabulary"].default,
+        value_type=zope.schema.TextLine(),
+    )
     zope.interface.alsoProvides(questions, ITextLinesField)
+
 
 class ILikertWidget(IEasyFormWidget):
     """Likert widget."""

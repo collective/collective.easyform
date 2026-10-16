@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <registry>
   <records interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
            prefix="easyform"
@@ -55,11 +55,12 @@
     </value>
   </record>
 
-  <records interface="Products.CMFPlone.interfaces.IBundleRegistry"
-           prefix="plone.bundles/easyform">
+  <records interface="plone.base.interfaces.resources.IBundleRegistry"
+           prefix="plone.bundles/easyform"
+  >
     <value key="enabled">True</value>
     <value key="csscompilation">++resource++easyform.css</value>
-    <value key="depends"></value>
+    <value key="depends" />
     <value key="load_async">False</value>
     <value key="load_defer">False</value>
   </records>
@@ -74,11 +75,13 @@
   </record> -->
   <record field="csv_delimiter"
           interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
-          name="easyform.csv_delimiter"></record>
+          name="easyform.csv_delimiter"
+  />
 
-  <record name="easyform.max_filesize"
+  <record field="max_filesize"
           interface="collective.easyform.browser.controlpanel.IEasyFormControlPanel"
-          field="max_filesize">
+          name="easyform.max_filesize"
+  >
   </record>
 
   <record name="plone.icon.contenttype/easyform">

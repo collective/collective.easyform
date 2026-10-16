@@ -1,0 +1,3 @@
+Remove the obsolete docs/rtd-requirements.txt (a Plone 4.3 pin set that
+nothing builds anymore, only kept dependabot busy).
+[petschki]

@@ -14,7 +14,6 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 import operator
 
-
 PMF = MessageFactory("plone")
 
 
@@ -133,7 +132,7 @@ def ValidatorsVocabularyFactory(context):
 def SchemaEditorFieldsVocabularyFactory(context=None):
     request = getRequest()
     terms = []
-    for (field_id, factory) in getUtilitiesFor(IFieldFactory):
+    for field_id, factory in getUtilitiesFor(IFieldFactory):
         terms.append(
             SimpleVocabulary.createTerm(
                 field_id, factory.title, translate(factory.title, context=request)

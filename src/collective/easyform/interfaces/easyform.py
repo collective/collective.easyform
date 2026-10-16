@@ -4,9 +4,9 @@ from collective.easyform import easyformMessageFactory as _  # NOQA
 from plone import api
 from plone.app.textfield import RichText
 from plone.autoform import directives
+from plone.base.utils import safe_text
 from plone.supermodel.directives import fieldset
 from plone.supermodel.model import Schema
-from plone.base.utils import safe_text
 from zope.i18n import translate
 from zope.interface import Interface
 from zope.interface import provider
@@ -14,7 +14,6 @@ from zope.interface import provider
 import zope.i18nmessageid
 import zope.interface
 import zope.schema.interfaces
-
 
 PMF = zope.i18nmessageid.MessageFactory("plone")
 
@@ -231,8 +230,9 @@ class IEasyForm(Schema):
         title=_("label_name_attribute", default="Name attribute"),
         description=_(
             "help_name_attribute",
-            default="optional, sets the name attribute on the form container. " \
-                    "can be used for form analytics"),
+            default="optional, sets the name attribute on the form container. "
+            "can be used for form analytics",
+        ),
         required=False,
     )
     directives.write_permission(form_tabbing=config.EDIT_ADVANCED_PERMISSION)
@@ -437,9 +437,7 @@ class IEasyForm(Schema):
     )
     directives.write_permission(submitLabelOverride=config.EDIT_TALES_PERMISSION)
     submitLabelOverride = zope.schema.TextLine(
-        title=_(
-            "label_submitlabeloverride_text", default="Custom Submit Button Label"
-        ),
+        title=_("label_submitlabeloverride_text", default="Custom Submit Button Label"),
         description=_(
             "help_submitlabeloverride_text",
             default="This override field allows you to change submit button "

@@ -4,9 +4,9 @@
     >
 
   <gs:upgradeSteps
-      destination="1003"
       profile="collective.easyform:default"
       source="1002"
+      destination="1003"
       >
     <gs:upgradeDepends
         title="Add Browserlayer"

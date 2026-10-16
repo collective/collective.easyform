@@ -1,7 +1,8 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:z3c="http://namespaces.zope.org/z3c"
-    i18n_domain="z3c.form">
+    i18n_domain="z3c.form"
+    >
 
   <class class=".likert.LikertWidget">
     <require
@@ -15,26 +16,26 @@
       for="..interfaces.ILikert
            z3c.form.interfaces.IFormLayer"
       />
-  
+
   <z3c:widgetTemplate
-      mode="display"
       widget="..interfaces.ILikertWidget"
-      layer="z3c.form.interfaces.IFormLayer"
       template="likert_display.pt"
+      layer="z3c.form.interfaces.IFormLayer"
+      mode="display"
       />
 
   <z3c:widgetTemplate
-      mode="input"
       widget="..interfaces.ILikertWidget"
-      layer="z3c.form.interfaces.IFormLayer"
       template="likert_input.pt"
+      layer="z3c.form.interfaces.IFormLayer"
+      mode="input"
       />
 
   <z3c:widgetTemplate
-      mode="hidden"
       widget="..interfaces.ILikertWidget"
-      layer="z3c.form.interfaces.IFormLayer"
       template="likert_hidden.pt"
+      layer="z3c.form.interfaces.IFormLayer"
+      mode="hidden"
       />
 
 </configure>

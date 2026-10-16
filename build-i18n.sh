@@ -1,12 +1,3 @@
 #!/bin/sh
-I18NDUDE=bin/i18ndude
-I18NPATH=src/collective/easyform
-DOMAIN=collective.easyform
-$I18NDUDE rebuild-pot --pot $I18NPATH/locales/$DOMAIN.pot --create $DOMAIN $I18NPATH
-$I18NDUDE sync --pot $I18NPATH/locales/$DOMAIN.pot $I18NPATH/locales/*/LC_MESSAGES/$DOMAIN.po
-
-## Don't automatically run the rebuild for the "plone" domain, as it puts too
-## much message strings into it.
-#DOMAIN=plone
-#$I18NDUDE rebuild-pot --pot $I18NPATH/locales/$DOMAIN.pot --merge $I18NPATH/locales/merge-plone.pot --create $DOMAIN $I18NPATH
-#$I18NDUDE sync --pot $I18NPATH/locales/$DOMAIN.pot $I18NPATH/locales/*/LC_MESSAGES/$DOMAIN.po
+uvx i18ndude rebuild-pot --pot ./src/collective/easyform/locales/collective.easyform.pot --create collective.easyform ./src/collective/easyform && uvx i18ndude sync --pot ./src/collective/easyform/locales/collective.easyform.pot ./src/collective/easyform/locales/*/LC_MESSAGES/collective.easyform.po
+uvx i18ndude rebuild-pot --pot ./src/collective/easyform/locales/plone.pot --create plone ./src/collective/easyform && uvx i18ndude sync --pot ./src/collective/easyform/locales/plone.pot ./src/collective/easyform/locales/*/LC_MESSAGES/plone.po

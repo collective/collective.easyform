@@ -6,8 +6,8 @@
   <browser:page
       name="form-wrapper"
       for="*"
-      permission="zope2.View"
       template="wrapper_template.pt"
+      permission="zope2.View"
       />
 
 </configure>

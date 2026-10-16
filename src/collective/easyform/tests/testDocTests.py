@@ -8,7 +8,6 @@ import doctest
 import os
 import unittest
 
-
 LINESEP = b"\r\n"
 
 optionflags = (
@@ -33,16 +32,16 @@ def get_browser(layer, auth=True):
     browser = Browser(layer["app"])
     browser.handleErrors = False
     if auth:
-        browser.open('http://nohost/plone/login_form')
-        browser.getControl('Login Name').value = SITE_OWNER_NAME
-        browser.getControl('Password').value = SITE_OWNER_PASSWORD
-        browser.getControl('Log in').click()
+        browser.open("http://nohost/plone/login_form")
+        browser.getControl("Login Name").value = SITE_OWNER_NAME
+        browser.getControl("Password").value = SITE_OWNER_PASSWORD
+        browser.getControl("Log in").click()
     return browser
 
 
 def get_image_path():
     dir_name = os.path.dirname(os.path.realpath(__file__))
-    return "{}/PloneLogo.png".format(dir_name)
+    return f"{dir_name}/PloneLogo.png"
 
 
 def test_suite():

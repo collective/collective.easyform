@@ -241,11 +241,18 @@ You can choose between the following actions after form submission:
 * Mailer
 * DataStorage
 * CustomScript
+* Double Opt-In
 
 The mailer stores a HTML template for sending the results of the form. You can override it with a file named
 `easyform_mail_body_default.pt` in your site. If it is not found the default from the `default_schemata` directory
 of this package is taken. If you plan to override start with the the `mail_body_default.pt` file and make sure
 it is a valid pagetemplate.
+
+The Double Opt-In action holds a submission back until the entered e-mail address confirmed it via a token
+link; only then the other actions of the form (mailer, data storage, ...) are executed, whatever their
+position in the list. Select the form field holding the e-mail address. Expired submissions are purged on the
+next submission or, for a cron job, via ``@@doubleoptin-purge`` on a form or on the site root (Manager only).
+See the documentation for details.
 
 
 Translations

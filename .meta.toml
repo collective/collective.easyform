@@ -1,0 +1,26 @@
+# Generated from:
+# https://github.com/plone/meta/tree/2.x/src/plone/meta/default
+# See the inline comments on how to expand/tweak this configuration file
+[meta]
+template = "default"
+commit-id = "2.11.2.dev0"
+
+[pyproject]
+codespell_ignores = "Ist"
+dependencies_mappings = [
+    "'beautifulsoup4' = ['bs4']",
+]
+dependencies_ignores = "['zest.pocompile','zestreleaser.towncrier', 'zest.releaser', 'Products.Five','collective.z3cform.norobots','plone.formwidget.hcaptcha','plone.formwidget.recaptcha']"
+
+[gitignore]
+extra_lines = """
+.mxdev_cache
+"""
+
+[tox]
+# enable mxdev, while Product.validation==3.0.0 in Plone 6.1
+# see https://github.com/plone/buildout.coredev/issues/1086
+use_mxdev = true
+# python_requires is >=3.10 (no 3.9 for Plone 6.0) and Plone 6.3 has no
+# released constraints yet (only 6.3-dev)
+test_matrix = {"6.2" = ["*"], "6.1" = ["*"], "6.0" = ["3.13", "3.12", "3.11", "3.10"]}
