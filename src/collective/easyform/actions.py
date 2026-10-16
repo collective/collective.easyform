@@ -700,13 +700,7 @@ class SaveData(Action):
                 vocab = bound.vocabulary
                 if vocab:
                     try:
-                        title = vocab.getTermByToken(str(val)).title
-                        if title is not None:
-                            return title
-                    except Exception:
-                        pass
-                    try:
-                        title = vocab.getTerm(val).title
+                        title = vocab.getTermByToken(safe_text(val)).title
                         if title is not None:
                             return title
                     except Exception:
