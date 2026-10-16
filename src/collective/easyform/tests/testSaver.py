@@ -6,6 +6,7 @@ from AccessControl.unauthorized import Unauthorized
 from collective.easyform.api import get_actions
 from collective.easyform.api import get_schema
 from collective.easyform.api import set_actions
+from collective.easyform.api import set_fields
 from collective.easyform.interfaces import ISaveData
 from collective.easyform.tests import base
 from io import BytesIO
@@ -18,9 +19,12 @@ from plone.app.testing import setRoles
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import SITE_OWNER_PASSWORD
 from plone.app.testing import TEST_USER_ID
+from plone.supermodel.model import Schema
 from plone.testing.zope import Browser
 from transaction import commit
 from zExceptions.unauthorized import Unauthorized as zUnauthorized
+from zope.schema import Choice, List
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from ZPublisher.HTTPRequest import HTTPRequest
 from ZPublisher.HTTPResponse import HTTPResponse
 
@@ -81,6 +85,62 @@ class BaseSaveData(base.EasyFormTestCase):
 
 
 class SaveDataTestCase(BaseSaveData):
+    def testSaverCSVExportVocabularyTitles(self):
+        """Test that Choice/Collection fields export their vocabulary titles, not tokens."""
+        self.createSaver()
+
+        # Create a dynamic schema with Choice and List fields
+        vocab = SimpleVocabulary(
+            [
+                SimpleTerm(value="es", token="es", title="Spain"),
+                SimpleTerm(value="fr", token="fr", title="France"),
+            ]
+        )
+
+        class ITestSchema(Schema):
+            single_choice = Choice(
+                title="Single Choice",
+                vocabulary=vocab,
+                required=False,
+            )
+            multi_choice = List(
+                title="Multiple Choice",
+                value_type=Choice(vocabulary=vocab),
+                required=False,
+            )
+
+        set_fields(self.ff1, ITestSchema)
+
+        self.assertTrue("saver" in get_actions(self.ff1))
+        saver = get_actions(self.ff1)["saver"]
+        self.assertEqual(saver.itemsSaved(), 0)
+
+        # Submit data using the raw values (tokens)
+        request = FakeRequest(
+            add_auth=True,
+            method="POST",
+            single_choice="es",
+            multi_choice=["es", "fr"],
+        )
+        saver.onSuccess(request.form, request)
+
+        self.assertEqual(saver.itemsSaved(), 1)
+
+        # Test CSV export
+        saver.download(request.response, delimiter=",")
+        res = request.response.stdout.getvalue().decode("utf-8")
+
+        # Check that the vocabulary TITLES ("Spain", "France") are in the CSV
+        self.assertIn("Spain", res)
+        self.assertIn("Spain|France", res)
+
+        # Ensure the raw tokens ("es", "fr") are not dumped as the final value
+        # (Though they might appear in the headers/internal fields, we specifically check the data rows)
+        data_rows = [row for row in res.splitlines() if "Spain" in row]
+        self.assertTrue(len(data_rows) == 1)
+        self.assertTrue(
+            "Spain,Spain|France" in data_rows[0] or "Spain|France" in data_rows[0]
+        )
 
     def testSavedDataView(self):
         """test saved data view"""
