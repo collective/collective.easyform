@@ -12,8 +12,9 @@ Changelog
 5.0.2 (2026-09-13)
 ------------------
 
-Bug fixes:
+- Implement `onDisplayOverride` TALES field (#376) [chiruzzimarco]
 
+Bug fixes:
 
 - Only use pat-plone-modal and remove pat-modal to prevent double initialization with Patternslib. [thet] (pat-plone-modal)
 
