@@ -63,7 +63,10 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.schema import Bool
+from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import ICollection
 from zope.schema import getFieldsInOrder
+from zope.schema import getFields
 from zope.security.interfaces import IPermission
 
 import secrets
@@ -691,13 +694,43 @@ class SaveData(Action):
 
     def get_row_data(self, row):
         names = self.getColumnNames()
+        context = get_context(self)
+        schema = get_schema(context)
+        fields = getFields(schema) if schema else {}
+
+        def get_vocab_title(val, vocab_field):
+            try:
+                bound = vocab_field.bind(context)
+                vocab = bound.vocabulary
+                if vocab:
+                    try:
+                        title = vocab.getTermByToken(safe_text(val)).title
+                        if title is not None:
+                            return title
+                    except Exception:
+                        pass
+            except Exception:
+                pass
+            return val
 
         def get_data(row, i):
             data = row.get(i, "")
             if isinstance(data, RichTextValue):
                 return data.raw
             if is_file_data(data):
-                data = data.filename
+                return data.filename
+            
+            field = fields.get(i)
+            if field:
+                is_choice = IChoice.providedBy(field)
+                is_collection = ICollection.providedBy(field) and getattr(field, 'value_type', None) and IChoice.providedBy(field.value_type)
+                
+                if is_choice and data:
+                    data = get_vocab_title(data, field)
+                elif is_collection and data and isinstance(data, (list, tuple, set)):
+                    titles = [str(get_vocab_title(v, field.value_type) or v) for v in data]
+                    return '|'.join(titles)
+
             if isinstance(data, (list, tuple, set)):
                 data = "|".join(data)
             return data
